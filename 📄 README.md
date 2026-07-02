@@ -7,10 +7,10 @@ WebZoneBW
 ├── blog.html
 ├── contact.html
 │
-├── .css/
+├── css/
 │     └── style.css
 │
-├── .js/
+├── js/
 │     └── script.js
 │
 ├── assets/
@@ -20,4 +20,4 @@ WebZoneBW
 │     ├── icons/
 │     └── resume/
 │
-└── README.md   ← Create this here
+└── README.md
