@@ -1,4 +1,3 @@
-
 WebZoneBW
 │
 ├── index.html
@@ -15,7 +14,7 @@ WebZoneBW
 │     └── script.js
 │
 ├── assets/
-      ├──favicon.ico
+      ├── favicon.ico/
 │     ├── logo.png
 │     ├── images/
 │     ├── icons/
