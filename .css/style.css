@@ -1,0 +1,508 @@
+this is .css style 
+/* ==========================
+   SC WebZoneBW v1.0
+   style.css
+========================== */
+
+/* Reset */
+
+html{
+    scroll-behavior:auto;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+     transition: 
+     background .25s,
+        color .25s,
+        transform .25s;
+}
+
+/* Body */
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #0F172A;
+    color: #F8FAFC;
+}
+
+/* Main Layout */
+
+.container{
+    display:flex;
+}
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: #111827;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 30px 20px;
+    box-shadow: 4px 0 12px rgba(0,0,0,.15);
+    border-right: 1px solid #334155;
+}
+
+/* Logo */
+
+.logo{
+
+    text-align:center;
+    margin-bottom:40px;
+
+}
+
+.logo img{
+    width:180px;
+    height:auto;
+    margin-bottom:20px;
+}
+
+/* Navigation */
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar ul li{
+
+    margin:20px 0;
+
+}
+
+.sidebar ul li a{
+
+    display:block;
+
+    padding:14px 18px;
+
+    color:#CBD5E1;
+
+    text-decoration:none;
+
+    border-radius:10px;
+
+    transition:.3s ease;
+
+    font-weight:500;
+
+}
+
+.sidebar ul li a:hover{
+
+    background:#2563EB;
+
+    color:#F8FAFC;
+
+    transform:translateX(6px);
+
+}
+
+.sidebar ul li a.active,
+.sidebar ul li a.active:hover {
+    background:#2563EB;
+    color:#0F172A;
+}
+
+
+/* ==========================
+   MAIN CONTENT
+========================== */
+
+.main-content{
+
+    margin-left:260px;
+
+    padding:60px;
+
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+.top-header h1{
+
+    color:#F8FAFC;
+
+    font-size:42px;
+
+    font-weight:700;
+
+    margin-bottom:40px;
+
+}
+
+/* ==========================
+   HERO
+========================== */
+
+.hero {
+    background: linear-gradient(135deg, #1E293B, #2563EB);
+    color: #F8FAFC;
+    border-radius: 15px;
+    padding: 50px;
+}
+.hero h1{
+
+    color:#F8FAFC;
+
+    font-size:42px;
+
+    margin-bottom:15px;
+
+}
+
+.hero h3{
+
+    color:#CBD5E1;
+
+    margin-bottom:20px;
+
+}
+
+.hero p{
+
+    color:#F8FAFC;
+
+    line-height:1.8;
+
+    margin-bottom:25px;
+
+}
+
+/* Buttons */
+
+.btn{
+
+    display:inline-block;
+
+    background:#2563EB;
+
+    color:#F8FAFC;
+
+    padding:14px 28px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s ease;
+
+}
+
+.btn:hover{
+
+    background:#1D4ED8;
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================
+   RESUME BUTTONS
+========================== */
+
+.resume-buttons{
+
+    margin-top:30px;
+
+}
+
+.resume-buttons .btn{
+
+    margin-right:15px;
+
+}
+
+
+/* ==========================
+   QUICK INFO
+========================== */
+
+.quick-info ul{
+
+    list-style:none;
+    padding:0;
+    margin:40px;
+}
+
+.quick-info li{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    color:#CBD5E1;
+}
+
+.quick-info li:last-child{
+    border-bottom:none;
+}
+
+.quick-info li i{
+    width:24px;
+    text-align:center;
+    color:#2563EB;
+    font-size:18px;
+}
+
+
+/* ==========================
+   PROJECTS
+========================== */
+
+.projects h2{
+    margin-bottom:15px;
+}
+
+.projects p{
+    margin-bottom:25px;
+    line-height:1.8;
+}
+
+.projects .btn{
+    margin-top:10px;
+}
+
+.quick-info,
+.projects {
+    background:#1E293B;
+    color:#F8FAFC;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 40px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    border: 1px solid #334155;
+}
+
+.projects h2{
+
+    color:#F8FAFC;
+
+    margin-bottom:20px;
+
+}
+
+.projects ul{
+
+    list-style:none;
+
+}
+
+.projects li{
+
+    padding:10px 0;
+
+}
+
+.featured-card{
+
+    background:linear-gradient(135deg,#1E293B,#2563EB);
+
+    border-radius:15px;
+
+    padding:30px;
+
+    margin:40px 0 30px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.30);
+
+}
+.featured-card h3{
+
+    margin:20px 0 16px;
+
+}
+.featured-card p{
+
+    margin-bottom:20px;
+}
+
+.featured-card .btn{
+
+    display:inline-block;
+
+    margin-top:10px;
+}
+.featured-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.30);
+
+}
+
+.border-slate {
+    border-color:#334155;
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+footer{
+
+    margin-top:40px;
+
+    text-align:center;
+
+    color:#CBD5E1;
+
+}
+/* ===========================
+   CONTACT PAGE
+=========================== */
+
+.social-links{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-top:20px;
+
+}
+
+.social-links a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    text-decoration:none;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    padding:14px 20px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.social-links a:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-4px);
+
+}
+
+.social-links i{
+
+    font-size:22px;
+
+}
+
+form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    margin-top:20px;
+
+}
+
+form input,
+form textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+form textarea{
+
+    resize:vertical;
+
+}
+
+form .btn{
+
+    width:220px;
+
+}
+/* ==========================
+   SKILL BARS
+========================== */
+
+.skill{
+
+    margin-bottom:25px;
+
+}
+
+.skill-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#F8FAFC;
+
+}
+
+.skill-bar{
+
+    width:100%;
+
+    height:12px;
+
+    background:#334155;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+.skill-fill{
+
+    width:0;
+
+    height:100%;
+
+    background:linear-gradient(90deg,#2563EB,#38BDF8);
+
+    border-radius:20px;
+
+    transition:width 1.8s ease;
+
+}
