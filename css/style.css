@@ -60,7 +60,8 @@ body {
 }
 
 .logo img{
-    width:180px;
+   max-width:180px;
+     width:100%;
     height:auto;
     margin-bottom:20px;
 }
@@ -354,11 +355,12 @@ body {
 
 footer{
 
-    margin-top:40px;
+    margin-top:60px;
 
-    text-align:center;
+    padding:25px 0;
 
-    color:#CBD5E1;
+    border-top:1px solid #94a3b8;
+
 
 }
 /* ===========================
@@ -504,5 +506,42 @@ form .btn{
     border-radius:20px;
 
     transition:width 1.8s ease;
+
+}
+/* ==========================
+   LEGAL PAGES
+========================== */
+
+.legal-page{
+
+    max-width:1000px;
+
+    margin:auto;
+
+    padding:60px 30px;
+
+}
+
+.legal-page h1{
+
+    margin-bottom:20px;
+
+}
+
+.legal-page h2{
+
+    margin-top:35px;
+
+}
+
+.legal-page p{
+
+    line-height:1.8;
+
+}
+
+.legal-page ul{
+
+    margin-left:25px;
 
 }
