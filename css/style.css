@@ -556,34 +556,78 @@ form .btn{
 
 .legal-page{
 
-    max-width:1000px;
+    max-width:900px;
 
-    margin:auto;
-
-    padding:60px 30px;
+    margin:0 auto;
 
 }
 
+.legal-page section{
+
+
+    background:#1E293B;
+
+    padding:30px;
+
+    border-radius:14px;
+
+    margin-bottom:30px;
+
+    border:1px solid #334155;
+
+}
+
+
 .legal-page h1{
 
-    margin-bottom:20px;
+    font-size:48px;
+
+    margin-bottom:25px;
 
 }
 
 .legal-page h2{
 
-    margin-top:35px;
+    font-size:34px;
+
+    margin-bottom:15px;
+
+    margin-top:25px;
+
+    color:#F8FAFC;
 
 }
 
 .legal-page p{
 
-    line-height:1.8;
+    line-height:1.9;
+
+    margin-bottom:18px;
+
+    color:#CBD5E1;
 
 }
 
 .legal-page ul{
 
-    margin-left:25px;
+    margin:20px 0 20px 35px;
+
+}
+
+.legal-page li{
+
+    margin-bottom:12px;
+
+    color:#CBD5E1;
+
+}
+
+.legal-page hr{
+
+    border:none;
+
+    border-top:1px solid #334155;
+
+    margin:25px 0;
 
 }
