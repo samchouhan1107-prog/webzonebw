@@ -353,63 +353,47 @@ body {
    FOOTER
 ========================== */
 
+
 .site-footer{
-
-    margin-top:80px;
-
-    padding:40px 20px;
-
+    margin-top:70px;
+    padding:30px 20px;
     border-top:1px solid #334155;
-
-    background:#111827;
-
 }
 
 .footer-content{
-
     max-width:1100px;
-    
     margin:auto;
-
     text-align:center;
-
 }
 
 .footer-content p{
-
     color:#CBD5E1;
-
-    margin-bottom:18px;
-
+    margin-bottom:22px;
 }
 
 .footer-links{
-
     display:flex;
-
     justify-content:center;
-
-    gap:18px;
-
+    align-items:center;
+    gap:12px;
     flex-wrap:wrap;
-
 }
 
 .footer-links a{
-
     color:#94A3B8;
-
     text-decoration:none;
-
+    font-weight:500;
     transition:.3s;
+}
 
+.footer-links a:visited{
+    color:#94A3B8;
 }
 
 .footer-links a:hover{
-
     color:#60A5FA;
-
 }
+
 
 footer{
 
