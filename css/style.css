@@ -1160,3 +1160,104 @@ form .btn{
 }
 
 }
+
+/* ==========================
+   THEME TOGGLE BUTTON
+========================== */
+
+.theme-btn{
+
+    width:100%;
+
+    margin-top:30px;
+
+    padding:14px;
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.theme-btn:hover{
+
+    background:#1D4ED8;
+
+}
+/* ==========================
+   LIGHT MODE
+========================== */
+
+body.light-mode{
+
+    background:#F4F7FB;
+
+    color:#1F2937;
+
+}
+
+body.light-mode .sidebar{
+
+    background:#FFFFFF;
+
+    border-right:1px solid #D1D5DB;
+
+}
+
+body.light-mode .sidebar a{
+
+    color:#374151;
+
+}
+
+body.light-mode .top-header h1{
+
+    color:#111827;
+
+}
+
+body.light-mode .hero{
+
+    background:linear-gradient(135deg,#FFFFFF,#EAF2FF);
+
+    color:#111827;
+
+}
+
+body.light-mode .hero h1,
+body.light-mode .hero h3,
+body.light-mode .hero p{
+
+    color:#111827;
+
+}
+
+body.light-mode .featured-card,
+body.light-mode .quick-info,
+body.light-mode .projects{
+
+    background:#FFFFFF;
+
+    color:#111827;
+
+    border:1px solid #D1D5DB;
+
+}
+
+body.light-mode .footer-links a{
+
+    color:#374151;
+
+}
