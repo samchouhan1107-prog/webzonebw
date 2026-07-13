@@ -124,7 +124,7 @@ body {
 
     margin-left:260px;
 
-    padding:40px 50px;
+    padding:25px;
 
 
 }
@@ -266,12 +266,11 @@ body {
 
 .hero-buttons .btn{
 
-    min-width:200px;
+    width:100%;
 
-    text-align:center;
+    max-width:320px;
 
 }
-
 /* ==========================
    QUICK INFO
 ========================== */
@@ -673,5 +672,25 @@ form .btn{
     border-top:1px solid #334155;
 
     margin:25px 0;
+
+}
+
+/* ==========================
+   MOBILE OPTIMIZATION
+========================== */
+
+@media (max-width: 768px) {
+
+    .hero{
+        padding:30px 25px;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+
+    .hero p{
+        line-height:1.6;
+    }
 
 }
