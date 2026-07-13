@@ -1164,8 +1164,9 @@ form .btn{
 /* ==========================
    THEME TOGGLE BUTTON
 ========================== */
-
 .theme-btn{
+
+    display:block;
 
     width:100%;
 
@@ -1187,7 +1188,7 @@ form .btn{
 
     font-weight:600;
 
-    transition:.3s;
+    transition:.3s ease;
 
 }
 
@@ -1195,7 +1196,10 @@ form .btn{
 
     background:#1D4ED8;
 
+    transform:translateY(-2px);
+
 }
+
 /* ==========================
    LIGHT MODE
 ========================== */
@@ -1259,5 +1263,70 @@ body.light-mode .projects{
 body.light-mode .footer-links a{
 
     color:#374151;
+
+}
+/* ======================================
+   LIGHT MODE
+====================================== */
+
+body.light-mode{
+
+    background:#F8FAFC;
+
+    color:#0F172A;
+
+}
+
+body.light-mode .sidebar{
+
+    background:#FFFFFF;
+
+    border-right:1px solid #D1D5DB;
+
+}
+
+body.light-mode .main-content{
+
+    background:#F8FAFC;
+
+}
+
+body.light-mode .hero{
+
+    background:linear-gradient(135deg,#FFFFFF,#E2E8F0);
+
+    color:#0F172A;
+
+}
+
+body.light-mode .hero h1,
+body.light-mode .hero h3,
+body.light-mode .hero p{
+
+    color:#0F172A;
+
+}
+
+body.light-mode .featured-card,
+body.light-mode .quick-info,
+body.light-mode .projects{
+
+    background:#FFFFFF;
+
+    color:#0F172A;
+
+    border:1px solid #CBD5E1;
+
+}
+
+body.light-mode .top-header h1{
+
+    color:#0F172A;
+
+}
+
+body.light-mode .footer-links a{
+
+    color:#334155;
 
 }
