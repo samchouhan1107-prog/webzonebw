@@ -181,6 +181,26 @@ body {
 
 }
 
+/* ==========================
+   HERO BUTTON GROUP
+========================== */
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:flex-start;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-top:30px;
+
+}
+
 /* Buttons */
 
 .btn{
@@ -197,7 +217,7 @@ body {
 
     color:#F8FAFC;
 
-    padding:14px 28px;
+    padding:14px 26px;
 
     border-radius:10px;
 
@@ -206,8 +226,6 @@ body {
     font-weight:600;
 
     cursor:pointer;
-
-    white-space:nowrap;
 
     transition:.3s ease;
 
