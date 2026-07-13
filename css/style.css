@@ -185,7 +185,13 @@ body {
 
 .btn{
 
-    display:inline-block;
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
 
     background:#2563EB;
 
@@ -198,6 +204,10 @@ body {
     text-decoration:none;
 
     font-weight:600;
+
+    cursor:pointer;
+
+    white-space:nowrap;
 
     transition:.3s ease;
 
@@ -212,21 +222,32 @@ body {
 }
 
 /* ==========================
-   RESUME BUTTONS
+   HERO BUTTONS
 ========================== */
 
-.resume-buttons{
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
 
     margin-top:30px;
 
 }
 
-.resume-buttons .btn{
+.hero-buttons .btn{
 
-    margin-right:15px;
+    min-width:200px;
+
+    text-align:center;
 
 }
-
 
 /* ==========================
    QUICK INFO
