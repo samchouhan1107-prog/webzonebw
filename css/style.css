@@ -13,14 +13,19 @@ html{
 }
 
 *{
+
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
+
     transition:
-        background .25s ease,
+        background-color .25s ease,
         color .25s ease,
-        transform .25s ease,
+        border-color .25s ease,
         box-shadow .25s ease;
+
 }
 
 /* ==========================================================
@@ -1328,5 +1333,221 @@ body.light-mode .top-header h1{
 body.light-mode .footer-links a{
 
     color:#334155;
+
+}/* ======================================
+   LIGHT MODE THEME
+====================================== */
+
+
+body.light-mode{
+
+    background:#F8FAFC;
+
+    color:#0F172A;
+
+}
+
+
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+
+body.light-mode .sidebar{
+
+    background:#FFFFFF;
+
+    border-right:1px solid #CBD5E1;
+
+}
+
+
+body.light-mode .sidebar ul li a{
+
+    color:#334155;
+
+}
+
+
+body.light-mode .sidebar ul li a:hover,
+body.light-mode .sidebar ul li a.active{
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+}
+
+
+
+/* ==========================
+   HEADER
+========================== */
+
+
+body.light-mode .top-header h1{
+
+    color:#0F172A;
+
+}
+
+
+
+/* ==========================
+   HERO
+========================== */
+
+
+body.light-mode .hero{
+
+    background:
+    linear-gradient(
+        135deg,
+        #FFFFFF,
+        #DBEAFE
+    );
+
+    border:1px solid #CBD5E1;
+
+}
+
+
+
+body.light-mode .hero h1,
+body.light-mode .hero h3,
+body.light-mode .hero p{
+
+    color:#0F172A;
+
+}
+
+
+
+/* ==========================
+   ALL CARDS
+========================== */
+
+
+body.light-mode .featured-card,
+body.light-mode .quick-info,
+body.light-mode .projects,
+body.light-mode .contact-section,
+body.light-mode .legal-page section{
+
+
+    background:#FFFFFF;
+
+    color:#0F172A;
+
+    border:1px solid #CBD5E1;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+body.light-mode .featured-card p,
+body.light-mode .projects p,
+body.light-mode .quick-info li,
+body.light-mode .projects li,
+body.light-mode .contact-section p,
+body.light-mode .legal-page p,
+body.light-mode .legal-page li{
+
+
+    color:#475569;
+
+}
+
+
+
+/* ==========================
+   FORM
+========================== */
+
+
+body.light-mode form input,
+body.light-mode form textarea{
+
+
+    background:#FFFFFF;
+
+    color:#0F172A;
+
+    border:1px solid #CBD5E1;
+
+}
+
+
+
+body.light-mode form input::placeholder,
+body.light-mode form textarea::placeholder{
+
+    color:#64748B;
+
+}
+
+
+
+/* ==========================
+   SKILLS
+========================== */
+
+
+body.light-mode .skill-title{
+
+    color:#0F172A;
+
+}
+
+
+body.light-mode .skill-bar{
+
+    background:#CBD5E1;
+
+}
+
+
+
+/* ==========================
+   FOOTER
+========================== */
+
+
+body.light-mode .site-footer{
+
+    border-top:1px solid #CBD5E1;
+
+}
+
+
+body.light-mode .footer-links a{
+
+    color:#334155;
+
+}
+
+
+body.light-mode .footer-links a:hover{
+
+    color:#2563EB;
+
+}
+
+
+
+/* ==========================
+   BUTTON
+========================== */
+
+
+body.light-mode .theme-btn{
+
+    background:#2563EB;
+
+    color:#FFFFFF;
 
 }
