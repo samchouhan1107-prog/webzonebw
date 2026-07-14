@@ -73,9 +73,7 @@ body{
 
     width:300px;
 
-    min-height:100vh;
-
-    padding:25px 24px;
+    height:100vh;
 
     background:#111827;
 
@@ -83,8 +81,13 @@ body{
 
     box-shadow:4px 0 18px rgba(0,0,0,.18);
 
-}
+    padding:25px 24px;
 
+    display:flex;
+
+    flex-direction:column;
+
+}
 
 /* ==========================================================
    LOGO
@@ -117,6 +120,18 @@ body{
 /* ==========================================================
    SIDEBAR NAVIGATION
 ========================================================== */
+
+.sidebar-nav{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    margin-top:20px;
+
+    padding-right:6px;
+
+}
 
 .sidebar ul{
 
