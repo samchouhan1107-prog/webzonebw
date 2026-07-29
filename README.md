@@ -18,22 +18,18 @@ I enjoy building practical solutions, learning modern technologies, and continuo
 
 # 🚀 Website Features
 
-- Professional Portfolio
-- About Me
-- Resume Download
-- Featured Projects
+- Professional Portfolio & Dashboard
+- Dark/Light Theme Switching
+- Integrated Navigation Sidebar
+- Resume View & Download
+- Featured Projects & Case Studies
 - Technical Blog
-- Contact Information
-- Responsive Layout
-- Clean User Interface
-- Fast Loading Pages
-- Search Engine Friendly Structure
+- Contact & Social Integration
+- Responsive & Fast Loading Pages
 
 ---
 
 # 📂 Project Structure
-
-```
 WebZoneBW/
 │
 ├── index.html
@@ -45,32 +41,34 @@ WebZoneBW/
 ├── privacy.html
 ├── terms.html
 ├── disclaimer.html
+├── master.html
+├── CNAME
+├── robots.txt
+├── sitemap.xml
 │
 ├── css/
-│   └── style.css
+│   ├── style.css
+│   ├── dashboard.css
+│   ├── sidebar.css
+│   ├── responsive.css
+│   └── animations.css
 │
 ├── js/
-│   └── script.js
 │
 ├── assets/
-│   ├── favicon.ico
 │   ├── logo.png
-│   ├── images/
-│   ├── icons/
-│   └── resume/
+│   └── icons/
 │
 └── README.md
-```
-
 ---
 
 # 💻 Technologies Used
 
 - HTML5
-- CSS3
+- CSS3 (Modular Stylesheets)
 - JavaScript
-- Git
-- GitHub Pages
+- Git & GitHub
+- Custom Domain DNS (webzonebw.in)
 
 ---
 
@@ -79,25 +77,24 @@ WebZoneBW/
 The purpose of this project is to:
 
 - Showcase my professional experience
-- Present my technical skills
-- Share personal projects
-- Maintain an online resume
-- Document my learning journey
-- Demonstrate front-end development skills
+- Present my technical skills in IT Support, Integration, and Web Development
+- Share live client solutions and personal projects
+- Provide instant contact and resume downloads
+- Demonstrate clean, front-end development standards
 
 ---
 
 # 🌍 Live Website
 
-Visit the website:
+Visit the live website:
 
-https://samchouhan1107-prog.github.io/webzonebw/
+**https://webzonebw.in**
 
 ---
 
 # 📄 Resume
 
-A downloadable version of my latest resume is available on the Resume page.
+A downloadable version of my latest resume is available directly on the Resume page.
 
 ---
 
@@ -105,24 +102,8 @@ A downloadable version of my latest resume is available on the Resume page.
 
 For professional opportunities or collaboration:
 
-- GitHub: https://github.com/samchouhan1107-prog
-- Portfolio: https://samchouhan1107-prog.github.io/webzonebw/
-
----
-
-# 📈 Future Improvements
-
-Planned updates include:
-
-- Additional portfolio projects
-- Interactive dashboards
-- JavaScript utilities
-- Learning resources
-- Better animations
-- Improved accessibility
-- SEO enhancements
-- Dark mode
-- Contact form improvements
+- **Website**: https://webzonebw.in
+- **GitHub**: https://github.com/samchouhan1107-prog
 
 ---
 
@@ -131,14 +112,6 @@ Planned updates include:
 This project is intended for educational and portfolio purposes.
 
 All original content, design, and source code are the property of Sameer Chouhan unless otherwise stated.
-
----
-
-# 🙏 Acknowledgements
-
-Thank you for taking the time to visit my portfolio.
-
-Your feedback and suggestions are always appreciated.
 
 ---
 

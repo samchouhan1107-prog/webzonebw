@@ -13,151 +13,103 @@
 
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 
-
     <link rel="stylesheet" href="css/style.css">
  
     <meta name="description"
-
     content="Sameer Chouhan Portfolio | IT Support | Systems Integration | Web Development">
 
     <!-- Font Awesome Icons -->
-
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
- <body>
+<body>
 
 <div class="container">
 
     <!-- Sidebar -->
-
     <aside class="sidebar">
 
         <div class="logo">
-
             <img src="assets/logo.png" alt="WebZoneBW Logo">
-
         </div>
 
-        <nav>
+        <!-- Theme Button -->
+        <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">
+            <span aria-hidden="true">☀️</span> Light Mode
+        </button>
 
+        <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-
-                <li><a href="index.html">🏠 Dashboard</a></li>
-
-                <li><a href="about.html">👤 About</a></li>
-
-                <li><a href="projects.html">💼 Projects</a></li>
-
-                <li><a href="resume.html">📄 Resume</a></li>
-
-                <li><a href="blog.html">📝 Blog</a></li>
-
-                <li><a href="contact.html" class="active">✉ Contact</a></li>
-
+                <li><a href="index.html"><span aria-hidden="true">🏠</span> Dashboard</a></li>
+                <li><a href="about.html"><span aria-hidden="true">👤</span> About</a></li>
+                <li><a href="projects.html"><span aria-hidden="true">💼</span> Projects</a></li>
+                <li><a href="resume.html"><span aria-hidden="true">📄</span> Resume</a></li>
+                <li><a href="blog.html"><span aria-hidden="true">📝</span> Blog</a></li>
+                <li><a href="contact.html" class="active" aria-current="page"><span aria-hidden="true">✉</span> Contact</a></li>
             </ul>
-
         </nav>
 
     </aside>
 
     <!-- Main Content -->
-
     <main class="main-content">
 
         <header class="top-header">
-
             <h1>Contact Me</h1>
-
         </header>
 
         <!-- Hero -->
-
         <section class="hero">
-
             <h1>Let's Connect</h1>
-
             <h3>Open to IT Support • Systems Integration • Web Development</h3>
-
             <p>
-
                 Thank you for visiting WebZoneBW.
                 If you have a career opportunity,
                 collaboration, or technical discussion,
                 I'd be happy to hear from you.
-
             </p>
-
         </section>
 
         <!-- Contact Details -->
-
         <section class="quick-info">
-
             <h2>📞 Contact Details</h2>
-
             <ul>
-
-                <li><i class="fa-solid fa-location-dot"></i> Punjab, India</li>
-
-                <li><i class="fa-solid fa-envelope"></i> sam.chouhan32@gmail.com</li>
-
-                <li><i class="fa-solid fa-phone"></i> +91 81980-91036</li>
-
-                <li><i class="fa-solid fa-earth-asia"></i> Open to Relocation</li>
-
+                <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Punjab, India</li>
+                <li><i class="fa-solid fa-envelope" aria-hidden="true"></i> sam.chouhan32@gmail.com</li>
+                <li><i class="fa-solid fa-phone" aria-hidden="true"></i> +91 81980-91036</li>
+                <li><i class="fa-solid fa-earth-asia" aria-hidden="true"></i> Open to Relocation</li>
             </ul>
-
         </section>
 
         <!-- Professional Profiles -->
-
         <section class="projects">
-
             <h2>🌐 Professional Profiles</h2>
-
             <div class="social-links">
-
                 <a href="https://www.linkedin.com/in/sameer-c-803823157"
-                target="_blank">
-
-                    <i class="fab fa-linkedin"></i>
-
+                target="_blank"
+                rel="noopener noreferrer">
+                    <i class="fab fa-linkedin" aria-hidden="true"></i>
                     LinkedIn
-
                 </a>
-
                 <a href="https://webzonebw1107.blogspot.com/"
-                target="_blank">
-
-                    <i class="fab fa-blogger"></i>
-
+                target="_blank"
+                rel="noopener noreferrer">
+                    <i class="fab fa-blogger" aria-hidden="true"></i>
                     Blogger
-
                 </a>
-
                 <a href="mailto:sam.chouhan32@gmail.com">
-
-                    <i class="fa-solid fa-envelope"></i>
-
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
                     Gmail
-
                 </a>
-
             </div>
-
         </section>
 
         <!-- Message Form -->
-
         <section class="quick-info">
-
             <h2>💬 Send a Message</h2>
-
             <form>
-
                 <input
                 type="text"
                 placeholder="Full Name"
@@ -180,54 +132,31 @@
                 <button
                 type="submit"
                 class="btn">
-
                     Send Message
-
                 </button>
-
             </form>
-
         </section>
 
-
         <footer class="site-footer">
-
-    
             <div class="footer-content">
-
-       
                 <p>
-
-            © 2026 <strong>WebZoneBW</strong><br>
-
-            Designed & Developed by Sameer Chouhan
-
-       
-        </p>
-
-        <nav class="footer-links">
-
-            <a href="privacy.html">Privacy Policy</a>
-
-            <a href="terms.html">Terms & Conditions</a>
-
-            <a href="disclaimer.html">Disclaimer</a>
-
-            <a href="contact.html">Contact</a>
-
-        </nav>
-
-    </div>
-
-
-</footer>
-
+                    © 2026 <strong>WebZoneBW</strong><br>
+                    Designed & Developed by Sameer Chouhan
+                </p>
+                <nav class="footer-links" aria-label="Footer Navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                    <a href="disclaimer.html">Disclaimer</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+        </footer>
 
     </main>
 
- </div>
+</div>
 
 <script src="js/script.js"></script>
- </body>
+</body>
 
 </html>
