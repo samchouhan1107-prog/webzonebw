@@ -1,6 +1,4 @@
-```txt
 User-agent: *
 Allow: /
 
 Sitemap: https://webzonebw.in/sitemap.xml
-```

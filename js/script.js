@@ -1,15 +1,26 @@
 /* ==========================================================
-   WebZoneBW v1.0
+   WebZoneBW
    Main JavaScript
 ========================================================== */
 
+"use strict";
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    initSkillBars();
+    try {
+        initSkillBars();
+    } catch (error) {
+        console.warn("WebZoneBW: Skill bar initialization failed.", error);
+    }
 
-    initTheme();
+    try {
+        initTheme();
+    } catch (error) {
+        console.warn("WebZoneBW: Theme initialization failed.", error);
+    }
 
 });
+
 
 /* ==========================================================
    Skill Bar Animation
@@ -19,19 +30,39 @@ function initSkillBars() {
 
     const skills = document.querySelectorAll(".skill-fill");
 
-    // Exit if no skill bars exist on this page
-    if (skills.length === 0) return;
+    // No skill bars on this page
+    if (!skills.length) return;
 
-    const observer = new IntersectionObserver((entries) => {
+    // Fallback for browsers without IntersectionObserver
+    if (!("IntersectionObserver" in window)) {
+
+        skills.forEach(skill => {
+
+            const width = skill.dataset.width;
+
+            if (width) {
+                skill.style.width = `${width}%`;
+            }
+
+        });
+
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries, observer) => {
 
         entries.forEach(entry => {
 
-            if (entry.isIntersecting) {
+            if (!entry.isIntersecting) return;
 
-                entry.target.style.width =
-                    entry.target.dataset.width + "%";
+            const skill = entry.target;
+            const width = skill.dataset.width;
 
+            if (width) {
+                skill.style.width = `${width}%`;
             }
+
+            observer.unobserve(skill);
 
         });
 
@@ -39,9 +70,13 @@ function initSkillBars() {
         threshold: 0.4
     });
 
-    skills.forEach(skill => observer.observe(skill));
+
+    skills.forEach(skill => {
+        observer.observe(skill);
+    });
 
 }
+
 
 /* ==========================================================
    Dark / Light Theme
@@ -51,38 +86,62 @@ function initTheme() {
 
     const themeToggle = document.getElementById("themeToggle");
 
-    // Exit if theme button doesn't exist
+    // No theme button on this page
     if (!themeToggle) return;
 
-    // Load saved theme
-    const savedTheme = localStorage.getItem("theme");
+    let savedTheme = null;
+
+    try {
+        savedTheme = localStorage.getItem("theme");
+    } catch (error) {
+        console.warn("WebZoneBW: Local storage unavailable.");
+    }
+
 
     if (savedTheme === "light") {
 
         document.body.classList.add("light-mode");
-        themeToggle.textContent = "🌙 Dark Mode";
+
+        themeToggle.innerHTML =
+            '<span aria-hidden="true">🌙</span> Dark Mode';
 
     } else {
 
         document.body.classList.remove("light-mode");
-        themeToggle.textContent = "☀️ Light Mode";
+
+        themeToggle.innerHTML =
+            '<span aria-hidden="true">☀️</span> Light Mode';
 
     }
 
-    // Toggle theme
+
     themeToggle.addEventListener("click", () => {
 
-        document.body.classList.toggle("light-mode");
+        const isLight =
+            document.body.classList.toggle("light-mode");
 
-        if (document.body.classList.contains("light-mode")) {
 
-            localStorage.setItem("theme", "light");
-            themeToggle.textContent = "🌙 Dark Mode";
+        if (isLight) {
+
+            try {
+                localStorage.setItem("theme", "light");
+            } catch (error) {
+                console.warn("WebZoneBW: Could not save theme.");
+            }
+
+            themeToggle.innerHTML =
+                '<span aria-hidden="true">🌙</span> Dark Mode';
 
         } else {
 
-            localStorage.setItem("theme", "dark");
-            themeToggle.textContent = "☀️ Light Mode";
+            try {
+                localStorage.setItem("theme", "dark");
+            } catch (error) {
+                console.warn("WebZoneBW: Could not save theme.");
+            }
+
+            themeToggle.innerHTML =
+                '<span aria-hidden="true">☀️</span> Light Mode';
 
         }
 

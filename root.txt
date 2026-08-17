@@ -1,18 +1,57 @@
-WEBZONEBW.IN/
-├── assets/
-├── css/
-├── documents/
-├── js/
-├── about.html
-├── blog.html
-├── contact.html
-├── disclaimer.html
+WEBZONEBW/
+│
 ├── index.html
-├── master.html
-├── privacy.html
+│   └── Main homepage / Dashboard
+│
+├── about.html
+│   └── Personal profile, education, experience, skills & career objective
+│
 ├── projects.html
+│   └── Portfolio projects, technical work & future projects
+│
 ├── resume.html
-├── robots.txt      
-├── sitemap.xml
+│   └── Professional resume page + PDF view/download
+│
+├── blog.html
+│   └── WebZoneBW1107 technical blog introduction & links
+│
+├── contact.html
+│   └── Contact information, professional profiles & contact form
+│
+├── privacy.html
+│   └── Privacy Policy — data, cookies, Analytics & advertising information
+│
 ├── terms.html
-└── ...
+│   └── Terms & Conditions for using WebZoneBW
+│
+├── disclaimer.html
+│   └── Disclaimer — educational content, projects, external links & advertising
+│
+├── robots.txt
+│   └── Search-engine crawler instructions + sitemap location
+│
+├── sitemap.xml
+│   └── Search-engine sitemap containing the public HTML pages
+│
+├── ads.txt
+│   └── Google AdSense authorized seller declaration
+│
+├── css/
+│   └── style.css
+│       └── Global website design, layout, responsive/mobile styling & themes
+│
+├── js/
+│   └── script.js
+│       └── Theme toggle, UI interactions & frontend functionality
+│
+└── assets/
+    │
+    ├── logo.png
+    │   └── WebZoneBW website logo
+    │
+    ├── favicon.ico
+    │   └── Browser tab favicon
+    │
+    └── resume/
+        └── Sameer_Chouhan.pdf
+            └── Downloadable professional resume
