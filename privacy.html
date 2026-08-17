@@ -2,6 +2,25 @@
 <html lang="en">
 
 <head>
+
+    // Remove Google AdSense script if present
+const adsenseScript = document.querySelector('script[src*="googlesyndication.com"]');
+if (adsenseScript) {
+    adsenseScript.remove();
+}
+
+// Remove Verification Meta Tag if present
+const verificationMeta = document.querySelector('meta[name="a1e90531e4f8ed3276007daf16c1b8cee45e9f43"]');
+if (verificationMeta) {
+    verificationMeta.remove();
+}
+
+// Remove External Ad Network script if present
+const adNetworkScript = document.querySelector('script[src*="conventionalresponse.com"]');
+if (adNetworkScript) {
+    adNetworkScript.remove();
+}
+
     <!-- AdSense Code (Hardcoded for GitHub Pages) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2904917114665090"
      crossorigin="anonymous">
