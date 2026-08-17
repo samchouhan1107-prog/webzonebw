@@ -1,9 +1,0 @@
-# ======================================================
-# WebZoneBW - robots.txt
-# Website: https://webzonebw.in
-# ======================================================
-
-User-agent: *
-Allow: /
-
-Sitemap: https://webzonebw.in/sitemap.xml
