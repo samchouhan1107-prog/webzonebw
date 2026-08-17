@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-     
 <head>
+
+    <?php include 'ads.php'; ?>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
      crossorigin="anonymous">
@@ -20,7 +21,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
- <body>
+<body>
 
 <div class="container">
 
@@ -28,7 +29,9 @@
     <aside class="sidebar">
 
         <div class="logo">
-            <img src="assets/logo.png" alt="WebZoneBW Logo">
+            <a href="index.php" aria-label="WebZoneBW Home">
+                <img src="assets/logo.png" alt="WebZoneBW Logo">
+            </a>
         </div>
 
         <!-- Theme Button -->
@@ -38,12 +41,12 @@
 
         <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-                <li><a href="index.html"><span aria-hidden="true">🏠</span> Dashboard</a></li>
-                <li><a href="about.html"><span aria-hidden="true">👤</span> About</a></li>
-                <li><a href="projects.html" class="active" aria-current="page"><span aria-hidden="true">💼</span> Projects</a></li>
-                <li><a href="resume.html"><span aria-hidden="true">📄</span> Resume</a></li>
-                <li><a href="blog.html"><span aria-hidden="true">📝</span> Blog</a></li>
-                <li><a href="contact.html"><span aria-hidden="true">✉</span> Contact</a></li>
+                <li><a href="index.php"><span aria-hidden="true">🏠</span> Dashboard</a></li>
+                <li><a href="about.php"><span aria-hidden="true">👤</span> About</a></li>
+                <li><a href="projects.php" class="active" aria-current="page"><span aria-hidden="true">💼</span> Projects</a></li>
+                <li><a href="resume.php"><span aria-hidden="true">📄</span> Resume</a></li>
+                <li><a href="blog.php"><span aria-hidden="true">📝</span> Blog</a></li>
+                <li><a href="contact.php"><span aria-hidden="true">✉</span> Contact</a></li>
             </ul>
         </nav>
 
@@ -131,10 +134,10 @@
                     Designed & Developed by Sameer Chouhan
                 </p>
                 <nav class="footer-links" aria-label="Footer Navigation">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms & Conditions</a>
-                    <a href="disclaimer.html">Disclaimer</a>
-                    <a href="contact.html">Contact</a>
+                    <a href="privacy.php">Privacy Policy</a>
+                    <a href="terms.php">Terms & Conditions</a>
+                    <a href="disclaimer.php">Disclaimer</a>
+                    <a href="contact.php">Contact</a>
                 </nav>
             </div>
         </footer>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    
+
+</head>
+
+<>
     <meta name="google-adsense-account" content="ca-pub-2904917114665090">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +12,7 @@
     <meta name="description" content="Sameer Chouhan Portfolio | IT Support | Systems Integration | Web Development">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="css/style.css">
-</head>
+
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
      crossorigin="anonymous"></script>
@@ -23,6 +27,9 @@
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+
+
+<?php include 'ads.php'; ?>
 
 <body>
     <script>

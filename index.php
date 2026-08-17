@@ -3,6 +3,8 @@
 
 <head>
 
+    <?php include 'ads.php'; ?>
+
     <!-- =====================================================
          WEBZONEBW — DASHBOARD v2.0
          ===================================================== -->
@@ -12,22 +14,6 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <!-- Google AdSense -->
-    <meta name="google-adsense-account"
-          content="ca-pub-2904917114665090">
-
-
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-     crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-format="fluid"
-     data-ad-layout-key="-gw-3+1f-3d+2z"
-     data-ad-client="ca-pub-4823379856566931"
-     data-ad-slot="4941540294"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
 
     <!-- SEO -->
     <title>WebZoneBW | Sameer Chouhan — IT & Technology Portfolio</title>
@@ -89,17 +75,6 @@
         gtag('config', 'G-ZFZ54Z2997');
     </script>
 
-
-    <!-- =====================================================
-         GOOGLE ADSENSE
-         ===================================================== -->
-
-
-         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-     crossorigin="anonymous">
-    </script>
-
-
 </head>
 
 
@@ -119,7 +94,7 @@
         <div class="logo">
 
             <a
-                href="index.html"
+                href="index.php"
                 aria-label="WebZoneBW Home">
 
                 <img
@@ -156,7 +131,7 @@
                 <li>
 
                     <a
-                        href="index.html"
+                        href="index.php"
                         class="active"
                         aria-current="page">
 
@@ -170,7 +145,7 @@
 
                 <li>
 
-                    <a href="about.html">
+                    <a href="about.php">
 
                         <span aria-hidden="true">👤</span>
                         About
@@ -182,7 +157,7 @@
 
                 <li>
 
-                    <a href="projects.html">
+                    <a href="projects.php">
 
                         <span aria-hidden="true">💼</span>
                         Projects
@@ -194,7 +169,7 @@
 
                 <li>
 
-                    <a href="resume.html">
+                    <a href="resume.php">
 
                         <span aria-hidden="true">📄</span>
                         Resume
@@ -206,7 +181,7 @@
 
                 <li>
 
-                    <a href="blog.html">
+                    <a href="blog.php">
 
                         <span aria-hidden="true">📝</span>
                         Blog
@@ -218,7 +193,7 @@
 
                 <li>
 
-                    <a href="contact.html">
+                    <a href="contact.php">
 
                         <span aria-hidden="true">✉️</span>
                         Contact
@@ -533,9 +508,6 @@
 
         </section>
 
- <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js">
- </script>
-
 
         <!-- =================================================
              FOOTER
@@ -563,19 +535,19 @@
                     class="footer-links"
                     aria-label="Footer Navigation">
 
-                    <a href="privacy.html">
+                    <a href="privacy.php">
                         Privacy Policy
                     </a>
 
-                    <a href="terms.html">
+                    <a href="terms.php">
                         Terms &amp; Conditions
                     </a>
 
-                    <a href="disclaimer.html">
+                    <a href="disclaimer.php">
                         Disclaimer
                     </a>
 
-                    <a href="contact.html">
+                    <a href="contact.php">
                         Contact
                     </a>
 

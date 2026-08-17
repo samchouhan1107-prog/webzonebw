@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <?php include 'ads.php'; ?>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+    content="Disclaimer for WebZoneBW">
+
+    <meta name="author"
+    content="Sameer Chouhan">
+
+    <title>Disclaimer | WebZoneBW</title>
+
+    <link rel="icon" href="assets/favicon.ico">
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<aside class="sidebar">
+
+<div class="logo">
+<img src="assets/logo.png" alt="WebZoneBW Logo">
+</div>
+
+<button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">
+    <span aria-hidden="true">☀️</span> Light Mode
+</button>
+
+<nav class="sidebar-nav" aria-label="Main Navigation">
+
+<ul>
+
+<li><a href="index.php"><span aria-hidden="true">🏠</span> Dashboard</a></li>
+<li><a href="about.php"><span aria-hidden="true">👤</span> About</a></li>
+<li><a href="projects.php"><span aria-hidden="true">💼</span> Projects</a></li>
+<li><a href="resume.php"><span aria-hidden="true">📄</span> Resume</a></li>
+<li><a href="blog.php"><span aria-hidden="true">📝</span> Blog</a></li>
+<li><a href="contact.php"><span aria-hidden="true">✉</span> Contact</a></li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<main class="main-content legal-page">
+
+<header class="top-header">
+
+<h1>Disclaimer</h1>
+
+</header>
+
+<section>
+
+<p><strong>Effective Date:</strong> July 2026</p>
+
+<hr>
+
+<h2>General Information</h2>
+
+<p>
+
+The information provided on <strong>WebZoneBW</strong> is published in good faith and for general educational, informational, and portfolio purposes only. While every effort is made to keep the information accurate and up to date, WebZoneBW makes no warranties regarding the completeness, reliability, or accuracy of the information presented.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>No Professional Advice</h2>
+
+<p>
+
+The tutorials, technical articles, portfolio projects, and other resources available on WebZoneBW reflect personal knowledge, learning, and professional experience.
+
+They are intended for educational purposes only and should not be considered legal, financial, business, or professional advice.
+
+Visitors should always seek qualified professional guidance before making important decisions based on any information found on this website.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>Portfolio Projects</h2>
+
+<p>
+
+The projects showcased on WebZoneBW are presented to demonstrate technical skills, personal development, and professional experience.
+
+Some projects may be prototypes, educational exercises, personal experiments, or demonstration applications created for learning purposes.
+
+Project functionality, technologies, and availability may change over time.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>External Links</h2>
+
+<p>
+
+This website may contain links to third-party websites including GitHub, Blogger, LinkedIn, documentation, or other educational resources.
+
+These links are provided solely for the convenience of visitors.
+
+WebZoneBW has no control over the content, privacy policies, or practices of third-party websites and accepts no responsibility for their content.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>Advertisements</h2>
+
+<p>
+
+This website may display advertisements served by Google AdSense or other advertising partners.
+
+These advertisements are automatically managed by Google and may use cookies to personalize advertising based on previous visits to this or other websites.
+
+WebZoneBW does not directly control the content of advertisements displayed through advertising services.
+
+</p>
+
+</section>
+
+<section>
+
+<h2>Copyright</h2>
+
+<p>
+
+Unless otherwise stated, all original content, website design, graphics, written material, and portfolio projects on WebZoneBW are the intellectual property of Sameer Chouhan.
+
+Unauthorized copying, reproduction, or redistribution of original content without permission is prohibited.
+
+</p>
+
+</section>
+
+
+<section>
+
+<h2>Contact</h2>
+
+<p>
+
+For any questions regarding this Disclaimer,
+please use the <a href="contact.php">Contact page</a>.
+
+</p>
+
+</section>
+
+<footer class="site-footer">
+
+    <div class="footer-content">
+        
+        <p>
+
+            © 2026 <strong>WebZoneBW</strong><br>
+
+            Designed & Developed by Sameer Chouhan
+
+        </p>
+
+        <nav class="footer-links" aria-label="Footer Navigation">
+
+            <a href="privacy.php">Privacy Policy</a>
+
+            <a href="terms.php">Terms & Conditions</a>
+
+            <a href="disclaimer.php" aria-current="page">Disclaimer</a>
+
+            <a href="contact.php">Contact</a>
+
+        </nav>
+
+    </div>
+
+</footer>
+
+
+</main>
+
+</div>
+
+<script src="js/script.js"></script>
+
+</body>
+
+</html>

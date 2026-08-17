@@ -2,10 +2,11 @@
 <html lang="en">
 
 <head>
+
+    <?php include 'ads.php'; ?>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="google-adsense-account" content="ca-pub-2904917114665090">
 
     <meta name="description"
         content="Sameer Chouhan Portfolio | IT Support | Systems Integration | Web Development | Technical Blog">
@@ -14,9 +15,6 @@
 
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="css/style.css">
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-     crossorigin="anonymous"></script>
 
 </head>
 
@@ -53,28 +51,28 @@
             <ul>
 
                 <li>
-                    <a href="index.html">
+                    <a href="index.php">
                         <span aria-hidden="true">🏠</span>
                         Dashboard
                     </a>
                 </li>
 
                 <li>
-                    <a href="about.html">
+                    <a href="about.php">
                         <span aria-hidden="true">👤</span>
                         About
                     </a>
                 </li>
 
                 <li>
-                    <a href="projects.html">
+                    <a href="projects.php">
                         <span aria-hidden="true">💼</span>
                         Projects
                     </a>
                 </li>
 
                 <li>
-                    <a href="resume.html">
+                    <a href="resume.php">
                         <span aria-hidden="true">📄</span>
                         Resume
                     </a>
@@ -82,7 +80,7 @@
 
                 <li>
                     <a
-                        href="blog.html"
+                        href="blog.php"
                         class="active"
                         aria-current="page">
 
@@ -93,7 +91,7 @@
                 </li>
 
                 <li>
-                    <a href="contact.html">
+                    <a href="contact.php">
                         <span aria-hidden="true">✉</span>
                         Contact
                     </a>
@@ -288,19 +286,19 @@
                     class="footer-links"
                     aria-label="Footer Navigation">
 
-                    <a href="privacy.html">
+                    <a href="privacy.php">
                         Privacy Policy
                     </a>
 
-                    <a href="terms.html">
+                    <a href="terms.php">
                         Terms &amp; Conditions
                     </a>
 
-                    <a href="disclaimer.html">
+                    <a href="disclaimer.php">
                         Disclaimer
                     </a>
 
-                    <a href="contact.html">
+                    <a href="contact.php">
                         Contact
                     </a>
 

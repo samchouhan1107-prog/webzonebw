@@ -12,9 +12,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="google-adsense-account"
-          content="ca-pub-2904917114665090">
-
     <title>Contact | WebZoneBW</title>
 
     <meta name="description"
@@ -24,7 +21,7 @@
           content="Sameer Chouhan">
 
     <link rel="canonical"
-          href="https://webzonebw.in/contact.html">
+          href="https://webzonebw.in/contact.php">
 
 
     <!-- =====================================================
@@ -71,7 +68,7 @@
 
         <div class="logo">
 
-            <a href="index.html"
+            <a href="index.php"
                aria-label="WebZoneBW Home">
 
                 <img
@@ -107,35 +104,35 @@
             <ul>
 
                 <li>
-                    <a href="index.html">
+                    <a href="index.php">
                         <span aria-hidden="true">🏠</span>
                         Dashboard
                     </a>
                 </li>
 
                 <li>
-                    <a href="about.html">
+                    <a href="about.php">
                         <span aria-hidden="true">👤</span>
                         About
                     </a>
                 </li>
 
                 <li>
-                    <a href="projects.html">
+                    <a href="projects.php">
                         <span aria-hidden="true">💼</span>
                         Projects
                     </a>
                 </li>
 
                 <li>
-                    <a href="resume.html">
+                    <a href="resume.php">
                         <span aria-hidden="true">📄</span>
                         Resume
                     </a>
                 </li>
 
                 <li>
-                    <a href="blog.html">
+                    <a href="blog.php">
                         <span aria-hidden="true">📝</span>
                         Blog
                     </a>
@@ -143,7 +140,7 @@
 
                 <li>
                     <a
-                        href="contact.html"
+                        href="contact.php"
                         class="active"
                         aria-current="page">
 
@@ -510,20 +507,20 @@
                     class="footer-links"
                     aria-label="Footer Navigation">
 
-                    <a href="privacy.html">
+                    <a href="privacy.php">
                         Privacy Policy
                     </a>
 
-                    <a href="terms.html">
+                    <a href="terms.php">
                         Terms &amp; Conditions
                     </a>
 
-                    <a href="disclaimer.html">
+                    <a href="disclaimer.php">
                         Disclaimer
                     </a>
 
                     <a
-                        href="contact.html"
+                        href="contact.php"
                         aria-current="page">
                         Contact
                     </a>

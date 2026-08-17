@@ -3,6 +3,8 @@
 
 <head>
 
+    <?php include 'ads.php'; ?>
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
      crossorigin="anonymous">
     </script>
@@ -10,7 +12,7 @@
 
     <!-- ==========================
          Basic Page Information
-    =========================== -->
+    ================================ -->
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +31,7 @@
 
     <!-- ==========================
          Favicon
-    =========================== -->
+    ================================ -->
 
     <link rel="icon"
           type="image/x-icon"
@@ -45,7 +47,7 @@
      
     <!-- ==========================
          Google Analytics
-    =========================== -->
+    ================================ -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
 
@@ -65,14 +67,16 @@
 
     <!-- ==========================
          Sidebar
-    =========================== -->
+    ================================ -->
 
     <aside class="sidebar">
 
         <div class="logo">
 
-            <img src="assets/logo.png"
-                 alt="WebZoneBW Logo">
+            <a href="index.php" aria-label="WebZoneBW Home">
+                <img src="assets/logo.png"
+                     alt="WebZoneBW Logo">
+            </a>
 
         </div>
 
@@ -85,17 +89,17 @@
 
             <ul>
 
-                <li><a href="index.html"><span aria-hidden="true">🏠</span> Dashboard</a></li>
+                <li><a href="index.php"><span aria-hidden="true">🏠</span> Dashboard</a></li>
 
-                <li><a href="about.html"><span aria-hidden="true">👤</span> About</a></li>
+                <li><a href="about.php"><span aria-hidden="true">👤</span> About</a></li>
 
-                <li><a href="projects.html"><span aria-hidden="true">💼</span> Projects</a></li>
+                <li><a href="projects.php"><span aria-hidden="true">💼</span> Projects</a></li>
 
-                <li><a href="resume.html"><span aria-hidden="true">📄</span> Resume</a></li>
+                <li><a href="resume.php"><span aria-hidden="true">📄</span> Resume</a></li>
 
-                <li><a href="blog.html"><span aria-hidden="true">📝</span> Blog</a></li>
+                <li><a href="blog.php"><span aria-hidden="true">📝</span> Blog</a></li>
 
-                <li><a href="contact.html"><span aria-hidden="true">✉</span> Contact</a></li>
+                <li><a href="contact.php"><span aria-hidden="true">✉</span> Contact</a></li>
 
             </ul>
 
@@ -105,7 +109,7 @@
 
     <!-- ==========================
          Main Content
-    =========================== -->
+    ================================ -->
 
     <main class="main-content">
 
@@ -119,7 +123,7 @@
 
         <!-- ==========================
              Hero Section
-        =========================== -->
+        ================================ -->
 
         <section class="hero">
 
@@ -137,7 +141,7 @@
 
         <!-- ==========================
              Content Section
-        =========================== -->
+        ================================ -->
 
         <section class="featured-card">
 
@@ -153,7 +157,7 @@
 
         <!-- ==========================
              Additional Section
-        =========================== -->
+        ================================ -->
 
         <section class="quick-info">
 
@@ -173,7 +177,7 @@
 
         <!-- ==========================
              Footer
-        =========================== -->
+        ================================ -->
 
         <footer class="site-footer">
 
@@ -189,13 +193,13 @@
 
                 <nav class="footer-links" aria-label="Footer Navigation">
 
-                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="privacy.php">Privacy Policy</a>
 
-                    <a href="terms.html">Terms & Conditions</a>
+                    <a href="terms.php">Terms & Conditions</a>
 
-                    <a href="disclaimer.html">Disclaimer</a>
+                    <a href="disclaimer.php">Disclaimer</a>
 
-                    <a href="contact.html">Contact</a>
+                    <a href="contact.php">Contact</a>
 
                 </nav>
 
@@ -208,7 +212,7 @@
 </div>
 
 <!-- ==========================
-     JavaScript
+    JavaScript
 =========================== -->
 
 <script src="js/script.js"></script>
