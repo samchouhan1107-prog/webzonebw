@@ -1,0 +1,65 @@
+<!--
+WEBZONEBW — STRUCTURED DATA TEMPLATE
+Paste inside the Blogger <head> section.
+
+This creates:
+1. Organization entity for WEBZONEBW
+2. WebSite entity
+3. Article entity on post pages
+
+Replace the logo URL if your real logo uses a different URL.
+-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://webzonebw.in/#organization",
+  "name": "WEBZONEBW",
+  "url": "https://webzonebw.in/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://webzonebw.in/assets/images/webzonebw-logo.png"
+  },
+  "description": "Technology-focused digital portfolio, knowledge base, workspace, and project hub covering IT support, networking, cybersecurity, web development, artificial intelligence, automation, and practical technology projects."
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://webzonebw.in/#website",
+  "url": "https://webzonebw.in/",
+  "name": "WEBZONEBW",
+  "description": "Technology portfolio, knowledge base, digital workspace, and practical technology project hub.",
+  "publisher": {
+    "@id": "https://webzonebw.in/#organization"
+  },
+  "inLanguage": "en"
+}
+</script>
+
+<b:if cond='data:blog.pageType == "item"'>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "<data:blog.pageName/>",
+  "url": "<data:blog.url.canonical/>",
+  "author": {
+    "@type": "Organization",
+    "name": "WEBZONEBW",
+    "url": "https://webzonebw.in/"
+  },
+  "publisher": {
+    "@id": "https://webzonebw.in/#organization"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "<data:blog.url.canonical/>"
+  },
+  "inLanguage": "en"
+}
+</script>
+</b:if>

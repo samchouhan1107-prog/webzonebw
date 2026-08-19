@@ -1,0 +1,12 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://webzonebw.in/#organization",
+  "name": "WEBZONEBW",
+  "url": "https://webzonebw.in/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://webzonebw.in/assets/images/webzonebw-logo.png"
+  },
+  "description": "WEBZONEBW is a technology-focused digital portfolio, knowledge base, workspace, and project hub covering IT support, networking, cybersecurity, web development, artificial intelligence, automation, and practical technology projects."
+}

@@ -1,0 +1,12 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://webzonebw.in/#website",
+  "url": "https://webzonebw.in/",
+  "name": "WEBZONEBW",
+  "description": "Technology portfolio, knowledge base, digital workspace, and practical technology project hub.",
+  "publisher": {
+    "@id": "https://webzonebw.in/#organization"
+  },
+  "inLanguage": "en"
+}

@@ -1,0 +1,35 @@
+<!--
+WEBZONEBW — META / SEO TEMPLATE
+Use in the Blogger <head> section.
+Blogger can replace dynamic values where required.
+-->
+
+<title><data:blog.pageTitle/></title>
+
+<b:if cond='data:blog.metaDescription != ""'>
+    <meta expr:content='data:blog.metaDescription' name='description'/>
+<b:else/>
+    <meta content='WEBZONEBW — Technology portfolio, knowledge base, digital workspace, IT, networking, cybersecurity, web development and AI projects.' name='description'/>
+</b:if>
+
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+
+<link expr:href='data:blog.url.canonical' rel='canonical'/>
+
+<meta property="og:site_name" content="WEBZONEBW"/>
+<meta property="og:type" content="website"/>
+<meta expr:content='data:blog.pageTitle' property="og:title"/>
+<meta expr:content='data:blog.url.canonical' property="og:url"/>
+
+<b:if cond='data:blog.metaDescription != ""'>
+    <meta expr:content='data:blog.metaDescription' property="og:description"/>
+</b:if>
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta expr:content='data:blog.pageTitle' name="twitter:title"/>
+
+<!--
+IMPORTANT:
+For Blogger, do not hard-code one article title into this global template.
+Use the post title dynamically.
+-->
