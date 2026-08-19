@@ -1,12 +1,19 @@
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": "https://webzonebw.in/#website",
+
   "url": "https://webzonebw.in/",
+
   "name": "WEBZONEBW",
-  "description": "Technology portfolio, knowledge base, digital workspace, and practical technology project hub.",
+
+  "description": "WEBZONEBW is a technology-focused digital portfolio, knowledge base, digital workspace, and practical project hub covering IT support, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and technology projects.",
+
   "publisher": {
     "@id": "https://webzonebw.in/#organization"
   },
+
   "inLanguage": "en"
 }
+</script>

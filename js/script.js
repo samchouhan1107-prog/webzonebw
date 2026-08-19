@@ -1,47 +1,79 @@
 /* ==========================================================
    WebZoneBW
    Main JavaScript
-========================================================== */
+   ----------------------------------------------------------
+   Purpose:
+   - Skill bar animation
+   - Dark / Light theme
+   - Theme persistence
+   - Accessibility support
+   - Lightweight static-site compatible
+   ========================================================== */
 
 "use strict";
+
+
+/* ==========================================================
+   DOM READY
+========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     try {
         initSkillBars();
     } catch (error) {
-        console.warn("WebZoneBW: Skill bar initialization failed.", error);
+        console.warn(
+            "WebZoneBW: Skill bar initialization failed.",
+            error
+        );
     }
 
     try {
         initTheme();
     } catch (error) {
-        console.warn("WebZoneBW: Theme initialization failed.", error);
+        console.warn(
+            "WebZoneBW: Theme initialization failed.",
+            error
+        );
     }
 
 });
 
 
 /* ==========================================================
-   Skill Bar Animation
+   SKILL BAR ANIMATION
 ========================================================== */
 
 function initSkillBars() {
 
-    const skills = document.querySelectorAll(".skill-fill");
+    const skills =
+        document.querySelectorAll(".skill-fill");
 
-    // No skill bars on this page
-    if (!skills.length) return;
+    /*
+     * Pages without skill bars do not need
+     * any further processing.
+     */
 
-    // Fallback for browsers without IntersectionObserver
+    if (!skills.length) {
+        return;
+    }
+
+
+    /*
+     * Fallback for browsers that do not support
+     * IntersectionObserver.
+     */
+
     if (!("IntersectionObserver" in window)) {
 
         skills.forEach(skill => {
 
-            const width = skill.dataset.width;
+            const width =
+                skill.dataset.width;
 
             if (width) {
-                skill.style.width = `${width}%`;
+                skill.style.width =
+                    `${width}%`;
             }
 
         });
@@ -49,26 +81,45 @@ function initSkillBars() {
         return;
     }
 
-    const observer = new IntersectionObserver((entries, observer) => {
 
-        entries.forEach(entry => {
+    /*
+     * Animate skill bars when they become visible.
+     */
 
-            if (!entry.isIntersecting) return;
+    const observer =
+        new IntersectionObserver(
+            (entries, observerInstance) => {
 
-            const skill = entry.target;
-            const width = skill.dataset.width;
+                entries.forEach(entry => {
 
-            if (width) {
-                skill.style.width = `${width}%`;
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+
+                    const skill =
+                        entry.target;
+
+                    const width =
+                        skill.dataset.width;
+
+                    if (width) {
+
+                        skill.style.width =
+                            `${width}%`;
+
+                    }
+
+                    observerInstance.unobserve(
+                        skill
+                    );
+
+                });
+
+            },
+            {
+                threshold: 0.4
             }
-
-            observer.unobserve(skill);
-
-        });
-
-    }, {
-        threshold: 0.4
-    });
+        );
 
 
     skills.forEach(skill => {
@@ -79,72 +130,172 @@ function initSkillBars() {
 
 
 /* ==========================================================
-   Dark / Light Theme
+   DARK / LIGHT THEME
 ========================================================== */
 
 function initTheme() {
 
-    const themeToggle = document.getElementById("themeToggle");
+    const themeToggle =
+        document.getElementById("themeToggle");
 
-    // No theme button on this page
-    if (!themeToggle) return;
 
-    let savedTheme = null;
+    /*
+     * Some pages may not contain the theme button.
+     */
 
-    try {
-        savedTheme = localStorage.getItem("theme");
-    } catch (error) {
-        console.warn("WebZoneBW: Local storage unavailable.");
+    if (!themeToggle) {
+        return;
     }
 
 
-    if (savedTheme === "light") {
+    let savedTheme = null;
 
-        document.body.classList.add("light-mode");
+
+    /*
+     * Read saved preference safely.
+     */
+
+    try {
+
+        savedTheme =
+            localStorage.getItem("theme");
+
+    } catch (error) {
+
+        console.warn(
+            "WebZoneBW: Local storage unavailable."
+        );
+
+    }
+
+
+    /*
+     * Apply initial theme.
+     */
+
+    applyTheme(
+        savedTheme === "light",
+        themeToggle
+    );
+
+
+    /*
+     * Theme toggle event.
+     */
+
+    themeToggle.addEventListener(
+        "click",
+        () => {
+
+            const isLight =
+                document.body.classList.toggle(
+                    "light-mode"
+                );
+
+
+            /*
+             * Save preference.
+             */
+
+            try {
+
+                localStorage.setItem(
+                    "theme",
+                    isLight
+                        ? "light"
+                        : "dark"
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "WebZoneBW: Could not save theme preference."
+                );
+
+            }
+
+
+            /*
+             * Update button.
+             */
+
+            updateThemeButton(
+                themeToggle,
+                isLight
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================================================
+   APPLY THEME
+========================================================== */
+
+function applyTheme(
+    isLight,
+    themeToggle
+) {
+
+    if (isLight) {
+
+        document.body.classList.add(
+            "light-mode"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "light-mode"
+        );
+
+    }
+
+
+    updateThemeButton(
+        themeToggle,
+        isLight
+    );
+
+}
+
+
+/* ==========================================================
+   UPDATE THEME BUTTON
+========================================================== */
+
+function updateThemeButton(
+    themeToggle,
+    isLight
+) {
+
+    /*
+     * Keep the button accessible and avoid
+     * unnecessary HTML replacement.
+     */
+
+    if (isLight) {
+
+        themeToggle.setAttribute(
+            "aria-label",
+            "Switch to dark mode"
+        );
 
         themeToggle.innerHTML =
             '<span aria-hidden="true">🌙</span> Dark Mode';
 
     } else {
 
-        document.body.classList.remove("light-mode");
+        themeToggle.setAttribute(
+            "aria-label",
+            "Switch to light mode"
+        );
 
         themeToggle.innerHTML =
             '<span aria-hidden="true">☀️</span> Light Mode';
 
     }
-
-
-    themeToggle.addEventListener("click", () => {
-
-        const isLight =
-            document.body.classList.toggle("light-mode");
-
-
-        if (isLight) {
-
-            try {
-                localStorage.setItem("theme", "light");
-            } catch (error) {
-                console.warn("WebZoneBW: Could not save theme.");
-            }
-
-            themeToggle.innerHTML =
-                '<span aria-hidden="true">🌙</span> Dark Mode';
-
-        } else {
-
-            try {
-                localStorage.setItem("theme", "dark");
-            } catch (error) {
-                console.warn("WebZoneBW: Could not save theme.");
-            }
-
-            themeToggle.innerHTML =
-                '<span aria-hidden="true">☀️</span> Light Mode';
-
-        }
-
-    });
 
 }

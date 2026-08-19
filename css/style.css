@@ -1,17 +1,18 @@
-```css
 /* ==========================================================
-   WebZoneBW v2.1
-   Clean Professional Portfolio
+   WEBZONEBW v2.2
+   Professional Technology Portfolio
    Sameer Chouhan
    ----------------------------------------------------------
    Design:
    - Professional dark default
    - Clean light mode
-   - Minimal visual effects
    - Recruiter friendly
+   - Legal-page optimized
+   - SEO / AI-content friendly
    - Responsive
    - Lightweight
    - Accessibility focused
+   - No unnecessary visual effects
    ========================================================== */
 
 
@@ -21,6 +22,7 @@
 
 html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
 }
 
 *,
@@ -51,12 +53,14 @@ body {
     overflow-x: hidden;
 
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
 }
 
 img {
     display: block;
     max-width: 100%;
+    height: auto;
 }
 
 a,
@@ -64,6 +68,11 @@ button,
 input,
 textarea {
     font: inherit;
+}
+
+button {
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 
@@ -79,6 +88,7 @@ button,
 .quick-info,
 .projects,
 .contact-section,
+.legal-page section,
 input,
 textarea {
     transition:
@@ -292,11 +302,15 @@ textarea {
 }
 
 .top-header p {
-    margin: 7px 0 0;
+    max-width: 850px;
+
+    margin: 8px 0 0;
 
     color: #94a3b8;
 
     font-size: 15px;
+
+    line-height: 1.7;
 }
 
 
@@ -494,7 +508,7 @@ textarea {
 
     font-size: 16px;
 
-    line-height: 1.7;
+    line-height: 1.75;
 
     margin: 0 0 18px;
 }
@@ -547,6 +561,8 @@ textarea {
     margin: 0 0 18px;
 
     font-size: 25px;
+
+    line-height: 1.3;
 }
 
 .projects h3 {
@@ -560,7 +576,7 @@ textarea {
 
     font-size: 16px;
 
-    line-height: 1.7;
+    line-height: 1.75;
 
     margin: 0 0 18px;
 }
@@ -611,12 +627,14 @@ textarea {
     margin: 0 0 14px;
 
     font-size: 25px;
+
+    line-height: 1.3;
 }
 
 .contact-section p {
     color: #cbd5e1;
 
-    line-height: 1.7;
+    line-height: 1.75;
 
     margin: 0 0 22px;
 }
@@ -673,7 +691,7 @@ textarea {
 
 
 /* ==========================================================
-   18 — CONTACT FORM
+   18 — CONTACT / FORM ELEMENTS
 ========================================================== */
 
 form {
@@ -682,6 +700,18 @@ form {
     flex-direction: column;
 
     gap: 14px;
+}
+
+form label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #e2e8f0;
+
+    font-size: 14px;
+
+    font-weight: 600;
 }
 
 form input,
@@ -830,19 +860,19 @@ form .btn {
 
 
 /* ==========================================================
-   21 — LEGAL PAGES
+   21 — LEGAL / INFORMATION PAGES
 ========================================================== */
 
 .legal-page {
     width: 100%;
 
-    max-width: 950px;
+    max-width: 1050px;
 
     margin: 0 auto;
 }
 
 .legal-page section {
-    padding: 30px;
+    padding: 32px;
 
     margin-bottom: 25px;
 
@@ -853,21 +883,41 @@ form .btn {
     border-radius: 16px;
 }
 
+.legal-page section:first-of-type {
+    margin-top: 0;
+}
+
 .legal-page h1 {
     margin: 0 0 25px;
 
-    font-size: 42px;
+    font-size: clamp(32px, 4vw, 44px);
 
     line-height: 1.2;
 }
 
 .legal-page h2 {
-    margin: 24px 0 12px;
+    margin: 0 0 14px;
+
+    color: #f8fafc;
 
     font-size: 25px;
+
+    line-height: 1.35;
+}
+
+.legal-page h3 {
+    margin: 24px 0 10px;
+
+    color: #e2e8f0;
+
+    font-size: 19px;
+
+    line-height: 1.4;
 }
 
 .legal-page p {
+    max-width: 900px;
+
     color: #cbd5e1;
 
     line-height: 1.8;
@@ -875,8 +925,15 @@ form .btn {
     margin: 0 0 16px;
 }
 
-.legal-page ul {
-    margin-bottom: 18px;
+.legal-page p:last-child {
+    margin-bottom: 0;
+}
+
+.legal-page ul,
+.legal-page ol {
+    max-width: 900px;
+
+    margin: 0 0 18px;
 
     padding-left: 25px;
 }
@@ -885,6 +942,26 @@ form .btn {
     margin-bottom: 9px;
 
     color: #cbd5e1;
+
+    line-height: 1.7;
+}
+
+.legal-page a {
+    color: #e2e8f0;
+
+    text-decoration: underline;
+
+    text-decoration-thickness: 1px;
+
+    text-underline-offset: 3px;
+}
+
+.legal-page a:hover {
+    color: #ffffff;
+}
+
+.legal-page strong {
+    color: #f8fafc;
 }
 
 .legal-page hr {
@@ -897,7 +974,24 @@ form .btn {
 
 
 /* ==========================================================
-   22 — SIDEBAR SCROLLBAR
+   22 — CONTENT READABILITY
+========================================================== */
+
+.main-content p {
+    overflow-wrap: break-word;
+}
+
+.main-content a {
+    overflow-wrap: anywhere;
+}
+
+main section + section {
+    scroll-margin-top: 20px;
+}
+
+
+/* ==========================================================
+   23 — SIDEBAR SCROLLBAR
 ========================================================== */
 
 .sidebar-nav::-webkit-scrollbar {
@@ -916,7 +1010,7 @@ form .btn {
 
 
 /* ==========================================================
-   23 — LARGE SCREENS
+   24 — LARGE SCREENS
 ========================================================== */
 
 @media (max-width: 1400px) {
@@ -933,7 +1027,7 @@ form .btn {
 
 
 /* ==========================================================
-   24 — TABLETS
+   25 — TABLETS
 ========================================================== */
 
 @media (max-width: 1024px) {
@@ -962,11 +1056,15 @@ form .btn {
         justify-content: flex-start;
     }
 
+    .legal-page {
+        max-width: 100%;
+    }
+
 }
 
 
 /* ==========================================================
-   25 — MOBILE
+   26 — MOBILE
 ========================================================== */
 
 @media (max-width: 768px) {
@@ -1165,6 +1263,32 @@ form .btn {
     }
 
 
+    /* Legal pages */
+
+    .legal-page section {
+        padding: 24px 22px;
+
+        margin-bottom: 18px;
+
+        border-radius: 14px;
+    }
+
+    .legal-page h2 {
+        font-size: 22px;
+    }
+
+    .legal-page h3 {
+        font-size: 18px;
+    }
+
+    .legal-page p,
+    .legal-page li {
+        font-size: 15px;
+
+        line-height: 1.75;
+    }
+
+
     /* Social */
 
     .social-links {
@@ -1189,7 +1313,7 @@ form .btn {
 
 
 /* ==========================================================
-   26 — SMALL PHONES
+   27 — SMALL PHONES
 ========================================================== */
 
 @media (max-width: 480px) {
@@ -1243,7 +1367,7 @@ form .btn {
 
 
     .legal-page section {
-        padding: 22px;
+        padding: 21px 18px;
     }
 
 
@@ -1251,11 +1375,20 @@ form .btn {
         font-size: 32px;
     }
 
+    .legal-page h2 {
+        font-size: 21px;
+    }
+
+    .legal-page p,
+    .legal-page li {
+        font-size: 15px;
+    }
+
 }
 
 
 /* ==========================================================
-   27 — LIGHT MODE
+   28 — LIGHT MODE
 ========================================================== */
 
 body.light-mode {
@@ -1364,7 +1497,9 @@ body.light-mode .featured-card h3,
 body.light-mode .quick-info h2,
 body.light-mode .projects h2,
 body.light-mode .projects h3,
-body.light-mode .contact-section h2 {
+body.light-mode .contact-section h2,
+body.light-mode .legal-page h2,
+body.light-mode .legal-page h3 {
     color: #0f172a;
 }
 
@@ -1377,6 +1512,22 @@ body.light-mode .contact-section p,
 body.light-mode .legal-page p,
 body.light-mode .legal-page li {
     color: #475569;
+}
+
+body.light-mode .legal-page strong {
+    color: #0f172a;
+}
+
+body.light-mode .legal-page a {
+    color: #334155;
+}
+
+body.light-mode .legal-page a:hover {
+    color: #0f172a;
+}
+
+body.light-mode .legal-page hr {
+    border-top-color: #e2e8f0;
 }
 
 
@@ -1413,6 +1564,10 @@ body.light-mode .social-links a:hover {
 
 
 /* Forms */
+
+body.light-mode form label {
+    color: #334155;
+}
 
 body.light-mode form input,
 body.light-mode form textarea {
@@ -1472,7 +1627,7 @@ body.light-mode .sidebar-nav::-webkit-scrollbar-thumb {
 
 
 /* ==========================================================
-   28 — ACCESSIBILITY
+   29 — ACCESSIBILITY
 ========================================================== */
 
 a:focus-visible,
@@ -1486,7 +1641,7 @@ textarea:focus-visible {
 
 
 /* ==========================================================
-   29 — REDUCED MOTION
+   30 — REDUCED MOTION
 ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1503,4 +1658,3 @@ textarea:focus-visible {
     }
 
 }
-```

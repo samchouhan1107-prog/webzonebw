@@ -1,35 +1,191 @@
 <!--
-WEBZONEBW — META / SEO TEMPLATE
-Use in the Blogger <head> section.
-Blogger can replace dynamic values where required.
+=========================================================
+WEBZONEBW — BLOGGER META / SEO TEMPLATE
+=========================================================
+
+Purpose:
+- Dynamic Blogger titles
+- Dynamic meta descriptions
+- Canonical URLs
+- Search engine directives
+- Open Graph metadata
+- Twitter metadata
+- WEBZONEBW brand/entity consistency
+
+Place inside the Blogger <head> section.
+
+Do not hard-code individual article titles or URLs here.
+=========================================================
 -->
+
+<!-- =====================================================
+     PAGE TITLE
+     ===================================================== -->
 
 <title><data:blog.pageTitle/></title>
 
+
+<!-- =====================================================
+     META DESCRIPTION
+     ===================================================== -->
+
 <b:if cond='data:blog.metaDescription != ""'>
-    <meta expr:content='data:blog.metaDescription' name='description'/>
+
+    <meta
+        expr:content='data:blog.metaDescription'
+        name='description'/>
+
 <b:else/>
-    <meta content='WEBZONEBW — Technology portfolio, knowledge base, digital workspace, IT, networking, cybersecurity, web development and AI projects.' name='description'/>
+
+    <meta
+        content='WEBZONEBW — Technology portfolio, knowledge base, digital workspace, and practical technology projects covering IT support, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and technology learning.'
+        name='description'/>
+
 </b:if>
 
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
 
-<link expr:href='data:blog.url.canonical' rel='canonical'/>
+<!-- =====================================================
+     SEARCH ENGINE ROBOTS
+     ===================================================== -->
 
-<meta property="og:site_name" content="WEBZONEBW"/>
-<meta property="og:type" content="website"/>
-<meta expr:content='data:blog.pageTitle' property="og:title"/>
-<meta expr:content='data:blog.url.canonical' property="og:url"/>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+
+
+<!-- =====================================================
+     CANONICAL URL
+     ===================================================== -->
+
+<link
+    expr:href='data:blog.url.canonical'
+    rel='canonical'/>
+
+
+<!-- =====================================================
+     OPEN GRAPH — SITE
+     ===================================================== -->
+
+<meta
+    property="og:site_name"
+    content="WEBZONEBW"/>
+
+<meta
+    property="og:locale"
+    content="en_US"/>
+
+
+<!-- =====================================================
+     OPEN GRAPH — PAGE TYPE
+     ===================================================== -->
+
+<b:if cond='data:blog.pageType == "item"'>
+
+    <meta
+        property="og:type"
+        content="article"/>
+
+<b:else/>
+
+    <meta
+        property="og:type"
+        content="website"/>
+
+</b:if>
+
+
+<!-- =====================================================
+     OPEN GRAPH — TITLE
+     ===================================================== -->
+
+<meta
+    expr:content='data:blog.pageTitle'
+    property="og:title"/>
+
+
+<!-- =====================================================
+     OPEN GRAPH — URL
+     ===================================================== -->
+
+<meta
+    expr:content='data:blog.url.canonical'
+    property="og:url"/>
+
+
+<!-- =====================================================
+     OPEN GRAPH — DESCRIPTION
+     ===================================================== -->
 
 <b:if cond='data:blog.metaDescription != ""'>
-    <meta expr:content='data:blog.metaDescription' property="og:description"/>
+
+    <meta
+        expr:content='data:blog.metaDescription'
+        property="og:description"/>
+
+<b:else/>
+
+    <meta
+        content="WEBZONEBW — Technology portfolio, knowledge base, digital workspace, and practical technology projects."
+        property="og:description"/>
+
 </b:if>
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta expr:content='data:blog.pageTitle' name="twitter:title"/>
 
-<!--
-IMPORTANT:
-For Blogger, do not hard-code one article title into this global template.
-Use the post title dynamically.
--->
+<!-- =====================================================
+     TWITTER / X
+     ===================================================== -->
+
+<meta
+    name="twitter:card"
+    content="summary_large_image"/>
+
+<meta
+    expr:content='data:blog.pageTitle'
+    name="twitter:title"/>
+
+
+<b:if cond='data:blog.metaDescription != ""'>
+
+    <meta
+        expr:content='data:blog.metaDescription'
+        name="twitter:description"/>
+
+<b:else/>
+
+    <meta
+        content="WEBZONEBW — Technology portfolio, knowledge base, digital workspace, and practical technology projects."
+        name="twitter:description"/>
+
+</b:if>
+
+
+<!-- =====================================================
+     WEBZONEBW BRAND ENTITY
+     ===================================================== -->
+
+<meta
+    name="author"
+    content="WEBZONEBW"/>
+
+
+<!-- =====================================================
+     IMPORTANT
+     =====================================================
+
+     Individual Blogger posts should define their own:
+
+     - Article JSON-LD
+     - headline
+     - author
+     - publisher
+     - datePublished
+     - dateModified
+     - articleSection
+     - keywords
+     - mainEntityOfPage
+
+     Do NOT hard-code an individual article title,
+     description, canonical URL, or publication date
+     into this global Blogger template.
+
+     ===================================================== -->

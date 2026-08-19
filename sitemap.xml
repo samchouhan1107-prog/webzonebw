@@ -2,67 +2,78 @@
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-    <!-- WEBZONEBW Homepage -->
+    <!-- =====================================================
+         WEBZONEBW — XML SITEMAP
+         Primary website pages
+         ===================================================== -->
+
+
+    <!-- Homepage -->
+
     <url>
         <loc>https://webzonebw.in/</loc>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
     </url>
+
 
     <!-- About -->
+
     <url>
         <loc>https://webzonebw.in/about.html</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
     </url>
+
 
     <!-- Projects -->
+
     <url>
         <loc>https://webzonebw.in/projects.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
     </url>
+
 
     <!-- Resume -->
+
     <url>
         <loc>https://webzonebw.in/resume.html</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
     </url>
+
 
     <!-- Blog -->
+
     <url>
         <loc>https://webzonebw.in/blog.html</loc>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
     </url>
+
 
     <!-- Contact -->
+
     <url>
         <loc>https://webzonebw.in/contact.html</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
     </url>
 
-    <!-- Privacy -->
+
+    <!-- =====================================================
+         LEGAL / TRUST PAGES
+         ===================================================== -->
+
+
+    <!-- Privacy Policy -->
+
     <url>
         <loc>https://webzonebw.in/privacy.html</loc>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
     </url>
 
-    <!-- Terms -->
+
+    <!-- Terms & Conditions -->
+
     <url>
         <loc>https://webzonebw.in/terms.html</loc>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
     </url>
 
+
     <!-- Disclaimer -->
+
     <url>
         <loc>https://webzonebw.in/disclaimer.html</loc>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
     </url>
+
 
 </urlset>

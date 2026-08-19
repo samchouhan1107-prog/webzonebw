@@ -1,32 +1,43 @@
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "@id": "https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html#article",
+
   "headline": "Troubleshooting Hardware Issues: A Comprehensive Guide",
+
   "description": "A practical guide to identifying, isolating, testing, and resolving common computer hardware problems through systematic troubleshooting.",
+
   "url": "https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html",
+
   "datePublished": "2026-08-14",
   "dateModified": "2026-08-14",
+
   "author": {
-    "@type": "Organization",
-    "name": "WEBZONEBW",
-    "url": "https://webzonebw.in/"
+    "@type": "Person",
+    "@id": "https://webzonebw.in/#sameer-chouhan",
+    "name": "Sameer Chouhan",
+    "url": "https://webzonebw.in/about.html"
   },
+
   "publisher": {
     "@type": "Organization",
     "@id": "https://webzonebw.in/#organization",
-    "name": "WEBZONEBW",
+    "name": "WebZoneBW",
     "url": "https://webzonebw.in/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://webzonebw.in/assets/images/webzonebw-logo.png"
+      "url": "https://webzonebw.in/assets/logo.png"
     }
   },
+
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html"
   },
+
   "articleSection": "IT Support & Hardware Troubleshooting",
+
   "keywords": [
     "hardware troubleshooting",
     "IT support",
@@ -35,5 +46,7 @@
     "computer maintenance",
     "technical support"
   ],
+
   "inLanguage": "en"
 }
+</script>

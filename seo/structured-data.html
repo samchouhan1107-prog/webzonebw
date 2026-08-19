@@ -1,65 +1,111 @@
 <!--
+=========================================================
 WEBZONEBW — STRUCTURED DATA TEMPLATE
-Paste inside the Blogger <head> section.
+=========================================================
 
-This creates:
-1. Organization entity for WEBZONEBW
-2. WebSite entity
-3. Article entity on post pages
+Purpose:
+1. Establish WEBZONEBW as the Organization entity.
+2. Establish webzonebw.in as the official WebSite entity.
+3. Add Article structured data to individual Blogger posts.
+4. Connect Blogger articles to the WEBZONEBW organization.
 
-Replace the logo URL if your real logo uses a different URL.
+Place inside the Blogger <head> section.
+
+IMPORTANT:
+- Keep the logo URL pointed to the real live logo.
+- Article dates should come from Blogger dynamically.
+- Do not hard-code an individual article title or URL.
+=========================================================
 -->
+
+
+<!-- =====================================================
+     WEBZONEBW — ORGANIZATION
+     ===================================================== -->
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Organization",
   "@id": "https://webzonebw.in/#organization",
+
   "name": "WEBZONEBW",
+
   "url": "https://webzonebw.in/",
+
   "logo": {
     "@type": "ImageObject",
-    "url": "https://webzonebw.in/assets/images/webzonebw-logo.png"
+    "@id": "https://webzonebw.in/#logo",
+    "url": "https://webzonebw.in/assets/logo.png"
   },
-  "description": "Technology-focused digital portfolio, knowledge base, workspace, and project hub covering IT support, networking, cybersecurity, web development, artificial intelligence, automation, and practical technology projects."
+
+  "description": "WEBZONEBW is a technology-focused digital portfolio, knowledge base, digital workspace, and practical project hub covering IT support, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and technology projects."
 }
 </script>
+
+
+<!-- =====================================================
+     WEBZONEBW — WEBSITE
+     ===================================================== -->
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": "https://webzonebw.in/#website",
+
   "url": "https://webzonebw.in/",
+
   "name": "WEBZONEBW",
-  "description": "Technology portfolio, knowledge base, digital workspace, and practical technology project hub.",
+
+  "description": "WEBZONEBW is a technology-focused digital portfolio, knowledge base, digital workspace, and practical project hub.",
+
   "publisher": {
     "@id": "https://webzonebw.in/#organization"
   },
+
   "inLanguage": "en"
 }
 </script>
 
+
+<!-- =====================================================
+     BLOGGER ARTICLE
+     Only generated on individual post pages.
+     ===================================================== -->
+
 <b:if cond='data:blog.pageType == "item"'>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
+
+  "@id": "<data:blog.url.canonical/>#article",
+
   "headline": "<data:blog.pageName/>",
+
   "url": "<data:blog.url.canonical/>",
+
   "author": {
     "@type": "Organization",
+    "@id": "https://webzonebw.in/#organization",
     "name": "WEBZONEBW",
     "url": "https://webzonebw.in/"
   },
+
   "publisher": {
     "@id": "https://webzonebw.in/#organization"
   },
+
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "<data:blog.url.canonical/>"
   },
+
   "inLanguage": "en"
 }
+
 </script>
+
 </b:if>
