@@ -5,13 +5,37 @@
 
     <!-- =====================================================
          WEBZONEBW — DASHBOARD
-         Standard HTML5 Production Version
+         Production HTML5 + SEO + AI Structured Data
          ===================================================== -->
 
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
+
+    <!-- =====================================================
+         BASIC DOCUMENT INFORMATION
+         ===================================================== -->
+
+    <title>
+        WEBZONEBW — Technology Portfolio, Projects &amp; Digital Workspace
+    </title>
+
+    <meta name="description"
+          content="WEBZONEBW is a technology portfolio and digital workspace showcasing IT support, networking, systems integration, cybersecurity, web development, AI, technical projects and practical technology work.">
+
+    <meta name="author"
+          content="Sameer Chouhan">
+
+    <meta name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <meta name="theme-color"
+          content="#0b0f19">
+
+    <link rel="canonical"
+          href="https://webzonebw.in/">
+
 
     <!-- =====================================================
          GOOGLE ADSENSE
@@ -27,27 +51,6 @@
 
 
     <!-- =====================================================
-         SEO
-         ===================================================== -->
-
-    <title>
-        WebZoneBW | Sameer Chouhan — IT &amp; Technology Portfolio
-    </title>
-
-    <meta name="description"
-          content="WebZoneBW is the professional technology portfolio of Sameer Chouhan, showcasing IT Support, Networking, Systems Integration, Network Security, Web Development, technical projects, and continuous learning.">
-
-    <meta name="author"
-          content="Sameer Chouhan">
-
-    <meta name="robots"
-          content="index, follow">
-
-    <link rel="canonical"
-          href="https://webzonebw.in/">
-
-
-    <!-- =====================================================
          FAVICON
          ===================================================== -->
 
@@ -57,11 +60,94 @@
 
 
     <!-- =====================================================
+         OPEN GRAPH
+         ===================================================== -->
+
+    <meta property="og:type"
+          content="website">
+
+    <meta property="og:title"
+          content="WEBZONEBW — Technology Portfolio, Projects &amp; Digital Workspace">
+
+    <meta property="og:description"
+          content="Explore WEBZONEBW — a technology portfolio covering IT support, networking, cybersecurity, web development, AI, systems integration and practical technology projects.">
+
+    <meta property="og:url"
+          content="https://webzonebw.in/">
+
+    <meta property="og:site_name"
+          content="WEBZONEBW">
+
+    <meta property="og:image"
+          content="https://webzonebw.in/assets/images/og-image.png">
+
+    <meta property="og:image:alt"
+          content="WEBZONEBW technology portfolio">
+
+
+    <!-- =====================================================
+         TWITTER / SOCIAL PREVIEW
+         ===================================================== -->
+
+    <meta name="twitter:card"
+          content="summary_large_image">
+
+    <meta name="twitter:title"
+          content="WEBZONEBW — Technology Portfolio">
+
+    <meta name="twitter:description"
+          content="IT, networking, cybersecurity, web development, AI, systems integration and practical technology projects.">
+
+    <meta name="twitter:image"
+          content="https://webzonebw.in/assets/images/og-image.png">
+
+
+    <!-- =====================================================
          MAIN STYLESHEET
          ===================================================== -->
 
     <link rel="stylesheet"
           href="css/style.css">
+
+
+    <!-- =====================================================
+         WEBZONEBW — ORGANIZATION SCHEMA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://webzonebw.in/#organization",
+        "name": "WEBZONEBW",
+        "url": "https://webzonebw.in/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://webzonebw.in/assets/logo.png"
+        },
+        "description": "WEBZONEBW is a technology-focused digital portfolio, knowledge base, workspace and project hub covering IT support, networking, systems integration, cybersecurity, web development, artificial intelligence, automation and practical technology projects."
+    }
+    </script>
+
+
+    <!-- =====================================================
+         WEBZONEBW — WEBSITE SCHEMA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://webzonebw.in/#website",
+        "url": "https://webzonebw.in/",
+        "name": "WEBZONEBW",
+        "description": "Technology portfolio, digital workspace and practical technology knowledge hub.",
+        "publisher": {
+            "@id": "https://webzonebw.in/#organization"
+        },
+        "inLanguage": "en"
+    }
+    </script>
 
 
     <!-- =====================================================
@@ -98,16 +184,14 @@
 
     <aside class="sidebar">
 
-        <!-- Logo -->
-
         <div class="logo">
 
             <a href="index.html"
-               aria-label="WebZoneBW Home">
+               aria-label="WEBZONEBW Home">
 
                 <img
                     src="assets/logo.png"
-                    alt="WebZoneBW Logo">
+                    alt="WEBZONEBW Logo">
 
             </a>
 
@@ -148,7 +232,6 @@
                     </a>
                 </li>
 
-
                 <li>
                     <a href="about.html">
 
@@ -157,7 +240,6 @@
 
                     </a>
                 </li>
-
 
                 <li>
                     <a href="projects.html">
@@ -168,7 +250,6 @@
                     </a>
                 </li>
 
-
                 <li>
                     <a href="resume.html">
 
@@ -178,7 +259,6 @@
                     </a>
                 </li>
 
-
                 <li>
                     <a href="blog.html">
 
@@ -187,7 +267,6 @@
 
                     </a>
                 </li>
-
 
                 <li>
                     <a href="contact.html">
@@ -219,7 +298,7 @@
         <header class="top-header">
 
             <h1>
-                Welcome to WebZoneBW
+                WEBZONEBW — Technology Portfolio &amp; Digital Workspace
             </h1>
 
             <p>
@@ -237,9 +316,9 @@
             class="hero"
             aria-labelledby="hero-title">
 
-            <h1 id="hero-title">
+            <h2 id="hero-title">
                 Hello, I'm Sameer Chouhan.
-            </h1>
+            </h2>
 
             <h3>
                 IT Support • Networking • Systems Integration
@@ -247,10 +326,10 @@
             </h3>
 
             <p>
-                WebZoneBW is my professional technology portfolio,
-                bringing together my technical experience, projects,
-                practical learning, and ongoing development in IT
-                and technology.
+                WEBZONEBW is my professional technology portfolio,
+                bringing together technical experience, projects,
+                practical learning, and ongoing development across
+                IT and technology.
             </p>
 
             <p>
@@ -265,8 +344,6 @@
 
             <div class="hero-buttons">
 
-                <!-- View Resume -->
-
                 <a
                     href="assets/resume/Sameer_Chouhan.pdf"
                     target="_blank"
@@ -279,8 +356,6 @@
                 </a>
 
 
-                <!-- Download Resume -->
-
                 <a
                     href="assets/resume/Sameer_Chouhan.pdf"
                     download
@@ -291,8 +366,6 @@
 
                 </a>
 
-
-                <!-- WhatsApp -->
 
                 <a
                     href="https://wa.me/918198091036?text=Hello%20Sameer%2C%20I%20visited%20your%20WebZoneBW%20portfolio%20and%20would%20like%20to%20connect."
@@ -326,19 +399,20 @@
             </h2>
 
             <h3>
-                WebZoneBW Blog
+                WEBZONEBW Technical Blog
             </h3>
 
             <p>
-                My technical blog documents practical IT,
+                The WEBZONEBW technical blog documents practical IT,
                 networking, infrastructure, cybersecurity,
-                troubleshooting, and web development topics.
+                troubleshooting, web development, and technology
+                topics.
             </p>
 
             <p>
-                It also reflects my ongoing learning journey —
-                turning technical concepts into practical,
-                easy-to-understand resources.
+                It also reflects an ongoing learning journey,
+                turning technical concepts and practical experience
+                into useful, understandable resources.
             </p>
 
             <a
@@ -413,7 +487,7 @@
             aria-labelledby="explore-title">
 
             <h2 id="explore-title">
-                Explore WebZoneBW
+                Explore WEBZONEBW
             </h2>
 
             <p>
@@ -432,7 +506,6 @@
 
                 </li>
 
-
                 <li>
 
                     <span aria-hidden="true">📄</span>
@@ -443,16 +516,15 @@
 
                 </li>
 
-
                 <li>
 
                     <span aria-hidden="true">📝</span>
 
                     <strong>Blog</strong> —
-                    Technical articles, guides, and learning.
+                    Technical articles, guides, troubleshooting
+                    resources, and learning.
 
                 </li>
-
 
                 <li>
 
@@ -480,7 +552,7 @@
                 <p>
 
                     © 2026
-                    <strong>WebZoneBW</strong>
+                    <strong>WEBZONEBW</strong>
 
                     <br>
 

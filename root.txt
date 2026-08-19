@@ -31,10 +31,35 @@ WEBZONEBW/
 │   └── Search-engine crawler instructions + sitemap location
 │
 ├── sitemap.xml
-│   └── Search-engine sitemap containing the public HTML pages
+│   └── Search-engine sitemap containing public WEBZONEBW pages
+│
+├── llms.txt
+│   └── AI-readable description of WEBZONEBW, content areas, projects & featured articles
 │
 ├── ads.txt
 │   └── Google AdSense authorized seller declaration
+│
+├── schema/
+│   │
+│   ├── organization.json
+│   │   └── WEBZONEBW Organization entity — name, URL, logo & description
+│   │
+│   ├── website.json
+│   │   └── WEBZONEBW WebSite entity — website identity & publisher relationship
+│   │
+│   └── article.json
+│       └── Article structured data for featured technical content
+│
+├── seo/
+│   │
+│   ├── meta.html
+│   │   └── Title, meta description, canonical & crawler metadata reference
+│   │
+│   ├── open-graph.html
+│   │   └── Social sharing title, description & image metadata
+│   │
+│   └── structured-data.html
+│       └── JSON-LD implementation reference for Organization, WebSite & Articles
 │
 ├── css/
 │   └── style.css
@@ -51,6 +76,14 @@ WEBZONEBW/
     │
     ├── favicon.ico
     │   └── Browser tab favicon
+    │
+    ├── images/
+    │   │
+    │   ├── og-image.png
+    │   │   └── Default social/AI preview image
+    │   │
+    │   └── webzonebw-cover.png
+    │       └── Main WEBZONEBW visual/brand cover
     │
     └── resume/
         └── Sameer_Chouhan.pdf
