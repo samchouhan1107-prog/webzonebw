@@ -21,6 +21,11 @@ app.get(['/halloween', '/halloween/', '/er', '/er/'], (req, res) => {
   res.sendFile(path.join(__dirname, 'halloween', 'index.html'));
 });
 
+// Explicit routes for 404 and Maintenance Center
+app.get(['/404', '/404.html', '/maintenance', '/maintenance.html', '/status'], (req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
 // Route fallback for client navigation
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

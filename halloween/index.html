@@ -738,6 +738,66 @@
                     <button type="button" id="toggleFaceHudBtnFloating" class="cam-floating-btn" title="3D Face Fit Reticle" aria-label="Toggle Face HUD">
                         <span>👤</span>
                     </button>
+                    <div id="micStatusIndicator" class="cam-floating-badge" style="display: none;" title="Microphone Live">
+                        <span class="mic-pulse-dot"></span>
+                        <span class="mic-icon">🎤</span>
+                    </div>
+                </div>
+
+                <!-- Camera & Microphone Permission Alert Overlay / Modal -->
+                <div id="permissionAlertModal" class="permission-alert-modal" style="display: none;" role="alertdialog" aria-modal="true" aria-labelledby="permAlertTitle">
+                    <div class="permission-alert-backdrop" onclick="window.closePermissionAlert && window.closePermissionAlert()"></div>
+                    <div class="permission-alert-card">
+                        <div class="perm-alert-header">
+                            <div class="perm-alert-icon-wrap" id="permAlertIconWrap">
+                                <span id="permAlertIcon">⚠️</span>
+                            </div>
+                            <div class="perm-alert-title-block">
+                                <h3 id="permAlertTitle">Camera &amp; Microphone Access Required</h3>
+                                <span class="perm-alert-badge" id="permAlertBadge">Permission Denied</span>
+                            </div>
+                            <button type="button" class="perm-alert-close-btn" id="permAlertCloseBtn" aria-label="Close Alert">✖</button>
+                        </div>
+
+                        <div class="perm-alert-body">
+                            <p id="permAlertMessage">
+                                WEBZONEBW ER Studio requires permission to access your <strong>Camera</strong> and <strong>Microphone</strong> to enable live visual effects, facial tracking, and audio-reactive shaders.
+                            </p>
+
+                            <div class="perm-browser-steps" id="permBrowserSteps">
+                                <div class="perm-step-item">
+                                    <span class="step-num">1</span>
+                                    <div class="step-text">
+                                        <strong>Click the Permissions Icon</strong> in your browser's address bar (the 🔒 lock or 📹 camera icon next to the URL).
+                                    </div>
+                                </div>
+                                <div class="perm-step-item">
+                                    <span class="step-num">2</span>
+                                    <div class="step-text">
+                                        Switch <strong>Camera</strong> and <strong>Microphone</strong> from <em>Block</em> to <strong>Allow</strong>.
+                                    </div>
+                                </div>
+                                <div class="perm-step-item">
+                                    <span class="step-num">3</span>
+                                    <div class="step-text">
+                                        Click <strong>Request Permissions Again</strong> below to start your live experience.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="perm-alert-actions">
+                            <button type="button" class="btn camera-btn-primary perm-action-btn" id="permRetryBtn">
+                                <span aria-hidden="true">🔄</span> Request Permissions Again
+                            </button>
+                            <button type="button" class="btn perm-action-btn" id="permDemoBtn">
+                                <span aria-hidden="true">✨</span> Switch to Test Mode
+                            </button>
+                            <button type="button" class="btn perm-action-btn" id="permUploadBtn">
+                                <span aria-hidden="true">📁</span> Upload Photo Instead
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Floating Canvas Swipe Toast (Fingertip Slider) -->
@@ -989,10 +1049,7 @@
 
                 <p>
                     © 2026
-                    <strong>WebZoneBW</strong>
-                    <br>
-                    Designed &amp; Developed by
-                    <strong>Sameer Chouhan</strong>
+                    <strong>WEBZONEBW</strong>. All rights reserved.
                 </p>
 
                 <nav

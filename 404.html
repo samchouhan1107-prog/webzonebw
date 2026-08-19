@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         WEBZONEBW — 404 & MAINTENANCE CENTER
+         Production HTML5 + SEO + Diagnostics
+         ===================================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- =====================================================
+         BASIC DOCUMENT INFORMATION
+         ===================================================== -->
+
+    <title>
+        404 — Page Not Found &amp; Maintenance Status | WEBZONEBW
+    </title>
+
+    <meta name="description"
+          content="Resource not found or systems undergoing maintenance. Check real-time WEBZONEBW service status, ping diagnostics, and quick navigation routes.">
+
+    <meta name="author"
+          content="Sameer Chouhan">
+
+    <meta name="robots"
+          content="noindex, follow">
+
+    <meta name="theme-color"
+          content="#0b0f19">
+
+    <!-- =====================================================
+         FAVICON
+         ===================================================== -->
+
+    <link rel="icon"
+          type="image/png"
+          href="assets/favicon/favicon.png">
+
+    <!-- =====================================================
+         MAIN STYLESHEET
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <!-- =====================================================
+         OPEN GRAPH
+         ===================================================== -->
+
+    <meta property="og:type"
+          content="website">
+
+    <meta property="og:title"
+          content="404 — Page Not Found &amp; System Maintenance | WEBZONEBW">
+
+    <meta property="og:description"
+          content="Resource not found or undergoing scheduled maintenance. Explore system health and fast navigation.">
+
+    <meta property="og:image"
+          content="assets/images/og-image.png">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <a href="index.html"
+               aria-label="WEBZONEBW Home">
+                <img
+                    src="assets/logo.png"
+                    alt="WEBZONEBW Logo">
+            </a>
+        </div>
+
+        <!-- Theme Toggle & WEBZONE ER Actions -->
+        <div class="sidebar-top-actions">
+            <button
+                id="themeToggle"
+                class="theme-btn"
+                type="button"
+                aria-label="Toggle website theme">
+                <span aria-hidden="true">☀️</span>
+                Light Mode
+            </button>
+
+            <a
+                href="halloween/"
+                class="er-btn"
+                aria-label="Launch WEBZONEBW ER Studio">
+                <span aria-hidden="true">🔮</span>
+                WEBZONEBW ER
+            </a>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav
+            class="sidebar-nav"
+            aria-label="Main Navigation">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <span aria-hidden="true">🏠</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="about.html">
+                        <span aria-hidden="true">👤</span>
+                        About
+                    </a>
+                </li>
+                <li>
+                    <a href="projects.html">
+                        <span aria-hidden="true">💼</span>
+                        Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="resume.html">
+                        <span aria-hidden="true">📄</span>
+                        Resume
+                    </a>
+                </li>
+                <li>
+                    <a href="blog.html">
+                        <span aria-hidden="true">📰</span>
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="certifications.html">
+                        <span aria-hidden="true">📜</span>
+                        Certifications
+                    </a>
+                </li>
+                <li>
+                    <a href="contact.html">
+                        <span aria-hidden="true">📬</span>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT AREA
+         ===================================================== -->
+
+    <main class="main-content" id="mainContent">
+
+        <section class="maintenance-section" aria-labelledby="errorHeading">
+
+            <!-- System Status Top Bar -->
+            <div class="maintenance-status-badge-row">
+                <div class="maintenance-pill">
+                    <span class="status-dot pulsing"></span>
+                    <span id="systemStatusLabel">Cluster Status: All Nodes Operational</span>
+                </div>
+                <div class="maintenance-time-pill" id="liveTimestamp">
+                    UTC Time: Syncing...
+                </div>
+            </div>
+
+            <!-- Glitch 404 & Maintenance Stage Card -->
+            <div class="error-stage-card">
+
+                <div class="error-code-glitch-wrap">
+                    <span class="error-code-bg">404</span>
+                    <h1 class="error-code-title" id="errorHeading">404</h1>
+                </div>
+
+                <h2 class="error-subtitle" id="errorSubTitle">
+                    Signal Lost • Route Not Found
+                </h2>
+
+                <p class="error-description" id="errorDescText">
+                    The path you are looking for has been relocated, deprecated, or is temporarily offline for scheduled system maintenance and performance optimizations.
+                </p>
+
+                <!-- Mode Switcher (404 Error vs Under Maintenance View) -->
+                <div class="error-mode-switcher" role="tablist" aria-label="Page View Switcher">
+                    <button
+                        type="button"
+                        class="mode-switch-btn active"
+                        id="tabNotFoundBtn"
+                        role="tab"
+                        aria-selected="true"
+                        onclick="switchErrorTab('notfound')">
+                        <span>🔍</span> 404 Route Diagnostics
+                    </button>
+                    <button
+                        type="button"
+                        class="mode-switch-btn"
+                        id="tabMaintenanceBtn"
+                        role="tab"
+                        aria-selected="false"
+                        onclick="switchErrorTab('maintenance')">
+                        <span>🛠️</span> Maintenance &amp; Uptime Center
+                    </button>
+                </div>
+
+                <!-- TAB 1: 404 QUICK NAVIGATION & RECOVERY -->
+                <div id="viewNotFound" class="error-tab-view active">
+                    
+                    <div class="error-action-grid">
+                        <a href="index.html" class="error-action-card highlight">
+                            <span class="action-icon">🏠</span>
+                            <div class="action-info">
+                                <h3>Return to Dashboard</h3>
+                                <p>Head back to the main technology portfolio and workspace</p>
+                            </div>
+                            <span class="action-arrow">→</span>
+                        </a>
+
+                        <a href="halloween/" class="error-action-card highlight-er">
+                            <span class="action-icon">🔮</span>
+                            <div class="action-info">
+                                <h3>WEBZONEBW ER Studio</h3>
+                                <p>Launch interactive camera filters and AR art shaders</p>
+                            </div>
+                            <span class="action-arrow">→</span>
+                        </a>
+
+                        <a href="projects.html" class="error-action-card">
+                            <span class="action-icon">💼</span>
+                            <div class="action-info">
+                                <h3>Explore Projects</h3>
+                                <p>Browse networking, IT systems, AI, and cloud architectures</p>
+                            </div>
+                            <span class="action-arrow">→</span>
+                        </a>
+
+                        <a href="blog.html" class="error-action-card">
+                            <span class="action-icon">📰</span>
+                            <div class="action-info">
+                                <h3>Read Articles</h3>
+                                <p>Access guides on systems, cybersecurity, and cloud automation</p>
+                            </div>
+                            <span class="action-arrow">→</span>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- TAB 2: UNDER MAINTENANCE & CLUSTER STATUS -->
+                <div id="viewMaintenance" class="error-tab-view" style="display: none;">
+                    
+                    <div class="maintenance-alert-box">
+                        <span class="alert-icon">⚡</span>
+                        <div class="alert-text">
+                            <strong>Maintenance Protocol Notice:</strong> Scheduled maintenance tasks run non-disruptively. Core static portfolio modules remain continuously available while real-time services undergo routine edge synchronization.
+                        </div>
+                    </div>
+
+                    <!-- System Health Grid -->
+                    <div class="service-health-grid">
+                        <div class="health-card">
+                            <div class="health-header">
+                                <span class="health-name">Portfolio Core Engine</span>
+                                <span class="health-badge status-ok">Operational</span>
+                            </div>
+                            <div class="health-progress-bar"><div class="bar-fill" style="width: 100%;"></div></div>
+                            <span class="health-stat">Uptime: 99.98% • Latency: ~14ms</span>
+                        </div>
+
+                        <div class="health-card">
+                            <div class="health-header">
+                                <span class="health-name">WebZone ER Studio (AR Canvas)</span>
+                                <span class="health-badge status-ok">Operational</span>
+                            </div>
+                            <div class="health-progress-bar"><div class="bar-fill" style="width: 100%;"></div></div>
+                            <span class="health-stat">Client-Side Engine • 60 FPS</span>
+                        </div>
+
+                        <div class="health-card">
+                            <div class="health-header">
+                                <span class="health-name">Edge Static CDN</span>
+                                <span class="health-badge status-ok">Active</span>
+                            </div>
+                            <div class="health-progress-bar"><div class="bar-fill" style="width: 100%;"></div></div>
+                            <span class="health-stat">Global Edge Routing • TLS 1.3</span>
+                        </div>
+
+                        <div class="health-card">
+                            <div class="health-header">
+                                <span class="health-name">API Gateway &amp; Routing</span>
+                                <span class="health-badge status-sync">Maintenance Ready</span>
+                            </div>
+                            <div class="health-progress-bar"><div class="bar-fill sync" style="width: 95%;"></div></div>
+                            <span class="health-stat">Zero-Downtime Standby</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Live Network & Diagnostic Terminal Box -->
+                <div class="diagnostic-terminal-box">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="terminal-title">system_diagnostics.sh — live telemetry</span>
+                        <button type="button" class="terminal-ping-btn" id="runPingBtn" onclick="executePingTest()">
+                            <span>⚡</span> Run Node Ping Test
+                        </button>
+                    </div>
+                    <pre class="terminal-body" id="terminalOutput">
+[INIT] Connecting to WebZone telemetry edge...
+[STATUS] Protocol: HTTP/2 (TLS 1.3 Verified)
+[ROUTING] Path requested: [unmatched route / 404 status]
+[DIAGNOSTIC] Fallback handlers engaged. Standby ready.
+                    </pre>
+                </div>
+
+                <div class="error-contact-row">
+                    <span>Need immediate assistance or looking for a specific project?</span>
+                    <a href="contact.html" class="btn-contact-link">Contact Webmaster →</a>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>&copy; 2026 WEBZONEBW. All rights reserved.</p>
+                <nav class="footer-nav" aria-label="Footer Navigation">
+                    <a href="index.html">Dashboard</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+        </footer>
+
+    </main>
+
+</div>
+
+<!-- =====================================================
+     SCRIPTS & DIAGNOSTICS LOGIC
+     ===================================================== -->
+
+<script src="js/script.js"></script>
+
+<script>
+    // Live UTC Clock
+    function updateClock() {
+        const timeEl = document.getElementById("liveTimestamp");
+        if (timeEl) {
+            const now = new Date();
+            timeEl.textContent = "System Time: " + now.toUTCString();
+        }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Tab Switcher between 404 Route Recovery & Maintenance Center
+    function switchErrorTab(tab) {
+        const notFoundView = document.getElementById("viewNotFound");
+        const maintenanceView = document.getElementById("viewMaintenance");
+        const notFoundBtn = document.getElementById("tabNotFoundBtn");
+        const maintenanceBtn = document.getElementById("tabMaintenanceBtn");
+        const heading = document.getElementById("errorHeading");
+        const subTitle = document.getElementById("errorSubTitle");
+        const desc = document.getElementById("errorDescText");
+        const statusLabel = document.getElementById("systemStatusLabel");
+
+        if (tab === "maintenance") {
+            notFoundView.style.display = "none";
+            maintenanceView.style.display = "block";
+            notFoundBtn.classList.remove("active");
+            notFoundBtn.setAttribute("aria-selected", "false");
+            maintenanceBtn.classList.add("active");
+            maintenanceBtn.setAttribute("aria-selected", "true");
+
+            heading.textContent = "503 / 🛠️";
+            subTitle.textContent = "Scheduled Maintenance Protocol Active";
+            desc.textContent = "Infrastructure optimization and scheduled node enhancements are currently active. All static systems remain fully operational.";
+            statusLabel.textContent = "Cluster Status: Scheduled Upgrade in Progress";
+        } else {
+            notFoundView.style.display = "block";
+            maintenanceView.style.display = "none";
+            maintenanceBtn.classList.remove("active");
+            maintenanceBtn.setAttribute("aria-selected", "false");
+            notFoundBtn.classList.add("active");
+            notFoundBtn.setAttribute("aria-selected", "true");
+
+            heading.textContent = "404";
+            subTitle.textContent = "Signal Lost • Route Not Found";
+            desc.textContent = "The path you are looking for has been relocated, deprecated, or is temporarily offline for scheduled system maintenance and performance optimizations.";
+            statusLabel.textContent = "Cluster Status: All Nodes Operational";
+        }
+    }
+
+    // Interactive Ping Test
+    function executePingTest() {
+        const term = document.getElementById("terminalOutput");
+        const btn = document.getElementById("runPingBtn");
+        if (!term || !btn) return;
+
+        btn.disabled = true;
+        btn.innerHTML = "<span>⏳</span> Pinging Clusters...";
+        term.textContent += "\n\n[PROBING] Initiating latency test across global clusters...";
+
+        setTimeout(() => {
+            const rtt1 = Math.floor(Math.random() * 12) + 8;
+            const rtt2 = Math.floor(Math.random() * 15) + 12;
+            const rtt3 = Math.floor(Math.random() * 10) + 6;
+
+            term.textContent += `\n[PING] Node 01 (Cloud Run Edge): ${rtt1}ms - OK`;
+            term.textContent += `\n[PING] Node 02 (Static Asset CDN): ${rtt2}ms - OK`;
+            term.textContent += `\n[PING] Node 03 (ER Studio Engine): ${rtt3}ms - ONLINE (60 FPS)`;
+            term.textContent += `\n[REPORT] Packet Loss: 0.0% • Overall Health: 100% HEALTHY`;
+            term.scrollTop = term.scrollHeight;
+
+            btn.disabled = false;
+            btn.innerHTML = "<span>⚡</span> Run Node Ping Test";
+        }, 600);
+    }
+</script>
+
+</body>
+
+</html>
