@@ -2049,79 +2049,244 @@ body.light-mode .snapshot-preview-modal {
 }
 
 /* ==========================================================
-   30.1 — SIDEBAR ACTION BUTTONS & ER BUTTON
+   30.1 — SIDEBAR ACTION BUTTONS & ER BUTTON (RESPONSIVE)
 ========================================================== */
 
 .sidebar-top-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 8px;
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin-top: 10px;
+    margin-bottom: 6px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .sidebar-top-actions .theme-btn {
-    width: 100%;
+    flex: 1 1 42%;
+    min-width: 0;
     margin-top: 0;
-    padding: 10px 8px;
-    font-size: 13px;
+    height: 38px;
+    padding: 0 6px;
+    font-size: 11.5px;
+    font-weight: 600;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
+    white-space: nowrap;
+    border-radius: 9px;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .er-btn {
+    flex: 1 1 58%;
+    min-width: 0;
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 8px;
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-    color: #e0e7ff;
-    border: 1px solid #6366f1;
+    gap: 4px;
+    height: 38px;
+    padding: 0 6px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);
+    color: #ffffff;
+    border: 1px solid #818cf8;
     border-radius: 9px;
     cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 11.5px;
+    font-weight: 700;
     text-align: center;
     text-decoration: none;
     white-space: nowrap;
-    transition: all 0.2s ease;
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-sizing: border-box;
+}
+
+.er-btn::after {
+    content: "LIVE";
+    display: inline-block;
+    padding: 1px 5px;
+    font-size: 8.5px;
+    font-weight: 800;
+    line-height: 1.1;
+    background: #0ea5e9;
+    color: #ffffff;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 0 6px rgba(14, 165, 233, 0.6);
 }
 
 .er-btn:hover {
-    background: linear-gradient(135deg, #312e81 0%, #4338ca 100%);
-    border-color: #818cf8;
+    background: linear-gradient(135deg, #312e81 0%, #4338ca 60%, #4f46e5 100%);
+    border-color: #a5b4fc;
     color: #ffffff;
-    box-shadow: 0 0 16px rgba(129, 140, 248, 0.4);
+    box-shadow: 0 0 16px rgba(129, 140, 248, 0.45);
     transform: translateY(-1px);
 }
 
 .er-btn.active {
-    background: #4f46e5;
-    border-color: #a5b4fc;
+    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+    border-color: #c7d2fe;
     color: #ffffff;
-    box-shadow: 0 0 14px rgba(79, 70, 229, 0.5);
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.5);
 }
 
 body.light-mode .er-btn {
     background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
-    color: #4338ca;
-    border-color: #c7d2fe;
-    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.1);
+    color: #3730a3;
+    border-color: #818cf8;
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.15);
 }
 
 body.light-mode .er-btn:hover {
-    background: #c7d2fe;
-    color: #312e81;
+    background: linear-gradient(135deg, #c7d2fe 0%, #ddd6fe 100%);
+    color: #1e1b4b;
+    border-color: #6366f1;
+    box-shadow: 0 3px 10px rgba(99, 102, 241, 0.22);
 }
 
 body.light-mode .er-btn.active {
     background: #4f46e5;
     color: #ffffff;
-    border-color: #4f46e5;
+    border-color: #4338ca;
+}
+
+/* ==========================================================
+   30.4 — COMPACT TECHNICAL SPECIFICATIONS SLIDE DRAWER
+========================================================== */
+.tech-specs-slidebar {
+    margin: 20px 0 28px;
+    background: #0f172a;
+    border: 1px solid #28374f;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tech-specs-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    background: #111a2e;
+    transition: background 0.2s ease;
+}
+
+.tech-specs-summary::-webkit-details-marker {
+    display: none;
+}
+
+.tech-specs-summary:hover {
+    background: #1a2640;
+}
+
+.tech-specs-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.tech-specs-badge {
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(14, 165, 233, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.tech-specs-chevron {
+    font-size: 13px;
+    color: #94a3b8;
+    transition: transform 0.25s ease;
+}
+
+details[open] .tech-specs-chevron {
+    transform: rotate(180deg);
+}
+
+.tech-specs-content {
+    padding: 16px 20px;
+    border-top: 1px solid #1e293b;
+    animation: fadeIn 0.25s ease;
+}
+
+.tech-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tech-spec-card {
+    background: #131d31;
+    border: 1px solid #26354a;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.tech-spec-card h4 {
+    margin: 0 0 6px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tech-spec-card p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #cbd5e1;
+}
+
+body.light-mode .tech-specs-slidebar {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+body.light-mode .tech-specs-summary {
+    background: #f8fafc;
+}
+
+body.light-mode .tech-specs-summary:hover {
+    background: #f1f5f9;
+}
+
+body.light-mode .tech-specs-title-group {
+    color: #0f172a;
+}
+
+body.light-mode .tech-specs-content {
+    border-top-color: #e2e8f0;
+}
+
+body.light-mode .tech-spec-card {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+body.light-mode .tech-spec-card h4 {
+    color: #0284c7;
+}
+
+body.light-mode .tech-spec-card p {
+    color: #475569;
 }
 
 /* Category Filter Tabs */
@@ -2627,38 +2792,6 @@ body.light-mode .mag-input {
     display: none;
 }
 
-/* Supabase Storage Result Box in Modal */
-.supabase-upload-box {
-    margin-top: 14px;
-    padding: 12px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.supabase-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #3ecf8e;
-    margin-bottom: 6px;
-}
-
-.supabase-link-input {
-    width: 100%;
-    padding: 6px 10px;
-    background: #1e293b;
-    border: 1px solid #475569;
-    border-radius: 6px;
-    color: #38bdf8;
-    font-size: 12px;
-    text-align: center;
-    margin-top: 6px;
-}
-
 body.light-mode .quick-effects-bar {
     background: #f8fafc;
     border-color: #e2e8f0;
@@ -2684,6 +2817,293 @@ body.light-mode .slide-arrow-btn {
 body.light-mode .effects-hidden-drawer {
     background: #f8fafc;
     border-color: #e2e8f0;
+}
+
+/* ==========================================================
+   30.2 — SNAPCHAT / INSTAGRAM AR LENS STUDIO & CONTROLS
+========================================================== */
+
+/* Floating Quick Actions on Camera Viewport */
+.cam-overlay-quick-bar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 12;
+}
+
+.cam-floating-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.cam-floating-btn:hover, .cam-floating-btn:active {
+    background: rgba(56, 189, 248, 0.3);
+    border-color: #38bdf8;
+    transform: scale(1.1);
+}
+
+.cam-floating-btn.active {
+    background: #0284c7;
+    border-color: #38bdf8;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+}
+
+/* Shutter Flash Animation Overlay */
+.shutter-flash-overlay {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+    transition: opacity 0.05s ease-out;
+}
+
+.shutter-flash-overlay.flash {
+    opacity: 0.9;
+    transition: none;
+}
+
+/* Snapchat / Instagram Circular Lens Carousel Tray */
+.snap-lens-tray-wrapper {
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid #1e293b;
+    border-radius: 20px;
+    padding: 16px 12px 14px;
+    margin-top: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.snap-lens-track {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 4px 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #334155 transparent;
+}
+
+.snap-lens-track::-webkit-scrollbar {
+    height: 5px;
+}
+
+.snap-lens-track::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
+
+.snap-lens-bubble {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 2px 4px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+.snap-lens-bubble .snap-lens-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #1e293b;
+    border: 2px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.snap-lens-bubble .snap-lens-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.snap-lens-bubble:hover .snap-lens-icon {
+    border-color: #38bdf8;
+    transform: scale(1.06);
+    background: #0f172a;
+}
+
+.snap-lens-bubble:hover .snap-lens-label {
+    color: #f8fafc;
+}
+
+.snap-lens-bubble.active .snap-lens-icon {
+    border-color: #38bdf8;
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    transform: scale(1.15);
+}
+
+.snap-lens-bubble.active .snap-lens-label {
+    color: #38bdf8;
+    font-weight: 700;
+}
+
+/* Centered Shutter Button Bar */
+.snap-shutter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding-top: 4px;
+}
+
+.snap-sub-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid #475569;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    color: #e2e8f0;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    justify-content: center;
+}
+
+.snap-sub-btn .snap-btn-text {
+    display: none;
+}
+
+.snap-sub-btn:hover, .snap-sub-btn:active {
+    background: #38bdf8;
+    color: #0f172a;
+    border-color: #38bdf8;
+    transform: scale(1.08);
+}
+
+/* Iconic Big Round Shutter Capture Button */
+.snap-capture-shutter-btn {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: transparent;
+    border: 4px solid #ffffff;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.snap-capture-shutter-btn .shutter-inner-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.snap-capture-shutter-btn .shutter-center-core {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #38bdf8;
+    opacity: 0.8;
+}
+
+.snap-capture-shutter-btn:hover {
+    transform: scale(1.08);
+    border-color: #38bdf8;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.8);
+}
+
+.snap-capture-shutter-btn:hover .shutter-inner-ring {
+    background: #e0f2fe;
+}
+
+.snap-capture-shutter-btn:active {
+    transform: scale(0.92);
+}
+
+.snap-capture-shutter-btn:active .shutter-inner-ring {
+    background: #38bdf8;
+}
+
+body.light-mode .snap-lens-tray-wrapper {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .snap-lens-bubble .snap-lens-icon {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+body.light-mode .snap-lens-bubble .snap-lens-label {
+    color: #64748b;
+}
+
+body.light-mode .snap-lens-bubble:hover .snap-lens-icon {
+    background: #e2e8f0;
+    border-color: #0284c7;
+}
+
+body.light-mode .snap-lens-bubble.active .snap-lens-icon {
+    background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+    border-color: #0284c7;
+}
+
+body.light-mode .snap-sub-btn {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+body.light-mode .snap-capture-shutter-btn {
+    border-color: #0f172a;
+    box-shadow: 0 0 18px rgba(15, 23, 42, 0.25);
+}
+
+body.light-mode .snap-capture-shutter-btn .shutter-inner-ring {
+    background: #0f172a;
+}
+
+body.light-mode .snap-capture-shutter-btn .shutter-center-core {
+    background: #38bdf8;
 }
 
 /* ==========================================================

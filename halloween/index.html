@@ -349,21 +349,28 @@
                             class="category-tab-btn active"
                             data-category="all"
                             role="tab">
-                            🌟 All Styles
+                            🌟 All Lenses
                         </button>
                         <button
                             type="button"
                             class="category-tab-btn"
-                            data-category="art"
+                            data-category="realistic"
                             role="tab">
-                            🎨 Art &amp; Anime
+                            📸 Realistic AR (Insta / Snap)
                         </button>
                         <button
                             type="button"
                             class="category-tab-btn"
                             data-category="tech"
                             role="tab">
-                            ⚡ Tech &amp; Sci-Fi
+                            ⚡ Cyber &amp; Sci-Fi
+                        </button>
+                        <button
+                            type="button"
+                            class="category-tab-btn"
+                            data-category="art"
+                            role="tab">
+                            🎨 Portrait &amp; Anime
                         </button>
                         <button
                             type="button"
@@ -384,6 +391,71 @@
 
                 <!-- Compressed Filter Pill Bar with WebZonebw Renamed Effects -->
                 <div class="filter-bar" role="toolbar" aria-label="Compressed ER Filter Options">
+
+                    <!-- 🌟 REALISTIC AR (INSTAGRAM / SNAPCHAT STYLE) -->
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="goldenhour"
+                        data-category="realistic">
+                        <span aria-hidden="true">🌟</span> Golden Hour Glow
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="sunglasses"
+                        data-category="realistic">
+                        <span aria-hidden="true">🕶️</span> Designer Aviators
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="halo"
+                        data-category="realistic">
+                        <span aria-hidden="true">👑</span> Neon Angel Halo
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="vintage90s"
+                        data-category="realistic">
+                        <span aria-hidden="true">🎞️</span> Retro 90s Kodak
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="kawaii"
+                        data-category="realistic">
+                        <span aria-hidden="true">🌸</span> Kawaii Anime Blush
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="cyberwarrior"
+                        data-category="realistic">
+                        <span aria-hidden="true">⚡</span> Cyber Face-Paint
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="noir"
+                        data-category="realistic">
+                        <span aria-hidden="true">🖤</span> Leica Noir Cinema
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="icefrost"
+                        data-category="realistic">
+                        <span aria-hidden="true">❄️</span> Diamond Shimmer
+                    </button>
 
                     <!-- 🌐 WEBZONEBW SIGNATURE THEME -->
                     <button
@@ -652,11 +724,30 @@
             <!-- Viewport Stage -->
             <div class="camera-viewport" id="cameraViewport">
 
+                <!-- Floating Top Quick HUD Bar (Snapchat / Instagram style) -->
+                <div class="cam-overlay-quick-bar">
+                    <button type="button" id="flipCameraBtnFloating" class="cam-floating-btn" title="Flip Front/Back Camera" aria-label="Flip Camera">
+                        <span>🔄</span>
+                    </button>
+                    <button type="button" id="studioLightBtnFloating" class="cam-floating-btn" title="Studio Ring Light" aria-label="Studio Light">
+                        <span>💡</span>
+                    </button>
+                    <button type="button" id="autoHdBtnFloating" class="cam-floating-btn active" title="Auto-HD Skin Retouch" aria-label="Auto HD Retouch">
+                        <span>✨</span>
+                    </button>
+                    <button type="button" id="toggleFaceHudBtnFloating" class="cam-floating-btn" title="3D Face Fit Reticle" aria-label="Toggle Face HUD">
+                        <span>👤</span>
+                    </button>
+                </div>
+
                 <!-- Floating Canvas Swipe Toast (Fingertip Slider) -->
                 <div id="canvasSwipeToast" class="canvas-swipe-toast" aria-live="polite">
                     <span id="canvasSwipeIcon">👈</span>
                     <span id="canvasSwipeText">WebZonebw Signature</span>
                 </div>
+
+                <!-- Shutter Flash Animation Effect -->
+                <div id="shutterFlashOverlay" class="shutter-flash-overlay"></div>
 
                 <video
                     id="cameraVideo"
@@ -697,29 +788,129 @@
 
             </div>
 
-            <!-- Stage Control Actions -->
-            <div class="camera-actions">
+            <!-- ==========================================================
+                 SNAPCHAT / INSTAGRAM STYLE CIRCULAR AR LENS CAROUSEL TRAY
+                 ========================================================== -->
+            <div class="snap-lens-tray-wrapper" id="snapLensTrayWrapper">
+                
+                <div class="snap-lens-track" id="snapLensTrack" role="region" aria-label="Snapchat & Instagram AR Lens Carousel">
+                    <!-- Realistic AR (Snap/Insta) -->
+                    <button type="button" class="snap-lens-bubble active" data-filter="goldenhour" title="Golden Hour Glow">
+                        <span class="snap-lens-icon">🌟</span>
+                        <span class="snap-lens-label">Golden Glow</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="sunglasses" title="Designer Aviators">
+                        <span class="snap-lens-icon">🕶️</span>
+                        <span class="snap-lens-label">Aviators</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="halo" title="Neon Angel Halo">
+                        <span class="snap-lens-icon">👑</span>
+                        <span class="snap-lens-label">Angel Halo</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="vintage90s" title="Retro 90s Kodak Film">
+                        <span class="snap-lens-icon">🎞️</span>
+                        <span class="snap-lens-label">Retro 90s</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="kawaii" title="Kawaii Anime Blush">
+                        <span class="snap-lens-icon">🌸</span>
+                        <span class="snap-lens-label">Kawaii Blush</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="cyberwarrior" title="Cyber Face-Paint">
+                        <span class="snap-lens-icon">⚡</span>
+                        <span class="snap-lens-label">Cyber Paint</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="noir" title="Leica Noir Cinema">
+                        <span class="snap-lens-icon">🖤</span>
+                        <span class="snap-lens-label">Leica Noir</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="icefrost" title="Diamond Shimmer">
+                        <span class="snap-lens-icon">❄️</span>
+                        <span class="snap-lens-label">Diamond Ice</span>
+                    </button>
+                    <!-- Studio & Art Styles -->
+                    <button type="button" class="snap-lens-bubble" data-filter="webzonebw" title="WebZonebw Signature">
+                        <span class="snap-lens-icon">🌐</span>
+                        <span class="snap-lens-label">Signature</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="cartoon" title="Anime Cel-Shader">
+                        <span class="snap-lens-icon">🎨</span>
+                        <span class="snap-lens-label">Anime Cel</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="studiohd" title="Studio Portrait HD">
+                        <span class="snap-lens-icon">📸</span>
+                        <span class="snap-lens-label">Studio HD</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="cinematic" title="35mm Film">
+                        <span class="snap-lens-icon">🎬</span>
+                        <span class="snap-lens-label">35mm Film</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="cyberhud" title="Cyborg HUD">
+                        <span class="snap-lens-icon">🤖</span>
+                        <span class="snap-lens-label">Cyborg HUD</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="matrix" title="Matrix Rain">
+                        <span class="snap-lens-icon">🟢</span>
+                        <span class="snap-lens-label">Matrix Rain</span>
+                    </button>
+                    <!-- Magazines -->
+                    <button type="button" class="snap-lens-bubble" data-filter="vogue" title="VOGUE Cover">
+                        <span class="snap-lens-icon">🕶️</span>
+                        <span class="snap-lens-label">Vogue Mag</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="time" title="TIME Cover">
+                        <span class="snap-lens-icon">🟥</span>
+                        <span class="snap-lens-label">TIME Mag</span>
+                    </button>
+                    <!-- Halloween -->
+                    <button type="button" class="snap-lens-bubble" data-filter="vampire" title="Vampire AR">
+                        <span class="snap-lens-icon">🧛</span>
+                        <span class="snap-lens-label">Vampire</span>
+                    </button>
+                    <button type="button" class="snap-lens-bubble" data-filter="pumpkin" title="Pumpkin AR">
+                        <span class="snap-lens-icon">🎃</span>
+                        <span class="snap-lens-label">Pumpkin</span>
+                    </button>
+                </div>
 
-                <button
-                    id="snapPhotoBtn"
-                    type="button"
-                    class="btn camera-btn-primary">
-                    <span aria-hidden="true">📷</span> Capture HD Photo / Magazine
-                </button>
+                <!-- Centered Snapchat / Instagram Shutter Button Controls -->
+                <div class="snap-shutter-bar">
+                    <button
+                        id="flipCameraBtn"
+                        type="button"
+                        class="snap-sub-btn"
+                        title="Flip Camera"
+                        aria-label="Flip Camera">
+                        <span aria-hidden="true">🔄</span>
+                        <span class="snap-btn-text">Flip</span>
+                    </button>
 
-                <button
-                    id="flipCameraBtn"
-                    type="button"
-                    class="btn">
-                    <span aria-hidden="true">🔄</span> Flip Camera
-                </button>
+                    <!-- Iconic Big Round Shutter Snap Button -->
+                    <button
+                        id="snapPhotoBtn"
+                        type="button"
+                        class="snap-capture-shutter-btn"
+                        title="Capture HD Photo (Instant Snapshot)"
+                        aria-label="Capture Photo">
+                        <div class="shutter-inner-ring">
+                            <span class="shutter-center-core"></span>
+                        </div>
+                    </button>
 
-                <button
-                    id="toggleAudioBtn"
-                    type="button"
-                    class="btn">
-                    <span aria-hidden="true">🔊</span> Play Ambient Audio
-                </button>
+                    <button
+                        id="toggleAudioBtn"
+                        type="button"
+                        class="snap-sub-btn"
+                        title="Toggle Ambient Audio"
+                        aria-label="Toggle Audio">
+                        <span aria-hidden="true">🔊</span>
+                        <span class="snap-btn-text">Audio</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Extra Camera Controls -->
+            <div class="camera-actions" style="margin-top: 10px;">
 
                 <button
                     id="stopExperienceBtn"
@@ -730,31 +921,17 @@
 
             </div>
 
-            <!-- Snapshot Preview Modal Area with Supabase Storage Support -->
+            <!-- Snapshot Preview Modal Area (Instant HD Save) -->
             <div id="snapshotModal" class="snapshot-preview-modal" style="display: none;">
                 <h3 style="margin: 0 0 8px; color: #f8fafc;">📸 Snapshot Captured!</h3>
                 <img id="snapshotImg" class="snapshot-preview-img" alt="Captured ER Photo">
                 
-                <div style="margin-top: 12px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button id="saveSupabaseBtn" type="button" class="btn" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-color: #34d399; color: #ffffff; font-weight: 700;">
-                        <span aria-hidden="true">☁️</span> Save to Supabase Storage
-                    </button>
-                    <a id="downloadSnapshotBtn" class="btn camera-btn-primary" download="webzonebw-snapshot.png">
-                        <span aria-hidden="true">💾</span> Save Local
+                <div style="margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <a id="downloadSnapshotBtn" class="btn camera-btn-primary" download="webzonebw-snapshot.png" style="font-weight: 700;">
+                        <span aria-hidden="true">💾</span> Save HD Snapshot
                     </a>
                     <button id="closeSnapshotBtn" type="button" class="btn">
-                        Close
-                    </button>
-                </div>
-
-                <!-- Supabase Cloud Result Container -->
-                <div id="supabaseResultBox" class="supabase-upload-box" style="display: none;">
-                    <div class="supabase-badge">
-                        <span aria-hidden="true">⚡</span> <span id="supabaseStatusText">Uploaded to Supabase Cloud Storage</span>
-                    </div>
-                    <input type="text" id="supabaseUrlField" class="supabase-link-input" readonly>
-                    <button id="copySupabaseUrlBtn" type="button" class="btn" style="margin-top: 8px; font-size: 12px; padding: 5px 12px;">
-                        📋 Copy Link
+                        ✕ Close
                     </button>
                 </div>
             </div>
@@ -763,41 +940,43 @@
 
 
         <!-- =================================================
-             TECHNICAL HIGHLIGHTS
+             COMPACT TECHNICAL SPECIFICATIONS SLIDEBAR
              ================================================= -->
 
-        <section
-            class="projects"
-            aria-labelledby="tech-specs-title">
-
-            <h2 id="tech-specs-title">
-                🛠️ Technical Specifications
-            </h2>
-
-            <ul>
-                <li>
-                    <strong>🎨 Cartoon &amp; Cel-Shading Engine:</strong>
-                    Real-time color quantization, posterization luminance algorithms, and manga edge-detection contours rendered on 60FPS HTML5 canvas.
-                </li>
-                <li>
-                    <strong>✨ Auto-HD Quality Enhancer:</strong>
-                    Unsharp masking convolution filters, contrast stretching, vibrance boosts, and studio portrait lighting vignette for crisp re-upload.
-                </li>
-                <li>
-                    <strong>📰 Trending Magazine Cover Generator:</strong>
-                    Dynamic high-fashion typography compositing (TIME, WIRED, Forbes, VOGUE, Cyberpunk) with customizable headlines and barcodes.
-                </li>
-                <li>
-                    <strong>📁 Re-upload Photo Studio:</strong>
-                    Full drag-and-drop or file upload pipeline to enhance, stylize, and export existing photos with zero quality loss.
-                </li>
-                <li>
-                    <strong>🔒 100% Client-Side Privacy:</strong>
-                    Video frames and uploaded images are processed locally in browser RAM with zero external server transmission.
-                </li>
-            </ul>
-
-        </section>
+        <details class="tech-specs-slidebar">
+            <summary class="tech-specs-summary">
+                <div class="tech-specs-title-group">
+                    <span>🛠️ Technical Specifications &amp; Architecture</span>
+                    <span class="tech-specs-badge">Client-Side High-Perf</span>
+                </div>
+                <span class="tech-specs-chevron">▼</span>
+            </summary>
+            
+            <div class="tech-specs-content">
+                <div class="tech-specs-grid">
+                    <div class="tech-spec-card">
+                        <h4>🎨 Cartoon &amp; Cel-Shading</h4>
+                        <p>Real-time color quantization, posterization luminance algorithms, and manga edge contours on 60FPS HTML5 canvas.</p>
+                    </div>
+                    <div class="tech-spec-card">
+                        <h4>✨ Auto-HD Quality Enhancer</h4>
+                        <p>Unsharp masking convolution filters, contrast stretching, vibrance boosts, and studio lighting vignette.</p>
+                    </div>
+                    <div class="tech-spec-card">
+                        <h4>👤 3D Biometric Face-Fitting</h4>
+                        <p>Real-time optical face tracking, automatic luminance-skin centroids, and dynamic anatomical reticle fitting.</p>
+                    </div>
+                    <div class="tech-spec-card">
+                        <h4>📰 Magazine Cover Generator</h4>
+                        <p>High-fashion typography compositing (TIME, WIRED, Forbes, VOGUE, CyberMag) with custom headlines &amp; barcodes.</p>
+                    </div>
+                    <div class="tech-spec-card">
+                        <h4>🔒 100% Client-Side Privacy</h4>
+                        <p>Camera frames processed locally in browser RAM with zero external server storage or telemetry leaks.</p>
+                    </div>
+                </div>
+            </div>
+        </details>
 
 
         <!-- =================================================
