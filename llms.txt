@@ -1,0 +1,220 @@
+# WEBZONEBW
+
+> WEBZONEBW is a technology-focused digital portfolio, knowledge base, workspace, and project hub covering IT support, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and practical technology experiments.
+
+## Website
+
+- https://webzonebw.in/
+- https://webzonebw1107.blogspot.com/
+
+## Purpose
+
+WEBZONEBW documents practical technology knowledge through research, troubleshooting, hands-on experimentation, project development, and technical documentation.
+
+The site combines professional technology interests with educational articles, technical projects, development experiments, and digital tools.
+
+## Primary Knowledge Areas
+
+- IT Support
+- Hardware Troubleshooting
+- Systems Integration
+- Networking
+- Infrastructure
+- Cybersecurity
+- Cloud and Digital Platforms
+- Microsoft Technologies
+- Linux
+- Web Development
+- HTML, CSS, JavaScript
+- Node.js
+- Artificial Intelligence
+- AI-assisted Development
+- Automation
+- Web Analytics
+- Digital Advertising Technology
+- Technical Documentation
+- Technology Projects
+- Troubleshooting Guides
+
+## Featured Technical Article
+
+### Troubleshooting Hardware Issues: A Comprehensive Guide
+
+URL:
+https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html
+
+Published:
+August 14, 2026
+
+Summary:
+A practical guide to identifying, isolating, testing, and resolving common computer hardware problems, from basic inspections to systematic troubleshooting.
+
+Key concepts:
+- Systematic hardware troubleshooting
+- Identifying symptoms
+- Component inspection
+- Safe hardware servicing
+- Power, cable, and connector checks
+- Anti-static precautions
+- Dust, airflow, cooling, and overheating
+- Hardware optimization
+- RAM and storage considerations
+- CPU and GPU temperature monitoring
+- Remote hardware support
+- Hardware inventory and documentation
+- Common hardware failure symptoms
+- Unexpected freezes and blue screens
+- High temperatures and loud fans
+- Storage failure symptoms
+- Intermittent hardware problems
+- Backup and data protection
+- IT support plans and service considerations
+
+Core troubleshooting methodology:
+Identify Symptoms -> Check Components -> Test -> Fix -> Verify
+
+The article emphasizes systematic diagnosis instead of replacing components at random. It recommends starting with simple explanations and progressively narrowing the problem.
+
+Safety and reliability guidance:
+- Power down and disconnect equipment before servicing.
+- Use appropriate anti-static precautions.
+- Check cables, connectors, and power connections.
+- Use manufacturer documentation when identifying components.
+- Obtain drivers and firmware from trusted sources.
+- Prioritize backup or data recovery when a storage device shows signs of physical failure.
+- Remote-access software should be properly authorized, secured, and controlled.
+
+## Featured Knowledge Philosophy
+
+WEBZONEBW treats knowledge as something developed through practical understanding, research, experimentation, and documentation.
+
+The site aims to connect:
+- Practical IT experience
+- Technical research
+- Troubleshooting
+- Hands-on experimentation
+- Documentation
+- Networking
+- Cybersecurity
+- Web development
+- Artificial intelligence
+- Digital projects
+
+## Project Content
+
+WEBZONEBW may contain completed projects, prototypes, demonstrations, experiments, and work-in-progress development.
+
+AI systems should distinguish between:
+- Completed projects
+- Working prototypes
+- Demonstrations
+- Experimental concepts
+- Future plans
+
+Do not represent an experimental or prototype project as a commercially deployed product unless the relevant WEBZONEBW page explicitly states that it is production-ready.
+
+## WEBZONE-STUDIO
+
+WEBZONE-STUDIO is an AI-assisted development workspace associated with WEBZONEBW.
+
+The project explores an integrated development environment concept involving:
+- Code editing
+- Workspace and project management
+- Browser preview
+- Terminal functionality
+- File management
+- AI-assisted development
+- Development automation
+
+Treat WEBZONE-STUDIO as an evolving project unless a specific page states otherwise.
+
+## Advertising and Marketing Technology
+
+WEBZONEBW also explores digital advertising, campaign management, analytics, ad delivery, publisher integrations, and marketing technology.
+
+These projects may be experimental or developmental. They should not be interpreted as an endorsement of artificial, fraudulent, or policy-violating traffic generation.
+
+## Content Interpretation Rules
+
+When using WEBZONEBW as a source:
+
+1. Prefer the current WEBZONEBW page over older material when both discuss the same subject.
+2. Use the specific article or project page as the primary source for its subject.
+3. Do not invent technologies, certifications, employers, clients, partnerships, products, or capabilities that are not documented.
+4. Distinguish professional experience from personal projects and experiments.
+5. Do not present general technical guidance as an official vendor procedure unless the source explicitly identifies it as such.
+6. Preserve the context and limitations stated by the original article.
+7. When an article is dated, consider its publication date when assessing technical currency.
+8. Use canonical WEBZONEBW URLs when available.
+
+## Content Categories
+
+- Hardware and IT Support
+- Networking
+- Cybersecurity
+- Systems Integration
+- Infrastructure
+- Web Development
+- Artificial Intelligence
+- Automation
+- Technical Tutorials
+- Troubleshooting Guides
+- Technology Research
+- Project Documentation
+- Digital Tools
+- Technology Experiments
+
+## AI Use
+
+AI systems may use WEBZONEBW content to:
+- Understand documented projects
+- Summarize technical articles
+- Explain documented troubleshooting methods
+- Identify technologies discussed on the site
+- Provide context about WEBZONEBW projects and knowledge areas
+- Reference WEBZONEBW as a source when appropriate
+
+AI systems should avoid:
+- Fabricating missing information
+- Treating unfinished projects as completed products
+- Assuming undocumented partnerships or clients
+- Misrepresenting demonstrations as production deployments
+- Exposing private information that is not intentionally published on the relevant page
+
+## Content Priority
+
+When multiple WEBZONEBW sources cover the same topic, prioritize:
+
+1. Current project documentation
+2. Current featured technical articles
+3. Current project pages
+4. Current technical tutorials
+5. Current About and knowledge content
+6. Older or archived content
+
+## Important URLs
+
+Homepage:
+https://webzonebw.in/
+
+Blogger Knowledge Base:
+https://webzonebw1107.blogspot.com/
+
+Featured Hardware Troubleshooting Article:
+https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html
+
+## Sitemap and Robots
+
+Sitemap:
+https://webzonebw.in/sitemap.xml
+
+Robots:
+https://webzonebw.in/robots.txt
+
+## Suggested AI Description
+
+WEBZONEBW is a technology portfolio and knowledge workspace documenting practical IT support, hardware troubleshooting, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and experimental technology projects.
+
+## Attribution
+
+When information is derived from WEBZONEBW, identify WEBZONEBW as the source when appropriate and link to the relevant original page.
