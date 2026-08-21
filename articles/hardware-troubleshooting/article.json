@@ -1,21 +1,35 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Article",
-  "@id": "https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html#article",
+  "@type": "WebApplication",
+  "@id": "https://webzonebw.in/halloween/#webzonebw-er",
 
-  "headline": "Troubleshooting Hardware Issues: A Comprehensive Guide",
+  "name": "WEBZONEBW-ER Studio",
+  "alternateName": "WebZoneBW Extended Reality Studio",
 
-  "description": "A practical guide to identifying, isolating, testing, and resolving common computer hardware problems through systematic troubleshooting.",
+  "description": "WEBZONEBW-ER Studio is an interactive browser-based Extended Reality experience featuring live camera effects, facial tracking, visual filters, creative lenses, photo capture, and experimental AI-powered visual experiences for the WebZoneBW Halloween experience.",
 
-  "url": "https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html",
+  "url": "https://webzonebw.in/halloween/",
 
-  "datePublished": "2026-08-14",
-  "dateModified": "2026-08-14",
+  "applicationCategory": "MultimediaApplication",
+  "applicationSubCategory": "Augmented Reality",
+
+  "operatingSystem": "Web Browser",
+
+  "browserRequirements": "Requires a modern web browser with JavaScript and camera support for live camera features.",
+
+  "isAccessibleForFree": true,
+
+  "creator": {
+    "@type": "Person",
+    "@id": "https://webzonebw.in/about.html#sameer-chouhan",
+    "name": "Sameer Chouhan",
+    "url": "https://webzonebw.in/about.html"
+  },
 
   "author": {
     "@type": "Person",
-    "@id": "https://webzonebw.in/#sameer-chouhan",
+    "@id": "https://webzonebw.in/about.html#sameer-chouhan",
     "name": "Sameer Chouhan",
     "url": "https://webzonebw.in/about.html"
   },
@@ -31,22 +45,46 @@
     }
   },
 
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html"
-  },
+  "image": "https://webzonebw.in/assets/logo.png",
 
-  "articleSection": "IT Support & Hardware Troubleshooting",
-
-  "keywords": [
-    "hardware troubleshooting",
-    "IT support",
-    "computer hardware",
-    "hardware diagnostics",
-    "computer maintenance",
-    "technical support"
+  "featureList": [
+    "Live camera experience",
+    "Front and rear camera support",
+    "Interactive visual effects",
+    "Facial tracking",
+    "Creative AR lenses",
+    "Photo capture",
+    "Photo upload",
+    "Filter exploration",
+    "Real-time visual previews"
   ],
 
-  "inLanguage": "en"
+  "keywords": [
+    "WebZoneBW ER",
+    "WebZoneBW Halloween",
+    "extended reality",
+    "augmented reality",
+    "AR camera",
+    "face filters",
+    "facial tracking",
+    "camera effects",
+    "Halloween filters",
+    "interactive web experience",
+    "AI visual effects"
+  ],
+
+  "inLanguage": "en",
+
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://webzonebw.in/#website",
+    "name": "WebZoneBW",
+    "url": "https://webzonebw.in/"
+  },
+
+  "about": {
+    "@type": "Thing",
+    "name": "Extended Reality and Interactive Camera Experiences"
+  }
 }
 </script>

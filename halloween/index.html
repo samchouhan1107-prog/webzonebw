@@ -4,530 +4,2100 @@
 <head>
 
     <!-- =====================================================
-         WEBZONEBW — WEBZONEBW-ER STUDIO (EXTENDED REALITY & AR)
-         Live Facial Recognition, AI Biometrics HUD & Visual Shaders
+         WEBZONEBW — WEBZONEBW-ER STUDIO
+         Extended Reality / AR / Halloween Experience
          ===================================================== -->
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>WEBZONEBW-ER STUDIO | Next-Gen AR &amp; Live Camera Effects</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        WEBZONEBW-ER Studio | Halloween AR Camera &amp; Live Effects
+    </title>
 
     <meta name="description"
-          content="WEBZONEBW-ER Studio: High-performance browser-based Extended Reality and real-time facial recognition camera studio featuring Cyber lenses, Matrix Rain, Anime Cel, and AI Biometric HUD.">
+          content="Explore the WEBZONEBW-ER Studio Halloween experience with live browser camera effects, AR-style lenses, visual shaders, photo capture and interactive effects.">
 
-    <meta name="author" content="WEBZONEBW">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://webzonebw.in/halloween/">
-    <link rel="icon" type="image/png" href="../assets/favicon/favicon.png">
+    <meta name="author"
+          content="Sameer Chouhan">
 
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="../css/style.css">
+    <meta name="robots"
+          content="index, follow, max-image-preview:large">
+
+    <meta name="theme-color"
+          content="#08080d">
+
+    <meta name="application-name"
+          content="WEBZONEBW-ER Studio">
+
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+
+    <meta name="apple-mobile-web-app-title"
+          content="WEBZONEBW-ER">
+
+    <meta name="mobile-web-app-capable"
+          content="yes">
+
+
+    <!-- =====================================================
+         CANONICAL
+         ===================================================== -->
+
+    <link rel="canonical"
+          href="https://webzonebw.in/Halloween/">
+
+
+    <!-- =====================================================
+         FAVICON
+         ===================================================== -->
+
+    <link rel="icon"
+          type="image/png"
+          href="../assets/favicon/favicon.png">
+
+    <link rel="shortcut icon"
+          href="../assets/favicon.ico.ico">
+
+
+    <!-- =====================================================
+         OPEN GRAPH
+         ===================================================== -->
+
+    <meta property="og:type"
+          content="website">
+
+    <meta property="og:title"
+          content="WEBZONEBW-ER Studio | Halloween AR Experience">
+
+    <meta property="og:description"
+          content="A browser-based Halloween AR experience featuring live camera effects, interactive lenses, visual shaders and HD photo capture.">
+
+    <meta property="og:url"
+          content="https://webzonebw.in/Halloween/">
+
+    <meta property="og:site_name"
+          content="WEBZONEBW">
+
+    <meta property="og:locale"
+          content="en_IN">
+
+    <meta property="og:image"
+          content="https://webzonebw.in/assets/logo.png">
+
+    <meta property="og:image:alt"
+          content="WEBZONEBW Halloween Extended Reality Studio">
+
+
+    <!-- =====================================================
+         TWITTER / SOCIAL CARD
+         ===================================================== -->
+
+    <meta name="twitter:card"
+          content="summary_large_image">
+
+    <meta name="twitter:title"
+          content="WEBZONEBW-ER Studio | Halloween AR Experience">
+
+    <meta name="twitter:description"
+          content="Explore live camera lenses, visual effects and interactive Halloween AR features from WEBZONEBW.">
+
+    <meta name="twitter:image"
+          content="https://webzonebw.in/assets/logo.png">
+
+
+    <!-- =====================================================
+         MAIN WEBZONEBW STYLESHEET
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="../css/style.css">
+
+
+    <!-- =====================================================
+         ER STUDIO PAGE-SCOPED LAYOUT
+         ===================================================== -->
+
+    <style>
+
+        /* =====================================================
+           GLOBAL ER PAGE SAFETY
+           ===================================================== */
+
+        .er-studio-body {
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           STANDARD WEBZONEBW PAGE HEADER
+           ===================================================== */
+
+        .er-studio-body .site-page-header {
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(8, 8, 13, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: relative;
+            z-index: 200;
+        }
+
+
+        .er-studio-body .page-header-content {
+            width: 100%;
+            max-width: 1600px;
+            min-height: 78px;
+            margin: 0 auto;
+            padding: 14px 28px;
+            box-sizing: border-box;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+
+        .er-studio-body .page-header-title {
+            min-width: 0;
+        }
+
+
+        .er-studio-body .page-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-wrap: wrap;
+
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+
+        .er-studio-body .page-header-brand-main {
+            color: inherit;
+            white-space: nowrap;
+        }
+
+
+        .er-studio-body .page-header-divider {
+            opacity: 0.35;
+        }
+
+
+        .er-studio-body .page-header-section {
+            font-weight: 500;
+            opacity: 0.82;
+            white-space: nowrap;
+        }
+
+
+        .er-studio-body .page-header-description {
+            margin: 5px 0 0;
+            font-size: 0.76rem;
+            line-height: 1.4;
+            opacity: 0.58;
+            letter-spacing: 0.025em;
+        }
+
+
+        .er-studio-body .page-header-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+
+        .er-studio-body .page-header-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            min-height: 38px;
+            padding: 0 12px;
+
+            border-radius: 8px;
+
+            color: inherit;
+            text-decoration: none;
+
+            font-size: 0.82rem;
+            font-weight: 500;
+
+            opacity: 0.78;
+
+            transition:
+                background 0.2s ease,
+                opacity 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .er-studio-body .page-header-action:hover {
+            background: rgba(255, 255, 255, 0.07);
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+
+        .er-studio-body .page-header-icon {
+            width: 38px;
+            height: 38px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+
+            background: rgba(255, 255, 255, 0.035);
+            color: inherit;
+
+            cursor: pointer;
+
+            font-size: 1rem;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .er-studio-body .page-header-icon:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-1px);
+        }
+
+
+        /* =====================================================
+           DESKTOP ER LAYOUT
+           Sidebar gets its own grid column.
+           ===================================================== */
+
+        .er-studio-body .er-layout-container {
+            display: grid;
+            grid-template-columns: minmax(230px, 270px) minmax(0, 1fr);
+            width: 100%;
+            min-height: calc(100vh - 78px);
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+           ===================================================== */
+
+        .er-studio-body .er-sidebar {
+            position: relative;
+            inset: auto;
+            width: auto;
+            min-width: 0;
+            height: calc(100vh - 78px);
+            z-index: 50;
+            overflow-y: auto;
+        }
+
+
+        /* =====================================================
+           MAIN AREA
+           ===================================================== */
+
+        .er-studio-body .er-main-content {
+            min-width: 0;
+            width: 100%;
+            max-width: none;
+        }
+
+
+        /* =====================================================
+           WORKSPACE
+           ===================================================== */
+
+        .er-studio-body .er-workspace-grid {
+            min-width: 0;
+            width: 100%;
+        }
+
+
+        /* =====================================================
+           CAMERA VIEWPORT
+           ===================================================== */
+
+        .er-studio-body .camera-viewport-frame {
+            position: relative;
+            width: 100%;
+            min-height: 420px;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+
+        .er-studio-body #cameraVideo.camera-video {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            max-width: 100%;
+            max-height: 100%;
+
+            object-fit: cover;
+            object-position: center center;
+
+            display: block;
+
+            z-index: 1;
+
+            background: #050507;
+        }
+
+
+        .er-studio-body #cameraCanvas.camera-canvas {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            max-width: 100%;
+            max-height: 100%;
+
+            object-fit: contain;
+
+            display: block;
+
+            z-index: 2;
+
+            pointer-events: none;
+        }
+
+
+        .er-studio-body #cameraPlaceholder {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+        }
+
+
+        /* =====================================================
+           CAMERA CONTROLS
+           ===================================================== */
+
+        .er-studio-body .cam-corner-btn,
+        .er-studio-body .cam-zoom-badge,
+        .er-studio-body .cam-floating-vertical-stack,
+        .er-studio-body .cam-floating-badge,
+        .er-studio-body .canvas-swipe-toast {
+            z-index: 20;
+        }
+
+
+        .er-studio-body .permission-alert-modal {
+            z-index: 100;
+        }
+
+
+        /* =====================================================
+           CAMERA PRIVACY
+           ===================================================== */
+
+        .er-camera-privacy-note {
+            margin: 10px auto 0;
+            max-width: 900px;
+            padding: 8px 14px;
+
+            text-align: center;
+
+            font-size: 0.78rem;
+            line-height: 1.45;
+
+            opacity: 0.72;
+        }
+
+
+        .er-camera-privacy-note strong {
+            opacity: 0.95;
+        }
+
+
+        /* =====================================================
+           EFFECTS PANEL
+           ===================================================== */
+
+        .er-studio-body .er-effects-panel {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+
+        /* =====================================================
+           MOBILE HEADER
+           ===================================================== */
+
+        .er-studio-body .er-mobile-nav-bar {
+            min-height: 58px;
+        }
+
+
+        .er-studio-body .er-mobile-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            text-decoration: none;
+            color: inherit;
+
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+
+
+        .er-studio-body .mobile-section-name {
+            opacity: 0.7;
+            font-size: 0.84em;
+        }
+
+
+        /* =====================================================
+           TABLET
+           ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .er-studio-body .er-layout-container {
+                grid-template-columns:
+                    minmax(210px, 240px)
+                    minmax(0, 1fr);
+            }
+
+
+            .er-studio-body .page-header-content {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE / DRAWER
+           ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .er-studio-body .site-page-header {
+                display: none;
+            }
+
+
+            .er-studio-body .er-layout-container {
+                display: block;
+                min-height: 100vh;
+            }
+
+
+            .er-studio-body .er-sidebar {
+                position: fixed;
+
+                top: 0;
+                left: 0;
+                bottom: 0;
+
+                width: min(82vw, 300px);
+                height: 100vh;
+
+                z-index: 1000;
+            }
+
+
+            .er-studio-body .er-main-content {
+                width: 100%;
+                min-width: 0;
+            }
+
+
+            .er-studio-body .camera-viewport-frame {
+                min-height: min(70vh, 600px);
+            }
+
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+           ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .er-studio-body .camera-viewport-frame {
+                min-height: 58vh;
+                max-height: 72vh;
+            }
+
+
+            .er-studio-body #cameraVideo.camera-video {
+                object-fit: cover;
+            }
+
+
+            .er-camera-privacy-note {
+                font-size: 0.72rem;
+                padding: 7px 10px;
+            }
+
+
+            .er-studio-body .er-mobile-title {
+                font-size: 0.92rem;
+            }
+
+        }
+
+
+        /* =====================================================
+           ACCESSIBILITY
+           ===================================================== */
+
+        .er-studio-body button:focus-visible,
+        .er-studio-body a:focus-visible,
+        .er-studio-body input:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+           ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .er-studio-body *,
+            .er-studio-body *::before,
+            .er-studio-body *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+        }
+
+    </style>
+
+
+    <!-- =====================================================
+         ER STUDIO CONFIGURATION
+         ===================================================== -->
+
+    <script>
+
+        window.WEBZONEBW_ER_CONFIG = {
+
+            version: "1.0",
+
+            experience: "WEBZONEBW-ER",
+
+            seasonalTheme: "Halloween",
+
+            initialCamera: "user",
+
+            facingMode: "user",
+
+            preferredFacingMode: "user",
+
+            allowCamera: true,
+
+            allowMicrophone: true,
+
+            allowPhotoUpload: true,
+
+            allowCameraFlip: true,
+
+            cameraFit: "cover",
+
+            cameraObjectPosition: "center center",
+
+            preserveLensSettings: true,
+
+            preserveEffects: true
+
+        };
+
+    </script>
+
+
+    <!-- =====================================================
+         WEB APPLICATION STRUCTURED DATA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+
+            {
+                "@type": "WebApplication",
+                "@id": "https://webzonebw.in/Halloween/#application",
+                "name": "WEBZONEBW-ER Studio",
+                "alternateName": "WEBZONEBW Extended Reality Studio",
+                "url": "https://webzonebw.in/Halloween/",
+                "description": "A browser-based Extended Reality and AR-style camera experience featuring interactive visual effects, lenses, photo capture and seasonal Halloween experiences.",
+                "applicationCategory": "MultimediaApplication",
+                "applicationSubCategory": "Augmented Reality",
+                "operatingSystem": "Web Browser",
+                "browserRequirements": "Requires a modern browser with camera support for live camera features.",
+                "inLanguage": "en",
+                "isAccessibleForFree": true,
+                "author": {
+                    "@type": "Person",
+                    "@id": "https://webzonebw.in/about.html#sameer-chouhan",
+                    "name": "Sameer Chouhan",
+                    "url": "https://webzonebw.in/about.html"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "@id": "https://webzonebw.in/#organization",
+                    "name": "WEBZONEBW",
+                    "url": "https://webzonebw.in/",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://webzonebw.in/assets/logo.png"
+                    }
+                }
+            },
+
+            {
+                "@type": "WebPage",
+                "@id": "https://webzonebw.in/Halloween/#webpage",
+                "url": "https://webzonebw.in/Halloween/",
+                "name": "WEBZONEBW-ER Studio | Halloween AR Camera & Live Effects",
+                "description": "Interactive WEBZONEBW Extended Reality Studio featuring browser camera access, AR-style lenses, visual shaders, photo capture and Halloween experiences.",
+                "isPartOf": {
+                    "@type": "WebSite",
+                    "@id": "https://webzonebw.in/#website"
+                },
+                "about": {
+                    "@id": "https://webzonebw.in/Halloween/#application"
+                },
+                "inLanguage": "en"
+            }
+
+        ]
+    }
+    </script>
 
 </head>
 
+
 <body class="er-studio-body">
 
+
 <div class="er-layout-container">
+
 
     <!-- =====================================================
          SIDEBAR NAVIGATION
          ===================================================== -->
 
-    <aside class="sidebar er-sidebar" id="mainSidebar">
+    <aside class="sidebar er-sidebar"
+           id="mainSidebar"
+           aria-label="WEBZONEBW navigation">
 
         <div class="logo">
-            <a href="../index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                <img src="../assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+
+            <a href="../index.html"
+               aria-label="WebZoneBW Home"
+               class="brand-logo-link">
+
+                <img src="../assets/logo.png"
+                     alt="WebZoneBW Logo"
+                     class="brand-logo-img">
+
                 <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        TECH · AI · INNOVATE
+                    </span>
+
                 </div>
+
             </a>
+
         </div>
 
-        <!-- Sidebar Navigation Menu -->
-        <nav class="sidebar-nav" aria-label="Main Navigation">
+
+        <!-- Sidebar Navigation -->
+
+        <nav class="sidebar-nav"
+             aria-label="Main Navigation">
+
             <ul>
+
                 <li>
                     <a href="../index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            🏠
+                        </span>
+
                         Dashboard
+
                     </a>
                 </li>
 
+
                 <li>
-                    <a href="index.html" class="active er-nav-pill" aria-current="page">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                    <a href="index.html"
+                       class="active er-nav-pill"
+                       aria-current="page">
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            🔮
+                        </span>
+
                         WebZoneBW-ER Studio
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="../projects.html">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            💼
+                        </span>
+
                         Projects
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="../resume.html">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            📄
+                        </span>
+
                         Resume
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="../blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            📝
+                        </span>
+
                         Blog
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="../soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            🎵
+                        </span>
+
                         Sound Box
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="../about.html">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            👤
+                        </span>
+
                         About
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="../contact.html">
-                        <span class="nav-icon" aria-hidden="true">✉️</span>
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            ✉️
+                        </span>
+
                         Contact
+
                     </a>
                 </li>
+
             </ul>
+
         </nav>
 
-        <!-- Dark Mode Switch Toggle -->
+
+        <!-- Dark Mode -->
+
         <div class="sidebar-theme-toggle-row">
+
             <div class="theme-label-group">
-                <span aria-hidden="true">🌙</span>
-                <span>Dark Mode</span>
+
+                <span aria-hidden="true">
+                    🌙
+                </span>
+
+                <span>
+                    Dark Mode
+                </span>
+
             </div>
-            <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+
+
+            <label class="switch-toggle"
+                   for="themeToggleSwitch">
+
+                <input type="checkbox"
+                       id="themeToggleSwitch"
+                       checked
+                       aria-label="Toggle Dark Mode">
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>
 
-        <!-- User Profile Card -->
+
+        <!-- User Profile -->
+
         <div class="sidebar-user-card">
+
             <div class="user-avatar-wrap">
-                <span class="user-avatar-icon">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
+
+                <span class="user-avatar-icon">
+                    👨‍💻
+                </span>
+
+                <span class="user-online-dot"
+                      title="Online">
+                </span>
+
             </div>
+
+
             <div class="user-info">
-                <strong>Sameer Chouhan</strong>
-                <span>Developer &amp; Creator</span>
+
+                <strong>
+                    Sameer Chouhan
+                </strong>
+
+                <span>
+                    Developer &amp; Creator
+                </span>
+
             </div>
+
         </div>
 
     </aside>
 
 
     <!-- =====================================================
-         MAIN ER STUDIO STAGE
+         MAIN WEBZONEBW CONTENT
          ===================================================== -->
 
     <main class="main-content er-main-content">
 
-        <!-- Mobile Drawer Hamburger Toggle Header -->
+
+        <!-- =================================================
+             MOBILE NAVIGATION
+             ================================================= -->
+
         <div class="er-mobile-nav-bar">
-            <button type="button" class="er-hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+
+            <button type="button"
+                    class="er-hamburger-btn"
+                    id="sidebarToggleBtn"
+                    aria-label="Toggle Sidebar Navigation"
+                    aria-controls="mainSidebar">
+
                 <span></span>
                 <span></span>
                 <span></span>
+
             </button>
-            <div class="er-mobile-title">
-                <span class="gradient-text">WEBZONEBW-ER</span> STUDIO
-            </div>
-            <button type="button" class="header-icon-btn" id="mobileEffectsToggleBtn" title="Toggle Effects Panel">
+
+
+            <a href="../index.html"
+               class="er-mobile-title"
+               aria-label="WEBZONEBW Home">
+
+                <span class="gradient-text">
+                    WEBZONEBW
+                </span>
+
+                <span class="mobile-section-name">
+                    / ER Studio
+                </span>
+
+            </a>
+
+
+            <button type="button"
+                    class="header-icon-btn"
+                    id="mobileEffectsToggleBtn"
+                    title="Toggle Effects Panel"
+                    aria-label="Toggle Effects Panel">
+
                 ❖
+
             </button>
+
         </div>
 
-        <!-- Top Studio Header -->
-        <header class="er-top-header">
-            <div class="er-title-group">
-                <h1 class="er-main-title">
-                    <span class="brand-prefix">WEBZONEBW-</span><span class="gradient-text">ER STUDIO</span> <span class="sparkle-icon">✨</span>
-                </h1>
-                <p class="er-subtitle">
-                    Swipe to explore WebZoneBW-ER Effects ✨
-                </p>
+
+        <!-- =================================================
+             STANDARD WEBZONEBW PAGE HEADER
+             ================================================= -->
+
+        <header class="site-page-header">
+
+            <div class="page-header-content">
+
+
+                <!-- PAGE TITLE -->
+
+                <div class="page-header-title">
+
+                    <div class="page-header-brand">
+
+                        <span class="page-header-brand-main">
+                            WEBZONEBW
+                        </span>
+
+                        <span class="page-header-divider">
+                            /
+                        </span>
+
+                        <span class="page-header-section">
+                            ER Studio
+                        </span>
+
+                    </div>
+
+
+                    <p class="page-header-description">
+
+                        Extended Reality · Interactive Camera ·
+                        Visual Effects
+
+                    </p>
+
+                </div>
+
+
+                <!-- HEADER ACTIONS -->
+
+                <div class="page-header-actions">
+
+
+                    <a href="../index.html"
+                       class="page-header-action"
+                       title="Return to WEBZONEBW Dashboard">
+
+                        <span aria-hidden="true">
+                            ⌂
+                        </span>
+
+                        <span>
+                            Dashboard
+                        </span>
+
+                    </a>
+
+
+                    <a href="../projects.html"
+                       class="page-header-action"
+                       title="View WEBZONEBW Projects">
+
+                        <span aria-hidden="true">
+                            ◈
+                        </span>
+
+                        <span>
+                            Projects
+                        </span>
+
+                    </a>
+
+
+                    <button type="button"
+                            class="page-header-icon"
+                            id="helpModalBtn"
+                            title="How to use WEBZONEBW-ER Studio"
+                            aria-label="Help">
+
+                        ?
+
+                    </button>
+
+
+                    <button type="button"
+                            class="page-header-icon"
+                            id="settingsBtn"
+                            title="Camera and Studio Settings"
+                            aria-label="Studio Settings">
+
+                        ⚙
+
+                    </button>
+
+                </div>
+
             </div>
 
-            <div class="er-header-utilities">
-                <button type="button" class="header-icon-btn" id="helpModalBtn" title="How to Use WebZoneBW-ER Studio" aria-label="Help">
-                    ❔
-                </button>
-                <button type="button" class="header-icon-btn" id="settingsBtn" title="Camera &amp; Shader Settings" aria-label="Settings">
-                    ⚙️
-                </button>
-                <div class="notification-btn-wrap">
-                    <button type="button" class="header-icon-btn" title="Notifications" aria-label="Notifications">
-                        🔔
-                    </button>
-                    <span class="notif-badge">1</span>
-                </div>
-            </div>
         </header>
 
 
-        <!-- =====================================================
-             STUDIO WORKSPACE: CAMERA STAGE + RIGHT EFFECTS PANEL
-             ===================================================== -->
+        <!-- =================================================
+             ER WORKSPACE
+             ================================================= -->
 
         <div class="er-workspace-grid">
 
-            <!-- LEFT/CENTER CAMERA VIEWPORT CARD -->
-            <section class="er-camera-card" aria-label="Live Camera Extended Reality Stage">
 
-                <!-- Primary Camera Viewport Frame -->
-                <div class="camera-viewport-frame" id="cameraViewport">
+            <!-- =================================================
+                 CAMERA STAGE
+                 ================================================= -->
 
-                    <!-- Floating Top Left: Scan Reticle HUD Toggle -->
-                    <button type="button" class="cam-corner-btn top-left" id="toggleFaceHudBtn" title="Toggle Biometric Reticle HUD" aria-label="Biometric Reticle">
-                        <span aria-hidden="true">🔲</span>
+            <section class="er-camera-card"
+                     aria-label="Live Camera Extended Reality Stage">
+
+
+                <div class="camera-viewport-frame"
+                     id="cameraViewport"
+                     aria-label="Live WEBZONEBW-ER camera viewport">
+
+
+                    <!-- TOP LEFT HUD -->
+
+                    <button type="button"
+                            class="cam-corner-btn top-left"
+                            id="toggleFaceHudBtn"
+                            title="Toggle Biometric Reticle HUD"
+                            aria-label="Toggle Biometric Reticle HUD">
+
+                        <span aria-hidden="true">
+                            🔲
+                        </span>
+
                     </button>
 
-                    <!-- Floating Top Right: Fullscreen Expand -->
-                    <button type="button" class="cam-corner-btn top-right" id="fullscreenBtn" title="Fullscreen View" aria-label="Fullscreen">
-                        <span aria-hidden="true">⛶</span>
+
+                    <!-- TOP RIGHT FULLSCREEN -->
+
+                    <button type="button"
+                            class="cam-corner-btn top-right"
+                            id="fullscreenBtn"
+                            title="Fullscreen View"
+                            aria-label="Fullscreen View">
+
+                        <span aria-hidden="true">
+                            ⛶
+                        </span>
+
                     </button>
 
-                    <!-- Floating Bottom Left: Zoom Badge -->
-                    <button type="button" class="cam-zoom-badge" id="zoomLevelBtn" title="Switch Zoom Level (1.0x / 2.0x / 0.5x)" aria-label="Zoom Level">
-                        <span id="zoomLevelText">1.0x</span>
+
+                    <!-- ZOOM -->
+
+                    <button type="button"
+                            class="cam-zoom-badge"
+                            id="zoomLevelBtn"
+                            title="Switch Zoom Level"
+                            aria-label="Zoom Level">
+
+                        <span id="zoomLevelText">
+                            1.0x
+                        </span>
+
                     </button>
 
-                    <!-- Floating Right Vertical Pill Stack -->
+
+                    <!-- CAMERA TOOLS -->
+
                     <div class="cam-floating-vertical-stack">
-                        <button type="button" class="cam-vertical-btn" id="flipCameraBtnFloating" title="Flip Camera (Front / Back)" aria-label="Flip Camera">
-                            <span>🔄</span>
+
+
+                        <button type="button"
+                                class="cam-vertical-btn"
+                                id="flipCameraBtnFloating"
+                                title="Flip Camera (Front / Back)"
+                                aria-label="Flip Camera Front or Back">
+
+                            <span>
+                                🔄
+                            </span>
+
                         </button>
-                        <button type="button" class="cam-vertical-btn" id="flashLightBtn" title="Toggle Studio Light / Flash" aria-label="Studio Light">
-                            <span>⚡</span>
+
+
+                        <button type="button"
+                                class="cam-vertical-btn"
+                                id="flashLightBtn"
+                                title="Toggle Studio Light / Flash"
+                                aria-label="Studio Light">
+
+                            <span>
+                                ⚡
+                            </span>
+
                         </button>
-                        <button type="button" class="cam-vertical-btn active" id="autoHdBtnFloating" title="AI Auto-HD Retouch &amp; Glow (Active)" aria-label="AI Glow Retouch">
-                            <span>✨</span>
+
+
+                        <button type="button"
+                                class="cam-vertical-btn active"
+                                id="autoHdBtnFloating"
+                                title="AI Auto-HD Retouch &amp; Glow"
+                                aria-label="AI Glow Retouch">
+
+                            <span>
+                                ✨
+                            </span>
+
                         </button>
-                        <button type="button" class="cam-vertical-btn" id="toggleFaceMeshBtn" title="Face Tracking &amp; Mesh" aria-label="Face Mesh">
-                            <span>👤</span>
+
+
+                        <button type="button"
+                                class="cam-vertical-btn"
+                                id="toggleFaceMeshBtn"
+                                title="Face Tracking &amp; Mesh"
+                                aria-label="Face Tracking and Mesh">
+
+                            <span>
+                                👤
+                            </span>
+
                         </button>
+
                     </div>
 
-                    <!-- Microphone Status Badge -->
-                    <div id="micStatusIndicator" class="cam-floating-badge" style="display: none;" title="Microphone Live">
+
+                    <!-- MICROPHONE -->
+
+                    <div id="micStatusIndicator"
+                         class="cam-floating-badge"
+                         style="display:none;"
+                         title="Microphone Live"
+                         aria-live="polite">
+
                         <span class="mic-pulse-dot"></span>
-                        <span class="mic-icon">🎤</span>
+
+                        <span class="mic-icon">
+                            🎤
+                        </span>
+
                     </div>
 
-                    <!-- Camera & Microphone Permission Alert Overlay / Modal -->
-                    <div id="permissionAlertModal" class="permission-alert-modal" style="display: none;" role="alertdialog" aria-modal="true" aria-labelledby="permAlertTitle">
-                        <div class="permission-alert-backdrop" onclick="window.closePermissionAlert && window.closePermissionAlert()"></div>
+
+                    <!-- =================================================
+                         PERMISSION MODAL
+                         ================================================= -->
+
+                    <div id="permissionAlertModal"
+                         class="permission-alert-modal"
+                         style="display:none;"
+                         role="alertdialog"
+                         aria-modal="true"
+                         aria-labelledby="permAlertTitle">
+
+
+                        <div class="permission-alert-backdrop"
+                             onclick="window.closePermissionAlert && window.closePermissionAlert()">
+                        </div>
+
+
                         <div class="permission-alert-card">
+
+
                             <div class="perm-alert-header">
-                                <div class="perm-alert-icon-wrap" id="permAlertIconWrap">
-                                    <span id="permAlertIcon">⚠️</span>
+
+                                <div class="perm-alert-icon-wrap"
+                                     id="permAlertIconWrap">
+
+                                    <span id="permAlertIcon">
+                                        ⚠️
+                                    </span>
+
                                 </div>
+
+
                                 <div class="perm-alert-title-block">
-                                    <h3 id="permAlertTitle">Camera &amp; Microphone Access Required</h3>
-                                    <span class="perm-alert-badge" id="permAlertBadge">Permission Denied</span>
+
+                                    <h3 id="permAlertTitle">
+                                        Camera &amp; Microphone Access Required
+                                    </h3>
+
+                                    <span class="perm-alert-badge"
+                                          id="permAlertBadge">
+                                        Permission Required
+                                    </span>
+
                                 </div>
-                                <button type="button" class="perm-alert-close-btn" id="permAlertCloseBtn" aria-label="Close Alert">✖</button>
+
+
+                                <button type="button"
+                                        class="perm-alert-close-btn"
+                                        id="permAlertCloseBtn"
+                                        aria-label="Close Permission Alert">
+
+                                    ✖
+
+                                </button>
+
                             </div>
+
 
                             <div class="perm-alert-body">
+
                                 <p id="permAlertMessage">
-                                    WEBZONEBW ER Studio requires permission to access your <strong>Camera</strong> and <strong>Microphone</strong> to enable live visual effects, facial tracking, and audio-reactive shaders.
+
+                                    WEBZONEBW-ER Studio requires browser
+                                    permission to access your
+                                    <strong>Camera</strong> and optionally
+                                    your <strong>Microphone</strong> for live
+                                    visual effects, facial tracking and
+                                    audio-reactive features.
+
                                 </p>
 
-                                <div class="perm-browser-steps" id="permBrowserSteps">
+
+                                <div class="perm-browser-steps"
+                                     id="permBrowserSteps">
+
+
                                     <div class="perm-step-item">
-                                        <span class="step-num">1</span>
+
+                                        <span class="step-num">
+                                            1
+                                        </span>
+
                                         <div class="step-text">
-                                            <strong>Click the Permissions Icon</strong> in your browser's address bar (the 🔒 lock or 📹 camera icon next to the URL).
+
+                                            <strong>
+                                                Allow Camera Access
+                                            </strong>
+
+                                            Choose <strong>Allow</strong>
+                                            when your browser asks for camera
+                                            permission.
+
                                         </div>
+
                                     </div>
+
+
                                     <div class="perm-step-item">
-                                        <span class="step-num">2</span>
+
+                                        <span class="step-num">
+                                            2
+                                        </span>
+
                                         <div class="step-text">
-                                            Switch <strong>Camera</strong> and <strong>Microphone</strong> from <em>Block</em> to <strong>Allow</strong>.
+
+                                            <strong>
+                                                Allow Microphone When Needed
+                                            </strong>
+
+                                            Microphone access is only required
+                                            for features that use audio input.
+
                                         </div>
+
                                     </div>
+
+
                                     <div class="perm-step-item">
-                                        <span class="step-num">3</span>
+
+                                        <span class="step-num">
+                                            3
+                                        </span>
+
                                         <div class="step-text">
-                                            Click <strong>Request Permissions Again</strong> below to start your live experience.
+
+                                            <strong>
+                                                Start the Experience
+                                            </strong>
+
+                                            After permission is granted,
+                                            request access again or start
+                                            the live camera.
+
                                         </div>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
 
                             <div class="perm-alert-actions">
-                                <button type="button" class="btn camera-btn-primary perm-action-btn" id="permRetryBtn">
-                                    <span aria-hidden="true">🔄</span> Request Permissions Again
+
+
+                                <button type="button"
+                                        class="btn camera-btn-primary perm-action-btn"
+                                        id="permRetryBtn">
+
+                                    <span aria-hidden="true">
+                                        🔄
+                                    </span>
+
+                                    Request Permissions Again
+
                                 </button>
-                                <button type="button" class="btn perm-action-btn" id="permDemoBtn">
-                                    <span aria-hidden="true">✨</span> Switch to Test Mode
+
+
+                                <button type="button"
+                                        class="btn perm-action-btn"
+                                        id="permDemoBtn">
+
+                                    <span aria-hidden="true">
+                                        ✨
+                                    </span>
+
+                                    Switch to Test Mode
+
                                 </button>
-                                <button type="button" class="btn perm-action-btn" id="permUploadBtn">
-                                    <span aria-hidden="true">📁</span> Upload Photo Instead
+
+
+                                <button type="button"
+                                        class="btn perm-action-btn"
+                                        id="permUploadBtn">
+
+                                    <span aria-hidden="true">
+                                        📁
+                                    </span>
+
+                                    Upload Photo Instead
+
                                 </button>
+
                             </div>
+
                         </div>
+
                     </div>
 
-                    <!-- Shutter Flash Overlay -->
-                    <div id="shutterFlashOverlay" class="shutter-flash-overlay"></div>
 
-                    <!-- Swipe Toast Indicator -->
-                    <div id="canvasSwipeToast" class="canvas-swipe-toast" aria-live="polite">
-                        <span id="canvasSwipeIcon">⚡</span>
-                        <span id="canvasSwipeText">Cyber Lens Active</span>
+                    <!-- SHUTTER -->
+
+                    <div id="shutterFlashOverlay"
+                         class="shutter-flash-overlay">
                     </div>
 
-                    <!-- Hidden Video Feed Element -->
-                    <video
-                        id="cameraVideo"
-                        class="camera-video"
-                        autoplay
-                        playsinline
-                        muted
-                        style="display: none;">
+
+                    <!-- EFFECT TOAST -->
+
+                    <div id="canvasSwipeToast"
+                         class="canvas-swipe-toast"
+                         aria-live="polite">
+
+                        <span id="canvasSwipeIcon">
+                            ⚡
+                        </span>
+
+                        <span id="canvasSwipeText">
+                            Cyber Lens Active
+                        </span>
+
+                    </div>
+
+
+                    <!-- LIVE CAMERA -->
+
+                    <video id="cameraVideo"
+                           class="camera-video"
+                           autoplay
+                           playsinline
+                           muted
+                           preload="none"
+                           data-facing-mode="user"
+                           data-camera-mode="front"
+                           aria-label="Live camera preview">
                     </video>
 
-                    <!-- High-Fidelity Render Canvas (Pixel Care Antialiased) -->
-                    <canvas
-                        id="cameraCanvas"
-                        class="camera-canvas"
-                        style="display: none;">
+
+                    <!-- RENDER CANVAS -->
+
+                    <canvas id="cameraCanvas"
+                            class="camera-canvas"
+                            aria-label="Processed camera effects canvas">
                     </canvas>
 
-                    <!-- Standby / Camera Off Placeholder Screen -->
-                    <div id="cameraPlaceholder" class="camera-placeholder">
+
+                    <!-- CAMERA PLACEHOLDER -->
+
+                    <div id="cameraPlaceholder"
+                         class="camera-placeholder">
+
+
                         <div class="placeholder-icon-wrap">
-                            <span class="big-icon" aria-hidden="true">🎨</span>
+
+                            <span class="big-icon"
+                                  aria-hidden="true">
+                                🎃
+                            </span>
+
                         </div>
-                        <h3 class="placeholder-title">WebZoneBW-ER Studio Ready</h3>
+
+
+                        <h2 class="placeholder-title">
+                            WebZoneBW-ER Studio Ready
+                        </h2>
+
+
                         <p class="placeholder-desc">
-                            Start your live camera, upload a photo to enhance, or enter Test Mode to try all 30+ interactive shaders.
+
+                            Start your live front camera,
+                            upload a photo, or enter Test Mode
+                            to explore the interactive effects.
+
                         </p>
+
+
                         <div class="placeholder-btn-group">
-                            <button
-                                type="button"
-                                class="btn camera-btn-primary"
-                                id="startExperienceBtn"
-                                aria-label="Start Live Camera">
-                                <span aria-hidden="true">📸</span> Start Live Camera
+
+
+                            <button type="button"
+                                    class="btn camera-btn-primary"
+                                    id="startExperienceBtn"
+                                    aria-label="Start Live Front Camera">
+
+                                <span aria-hidden="true">
+                                    📸
+                                </span>
+
+                                Start Live Camera
+
                             </button>
-                            <button
-                                type="button"
-                                class="btn"
-                                id="startDemoBtn"
-                                aria-label="Interactive Demo Mode">
-                                <span aria-hidden="true">✨</span> Test Mode
+
+
+                            <button type="button"
+                                    class="btn"
+                                    id="startDemoBtn"
+                                    aria-label="Interactive Demo Mode">
+
+                                <span aria-hidden="true">
+                                    ✨
+                                </span>
+
+                                Test Mode
+
                             </button>
+
                         </div>
+
                     </div>
 
                 </div>
 
-                <!-- Swipe Navigation Hint -->
+
+                <!-- CAMERA PRIVACY NOTE -->
+
+                <p class="er-camera-privacy-note">
+
+                    <strong>Camera privacy:</strong>
+                    your camera is accessed only after browser permission
+                    is granted. You can stop access at any time using your
+                    browser's site permissions.
+
+                </p>
+
+
+                <!-- SWIPE HINT -->
+
                 <div class="swipe-hint-bar">
-                    <span class="swipe-arrow">←</span>
-                    <span class="swipe-text">Swipe left / right to change effect</span>
-                    <span class="swipe-arrow">→</span>
+
+                    <span class="swipe-arrow">
+                        ←
+                    </span>
+
+                    <span class="swipe-text">
+                        Swipe left / right to change effect
+                    </span>
+
+                    <span class="swipe-arrow">
+                        →
+                    </span>
+
                 </div>
 
-                <!-- Circular Lens Carousel Bar -->
+
+                <!-- =================================================
+                     LENS CAROUSEL
+                     ================================================= -->
+
                 <div class="er-lens-carousel-wrap">
-                    <div class="er-lens-track" id="snapLensTrack" role="region" aria-label="AR Lens Carousel">
-                        
-                        <button type="button" class="er-lens-bubble" data-filter="cartoon" title="Anime Cel Shader">
-                            <div class="lens-bubble-circle">🌸</div>
-                            <span class="lens-bubble-label">Anime</span>
+
+                    <div class="er-lens-track"
+                         id="snapLensTrack"
+                         role="region"
+                         aria-label="AR Lens Carousel">
+
+
+                        <button type="button"
+                                class="er-lens-bubble"
+                                data-filter="cartoon"
+                                title="Anime Cel Shader">
+
+                            <div class="lens-bubble-circle">
+                                🌸
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Anime
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="studiohd" title="Studio Portrait HD">
-                            <div class="lens-bubble-circle">👤</div>
-                            <span class="lens-bubble-label">Portrait</span>
+
+                        <button type="button"
+                                class="er-lens-bubble"
+                                data-filter="studiohd"
+                                title="Studio Portrait HD">
+
+                            <div class="lens-bubble-circle">
+                                👤
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Portrait
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="cinematic" title="Cinematic 35mm Film">
-                            <div class="lens-bubble-circle">🎬</div>
-                            <span class="lens-bubble-label">Cinema</span>
+
+                        <button type="button"
+                                class="er-lens-bubble"
+                                data-filter="cinematic"
+                                title="Cinematic 35mm Film">
+
+                            <div class="lens-bubble-circle">
+                                🎬
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Cinema
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble active" data-filter="cyberwarrior" title="Cyber Hologram (Active)">
-                            <div class="lens-bubble-circle active-glow">⚡</div>
-                            <span class="lens-bubble-label">Cyber</span>
+
+                        <button type="button"
+                                class="er-lens-bubble active"
+                                data-filter="cyberwarrior"
+                                title="Cyber Hologram Active">
+
+                            <div class="lens-bubble-circle active-glow">
+                                ⚡
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Cyber
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="matrix" title="Matrix Rain Green Code">
-                            <div class="lens-bubble-circle">❇️</div>
-                            <span class="lens-bubble-label">Matrix</span>
+
+                        <button type="button"
+                                class="er-lens-bubble"
+                                data-filter="matrix"
+                                title="Matrix Rain Green Code">
+
+                            <div class="lens-bubble-circle">
+                                ❇️
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Matrix
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="icefrost" title="Hologram Shimmer">
-                            <div class="lens-bubble-circle">🧊</div>
-                            <span class="lens-bubble-label">Holo</span>
+
+                        <button type="button"
+                                class="er-lens-bubble"
+                                data-filter="icefrost"
+                                title="Hologram Shimmer">
+
+                            <div class="lens-bubble-circle">
+                                🧊
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Holo
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="comic" title="Comic Book Pop-Art">
-                            <div class="lens-bubble-circle">💥</div>
-                            <span class="lens-bubble-label">Comic</span>
+
+                        <button type="button"
+                                class="er-lens-bubble"
+                                data-filter="comic"
+                                title="Comic Book Pop-Art">
+
+                            <div class="lens-bubble-circle">
+                                💥
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                Comic
+                            </span>
+
                         </button>
 
-                        <button type="button" class="er-lens-bubble more-lens-btn" id="openAllEffectsBtn" title="View All 30+ Effects">
-                            <div class="lens-bubble-circle">•••</div>
-                            <span class="lens-bubble-label">More</span>
+
+                        <button type="button"
+                                class="er-lens-bubble more-lens-btn"
+                                id="openAllEffectsBtn"
+                                title="View All 30+ Effects">
+
+                            <div class="lens-bubble-circle">
+                                •••
+                            </div>
+
+                            <span class="lens-bubble-label">
+                                More
+                            </span>
+
                         </button>
 
                     </div>
+
                 </div>
 
-                <!-- Bottom Camera Action Controls (Flip Camera, Shutter, Upload Photo) -->
+
+                <!-- =================================================
+                     CAMERA CONTROLS
+                     ================================================= -->
+
                 <div class="er-bottom-controls-bar">
 
-                    <button type="button" class="er-action-pill-btn" id="flipCameraBtn" title="Flip Camera">
-                        <span aria-hidden="true">🔄</span>
-                        <span>Flip Camera</span>
+
+                    <button type="button"
+                            class="er-action-pill-btn"
+                            id="flipCameraBtn"
+                            title="Flip Camera"
+                            aria-label="Flip Camera">
+
+                        <span aria-hidden="true">
+                            🔄
+                        </span>
+
+                        <span>
+                            Flip Camera
+                        </span>
+
                     </button>
 
-                    <!-- Large Glowing Center Shutter Snap Button -->
-                    <button type="button" class="er-snap-shutter-btn" id="snapPhotoBtn" title="Capture HD Photo" aria-label="Capture Photo">
+
+                    <button type="button"
+                            class="er-snap-shutter-btn"
+                            id="snapPhotoBtn"
+                            title="Capture HD Photo"
+                            aria-label="Capture HD Photo">
+
                         <div class="shutter-outer-glow">
-                            <div class="shutter-inner-core"></div>
+
+                            <div class="shutter-inner-core">
+                            </div>
+
                         </div>
+
                     </button>
 
-                    <button type="button" class="er-action-pill-btn" id="modeUploadBtn" title="Upload Photo from Device">
-                        <span aria-hidden="true">📁</span>
-                        <span>Upload Photo</span>
+
+                    <button type="button"
+                            class="er-action-pill-btn"
+                            id="modeUploadBtn"
+                            title="Upload Photo from Device"
+                            aria-label="Upload Photo">
+
+                        <span aria-hidden="true">
+                            📁
+                        </span>
+
+                        <span>
+                            Upload Photo
+                        </span>
+
                     </button>
 
-                    <!-- Hidden File Upload Input -->
-                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+                    <input type="file"
+                           id="fileInput"
+                           accept="image/*"
+                           style="display:none;"
+                           aria-label="Upload an image">
 
                 </div>
 
             </section>
 
 
-            <!-- RIGHT EFFECTS PANEL: WEBZONEBW-ER EFFECTS (Drawer / Side Panel) -->
-            <aside class="er-effects-panel" id="effectsPanel">
+            <!-- =================================================
+                 EFFECTS PANEL
+                 ================================================= -->
+
+            <aside class="er-effects-panel"
+                   id="effectsPanel"
+                   aria-label="WEBZONEBW-ER Effects">
+
 
                 <div class="effects-panel-header">
+
                     <div class="panel-title-group">
-                        <span class="panel-icon">❖</span>
-                        <h3><span class="text-white">WEBZONEBW-</span><span class="gradient-text">ER EFFECTS</span></h3>
+
+                        <span class="panel-icon">
+                            ❖
+                        </span>
+
+                        <h2>
+
+                            <span class="text-white">
+                                WEBZONEBW-
+                            </span>
+
+                            <span class="gradient-text">
+                                ER EFFECTS
+                            </span>
+
+                        </h2>
+
                     </div>
-                    <button type="button" class="panel-close-btn" id="closeEffectsPanelBtn" aria-label="Close Effects Panel">
+
+
+                    <button type="button"
+                            class="panel-close-btn"
+                            id="closeEffectsPanelBtn"
+                            aria-label="Close Effects Panel">
+
                         ✕
+
                     </button>
+
                 </div>
 
-                <!-- Search Effects Input -->
+
+                <!-- SEARCH -->
+
                 <div class="effects-search-wrap">
-                    <span class="search-icon" aria-hidden="true">🔍</span>
-                    <input
-                        type="text"
-                        id="effectsSearchInput"
-                        class="effects-search-input"
-                        placeholder="Search effects..."
-                        aria-label="Search effects">
+
+                    <span class="search-icon"
+                          aria-hidden="true">
+                        🔍
+                    </span>
+
+                    <input type="text"
+                           id="effectsSearchInput"
+                           class="effects-search-input"
+                           placeholder="Search effects..."
+                           aria-label="Search effects">
+
                 </div>
 
-                <!-- Category Pills (All, Popular, Stylize, Sci-Fi, Art) -->
-                <div class="effects-category-pills" role="tablist" aria-label="Effect Categories">
-                    <button type="button" class="cat-pill active" data-cat="all">All</button>
-                    <button type="button" class="cat-pill" data-cat="popular">Popular</button>
-                    <button type="button" class="cat-pill" data-cat="stylize">Stylize</button>
-                    <button type="button" class="cat-pill" data-cat="scifi">Sci-Fi</button>
-                    <button type="button" class="cat-pill" data-cat="art">Art</button>
-                </div>
 
-                <!-- 3x4 Grid of Effect Cards (Anime, Portrait, Cinema, Cyber, Matrix, AI HUD, Bio-Scan, Holo, Comic, Glitch, Neon, Retro) -->
-                <div class="effects-card-grid" id="effectsCardGrid">
+                <!-- CATEGORIES -->
 
-                    <button type="button" class="effect-card" data-filter="cartoon" data-cat="art popular stylize">
-                        <div class="effect-icon-box anime-box">🌸</div>
-                        <span class="effect-name">Anime</span>
+                <div class="effects-category-pills"
+                     role="tablist"
+                     aria-label="Effect Categories">
+
+
+                    <button type="button"
+                            class="cat-pill active"
+                            data-cat="all">
+                        All
                     </button>
 
-                    <button type="button" class="effect-card" data-filter="studiohd" data-cat="popular stylize">
-                        <div class="effect-icon-box portrait-box">👤</div>
-                        <span class="effect-name">Portrait</span>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="popular">
+                        Popular
                     </button>
 
-                    <button type="button" class="effect-card" data-filter="cinematic" data-cat="popular stylize">
-                        <div class="effect-icon-box cinema-box">🎬</div>
-                        <span class="effect-name">Cinema</span>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="stylize">
+                        Stylize
                     </button>
 
-                    <button type="button" class="effect-card active" data-filter="cyberwarrior" data-cat="scifi popular">
-                        <div class="effect-icon-box cyber-box">⚡</div>
-                        <span class="effect-name">Cyber</span>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="scifi">
+                        Sci-Fi
                     </button>
 
-                    <button type="button" class="effect-card" data-filter="matrix" data-cat="scifi">
-                        <div class="effect-icon-box matrix-box">❇️</div>
-                        <span class="effect-name">Matrix</span>
-                    </button>
 
-                    <button type="button" class="effect-card" data-filter="cyberhud" data-cat="scifi">
-                        <div class="effect-icon-box aihud-box">🌐</div>
-                        <span class="effect-name">AI HUD</span>
-                    </button>
-
-                    <button type="button" class="effect-card" data-filter="skeleton" data-cat="scifi art">
-                        <div class="effect-icon-box bioscan-box">💀</div>
-                        <span class="effect-name">Bio-Scan</span>
-                    </button>
-
-                    <button type="button" class="effect-card" data-filter="icefrost" data-cat="scifi stylize">
-                        <div class="effect-icon-box holo-box">🧊</div>
-                        <span class="effect-name">Holo</span>
-                    </button>
-
-                    <button type="button" class="effect-card" data-filter="comic" data-cat="art stylize">
-                        <div class="effect-icon-box comic-box">💥</div>
-                        <span class="effect-name">Comic</span>
-                    </button>
-
-                    <button type="button" class="effect-card" data-filter="glitch" data-cat="scifi art">
-                        <div class="effect-icon-box glitch-box">🎯</div>
-                        <span class="effect-name">Glitch</span>
-                    </button>
-
-                    <button type="button" class="effect-card" data-filter="halo" data-cat="popular stylize">
-                        <div class="effect-icon-box neon-box">🦹</div>
-                        <span class="effect-name">Neon</span>
-                    </button>
-
-                    <button type="button" class="effect-card" data-filter="vintage90s" data-cat="stylize art">
-                        <div class="effect-icon-box retro-box">🌅</div>
-                        <span class="effect-name">Retro</span>
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="art">
+                        Art
                     </button>
 
                 </div>
 
-                <!-- Bottom View All Effects Action -->
+
+                <!-- EFFECT GRID -->
+
+                <div class="effects-card-grid"
+                     id="effectsCardGrid">
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="cartoon"
+                            data-cat="art popular stylize">
+
+                        <div class="effect-icon-box anime-box">
+                            🌸
+                        </div>
+
+                        <span class="effect-name">
+                            Anime
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="studiohd"
+                            data-cat="popular stylize">
+
+                        <div class="effect-icon-box portrait-box">
+                            👤
+                        </div>
+
+                        <span class="effect-name">
+                            Portrait
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="cinematic"
+                            data-cat="popular stylize">
+
+                        <div class="effect-icon-box cinema-box">
+                            🎬
+                        </div>
+
+                        <span class="effect-name">
+                            Cinema
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card active"
+                            data-filter="cyberwarrior"
+                            data-cat="scifi popular">
+
+                        <div class="effect-icon-box cyber-box">
+                            ⚡
+                        </div>
+
+                        <span class="effect-name">
+                            Cyber
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="matrix"
+                            data-cat="scifi">
+
+                        <div class="effect-icon-box matrix-box">
+                            ❇️
+                        </div>
+
+                        <span class="effect-name">
+                            Matrix
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="cyberhud"
+                            data-cat="scifi">
+
+                        <div class="effect-icon-box aihud-box">
+                            🌐
+                        </div>
+
+                        <span class="effect-name">
+                            AI HUD
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="skeleton"
+                            data-cat="scifi art">
+
+                        <div class="effect-icon-box bioscan-box">
+                            💀
+                        </div>
+
+                        <span class="effect-name">
+                            Bio-Scan
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="icefrost"
+                            data-cat="scifi stylize">
+
+                        <div class="effect-icon-box holo-box">
+                            🧊
+                        </div>
+
+                        <span class="effect-name">
+                            Holo
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="comic"
+                            data-cat="art stylize">
+
+                        <div class="effect-icon-box comic-box">
+                            💥
+                        </div>
+
+                        <span class="effect-name">
+                            Comic
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="glitch"
+                            data-cat="scifi art">
+
+                        <div class="effect-icon-box glitch-box">
+                            🎯
+                        </div>
+
+                        <span class="effect-name">
+                            Glitch
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="halo"
+                            data-cat="popular stylize">
+
+                        <div class="effect-icon-box neon-box">
+                            🦹
+                        </div>
+
+                        <span class="effect-name">
+                            Neon
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="effect-card"
+                            data-filter="vintage90s"
+                            data-cat="stylize art">
+
+                        <div class="effect-icon-box retro-box">
+                            🌅
+                        </div>
+
+                        <span class="effect-name">
+                            Retro
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- VIEW ALL -->
+
                 <div class="panel-bottom-action">
-                    <button type="button" class="view-all-effects-btn" id="viewAllCatalogBtn">
-                        <span aria-hidden="true">⊞</span> View All Effects (30+)
+
+                    <button type="button"
+                            class="view-all-effects-btn"
+                            id="viewAllCatalogBtn">
+
+                        <span aria-hidden="true">
+                            ⊞
+                        </span>
+
+                        View All Effects (30+)
+
                     </button>
+
                 </div>
 
             </aside>
@@ -536,76 +2106,187 @@
 
 
         <!-- =====================================================
-             HOW TO USE & POWERED BY AI FEATURE CARDS (FROM SCREENSHOT 2)
+             HOW TO USE
              ===================================================== -->
 
         <div class="er-bottom-feature-row">
 
-            <!-- How To Use Section -->
+
             <div class="how-to-use-card">
-                <h3 class="how-to-title">HOW TO USE WEBZONEBW-ER STUDIO</h3>
-                
+
+                <h2 class="how-to-title">
+                    HOW TO USE WEBZONEBW-ER STUDIO
+                </h2>
+
+
                 <div class="how-to-steps-grid">
-                    <div class="how-to-step">
-                        <div class="step-icon-circle">👆</div>
-                        <div class="step-desc-block">
-                            <strong>Swipe</strong>
-                            <span>Swipe left / right to change effects</span>
-                        </div>
-                    </div>
+
 
                     <div class="how-to-step">
-                        <div class="step-icon-circle">✨</div>
-                        <div class="step-desc-block">
-                            <strong>Explore</strong>
-                            <span>Tap "Effects" to view all WebZoneBW-ER Effects</span>
+
+                        <div class="step-icon-circle">
+                            👆
                         </div>
+
+                        <div class="step-desc-block">
+
+                            <strong>
+                                Swipe
+                            </strong>
+
+                            <span>
+                                Swipe left / right to change effects
+                            </span>
+
+                        </div>
+
                     </div>
 
+
                     <div class="how-to-step">
-                        <div class="step-icon-circle">📷</div>
-                        <div class="step-desc-block">
-                            <strong>Capture</strong>
-                            <span>Take photo or upload from gallery</span>
+
+                        <div class="step-icon-circle">
+                            ✨
                         </div>
+
+                        <div class="step-desc-block">
+
+                            <strong>
+                                Explore
+                            </strong>
+
+                            <span>
+                                Open Effects to explore the available
+                                WEBZONEBW-ER visual experiences
+                            </span>
+
+                        </div>
+
                     </div>
+
+
+                    <div class="how-to-step">
+
+                        <div class="step-icon-circle">
+                            📷
+                        </div>
+
+                        <div class="step-desc-block">
+
+                            <strong>
+                                Capture
+                            </strong>
+
+                            <span>
+                                Take a photo or upload one from your device
+                            </span>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
 
-            <!-- Powered By AI Badge Card -->
+
+            <!-- EXPERIENCE INFORMATION -->
+
             <div class="powered-ai-card">
-                <div class="ai-card-glow-icon">🔮</div>
-                <div class="ai-card-text">
-                    <h4>Powered by WebZoneBW AI</h4>
-                    <p>Smart Effects • Real-time Preview • One Tap Apply</p>
+
+                <div class="ai-card-glow-icon">
+                    🔮
                 </div>
+
+                <div class="ai-card-text">
+
+                    <h3>
+                        WEBZONEBW-ER Studio
+                    </h3>
+
+                    <p>
+                        Interactive Effects · Live Preview · Photo Capture
+                    </p>
+
+                </div>
+
             </div>
 
         </div>
 
 
         <!-- =====================================================
-             SNAPSHOT PREVIEW MODAL (INSTANT HD CAPTURE)
+             SNAPSHOT MODAL
              ===================================================== -->
 
-        <div id="snapshotModal" class="snapshot-preview-modal" style="display: none;">
-            <div class="snapshot-modal-backdrop" onclick="document.getElementById('closeSnapshotBtn').click()"></div>
-            <div class="snapshot-modal-card">
-                <div class="snapshot-header">
-                    <h3>📸 Snapshot Captured!</h3>
-                    <button type="button" class="snapshot-close-x" id="closeSnapshotXBtn" aria-label="Close Snapshot">✕</button>
-                </div>
-                <img id="snapshotImg" class="snapshot-preview-img" alt="Captured ER Photo">
-                
-                <div class="snapshot-btn-row">
-                    <a id="downloadSnapshotBtn" class="btn camera-btn-primary" download="webzonebw-snapshot.png">
-                        <span aria-hidden="true">💾</span> Save HD Snapshot
-                    </a>
-                    <button id="closeSnapshotBtn" type="button" class="btn">
-                        ✕ Close
-                    </button>
-                </div>
+        <div id="snapshotModal"
+             class="snapshot-preview-modal"
+             style="display:none;"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="snapshotTitle">
+
+
+            <div class="snapshot-modal-backdrop"
+                 onclick="document.getElementById('closeSnapshotBtn').click()">
             </div>
+
+
+            <div class="snapshot-modal-card">
+
+
+                <div class="snapshot-header">
+
+                    <h2 id="snapshotTitle">
+                        📸 Snapshot Captured!
+                    </h2>
+
+
+                    <button type="button"
+                            class="snapshot-close-x"
+                            id="closeSnapshotXBtn"
+                            aria-label="Close Snapshot">
+
+                        ✕
+
+                    </button>
+
+                </div>
+
+
+                <img id="snapshotImg"
+                     class="snapshot-preview-img"
+                     alt="Captured WEBZONEBW-ER Photo">
+
+
+                <div class="snapshot-btn-row">
+
+
+                    <a id="downloadSnapshotBtn"
+                       class="btn camera-btn-primary"
+                       download="webzonebw-er-snapshot.png">
+
+                        <span aria-hidden="true">
+                            💾
+                        </span>
+
+                        Save HD Snapshot
+
+                    </a>
+
+
+                    <button id="closeSnapshotBtn"
+                            type="button"
+                            class="btn">
+
+                        ✕ Close
+
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
 
 
@@ -614,27 +2295,86 @@
              ===================================================== -->
 
         <footer class="site-footer">
+
             <div class="footer-content">
+
                 <p>
-                    © 2026 <strong>WEBZONEBW</strong>. All rights reserved.
+
+                    © 2026
+
+                    <strong>
+                        WEBZONEBW
+                    </strong>.
+
+                    All rights reserved.
+
                 </p>
-                <nav class="footer-links" aria-label="Footer Navigation">
-                    <a href="../privacy.html">Privacy Policy</a>
-                    <a href="../terms.html">Terms &amp; Conditions</a>
-                    <a href="../disclaimer.html">Disclaimer</a>
-                    <a href="../contact.html">Contact</a>
+
+
+                <nav class="footer-links"
+                     aria-label="Footer Navigation">
+
+
+                    <a href="../privacy.html">
+                        Privacy Policy
+                    </a>
+
+
+                    <a href="../terms.html">
+                        Terms &amp; Conditions
+                    </a>
+
+
+                    <a href="../disclaimer.html">
+                        Disclaimer
+                    </a>
+
+
+                    <a href="../contact.html">
+                        Contact
+                    </a>
+
                 </nav>
+
             </div>
+
         </footer>
 
     </main>
 
 </div>
 
-<!-- Scripts -->
+
+<!-- =====================================================
+     NOSCRIPT FALLBACK
+     ===================================================== -->
+
+<noscript>
+
+    <div style="
+        padding:20px;
+        text-align:center;
+        font-family:system-ui,sans-serif;
+    ">
+
+        WEBZONEBW-ER Studio requires JavaScript for
+        live camera effects and interactive features.
+
+    </div>
+
+</noscript>
+
+
+<!-- =====================================================
+     WEBZONEBW JAVASCRIPT
+     ===================================================== -->
+
 <script src="../js/beatles-playlists.js"></script>
+
 <script src="../js/script.js"></script>
+
 <script src="../js/halloween.js"></script>
+
 
 </body>
 
