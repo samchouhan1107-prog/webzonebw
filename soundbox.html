@@ -22,6 +22,124 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 
+
+    <style id="soundbox-media-player-theme">
+        /* =====================================================
+           SOUNDBOX MEDIA PLAYER TRANSPORT THEME
+           Purpose: make PlayBox controls read as audio-player
+           controls, not website navigation buttons.
+           ===================================================== */
+        .soundbox-player-hero .transport-buttons-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            margin: 18px 0 8px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(0,0,0,.16));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 8px 20px rgba(0,0,0,.16);
+        }
+
+        .soundbox-player-hero .transport-btn {
+            appearance: none;
+            -webkit-appearance: none;
+            border: 0;
+            outline: 0;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: transparent;
+            color: #d7dde8;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease;
+        }
+
+        .soundbox-player-hero .transport-btn:hover {
+            transform: translateY(-1px);
+            background: rgba(255,255,255,.09);
+            color: #fff;
+        }
+
+        .soundbox-player-hero .transport-btn:active {
+            transform: scale(.94);
+        }
+
+        .soundbox-player-hero .transport-btn:focus-visible {
+            box-shadow: 0 0 0 3px rgba(255,255,255,.18);
+        }
+
+        .soundbox-player-hero .transport-btn.play-main-btn {
+            width: 58px;
+            height: 58px;
+            min-width: 58px;
+            margin: 0 8px;
+            border: 1px solid rgba(255,255,255,.16);
+            background: #fff;
+            color: #101827;
+            font-size: 25px;
+            box-shadow: 0 8px 18px rgba(0,0,0,.25);
+        }
+
+        .soundbox-player-hero .transport-btn.play-main-btn:hover {
+            background: #f2f4f7;
+            color: #050914;
+            box-shadow: 0 10px 22px rgba(0,0,0,.30);
+        }
+
+        .soundbox-player-hero .transport-btn.active {
+            color: #fff;
+            background: rgba(255,255,255,.12);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+        }
+
+        .soundbox-player-hero .transport-btn.fav-main-btn {
+            font-size: 18px;
+        }
+
+        .soundbox-player-hero .transport-btn .media-icon {
+            width: 22px;
+            height: 22px;
+            display: block;
+            fill: currentColor;
+        }
+
+        .soundbox-player-hero .transport-btn.play-main-btn .media-icon {
+            width: 26px;
+            height: 26px;
+        }
+
+        @media (max-width: 680px) {
+            .soundbox-player-hero .transport-buttons-row {
+                gap: 4px;
+                padding: 10px 6px;
+            }
+
+            .soundbox-player-hero .transport-btn {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                font-size: 18px;
+            }
+
+            .soundbox-player-hero .transport-btn.play-main-btn {
+                width: 54px;
+                height: 54px;
+                min-width: 54px;
+                margin: 0 4px;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -216,20 +334,20 @@
 
                     <!-- Transport Buttons -->
                     <div class="transport-buttons-row">
-                        <button type="button" class="transport-btn" id="btnShuffle" title="Toggle Shuffle">
-                            🔀
+                        <button type="button" class="transport-btn" id="btnShuffle" title="Toggle Shuffle" aria-label="Shuffle">
+                            <svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5h-2V6.41l-3.29 3.3-1.42-1.42L17.59 5H16V3ZM4 5h3.18l3.4 4.53-1.6 1.2L6.18 7H4V5Zm0 12h2.18l3.4-4.53 1.6 1.2L7.18 19H4v-2Zm11.29-3.71 1.42-1.42L19 14.17V12h2v5h-5v-2h1.59l-2.3-2.71ZM12.4 11.6l1.6-1.2 3.29 4.53H21v2h-4.18l-4.42-5.33Z"/></svg>
                         </button>
-                        <button type="button" class="transport-btn" id="btnPrev" title="Previous Track (1-23)">
-                            ⏮️
+                        <button type="button" class="transport-btn" id="btnPrev" title="Previous Track (1-23)" aria-label="Previous Track">
+                            <svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6V5Zm3 7 9-7v14l-9-7Z"/></svg>
                         </button>
-                        <button type="button" class="transport-btn play-main-btn" id="btnPlayPause" title="Play / Pause Track">
-                            <span id="playIcon">▶</span>
+                        <button type="button" class="transport-btn play-main-btn" id="btnPlayPause" title="Play / Pause Track" aria-label="Play / Pause Track">
+                            <svg id="playIcon" class="media-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7L8 5Z"/></svg>
                         </button>
-                        <button type="button" class="transport-btn" id="btnNext" title="Next Track (1-23)">
-                            ⏭️
+                        <button type="button" class="transport-btn" id="btnNext" title="Next Track (1-23)" aria-label="Next Track">
+                            <svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2V5Zm-10 0 9 7-9 7V5Z"/></svg>
                         </button>
-                        <button type="button" class="transport-btn" id="btnRepeat" title="Toggle Repeat">
-                            🔁
+                        <button type="button" class="transport-btn" id="btnRepeat" title="Toggle Repeat" aria-label="Repeat">
+                            <svg class="media-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h9.17l-1.58-1.59L16 4l4 4-4 4-1.41-1.41L16.17 9H7a3 3 0 0 0-3 3v1H2v-1a5 5 0 0 1 5-5Zm10 10H7.83l1.58 1.59L8 20l-4-4 4-4 1.41 1.41L7.83 15H17a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5Z"/></svg>
                         </button>
                         <button type="button" class="transport-btn fav-main-btn" id="btnFavorite" title="Add to Favorites">
                             🤍
@@ -1563,7 +1681,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updatePlayState() {
         const isPlaying = soundBox.engine.isPlaying;
-        if (playIcon) playIcon.textContent = isPlaying ? "⏸" : "▶";
+        if (playIcon) {
+            playIcon.innerHTML = isPlaying
+                ? '<path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/>'
+                : '<path d="M8 5v14l11-7L8 5Z"/>';
+        }
+        if (btnPlayPause) {
+            btnPlayPause.setAttribute("aria-label", isPlaying ? "Pause Track" : "Play Track");
+            btnPlayPause.title = isPlaying ? "Pause Track" : "Play / Pause Track";
+        }
         if (vinylRecord) vinylRecord.classList.toggle("spinning", isPlaying);
         if (audioVisualizer) audioVisualizer.classList.toggle("active", isPlaying);
         updateDiagnostics();
