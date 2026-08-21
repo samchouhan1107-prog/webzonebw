@@ -117,16 +117,30 @@
 
 
     <!-- =====================================================
-         WEBZONEBW-ER PAGE-SCOPED LAYOUT SAFETY
-         
-         IMPORTANT:
-         These rules preserve the current desktop/tablet/
-         mobile camera layout.
-         
-         Do not move or restructure these breakpoints.
+         WEBZONEBW-ER LAYOUT SAFETY
          ===================================================== -->
 
     <style>
+
+        /* =====================================================
+           THEME BRIDGE
+           
+           The main WEBZONEBW stylesheet controls the actual
+           visual theme. These classes provide a safe bridge
+           for the ER page so the page does not get stuck in
+           dark mode.
+           ===================================================== */
+
+        html.er-theme-light,
+        body.er-theme-light {
+            color-scheme: light;
+        }
+
+        html.er-theme-dark,
+        body.er-theme-dark {
+            color-scheme: dark;
+        }
+
 
         /* =====================================================
            GLOBAL ER PAGE SAFETY
@@ -269,12 +283,7 @@
 
 
         /* =====================================================
-           HALLOWEEN ER LAUNCH ORB
-           
-           Replaces the pumpkin emoji only.
-           
-           It intentionally keeps a compact footprint so it
-           does not change the camera placeholder layout.
+           HALLOWEEN LAUNCH ORB
            ===================================================== */
 
         .er-studio-body .er-launch-icon-wrap {
@@ -289,7 +298,6 @@
             --orb-y: 0px;
 
             position: relative;
-
             width: 82px;
             height: 82px;
 
@@ -345,7 +353,6 @@
                 inset 0 0 18px rgba(255,255,255,.12);
 
             z-index: 3;
-
             overflow: hidden;
         }
 
@@ -356,24 +363,20 @@
 
         .er-studio-body .er-orb-mark {
             position: relative;
-
             width: 36px;
             height: 32px;
-
             opacity: .96;
         }
 
 
         .er-studio-body .er-mark-eye {
             position: absolute;
-
             top: 7px;
 
             width: 8px;
             height: 5px;
 
             background: #170c2d;
-
             border-radius: 50%;
 
             box-shadow:
@@ -455,9 +458,7 @@
 
         .er-studio-body .er-orb-ring {
             position: absolute;
-
             border-radius: 50%;
-
             pointer-events: none;
         }
 
@@ -545,7 +546,6 @@
         .er-studio-body .particle-two {
             bottom: 9px;
             left: 8px;
-
             animation-delay: .5s;
         }
 
@@ -553,7 +553,6 @@
         .er-studio-body .particle-three {
             top: 38px;
             left: 0;
-
             animation-delay: 1s;
         }
 
@@ -561,7 +560,6 @@
         .er-studio-body .particle-four {
             right: 1px;
             bottom: 27px;
-
             animation-delay: 1.5s;
         }
 
@@ -593,15 +591,12 @@
             justify-content: center;
 
             gap: 7px;
-
             margin-top: 10px;
 
             font-size: .66rem;
-
             font-weight: 700;
 
             letter-spacing: .15em;
-
             text-transform: uppercase;
 
             opacity: .68;
@@ -683,7 +678,6 @@
         .er-studio-body
         .er-launch-orb.launch-active
         .er-orb-ring-outer {
-
             animation-duration: 1s;
         }
 
@@ -691,15 +685,12 @@
         .er-studio-body
         .er-launch-orb.launch-active
         .er-orb-ring-middle {
-
             animation-duration: .8s;
         }
 
 
         /* =====================================================
-           DESKTOP / TABLET / MOBILE LAYOUT
-           
-           ORIGINAL BREAKPOINTS PRESERVED.
+           DESKTOP / TABLET
            ===================================================== */
 
         @media (max-width: 1100px) {
@@ -713,6 +704,10 @@
         }
 
 
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
         @media (max-width: 900px) {
 
             .er-studio-body .er-layout-container {
@@ -724,8 +719,10 @@
                 top: 0;
                 left: 0;
                 bottom: 0;
+
                 width: min(82vw, 300px);
                 height: 100vh;
+
                 z-index: 1000;
             }
 
@@ -829,6 +826,50 @@
             preserveEffects: true
 
         };
+
+    </script>
+
+
+    <!-- =====================================================
+         THEME BOOTSTRAP
+         
+         Runs before the page renders so the ER page does
+         not visibly flash into the wrong theme.
+         ===================================================== -->
+
+    <script>
+
+        (function () {
+
+            "use strict";
+
+            try {
+
+                const savedTheme =
+                    localStorage.getItem("webzonebw-theme");
+
+                const isLight =
+                    savedTheme === "light";
+
+                document.documentElement.classList.toggle(
+                    "er-theme-light",
+                    isLight
+                );
+
+                document.documentElement.classList.toggle(
+                    "er-theme-dark",
+                    !isLight
+                );
+
+            } catch (error) {
+
+                document.documentElement.classList.add(
+                    "er-theme-dark"
+                );
+
+            }
+
+        })();
 
     </script>
 
@@ -943,8 +984,7 @@
 
                 <li>
                     <a href="../index.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">🏠</span>
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
                         Dashboard
                     </a>
                 </li>
@@ -953,56 +993,49 @@
                     <a href="index.html"
                        class="active er-nav-pill"
                        aria-current="page">
-                        <span class="nav-icon"
-                              aria-hidden="true">🔮</span>
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
                         WebZoneBW-ER Studio
                     </a>
                 </li>
 
                 <li>
                     <a href="../projects.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">💼</span>
+                        <span class="nav-icon" aria-hidden="true">💼</span>
                         Projects
                     </a>
                 </li>
 
                 <li>
                     <a href="../resume.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">📄</span>
+                        <span class="nav-icon" aria-hidden="true">📄</span>
                         Resume
                     </a>
                 </li>
 
                 <li>
                     <a href="../blog.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">📝</span>
+                        <span class="nav-icon" aria-hidden="true">📝</span>
                         Blog
                     </a>
                 </li>
 
                 <li>
                     <a href="../soundbox.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">🎵</span>
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
                         Sound Box
                     </a>
                 </li>
 
                 <li>
                     <a href="../about.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">👤</span>
+                        <span class="nav-icon" aria-hidden="true">👤</span>
                         About
                     </a>
                 </li>
 
                 <li>
                     <a href="../contact.html">
-                        <span class="nav-icon"
-                              aria-hidden="true">✉️</span>
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
                         Contact
                     </a>
                 </li>
@@ -1012,11 +1045,23 @@
         </nav>
 
 
+        <!-- =================================================
+             THEME SWITCH
+             ================================================= -->
+
         <div class="sidebar-theme-toggle-row">
 
             <div class="theme-label-group">
-                <span aria-hidden="true">🌙</span>
-                <span>Dark Mode</span>
+
+                <span id="themeModeIcon"
+                      aria-hidden="true">
+                    🌙
+                </span>
+
+                <span id="themeModeText">
+                    Dark Mode
+                </span>
+
             </div>
 
             <label class="switch-toggle"
@@ -1071,9 +1116,7 @@
     <main class="main-content er-main-content">
 
 
-        <!-- =================================================
-             MOBILE NAVIGATION
-             ================================================= -->
+        <!-- MOBILE NAVIGATION -->
 
         <div class="er-mobile-nav-bar">
 
@@ -1151,22 +1194,16 @@
                         id="helpModalBtn"
                         title="How to Use WebZoneBW-ER Studio"
                         aria-label="Help">
-
                     ❔
-
                 </button>
-
 
                 <button type="button"
                         class="header-icon-btn"
                         id="settingsBtn"
                         title="Camera &amp; Shader Settings"
                         aria-label="Camera and Shader Settings">
-
                     ⚙️
-
                 </button>
-
 
                 <div class="notification-btn-wrap">
 
@@ -1174,9 +1211,7 @@
                             class="header-icon-btn"
                             title="Notifications"
                             aria-label="Notifications">
-
                         🔔
-
                     </button>
 
                     <span class="notif-badge">
@@ -1204,43 +1239,28 @@
             <section class="er-camera-card"
                      aria-label="Live Camera Extended Reality Stage">
 
-
                 <div class="camera-viewport-frame"
                      id="cameraViewport"
                      aria-label="Live WEBZONEBW-ER camera viewport">
 
-
-                    <!-- TOP LEFT HUD -->
 
                     <button type="button"
                             class="cam-corner-btn top-left"
                             id="toggleFaceHudBtn"
                             title="Toggle Biometric Reticle HUD"
                             aria-label="Toggle Biometric Reticle HUD">
-
-                        <span aria-hidden="true">
-                            🔲
-                        </span>
-
+                        <span aria-hidden="true">🔲</span>
                     </button>
 
-
-                    <!-- TOP RIGHT FULLSCREEN -->
 
                     <button type="button"
                             class="cam-corner-btn top-right"
                             id="fullscreenBtn"
                             title="Fullscreen View"
                             aria-label="Fullscreen View">
-
-                        <span aria-hidden="true">
-                            ⛶
-                        </span>
-
+                        <span aria-hidden="true">⛶</span>
                     </button>
 
-
-                    <!-- ZOOM -->
 
                     <button type="button"
                             class="cam-zoom-badge"
@@ -1255,8 +1275,6 @@
                     </button>
 
 
-                    <!-- CAMERA TOOLS -->
-
                     <div class="cam-floating-vertical-stack">
 
                         <button type="button"
@@ -1264,48 +1282,35 @@
                                 id="flipCameraBtnFloating"
                                 title="Flip Camera (Front / Back)"
                                 aria-label="Flip Camera Front or Back">
-
                             <span>🔄</span>
-
                         </button>
-
 
                         <button type="button"
                                 class="cam-vertical-btn"
                                 id="flashLightBtn"
                                 title="Toggle Studio Light / Flash"
                                 aria-label="Studio Light">
-
                             <span>⚡</span>
-
                         </button>
-
 
                         <button type="button"
                                 class="cam-vertical-btn active"
                                 id="autoHdBtnFloating"
                                 title="AI Auto-HD Retouch &amp; Glow"
                                 aria-label="AI Glow Retouch">
-
                             <span>✨</span>
-
                         </button>
-
 
                         <button type="button"
                                 class="cam-vertical-btn"
                                 id="toggleFaceMeshBtn"
                                 title="Face Tracking &amp; Mesh"
                                 aria-label="Face Tracking and Mesh">
-
                             <span>👤</span>
-
                         </button>
 
                     </div>
 
-
-                    <!-- MICROPHONE -->
 
                     <div id="micStatusIndicator"
                          class="cam-floating-badge"
@@ -1314,10 +1319,7 @@
                          aria-live="polite">
 
                         <span class="mic-pulse-dot"></span>
-
-                        <span class="mic-icon">
-                            🎤
-                        </span>
+                        <span class="mic-icon">🎤</span>
 
                     </div>
 
@@ -1337,20 +1339,14 @@
                              onclick="window.closePermissionAlert && window.closePermissionAlert()">
                         </div>
 
-
                         <div class="permission-alert-card">
 
                             <div class="perm-alert-header">
 
                                 <div class="perm-alert-icon-wrap"
                                      id="permAlertIconWrap">
-
-                                    <span id="permAlertIcon">
-                                        ⚠️
-                                    </span>
-
+                                    <span id="permAlertIcon">⚠️</span>
                                 </div>
-
 
                                 <div class="perm-alert-title-block">
 
@@ -1365,14 +1361,11 @@
 
                                 </div>
 
-
                                 <button type="button"
                                         class="perm-alert-close-btn"
                                         id="permAlertCloseBtn"
                                         aria-label="Close Permission Alert">
-
                                     ✖
-
                                 </button>
 
                             </div>
@@ -1396,9 +1389,7 @@
 
                                     <div class="perm-step-item">
 
-                                        <span class="step-num">
-                                            1
-                                        </span>
+                                        <span class="step-num">1</span>
 
                                         <div class="step-text">
 
@@ -1417,9 +1408,7 @@
 
                                     <div class="perm-step-item">
 
-                                        <span class="step-num">
-                                            2
-                                        </span>
+                                        <span class="step-num">2</span>
 
                                         <div class="step-text">
 
@@ -1437,9 +1426,7 @@
 
                                     <div class="perm-step-item">
 
-                                        <span class="step-num">
-                                            3
-                                        </span>
+                                        <span class="step-num">3</span>
 
                                         <div class="step-text">
 
@@ -1465,39 +1452,19 @@
                                 <button type="button"
                                         class="btn camera-btn-primary perm-action-btn"
                                         id="permRetryBtn">
-
-                                    <span aria-hidden="true">
-                                        🔄
-                                    </span>
-
-                                    Request Permissions Again
-
+                                    🔄 Request Permissions Again
                                 </button>
-
 
                                 <button type="button"
                                         class="btn perm-action-btn"
                                         id="permDemoBtn">
-
-                                    <span aria-hidden="true">
-                                        ✨
-                                    </span>
-
-                                    Switch to Test Mode
-
+                                    ✨ Switch to Test Mode
                                 </button>
-
 
                                 <button type="button"
                                         class="btn perm-action-btn"
                                         id="permUploadBtn">
-
-                                    <span aria-hidden="true">
-                                        📁
-                                    </span>
-
-                                    Upload Photo Instead
-
+                                    📁 Upload Photo Instead
                                 </button>
 
                             </div>
@@ -1507,22 +1474,16 @@
                     </div>
 
 
-                    <!-- SHUTTER -->
-
                     <div id="shutterFlashOverlay"
                          class="shutter-flash-overlay">
                     </div>
 
 
-                    <!-- EFFECT TOAST -->
-
                     <div id="canvasSwipeToast"
                          class="canvas-swipe-toast"
                          aria-live="polite">
 
-                        <span id="canvasSwipeIcon">
-                            ⚡
-                        </span>
+                        <span id="canvasSwipeIcon">⚡</span>
 
                         <span id="canvasSwipeText">
                             Cyber Lens Active
@@ -1531,9 +1492,7 @@
                     </div>
 
 
-                    <!-- =================================================
-                         LIVE CAMERA
-                         ================================================= -->
+                    <!-- LIVE CAMERA -->
 
                     <video id="cameraVideo"
                            class="camera-video"
@@ -1547,8 +1506,6 @@
                     </video>
 
 
-                    <!-- RENDER CANVAS -->
-
                     <canvas id="cameraCanvas"
                             class="camera-canvas"
                             aria-label="Processed camera effects canvas">
@@ -1557,14 +1514,10 @@
 
                     <!-- =================================================
                          CAMERA PLACEHOLDER
-                         
-                         HALLOWEEN ORB REPLACES ONLY THE OLD
-                         PUMPKIN EMOJI.
                          ================================================= -->
 
                     <div id="cameraPlaceholder"
                          class="camera-placeholder">
-
 
                         <div class="placeholder-icon-wrap er-launch-icon-wrap">
 
@@ -1573,42 +1526,27 @@
                                  aria-label="WEBZONEBW Extended Reality Halloween Studio"
                                  role="img">
 
-
-                                <!-- ORBIT RINGS -->
-
                                 <div class="er-orb-ring er-orb-ring-outer"></div>
 
                                 <div class="er-orb-ring er-orb-ring-middle"></div>
-
-
-                                <!-- CORE -->
 
                                 <div class="er-orb-core">
 
                                     <div class="er-orb-mark">
 
                                         <span class="er-mark-eye left"></span>
-
                                         <span class="er-mark-eye right"></span>
-
                                         <span class="er-mark-smile"></span>
 
                                     </div>
-
 
                                     <div class="er-orb-scan"></div>
 
                                 </div>
 
-
-                                <!-- PARTICLES -->
-
                                 <span class="er-orb-particle particle-one"></span>
-
                                 <span class="er-orb-particle particle-two"></span>
-
                                 <span class="er-orb-particle particle-three"></span>
-
                                 <span class="er-orb-particle particle-four"></span>
 
                             </div>
@@ -1643,11 +1581,7 @@
                                     id="startExperienceBtn"
                                     aria-label="Start Live Front Camera">
 
-                                <span aria-hidden="true">
-                                    📸
-                                </span>
-
-                                Start Live Camera
+                                📸 Start Live Camera
 
                             </button>
 
@@ -1657,18 +1591,12 @@
                                     id="startDemoBtn"
                                     aria-label="Interactive Demo Mode">
 
-                                <span aria-hidden="true">
-                                    ✨
-                                </span>
-
-                                Test Mode
+                                ✨ Test Mode
 
                             </button>
 
                         </div>
 
-
-                        <!-- STATUS -->
 
                         <div class="er-launch-status"
                              id="erLaunchStatus"
@@ -1687,8 +1615,6 @@
                 </div>
 
 
-                <!-- CAMERA PRIVACY NOTE -->
-
                 <p class="er-camera-privacy-note">
 
                     <strong>Camera privacy:</strong>
@@ -1699,21 +1625,15 @@
                 </p>
 
 
-                <!-- SWIPE HINT -->
-
                 <div class="swipe-hint-bar">
 
-                    <span class="swipe-arrow">
-                        ←
-                    </span>
+                    <span class="swipe-arrow">←</span>
 
                     <span class="swipe-text">
                         Swipe left / right to change effect
                     </span>
 
-                    <span class="swipe-arrow">
-                        →
-                    </span>
+                    <span class="swipe-arrow">→</span>
 
                 </div>
 
@@ -1894,8 +1814,7 @@
 
                         <div class="shutter-outer-glow">
 
-                            <div class="shutter-inner-core">
-                            </div>
+                            <div class="shutter-inner-core"></div>
 
                         </div>
 
@@ -1974,8 +1893,6 @@
                 </div>
 
 
-                <!-- SEARCH -->
-
                 <div class="effects-search-wrap">
 
                     <span class="search-icon"
@@ -1991,8 +1908,6 @@
 
                 </div>
 
-
-                <!-- CATEGORIES -->
 
                 <div class="effects-category-pills"
                      role="tablist"
@@ -2030,8 +1945,6 @@
 
                 </div>
 
-
-                <!-- EFFECT GRID -->
 
                 <div class="effects-card-grid"
                      id="effectsCardGrid">
@@ -2231,8 +2144,6 @@
                 </div>
 
 
-                <!-- VIEW ALL -->
-
                 <div class="panel-bottom-action">
 
                     <button type="button"
@@ -2339,8 +2250,6 @@
             </div>
 
 
-            <!-- AI CARD -->
-
             <div class="powered-ai-card">
 
                 <div class="ai-card-glow-icon">
@@ -2383,7 +2292,6 @@
 
             <div class="snapshot-modal-card">
 
-
                 <div class="snapshot-header">
 
                     <h2 id="snapshotTitle">
@@ -2394,9 +2302,7 @@
                             class="snapshot-close-x"
                             id="closeSnapshotXBtn"
                             aria-label="Close Snapshot">
-
                         ✕
-
                     </button>
 
                 </div>
@@ -2413,11 +2319,7 @@
                        class="btn camera-btn-primary"
                        download="webzonebw-er-snapshot.png">
 
-                        <span aria-hidden="true">
-                            💾
-                        </span>
-
-                        Save HD Snapshot
+                        💾 Save HD Snapshot
 
                     </a>
 
@@ -2448,11 +2350,7 @@
                 <p>
 
                     © 2026
-
-                    <strong>
-                        WEBZONEBW
-                    </strong>.
-
+                    <strong>WEBZONEBW</strong>.
                     All rights reserved.
 
                 </p>
@@ -2489,7 +2387,7 @@
 
 
 <!-- =====================================================
-     NOSCRIPT FALLBACK
+     NOSCRIPT
      ===================================================== -->
 
 <noscript>
@@ -2523,10 +2421,180 @@
 
 
 <!-- =====================================================
-     HALLOWEEN LAUNCH UI
+     ER THEME CONTROLLER
      
-     This is intentionally separate from the main camera
-     engine. It only controls the launch orb/status UI.
+     This is deliberately placed after the existing site
+     scripts so it can synchronize the ER toggle without
+     replacing the existing script.js functionality.
+     ===================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    function getSavedTheme() {
+
+        try {
+
+            const saved =
+                localStorage.getItem("webzonebw-theme");
+
+            return saved === "light"
+                ? "light"
+                : "dark";
+
+        } catch (error) {
+
+            return "dark";
+
+        }
+
+    }
+
+
+    function applyERTheme(theme) {
+
+        const isLight =
+            theme === "light";
+
+
+        document.documentElement.classList.toggle(
+            "er-theme-light",
+            isLight
+        );
+
+        document.documentElement.classList.toggle(
+            "er-theme-dark",
+            !isLight
+        );
+
+
+        document.body.classList.toggle(
+            "er-theme-light",
+            isLight
+        );
+
+        document.body.classList.toggle(
+            "er-theme-dark",
+            !isLight
+        );
+
+
+        const toggle =
+            document.getElementById("themeToggleSwitch");
+
+        const icon =
+            document.getElementById("themeModeIcon");
+
+        const text =
+            document.getElementById("themeModeText");
+
+
+        if (toggle) {
+
+            toggle.checked = !isLight;
+
+        }
+
+
+        if (icon) {
+
+            icon.textContent =
+                isLight
+                    ? "☀️"
+                    : "🌙";
+
+        }
+
+
+        if (text) {
+
+            text.textContent =
+                isLight
+                    ? "Light Mode"
+                    : "Dark Mode";
+
+        }
+
+
+        try {
+
+            localStorage.setItem(
+                "webzonebw-theme",
+                theme
+            );
+
+        } catch (error) {
+
+            /* Storage unavailable — theme still works. */
+
+        }
+
+    }
+
+
+    function initERTheme() {
+
+        const toggle =
+            document.getElementById(
+                "themeToggleSwitch"
+            );
+
+
+        applyERTheme(
+            getSavedTheme()
+        );
+
+
+        if (!toggle) {
+            return;
+        }
+
+
+        toggle.addEventListener(
+            "change",
+            function () {
+
+                const theme =
+                    toggle.checked
+                        ? "dark"
+                        : "light";
+
+
+                applyERTheme(theme);
+
+            }
+        );
+
+    }
+
+
+    if (
+        document.readyState === "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initERTheme,
+            { once: true }
+        );
+
+    } else {
+
+        initERTheme();
+
+    }
+
+})();
+
+</script>
+
+
+<!-- =====================================================
+     HALLOWEEN LAUNCH UI
      ===================================================== -->
 
 <script>
@@ -2556,49 +2624,62 @@
         }
 
 
-        /* -----------------------------------------------------
-           READY STATE
-           ----------------------------------------------------- */
+        orb.classList.add(
+            "halloween-ready"
+        );
 
-        orb.classList.add("halloween-ready");
-
-
-        /* -----------------------------------------------------
-           BUTTON RESPONSE
-           ----------------------------------------------------- */
 
         function activateOrb() {
 
-            orb.classList.add("launch-active");
+            orb.classList.add(
+                "launch-active"
+            );
+
 
             if (status) {
 
                 const text =
-                    status.querySelector(".er-status-text");
+                    status.querySelector(
+                        ".er-status-text"
+                    );
 
                 if (text) {
-                    text.textContent = "INITIALIZING ER";
+
+                    text.textContent =
+                        "INITIALIZING ER";
+
                 }
 
             }
 
 
-            window.setTimeout(function () {
+            window.setTimeout(
+                function () {
 
-                orb.classList.remove("launch-active");
+                    orb.classList.remove(
+                        "launch-active"
+                    );
 
-                if (status) {
 
-                    const text =
-                        status.querySelector(".er-status-text");
+                    if (status) {
 
-                    if (text) {
-                        text.textContent = "ER STUDIO READY";
+                        const text =
+                            status.querySelector(
+                                ".er-status-text"
+                            );
+
+                        if (text) {
+
+                            text.textContent =
+                                "ER STUDIO READY";
+
+                        }
+
                     }
 
-                }
-
-            }, 1100);
+                },
+                1100
+            );
 
         }
 
@@ -2625,15 +2706,15 @@
         }
 
 
-        /* -----------------------------------------------------
+        /* =================================================
            DESKTOP POINTER PARALLAX
-           
-           Touch/tablet/mobile devices are untouched.
-           ----------------------------------------------------- */
+           ================================================= */
 
         if (
             window.matchMedia &&
-            window.matchMedia("(pointer:fine)").matches
+            window.matchMedia(
+                "(pointer:fine)"
+            ).matches
         ) {
 
             orb.addEventListener(
@@ -2643,24 +2724,34 @@
                     const rect =
                         orb.getBoundingClientRect();
 
+
                     const x =
                         (
-                            (event.clientX - rect.left)
-                            / rect.width
-                            - 0.5
+                            (
+                                event.clientX -
+                                rect.left
+                            ) /
+                            rect.width -
+                            0.5
                         ) * 8;
+
 
                     const y =
                         (
-                            (event.clientY - rect.top)
-                            / rect.height
-                            - 0.5
+                            (
+                                event.clientY -
+                                rect.top
+                            ) /
+                            rect.height -
+                            0.5
                         ) * 8;
+
 
                     orb.style.setProperty(
                         "--orb-x",
                         x + "px"
                     );
+
 
                     orb.style.setProperty(
                         "--orb-y",

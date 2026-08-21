@@ -16,18 +16,16 @@
        • Automatic next-track playback
        • Missing-file protection
        • Mobile responsive player
-       • Works with existing WEBZONEBW theme
-
-   AUDIO LOCATION:
-       assets/audio/
-
-   IMPORTANT:
-       Supports playlist properties:
-       • audio
-       • audioFile
-       • audioPath
-       • src
-       • url
+       • Existing WEBZONEBW theme integration
+       • Supports:
+           assets/audio/file.mp3
+       • Supports Beatles track fields:
+           audioFile
+           audioPath
+           fileName
+           audio
+           src
+           url
    ========================================================== */
 
 "use strict";
@@ -58,6 +56,8 @@
 
         showOnAllPages: true,
 
+        audioBasePath: "assets/audio/",
+
         playlistSource: "beatles-playlists.js"
 
     };
@@ -85,9 +85,7 @@
 
         initialized: false,
 
-        expanded: false,
-
-        savedPosition: 0
+        expanded: false
 
     };
 
@@ -106,7 +104,6 @@
     let playButton = null;
     let previousButton = null;
     let nextButton = null;
-    let muteButton = null;
 
     let progressRange = null;
     let volumeRange = null;
@@ -116,7 +113,6 @@
 
     let playlistPanel = null;
     let playlistButton = null;
-    let playlistCloseButton = null;
 
     let minimizeButton = null;
 
@@ -155,61 +151,133 @@
     }
 
 
-    function getAudioPath(track) {
+    /* ======================================================
+       AUDIO PATH NORMALIZATION
+       ====================================================== */
+
+    function normalizeAudioPath(track) {
 
         if (!track || typeof track !== "object") {
             return "";
         }
 
+
         /*
-         * Your Beatles playlist uses:
+         * Priority:
          *
-         * audioFile
-         * audioPath
-         * fileName
+         * 1. audioFile
+         * 2. audioPath
+         * 3. fileName
+         * 4. audio
+         * 5. src
+         * 6. url
+         */
+
+        let audioPath =
+            track.audioFile ||
+            track.audioPath ||
+            track.fileName ||
+            track.audio ||
+            track.src ||
+            track.url ||
+            "";
+
+
+        if (!audioPath) {
+            return "";
+        }
+
+
+        audioPath = String(audioPath).trim();
+
+
+        /*
+         * Already a complete URL.
+         */
+
+        if (
+            /^https?:\/\//i.test(audioPath) ||
+            /^blob:/i.test(audioPath) ||
+            /^data:/i.test(audioPath)
+        ) {
+
+            return audioPath;
+
+        }
+
+
+        /*
+         * Remove leading ./ so paths remain clean.
+         */
+
+        audioPath =
+            audioPath.replace(/^\.\/+/, "");
+
+
+        /*
+         * Normalize Windows-style separators.
+         */
+
+        audioPath =
+            audioPath.replace(/\\/g, "/");
+
+
+        /*
+         * If the playlist already provides:
          *
-         * The player also supports older/common names.
+         * assets/audio/file.mp3
+         *
+         * keep it exactly in that structure.
+         */
+
+        if (
+            audioPath.startsWith("assets/audio/")
+        ) {
+
+            return audioPath;
+
+        }
+
+
+        /*
+         * If the playlist provides:
+         *
+         * /assets/audio/file.mp3
+         *
+         * remove the leading slash so the path
+         * remains relative to the current website.
+         */
+
+        if (
+            audioPath.startsWith("/assets/audio/")
+        ) {
+
+            return audioPath.substring(1);
+
+        }
+
+
+        /*
+         * If the playlist provides only:
+         *
+         * The Beatles - Come Together.mp3
+         *
+         * automatically connect it to:
+         *
+         * assets/audio/
          */
 
         return (
-            track.audio ||
-            track.audioFile ||
-            track.audioPath ||
-            track.src ||
-            track.url ||
-            ""
+            CONFIG.audioBasePath +
+            audioPath.replace(/^\/+/, "")
         );
 
     }
 
 
-    function normalizeAudioPath(path) {
-
-        if (!path) {
-            return "";
-        }
-
-        return String(path).trim();
-
-    }
-
-
-    function getTrackId(track) {
-
-        if (!track || typeof track !== "object") {
-            return "";
-        }
-
-        return (
-            track.id ||
-            track.slug ||
-            track.fileName ||
-            track.title ||
-            ""
-        );
-
-    }
-
+    /* ======================================================
+       TRACK NORMALIZATION
+       ====================================================== */
 
     function normalizeTrack(track) {
 
@@ -217,86 +285,111 @@
             return null;
         }
 
-        const audioPath =
-            normalizeAudioPath(
-                getAudioPath(track)
-            );
+
+        const normalizedAudio =
+            normalizeAudioPath(track);
+
 
         const normalized = {
 
             id:
-                getTrackId(track) ||
+                track.id ||
+                track.slug ||
+                track.fileName ||
+                track.title ||
                 `track-${Math.random()
                     .toString(36)
                     .slice(2)}`,
 
+
             num:
-                track.num ||
+                track.num ??
+                track.trackNumber ??
                 "",
 
+
             phaseNum:
-                track.phaseNum ||
+                track.phaseNum ??
                 "",
+
 
             phaseName:
                 track.phaseName ||
                 "",
+
 
             title:
                 track.title ||
                 track.name ||
                 "Unknown Track",
 
+
             artist:
                 track.artist ||
                 track.artistName ||
+                track.vocalLead ||
                 "The Beatles",
+
 
             album:
                 track.album ||
                 track.albumName ||
                 "",
 
+
             albumGroup:
                 track.albumGroup ||
                 "",
+
 
             year:
                 track.year ||
                 "",
 
+
             releaseDate:
                 track.releaseDate ||
                 "",
+
 
             duration:
                 track.duration ||
                 "",
 
+
             audio:
-                audioPath,
+                normalizedAudio,
+
 
             audioFile:
                 track.audioFile ||
                 "",
 
+
             audioPath:
                 track.audioPath ||
                 "",
+
 
             fileName:
                 track.fileName ||
                 "",
 
+
             audioType:
                 track.audioType ||
                 "mp3",
 
+
             hasAudioFile:
-                track.hasAudioFile !== false,
+                track.hasAudioFile !== false &&
+                Boolean(normalizedAudio),
+
 
             audioAvailable:
-                track.audioAvailable !== false,
+                track.audioAvailable !== false &&
+                Boolean(normalizedAudio),
+
 
             cover:
                 track.cover ||
@@ -304,41 +397,38 @@
                 track.image ||
                 "",
 
+
             description:
                 track.description ||
                 "",
 
-            vocalLead:
-                track.vocalLead ||
-                "",
-
-            tempo:
-                track.tempo ||
-                "",
 
             keyNote:
-                track.keyNote ||
+                track.keyNote ??
                 "",
+
 
             scale:
                 track.scale ||
                 "",
 
-            chords:
-                Array.isArray(track.chords)
-                    ? track.chords
-                    : [],
+
+            tempo:
+                track.tempo ??
+                "",
+
 
             motifType:
                 track.motifType ||
                 "",
 
-            melody:
-                Array.isArray(track.melody)
-                    ? track.melody
-                    : []
+
+            vocalLead:
+                track.vocalLead ||
+                ""
 
         };
+
 
         return normalized;
 
@@ -350,11 +440,6 @@
        ====================================================== */
 
     function discoverPlaylist() {
-
-        /*
-         * Check the global names used by different
-         * versions of beatles-playlists.js.
-         */
 
         const candidates = [
 
@@ -381,9 +466,9 @@
         ];
 
 
-        /* --------------------------------------------------
-           Direct arrays
-           -------------------------------------------------- */
+        /*
+         * Direct arrays.
+         */
 
         for (const candidate of candidates) {
 
@@ -392,7 +477,7 @@
                 candidate.length
             ) {
 
-                const tracks =
+                const normalized =
                     candidate
                         .map(normalizeTrack)
                         .filter(
@@ -401,14 +486,18 @@
                                 track.audio
                         );
 
-                if (tracks.length) {
 
-                    state.playlist = tracks;
+                if (normalized.length) {
+
+                    state.playlist =
+                        normalized;
+
 
                     console.info(
                         "[WEBZONEBW Sound Box]",
-                        `Loaded ${tracks.length} tracks.`
+                        `Loaded ${normalized.length} Beatles tracks.`
                     );
+
 
                     return true;
 
@@ -419,9 +508,9 @@
         }
 
 
-        /* --------------------------------------------------
-           Nested playlist objects
-           -------------------------------------------------- */
+        /*
+         * Nested playlist objects.
+         */
 
         for (const candidate of candidates) {
 
@@ -445,9 +534,9 @@
 
                     candidate.albums,
 
-                    candidate.entries,
+                    candidate.trackList,
 
-                    candidate.data
+                    candidate.songList
 
                 ];
 
@@ -459,7 +548,7 @@
                         list.length
                     ) {
 
-                        const tracks =
+                        const normalized =
                             list
                                 .map(normalizeTrack)
                                 .filter(
@@ -468,15 +557,18 @@
                                         track.audio
                                 );
 
-                        if (tracks.length) {
+
+                        if (normalized.length) {
 
                             state.playlist =
-                                tracks;
+                                normalized;
+
 
                             console.info(
                                 "[WEBZONEBW Sound Box]",
-                                `Loaded ${tracks.length} tracks.`
+                                `Loaded ${normalized.length} Beatles tracks.`
                             );
+
 
                             return true;
 
@@ -504,9 +596,14 @@
 
         /*
          * IMPORTANT:
-         * Your audio files are directly inside:
          *
-         * assets/audio/
+         * Your real file structure is:
+         *
+         * assets/audio/file
+         *
+         * Therefore Come Together uses:
+         *
+         * assets/audio/The Beatles - Come Together.mp3
          */
 
         state.playlist = [
@@ -555,9 +652,6 @@
                 fileName:
                     "The Beatles - Come Together.mp3",
 
-                audio:
-                    "assets/audio/The Beatles - Come Together.mp3",
-
                 audioType:
                     "mp3",
 
@@ -566,6 +660,9 @@
 
                 audioAvailable:
                     true,
+
+                audio:
+                    "assets/audio/The Beatles - Come Together.mp3",
 
                 keyNote:
                     293.66,
@@ -624,9 +721,11 @@
                     CONFIG.storageKey
                 );
 
+
             if (!raw) {
                 return;
             }
+
 
             const saved =
                 JSON.parse(raw);
@@ -655,9 +754,6 @@
                 ) &&
                 saved.currentTime >= 0
             ) {
-
-                state.savedPosition =
-                    saved.currentTime;
 
                 state.currentTime =
                     saved.currentTime;
@@ -701,9 +797,7 @@
                 JSON.stringify({
 
                     currentIndex:
-                        CONFIG.rememberTrack
-                            ? state.currentIndex
-                            : 0,
+                        state.currentIndex,
 
                     currentTime:
                         CONFIG.rememberPosition
@@ -765,11 +859,14 @@
                 "section"
             );
 
+
         player.id =
             CONFIG.playerId;
 
+
         player.className =
             "webzonebw-global-player";
+
 
         player.setAttribute(
             "aria-label",
@@ -788,20 +885,19 @@
             <div class="webzonebw-player-inner">
 
 
-                <!-- TRACK INFORMATION -->
-
                 <div class="webzonebw-track-info">
 
                     <div
                         class="webzonebw-track-icon"
                         aria-hidden="true">
 
-                        ♪
+                        🎵
 
                     </div>
 
 
-                    <div class="webzonebw-track-text">
+                    <div
+                        class="webzonebw-track-text">
 
                         <strong
                             id="webzonebwTrackTitle">
@@ -830,8 +926,6 @@
 
                 </div>
 
-
-                <!-- MAIN CONTROLS -->
 
                 <div class="webzonebw-main-controls">
 
@@ -871,15 +965,10 @@
 
                     </button>
 
-
                 </div>
 
 
-                <!-- PROGRESS -->
-
-                <div
-                    class="webzonebw-progress-area">
-
+                <div class="webzonebw-progress-area">
 
                     <span
                         id="webzonebwCurrentTime">
@@ -907,14 +996,10 @@
 
                     </span>
 
-
                 </div>
 
 
-                <!-- VOLUME / PLAYLIST -->
-
-                <div
-                    class="webzonebw-volume-area">
+                <div class="webzonebw-volume-area">
 
 
                     <button
@@ -963,13 +1048,10 @@
 
                     </button>
 
-
                 </div>
 
             </div>
 
-
-            <!-- PLAYLIST DRAWER -->
 
             <div
                 id="webzonebwPlaylistPanel"
@@ -980,9 +1062,8 @@
                 <div
                     class="webzonebw-playlist-header">
 
-
                     <strong>
-                        ♪ WEBZONEBW SOUND BOX
+                        🎵 WEBZONEBW SOUND BOX
                     </strong>
 
 
@@ -990,13 +1071,11 @@
                         type="button"
                         id="webzonebwPlaylistClose"
                         class="webzonebw-player-btn"
-                        aria-label="Close playlist"
-                        title="Close Playlist">
+                        aria-label="Close playlist">
 
                         ✕
 
                     </button>
-
 
                 </div>
 
@@ -1005,7 +1084,6 @@
                     id="webzonebwPlaylistItems"
                     class="webzonebw-playlist-items">
                 </div>
-
 
             </div>
 
@@ -1041,74 +1119,76 @@
                 "webzonebwTrackTitle"
             );
 
+
         artistElement =
             document.getElementById(
                 "webzonebwTrackArtist"
             );
+
 
         albumElement =
             document.getElementById(
                 "webzonebwTrackAlbum"
             );
 
+
         playButton =
             document.getElementById(
                 "webzonebwPlay"
             );
+
 
         previousButton =
             document.getElementById(
                 "webzonebwPrevious"
             );
 
+
         nextButton =
             document.getElementById(
                 "webzonebwNext"
             );
+
 
         progressRange =
             document.getElementById(
                 "webzonebwProgress"
             );
 
+
         volumeRange =
             document.getElementById(
                 "webzonebwVolume"
             );
+
 
         currentTimeElement =
             document.getElementById(
                 "webzonebwCurrentTime"
             );
 
+
         durationElement =
             document.getElementById(
                 "webzonebwDuration"
             );
+
 
         playlistPanel =
             document.getElementById(
                 "webzonebwPlaylistPanel"
             );
 
+
         playlistButton =
             document.getElementById(
                 "webzonebwPlaylist"
             );
 
-        playlistCloseButton =
-            document.getElementById(
-                "webzonebwPlaylistClose"
-            );
 
         minimizeButton =
             document.getElementById(
                 "webzonebwMinimize"
-            );
-
-        muteButton =
-            document.getElementById(
-                "webzonebwMute"
             );
 
     }
@@ -1118,19 +1198,10 @@
        LOAD TRACK
        ====================================================== */
 
-    function loadTrack(
-        index,
-        options = {}
-    ) {
+    function loadTrack(index, options = {}) {
 
         if (!state.playlist.length) {
-
-            console.warn(
-                "[WEBZONEBW Sound Box] Playlist is empty."
-            );
-
             return;
-
         }
 
 
@@ -1166,26 +1237,18 @@
         }
 
 
-        /*
-         * Stop the current track.
-         */
-
         audio.pause();
 
 
         /*
-         * Reset playback state.
-         */
-
-        state.currentTime = 0;
-
-        state.duration = 0;
-
-        state.savedPosition = 0;
-
-
-        /*
-         * Set real MP3 source.
+         * IMPORTANT:
+         *
+         * The actual source is now taken from
+         * the normalized audio path.
+         *
+         * Example:
+         *
+         * assets/audio/The Beatles - Come Together.mp3
          */
 
         audio.src =
@@ -1195,45 +1258,26 @@
         audio.load();
 
 
-        /*
-         * Update track information.
-         */
-
         titleElement.textContent =
             track.title;
 
 
         artistElement.textContent =
-            track.artist ||
-            "The Beatles";
+            track.artist;
 
 
-        if (track.album) {
-
-            albumElement.textContent =
-                `${track.album}${
+        albumElement.textContent =
+            track.album
+                ? `${track.album}${
                     track.year
                         ? " • " + track.year
                         : ""
-                }`;
+                }`
+                : "WEBZONEBW Sound Box";
 
-        } else {
-
-            albumElement.textContent =
-                "WEBZONEBW Sound Box";
-
-        }
-
-
-        /*
-         * Reset controls.
-         */
 
         progressRange.value =
             0;
-
-        progressRange.max =
-            100;
 
 
         currentTimeElement.textContent =
@@ -1241,28 +1285,28 @@
 
 
         durationElement.textContent =
-            track.duration ||
             "0:00";
 
 
-        /*
-         * Save current track.
-         */
+        state.currentTime =
+            0;
+
+
+        state.duration =
+            0;
+
 
         saveState();
 
 
-        /*
-         * Refresh playlist.
-
-         */
-
         renderPlaylist();
 
 
-        /*
-         * Optional autoplay.
-         */
+        console.info(
+            "[WEBZONEBW Sound Box] Loading:",
+            track.audio
+        );
+
 
         if (options.autoplay) {
 
@@ -1300,8 +1344,10 @@
 
             await audio.play();
 
+
             state.isPlaying =
                 true;
+
 
             updatePlayButton();
 
@@ -1310,12 +1356,15 @@
             state.isPlaying =
                 false;
 
+
             updatePlayButton();
+
 
             console.warn(
                 "[WEBZONEBW Sound Box] Playback was blocked or unavailable.",
                 error
             );
+
 
             showTrackError(
                 "Press Play to start the music."
@@ -1381,31 +1430,13 @@
 
 
     /* ======================================================
-       PREVIOUS TRACK
+       PREVIOUS
        ====================================================== */
 
     function previousTrack() {
 
         if (!state.playlist.length) {
             return;
-        }
-
-
-        /*
-         * If more than 3 seconds into the current track,
-         * previous button first restarts the current track.
-         */
-
-        if (
-            audio &&
-            audio.currentTime > 3
-        ) {
-
-            audio.currentTime =
-                0;
-
-            return;
-
         }
 
 
@@ -1420,7 +1451,7 @@
 
 
     /* ======================================================
-       NEXT TRACK
+       NEXT
        ====================================================== */
 
     function nextTrack() {
@@ -1509,12 +1540,7 @@
             audio.duration || 0;
 
 
-        if (
-            Number.isFinite(
-                state.duration
-            ) &&
-            state.duration > 0
-        ) {
+        if (state.duration > 0) {
 
             progressRange.max =
                 state.duration;
@@ -1547,31 +1573,14 @@
         }
 
 
-        const newTime =
+        audio.currentTime =
             Number(
                 progressRange.value
             );
 
 
-        if (
-            Number.isFinite(newTime) &&
-            audio.duration
-        ) {
-
-            audio.currentTime =
-                Math.max(
-                    0,
-                    Math.min(
-                        newTime,
-                        audio.duration
-                    )
-                );
-
-        }
-
-
         state.currentTime =
-            audio.currentTime || 0;
+            audio.currentTime;
 
 
         saveState();
@@ -1622,6 +1631,7 @@
 
         updateMuteButton();
 
+
         saveState();
 
     }
@@ -1643,22 +1653,14 @@
                 false;
 
 
-            const restoredVolume =
+            audio.volume =
                 state.volume > 0
                     ? state.volume
                     : CONFIG.defaultVolume;
 
 
-            audio.volume =
-                restoredVolume;
-
-
             volumeRange.value =
-                restoredVolume;
-
-
-            state.volume =
-                restoredVolume;
+                audio.volume;
 
 
             state.muted =
@@ -1678,14 +1680,18 @@
 
         updateMuteButton();
 
-        saveState();
-
     }
 
 
     function updateMuteButton() {
 
-        if (!muteButton) {
+        const muteButton =
+            document.getElementById(
+                "webzonebwMute"
+            );
+
+
+        if (!muteButton || !audio) {
             return;
         }
 
@@ -1802,18 +1808,20 @@
                 }
 
 
-                const number =
-                    track.num ||
-                    index + 1;
-
-
                 button.innerHTML = `
 
                     <span
                         class="webzonebw-playlist-number">
 
-                        ${String(number)
-                            .padStart(2, "0")}
+                        ${
+                            String(
+                                track.num ||
+                                index + 1
+                            ).padStart(
+                                2,
+                                "0"
+                            )
+                        }
 
                     </span>
 
@@ -1821,21 +1829,17 @@
                     <span
                         class="webzonebw-playlist-track">
 
-
                         <strong>
-
                             ${escapeHTML(
                                 track.title
                             )}
-
                         </strong>
 
 
                         <small>
 
                             ${escapeHTML(
-                                track.artist ||
-                                "The Beatles"
+                                track.artist
                             )}
 
                             ${
@@ -1848,7 +1852,6 @@
                             }
 
                         </small>
-
 
                     </span>
 
@@ -1932,18 +1935,9 @@
 
     function showTrackError(message) {
 
-        if (
-            !titleElement ||
-            !artistElement
-        ) {
+        if (!titleElement) {
             return;
         }
-
-
-        const track =
-            state.playlist[
-                state.currentIndex
-            ];
 
 
         titleElement.textContent =
@@ -1957,6 +1951,12 @@
         window.setTimeout(
             function () {
 
+                const track =
+                    state.playlist[
+                        state.currentIndex
+                    ];
+
+
                 if (!track) {
                     return;
                 }
@@ -1967,8 +1967,7 @@
 
 
                 artistElement.textContent =
-                    track.artist ||
-                    "The Beatles";
+                    track.artist;
 
             },
             3500
@@ -1982,11 +1981,6 @@
        ====================================================== */
 
     function bindAudioEvents() {
-
-        if (!audio) {
-            return;
-        }
-
 
         audio.addEventListener(
             "loadedmetadata",
@@ -2002,29 +1996,18 @@
                     );
 
 
-                /*
-                 * Restore saved position only
-                 * for the remembered track.
-                 */
-
                 if (
-                    CONFIG.rememberPosition &&
-                    state.savedPosition > 0 &&
-                    state.savedPosition <
+                    state.currentTime > 0 &&
+                    state.currentTime <
                         state.duration
                 ) {
 
                     try {
 
                         audio.currentTime =
-                            state.savedPosition;
+                            state.currentTime;
 
-                    } catch (_) {
-
-                        // Browser may reject setting
-                        // currentTime before ready.
-
-                    }
+                    } catch (_) {}
 
                 }
 
@@ -2045,6 +2028,7 @@
                 state.isPlaying =
                     true;
 
+
                 updatePlayButton();
 
             }
@@ -2059,34 +2043,10 @@
                     false;
 
 
-                state.currentTime =
-                    audio.currentTime || 0;
-
-
                 updatePlayButton();
 
+
                 saveState();
-
-            }
-        );
-
-
-        audio.addEventListener(
-            "volumechange",
-            function () {
-
-                if (!audio.muted) {
-
-                    state.volume =
-                        audio.volume;
-
-                    state.muted =
-                        audio.volume === 0;
-
-                }
-
-
-                updateMuteButton();
 
             }
         );
@@ -2100,13 +2060,8 @@
                     false;
 
 
-                state.currentTime =
-                    0;
-
-
                 if (
-                    CONFIG.autoPlayNext &&
-                    state.playlist.length > 1
+                    CONFIG.autoPlayNext
                 ) {
 
                     nextTrack();
@@ -2125,9 +2080,17 @@
             "error",
             function () {
 
+                const track =
+                    state.playlist[
+                        state.currentIndex
+                    ];
+
+
                 console.error(
                     "[WEBZONEBW Sound Box] Unable to load audio:",
-                    audio.src
+                    track
+                        ? track.audio
+                        : audio.src
                 );
 
 
@@ -2154,15 +2117,6 @@
 
     function bindPlayerEvents() {
 
-        if (
-            !playButton ||
-            !previousButton ||
-            !nextButton
-        ) {
-            return;
-        }
-
-
         playButton.addEventListener(
             "click",
             togglePlay
@@ -2181,63 +2135,48 @@
         );
 
 
-        /* --------------------------------------------------
-           Progress
-           -------------------------------------------------- */
+        progressRange.addEventListener(
+            "input",
+            function () {
 
-        if (progressRange) {
+                if (audio.duration) {
 
-            progressRange.addEventListener(
-                "input",
-                function () {
-
-                    if (audio.duration) {
-
-                        currentTimeElement
-                            .textContent =
-                                formatTime(
-                                    Number(
-                                        progressRange.value
-                                    )
-                                );
-
-                    }
+                    currentTimeElement.textContent =
+                        formatTime(
+                            Number(
+                                progressRange.value
+                            )
+                        );
 
                 }
+
+            }
+        );
+
+
+        progressRange.addEventListener(
+            "change",
+            seekTrack
+        );
+
+
+        volumeRange.addEventListener(
+            "input",
+            function () {
+
+                setVolume(
+                    volumeRange.value
+                );
+
+            }
+        );
+
+
+        const muteButton =
+            document.getElementById(
+                "webzonebwMute"
             );
 
-
-            progressRange.addEventListener(
-                "change",
-                seekTrack
-            );
-
-        }
-
-
-        /* --------------------------------------------------
-           Volume
-           -------------------------------------------------- */
-
-        if (volumeRange) {
-
-            volumeRange.addEventListener(
-                "input",
-                function () {
-
-                    setVolume(
-                        volumeRange.value
-                    );
-
-                }
-            );
-
-        }
-
-
-        /* --------------------------------------------------
-           Mute
-           -------------------------------------------------- */
 
         if (muteButton) {
 
@@ -2249,10 +2188,6 @@
         }
 
 
-        /* --------------------------------------------------
-           Playlist
-           -------------------------------------------------- */
-
         if (playlistButton) {
 
             playlistButton.addEventListener(
@@ -2263,19 +2198,21 @@
         }
 
 
-        if (playlistCloseButton) {
+        const playlistClose =
+            document.getElementById(
+                "webzonebwPlaylistClose"
+            );
 
-            playlistCloseButton.addEventListener(
+
+        if (playlistClose) {
+
+            playlistClose.addEventListener(
                 "click",
                 togglePlaylist
             );
 
         }
 
-
-        /* --------------------------------------------------
-           Minimize
-           -------------------------------------------------- */
 
         if (minimizeButton) {
 
@@ -2287,10 +2224,6 @@
         }
 
 
-        /* --------------------------------------------------
-           Keyboard Controls
-           -------------------------------------------------- */
-
         document.addEventListener(
             "keydown",
             function (event) {
@@ -2299,20 +2232,11 @@
                     event.target;
 
 
-                /*
-                 * Do not hijack keyboard controls
-                 * while typing.
-                 */
-
                 if (
                     target &&
                     (
-                        target.tagName ===
-                            "INPUT" ||
-
-                        target.tagName ===
-                            "TEXTAREA" ||
-
+                        target.tagName === "INPUT" ||
+                        target.tagName === "TEXTAREA" ||
                         target.isContentEditable
                     )
                 ) {
@@ -2321,10 +2245,6 @@
 
                 }
 
-
-                /*
-                 * Space = Play / Pause
-                 */
 
                 if (
                     event.code ===
@@ -2338,34 +2258,22 @@
                 }
 
 
-                /*
-                 * Shift + Right Arrow = Next
-                 */
-
                 if (
                     event.code ===
                     "ArrowRight" &&
                     event.shiftKey
                 ) {
 
-                    event.preventDefault();
-
                     nextTrack();
 
                 }
 
-
-                /*
-                 * Shift + Left Arrow = Previous
-                 */
 
                 if (
                     event.code ===
                     "ArrowLeft" &&
                     event.shiftKey
                 ) {
-
-                    event.preventDefault();
 
                     previousTrack();
 
@@ -2406,10 +2314,6 @@
 
         style.textContent = `
 
-            /* =============================================
-               WEBZONEBW GLOBAL SOUND BOX
-               ============================================= */
-
             .webzonebw-global-player {
 
                 position: fixed;
@@ -2421,7 +2325,7 @@
                 z-index: 99999;
 
                 background:
-                    rgba(8, 10, 18, .97);
+                    rgba(8, 10, 18, .96);
 
                 border-top:
                     1px solid
@@ -2481,10 +2385,6 @@
             }
 
 
-            /* =============================================
-               TRACK INFO
-               ============================================= */
-
             .webzonebw-track-info {
 
                 display:
@@ -2526,14 +2426,11 @@
                     12px;
 
                 background:
-                    rgba(55, 110, 255, .16);
+                    rgba(55,110,255,.16);
 
                 border:
                     1px solid
-                    rgba(90, 145, 255, .3);
-
-                font-size:
-                    1.2rem;
+                    rgba(90,145,255,.3);
 
             }
 
@@ -2555,7 +2452,9 @@
             }
 
 
-            .webzonebw-track-text strong {
+            .webzonebw-track-text strong,
+            .webzonebw-track-text span,
+            .webzonebw-track-text small {
 
                 overflow:
                     hidden;
@@ -2565,6 +2464,11 @@
 
                 white-space:
                     nowrap;
+
+            }
+
+
+            .webzonebw-track-text strong {
 
                 font-size:
                     .92rem;
@@ -2573,15 +2477,6 @@
 
 
             .webzonebw-track-text span {
-
-                overflow:
-                    hidden;
-
-                text-overflow:
-                    ellipsis;
-
-                white-space:
-                    nowrap;
 
                 font-size:
                     .75rem;
@@ -2594,15 +2489,6 @@
 
             .webzonebw-track-text small {
 
-                overflow:
-                    hidden;
-
-                text-overflow:
-                    ellipsis;
-
-                white-space:
-                    nowrap;
-
                 font-size:
                     .66rem;
 
@@ -2611,10 +2497,6 @@
 
             }
 
-
-            /* =============================================
-               CONTROLS
-               ============================================= */
 
             .webzonebw-main-controls {
 
@@ -2643,13 +2525,13 @@
 
                 border:
                     1px solid
-                    rgba(110, 160, 255, .25);
+                    rgba(110,160,255,.25);
 
                 border-radius:
                     10px;
 
                 background:
-                    rgba(35, 65, 125, .32);
+                    rgba(35,65,125,.32);
 
                 color:
                     #ffffff;
@@ -2680,22 +2562,13 @@
             .webzonebw-player-btn:hover {
 
                 background:
-                    rgba(55, 100, 190, .55);
+                    rgba(55,100,190,.55);
 
                 border-color:
-                    rgba(120, 170, 255, .55);
+                    rgba(120,170,255,.55);
 
                 transform:
                     translateY(-1px);
-
-            }
-
-
-            .webzonebw-player-btn:active {
-
-                transform:
-                    translateY(0)
-                    scale(.96);
 
             }
 
@@ -2704,7 +2577,7 @@
 
                 outline:
                     2px solid
-                    #4d8cff;
+                    currentColor;
 
                 outline-offset:
                     2px;
@@ -2731,26 +2604,10 @@
                     );
 
                 border-color:
-                    rgba(125, 170, 255, .7);
+                    rgba(125,170,255,.7);
 
             }
 
-
-            .webzonebw-play-btn:hover {
-
-                background:
-                    linear-gradient(
-                        135deg,
-                        #3478ff,
-                        #1d51d6
-                    );
-
-            }
-
-
-            /* =============================================
-               PROGRESS
-               ============================================= */
 
             .webzonebw-progress-area {
 
@@ -2882,10 +2739,6 @@
             }
 
 
-            /* =============================================
-               VOLUME
-               ============================================= */
-
             .webzonebw-volume-area {
 
                 display:
@@ -2902,10 +2755,6 @@
 
             }
 
-
-            /* =============================================
-               PLAYLIST
-               ============================================= */
 
             .webzonebw-playlist-panel {
 
@@ -2929,13 +2778,13 @@
 
                 border:
                     1px solid
-                    rgba(90, 140, 255, .3);
+                    rgba(90,140,255,.3);
 
                 border-radius:
                     16px;
 
                 background:
-                    rgba(9, 12, 22, .98);
+                    rgba(9,12,22,.98);
 
                 box-shadow:
                     0 15px 50px
@@ -2997,8 +2846,7 @@
                     10px;
 
                 border:
-                    1px solid
-                    transparent;
+                    1px solid transparent;
 
                 border-radius:
                     10px;
@@ -3014,9 +2862,6 @@
 
                 cursor:
                     pointer;
-
-                font:
-                    inherit;
 
             }
 
@@ -3074,23 +2919,7 @@
             }
 
 
-            .webzonebw-playlist-track strong {
-
-                overflow:
-                    hidden;
-
-                text-overflow:
-                    ellipsis;
-
-                white-space:
-                    nowrap;
-
-                font-size:
-                    .82rem;
-
-            }
-
-
+            .webzonebw-playlist-track strong,
             .webzonebw-playlist-track small {
 
                 overflow:
@@ -3102,6 +2931,19 @@
                 white-space:
                     nowrap;
 
+            }
+
+
+            .webzonebw-playlist-track strong {
+
+                font-size:
+                    .82rem;
+
+            }
+
+
+            .webzonebw-playlist-track small {
+
                 font-size:
                     .68rem;
 
@@ -3110,10 +2952,6 @@
 
             }
 
-
-            /* =============================================
-               MINIMIZED PLAYER
-               ============================================= */
 
             .webzonebw-player-minimized
             .webzonebw-player-inner {
@@ -3125,7 +2963,7 @@
                     6px 12px;
 
                 grid-template-columns:
-                    minmax(0, 1fr)
+                    minmax(0,1fr)
                     auto;
 
             }
@@ -3133,7 +2971,6 @@
 
             .webzonebw-player-minimized
             .webzonebw-progress-area,
-
             .webzonebw-player-minimized
             .webzonebw-volume-area {
 
@@ -3142,10 +2979,6 @@
 
             }
 
-
-            /* =============================================
-               TABLET
-               ============================================= */
 
             @media (max-width: 900px) {
 
@@ -3188,10 +3021,6 @@
 
             }
 
-
-            /* =============================================
-               MOBILE
-               ============================================= */
 
             @media (max-width: 600px) {
 
@@ -3262,23 +3091,8 @@
 
                 }
 
-
-                .webzonebw-playlist-panel {
-
-                    right:
-                        8px;
-
-                    width:
-                        calc(100vw - 16px);
-
-                }
-
             }
 
-
-            /* =============================================
-               REDUCED MOTION
-               ============================================= */
 
             @media (prefers-reduced-motion: reduce) {
 
@@ -3313,17 +3127,6 @@
 
 
         /*
-         * If a player already exists in the page,
-         * do not create another one.
-         */
-
-        const existingPlayer =
-            document.getElementById(
-                CONFIG.playerId
-            );
-
-
-        /*
          * Discover the Beatles playlist first.
          */
 
@@ -3332,74 +3135,36 @@
 
 
         /*
-         * If the playlist is unavailable,
-         * use the real Come Together file as
-         * a safe fallback.
+         * If playlist data is not available yet,
+         * use the verified Come Together path.
          */
 
         if (!playlistFound) {
 
             console.warn(
-                "[WEBZONEBW Sound Box] Beatles playlist not detected. Using Come Together fallback."
+                "[WEBZONEBW Sound Box] Beatles playlist not detected. Using fallback track."
             );
+
 
             createFallbackPlaylist();
 
         }
 
 
-        /*
-         * Create or connect the player.
-         */
+        createPlayer();
 
-        if (!existingPlayer) {
-
-            createPlayer();
-
-        } else {
-
-            player =
-                existingPlayer;
-
-            audio =
-                document.getElementById(
-                    CONFIG.audioId
-                );
-
-            cacheElements();
-
-            injectStyles();
-
-        }
-
-
-        /*
-         * Restore previous session.
-         */
 
         loadSavedState();
 
-
-        /*
-         * Apply saved volume.
-         */
 
         audio.volume =
             state.volume;
 
 
-        /*
-         * Bind events.
-         */
-
         bindAudioEvents();
 
         bindPlayerEvents();
 
-
-        /*
-         * Load remembered track.
-         */
 
         loadTrack(
             state.currentIndex,
@@ -3408,10 +3173,6 @@
             }
         );
 
-
-        /*
-         * Restore controls.
-         */
 
         updateMuteButton();
 
@@ -3429,17 +3190,21 @@
         );
 
 
-        console.info(
-            "[WEBZONEBW Sound Box] Audio folder:",
-            "assets/audio/"
-        );
+        /*
+         * Helpful diagnostic.
+         */
+
+        const currentTrack =
+            state.playlist[
+                state.currentIndex
+            ];
 
 
-        if (state.playlist.length) {
+        if (currentTrack) {
 
             console.info(
-                "[WEBZONEBW Sound Box] Playlist tracks:",
-                state.playlist.length
+                "[WEBZONEBW Sound Box] Active audio path:",
+                currentTrack.audio
             );
 
         }
@@ -3473,26 +3238,6 @@
 
         setVolume:
             setVolume,
-
-        getPlaylist:
-            function () {
-
-                return [
-                    ...state.playlist
-                ];
-
-            },
-
-        getCurrentTrack:
-            function () {
-
-                return (
-                    state.playlist[
-                        state.currentIndex
-                    ] || null
-                );
-
-            },
 
         getState:
             function () {

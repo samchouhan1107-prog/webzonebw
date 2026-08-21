@@ -1,16 +1,29 @@
 {
-  "name": "webzonebw",
+  "name": "webzonebw-in",
   "version": "1.0.0",
-  "description": "Technology portfolio and digital workspace",
-  "private": true,
+  "description": "WEBZONEBW.in — Technology, AI, Innovation and Interactive Web Experiences",
   "type": "module",
+  "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
-    "build": "echo 'Static build complete'",
     "start": "node server.js",
-    "lint": "echo 'No lint errors'"
+    "dev": "node server.js",
+    "install-deps": "npm install"
+  },
+  "keywords": [
+    "webzonebw",
+    "web",
+    "technology",
+    "ai",
+    "portfolio",
+    "halloween",
+    "extended-reality"
+  ],
+  "author": "Sameer Chouhan",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^5.1.0"
   }
 }
