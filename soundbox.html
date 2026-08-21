@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         WEBZONEBW — BEATLES SOUND BOX & CURATED PLAYLISTS
+         Acoustic Soundscapes • Studio Discography • Archive
+         ===================================================== -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beatles Sound Box &amp; Playlists | WEBZONEBW Music Archive</title>
+    <meta name="description" content="Explore the official WEBZONEBW Beatles Sound Box featuring curated chronological playlists, studio discography 1963-1970, audio synth player, and album history.">
+    <meta name="author" content="WEBZONEBW">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://webzonebw.in/soundbox.html">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" href="assets/favicon/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon/favicon.png">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Mobile Nav Bar -->
+    <div class="mobile-nav-bar">
+        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-brand-title">
+            <span class="gradient-text">WEBZONEBW</span>
+        </div>
+        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
+    </div>
+
+    <!-- =====================================================
+         STANDARDIZED SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar" id="mainSidebar">
+
+        <div class="logo">
+            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
+                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+                <div class="brand-name-group">
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="sidebar-nav" aria-label="Main Navigation">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="halloween/index.html">
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        WebZoneBW-ER Studio
+                    </a>
+                </li>
+                <li>
+                    <a href="projects.html">
+                        <span class="nav-icon" aria-hidden="true">💼</span>
+                        Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="resume.html">
+                        <span class="nav-icon" aria-hidden="true">📄</span>
+                        Resume
+                    </a>
+                </li>
+                <li>
+                    <a href="blog.html">
+                        <span class="nav-icon" aria-hidden="true">📝</span>
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="soundbox.html" class="active" aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        Sound Box
+                    </a>
+                </li>
+                <li>
+                    <a href="about.html">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        About
+                    </a>
+                </li>
+                <li>
+                    <a href="contact.html">
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Dark Mode Switch Toggle -->
+        <div class="sidebar-theme-toggle-row">
+            <div class="theme-label-group">
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                <span id="themeModeText">Dark Mode</span>
+            </div>
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- User Profile Card -->
+        <div class="sidebar-user-card">
+            <div class="user-avatar-wrap">
+                <span class="user-avatar-icon">👨‍💻</span>
+                <span class="user-online-dot" title="Online"></span>
+            </div>
+            <div class="user-info">
+                <strong>Sameer Chouhan</strong>
+                <span>Developer &amp; Creator</span>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+        <!-- Top Header Bar -->
+        <header class="top-header soundbox-header">
+            <div class="header-left">
+                <h1>
+                    🎵 The Beatles: 6-Phase Evolution (1964–1970)
+                </h1>
+                <p>
+                    23 Essential Key Tracks Across 6 Historic Eras • Interactive Web Audio Soundscape • Master Playlist
+                </p>
+            </div>
+
+            <div class="header-utilities">
+                <button type="button" class="header-icon-btn" id="btnSoundHelp" title="Sound Box Guide" aria-label="Help">❔</button>
+                <button type="button" class="header-icon-btn" id="btnAudioTone" title="Audio Synth Settings" aria-label="Settings">⚙️</button>
+                <span class="header-badge">23 Key Tracks Live 🟢</span>
+            </div>
+        </header>
+
+
+        <!-- =====================================================
+             NOW PLAYING HERO STAGE & AUDIO CONTROLS
+             ===================================================== -->
+
+        <section class="soundbox-player-hero" aria-label="Now Playing Audio Console">
+            <div class="player-stage-grid">
+                
+                <!-- Vinyl Turntable & Visualizer Stage -->
+                <div class="vinyl-display-card">
+                    <div class="vinyl-record-wrap" id="vinylRecord">
+                        <div class="vinyl-grooves">
+                            <div class="vinyl-label" id="vinylLabel">
+                                <span class="vinyl-apple-logo">🍏</span>
+                                <span class="vinyl-song-title" id="vinylSongTitle">I Want to Hold Your Hand</span>
+                            </div>
+                        </div>
+                        <div class="tonearm" id="tonearm"></div>
+                    </div>
+
+                    <div class="audio-wave-visualizer" id="audioVisualizer" aria-hidden="true">
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                    </div>
+                </div>
+
+                <!-- Active Track Meta & Playback Controls -->
+                <div class="player-controls-card">
+                    <div class="player-badge-row">
+                        <span class="player-era-badge" id="nowPlayingEra">Phase 1: Beatlemania Begins (1964)</span>
+                        <span class="player-chords-badge" id="nowPlayingChords">Chords: G • D • Em • B7</span>
+                    </div>
+
+                    <h2 class="now-playing-title" id="nowPlayingTitle">1. I Want to Hold Your Hand</h2>
+                    <p class="now-playing-album" id="nowPlayingAlbum">Album: A Hard Day's Night Era / Single (July 1964)</p>
+                    <p class="now-playing-playlist-ref" id="nowPlayingPlaylistRef">Lead Vocals: John Lennon &amp; Paul McCartney</p>
+
+                    <!-- Scrub Bar -->
+                    <div class="scrub-container">
+                        <span class="scrub-time" id="currentTimeLabel">0:00</span>
+                        <div class="scrub-bar-track" id="scrubBarTrack">
+                            <div class="scrub-bar-progress" id="scrubProgress"></div>
+                        </div>
+                        <span class="scrub-time" id="totalDurationLabel">2:26</span>
+                    </div>
+
+                    <!-- Transport Buttons -->
+                    <div class="transport-buttons-row">
+                        <button type="button" class="transport-btn" id="btnShuffle" title="Toggle Shuffle">
+                            🔀
+                        </button>
+                        <button type="button" class="transport-btn" id="btnPrev" title="Previous Track (1-23)">
+                            ⏮️
+                        </button>
+                        <button type="button" class="transport-btn play-main-btn" id="btnPlayPause" title="Play / Pause Track">
+                            <span id="playIcon">▶</span>
+                        </button>
+                        <button type="button" class="transport-btn" id="btnNext" title="Next Track (1-23)">
+                            ⏭️
+                        </button>
+                        <button type="button" class="transport-btn" id="btnRepeat" title="Toggle Repeat">
+                            🔁
+                        </button>
+                        <button type="button" class="transport-btn fav-main-btn" id="btnFavorite" title="Add to Favorites">
+                            🤍
+                        </button>
+                    </div>
+
+                    <!-- Volume, Audio Settings Pill & Synth Note -->
+                    <div class="player-footer-row">
+                        <div class="volume-control-group">
+                            <span class="vol-icon" id="volIcon">🔊</span>
+                            <input type="range" id="volumeSlider" min="0" max="100" value="75" class="volume-slider" aria-label="Volume">
+                        </div>
+                        <button type="button" class="settings-quick-pill-btn" id="btnOpenSettingsPill" title="Open Live Studio Sliders &amp; Files">
+                            <span>🎛️</span> Studio Console &amp; Files
+                        </button>
+                        <span class="synth-note">✨ Web Audio Polyphonic Engine</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             6 HISTORICAL PHASES TIMELINE NAVIGATOR
+             ===================================================== -->
+
+        <section class="phases-navigator-section" aria-label="The 6 Historical Phases of The Beatles">
+            <div class="section-header-row">
+                <div>
+                    <h2 class="section-title">
+                        ⏳ The 6 Historical Phases (1964–1970)
+                    </h2>
+                    <p class="section-subtitle">
+                        Click any phase to jump straight to its key tracks or listen to the full 23-track master journey
+                    </p>
+                </div>
+
+                <div class="playlist-quick-actions">
+                    <button type="button" class="btn" id="btnPlayMasterAll">
+                        <span>▶</span> Play All 23 Tracks (Phases 1–6)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 6 Phase Cards Bar -->
+            <div class="phases-timeline-bar" id="phasesTimelineBar">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             ACTIVE PLAYLIST TRACKLIST VIEWER (ALL 23 TRACKS)
+             ===================================================== -->
+
+        <section class="active-tracklist-section" id="activeTracklistSection">
+            <div class="tracklist-header-card">
+                <div class="tracklist-info-block">
+                    <span class="active-pl-badge" id="activePlBadge">Master Playlist</span>
+                    <h3 id="activePlTitle">The 6-Phase Evolution of The Beatles (1964–1970)</h3>
+                    <p id="activePlDesc">All 23 Key Tracks from A Hard Day's Night through Let It Be</p>
+                </div>
+                <div class="tracklist-stats">
+                    <span id="activePlCount">23 Tracks</span> • <span id="activePlEra">1964–1970</span>
+                </div>
+            </div>
+
+            <!-- Filter Category Pills -->
+            <div class="playlist-filter-pills" role="tablist" aria-label="Playlist Categories" style="margin-bottom: 16px;">
+                <button type="button" class="filter-pill active" data-phase="all">All 23 Tracks (Phases 1–6)</button>
+                <button type="button" class="filter-pill" data-phase="1">Phase 1 (Tracks 1–5)</button>
+                <button type="button" class="filter-pill" data-phase="2">Phase 2 (Tracks 6–9)</button>
+                <button type="button" class="filter-pill" data-phase="3">Phase 3 (Tracks 10–13)</button>
+                <button type="button" class="filter-pill" data-phase="4">Phase 4 (Tracks 14–17)</button>
+                <button type="button" class="filter-pill" data-phase="5">Phase 5 (Tracks 18–21)</button>
+                <button type="button" class="filter-pill" data-phase="6">Phase 6 (Tracks 22–23)</button>
+            </div>
+
+            <div class="track-table-wrap">
+                <table class="track-table" aria-label="Playlist Tracks">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 50px;">#</th>
+                            <th scope="col">Song Title &amp; Chords</th>
+                            <th scope="col">Key Album / Era</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Duration</th>
+                            <th scope="col" style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             CURATED PLAYLISTS BROWSER
+             ===================================================== -->
+
+        <section class="playlists-main-section" aria-labelledby="playlistsSectionTitle">
+
+            <div class="section-header-row">
+                <div>
+                    <h2 id="playlistsSectionTitle" class="section-title">
+                        🎼 Curated Phase Playlists
+                    </h2>
+                    <p class="section-subtitle">
+                        Dedicated playlists by historical phase and thematic collections
+                    </p>
+                </div>
+            </div>
+
+            <!-- Playlists Card Grid -->
+            <div class="playlists-grid" id="playlistsGrid">
+                <!-- Dynamically Rendered from BEATLES_PLAYLISTS_DATA -->
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             THE FAB FOUR SPOTLIGHT & STUDIO TIMELINE
+             ===================================================== -->
+
+        <section class="fabfour-spotlight-section">
+            <h3 class="section-title">🎸 The Fab Four Band Members</h3>
+            <div class="fabfour-grid">
+                <div class="fab-card">
+                    <span class="fab-emoji">👓</span>
+                    <h4>John Lennon</h4>
+                    <span class="fab-role">Rhythm Guitar • Vocals • Harmonica</span>
+                    <p>Raw rock vocal power, introspective and avant-garde songwriting genius.</p>
+                </div>
+                <div class="fab-card">
+                    <span class="fab-emoji">🎻</span>
+                    <h4>Paul McCartney</h4>
+                    <span class="fab-role">Bass • Vocals • Piano</span>
+                    <p>Unmatched melodic craftsmanship, versatile bass lines, and harmonic arrangements.</p>
+                </div>
+                <div class="fab-card">
+                    <span class="fab-emoji">🕉️</span>
+                    <h4>George Harrison</h4>
+                    <span class="fab-role">Lead Guitar • Sitar • Vocals</span>
+                    <p>Pioneering Eastern sitar integration, soulful slide guitar, and iconic compositions.</p>
+                </div>
+                <div class="fab-card">
+                    <span class="fab-emoji">🥁</span>
+                    <h4>Ringo Starr</h4>
+                    <span class="fab-role">Drums • Percussion • Vocals</span>
+                    <p>Innovative, pocket-locked drum grooves and distinct left-handed fills that anchored the band.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>
+                    © 2026 <strong>WEBZONEBW</strong>. All rights reserved.
+                </p>
+                <nav class="footer-links" aria-label="Footer Navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="disclaimer.html">Disclaimer</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+        </footer>
+
+    </main>
+
+</div>
+
+<!-- =====================================================
+     LIVE BOX SETTINGS SLIDER TAB & STUDIO CONSOLE DRAWER
+     ===================================================== -->
+<div class="settings-drawer-overlay" id="settingsDrawerOverlay" aria-hidden="true"></div>
+
+<aside class="settings-slider-drawer" id="settingsSliderDrawer" role="dialog" aria-label="Audio Studio Console & Settings">
+    
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+        <div class="drawer-title-group">
+            <div class="drawer-icon-badge">🎛️</div>
+            <div>
+                <h3>Studio Sound Console</h3>
+                <p>Real-time Synthesizer EQ, Files &amp; Tone Tuning</p>
+            </div>
+        </div>
+        <button type="button" class="drawer-close-btn" id="btnDrawerClose" title="Close Settings Console" aria-label="Close">✕</button>
+    </div>
+
+    <!-- Drawer Navigation Tabs -->
+    <div class="drawer-tabs-bar" role="tablist">
+        <button type="button" class="drawer-tab-btn active" data-tab="tabSliders" role="tab" aria-selected="true">
+            <span>🎚️</span> Sliders &amp; EQ
+        </button>
+        <button type="button" class="drawer-tab-btn" data-tab="tabFiles" role="tab" aria-selected="false">
+            <span>📁</span> Suitable Files
+        </button>
+        <button type="button" class="drawer-tab-btn" data-tab="tabWaveforms" role="tab" aria-selected="false">
+            <span>🎹</span> Waveforms
+        </button>
+        <button type="button" class="drawer-tab-btn" data-tab="tabDiagnostics" role="tab" aria-selected="false">
+            <span>⚡</span> Diagnostics
+        </button>
+    </div>
+
+    <!-- Drawer Body Panels -->
+    <div class="drawer-body">
+
+        <!-- TAB 1: SLIDERS & EQ -->
+        <div class="drawer-tab-panel active" id="tabSliders" role="tabpanel">
+
+            <!-- Master Volume -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">🔊 Master Output Volume</span>
+                    <span class="setting-value-badge" id="valVolumeBadge">75%</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderMasterVolume" min="0" max="100" value="75" aria-label="Master Volume">
+                <div class="slider-scale-labels">
+                    <span>Mute</span>
+                    <span>50%</span>
+                    <span>100% Max</span>
+                </div>
+            </div>
+
+            <!-- Tempo Speed Multiplier -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">⏱️ Playback Tempo &amp; Speed</span>
+                    <span class="setting-value-badge" id="valTempoBadge">1.00x</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderTempo" min="50" max="180" value="100" aria-label="Tempo Multiplier">
+                <div class="slider-scale-labels">
+                    <span>0.50x Slow</span>
+                    <span>1.00x Studio</span>
+                    <span>1.80x Fast</span>
+                </div>
+            </div>
+
+            <!-- Pitch Transposition -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">🎼 Pitch Transposition</span>
+                    <span class="setting-value-badge" id="valPitchBadge">0 st (Original)</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderPitch" min="-6" max="6" value="0" step="1" aria-label="Pitch Shift">
+                <div class="slider-scale-labels">
+                    <span>-6 Semitones</span>
+                    <span>0 (Standard)</span>
+                    <span>+6 Semitones</span>
+                </div>
+            </div>
+
+            <!-- Bass Low-Shelf EQ -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">🎸 Bass EQ (150Hz Rickenbacker Lows)</span>
+                    <span class="setting-value-badge" id="valBassBadge">+3.0 dB</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderBass" min="-12" max="12" value="3" step="0.5" aria-label="Bass EQ">
+                <div class="slider-scale-labels">
+                    <span>-12 dB</span>
+                    <span>0 dB Flat</span>
+                    <span>+12 dB Boost</span>
+                </div>
+            </div>
+
+            <!-- Treble High-Shelf EQ -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">✨ Treble EQ (3.5kHz Acoustic Chime)</span>
+                    <span class="setting-value-badge" id="valTrebleBadge">+2.0 dB</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderTreble" min="-12" max="12" value="2" step="0.5" aria-label="Treble EQ">
+                <div class="slider-scale-labels">
+                    <span>-12 dB</span>
+                    <span>0 dB Flat</span>
+                    <span>+12 dB Sparkle</span>
+                </div>
+            </div>
+
+            <!-- Lowpass Filter Cutoff -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">📻 Lowpass Tone Cutoff</span>
+                    <span class="setting-value-badge" id="valCutoffBadge">12.0 kHz</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderCutoff" min="800" max="16000" value="12000" step="200" aria-label="Cutoff Filter">
+                <div class="slider-scale-labels">
+                    <span>800 Hz Vintage Radio</span>
+                    <span>8.0 kHz</span>
+                    <span>16.0 kHz Ultra-Clean</span>
+                </div>
+            </div>
+
+            <!-- Ambient Reverb -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">🏛️ Abbey Road Studio 2 Reverb</span>
+                    <span class="setting-value-badge" id="valReverbBadge">25%</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderReverb" min="0" max="100" value="25" aria-label="Reverb Ambience">
+                <div class="slider-scale-labels">
+                    <span>Dry 0%</span>
+                    <span>Chamber 50%</span>
+                    <span>Cathedral 100%</span>
+                </div>
+            </div>
+
+            <!-- Vinyl Crackle & Tape Hiss -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">💿 Vinyl Crackle &amp; Tape Flutter</span>
+                    <span class="setting-value-badge" id="valCrackleBadge">12%</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderCrackle" min="0" max="100" value="12" aria-label="Crackle Level">
+                <div class="slider-scale-labels">
+                    <span>Pristine Digital</span>
+                    <span>Warm 1965 Tape</span>
+                    <span>Heavy 1963 45 RPM</span>
+                </div>
+            </div>
+
+            <!-- Stereo Pan -->
+            <div class="setting-slider-group">
+                <div class="setting-slider-header">
+                    <span class="setting-label">🎧 Stereo Panning Position</span>
+                    <span class="setting-value-badge" id="valStereoBadge">Center</span>
+                </div>
+                <input type="range" class="slider-control-input" id="sliderStereo" min="-100" max="100" value="0" aria-label="Stereo Pan">
+                <div class="slider-scale-labels">
+                    <span>100% Left</span>
+                    <span>Center Mono/Stereo</span>
+                    <span>100% Right</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: SUITABLE FILES & SOUND LIBRARY -->
+        <div class="drawer-tab-panel" id="tabFiles" role="tabpanel">
+
+            <!-- Drag & Drop Custom Audio Upload -->
+            <label class="files-hero-box" id="dropzoneArea" for="audioFileInput">
+                <div class="files-hero-icon">📥</div>
+                <h4>Upload &amp; Play Custom Audio Files</h4>
+                <p>Drag &amp; drop or click to load MP3, WAV, OGG, or M4A files</p>
+                <input type="file" id="audioFileInput" class="file-dropzone-input" accept="audio/*,.json">
+            </label>
+
+            <!-- Custom Active File Banner -->
+            <div class="custom-audio-active-banner" id="customFileActiveBanner">
+                <span id="customFileNameText">🎵 custom_audio.mp3</span>
+                <button type="button" class="sound-file-btn" id="btnResetToSynth" title="Return to Beatles Synth">Return to Synth</button>
+            </div>
+
+            <!-- Suitable Built-in Sound Library Stems -->
+            <h4 style="font-size: 13px; color: #f8fafc; margin: 16px 0 10px;">
+                💽 Suitable Phase Soundscape Stems (6 Phases)
+            </h4>
+
+            <div class="sound-files-list" id="soundFilesList">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Preset Export & Import Tools -->
+            <h4 style="font-size: 13px; color: #f8fafc; margin: 18px 0 10px;">
+                ⚙️ Preset Files &amp; Chords Exporter
+            </h4>
+
+            <div class="files-tools-grid">
+                <div class="tool-action-card" id="btnExportChords">
+                    <div class="tool-action-icon">📄</div>
+                    <strong>Export Chords Sheet</strong>
+                    <span>23 Tracks JSON File</span>
+                </div>
+                <div class="tool-action-card" id="btnExportSettings">
+                    <div class="tool-action-icon">💾</div>
+                    <strong>Export Synth Preset</strong>
+                    <span>Save Slider Config (.json)</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 3: WAVEFORMS & TONE -->
+        <div class="drawer-tab-panel" id="tabWaveforms" role="tabpanel">
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">
+                Select the primary oscillator tone synthesis engine for harmonic voice chords:
+            </p>
+
+            <div class="waveform-selector-grid">
+                <div class="waveform-option-card active" data-waveform="auto">
+                    <div class="waveform-icon">✨</div>
+                    <div class="waveform-name">Auto Phase Era</div>
+                    <div class="waveform-desc">Adapts tone automatically per Phase 1–6</div>
+                </div>
+                <div class="waveform-option-card" data-waveform="triangle">
+                    <div class="waveform-icon">📐</div>
+                    <div class="waveform-name">Warm Triangle</div>
+                    <div class="waveform-desc">Acoustic folk &amp; warm Mersey rhythm</div>
+                </div>
+                <div class="waveform-option-card" data-waveform="sawtooth">
+                    <div class="waveform-icon">🪚</div>
+                    <div class="waveform-name">Psychedelic Saw</div>
+                    <div class="waveform-desc">Mellotron strings, sitar &amp; horns</div>
+                </div>
+                <div class="waveform-option-card" data-waveform="sine">
+                    <div class="waveform-icon">〰️</div>
+                    <div class="waveform-name">Pure Sine</div>
+                    <div class="waveform-desc">Smooth chamber strings &amp; bass pads</div>
+                </div>
+                <div class="waveform-option-card" data-waveform="square">
+                    <div class="waveform-icon">⏹️</div>
+                    <div class="waveform-name">Moog Square</div>
+                    <div class="waveform-desc">1969 solid-state modular overdrive</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: DIAGNOSTICS -->
+        <div class="drawer-tab-panel" id="tabDiagnostics" role="tabpanel">
+            <table class="diag-table">
+                <tbody>
+                    <tr>
+                        <td>Audio Engine State</td>
+                        <td><span class="diag-status-live" id="diagEngineState">Ready 🟢</span></td>
+                    </tr>
+                    <tr>
+                        <td>Web Audio Context</td>
+                        <td id="diagContextState">Interactive Active</td>
+                    </tr>
+                    <tr>
+                        <td>Context Sample Rate</td>
+                        <td id="diagSampleRate">48,000 Hz</td>
+                    </tr>
+                    <tr>
+                        <td>Active Oscillators</td>
+                        <td id="diagNodeCount">4 Polyphonic Voices</td>
+                    </tr>
+                    <tr>
+                        <td>Currently Playing Song</td>
+                        <td id="diagActiveSong">1. I Want to Hold Your Hand</td>
+                    </tr>
+                    <tr>
+                        <td>Active Phase Era</td>
+                        <td id="diagActivePhase">Phase 1: Beatlemania (1964)</td>
+                    </tr>
+                    <tr>
+                        <td>Biquad EQ Filters</td>
+                        <td>LowShelf + HighShelf + LowPass</td>
+                    </tr>
+                    <tr>
+                        <td>Analog Crackle Generator</td>
+                        <td id="diagCrackleStatus">Pink Noise + Pops Active</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="text-align: center; margin-top: 18px;">
+                <button type="button" class="sound-file-btn" id="btnResetAllSliders" style="width: 100%; padding: 10px;">
+                    🔄 Reset All Sliders to Default Studio Presets
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+<!-- =====================================================
+     BEATLES 6-PHASE GUIDE MODAL
+     ===================================================== -->
+<div class="settings-drawer-overlay" id="guideModalOverlay" aria-hidden="true"></div>
+
+<div class="modal-card" id="soundGuideModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-width: 560px; background: #080c1a; border: 1px solid #1e263d; border-radius: 18px; padding: 24px; z-index: 2020; box-shadow: 0 20px 40px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #1a2238; padding-bottom: 12px;">
+        <h3 style="margin: 0; font-size: 17px; color: #f8fafc; font-weight: 800;">🎵 Beatles 6-Phase Sound Box Guide</h3>
+        <button type="button" class="drawer-close-btn" id="btnGuideModalClose">✕</button>
+    </div>
+    <div style="font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+        <p style="margin-top: 0;">
+            Welcome to the <strong>WEBZONEBW 6-Phase Evolution Sound Box</strong>. This interactive experience synthesizes authentic musical motifs across The Beatles' historic journey from 1964 to 1970.
+        </p>
+        <h4 style="color: #d4af37; margin: 14px 0 6px;">✨ Key Features:</h4>
+        <ul style="padding-left: 20px; margin: 0 0 14px;">
+            <li><strong>23 Essential Key Tracks:</strong> Spanning all 6 distinct historical eras and 13 studio albums.</li>
+            <li><strong>Live Studio Console:</strong> Click <strong>⚙️</strong> or <strong>Studio Console &amp; Files</strong> to tune EQ sliders, bass boost, treble sparkle, vinyl crackle, and stereo panning.</li>
+            <li><strong>Suitable Files &amp; Upload:</strong> Load built-in Phase stems, export chord sheets in JSON, or upload your own audio files to play on the turntable!</li>
+            <li><strong>Polyphonic Synth:</strong> Emulates 1964 Mersey guitars, 1966 sitars, 1967 Mellotron flutes, and 1970 gospel pianos in real-time Web Audio.</li>
+        </ul>
+        <button type="button" class="btn" id="btnGuideModalDismiss" style="width: 100%; margin-top: 10px;">
+            Got It • Start Listening
+        </button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/script.js"></script>
+<script src="js/beatles-playlists.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const soundBox = window.BeatlesSoundBox;
+    if (!soundBox) return;
+
+    // UI Element References
+    const phasesTimelineBar = document.getElementById("phasesTimelineBar");
+    const playlistsGrid = document.getElementById("playlistsGrid");
+    const trackTableBody = document.getElementById("trackTableBody");
+    const activePlTitle = document.getElementById("activePlTitle");
+    const activePlDesc = document.getElementById("activePlDesc");
+    const activePlCount = document.getElementById("activePlCount");
+    const activePlEra = document.getElementById("activePlEra");
+    const activePlBadge = document.getElementById("activePlBadge");
+
+    const nowPlayingTitle = document.getElementById("nowPlayingTitle");
+    const nowPlayingAlbum = document.getElementById("nowPlayingAlbum");
+    const nowPlayingEra = document.getElementById("nowPlayingEra");
+    const nowPlayingChords = document.getElementById("nowPlayingChords");
+    const nowPlayingPlaylistRef = document.getElementById("nowPlayingPlaylistRef");
+    const vinylRecord = document.getElementById("vinylRecord");
+    const vinylSongTitle = document.getElementById("vinylSongTitle");
+    const playIcon = document.getElementById("playIcon");
+    const btnPlayPause = document.getElementById("btnPlayPause");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const btnShuffle = document.getElementById("btnShuffle");
+    const btnRepeat = document.getElementById("btnRepeat");
+    const btnFavorite = document.getElementById("btnFavorite");
+    const btnPlayMasterAll = document.getElementById("btnPlayMasterAll");
+    const scrubProgress = document.getElementById("scrubProgress");
+    const scrubBarTrack = document.getElementById("scrubBarTrack");
+    const currentTimeLabel = document.getElementById("currentTimeLabel");
+    const totalDurationLabel = document.getElementById("totalDurationLabel");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const audioVisualizer = document.getElementById("audioVisualizer");
+
+    // Settings Slider Drawer Elements
+    const settingsDrawerOverlay = document.getElementById("settingsDrawerOverlay");
+    const settingsSliderDrawer = document.getElementById("settingsSliderDrawer");
+    const btnAudioTone = document.getElementById("btnAudioTone");
+    const btnOpenSettingsPill = document.getElementById("btnOpenSettingsPill");
+    const btnDrawerClose = document.getElementById("btnDrawerClose");
+    const drawerTabBtns = document.querySelectorAll(".drawer-tab-btn");
+    const drawerTabPanels = document.querySelectorAll(".drawer-tab-panel");
+
+    // Slider Controls & Badges
+    const sliderMasterVolume = document.getElementById("sliderMasterVolume");
+    const valVolumeBadge = document.getElementById("valVolumeBadge");
+    const sliderTempo = document.getElementById("sliderTempo");
+    const valTempoBadge = document.getElementById("valTempoBadge");
+    const sliderPitch = document.getElementById("sliderPitch");
+    const valPitchBadge = document.getElementById("valPitchBadge");
+    const sliderBass = document.getElementById("sliderBass");
+    const valBassBadge = document.getElementById("valBassBadge");
+    const sliderTreble = document.getElementById("sliderTreble");
+    const valTrebleBadge = document.getElementById("valTrebleBadge");
+    const sliderCutoff = document.getElementById("sliderCutoff");
+    const valCutoffBadge = document.getElementById("valCutoffBadge");
+    const sliderReverb = document.getElementById("sliderReverb");
+    const valReverbBadge = document.getElementById("valReverbBadge");
+    const sliderCrackle = document.getElementById("sliderCrackle");
+    const valCrackleBadge = document.getElementById("valCrackleBadge");
+    const sliderStereo = document.getElementById("sliderStereo");
+    const valStereoBadge = document.getElementById("valStereoBadge");
+
+    // Files Tab Elements
+    const dropzoneArea = document.getElementById("dropzoneArea");
+    const audioFileInput = document.getElementById("audioFileInput");
+    const soundFilesList = document.getElementById("soundFilesList");
+    const customFileActiveBanner = document.getElementById("customFileActiveBanner");
+    const customFileNameText = document.getElementById("customFileNameText");
+    const btnResetToSynth = document.getElementById("btnResetToSynth");
+    const btnExportChords = document.getElementById("btnExportChords");
+    const btnExportSettings = document.getElementById("btnExportSettings");
+    const btnResetAllSliders = document.getElementById("btnResetAllSliders");
+
+    // Waveform Cards
+    const waveformCards = document.querySelectorAll(".waveform-option-card");
+
+    // Diagnostics Elements
+    const diagEngineState = document.getElementById("diagEngineState");
+    const diagContextState = document.getElementById("diagContextState");
+    const diagSampleRate = document.getElementById("diagSampleRate");
+    const diagActiveSong = document.getElementById("diagActiveSong");
+    const diagActivePhase = document.getElementById("diagActivePhase");
+
+    // Help / Guide Modal Elements
+    const btnSoundHelp = document.getElementById("btnSoundHelp");
+    const guideModalOverlay = document.getElementById("guideModalOverlay");
+    const soundGuideModal = document.getElementById("soundGuideModal");
+    const btnGuideModalClose = document.getElementById("btnGuideModalClose");
+    const btnGuideModalDismiss = document.getElementById("btnGuideModalDismiss");
+
+    let currentPhaseFilter = "all";
+
+    // Format Seconds to M:SS
+    function formatTime(sec) {
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${m}:${s < 10 ? "0" : ""}${s}`;
+    }
+
+    // ==========================================
+    // SETTINGS SLIDER DRAWER CONTROLLERS
+    // ==========================================
+    function openSettingsDrawer() {
+        if (settingsSliderDrawer && settingsDrawerOverlay) {
+            settingsSliderDrawer.classList.add("open");
+            settingsDrawerOverlay.classList.add("open");
+            updateDiagnostics();
+        }
+    }
+
+    function closeSettingsDrawer() {
+        if (settingsSliderDrawer && settingsDrawerOverlay) {
+            settingsSliderDrawer.classList.remove("open");
+            settingsDrawerOverlay.classList.remove("open");
+        }
+    }
+
+    if (btnAudioTone) btnAudioTone.addEventListener("click", openSettingsDrawer);
+    if (btnOpenSettingsPill) btnOpenSettingsPill.addEventListener("click", openSettingsDrawer);
+    if (btnDrawerClose) btnDrawerClose.addEventListener("click", closeSettingsDrawer);
+    if (settingsDrawerOverlay) settingsDrawerOverlay.addEventListener("click", closeSettingsDrawer);
+
+    // Tab Switching inside Settings Drawer
+    drawerTabBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            drawerTabBtns.forEach(b => {
+                b.classList.remove("active");
+                b.setAttribute("aria-selected", "false");
+            });
+            drawerTabPanels.forEach(p => p.classList.remove("active"));
+
+            btn.classList.add("active");
+            btn.setAttribute("aria-selected", "true");
+            const targetPanel = document.getElementById(btn.dataset.tab);
+            if (targetPanel) targetPanel.classList.add("active");
+
+            if (btn.dataset.tab === "tabDiagnostics") {
+                updateDiagnostics();
+            }
+        });
+    });
+
+    // ==========================================
+    // REAL-TIME SLIDER EVENT LISTENERS
+    // ==========================================
+    if (sliderMasterVolume) {
+        sliderMasterVolume.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            if (valVolumeBadge) valVolumeBadge.textContent = `${val}%`;
+            soundBox.engine.setVolume(val / 100);
+            if (volumeSlider) volumeSlider.value = val;
+        });
+    }
+
+    if (sliderTempo) {
+        sliderTempo.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10) / 100;
+            if (valTempoBadge) valTempoBadge.textContent = `${val.toFixed(2)}x`;
+            soundBox.engine.setTempoMultiplier(val);
+        });
+    }
+
+    if (sliderPitch) {
+        sliderPitch.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            if (valPitchBadge) valPitchBadge.textContent = `${val > 0 ? "+" : ""}${val} st${val === 0 ? " (Original)" : ""}`;
+            soundBox.engine.setPitchShift(val);
+        });
+    }
+
+    if (sliderBass) {
+        sliderBass.addEventListener("input", (e) => {
+            const val = parseFloat(e.target.value);
+            if (valBassBadge) valBassBadge.textContent = `${val > 0 ? "+" : ""}${val.toFixed(1)} dB`;
+            soundBox.engine.setBassGain(val);
+        });
+    }
+
+    if (sliderTreble) {
+        sliderTreble.addEventListener("input", (e) => {
+            const val = parseFloat(e.target.value);
+            if (valTrebleBadge) valTrebleBadge.textContent = `${val > 0 ? "+" : ""}${val.toFixed(1)} dB`;
+            soundBox.engine.setTrebleGain(val);
+        });
+    }
+
+    if (sliderCutoff) {
+        sliderCutoff.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            if (valCutoffBadge) valCutoffBadge.textContent = `${(val / 1000).toFixed(1)} kHz`;
+            soundBox.engine.setFilterCutoff(val);
+        });
+    }
+
+    if (sliderReverb) {
+        sliderReverb.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            if (valReverbBadge) valReverbBadge.textContent = `${val}%`;
+            soundBox.engine.setReverbWet(val / 100);
+        });
+    }
+
+    if (sliderCrackle) {
+        sliderCrackle.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            if (valCrackleBadge) valCrackleBadge.textContent = `${val}%`;
+            soundBox.engine.setCrackleLevel(val / 100);
+        });
+    }
+
+    if (sliderStereo) {
+        sliderStereo.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            let label = "Center";
+            if (val < -10) label = `${Math.abs(val)}% L`;
+            else if (val > 10) label = `${val}% R`;
+            if (valStereoBadge) valStereoBadge.textContent = label;
+            soundBox.engine.setStereoPan(val / 100);
+        });
+    }
+
+    // Reset All Sliders Button
+    if (btnResetAllSliders) {
+        btnResetAllSliders.addEventListener("click", () => {
+            if (sliderMasterVolume) { sliderMasterVolume.value = "75"; valVolumeBadge.textContent = "75%"; }
+            if (sliderTempo) { sliderTempo.value = "100"; valTempoBadge.textContent = "1.00x"; }
+            if (sliderPitch) { sliderPitch.value = "0"; valPitchBadge.textContent = "0 st (Original)"; }
+            if (sliderBass) { sliderBass.value = "3"; valBassBadge.textContent = "+3.0 dB"; }
+            if (sliderTreble) { sliderTreble.value = "2"; valTrebleBadge.textContent = "+2.0 dB"; }
+            if (sliderCutoff) { sliderCutoff.value = "12000"; valCutoffBadge.textContent = "12.0 kHz"; }
+            if (sliderReverb) { sliderReverb.value = "25"; valReverbBadge.textContent = "25%"; }
+            if (sliderCrackle) { sliderCrackle.value = "12"; valCrackleBadge.textContent = "12%"; }
+            if (sliderStereo) { sliderStereo.value = "0"; valStereoBadge.textContent = "Center"; }
+
+            soundBox.engine.setVolume(0.75);
+            soundBox.engine.setTempoMultiplier(1.0);
+            soundBox.engine.setPitchShift(0);
+            soundBox.engine.setBassGain(3.0);
+            soundBox.engine.setTrebleGain(2.0);
+            soundBox.engine.setFilterCutoff(12000);
+            soundBox.engine.setReverbWet(0.25);
+            soundBox.engine.setCrackleLevel(0.12);
+            soundBox.engine.setStereoPan(0.0);
+            soundBox.engine.setWaveform("auto");
+
+            waveformCards.forEach(c => c.classList.toggle("active", c.dataset.waveform === "auto"));
+            updateDiagnostics();
+        });
+    }
+
+    // ==========================================
+    // WAVEFORM SELECTOR CONTROLS
+    // ==========================================
+    waveformCards.forEach(card => {
+        card.addEventListener("click", () => {
+            waveformCards.forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+            soundBox.engine.setWaveform(card.dataset.waveform);
+        });
+    });
+
+    // ==========================================
+    // SOUND FILES LIBRARY & CUSTOM UPLOAD
+    // ==========================================
+    function renderSoundFilesList() {
+        if (!soundFilesList) return;
+        soundFilesList.innerHTML = "";
+
+        soundBox.engine.soundLibraryFiles.forEach(file => {
+            const item = document.createElement("div");
+            item.className = "sound-file-item";
+            item.id = file.id;
+            item.innerHTML = `
+                <div class="sound-file-icon">🎵</div>
+                <div class="sound-file-meta">
+                    <div class="sound-file-title">${file.name}</div>
+                    <div class="sound-file-sub">${file.era} • ${file.type} (${file.duration})</div>
+                </div>
+                <div class="sound-file-actions" style="display: flex; gap: 6px;">
+                    <button type="button" class="sound-file-btn play-audio-file-btn" data-id="${file.id}" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 700;" title="Play Real Audio File">
+                        ▶ Play Audio
+                    </button>
+                    <button type="button" class="sound-file-btn load-stem-btn" data-phase="${file.phaseNum}" title="Tune Synth to Phase ${file.phaseNum}">
+                        🎛️ Tune Synth
+                    </button>
+                </div>
+            `;
+
+            // Play the direct WAV audio file from assets/audio/
+            const playAudioBtn = item.querySelector(".play-audio-file-btn");
+            playAudioBtn.addEventListener("click", () => {
+                if (file.filePath) {
+                    if (customFileActiveBanner) customFileActiveBanner.classList.add("active");
+                    if (customFileNameText) customFileNameText.textContent = `🎵 ${file.name} (${file.label})`;
+                    soundBox.engine.playAudioUrl(file.filePath, file.name, (curr, total) => {
+                        if (currentTimeLabel) currentTimeLabel.textContent = formatTime(curr);
+                        if (totalDurationLabel) totalDurationLabel.textContent = formatTime(total);
+                        if (scrubProgress && total > 0) {
+                            scrubProgress.style.width = `${(curr / total) * 100}%`;
+                        }
+                    }, () => {
+                        updatePlayState();
+                    });
+                    updatePlayState();
+                }
+            });
+
+            // Tune synth preset & playlist
+            const btn = item.querySelector(".load-stem-btn");
+            btn.addEventListener("click", () => {
+                soundBox.engine.applyPreset(file.preset);
+                currentPhaseFilter = String(file.phaseNum);
+                soundBox.activePlaylistId = `phase-${file.phaseNum}-playlist`;
+                updateFilterPillStates();
+                renderPhasesBar();
+                renderPlaylists();
+                renderTracklist();
+
+                const firstTrack = soundBox.masterTracks.find(t => t.phaseNum === file.phaseNum);
+                if (firstTrack) {
+                    playSpecificSong(firstTrack.id);
+                }
+
+                // Sync slider badges
+                if (file.preset.bass !== undefined && sliderBass) {
+                    sliderBass.value = file.preset.bass;
+                    if (valBassBadge) valBassBadge.textContent = `${file.preset.bass > 0 ? "+" : ""}${file.preset.bass.toFixed(1)} dB`;
+                }
+                if (file.preset.treble !== undefined && sliderTreble) {
+                    sliderTreble.value = file.preset.treble;
+                    if (valTrebleBadge) valTrebleBadge.textContent = `${file.preset.treble > 0 ? "+" : ""}${file.preset.treble.toFixed(1)} dB`;
+                }
+                if (file.preset.reverb !== undefined && sliderReverb) {
+                    sliderReverb.value = file.preset.reverb * 100;
+                    if (valReverbBadge) valReverbBadge.textContent = `${Math.round(file.preset.reverb * 100)}%`;
+                }
+                if (file.preset.tempo !== undefined && sliderTempo) {
+                    sliderTempo.value = file.preset.tempo * 100;
+                    if (valTempoBadge) valTempoBadge.textContent = `${file.preset.tempo.toFixed(2)}x`;
+                }
+                if (file.preset.crackle !== undefined && sliderCrackle) {
+                    sliderCrackle.value = file.preset.crackle * 100;
+                    if (valCrackleBadge) valCrackleBadge.textContent = `${Math.round(file.preset.crackle * 100)}%`;
+                }
+            });
+
+            soundFilesList.appendChild(item);
+        });
+    }
+
+    // Custom Audio File Upload / Drag & Drop
+    if (audioFileInput) {
+        audioFileInput.addEventListener("change", (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) {
+                handleLoadedAudioFile(file);
+            }
+        });
+    }
+
+    if (dropzoneArea) {
+        ["dragenter", "dragover"].forEach(eventName => {
+            dropzoneArea.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzoneArea.style.borderColor = "#d4af37";
+                dropzoneArea.style.background = "rgba(212, 175, 55, 0.2)";
+            }, false);
+        });
+
+        ["dragleave", "drop"].forEach(eventName => {
+            dropzoneArea.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzoneArea.style.borderColor = "rgba(212, 175, 55, 0.4)";
+                dropzoneArea.style.background = "";
+            }, false);
+        });
+
+        dropzoneArea.addEventListener("drop", (e) => {
+            const dt = e.dataTransfer;
+            const file = dt && dt.files && dt.files[0];
+            if (file) {
+                handleLoadedAudioFile(file);
+            }
+        });
+    }
+
+    function handleLoadedAudioFile(file) {
+        if (file.name.endsWith(".json")) {
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (parsed.settings) {
+                        soundBox.engine.applyPreset({
+                            bass: parsed.settings.bassGainValue,
+                            treble: parsed.settings.trebleGainValue,
+                            reverb: parsed.settings.reverbWet,
+                            tempo: parsed.settings.tempoMultiplier,
+                            crackle: parsed.settings.crackleLevel,
+                            pitch: parsed.settings.pitchShiftSemitones,
+                            waveform: parsed.settings.waveformOverride
+                        });
+                        alert("✅ Preset JSON configuration loaded successfully!");
+                    }
+                } catch (err) {
+                    alert("⚠️ Unable to parse JSON preset file.");
+                }
+            };
+            reader.readAsText(file);
+            return;
+        }
+
+        if (nowPlayingTitle) nowPlayingTitle.textContent = `📁 ${file.name}`;
+        if (nowPlayingAlbum) nowPlayingAlbum.textContent = `Custom Audio File (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+        if (nowPlayingEra) nowPlayingEra.textContent = "Live User File Playback";
+        if (nowPlayingChords) nowPlayingChords.textContent = "Audio Source: Local File System";
+        if (vinylSongTitle) vinylSongTitle.textContent = file.name;
+
+        if (customFileActiveBanner && customFileNameText) {
+            customFileNameText.textContent = `🎵 ${file.name}`;
+            customFileActiveBanner.classList.add("active");
+        }
+
+        soundBox.engine.playCustomAudioFile(
+            file,
+            (curr, total) => {
+                if (currentTimeLabel) currentTimeLabel.textContent = formatTime(curr);
+                if (totalDurationLabel) totalDurationLabel.textContent = formatTime(total);
+                if (scrubProgress) scrubProgress.style.width = `${(curr / total) * 100}%`;
+            },
+            () => {
+                updatePlayState();
+            }
+        );
+
+        updatePlayState();
+    }
+
+    if (btnResetToSynth) {
+        btnResetToSynth.addEventListener("click", () => {
+            if (customFileActiveBanner) customFileActiveBanner.classList.remove("active");
+            playSpecificSong(soundBox.activeSongId || "p1-track-1");
+        });
+    }
+
+    // Export Chords & Settings JSON
+    if (btnExportChords) {
+        btnExportChords.addEventListener("click", () => {
+            soundBox.engine.exportChordsJSON();
+        });
+    }
+
+    if (btnExportSettings) {
+        btnExportSettings.addEventListener("click", () => {
+            soundBox.engine.exportSettingsJSON();
+        });
+    }
+
+    // ==========================================
+    // LIVE DIAGNOSTICS UPDATER
+    // ==========================================
+    function updateDiagnostics() {
+        if (!soundBox.engine) return;
+        if (diagEngineState) {
+            diagEngineState.textContent = soundBox.engine.isPlaying ? "Playing Live 🟢" : "Idle / Standby 🟡";
+        }
+        if (diagContextState && soundBox.engine.ctx) {
+            diagContextState.textContent = soundBox.engine.ctx.state || "active";
+        }
+        if (diagSampleRate && soundBox.engine.ctx) {
+            diagSampleRate.textContent = `${soundBox.engine.ctx.sampleRate.toLocaleString()} Hz`;
+        }
+        if (diagActiveSong) {
+            if (soundBox.engine.isCustomFilePlaying) {
+                diagActiveSong.textContent = `Custom: ${soundBox.engine.customFileName}`;
+            } else {
+                const s = soundBox.getSongById(soundBox.activeSongId);
+                diagActiveSong.textContent = `${s.num}. ${s.title}`;
+            }
+        }
+        if (diagActivePhase) {
+            const s = soundBox.getSongById(soundBox.activeSongId);
+            diagActivePhase.textContent = s ? s.phaseName : "Phase 1 (1964)";
+        }
+    }
+
+    // ==========================================
+    // GUIDE / HELP MODAL CONTROLLERS
+    // ==========================================
+    function openGuideModal() {
+        if (soundGuideModal && guideModalOverlay) {
+            soundGuideModal.style.display = "block";
+            guideModalOverlay.classList.add("open");
+        }
+    }
+
+    function closeGuideModal() {
+        if (soundGuideModal && guideModalOverlay) {
+            soundGuideModal.style.display = "none";
+            guideModalOverlay.classList.remove("open");
+        }
+    }
+
+    if (btnSoundHelp) btnSoundHelp.addEventListener("click", openGuideModal);
+    if (btnGuideModalClose) btnGuideModalClose.addEventListener("click", closeGuideModal);
+    if (btnGuideModalDismiss) btnGuideModalDismiss.addEventListener("click", closeGuideModal);
+    if (guideModalOverlay) guideModalOverlay.addEventListener("click", closeGuideModal);
+
+    // ==========================================
+    // 6-PHASE TIMELINE NAVIGATOR
+    // ==========================================
+    function renderPhasesBar() {
+        if (!phasesTimelineBar) return;
+        phasesTimelineBar.innerHTML = "";
+
+        soundBox.phases.forEach(phase => {
+            const isActive = currentPhaseFilter === String(phase.phaseNum);
+            const card = document.createElement("div");
+            card.className = `phase-nav-card ${isActive ? "active" : ""}`;
+            card.id = `phase-card-${phase.phaseNum}`;
+            card.innerHTML = `
+                <div class="phase-nav-card-top">
+                    <span class="phase-num-pill">${phase.shortName}</span>
+                    <span class="phase-track-count">${phase.trackIds.length} Tracks</span>
+                </div>
+                <h4 class="phase-nav-title">${phase.icon} ${phase.name.split(':')[1] || phase.name}</h4>
+                <p class="phase-nav-album">💽 ${phase.albums}</p>
+            `;
+
+            card.addEventListener("click", () => {
+                currentPhaseFilter = String(phase.phaseNum);
+                soundBox.activePlaylistId = `phase-${phase.phaseNum}-playlist`;
+                updateFilterPillStates();
+                renderPhasesBar();
+                renderPlaylists();
+                renderTracklist();
+                const firstSongId = phase.trackIds[0];
+                if (firstSongId) {
+                    playSpecificSong(firstSongId);
+                }
+            });
+
+            phasesTimelineBar.appendChild(card);
+        });
+    }
+
+    function updateFilterPillStates() {
+        const pills = document.querySelectorAll(".filter-pill");
+        pills.forEach(p => {
+            p.classList.toggle("active", p.dataset.phase === currentPhaseFilter);
+        });
+    }
+
+    // Render Playlists Grid
+    function renderPlaylists() {
+        if (!playlistsGrid) return;
+        playlistsGrid.innerHTML = "";
+
+        soundBox.playlists.forEach(pl => {
+            const isSelected = pl.id === soundBox.activePlaylistId;
+            const card = document.createElement("div");
+            card.className = `playlist-card ${isSelected ? "active" : ""}`;
+            card.id = `pl-card-${pl.id}`;
+            card.innerHTML = `
+                <div class="playlist-cover-art" style="background: ${pl.coverColor};">
+                    <span class="pl-cover-icon">${pl.icon}</span>
+                    <span class="pl-cover-badge">${pl.badge}</span>
+                </div>
+                <div class="playlist-card-content">
+                    <h4>${pl.title}</h4>
+                    <p class="pl-card-desc">${pl.tagline}</p>
+                    <div class="pl-card-footer">
+                        <span class="pl-card-meta">${pl.songs.length} Tracks • ${pl.era}</span>
+                        <button type="button" class="pl-card-play-btn" title="Open Playlist">
+                            ${isSelected ? "▶ Active" : "Open"}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener("click", () => {
+                soundBox.activePlaylistId = pl.id;
+                if (pl.id === "beatles-6-phases-complete") {
+                    currentPhaseFilter = "all";
+                } else if (pl.id.startsWith("phase-")) {
+                    currentPhaseFilter = pl.id.replace("phase-", "").replace("-playlist", "");
+                }
+                updateFilterPillStates();
+                renderPhasesBar();
+                renderPlaylists();
+                renderTracklist();
+            });
+
+            playlistsGrid.appendChild(card);
+        });
+    }
+
+    // Render Tracklist Table
+    function renderTracklist() {
+        if (!trackTableBody) return;
+        const pl = soundBox.getPlaylist(soundBox.activePlaylistId);
+
+        if (activePlTitle) activePlTitle.textContent = pl.title;
+        if (activePlDesc) activePlDesc.textContent = pl.tagline;
+        if (activePlCount) activePlCount.textContent = `${pl.songs.length} Tracks`;
+        if (activePlEra) activePlEra.textContent = pl.era;
+        if (activePlBadge) activePlBadge.textContent = pl.badge;
+
+        trackTableBody.innerHTML = "";
+
+        let songsToDisplay = currentPhaseFilter === "all"
+            ? soundBox.masterTracks
+            : soundBox.masterTracks.filter(s => String(s.phaseNum) === currentPhaseFilter);
+
+        let lastPhaseRendered = null;
+
+        songsToDisplay.forEach((song) => {
+            if (currentPhaseFilter === "all" && song.phaseNum !== lastPhaseRendered) {
+                lastPhaseRendered = song.phaseNum;
+                const phaseObj = soundBox.phases.find(p => p.phaseNum === song.phaseNum);
+                const headerTr = document.createElement("tr");
+                headerTr.className = "phase-group-header-row";
+                headerTr.innerHTML = `
+                    <td colspan="6">
+                        <div class="phase-group-header-content">
+                            <div class="phase-group-title-group">
+                                <span class="phase-group-tag">${phaseObj.shortName}</span>
+                                <span class="phase-group-title">${phaseObj.name}</span>
+                                <span class="phase-group-album-note">— 💽 ${phaseObj.albums}</span>
+                            </div>
+                            <button type="button" class="phase-play-btn" data-phase="${phaseObj.phaseNum}" title="Play this Phase">
+                                ▶ Play Phase ${phaseObj.phaseNum}
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                const phaseBtn = headerTr.querySelector(".phase-play-btn");
+                phaseBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const firstTrack = soundBox.masterTracks.find(t => t.phaseNum === phaseObj.phaseNum);
+                    if (firstTrack) {
+                        playSpecificSong(firstTrack.id);
+                    }
+                });
+
+                trackTableBody.appendChild(headerTr);
+            }
+
+            const isPlayingThis = soundBox.activeSongId === song.id && soundBox.engine.isPlaying;
+            const isFav = soundBox.isFavorite(song.id);
+            const tr = document.createElement("tr");
+            tr.className = soundBox.activeSongId === song.id ? "active-row" : "";
+            tr.innerHTML = `
+                <td class="track-num" style="font-weight: 800;">${isPlayingThis ? "🔊" : song.num}</td>
+                <td>
+                    <div class="track-title-cell">
+                        <strong>${song.title}</strong>
+                        <span class="track-meta-sub">${song.vocalLead}</span>
+                        <span class="track-chords-hint">Chords: ${(song.chords || []).join(" • ")}</span>
+                    </div>
+                </td>
+                <td>
+                    <div><strong>${song.album}</strong></div>
+                    <span class="track-phase-tag">${song.albumGroup}</span>
+                </td>
+                <td>${song.year}</td>
+                <td>${song.duration}</td>
+                <td style="text-align: right;">
+                    <div class="track-row-actions">
+                        <button type="button" class="track-action-btn fav-btn ${isFav ? "active" : ""}" data-id="${song.id}" title="Favorite">
+                            ${isFav ? "❤️" : "🤍"}
+                        </button>
+                        <button type="button" class="track-action-btn play-row-btn" data-id="${song.id}" title="Play Track">
+                            ${isPlayingThis ? "⏸️" : "▶"}
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            const playRowBtn = tr.querySelector(".play-row-btn");
+            playRowBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                if (soundBox.activeSongId === song.id && soundBox.engine.isPlaying) {
+                    soundBox.engine.pause();
+                    updatePlayState();
+                } else {
+                    playSpecificSong(song.id);
+                }
+            });
+
+            const favBtn = tr.querySelector(".fav-btn");
+            favBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const nowFav = soundBox.toggleFavorite(song.id);
+                favBtn.textContent = nowFav ? "❤️" : "🤍";
+                favBtn.classList.toggle("active", nowFav);
+                if (song.id === soundBox.activeSongId && btnFavorite) {
+                    btnFavorite.textContent = nowFav ? "❤️" : "🤍";
+                }
+            });
+
+            tr.addEventListener("click", () => {
+                playSpecificSong(song.id);
+            });
+
+            trackTableBody.appendChild(tr);
+        });
+    }
+
+    // Play Specific Song
+    function playSpecificSong(songId) {
+        soundBox.activeSongId = songId;
+        const song = soundBox.getSongById(songId);
+
+        if (customFileActiveBanner) customFileActiveBanner.classList.remove("active");
+
+        if (nowPlayingTitle) nowPlayingTitle.textContent = `${song.num}. ${song.title}`;
+        if (nowPlayingAlbum) nowPlayingAlbum.textContent = `Album: ${song.albumGroup}`;
+        if (nowPlayingEra) nowPlayingEra.textContent = `${song.phaseName}`;
+        if (nowPlayingChords) nowPlayingChords.textContent = `Scale: ${song.scale} • Chords: ${(song.chords || []).join(" • ")}`;
+        if (nowPlayingPlaylistRef) nowPlayingPlaylistRef.textContent = `Lead Vocals: ${song.vocalLead} (${song.year})`;
+        if (vinylSongTitle) vinylSongTitle.textContent = song.title;
+        if (totalDurationLabel) totalDurationLabel.textContent = song.duration;
+        if (btnFavorite) btnFavorite.textContent = soundBox.isFavorite(song.id) ? "❤️" : "🤍";
+
+        soundBox.engine.playSong(
+            song,
+            (curr, total) => {
+                if (currentTimeLabel) currentTimeLabel.textContent = formatTime(curr);
+                if (scrubProgress) scrubProgress.style.width = `${(curr / total) * 100}%`;
+            },
+            () => {
+                handleTrackEnded();
+            }
+        );
+
+        updatePlayState();
+        renderTracklist();
+        updateDiagnostics();
+    }
+
+    function updatePlayState() {
+        const isPlaying = soundBox.engine.isPlaying;
+        if (playIcon) playIcon.textContent = isPlaying ? "⏸" : "▶";
+        if (vinylRecord) vinylRecord.classList.toggle("spinning", isPlaying);
+        if (audioVisualizer) audioVisualizer.classList.toggle("active", isPlaying);
+        updateDiagnostics();
+    }
+
+    function handleTrackEnded() {
+        const songList = currentPhaseFilter === "all"
+            ? soundBox.masterTracks
+            : soundBox.masterTracks.filter(s => String(s.phaseNum) === currentPhaseFilter);
+
+        const idx = songList.findIndex(s => s.id === soundBox.activeSongId);
+        if (soundBox.isRepeat) {
+            playSpecificSong(soundBox.activeSongId);
+        } else if (soundBox.isShuffle) {
+            const randIdx = Math.floor(Math.random() * songList.length);
+            playSpecificSong(songList[randIdx].id);
+        } else if (idx < songList.length - 1) {
+            playSpecificSong(songList[idx + 1].id);
+        } else {
+            soundBox.engine.stop();
+            updatePlayState();
+        }
+    }
+
+    // Transport Listeners
+    if (btnPlayPause) {
+        btnPlayPause.addEventListener("click", () => {
+            if (soundBox.engine.isPlaying) {
+                soundBox.engine.pause();
+            } else {
+                if (!soundBox.engine.activeSong && !soundBox.engine.isCustomFilePlaying) {
+                    playSpecificSong(soundBox.activeSongId || "p1-track-1");
+                } else {
+                    soundBox.engine.resume(
+                        (curr, total) => {
+                            if (currentTimeLabel) currentTimeLabel.textContent = formatTime(curr);
+                            if (scrubProgress) scrubProgress.style.width = `${(curr / total) * 100}%`;
+                        },
+                        () => handleTrackEnded()
+                    );
+                }
+            }
+            updatePlayState();
+            renderTracklist();
+        });
+    }
+
+    if (btnNext) {
+        btnNext.addEventListener("click", () => {
+            const songList = currentPhaseFilter === "all"
+                ? soundBox.masterTracks
+                : soundBox.masterTracks.filter(s => String(s.phaseNum) === currentPhaseFilter);
+            const idx = songList.findIndex(s => s.id === soundBox.activeSongId);
+            const nextIdx = (idx + 1) % songList.length;
+            playSpecificSong(songList[nextIdx].id);
+        });
+    }
+
+    if (btnPrev) {
+        btnPrev.addEventListener("click", () => {
+            const songList = currentPhaseFilter === "all"
+                ? soundBox.masterTracks
+                : soundBox.masterTracks.filter(s => String(s.phaseNum) === currentPhaseFilter);
+            const idx = songList.findIndex(s => s.id === soundBox.activeSongId);
+            const prevIdx = (idx - 1 + songList.length) % songList.length;
+            playSpecificSong(songList[prevIdx].id);
+        });
+    }
+
+    if (btnShuffle) {
+        btnShuffle.addEventListener("click", () => {
+            soundBox.isShuffle = !soundBox.isShuffle;
+            btnShuffle.classList.toggle("active", soundBox.isShuffle);
+        });
+    }
+
+    if (btnRepeat) {
+        btnRepeat.addEventListener("click", () => {
+            soundBox.isRepeat = !soundBox.isRepeat;
+            btnRepeat.classList.toggle("active", soundBox.isRepeat);
+        });
+    }
+
+    if (btnFavorite) {
+        btnFavorite.addEventListener("click", () => {
+            const nowFav = soundBox.toggleFavorite(soundBox.activeSongId);
+            btnFavorite.textContent = nowFav ? "❤️" : "🤍";
+            renderTracklist();
+        });
+    }
+
+    if (btnPlayMasterAll) {
+        btnPlayMasterAll.addEventListener("click", () => {
+            currentPhaseFilter = "all";
+            soundBox.activePlaylistId = "beatles-6-phases-complete";
+            updateFilterPillStates();
+            renderPhasesBar();
+            renderPlaylists();
+            renderTracklist();
+            playSpecificSong("p1-track-1");
+        });
+    }
+
+    if (volumeSlider) {
+        volumeSlider.addEventListener("input", (e) => {
+            const val = parseInt(e.target.value, 10);
+            soundBox.engine.setVolume(val / 100);
+            if (sliderMasterVolume) sliderMasterVolume.value = val;
+            if (valVolumeBadge) valVolumeBadge.textContent = `${val}%`;
+        });
+    }
+
+    // Scrub Bar Click to Seek
+    if (scrubBarTrack) {
+        scrubBarTrack.addEventListener("click", (e) => {
+            const rect = scrubBarTrack.getBoundingClientRect();
+            const clickRatio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            if (soundBox.engine && soundBox.engine.playbackDuration) {
+                soundBox.engine.playbackProgress = Math.floor(clickRatio * soundBox.engine.playbackDuration);
+                if (currentTimeLabel) {
+                    currentTimeLabel.textContent = formatTime(soundBox.engine.playbackProgress);
+                }
+                if (scrubProgress) {
+                    scrubProgress.style.width = `${clickRatio * 100}%`;
+                }
+            }
+        });
+    }
+
+    // Category Filter Pills
+    const filterPills = document.querySelectorAll(".filter-pill");
+    filterPills.forEach(pill => {
+        pill.addEventListener("click", () => {
+            filterPills.forEach(p => p.classList.remove("active"));
+            pill.classList.add("active");
+            currentPhaseFilter = pill.dataset.phase;
+            if (currentPhaseFilter === "all") {
+                soundBox.activePlaylistId = "beatles-6-phases-complete";
+            } else {
+                soundBox.activePlaylistId = `phase-${currentPhaseFilter}-playlist`;
+            }
+            renderPhasesBar();
+            renderPlaylists();
+            renderTracklist();
+        });
+    });
+
+    // Multi-tab synchronization hook
+    window.onSoundBoxAudioEngineUpdate = () => {
+        const song = soundBox.engine.activeSong || soundBox.masterTracks[0];
+        if (soundBox.activeSongId !== song.id) {
+            soundBox.activeSongId = song.id;
+            if (nowPlayingTitle) nowPlayingTitle.textContent = `${song.num}. ${song.title}`;
+            if (nowPlayingAlbum) nowPlayingAlbum.textContent = `Album: ${song.albumGroup}`;
+            if (nowPlayingEra) nowPlayingEra.textContent = `${song.phaseName}`;
+            if (nowPlayingChords) nowPlayingChords.textContent = `Scale: ${song.scale} • Chords: ${(song.chords || []).join(" • ")}`;
+            if (nowPlayingPlaylistRef) nowPlayingPlaylistRef.textContent = `Lead Vocals: ${song.vocalLead} (${song.year})`;
+            if (vinylSongTitle) vinylSongTitle.textContent = song.title;
+            if (totalDurationLabel) totalDurationLabel.textContent = song.duration;
+            if (btnFavorite) btnFavorite.textContent = soundBox.isFavorite(song.id) ? "❤️" : "🤍";
+        }
+
+        if (currentTimeLabel) currentTimeLabel.textContent = formatTime(soundBox.engine.playbackProgress || 0);
+        if (scrubProgress && soundBox.engine.playbackDuration) {
+            const pct = (soundBox.engine.playbackProgress / soundBox.engine.playbackDuration) * 100;
+            scrubProgress.style.width = `${pct}%`;
+        }
+
+        updatePlayState();
+        renderTracklist();
+    };
+
+    // Initial Renders
+    renderPhasesBar();
+    renderPlaylists();
+    renderTracklist();
+    renderSoundFilesList();
+    updateDiagnostics();
+
+    // Check if audio was already playing when opening soundbox.html
+    if (soundBox.engine.isPlaying) {
+        window.onSoundBoxAudioEngineUpdate();
+    }
+});
+</script>
+
+</body>
+</html>

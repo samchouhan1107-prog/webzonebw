@@ -34,4 +34,3 @@ app.get('*', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`WEBZONEBW server running on http://0.0.0.0:${PORT}`);
 });
-

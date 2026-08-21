@@ -2,7 +2,8 @@
   "name": "WEBZONEBW",
   "description": "Technology portfolio, interactive digital workspace and WEBZONEBW ER Studio showcasing systems integration, cartoon art shaders, promotional themes, and trending magazine covers.",
   "requestFramePermissions": [
-    "camera"
+    "camera",
+    "microphone"
   ],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
