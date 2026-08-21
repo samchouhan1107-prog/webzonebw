@@ -19,6 +19,14 @@ function initWebZoneERStudio() {
     const flipBtn = document.getElementById("flipCameraBtn");
     const faceHudToggle = document.getElementById("toggleFaceHudBtn");
 
+    // Smart Face Framing controls
+    const smartFrameOverlay = document.getElementById("smartFrameOverlay");
+    const smartFrameGuide = document.getElementById("smartFrameGuide");
+    const smartFrameStatusText = document.getElementById("smartFrameStatusText");
+    const mobileCameraStatusText = document.getElementById("mobileCameraStatusText");
+    const frameModeHint = document.getElementById("frameModeHint");
+    const frameModeButtons = document.querySelectorAll(".frame-mode-btn");
+
     // Floating Camera Overlay Actions (Snapchat / Instagram style)
     const flipBtnFloating = document.getElementById("flipCameraBtnFloating");
     const studioLightBtnFloating = document.getElementById("studioLightBtnFloating");
@@ -84,6 +92,11 @@ function initWebZoneERStudio() {
     let isDetectingFace = false;
     let lastFaceDetectTimestamp = 0;
     let faceDetectionConfidence = 99.4;
+
+    // Camera composition mode: standard, wide, or automatic full-face guidance.
+    let frameMode = "auto";
+    let faceDetected = false;
+    let lastFrameMessage = "Full Face Auto • Ready";
 
     // Check Native Browser FaceDetector API
     if (typeof window !== "undefined" && "FaceDetector" in window) {
@@ -321,10 +334,83 @@ function initWebZoneERStudio() {
             showFaceHud = !showFaceHud;
             faceHudToggle.classList.toggle("active", showFaceHud);
             faceHudToggle.innerHTML = showFaceHud
-                ? '<span aria-hidden="true">🎯</span> Face Recognition HUD: ON'
-                : '<span aria-hidden="true">🎯</span> Face Recognition HUD: OFF';
+                ? '<span aria-hidden="true">🎯</span> Smart Face Frame: ON'
+                : '<span aria-hidden="true">🎯</span> Smart Face Frame: OFF';
         });
     }
+
+    // Smart Face Framing mode controls
+    function setFrameMode(mode) {
+        frameMode = ["standard", "wide", "auto"].includes(mode) ? mode : "auto";
+        frameModeButtons.forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.frameMode === frameMode);
+        });
+        if (frameModeHint) {
+            frameModeHint.textContent = frameMode === "standard"
+                ? "Natural camera composition with a light framing guide."
+                : frameMode === "wide"
+                    ? "Adds breathing room so the whole face and shoulders stay visible."
+                    : "Automatically keeps the detected face comfortably inside the frame.";
+        }
+        updateSmartFrameUI();
+    }
+
+    frameModeButtons.forEach(btn => {
+        btn.addEventListener("click", () => setFrameMode(btn.dataset.frameMode));
+    });
+
+    function updateSmartFrameUI() {
+        if (!smartFrameGuide) return;
+
+        const x = faceBox.x;
+        const y = faceBox.y;
+        const fw = faceBox.w;
+        const fh = faceBox.h;
+
+        const safeLeft = x - fw / 2;
+        const safeRight = x + fw / 2;
+        const tooWide = fw > (frameMode === "wide" ? 0.66 : 0.56);
+        const tooFarLeft = safeLeft < 0.08;
+        const tooFarRight = safeRight > 0.92;
+        const tooHigh = y - fh / 2 < 0.08;
+        const tooLow = y + fh / 2 > 0.92;
+
+        let state = "good";
+        let message = frameMode === "auto" ? "Full face in frame" : frameMode === "wide" ? "Wide framing ready" : "Standard framing";
+
+        if (frameMode === "auto" && !faceDetected) {
+            state = "warn";
+            message = "Looking for your face…";
+        } else if (tooWide) {
+            state = "alert";
+            message = "Move the camera back a little";
+        } else if (tooFarLeft) {
+            state = "warn";
+            message = "Move slightly right";
+        } else if (tooFarRight) {
+            state = "warn";
+            message = "Move slightly left";
+        } else if (tooHigh) {
+            state = "warn";
+            message = "Lower the camera slightly";
+        } else if (tooLow) {
+            state = "warn";
+            message = "Raise the camera slightly";
+        }
+
+        smartFrameGuide.classList.remove("good", "warn", "alert");
+        smartFrameGuide.classList.add(state);
+        smartFrameGuide.style.left = `${Math.max(18, Math.min(82, x * 100))}%`;
+        smartFrameGuide.style.top = `${Math.max(18, Math.min(82, y * 100))}%`;
+        smartFrameGuide.style.width = `${Math.max(24, Math.min(64, fw * 100))}%`;
+        smartFrameGuide.style.height = `${Math.max(30, Math.min(68, fh * 100))}%`;
+
+        if (smartFrameStatusText) smartFrameStatusText.textContent = message;
+        if (mobileCameraStatusText) mobileCameraStatusText.textContent = message;
+        lastFrameMessage = message;
+    }
+
+    setFrameMode("auto");
 
     // Quick Actions & Drawer Elements
     const quickWebzoneBtn = document.getElementById("quickWebzoneBtn");
@@ -712,14 +798,34 @@ function initWebZoneERStudio() {
                 mediaStream.getTracks().forEach(track => track.stop());
             }
 
-            const constraints = {
-                video: {
+            const isMobileViewport = window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
+            const isTabletViewport = window.matchMedia && window.matchMedia("(min-width: 768px) and (max-width: 1199px)").matches;
+
+            // Prefer a portrait camera stream on phones. This is the main fix for
+            // the common mobile problem where a 16:9 landscape request makes the
+            // user's face feel cropped inside a portrait UI.
+            const cameraVideo = isMobileViewport
+                ? {
                     facingMode: isFacingUser ? "user" : "environment",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                },
-                audio: false
-            };
+                    width: { ideal: 720 },
+                    height: { ideal: 1280 },
+                    aspectRatio: { ideal: 9 / 16 }
+                }
+                : isTabletViewport
+                    ? {
+                        facingMode: isFacingUser ? "user" : "environment",
+                        width: { ideal: 960 },
+                        height: { ideal: 1280 },
+                        aspectRatio: { ideal: 3 / 4 }
+                    }
+                    : {
+                        facingMode: isFacingUser ? "user" : "environment",
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        aspectRatio: { ideal: 16 / 9 }
+                    };
+
+            const constraints = { video: cameraVideo, audio: false };
 
             mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
             setHighlightStep(5);
@@ -732,6 +838,7 @@ function initWebZoneERStudio() {
                 canvas.style.display = "block";
                 canvas.width = video.videoWidth || 640;
                 canvas.height = video.videoHeight || 480;
+                if (mobileCameraStatusText) mobileCameraStatusText.textContent = "Camera live • Full Face Auto";
                 setHighlightStep(6);
                 startRenderLoop();
             };
@@ -749,6 +856,7 @@ function initWebZoneERStudio() {
         canvas.style.display = "block";
         canvas.width = 640;
         canvas.height = 480;
+        if (mobileCameraStatusText) mobileCameraStatusText.textContent = "Test Mode • Framing preview";
         setHighlightStep(6);
         startRenderLoop();
     }
@@ -890,7 +998,17 @@ function initWebZoneERStudio() {
             } else if (isDemoMode) {
                 drawDemoBackground(ctx, w, h);
             } else if (video.readyState >= 2) {
-                ctx.drawImage(video, 0, 0, w, h);
+                // Mirror the front camera in the rendered canvas so the selfie
+                // experience behaves like a normal phone camera.
+                if (isFacingUser) {
+                    ctx.save();
+                    ctx.translate(w, 0);
+                    ctx.scale(-1, 1);
+                    ctx.drawImage(video, 0, 0, w, h);
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(video, 0, 0, w, h);
+                }
             }
 
             // 2. Auto-HD Quality Enhancer (Convolution Sharpness & Clarity)
@@ -906,7 +1024,7 @@ function initWebZoneERStudio() {
                 applyStudioVignette(ctx, w, h);
             }
 
-            // 5. Face Recognition HUD
+            // 5. Smart Face Frame
             if (showFaceHud) {
                 drawFaceHUD(ctx, w, h, time);
             }
@@ -935,6 +1053,7 @@ function initWebZoneERStudio() {
                 try {
                     const faces = await nativeFaceDetector.detect(video);
                     if (faces && faces.length > 0) {
+                        faceDetected = true;
                         const b = faces[0].boundingBox;
                         const vw = video.videoWidth || 640;
                         const vh = video.videoHeight || 480;
@@ -946,18 +1065,20 @@ function initWebZoneERStudio() {
                         const rawH = b.height / vh;
 
                         // Account for video mirroring in user facing mode
-                        faceBox.targetX = isFacingUser ? (1 - rawCx) : rawCx;
+                        faceBox.targetX = rawCx;
                         faceBox.targetY = rawCy;
                         faceBox.targetW = Math.max(0.24, Math.min(0.55, rawW * 1.15));
                         faceBox.targetH = Math.max(0.32, Math.min(0.65, rawH * 1.25));
                         faceDetectionConfidence = 99.6;
                     }
                 } catch (e) {
-                    // fall back to optical centroid
+                    // Keep the last stable position if native detection fails.
                 } finally {
                     isDetectingFace = false;
                 }
             } else {
+                // Browser compatibility fallback: keep a stable center guide.
+                faceDetected = false;
                 // High-performance skin-luminance optical centroid tracker fallback
                 try {
                     const vw = video.videoWidth || 640;
@@ -976,6 +1097,8 @@ function initWebZoneERStudio() {
         faceBox.y += (faceBox.targetY - faceBox.y) * 0.18;
         if (faceBox.targetW) faceBox.w += (faceBox.targetW - faceBox.w) * 0.15;
         if (faceBox.targetH) faceBox.h += (faceBox.targetH - faceBox.h) * 0.15;
+
+        updateSmartFrameUI();
     }
 
     /* ==========================================================

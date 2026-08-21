@@ -165,7 +165,7 @@
             </h1>
 
             <p>
-                Real-Time Facial Recognition, AI Biometrics HUD &amp; Interactive Visual Themes
+                Smart Face Framing, Interactive Camera Lenses &amp; Visual Themes
             </p>
 
         </header>
@@ -188,7 +188,7 @@
             </h3>
 
             <p>
-                Experience real-time interactive Extended Reality powered by WEBZONEBW. Apply high-definition cartoon shaders, signature promotional themes, biometric face HUD overlays, and trending magazine covers directly in your browser.
+                Experience real-time interactive Extended Reality powered by WEBZONEBW. Explore creative camera lenses, Smart Face Framing, high-definition visual themes, magazine styles, and Halloween effects directly in your browser.
             </p>
 
             <div class="hero-buttons">
@@ -266,13 +266,13 @@
                     </p>
                 </div>
 
-                <!-- Face Recognition HUD Toggle -->
+                <!-- Smart Face Frame Toggle -->
                 <button
                     id="toggleFaceHudBtn"
                     type="button"
                     class="btn"
                     style="font-size: 13px; padding: 7px 14px; background: #1e293b; border-color: #475569; color: #94a3b8;">
-                    <span aria-hidden="true">🎯</span> Face Recognition HUD: OFF
+                    <span aria-hidden="true">🎯</span> Smart Face Frame: OFF
                 </button>
 
             </div>
@@ -721,6 +721,19 @@
                 </div>
             </div>
 
+            <!-- Smart framing controls: shared by desktop, tablet and mobile -->
+            <div class="smart-framing-toolbar" id="smartFramingToolbar" aria-label="Camera framing controls">
+                <div class="smart-framing-copy">
+                    <strong>🎯 Smart Face Framing</strong>
+                    <span id="frameModeHint">Keeps the whole face comfortably inside the camera view.</span>
+                </div>
+                <div class="frame-mode-group" role="group" aria-label="Framing mode">
+                    <button type="button" class="frame-mode-btn" data-frame-mode="standard">Standard</button>
+                    <button type="button" class="frame-mode-btn" data-frame-mode="wide">Wide</button>
+                    <button type="button" class="frame-mode-btn active" data-frame-mode="auto">Full Face Auto</button>
+                </div>
+            </div>
+
             <!-- Viewport Stage -->
             <div class="camera-viewport" id="cameraViewport">
 
@@ -800,6 +813,16 @@
                     </div>
                 </div>
 
+                <!-- Smart Face Framing UX -->
+                <div id="smartFrameOverlay" class="smart-frame-overlay" aria-hidden="true">
+                    <div class="smart-frame-corners"></div>
+                    <div class="smart-frame-guide" id="smartFrameGuide"></div>
+                    <div class="smart-frame-status" id="smartFrameStatus">
+                        <span class="smart-frame-dot"></span>
+                        <span id="smartFrameStatusText">Full Face Auto • Ready</span>
+                    </div>
+                </div>
+
                 <!-- Floating Canvas Swipe Toast (Fingertip Slider) -->
                 <div id="canvasSwipeToast" class="canvas-swipe-toast" aria-live="polite">
                     <span id="canvasSwipeIcon">👈</span>
@@ -846,6 +869,11 @@
                     </div>
                 </div>
 
+            </div>
+
+            <div class="mobile-camera-status" id="mobileCameraStatus" aria-live="polite">
+                <span class="status-live-dot"></span>
+                <span id="mobileCameraStatusText">Camera ready</span>
             </div>
 
             <!-- ==========================================================
