@@ -22,12 +22,12 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 
-
     <style id="soundbox-media-player-theme">
         /* =====================================================
            SOUNDBOX MEDIA PLAYER TRANSPORT THEME
            Purpose: make PlayBox controls read as audio-player
-           controls, not website navigation buttons.
+           controls, not website navigation buttons, perfectly
+           neutral and harmonious across dark & light modes.
            ===================================================== */
         .soundbox-player-hero .transport-buttons-row {
             display: flex;
@@ -37,16 +37,16 @@
             width: 100%;
             margin: 18px 0 8px;
             padding: 12px 14px;
-            border: 1px solid rgba(255,255,255,.10);
-            border-radius: 16px;
-            background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(0,0,0,.16));
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 8px 20px rgba(0,0,0,.16);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--surface-card-hover);
+            box-shadow: var(--shadow-sm);
         }
 
         .soundbox-player-hero .transport-btn {
             appearance: none;
             -webkit-appearance: none;
-            border: 0;
+            border: 1px solid transparent;
             outline: 0;
             width: 44px;
             height: 44px;
@@ -57,17 +57,18 @@
             justify-content: center;
             border-radius: 50%;
             background: transparent;
-            color: #d7dde8;
-            font-size: 20px;
+            color: var(--text-secondary);
+            font-size: 18px;
             line-height: 1;
             cursor: pointer;
-            transition: transform .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease;
+            transition: transform .16s ease, background .16s ease, color .16s ease, border-color .16s ease;
         }
 
         .soundbox-player-hero .transport-btn:hover {
             transform: translateY(-1px);
-            background: rgba(255,255,255,.09);
-            color: #fff;
+            background: var(--surface-card);
+            border-color: var(--border-color-hover);
+            color: var(--text-heading);
         }
 
         .soundbox-player-hero .transport-btn:active {
@@ -75,31 +76,50 @@
         }
 
         .soundbox-player-hero .transport-btn:focus-visible {
-            box-shadow: 0 0 0 3px rgba(255,255,255,.18);
+            box-shadow: 0 0 0 2px var(--brand-cyan);
         }
 
         .soundbox-player-hero .transport-btn.play-main-btn {
-            width: 58px;
-            height: 58px;
-            min-width: 58px;
-            margin: 0 8px;
-            border: 1px solid rgba(255,255,255,.16);
-            background: #fff;
-            color: #101827;
-            font-size: 25px;
-            box-shadow: 0 8px 18px rgba(0,0,0,.25);
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            margin: 0 6px;
+            border: 1px solid var(--brand-cyan);
+            background: var(--brand-cyan);
+            color: #020617;
+            font-size: 22px;
+            box-shadow: var(--shadow-sm);
         }
 
         .soundbox-player-hero .transport-btn.play-main-btn:hover {
-            background: #f2f4f7;
-            color: #050914;
-            box-shadow: 0 10px 22px rgba(0,0,0,.30);
+            background: #7dd3fc;
+            border-color: #7dd3fc;
+            color: #020617;
+            box-shadow: var(--shadow-md);
+        }
+
+        body.light-mode .soundbox-player-hero .transport-btn.play-main-btn {
+            background: var(--text-link);
+            border-color: var(--text-link);
+            color: #ffffff;
+        }
+
+        body.light-mode .soundbox-player-hero .transport-btn.play-main-btn:hover {
+            background: #0369a1;
+            border-color: #0369a1;
+            color: #ffffff;
         }
 
         .soundbox-player-hero .transport-btn.active {
-            color: #fff;
-            background: rgba(255,255,255,.12);
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+            color: var(--brand-cyan);
+            background: rgba(56, 189, 248, 0.14);
+            border-color: var(--brand-cyan);
+        }
+
+        body.light-mode .soundbox-player-hero .transport-btn.active {
+            color: var(--text-link);
+            background: rgba(2, 132, 199, 0.12);
+            border-color: var(--text-link);
         }
 
         .soundbox-player-hero .transport-btn.fav-main-btn {
@@ -107,34 +127,34 @@
         }
 
         .soundbox-player-hero .transport-btn .media-icon {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             display: block;
             fill: currentColor;
         }
 
         .soundbox-player-hero .transport-btn.play-main-btn .media-icon {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
         }
 
         @media (max-width: 680px) {
             .soundbox-player-hero .transport-buttons-row {
-                gap: 4px;
-                padding: 10px 6px;
+                gap: 6px;
+                padding: 10px 8px;
             }
 
             .soundbox-player-hero .transport-btn {
                 width: 40px;
                 height: 40px;
                 min-width: 40px;
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .soundbox-player-hero .transport-btn.play-main-btn {
-                width: 54px;
-                height: 54px;
-                min-width: 54px;
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
                 margin: 0 4px;
             }
         }
@@ -170,7 +190,7 @@
                 <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
                 <div class="brand-name-group">
                     <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+                    <span class="brand-sub">SYSTEMS · SUPPORT · INFRASTRUCTURE</span>
                 </div>
             </a>
         </div>
@@ -726,7 +746,7 @@
             </div>
 
             <!-- Suitable Built-in Sound Library Stems -->
-            <h4 style="font-size: 13px; color: #f8fafc; margin: 16px 0 10px;">
+            <h4 style="font-size: 13px; color: var(--text-heading); margin: 16px 0 10px;">
                 💽 Suitable Phase Soundscape Stems (6 Phases)
             </h4>
 
@@ -735,7 +755,7 @@
             </div>
 
             <!-- Preset Export & Import Tools -->
-            <h4 style="font-size: 13px; color: #f8fafc; margin: 18px 0 10px;">
+            <h4 style="font-size: 13px; color: var(--text-heading); margin: 18px 0 10px;">
                 ⚙️ Preset Files &amp; Chords Exporter
             </h4>
 
@@ -756,7 +776,7 @@
 
         <!-- TAB 3: WAVEFORMS & TONE -->
         <div class="drawer-tab-panel" id="tabWaveforms" role="tabpanel">
-            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
                 Select the primary oscillator tone synthesis engine for harmonic voice chords:
             </p>
 
@@ -844,16 +864,16 @@
      ===================================================== -->
 <div class="settings-drawer-overlay" id="guideModalOverlay" aria-hidden="true"></div>
 
-<div class="modal-card" id="soundGuideModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-width: 560px; background: #080c1a; border: 1px solid #1e263d; border-radius: 18px; padding: 24px; z-index: 2020; box-shadow: 0 20px 40px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #1a2238; padding-bottom: 12px;">
-        <h3 style="margin: 0; font-size: 17px; color: #f8fafc; font-weight: 800;">🎵 Beatles 6-Phase Sound Box Guide</h3>
+<div class="modal-card" id="soundGuideModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-width: 560px; background: var(--surface-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 24px; z-index: 2020; box-shadow: 0 20px 40px rgba(0,0,0,0.4); max-height: 85vh; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <h3 style="margin: 0; font-size: 17px; color: var(--text-heading); font-weight: 800;">🎵 Beatles 6-Phase Sound Box Guide</h3>
         <button type="button" class="drawer-close-btn" id="btnGuideModalClose">✕</button>
     </div>
-    <div style="font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
         <p style="margin-top: 0;">
             Welcome to the <strong>WEBZONEBW 6-Phase Evolution Sound Box</strong>. This interactive experience synthesizes authentic musical motifs across The Beatles' historic journey from 1964 to 1970.
         </p>
-        <h4 style="color: #d4af37; margin: 14px 0 6px;">✨ Key Features:</h4>
+        <h4 style="color: var(--brand-cyan); margin: 14px 0 6px;">✨ Key Features:</h4>
         <ul style="padding-left: 20px; margin: 0 0 14px;">
             <li><strong>23 Essential Key Tracks:</strong> Spanning all 6 distinct historical eras and 13 studio albums.</li>
             <li><strong>Live Studio Console:</strong> Click <strong>⚙️</strong> or <strong>Studio Console &amp; Files</strong> to tune EQ sliders, bass boost, treble sparkle, vinyl crackle, and stereo panning.</li>
@@ -1239,15 +1259,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ["dragenter", "dragover"].forEach(eventName => {
             dropzoneArea.addEventListener(eventName, (e) => {
                 e.preventDefault();
-                dropzoneArea.style.borderColor = "#d4af37";
-                dropzoneArea.style.background = "rgba(212, 175, 55, 0.2)";
+                dropzoneArea.style.borderColor = "var(--brand-cyan)";
+                dropzoneArea.style.background = "rgba(56, 189, 248, 0.15)";
             }, false);
         });
 
         ["dragleave", "drop"].forEach(eventName => {
             dropzoneArea.addEventListener(eventName, (e) => {
                 e.preventDefault();
-                dropzoneArea.style.borderColor = "rgba(212, 175, 55, 0.4)";
+                dropzoneArea.style.borderColor = "";
                 dropzoneArea.style.background = "";
             }, false);
         });

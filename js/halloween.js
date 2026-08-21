@@ -91,12 +91,29 @@ function initWebZoneERStudio() {
     let isAudioPlaying = false;
     let soundNodes = [];
 
-    // Face tracking state
+    // Advanced Biometric Face Tracking & Smart Inventory State (Mobile / Tablet Optimized)
     let faceBox = { x: 0.5, y: 0.42, w: 0.32, h: 0.44, targetX: 0.5, targetY: 0.42, targetW: 0.32, targetH: 0.44 };
     let nativeFaceDetector = null;
     let isDetectingFace = false;
+    let isFaceDetected = false;
+    let detectionMethod = "scanning"; // "native" | "chrominance" | "touch_lock" | "scanning"
     let lastFaceDetectTimestamp = 0;
     let faceDetectionConfidence = 99.4;
+    let isTouchLocked = false;
+    let touchLockTimeout = null;
+    let activeSmartCategory = "smart"; // "smart" | "face" | "scene" | "magazine" | "halloween" | "all"
+    let currentProximity = "optimal"; // "optimal" | "close" | "far"
+    let currentLighting = "good"; // "good" | "low" | "bright"
+
+    // Offscreen Canvas for Mobile/Tablet Skin-Chrominance & Optical Centroid Analysis
+    let analysisCanvas = null;
+    let analysisCtx = null;
+    if (typeof document !== "undefined") {
+        analysisCanvas = document.createElement("canvas");
+        analysisCanvas.width = 48;
+        analysisCanvas.height = 36;
+        analysisCtx = analysisCanvas.getContext("2d", { willReadFrequently: true });
+    }
 
     // Check Native Browser FaceDetector API
     if (typeof window !== "undefined" && "FaceDetector" in window) {
@@ -357,49 +374,212 @@ function initWebZoneERStudio() {
     // Random Filter Button
     const randomFilterBtn = document.getElementById("randomFilterBtn");
 
-    // Comprehensive catalog of all WebZonebw & Realistic AR effects in sequence
+    // Comprehensive catalog of all WebZonebw & Realistic AR effects with category and target metadata
     const allFilterConfigs = [
-        // 🌟 REALISTIC AR LENSES (INSTAGRAM / SNAPCHAT STYLE)
-        { id: "goldenhour", name: "Golden Hour Glow", icon: "🌟" },
-        { id: "sunglasses", name: "Designer Aviators", icon: "🕶️" },
-        { id: "halo", name: "Neon Angel Halo", icon: "👑" },
-        { id: "vintage90s", name: "Retro 90s Kodak", icon: "🎞️" },
-        { id: "kawaii", name: "Kawaii Anime Blush", icon: "🌸" },
-        { id: "cyberwarrior", name: "Cyber Face-Paint", icon: "⚡" },
-        { id: "noir", name: "Leica Noir Cinema", icon: "🖤" },
-        { id: "icefrost", name: "Diamond Shimmer", icon: "❄️" },
+        // 👤 FACE AR LENSES (ANCHORED BIOMETRIC OVERLAYS & BEAUTY/GLAM)
+        { id: "sunglasses", name: "Aviators", icon: "🕶️", category: "face", target: "face", desc: "Ray-Ban aviator sunglasses with reflective lens shimmer" },
+        { id: "halo", name: "Angel Halo", icon: "👑", category: "face", target: "face", desc: "Floating neon gold angelic halo with sacred geometry" },
+        { id: "kawaii", name: "Kawaii Blush", icon: "🌸", category: "face", target: "face", desc: "Anime peach cheek blush and floating cherry petals" },
+        { id: "cyberwarrior", name: "Cyber Paint", icon: "⚡", category: "face", target: "face", desc: "Cyan warpaint cheek glyphs with electric pulse" },
+        { id: "cyberhud", name: "Cyborg HUD", icon: "🤖", category: "face", target: "face", desc: "Sci-fi holographic biometric targeting reticle" },
+        { id: "studiohd", name: "Portrait HD", icon: "📸", category: "face", target: "face", desc: "Studio portrait lighting with unsharp mask clarity" },
+        { id: "icefrost", name: "Diamond Dust", icon: "❄️", category: "face", target: "face", desc: "Sparkling crystal prism shimmer across facial contours" },
+        { id: "cartoon", name: "Anime Cel", icon: "🎨", category: "face", target: "face", desc: "High-contrast comic outline with vibrant cel shading" },
+        { id: "cybersec", name: "Bio-Scan", icon: "🔐", category: "face", target: "face", desc: "Facial recognition grid with cryptographic hex telemetry" },
+        { id: "superhero", name: "Hero Mask", icon: "🦸", category: "face", target: "face", desc: "Comic vigilante sleek carbon-fiber face mask" },
+        { id: "goldenhour", name: "Golden Hour", icon: "🌟", category: "face", target: "face", desc: "Warm California sunset rim light and golden skin glow" },
 
-        // 🌐 SIGNATURE & ART STYLES
-        { id: "webzonebw", name: "WebZonebw Signature", icon: "🌐" },
-        { id: "cartoon", name: "WebZonebw Anime", icon: "🎨" },
-        { id: "studiohd", name: "WebZonebw Studio HD", icon: "📸" },
-        { id: "cinematic", name: "WebZonebw 35mm", icon: "🎬" },
-        { id: "cyberpunk", name: "WebZonebw Cyberpunk", icon: "💡" },
-        { id: "matrix", name: "WebZonebw Matrix", icon: "🟢" },
-        { id: "cyberhud", name: "WebZonebw Cyborg HUD", icon: "🤖" },
-        { id: "cybersec", name: "WebZonebw Bio-Scan", icon: "🔐" },
-        { id: "hologram", name: "WebZonebw Holo-Grid", icon: "🌐" },
-        { id: "glitch", name: "WebZonebw Glitch", icon: "⚡" },
-        { id: "popart", name: "WebZonebw Comic", icon: "🖌️" },
-        { id: "space", name: "WebZonebw Space", icon: "🚀" },
-        { id: "superhero", name: "WebZonebw Hero", icon: "🦸" },
+        // 🌍 SCENE & ATMOSPHERIC SHADERS (FULL-CANVAS COMPOSITIONS)
+        { id: "matrix", name: "Matrix Rain", icon: "🟢", category: "scene", target: "scene", desc: "Cascading digital green kanji code matrix stream" },
+        { id: "noir", name: "Leica Noir", icon: "🖤", category: "scene", target: "scene", desc: "High-contrast silver gelatin black-and-white 35mm film" },
+        { id: "vintage90s", name: "Retro 90s", icon: "🎞️", category: "scene", target: "scene", desc: "Warm Kodak Portra analog grain with soft vignette" },
+        { id: "cinematic", name: "35mm Film", icon: "🎬", category: "scene", target: "scene", desc: "Anamorphic widescreen teal & orange color grade" },
+        { id: "glitch", name: "Glitch FX", icon: "⚡", category: "scene", target: "scene", desc: "RGB channel chromatic aberration and scanline shifts" },
+        { id: "popart", name: "Pop Comic", icon: "🖌️", category: "scene", target: "scene", desc: "Roy Lichtenstein halftone pop-art print dots" },
+        { id: "space", name: "Deep Space", icon: "🚀", category: "scene", target: "scene", desc: "Starlight nebula cosmic aura with drifting stardust" },
+        { id: "hologram", name: "Holo-Grid", icon: "🌐", category: "scene", target: "scene", desc: "Blue wireframe laser scanline perspective grid" },
+        { id: "cyberpunk", name: "Neon Cyber", icon: "💡", category: "scene", target: "scene", desc: "Vibrant synthwave neon magenta & cyan wash" },
+        { id: "webzonebw", name: "Signature BW", icon: "🌐", category: "scene", target: "scene", desc: "WebZonebw official high-definition monochrome" },
 
-        // 📰 MAGAZINES
-        { id: "time", name: "WebZonebw TIME", icon: "🟥" },
-        { id: "wired", name: "WebZonebw WIRED", icon: "🚀" },
-        { id: "forbes", name: "WebZonebw Forbes", icon: "💼" },
-        { id: "vogue", name: "WebZonebw VOGUE", icon: "🕶️" },
-        { id: "cyber", name: "WebZonebw CyberMag", icon: "🎮" },
+        // 📰 EDITORIAL MAGAZINE COVERS
+        { id: "time", name: "TIME Mag", icon: "🟥", category: "magazine", target: "magazine", desc: "Iconic red border Person of the Year cover" },
+        { id: "vogue", name: "VOGUE", icon: "🕶️", category: "magazine", target: "magazine", desc: "Haute couture high-fashion editorial title" },
+        { id: "forbes", name: "Forbes", icon: "💼", category: "magazine", target: "magazine", desc: "World's Top Innovators billionaire edition" },
+        { id: "wired", name: "WIRED", icon: "🚀", category: "magazine", target: "magazine", desc: "Cutting-edge Silicon Valley tech cover" },
+        { id: "cyber", name: "CyberMag", icon: "🎮", category: "magazine", target: "magazine", desc: "Year 2077 Cyberpunk gaming publication" },
 
-        // 🎃 HALLOWEEN FX
-        { id: "pumpkin", name: "WebZonebw Pumpkin", icon: "🎃" },
-        { id: "ghost", name: "WebZonebw Ghost", icon: "👻" },
-        { id: "zombie", name: "WebZonebw Zombie", icon: "🧟" },
-        { id: "vampire", name: "WebZonebw Vampire", icon: "🧛" },
-        { id: "skeleton", name: "WebZonebw Skeleton", icon: "💀" },
-        { id: "spider", name: "WebZonebw Spider", icon: "🕷️" },
-        { id: "bats", name: "WebZonebw Bats", icon: "🦇" }
+        // 🎃 HALLOWEEN & SPOOKY MASKS
+        { id: "skeleton", name: "Bio-Skull", icon: "💀", category: "halloween", target: "face", desc: "Glowing bio-luminescent skull eye sockets & jaw" },
+        { id: "pumpkin", name: "Jack Lantern", icon: "🎃", category: "halloween", target: "face", desc: "Carved flaming jack-o'-lantern mask overlay" },
+        { id: "ghost", name: "Phantom", icon: "👻", category: "halloween", target: "scene", desc: "Ethereal translucent floating specters" },
+        { id: "zombie", name: "Zombie FX", icon: "🧟", category: "halloween", target: "face", desc: "Radioactive undead green toxic infection" },
+        { id: "vampire", name: "Vampire", icon: "🧛", category: "halloween", target: "face", desc: "Crimson blood vignette and razor vampire fangs" },
+        { id: "spider", name: "Spider Web", icon: "🕷️", category: "halloween", target: "scene", desc: "Creepy crawling arachnid webs on screen edges" },
+        { id: "bats", name: "Night Bats", icon: "🦇", category: "halloween", target: "scene", desc: "Swarm of nocturnal bats fluttering across the night sky" }
     ];
+
+    const snapLensTrack = document.getElementById("snapLensTrack");
+    const smartStatusIcon = document.getElementById("smartStatusIcon");
+    const smartStatusText = document.getElementById("smartStatusText");
+    const smartInventoryBadge = document.getElementById("smartInventoryBadge");
+    const faceChipDot = document.getElementById("faceChipDot");
+    const faceChipStatus = document.getElementById("faceChipStatus");
+    const faceProximityMetric = document.getElementById("faceProximityMetric");
+    const faceLightingMetric = document.getElementById("faceLightingMetric");
+    const touchTargetCrosshair = document.getElementById("touchTargetCrosshair");
+
+    // Dynamic Filter Inventory Manager based on Face Detection & Active Category
+    function getActiveInventoryFilters() {
+        if (activeSmartCategory === "face") {
+            return allFilterConfigs.filter(f => f.category === "face");
+        } else if (activeSmartCategory === "scene") {
+            return allFilterConfigs.filter(f => f.category === "scene");
+        } else if (activeSmartCategory === "magazine") {
+            return allFilterConfigs.filter(f => f.category === "magazine");
+        } else if (activeSmartCategory === "halloween") {
+            return allFilterConfigs.filter(f => f.category === "halloween");
+        } else if (activeSmartCategory === "all") {
+            return allFilterConfigs;
+        }
+
+        // "smart" category: Auto-prioritize based on real-time face detection
+        if (isFaceDetected) {
+            // Put face AR lenses first, then scene, then magazine, then halloween
+            const faceFilters = allFilterConfigs.filter(f => f.category === "face");
+            const otherFilters = allFilterConfigs.filter(f => f.category !== "face");
+            return [...faceFilters, ...otherFilters];
+        } else {
+            // Put scene & magazine filters first when face is not actively detected
+            const sceneFilters = allFilterConfigs.filter(f => f.category === "scene" || f.category === "magazine");
+            const otherFilters = allFilterConfigs.filter(f => f.category !== "scene" && f.category !== "magazine");
+            return [...sceneFilters, ...otherFilters];
+        }
+    }
+
+    // Render / Update Snapchat Circular Lens Carousel Dynamically
+    function renderSmartLensTrack() {
+        if (!snapLensTrack) return;
+        const currentList = getActiveInventoryFilters();
+        const displayLimit = 12; // High-performance smooth carousel size
+        const visibleLenses = currentList.slice(0, displayLimit);
+
+        // Make sure currentFilter is included in the visible lenses so user never loses their active selection
+        if (!visibleLenses.some(f => f.id === currentFilter)) {
+            const currentCfg = allFilterConfigs.find(f => f.id === currentFilter);
+            if (currentCfg) visibleLenses.unshift(currentCfg);
+        }
+
+        snapLensTrack.innerHTML = "";
+
+        visibleLenses.forEach(config => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `er-lens-bubble ${config.id === currentFilter ? "active" : ""}`;
+            btn.dataset.filter = config.id;
+            btn.title = `${config.name} (${config.category.toUpperCase()})`;
+
+            const circle = document.createElement("div");
+            circle.className = `lens-bubble-circle ${config.id === currentFilter ? "active-glow" : ""}`;
+            circle.textContent = config.icon;
+
+            const label = document.createElement("span");
+            label.className = "lens-bubble-label";
+            label.textContent = config.name.split(" ")[0]; // Clean short label
+
+            btn.appendChild(circle);
+            btn.appendChild(label);
+
+            btn.addEventListener("click", () => {
+                selectFilter(config.id);
+            });
+
+            snapLensTrack.appendChild(btn);
+        });
+
+        // Add "••• More" button at the end
+        const moreBtn = document.createElement("button");
+        moreBtn.type = "button";
+        moreBtn.className = "er-lens-bubble more-lens-btn";
+        moreBtn.id = "openAllEffectsBtn";
+        moreBtn.title = "View All 30+ Effects in Studio Panel";
+        moreBtn.innerHTML = `
+            <div class="lens-bubble-circle">•••</div>
+            <span class="lens-bubble-label">More</span>
+        `;
+        moreBtn.addEventListener("click", () => {
+            const effectsPanel = document.getElementById("effectsPanel");
+            if (effectsPanel) effectsPanel.classList.add("open");
+        });
+        snapLensTrack.appendChild(moreBtn);
+    }
+
+    // Update Telemetry & Status Badges
+    function updateSmartInventoryUI() {
+        const inventory = getActiveInventoryFilters();
+        const faceCount = allFilterConfigs.filter(f => f.category === "face").length;
+        const sceneCount = allFilterConfigs.filter(f => f.category === "scene").length;
+
+        if (smartStatusText && smartStatusIcon) {
+            if (isTouchLocked) {
+                smartStatusIcon.textContent = "🎯";
+                smartStatusText.textContent = "Touch-Locked AR Active";
+            } else if (isFaceDetected) {
+                smartStatusIcon.textContent = "👤";
+                smartStatusText.textContent = `Smart Face AR: Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+            } else {
+                smartStatusIcon.textContent = "🌍";
+                smartStatusText.textContent = "Smart Scene Shaders: Active";
+            }
+        }
+
+        if (smartInventoryBadge) {
+            if (activeSmartCategory === "face" || (activeSmartCategory === "smart" && isFaceDetected)) {
+                smartInventoryBadge.textContent = `👤 ${faceCount} Face AR Lenses Ready`;
+                smartInventoryBadge.classList.remove("scene-mode");
+            } else if (activeSmartCategory === "scene" || activeSmartCategory === "magazine") {
+                smartInventoryBadge.textContent = `🌍 ${sceneCount} Scene Shaders Active`;
+                smartInventoryBadge.classList.add("scene-mode");
+            } else {
+                smartInventoryBadge.textContent = `✨ ${inventory.length} Effects Available`;
+                smartInventoryBadge.classList.remove("scene-mode");
+            }
+        }
+
+        // Mobile Telemetry Top Bar
+        if (faceChipDot && faceChipStatus) {
+            faceChipDot.className = "face-chip-dot";
+            if (isTouchLocked) {
+                faceChipDot.classList.add("touch-locked");
+                faceChipStatus.textContent = "🎯 Touch Lock Anchored";
+            } else if (isFaceDetected) {
+                faceChipDot.classList.add("locked");
+                faceChipStatus.textContent = `👤 Face Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+            } else {
+                faceChipDot.classList.add("scanning");
+                faceChipStatus.textContent = "👤 Auto-Scanning Face...";
+            }
+        }
+
+        if (faceProximityMetric) {
+            if (currentProximity === "close") {
+                faceProximityMetric.textContent = "📐 Move Back";
+            } else if (currentProximity === "far") {
+                faceProximityMetric.textContent = "🔍 Step Closer";
+            } else {
+                faceProximityMetric.textContent = "🎯 Optimal Range";
+            }
+        }
+
+        if (faceLightingMetric) {
+            if (currentLighting === "low") {
+                faceLightingMetric.textContent = "🌙 Low Light";
+            } else if (currentLighting === "bright") {
+                faceLightingMetric.textContent = "☀️ High Lumens";
+            } else {
+                faceLightingMetric.textContent = "⚡ Studio Light";
+            }
+        }
+    }
 
     let toastTimeout = null;
 
@@ -421,7 +601,8 @@ function initWebZoneERStudio() {
         const config = allFilterConfigs.find(c => c.id === filterName) || {
             id: filterName,
             name: filterName.toUpperCase(),
-            icon: "✨"
+            icon: "✨",
+            category: "scene"
         };
 
         // Update active pill text
@@ -447,25 +628,29 @@ function initWebZoneERStudio() {
             }
         }
 
-        // Update Snapchat circular lens tray active state
-        if (snapLensBubbles && snapLensBubbles.length > 0) {
-            snapLensBubbles.forEach(bubble => {
-                if (bubble.dataset.filter === filterName) {
-                    bubble.classList.add("active");
-                    bubble.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-                } else {
-                    bubble.classList.remove("active");
-                }
-            });
-        }
-
-        // Find button corresponding to selected filter in hidden drawer
-        filterBtns.forEach(b => {
-            if (b.dataset.filter === filterName) {
-                b.classList.add("active");
-                b.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        // Sync Snapchat circular lens tray active state
+        const bubbles = document.querySelectorAll(".er-lens-bubble");
+        bubbles.forEach(bubble => {
+            if (bubble.dataset.filter === filterName) {
+                bubble.classList.add("active");
+                const circle = bubble.querySelector(".lens-bubble-circle");
+                if (circle) circle.classList.add("active-glow");
+                bubble.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
             } else {
-                b.classList.remove("active");
+                bubble.classList.remove("active");
+                const circle = bubble.querySelector(".lens-bubble-circle");
+                if (circle) circle.classList.remove("active-glow");
+            }
+        });
+
+        // Sync Right Drawer / Panel effect cards
+        const effectCards = document.querySelectorAll(".effect-card");
+        effectCards.forEach(card => {
+            if (card.dataset.filter === filterName) {
+                card.classList.add("active");
+                card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+            } else {
+                card.classList.remove("active");
             }
         });
 
@@ -474,7 +659,6 @@ function initWebZoneERStudio() {
         if (isMag) {
             activeMagazine = filterName;
             if (magPanel) magPanel.classList.add("show");
-            // Also sync mag items
             magItemBtns.forEach(btn => {
                 btn.classList.toggle("active", btn.dataset.mag === filterName);
             });
@@ -489,15 +673,17 @@ function initWebZoneERStudio() {
     }
 
     function slideNext() {
-        const currIdx = allFilterConfigs.findIndex(f => f.id === currentFilter);
-        const nextIdx = (currIdx + 1) % allFilterConfigs.length;
-        selectFilter(allFilterConfigs[nextIdx].id, "left");
+        const inventory = getActiveInventoryFilters();
+        const currIdx = inventory.findIndex(f => f.id === currentFilter);
+        const nextIdx = (currIdx + 1 + inventory.length) % inventory.length;
+        selectFilter(inventory[nextIdx].id, "left");
     }
 
     function slidePrev() {
-        const currIdx = allFilterConfigs.findIndex(f => f.id === currentFilter);
-        const prevIdx = (currIdx - 1 + allFilterConfigs.length) % allFilterConfigs.length;
-        selectFilter(allFilterConfigs[prevIdx].id, "right");
+        const inventory = getActiveInventoryFilters();
+        const currIdx = inventory.findIndex(f => f.id === currentFilter);
+        const prevIdx = (currIdx - 1 + inventory.length) % inventory.length;
+        selectFilter(inventory[prevIdx].id, "right");
     }
 
     // Quick WebZoneBW signature button
