@@ -85,7 +85,8 @@
 
         initialized: false,
 
-        expanded: false,
+        // Compact corner player is the default; visitors can expand it when needed.
+        expanded: true,
 
         savedPosition: 0,
 
@@ -3157,6 +3158,67 @@
             }
 
 
+            /* Compact cloud player: keep only artwork, play/pause and expand. */
+            .webzonebw-global-player.webzonebw-player-minimized {
+
+                left: auto;
+                right: max(18px, env(safe-area-inset-right));
+                bottom: max(18px, env(safe-area-inset-bottom));
+                width: auto;
+                border: 1px solid rgba(80, 140, 255, .34);
+                border-radius: 999px;
+                box-shadow: 0 12px 32px rgba(0,0,0,.42), 0 0 22px rgba(79, 70, 229, .16);
+            }
+
+            .webzonebw-player-minimized .webzonebw-player-inner {
+
+                width: auto;
+                min-height: 58px;
+                margin: 0;
+                padding: 7px;
+                display: flex;
+                gap: 7px;
+            }
+
+            .webzonebw-player-minimized .webzonebw-track-text,
+            .webzonebw-player-minimized #webzonebwPrevious,
+            .webzonebw-player-minimized #webzonebwNext,
+            .webzonebw-player-minimized #webzonebwMute,
+            .webzonebw-player-minimized #webzonebwVolume,
+            .webzonebw-player-minimized #webzonebwPlaylist {
+
+                display: none;
+            }
+
+            .webzonebw-player-minimized .webzonebw-track-icon {
+
+                width: 42px;
+                height: 42px;
+                flex-basis: 42px;
+                border-radius: 50%;
+            }
+
+            .webzonebw-player-minimized .webzonebw-main-controls,
+            .webzonebw-player-minimized .webzonebw-volume-area {
+
+                display: flex;
+                gap: 7px;
+            }
+
+            .webzonebw-player-minimized .webzonebw-play-btn {
+
+                width: 44px;
+                height: 44px;
+            }
+
+            .webzonebw-player-minimized #webzonebwMinimize {
+
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+            }
+
+
             /* =============================================
                TABLET
                ============================================= */
@@ -3384,6 +3446,20 @@
 
             injectStyles();
 
+        }
+
+        // Start compact on every page so the player never consumes page width.
+        player.classList.toggle(
+            "webzonebw-player-minimized",
+            state.expanded
+        );
+
+        if (minimizeButton) {
+            minimizeButton.textContent = state.expanded ? "↑" : "↓";
+            minimizeButton.setAttribute(
+                "aria-label",
+                state.expanded ? "Expand player" : "Minimize player"
+            );
         }
 
 

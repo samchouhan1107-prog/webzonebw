@@ -205,7 +205,12 @@
         if (status) status.textContent = "💽 Local MP3 • Come Together";
 
         playButton?.addEventListener("click", () => {
-            if (audio.paused) audio.play().catch(error => console.error("Soundbox audio could not play:", error));
+            if (audio.paused) {
+                // The corner player is present on every page. Pause it before
+                // the large Sound Box console takes control of the same stream.
+                window.WEBZONEBWSoundBox?.pause();
+                audio.play().catch(error => console.error("Soundbox audio could not play:", error));
+            }
             else audio.pause();
         });
         $("btnPrev")?.addEventListener("click", () => { audio.currentTime = 0; audio.play(); });
@@ -220,7 +225,11 @@
         audio.addEventListener("loadedmetadata", () => {
             if (total) total.textContent = formatTime(audio.duration);
             if (resumePosition > 0 && resumePosition < audio.duration) audio.currentTime = resumePosition;
-            if (shouldResume) audio.play().catch(() => setPlayVisual(false));
+            // On Sound Box, the shared corner player restores playback first.
+            // Avoid two audio elements playing the same MP3 at the same time.
+            if (shouldResume && !window.WEBZONEBWSoundBox) {
+                audio.play().catch(() => setPlayVisual(false));
+            }
             shouldResume = false;
         });
         audio.addEventListener("timeupdate", () => {
