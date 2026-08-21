@@ -6226,7 +6226,12 @@ body.light-mode .fab-role { color: var(--fab-accent); }
     font-weight: 700;
 }
 
-.fabfour-grid { margin-top: 20px; }
+.fabfour-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
 
 .fab-card {
     --fab-accent: var(--brand-purple);
@@ -6238,6 +6243,10 @@ body.light-mode .fab-role { color: var(--fab-accent); }
     border-radius: var(--radius-lg);
     background: linear-gradient(145deg, var(--surface-card-elevated), var(--surface-card));
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
 }
 
@@ -6283,16 +6292,29 @@ body.light-mode .fab-role { color: var(--fab-accent); }
     font-size: 27px;
 }
 
-.fab-card h4 { color: var(--text-heading); }
+.fab-card h4 {
+    margin: 0 0 4px;
+    color: var(--text-heading);
+    font-size: 15px;
+    font-weight: 800;
+}
 
 .fab-role {
     padding: 4px 8px;
     border-radius: var(--radius-full);
     background: rgba(139, 92, 246, .10);
     color: var(--fab-accent);
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.fab-card p { color: var(--text-muted); }
+.fab-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
 
 /* One sidebar rule set for every standard page and theme. */
 .sidebar, .er-sidebar {
