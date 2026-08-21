@@ -87,7 +87,10 @@
 
         expanded: false,
 
-        savedPosition: 0
+        savedPosition: 0,
+
+        // Retain whether the visitor was listening before navigating to a new page.
+        resumeOnLoad: false
 
     };
 
@@ -678,6 +681,8 @@
 
             }
 
+            state.resumeOnLoad = saved.isPlaying === true;
+
         } catch (error) {
 
             console.warn(
@@ -711,7 +716,10 @@
                             : 0,
 
                     volume:
-                        state.volume
+                        state.volume,
+
+                    isPlaying:
+                        state.isPlaying
 
                 })
 
@@ -1181,7 +1189,9 @@
 
         state.duration = 0;
 
-        state.savedPosition = 0;
+        if (!options.restorePosition) {
+            state.savedPosition = 0;
+        }
 
 
         /*
@@ -3404,7 +3414,8 @@
         loadTrack(
             state.currentIndex,
             {
-                autoplay: false
+                autoplay: state.resumeOnLoad,
+                restorePosition: true
             }
         );
 

@@ -6174,6 +6174,152 @@ body.light-mode .cam-floating-badge {
     line-height: 1.4;
 }
 
+/* Final shared-theme safeguards: keep navigation and Sound Box surfaces aligned
+   after page-specific styles have loaded. */
+.sidebar, .er-sidebar { background: var(--bg-sidebar); border-right-color: var(--border-color); }
+.sidebar ul li a, .sidebar-nav ul li a { color: var(--text-secondary); }
+.sidebar ul li a:hover, .sidebar-nav ul li a:hover { background: var(--surface-badge); color: var(--text-heading); border-left-color: var(--brand-purple); }
+.sidebar ul li a.active, .sidebar-nav ul li a.active { background: linear-gradient(90deg, var(--surface-badge), transparent); color: var(--text-heading); border-left-color: var(--brand-purple-hover); }
+
+body.light-mode .fabfour-spotlight-section { background: radial-gradient(circle at 8% 0%, rgba(139, 92, 246, .12), transparent 30%), var(--surface-card); }
+body.light-mode .fab-card { background: linear-gradient(145deg, var(--surface-card-elevated), var(--surface-card)); border-color: var(--border-color); }
+body.light-mode .fab-card h4 { color: var(--text-heading); }
+body.light-mode .fab-card p { color: var(--text-muted); }
+body.light-mode .fab-role { color: var(--fab-accent); }
+
+/* Sound Box member spotlight — uses the same navy / violet / gold system as the shared sidebar. */
+.fabfour-spotlight-section {
+    position: relative;
+    margin: 36px 0 32px;
+    padding: 24px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    background: radial-gradient(circle at 8% 0%, rgba(139, 92, 246, .18), transparent 30%), radial-gradient(circle at 95% 100%, rgba(0, 242, 254, .10), transparent 28%), var(--surface-card);
+    box-shadow: var(--shadow-card);
+}
+
+.fabfour-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.fabfour-heading .section-title { margin: 2px 0 0; }
+
+.section-kicker {
+    display: block;
+    color: var(--text-purple);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .14em;
+}
+
+.fabfour-heading-note {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color-gold);
+    border-radius: var(--radius-full);
+    background: var(--surface-badge-gold);
+    color: var(--text-gold);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.fabfour-grid { margin-top: 20px; }
+
+.fab-card {
+    --fab-accent: var(--brand-purple);
+    position: relative;
+    min-height: 232px;
+    overflow: hidden;
+    padding: 26px 20px 20px;
+    border-color: var(--border-color);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(145deg, var(--surface-card-elevated), var(--surface-card));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.fab-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--fab-accent), transparent);
+}
+
+.fab-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--fab-accent);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .26), 0 0 22px rgba(139, 92, 246, .16);
+}
+
+.fab-card-lennon { --fab-accent: var(--brand-purple); }
+.fab-card-mccartney { --fab-accent: var(--brand-gold); }
+.fab-card-harrison { --fab-accent: var(--brand-cyan); }
+.fab-card-starr { --fab-accent: var(--brand-green); }
+
+.fab-card-number {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    color: var(--text-dim);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .12em;
+}
+
+.fab-emoji {
+    display: grid;
+    width: 54px;
+    height: 54px;
+    margin-bottom: 14px;
+    place-items: center;
+    border: 1px solid var(--fab-accent);
+    border-radius: 18px;
+    background: rgba(139, 92, 246, .12);
+    box-shadow: 0 0 18px rgba(139, 92, 246, .14);
+    font-size: 27px;
+}
+
+.fab-card h4 { color: var(--text-heading); }
+
+.fab-role {
+    padding: 4px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(139, 92, 246, .10);
+    color: var(--fab-accent);
+}
+
+.fab-card p { color: var(--text-muted); }
+
+/* One sidebar rule set for every standard page and theme. */
+.sidebar, .er-sidebar {
+    background: var(--bg-sidebar);
+    border-right-color: var(--border-color);
+    box-shadow: 12px 0 32px rgba(0, 0, 0, .14);
+}
+
+.sidebar ul li a, .sidebar-nav ul li a { color: var(--text-secondary); }
+.sidebar ul li a:hover, .sidebar-nav ul li a:hover {
+    background: var(--surface-badge);
+    color: var(--text-heading);
+    border-left-color: var(--brand-purple);
+}
+.sidebar ul li a.active, .sidebar-nav ul li a.active {
+    background: linear-gradient(90deg, var(--surface-badge), transparent);
+    color: var(--text-heading);
+    border-left-color: var(--brand-purple-hover);
+    box-shadow: 0 2px 12px var(--brand-purple-glow);
+}
+
+@media (max-width: 640px) {
+    .fabfour-spotlight-section { padding: 18px; }
+    .fabfour-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+    .fab-card { min-height: 0; }
+}
+
 /* ==========================================================
    LIVE BOX SETTINGS SLIDER TAB & STUDIO CONSOLE DRAWER
    ========================================================== */
@@ -7149,20 +7295,20 @@ body.light-mode .track-action-btn:hover {
 }
 
 body.light-mode .fab-card {
-    background: #ffffff;
-    border-color: #e2e8f0;
+    background: linear-gradient(145deg, var(--surface-card-elevated), var(--surface-card));
+    border-color: var(--border-color);
 }
 
 body.light-mode .fab-card h4 {
-    color: #0f172a;
+    color: var(--text-heading);
 }
 
 body.light-mode .fab-card p {
-    color: #64748b;
+    color: var(--text-muted);
 }
 
 body.light-mode .fab-role {
-    color: #b45309;
+    color: var(--fab-accent);
 }
 
 body.light-mode .how-to-card,

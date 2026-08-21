@@ -150,6 +150,20 @@
         const audio = new Audio(AUDIO_PATH);
         audio.preload = "metadata";
         audio.volume = 0.75;
+        const playbackKey = "webzonebw_soundbox_state";
+        let resumePosition = 0;
+        let shouldResume = false;
+
+        try {
+            const saved = JSON.parse(sessionStorage.getItem(playbackKey) || "null");
+            if (saved) {
+                resumePosition = Number.isFinite(saved.currentTime) ? saved.currentTime : 0;
+                shouldResume = saved.isPlaying === true;
+                if (Number.isFinite(saved.volume)) audio.volume = saved.volume;
+            }
+        } catch (_) {
+            // Playback continuity is optional; the player still works without storage access.
+        }
 
         const $ = id => document.getElementById(id);
         const title = $("nowPlayingTitle");
@@ -196,13 +210,19 @@
         });
         $("btnPrev")?.addEventListener("click", () => { audio.currentTime = 0; audio.play(); });
         $("btnNext")?.addEventListener("click", () => { audio.currentTime = 0; audio.play(); });
+        if (volume) volume.value = String(Math.round(audio.volume * 100));
         volume?.addEventListener("input", () => { audio.volume = Number(volume.value) / 100; });
         scrub?.addEventListener("click", event => {
             if (!audio.duration) return;
             const rect = scrub.getBoundingClientRect();
             audio.currentTime = ((event.clientX - rect.left) / rect.width) * audio.duration;
         });
-        audio.addEventListener("loadedmetadata", () => { if (total) total.textContent = formatTime(audio.duration); });
+        audio.addEventListener("loadedmetadata", () => {
+            if (total) total.textContent = formatTime(audio.duration);
+            if (resumePosition > 0 && resumePosition < audio.duration) audio.currentTime = resumePosition;
+            if (shouldResume) audio.play().catch(() => setPlayVisual(false));
+            shouldResume = false;
+        });
         audio.addEventListener("timeupdate", () => {
             if (current) current.textContent = formatTime(audio.currentTime);
             if (progress && audio.duration) progress.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
@@ -210,5 +230,17 @@
         audio.addEventListener("play", () => setPlayVisual(true));
         audio.addEventListener("pause", () => setPlayVisual(false));
         audio.addEventListener("ended", () => { audio.currentTime = 0; setPlayVisual(false); });
+        window.addEventListener("pagehide", () => {
+            try {
+                sessionStorage.setItem(playbackKey, JSON.stringify({
+                    currentIndex: 0,
+                    currentTime: audio.currentTime || 0,
+                    volume: audio.volume,
+                    isPlaying: !audio.paused && !audio.ended
+                }));
+            } catch (_) {
+                // Ignore storage failures.
+            }
+        });
     });
 })();
