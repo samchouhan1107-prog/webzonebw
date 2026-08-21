@@ -4,9 +4,8 @@
 <head>
 
     <!-- =====================================================
-         WEBZONEBW — ABOUT PAGE
-         Production HTML5 • SEO • Accessibility •
-         Structured Data • Responsive Design
+         WEBZONEBW — ABOUT
+         Production HTML5 + SEO + AI Structured Data
          ===================================================== -->
 
     <meta charset="UTF-8">
@@ -14,10 +13,17 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>About Sameer Chouhan | IT Support &amp; Technology — WEBZONEBW</title>
+
+    <!-- =====================================================
+         BASIC DOCUMENT INFORMATION
+         ===================================================== -->
+
+    <title>
+        About Sameer Chouhan | IT Support &amp; Technology — WEBZONEBW
+    </title>
 
     <meta name="description"
-          content="Learn about Sameer Chouhan, an IT Support and technology professional focused on networking, systems integration, technical support, web development and continuous technology learning through WEBZONEBW.">
+          content="Learn about Sameer Chouhan, his IT Support experience, networking, systems integration, Microsoft 365, web development, technical skills, education and career goals through WEBZONEBW.">
 
     <meta name="author"
           content="Sameer Chouhan">
@@ -27,18 +33,6 @@
 
     <meta name="theme-color"
           content="#0b0f19">
-
-    <meta name="application-name"
-          content="WEBZONEBW">
-
-    <meta name="apple-mobile-web-app-capable"
-          content="yes">
-
-    <meta name="apple-mobile-web-app-title"
-          content="WEBZONEBW">
-
-    <meta name="mobile-web-app-capable"
-          content="yes">
 
     <link rel="canonical"
           href="https://webzonebw.in/about.html">
@@ -77,7 +71,7 @@
           content="About Sameer Chouhan | IT Support &amp; Technology — WEBZONEBW">
 
     <meta property="og:description"
-          content="Explore Sameer Chouhan's technical background, IT Support experience, networking, systems integration, web development and professional goals.">
+          content="Explore Sameer Chouhan's IT Support experience, technical skills, education, systems integration, networking, web development and career direction.">
 
     <meta property="og:url"
           content="https://webzonebw.in/about.html">
@@ -93,7 +87,7 @@
 
 
     <!-- =====================================================
-         X / TWITTER SOCIAL PREVIEW
+         TWITTER / SOCIAL PREVIEW
          ===================================================== -->
 
     <meta name="twitter:card"
@@ -103,14 +97,14 @@
           content="About Sameer Chouhan — WEBZONEBW">
 
     <meta name="twitter:description"
-          content="IT Support, networking, systems integration, web development and technology projects.">
+          content="IT Support, networking, systems integration, web development, technical skills and professional background.">
 
     <meta name="twitter:image"
           content="https://webzonebw.in/assets/images/og-image.png">
 
 
     <!-- =====================================================
-         MAIN WEBZONEBW STYLESHEET
+         MAIN STYLESHEET
          ===================================================== -->
 
     <link rel="stylesheet"
@@ -118,352 +112,7 @@
 
 
     <!-- =====================================================
-         ABOUT PAGE POLISH
-         
-         These styles are intentionally lightweight.
-         The main WEBZONEBW stylesheet remains the primary
-         design system.
-         ===================================================== -->
-
-    <style>
-
-        /* =================================================
-           GENERAL PAGE POLISH
-           ================================================= */
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
-        }
-
-
-        /* =================================================
-           ABOUT ICONS
-           ================================================= */
-
-        .about-icon {
-            width: 34px;
-            height: 34px;
-
-            min-width: 34px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 9px;
-
-            font-size: 1rem;
-            line-height: 1;
-
-            background: rgba(255, 255, 255, 0.045);
-
-            border: 1px solid rgba(255, 255, 255, 0.08);
-
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.035);
-
-            transition:
-                transform 180ms ease,
-                background-color 180ms ease,
-                border-color 180ms ease;
-        }
-
-        .about-icon:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.075);
-            border-color: rgba(255, 255, 255, 0.14);
-        }
-
-
-        /* =================================================
-           NAVIGATION ICONS
-           ================================================= */
-
-        .sidebar-nav .nav-icon {
-            width: 30px;
-            height: 30px;
-
-            min-width: 30px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 8px;
-
-            font-size: 0.95rem;
-            line-height: 1;
-
-            transition:
-                transform 180ms ease,
-                background-color 180ms ease;
-        }
-
-        .sidebar-nav a:hover .nav-icon {
-            transform: scale(1.06);
-            background: rgba(255, 255, 255, 0.055);
-        }
-
-        .sidebar-nav a.active .nav-icon {
-            transform: scale(1.04);
-        }
-
-
-        /* =================================================
-           HEADER UTILITY BUTTONS
-           ================================================= */
-
-        .about-header-icon {
-            width: 42px;
-            height: 42px;
-
-            min-width: 42px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 11px;
-
-            text-decoration: none;
-
-            font-size: 1.05rem;
-            line-height: 1;
-
-            background: rgba(255, 255, 255, 0.045);
-
-            border: 1px solid rgba(255, 255, 255, 0.08);
-
-            transition:
-                transform 180ms ease,
-                background-color 180ms ease,
-                border-color 180ms ease;
-        }
-
-        .about-header-icon:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.075);
-            border-color: rgba(255, 255, 255, 0.14);
-        }
-
-        .about-header-icon:active {
-            transform: scale(0.95);
-        }
-
-        .about-header-icon:focus-visible,
-        .about-mobile-er-btn:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 3px;
-        }
-
-
-        /* =================================================
-           MOBILE ER BUTTON
-           ================================================= */
-
-        .about-mobile-er-btn {
-            width: 40px;
-            height: 40px;
-
-            min-width: 40px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 10px;
-
-            text-decoration: none;
-
-            font-size: 1rem;
-            line-height: 1;
-
-            transition:
-                transform 180ms ease,
-                background-color 180ms ease;
-        }
-
-        .about-mobile-er-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .about-mobile-er-btn:active {
-            transform: scale(0.95);
-        }
-
-
-        /* =================================================
-           QUICK INFORMATION LIST
-           ================================================= */
-
-        .quick-info ul li {
-            transition:
-                transform 180ms ease,
-                background-color 180ms ease;
-        }
-
-        .quick-info ul li:hover {
-            transform: translateX(3px);
-        }
-
-
-        /* =================================================
-           SKILL BARS
-           ================================================= */
-
-        .skill-fill {
-            transform-origin: left center;
-
-            transition:
-                width 900ms cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-
-        /* =================================================
-           CONTENT LINKS
-           ================================================= */
-
-        .main-content a {
-            transition:
-                color 180ms ease,
-                opacity 180ms ease;
-        }
-
-
-        /* =================================================
-           FOOTER LINKS
-           ================================================= */
-
-        .footer-links a {
-            transition:
-                color 180ms ease,
-                opacity 180ms ease,
-                transform 180ms ease;
-        }
-
-        .footer-links a:hover {
-            transform: translateY(-1px);
-        }
-
-
-        /* =================================================
-           LIVE STATUS
-           ================================================= */
-
-        .about-live-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .about-live-dot {
-            width: 7px;
-            height: 7px;
-
-            min-width: 7px;
-
-            border-radius: 50%;
-
-            background: #72f7a8;
-
-            box-shadow:
-                0 0 8px rgba(114, 247, 168, 0.6);
-
-            animation:
-                aboutStatusPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes aboutStatusPulse {
-
-            0%,
-            100% {
-                opacity: 0.55;
-                transform: scale(0.88);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.12);
-            }
-
-        }
-
-
-        /* =================================================
-           USER CARD
-           ================================================= */
-
-        .sidebar-user-card {
-            transition:
-                transform 220ms ease,
-                background-color 220ms ease;
-        }
-
-        .sidebar-user-card:hover {
-            transform: translateY(-2px);
-        }
-
-
-        /* =================================================
-           REDUCED MOTION
-           ================================================= */
-
-        @media (prefers-reduced-motion: reduce) {
-
-            html {
-                scroll-behavior: auto;
-            }
-
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-
-        }
-
-
-        /* =================================================
-           MOBILE
-           ================================================= */
-
-        @media (max-width: 600px) {
-
-            .about-header-icon {
-                width: 38px;
-                height: 38px;
-                min-width: 38px;
-                border-radius: 9px;
-            }
-
-            .about-mobile-er-btn {
-                width: 38px;
-                height: 38px;
-                min-width: 38px;
-            }
-
-            .about-icon {
-                width: 31px;
-                height: 31px;
-                min-width: 31px;
-                border-radius: 8px;
-            }
-
-        }
-
-    </style>
-
-
-    <!-- =====================================================
-         WEBZONEBW — PERSON STRUCTURED DATA
+         WEBZONEBW — PERSON / ABOUT PAGE SCHEMA
          ===================================================== -->
 
     <script type="application/ld+json">
@@ -474,13 +123,19 @@
         "name": "Sameer Chouhan",
         "url": "https://webzonebw.in/about.html",
         "jobTitle": "IT Support & Technology Professional",
-        "description": "IT Support and technology professional focused on systems integration, networking, infrastructure, web development and continuous technical learning."
+        "description": "IT Support and technology professional with experience and interests in systems integration, networking, infrastructure, web development and emerging technology.",
+        "worksFor": {
+            "@type": "Organization",
+            "@id": "https://webzonebw.in/#organization",
+            "name": "WEBZONEBW",
+            "url": "https://webzonebw.in/"
+        }
     }
     </script>
 
 
     <!-- =====================================================
-         WEBZONEBW — ABOUT PAGE STRUCTURED DATA
+         WEBZONEBW — ABOUT PAGE SCHEMA
          ===================================================== -->
 
     <script type="application/ld+json">
@@ -490,12 +145,9 @@
         "@id": "https://webzonebw.in/about.html#aboutpage",
         "url": "https://webzonebw.in/about.html",
         "name": "About Sameer Chouhan | WEBZONEBW",
-        "description": "Professional background, education, technical experience, skills and career objectives of Sameer Chouhan.",
+        "description": "Professional background, education, experience, technical skills and career objectives of Sameer Chouhan.",
         "isPartOf": {
-            "@type": "WebSite",
-            "@id": "https://webzonebw.in/#website",
-            "name": "WEBZONEBW",
-            "url": "https://webzonebw.in/"
+            "@id": "https://webzonebw.in/#website"
         },
         "about": {
             "@id": "https://webzonebw.in/about.html#person"
@@ -511,265 +163,118 @@
 
 <div class="container">
 
-
-    <!-- =====================================================
-         MOBILE NAVIGATION
-         ===================================================== -->
-
+    <!-- Mobile Nav Bar -->
     <div class="mobile-nav-bar">
-
-        <button type="button"
-                class="hamburger-btn"
-                id="sidebarToggleBtn"
-                aria-label="Open navigation menu"
-                aria-controls="mainSidebar"
-                aria-expanded="false">
-
+        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
             <span></span>
             <span></span>
             <span></span>
-
         </button>
-
-
         <div class="mobile-brand-title">
-
-            <span class="gradient-text">
-                WEBZONEBW
-            </span>
-
+            <span class="gradient-text">WEBZONEBW</span>
         </div>
-
-
-        <a href="halloween/index.html"
-           class="about-mobile-er-btn header-icon-btn"
-           title="Launch WEBZONEBW-ER Studio"
-           aria-label="Launch WEBZONEBW-ER Studio">
-
-            🔮
-
-        </a>
-
+        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
     </div>
 
-
     <!-- =====================================================
-         SIDEBAR
+         STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar"
-           id="mainSidebar"
-           aria-label="WEBZONEBW navigation">
-
-
-        <!-- BRAND -->
+    <aside class="sidebar" id="mainSidebar">
 
         <div class="logo">
-
-            <a href="index.html"
-               class="brand-logo-link"
-               aria-label="WEBZONEBW Home">
-
-                <img src="assets/logo.png"
-                     alt="WEBZONEBW Logo"
-                     class="brand-logo-img">
-
+            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
+                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
                 <div class="brand-name-group">
-
-                    <span class="brand-title">
-                        WEBZONEBW
-                    </span>
-
-                    <span class="brand-sub">
-                        TECH · AI · INNOVATE
-                    </span>
-
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">TECH · AI · INNOVATE</span>
                 </div>
-
             </a>
-
         </div>
 
-
-        <!-- =================================================
-             MAIN NAVIGATION
-             ================================================= -->
-
-        <nav class="sidebar-nav"
-             aria-label="Main Navigation">
-
+        <!-- Main Navigation -->
+        <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-
                 <li>
                     <a href="index.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">🏠</span>
-
-                        <span>Dashboard</span>
-
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        Dashboard
                     </a>
                 </li>
-
 
                 <li>
                     <a href="halloween/index.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">🔮</span>
-
-                        <span>WebZoneBW-ER Studio</span>
-
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        WebZoneBW-ER Studio
                     </a>
                 </li>
-
 
                 <li>
                     <a href="projects.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">💼</span>
-
-                        <span>Projects</span>
-
+                        <span class="nav-icon" aria-hidden="true">💼</span>
+                        Projects
                     </a>
                 </li>
-
 
                 <li>
                     <a href="resume.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">📄</span>
-
-                        <span>Resume</span>
-
+                        <span class="nav-icon" aria-hidden="true">📄</span>
+                        Resume
                     </a>
                 </li>
-
 
                 <li>
                     <a href="blog.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">📝</span>
-
-                        <span>Blog</span>
-
+                        <span class="nav-icon" aria-hidden="true">📝</span>
+                        Blog
                     </a>
                 </li>
-
 
                 <li>
                     <a href="soundbox.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">🎵</span>
-
-                        <span>Sound Box</span>
-
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        Sound Box
                     </a>
                 </li>
-
 
                 <li>
-                    <a href="about.html"
-                       class="active"
-                       aria-current="page">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">👤</span>
-
-                        <span>About</span>
-
+                    <a href="about.html" class="active" aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        About
                     </a>
                 </li>
-
 
                 <li>
                     <a href="contact.html">
-
-                        <span class="nav-icon"
-                              aria-hidden="true">✉️</span>
-
-                        <span>Contact</span>
-
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        Contact
                     </a>
                 </li>
-
             </ul>
-
         </nav>
 
-
-        <!-- =================================================
-             THEME TOGGLE
-             ================================================= -->
-
+        <!-- Dark Mode Switch Toggle -->
         <div class="sidebar-theme-toggle-row">
-
             <div class="theme-label-group">
-
-                <span id="themeModeIcon"
-                      aria-hidden="true">
-                    🌙
-                </span>
-
-                <span id="themeModeText">
-                    Dark Mode
-                </span>
-
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                <span id="themeModeText">Dark Mode</span>
             </div>
-
-
-            <label class="switch-toggle"
-                   for="themeToggleSwitch">
-
-                <input type="checkbox"
-                       id="themeToggleSwitch"
-                       checked
-                       aria-label="Toggle dark mode">
-
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
                 <span class="toggle-slider"></span>
-
             </label>
-
         </div>
 
-
-        <!-- =================================================
-             USER PROFILE
-             ================================================= -->
-
+        <!-- User Profile Card -->
         <div class="sidebar-user-card">
-
             <div class="user-avatar-wrap">
-
-                <span class="user-avatar-icon"
-                      aria-hidden="true">
-                    👨‍💻
-                </span>
-
-                <span class="user-online-dot"
-                      title="Online"
-                      aria-label="Online status">
-                </span>
-
+                <span class="user-avatar-icon">👨‍💻</span>
+                <span class="user-online-dot" title="Online"></span>
             </div>
-
-
             <div class="user-info">
-
-                <strong>
-                    Sameer Chouhan
-                </strong>
-
-                <span>
-                    Developer &amp; Creator
-                </span>
-
+                <strong>Sameer Chouhan</strong>
+                <span>Developer &amp; Creator</span>
             </div>
-
         </div>
 
     </aside>
@@ -789,54 +294,19 @@
         <header class="top-header">
 
             <div class="header-left">
-
                 <h1>
-                    About Sameer Chouhan —
-                    IT &amp; Technology Professional
+                    About Sameer Chouhan — IT &amp; Technology Professional
                 </h1>
 
                 <p class="header-subtitle">
                     IT Support • Systems Integration • Networking • Web Development
                 </p>
-
             </div>
 
-
-            <div class="header-utilities"
-                 aria-label="Quick access">
-
-
-                <a href="soundbox.html"
-                   class="about-header-icon"
-                   title="Open WEBZONEBW Sound Box"
-                   aria-label="Open WEBZONEBW Sound Box">
-
-                    🎵
-
-                </a>
-
-
-                <a href="halloween/index.html"
-                   class="about-header-icon"
-                   title="Launch WEBZONEBW-ER Studio"
-                   aria-label="Launch WEBZONEBW-ER Studio">
-
-                    🔮
-
-                </a>
-
-
-                <span class="header-badge about-live-status"
-                      aria-label="WEBZONEBW is live">
-
-                    <span class="about-live-dot"
-                          aria-hidden="true">
-                    </span>
-
-                    Live
-
-                </span>
-
+            <div class="header-utilities">
+                <a href="soundbox.html" class="header-icon-btn" title="Sound Box" aria-label="Sound Box">🎵</a>
+                <a href="halloween/index.html" class="header-icon-btn" title="ER Studio" aria-label="ER Studio">🔮</a>
+                <span class="header-badge">Live 🟢</span>
             </div>
 
         </header>
@@ -846,8 +316,9 @@
              HERO
              ================================================= -->
 
-        <section class="hero"
-                 aria-labelledby="about-title">
+        <section
+            class="hero"
+            aria-labelledby="about-title">
 
             <h2 id="about-title">
                 Hello, I'm Sameer Chouhan
@@ -858,11 +329,10 @@
             </h3>
 
             <p>
-                I am an IT Support and technology professional
-                interested in solving technical problems, building
-                practical digital experiences, and continuously
-                expanding my knowledge through hands-on projects
-                and real-world learning.
+                I am an IT Support professional passionate about
+                solving technical problems, building modern websites,
+                and continuously expanding my technical knowledge
+                through practical projects and real-world learning.
             </p>
 
         </section>
@@ -872,92 +342,44 @@
              PROFESSIONAL SNAPSHOT
              ================================================= -->
 
-        <section class="quick-info"
-                 aria-labelledby="professional-snapshot">
+        <section
+            class="quick-info"
+            aria-labelledby="professional-snapshot">
 
             <h2 id="professional-snapshot">
-
-                <span class="about-icon"
-                      aria-hidden="true">
-                    🏆
-                </span>
-
-                Professional Snapshot
-
+                🏆 Professional Snapshot
             </h2>
-
 
             <ul>
 
                 <li>
-
-                    <span class="about-icon"
-                          aria-hidden="true">
-                        🖥️
-                    </span>
-
-                    IT Support &amp; Technical Troubleshooting
-
+                    <span aria-hidden="true">🏅</span>
+                    Microsoft 365 Certified
                 </li>
 
-
                 <li>
-
-                    <span class="about-icon"
-                          aria-hidden="true">
-                        🌐
-                    </span>
-
-                    Networking &amp; Infrastructure
-
+                    <span aria-hidden="true">🤖</span>
+                    AI Productivity &amp; Search Tools
                 </li>
 
-
                 <li>
-
-                    <span class="about-icon"
-                          aria-hidden="true">
-                        ⚙️
-                    </span>
-
-                    Systems Integration Technologies
-
+                    <span aria-hidden="true">🌐</span>
+                    Networking Fundamentals
                 </li>
 
-
                 <li>
-
-                    <span class="about-icon"
-                          aria-hidden="true">
-                        ☁️
-                    </span>
-
-                    Microsoft 365 &amp; Cloud Technologies
-
-                </li>
-
-
-                <li>
-
-                    <span class="about-icon"
-                          aria-hidden="true">
-                        💻
-                    </span>
-
+                    <span aria-hidden="true">🎨</span>
                     Web Design &amp; Front-End Development
-
                 </li>
 
+                <li>
+                    <span aria-hidden="true">💻</span>
+                    IT Support &amp; Technical Troubleshooting
+                </li>
 
                 <li>
-
-                    <span class="about-icon"
-                          aria-hidden="true">
-                        🤖
-                    </span>
-
-                    AI Productivity &amp; Emerging Technology
-
+                    <span aria-hidden="true">⚙️</span>
+                    Systems Integration Technologies
                 </li>
 
             </ul>
@@ -969,18 +391,12 @@
              EDUCATION
              ================================================= -->
 
-        <section class="quick-info"
-                 aria-labelledby="education-title">
+        <section
+            class="quick-info"
+            aria-labelledby="education-title">
 
             <h2 id="education-title">
-
-                <span class="about-icon"
-                      aria-hidden="true">
-                    🎓
-                </span>
-
-                Education Journey
-
+                🎓 Education Journey
             </h2>
 
 
@@ -989,12 +405,16 @@
             </h3>
 
             <p>
-                I began my undergraduate studies at Lakehead
-                University in Canada. My studies helped strengthen
-                my problem-solving, communication and analytical
-                abilities while developing my interest in
-                Information Technology.
+                I began my undergraduate studies at Lakehead University,
+                where I completed approximately one and a half years
+                of study. During this time, I strengthened my
+                problem-solving abilities, communication skills,
+                and developed a strong interest in Information
+                Technology.
             </p>
+
+
+            <br>
 
 
             <h3>
@@ -1002,10 +422,11 @@
             </h3>
 
             <p>
-                I later completed a career-focused diploma in
-                networking and security, developing practical
-                knowledge across computer networking, systems,
-                infrastructure and technical support.
+                To pursue a more practical and career-focused path
+                in IT, I completed a diploma focused on
+                <strong>Networking Design and Analysis</strong>,
+                with practical learning in networking, systems
+                integration, and IT support.
             </p>
 
         </section>
@@ -1015,33 +436,20 @@
              PROFESSIONAL EXPERIENCE
              ================================================= -->
 
-        <section class="projects"
-                 aria-labelledby="experience-title">
+        <section
+            class="projects"
+            aria-labelledby="experience-title">
 
             <h2 id="experience-title">
-
-                <span class="about-icon"
-                      aria-hidden="true">
-                    💼
-                </span>
-
-                Professional Experience
-
+                💼 Professional Experience
             </h2>
 
             <p>
-                My professional experience includes IT support,
-                systems integration, hardware troubleshooting,
-                technical coordination, installation support,
-                quotations, scheduling and customer-facing
-                technical assistance.
-            </p>
-
-            <p>
-                I enjoy working across hardware, software,
-                networking and user-support environments while
-                approaching technical issues through structured
-                troubleshooting and practical problem solving.
+                My experience includes technical support, systems
+                integration, hardware troubleshooting, coordinating
+                quotations, scheduling installations, and assisting
+                users in resolving technical issues while maintaining
+                excellent customer service.
             </p>
 
         </section>
@@ -1051,159 +459,113 @@
              TECHNICAL SKILLS
              ================================================= -->
 
-        <section class="quick-info"
-                 aria-labelledby="skills-title">
+        <section
+            class="quick-info"
+            aria-labelledby="skills-title">
 
             <h2 id="skills-title">
-
-                <span class="about-icon"
-                      aria-hidden="true">
-                    📊
-                </span>
-
-                Technical Skills
-
+                📊 Technical Skills
             </h2>
 
-
-            <!-- IT SUPPORT -->
 
             <div class="skill">
 
                 <div class="skill-title">
 
                     <span>IT Support</span>
-
                     <span>90%</span>
 
                 </div>
 
                 <div class="skill-bar">
 
-                    <div class="skill-fill"
-                         data-width="90"
-                         style="width: 90%;"
-                         role="progressbar"
-                         aria-label="IT Support proficiency"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-valuenow="90">
+                    <div
+                        class="skill-fill"
+                        data-width="90">
                     </div>
 
                 </div>
 
             </div>
 
-
-            <!-- SYSTEMS INTEGRATION -->
 
             <div class="skill">
 
                 <div class="skill-title">
 
                     <span>Systems Integration</span>
-
                     <span>85%</span>
 
                 </div>
 
                 <div class="skill-bar">
 
-                    <div class="skill-fill"
-                         data-width="85"
-                         style="width: 85%;"
-                         role="progressbar"
-                         aria-label="Systems Integration proficiency"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-valuenow="85">
+                    <div
+                        class="skill-fill"
+                        data-width="85">
                     </div>
 
                 </div>
 
             </div>
 
-
-            <!-- NETWORKING -->
 
             <div class="skill">
 
                 <div class="skill-title">
 
                     <span>Networking</span>
-
                     <span>80%</span>
 
                 </div>
 
                 <div class="skill-bar">
 
-                    <div class="skill-fill"
-                         data-width="80"
-                         style="width: 80%;"
-                         role="progressbar"
-                         aria-label="Networking proficiency"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-valuenow="80">
+                    <div
+                        class="skill-fill"
+                        data-width="80">
                     </div>
 
                 </div>
 
             </div>
 
-
-            <!-- MICROSOFT 365 -->
 
             <div class="skill">
 
                 <div class="skill-title">
 
                     <span>Microsoft 365</span>
-
                     <span>80%</span>
 
                 </div>
 
                 <div class="skill-bar">
 
-                    <div class="skill-fill"
-                         data-width="80"
-                         style="width: 80%;"
-                         role="progressbar"
-                         aria-label="Microsoft 365 proficiency"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-valuenow="80">
+                    <div
+                        class="skill-fill"
+                        data-width="80">
                     </div>
 
                 </div>
 
             </div>
 
-
-            <!-- WEB DEVELOPMENT -->
 
             <div class="skill">
 
                 <div class="skill-title">
 
                     <span>Web Development</span>
-
                     <span>75%</span>
 
                 </div>
 
                 <div class="skill-bar">
 
-                    <div class="skill-fill"
-                         data-width="75"
-                         style="width: 75%;"
-                         role="progressbar"
-                         aria-label="Web Development proficiency"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-valuenow="75">
+                    <div
+                        class="skill-fill"
+                        data-width="75">
                     </div>
 
                 </div>
@@ -1211,28 +573,20 @@
             </div>
 
 
-            <!-- ARTIFICIAL INTELLIGENCE -->
-
             <div class="skill">
 
                 <div class="skill-title">
 
                     <span>Artificial Intelligence</span>
-
                     <span>70%</span>
 
                 </div>
 
                 <div class="skill-bar">
 
-                    <div class="skill-fill"
-                         data-width="70"
-                         style="width: 70%;"
-                         role="progressbar"
-                         aria-label="Artificial Intelligence proficiency"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-valuenow="70">
+                    <div
+                        class="skill-fill"
+                        data-width="70">
                     </div>
 
                 </div>
@@ -1246,37 +600,29 @@
              CONTINUOUS LEARNING
              ================================================= -->
 
-        <section class="quick-info"
-                 aria-labelledby="learning-title">
+        <section
+            class="quick-info"
+            aria-labelledby="learning-title">
 
             <h2 id="learning-title">
-
-                <span class="about-icon"
-                      aria-hidden="true">
-                    📚
-                </span>
-
-                Continuous Learning
-
+                📚 Continuous Learning
             </h2>
 
-
             <p>
-                I enjoy learning through hands-on projects,
-                technical experimentation and practical web
-                development. WEBZONEBW provides a space where I
-                document projects, technology experiments,
-                tutorials and my continuing professional growth.
+                I enjoy learning through hands-on projects and
+                sharing knowledge with others. My Blogger website
+                documents my web development journey, resume
+                guidance, technical tutorials, and professional
+                growth.
             </p>
-
 
             <p>
                 Explore the
                 <a href="blog.html">
                     WEBZONEBW technical blog
                 </a>
-                for practical articles, guides and technology
-                resources.
+                to discover practical articles, guides and
+                technology resources.
             </p>
 
         </section>
@@ -1286,32 +632,23 @@
              CAREER OBJECTIVE
              ================================================= -->
 
-        <section class="projects"
-                 aria-labelledby="career-title">
+        <section
+            class="projects"
+            aria-labelledby="career-title">
 
             <h2 id="career-title">
-
-                <span class="about-icon"
-                      aria-hidden="true">
-                    🎯
-                </span>
-
-                Career Objective
-
+                🎯 Career Objective
             </h2>
-
 
             <p>
                 I am seeking opportunities where I can contribute
-                my IT Support and technical experience while
-                continuing to develop professionally in System
-                Administration, Cloud Technologies, Cybersecurity,
-                Networking and Web Development.
+                my IT Support experience while continuing to grow
+                in System Administration, Cloud Technologies,
+                Cybersecurity, and Web Development.
             </p>
 
-
             <p>
-                Review my
+                You can review my
                 <a href="resume.html">
                     professional resume
                 </a>
@@ -1319,7 +656,7 @@
                 <a href="projects.html">
                     technical projects
                 </a>
-                to learn more about my work.
+                to learn more about my experience and work.
             </p>
 
         </section>
@@ -1334,14 +671,16 @@
             <div class="footer-content">
 
                 <p>
+
                     © 2026
-                    <strong>WEBZONEBW</strong>.
-                    All rights reserved.
+                    <strong>WEBZONEBW</strong>. All rights reserved.
+
                 </p>
 
 
-                <nav class="footer-links"
-                     aria-label="Footer Navigation">
+                <nav
+                    class="footer-links"
+                    aria-label="Footer Navigation">
 
                     <a href="privacy.html">
                         Privacy Policy
@@ -1365,172 +704,18 @@
 
         </footer>
 
+
     </main>
 
 </div>
 
 
 <!-- =====================================================
-     WEBZONEBW CORE JAVASCRIPT
-     
-     NOTE:
-     Beatles playlist JavaScript is intentionally NOT loaded
-     here because About does not use the Sound Box playlist
-     engine.
+     SITE JAVASCRIPT
      ===================================================== -->
 
+<script src="js/beatles-playlists.js"></script>
 <script src="js/script.js"></script>
-
-
-<!-- =====================================================
-     ABOUT PAGE MICRO-INTERACTIONS
-     ===================================================== -->
-
-<script>
-
-(function () {
-
-    "use strict";
-
-
-    function initAboutPage() {
-
-        /* =================================================
-           SKILL BAR ANIMATION
-           ================================================= */
-
-        const skillBars =
-            document.querySelectorAll(
-                ".skill-fill[data-width]"
-            );
-
-
-        if (skillBars.length) {
-
-            skillBars.forEach(function (bar) {
-
-                const target =
-                    Number(bar.getAttribute("data-width"));
-
-
-                if (
-                    Number.isNaN(target) ||
-                    target < 0 ||
-                    target > 100
-                ) {
-                    return;
-                }
-
-
-                bar.style.width = "0%";
-
-
-                requestAnimationFrame(function () {
-
-                    requestAnimationFrame(function () {
-
-                        bar.style.width =
-                            target + "%";
-
-                    });
-
-                });
-
-            });
-
-        }
-
-
-        /* =================================================
-           MOBILE SIDEBAR ARIA STATE
-           
-           script.js remains responsible for opening /
-           closing the sidebar.
-           ================================================= */
-
-        const sidebarToggle =
-            document.getElementById(
-                "sidebarToggleBtn"
-            );
-
-        const sidebar =
-            document.getElementById(
-                "mainSidebar"
-            );
-
-
-        if (
-            !sidebarToggle ||
-            !sidebar
-        ) {
-            return;
-        }
-
-
-        const syncSidebarState =
-            function () {
-
-                const isOpen =
-                    sidebar.classList.contains("open") ||
-                    sidebar.classList.contains("active");
-
-
-                sidebarToggle.setAttribute(
-                    "aria-expanded",
-                    String(isOpen)
-                );
-
-
-                sidebarToggle.setAttribute(
-                    "aria-label",
-                    isOpen
-                        ? "Close navigation menu"
-                        : "Open navigation menu"
-                );
-
-            };
-
-
-        sidebarToggle.addEventListener(
-            "click",
-            function () {
-
-                window.setTimeout(
-                    syncSidebarState,
-                    50
-                );
-
-            }
-        );
-
-
-        syncSidebarState();
-
-    }
-
-
-    if (
-        document.readyState === "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            initAboutPage,
-            {
-                once: true
-            }
-        );
-
-    } else {
-
-        initAboutPage();
-
-    }
-
-})();
-
-</script>
-
 
 </body>
 
