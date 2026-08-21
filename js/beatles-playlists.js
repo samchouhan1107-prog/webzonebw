@@ -1942,6 +1942,41 @@
 
 
     /* ======================================================
+       WEBZONEBW-ER NAVIGATION HANDOFF
+       ====================================================== */
+
+    function bindERNavigationPause() {
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (!(event.target instanceof Element)) {
+                    return;
+                }
+
+                const link = event.target.closest(
+                    'a[href*="halloween/index.html"]'
+                );
+
+                if (!link || !audio) {
+                    return;
+                }
+
+                // ER is an immersive workspace. Pause rather than discard the
+                // stream, so the regular site can resume from this exact point.
+                state.currentTime = audio.currentTime || 0;
+                state.isPlaying = false;
+                state.volume = audio.volume;
+                saveState();
+                audio.pause();
+            }
+        );
+
+    }
+
+
+    /* ======================================================
        ERROR HANDLING
        ====================================================== */
 
@@ -3485,6 +3520,8 @@
         bindAudioEvents();
 
         bindPlayerEvents();
+
+        bindERNavigationPause();
 
         // A page navigation destroys the current document and its <audio>
         // element. Capture the live position before that happens so the next
