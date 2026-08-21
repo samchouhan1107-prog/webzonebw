@@ -245,7 +245,7 @@
                         <button type="button" class="settings-quick-pill-btn" id="btnOpenSettingsPill" title="Open Live Studio Sliders &amp; Files">
                             <span>🎛️</span> Studio Console &amp; Files
                         </button>
-                        <span class="synth-note">✨ Web Audio Polyphonic Engine</span>
+                        <span class="synth-note" id="audioSourceStatus">🎛️ Inventory Audio + Synth Fallback</span>
                     </div>
                 </div>
 
@@ -341,7 +341,7 @@
                         🎼 Curated Phase Playlists
                     </h2>
                     <p class="section-subtitle">
-                        Dedicated playlists by historical phase and thematic collections
+                        Dedicated playlists by historical phase and thematic collections • 6 local inventory stems + synth catalogue fallback
                     </p>
                 </div>
             </div>
@@ -777,6 +777,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalDurationLabel = document.getElementById("totalDurationLabel");
     const volumeSlider = document.getElementById("volumeSlider");
     const audioVisualizer = document.getElementById("audioVisualizer");
+    const audioSourceStatus = document.getElementById("audioSourceStatus");
 
     // Settings Slider Drawer Elements
     const settingsDrawerOverlay = document.getElementById("settingsDrawerOverlay");
@@ -1025,7 +1026,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="sound-file-actions" style="display: flex; gap: 6px;">
                     <button type="button" class="sound-file-btn play-audio-file-btn" data-id="${file.id}" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 700;" title="Play Real Audio File">
-                        ▶ Play Audio
+                        ▶ Play Inventory Audio
                     </button>
                     <button type="button" class="sound-file-btn load-stem-btn" data-phase="${file.phaseNum}" title="Tune Synth to Phase ${file.phaseNum}">
                         🎛️ Tune Synth
@@ -1455,6 +1456,59 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ======================================================
+    // INVENTORY AUDIO BRIDGE
+    // ------------------------------------------------------
+    // Six real local inventory stems are available: one per
+    // historical phase. Each phase opener uses its real local
+    // file; the remaining catalogue tracks keep their metadata
+    // and use the existing Web Audio arrangement engine.
+    // ======================================================
+    const INVENTORY_AUDIO_BY_PHASE = Object.freeze({
+        1: "file-stem-p1",
+        2: "file-stem-p2",
+        3: "file-stem-p3",
+        4: "file-stem-p4",
+        5: "file-stem-p5",
+        6: "file-stem-p6"
+    });
+
+    const INVENTORY_PRIMARY_TRACKS = Object.freeze({
+        1: "p1-track-1",
+        2: "p2-track-6",
+        3: "p3-track-10",
+        4: "p4-track-14",
+        5: "p5-track-18",
+        6: "p6-track-22"
+    });
+
+    function getInventoryFileForSong(song) {
+        if (!song || !soundBox.engine || !Array.isArray(soundBox.engine.soundLibraryFiles)) return null;
+
+        const inventoryId = INVENTORY_AUDIO_BY_PHASE[song.phaseNum];
+        const primaryTrackId = INVENTORY_PRIMARY_TRACKS[song.phaseNum];
+
+        // Do not pretend a phase stem is a separate recording for every song.
+        // Only the phase opener uses the actual inventory file.
+        if (song.id !== primaryTrackId) return null;
+
+        return soundBox.engine.soundLibraryFiles.find(file =>
+            file.id === inventoryId && file.filePath
+        ) || null;
+    }
+
+    function setAudioSourceStatus(mode, file) {
+        if (!audioSourceStatus) return;
+
+        if (mode === "inventory" && file) {
+            audioSourceStatus.textContent = `💽 Inventory Audio • ${file.name}`;
+            audioSourceStatus.title = "Built-in WebZoneBW inventory audio is playing.";
+        } else {
+            audioSourceStatus.textContent = "🎛️ Web Audio Synth • Catalogue Arrangement";
+            audioSourceStatus.title = "This catalogue entry is rendered by the Web Audio synthesis engine.";
+        }
+    }
+
     // Play Specific Song
     function playSpecificSong(songId) {
         soundBox.activeSongId = songId;
@@ -1471,16 +1525,36 @@ document.addEventListener("DOMContentLoaded", () => {
         if (totalDurationLabel) totalDurationLabel.textContent = song.duration;
         if (btnFavorite) btnFavorite.textContent = soundBox.isFavorite(song.id) ? "❤️" : "🤍";
 
-        soundBox.engine.playSong(
-            song,
-            (curr, total) => {
-                if (currentTimeLabel) currentTimeLabel.textContent = formatTime(curr);
-                if (scrubProgress) scrubProgress.style.width = `${(curr / total) * 100}%`;
-            },
-            () => {
-                handleTrackEnded();
+        const inventoryFile = getInventoryFileForSong(song);
+
+        const handleProgress = (curr, total) => {
+            if (currentTimeLabel) currentTimeLabel.textContent = formatTime(curr);
+            if (scrubProgress && total > 0) {
+                scrubProgress.style.width = `${Math.min(100, (curr / total) * 100)}%`;
             }
-        );
+        };
+
+        const handleEnded = () => {
+            setAudioSourceStatus("synth");
+            handleTrackEnded();
+        };
+
+        if (inventoryFile) {
+            setAudioSourceStatus("inventory", inventoryFile);
+            soundBox.engine.playAudioUrl(
+                inventoryFile.filePath,
+                inventoryFile.name,
+                handleProgress,
+                handleEnded
+            );
+
+            if (totalDurationLabel) {
+                totalDurationLabel.textContent = inventoryFile.duration || song.duration;
+            }
+        } else {
+            setAudioSourceStatus("synth");
+            soundBox.engine.playSong(song, handleProgress, handleEnded);
+        }
 
         updatePlayState();
         renderTracklist();
@@ -1668,6 +1742,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTracklist();
     renderSoundFilesList();
     updateDiagnostics();
+    setAudioSourceStatus("synth");
 
     // Check if audio was already playing when opening soundbox.html
     if (soundBox.engine.isPlaying) {

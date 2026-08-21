@@ -1,16 +1,102 @@
 /* ==========================================================
    WebZoneBW
-   Main JavaScript
    ----------------------------------------------------------
-   Purpose:
+   Core JavaScript Controller
+   Version: 2.0
+   ----------------------------------------------------------
+   Features:
    - Skill bar animation
    - Dark / Light theme
    - Theme persistence
-   - Accessibility support
+   - System theme detection
+   - Reduced-motion support
+   - Accessible theme controls
+   - Mobile sidebar drawer
+   - Backdrop / Escape / outside-click handling
+   - Active navigation detection
+   - Multi-page navigation persistence
+   - Global WebZoneTheme API
+   - Global WebZoneSidebar API
+   - Global WebZoneBW API
    - Lightweight static-site compatible
+   - Safe initialization
    ========================================================== */
 
 "use strict";
+
+
+/* ==========================================================
+   GLOBAL CONFIGURATION
+========================================================== */
+
+const WEBZONE_CONFIG = Object.freeze({
+    version: "2.0",
+
+    selectors: {
+        skillBars: ".skill-fill",
+
+        themeSwitches:
+            "#themeToggleSwitch, input[name='theme-switch']",
+
+        themeButtons:
+            "#themeToggle, .theme-btn-toggle, [data-action='toggle-theme']",
+
+        themeIcons:
+            "#themeModeIcon, .theme-mode-icon",
+
+        themeTexts:
+            "#themeModeText, .theme-mode-text",
+
+        sidebars:
+            "#mainSidebar, .sidebar, .er-sidebar",
+
+        sidebarToggles:
+            "#sidebarToggleBtn, .hamburger-btn, .er-hamburger-btn, [data-action='toggle-sidebar']",
+
+        sidebarNav:
+            ".sidebar-nav a, .sidebar ul li a, .er-sidebar nav a"
+    },
+
+    storage: {
+        theme: "theme",
+        activeNavigation: "webzone_active_nav"
+    },
+
+    mobileBreakpoint: 860,
+
+    themeTransitionDuration: 380,
+
+    skillThreshold: 0.4
+});
+
+
+/* ==========================================================
+   INTERNAL STATE
+========================================================== */
+
+const WebZoneState = {
+    initialized: false,
+    themeInitialized: false,
+    sidebarInitialized: false,
+    navigationInitialized: false,
+    skillsInitialized: false,
+
+    sidebarOpen: false,
+
+    theme: "dark",
+
+    reducedMotion: false,
+
+    transitionTimeout: null,
+
+    mediaQuery: null,
+
+    sidebar: {
+        backdrop: null,
+        sidebars: [],
+        toggleButtons: []
+    }
+};
 
 
 /* ==========================================================
@@ -19,43 +105,101 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    try {
-        initSkillBars();
-    } catch (error) {
-        console.warn(
-            "WebZoneBW: Skill bar initialization failed.",
-            error
-        );
+    if (WebZoneState.initialized) {
+        return;
     }
 
-    try {
-        initTheme();
-    } catch (error) {
-        console.warn(
-            "WebZoneBW: Theme initialization failed.",
-            error
-        );
-    }
+    WebZoneState.initialized = true;
 
-    try {
-        initMobileSidebarDrawer();
-    } catch (error) {
-        console.warn(
-            "WebZoneBW: Mobile sidebar drawer initialization failed.",
-            error
-        );
-    }
+    safeInit("Skill bars", initSkillBars);
+    safeInit("Theme controller", initTheme);
+    safeInit("Mobile sidebar", initMobileSidebarDrawer);
+    safeInit("Active navigation", initActiveNavigation);
 
-    try {
-        initActiveNavigation();
-    } catch (error) {
-        console.warn(
-            "WebZoneBW: Active navigation initialization failed.",
-            error
-        );
-    }
+    updateReducedMotionState();
 
+    /*
+     * Public application-ready event.
+     */
+    window.dispatchEvent(
+        new CustomEvent("webzone-ready", {
+            detail: {
+                version: WEBZONE_CONFIG.version
+            }
+        })
+    );
 });
+
+
+/* ==========================================================
+   SAFE INITIALIZER
+========================================================== */
+
+function safeInit(name, initializer) {
+
+    try {
+
+        initializer();
+
+    } catch (error) {
+
+        console.warn(
+            `WebZoneBW: ${name} initialization failed.`,
+            error
+        );
+    }
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+========================================================== */
+
+function updateReducedMotionState() {
+
+    if (!window.matchMedia) {
+        WebZoneState.reducedMotion = false;
+        return;
+    }
+
+    const mediaQuery =
+        window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    WebZoneState.mediaQuery = mediaQuery;
+
+    WebZoneState.reducedMotion =
+        mediaQuery.matches;
+
+    const handleMotionChange = event => {
+
+        WebZoneState.reducedMotion =
+            event.matches;
+
+        document.documentElement.classList.toggle(
+            "webzone-reduced-motion",
+            event.matches
+        );
+    };
+
+    if (typeof mediaQuery.addEventListener === "function") {
+
+        mediaQuery.addEventListener(
+            "change",
+            handleMotionChange
+        );
+
+    } else if (typeof mediaQuery.addListener === "function") {
+
+        mediaQuery.addListener(
+            handleMotionChange
+        );
+    }
+
+    document.documentElement.classList.toggle(
+        "webzone-reduced-motion",
+        WebZoneState.reducedMotion
+    );
+}
 
 
 /* ==========================================================
@@ -64,45 +208,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initSkillBars() {
 
-    const skills =
-        document.querySelectorAll(".skill-fill");
+    if (WebZoneState.skillsInitialized) {
+        return;
+    }
 
-    /*
-     * Pages without skill bars do not need
-     * any further processing.
-     */
+    const skills =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.skillBars
+        );
 
     if (!skills.length) {
         return;
     }
 
+    WebZoneState.skillsInitialized = true;
 
     /*
-     * Fallback for browsers that do not support
-     * IntersectionObserver.
+     * Reduced motion:
+     * Immediately display final values.
      */
+    if (WebZoneState.reducedMotion) {
 
-    if (!("IntersectionObserver" in window)) {
-
-        skills.forEach(skill => {
-
-            const width =
-                skill.dataset.width;
-
-            if (width) {
-                skill.style.width =
-                    `${width}%`;
-            }
-
-        });
+        skills.forEach(applySkillWidth);
 
         return;
     }
 
 
     /*
-     * Animate skill bars when they become visible.
+     * IntersectionObserver fallback.
      */
+    if (!("IntersectionObserver" in window)) {
+
+        skills.forEach(applySkillWidth);
+
+        return;
+    }
+
 
     const observer =
         new IntersectionObserver(
@@ -114,475 +256,1870 @@ function initSkillBars() {
                         return;
                     }
 
-                    const skill =
-                        entry.target;
-
-                    const width =
-                        skill.dataset.width;
-
-                    if (width) {
-
-                        skill.style.width =
-                            `${width}%`;
-
-                    }
-
-                    observerInstance.unobserve(
-                        skill
+                    applySkillWidth(
+                        entry.target
                     );
 
+                    observerInstance.unobserve(
+                        entry.target
+                    );
                 });
-
             },
             {
-                threshold: 0.4
+                threshold:
+                    WEBZONE_CONFIG.skillThreshold
             }
         );
 
 
     skills.forEach(skill => {
+
+        /*
+         * Start from zero where possible.
+         */
+        if (
+            !skill.style.width &&
+            skill.dataset.width
+        ) {
+            skill.style.width = "0%";
+        }
+
         observer.observe(skill);
     });
+}
 
+
+function applySkillWidth(skill) {
+
+    if (!skill) {
+        return;
+    }
+
+    const rawWidth =
+        skill.dataset.width;
+
+    if (!rawWidth) {
+        return;
+    }
+
+    let width =
+        parseFloat(
+            String(rawWidth).replace("%", "")
+        );
+
+    if (Number.isNaN(width)) {
+        return;
+    }
+
+    /*
+     * Prevent invalid values.
+     */
+    width =
+        Math.max(
+            0,
+            Math.min(100, width)
+        );
+
+    skill.style.width =
+        `${width}%`;
+
+    skill.setAttribute(
+        "aria-valuenow",
+        String(width)
+    );
 }
 
 
 /* ==========================================================
-   DARK / LIGHT THEME CONTROLLER & SMOOTH TRANSITION ENGINE
+   THEME CONTROLLER
 ========================================================== */
 
-let transitionTimeout = null;
-
-/**
- * Global WebZoneTheme API for cross-component theme control
- */
 window.WebZoneTheme = {
+
     get current() {
-        return document.documentElement.getAttribute("data-theme") === "light" ||
-               document.body.classList.contains("light-mode") ? "light" : "dark";
+
+        return WebZoneState.theme;
     },
 
+
     get isLight() {
+
         return this.current === "light";
     },
 
-    /**
-     * Smoothly toggle between light and dark modes
-     */
+
+    get isDark() {
+
+        return this.current === "dark";
+    },
+
+
     toggle() {
-        const nextTheme = this.isLight ? "dark" : "light";
-        this.set(nextTheme, true);
+
+        const nextTheme =
+            this.isLight
+                ? "dark"
+                : "light";
+
+        this.set(
+            nextTheme,
+            true,
+            true
+        );
+
         return nextTheme;
     },
 
-    /**
-     * Set a specific theme with optional smooth transition animation
-     * @param {string} themeName - "light" or "dark"
-     * @param {boolean} smooth - Whether to animate transition
-     */
-    set(themeName, smooth = true) {
-        const wantLight = themeName === "light";
 
-        if (smooth) {
+    set(
+        themeName,
+        smooth = true,
+        persist = true
+    ) {
+
+        const theme =
+            normalizeTheme(themeName);
+
+        const wantLight =
+            theme === "light";
+
+
+        /*
+         * Only animate if requested and
+         * reduced motion is not enabled.
+         */
+        if (
+            smooth &&
+            !WebZoneState.reducedMotion
+        ) {
+
             this.enableSmoothTransition();
         }
 
-        // Apply HTML data-theme and body classes
-        if (wantLight) {
-            document.documentElement.setAttribute("data-theme", "light");
-            document.body.classList.add("light-mode");
-        } else {
-            document.documentElement.setAttribute("data-theme", "dark");
-            document.body.classList.remove("light-mode");
+
+        /*
+         * HTML data-theme.
+         */
+        document.documentElement.setAttribute(
+            "data-theme",
+            theme
+        );
+
+
+        /*
+         * Existing WebZoneBW body compatibility.
+         */
+        document.body.classList.toggle(
+            "light-mode",
+            wantLight
+        );
+
+
+        /*
+         * Maintain theme class helpers.
+         */
+        document.documentElement.classList.toggle(
+            "theme-light",
+            wantLight
+        );
+
+        document.documentElement.classList.toggle(
+            "theme-dark",
+            !wantLight
+        );
+
+
+        WebZoneState.theme =
+            theme;
+
+
+        /*
+         * Synchronize every theme control.
+         */
+        this.syncUIControls(
+            wantLight
+        );
+
+
+        /*
+         * Persist ONLY when explicitly requested.
+         *
+         * This prevents system-theme detection from
+         * accidentally becoming a permanent preference.
+         */
+        if (persist) {
+
+            saveThemePreference(
+                theme
+            );
         }
 
-        // Sync all UI toggles, buttons and labels across the interface
-        this.syncUIControls(wantLight);
 
-        // Persist user selection
-        saveThemePreference(wantLight ? "light" : "dark");
-
-        // Notify other listeners / canvas / components
-        window.dispatchEvent(new CustomEvent("webzone-theme-change", {
-            detail: { theme: wantLight ? "light" : "dark", isLight: wantLight }
-        }));
+        /*
+         * Notify all WebZone components.
+         */
+        window.dispatchEvent(
+            new CustomEvent(
+                "webzone-theme-change",
+                {
+                    detail: {
+                        theme,
+                        isLight: wantLight,
+                        isDark: !wantLight
+                    }
+                }
+            )
+        );
     },
 
-    /**
-     * Triggers hardware-accelerated smooth transition effect
-     */
-    enableSmoothTransition(duration = 380) {
-        if (transitionTimeout) {
-            clearTimeout(transitionTimeout);
+
+    enableSmoothTransition(
+        duration =
+            WEBZONE_CONFIG.themeTransitionDuration
+    ) {
+
+        if (
+            WebZoneState.reducedMotion
+        ) {
+            return;
         }
 
-        document.documentElement.classList.add("theme-transitioning");
-        document.body.classList.add("theme-transitioning");
 
-        transitionTimeout = setTimeout(() => {
-            document.documentElement.classList.remove("theme-transitioning");
-            document.body.classList.remove("theme-transitioning");
-            transitionTimeout = null;
-        }, duration);
+        if (
+            WebZoneState.transitionTimeout
+        ) {
+
+            clearTimeout(
+                WebZoneState.transitionTimeout
+            );
+        }
+
+
+        document.documentElement.classList.add(
+            "theme-transitioning"
+        );
+
+        document.body.classList.add(
+            "theme-transitioning"
+        );
+
+
+        WebZoneState.transitionTimeout =
+            setTimeout(() => {
+
+                document.documentElement.classList.remove(
+                    "theme-transitioning"
+                );
+
+                document.body.classList.remove(
+                    "theme-transitioning"
+                );
+
+                WebZoneState.transitionTimeout =
+                    null;
+
+            }, duration);
     },
 
-    /**
-     * Synchronize all switch inputs, toggle buttons, and text labels
-     */
+
     syncUIControls(isLight) {
-        // 1. Toggle Switches (<input type="checkbox" id="themeToggleSwitch">)
-        const switches = document.querySelectorAll("#themeToggleSwitch, input[name='theme-switch']");
+
+        /*
+         * Toggle switches.
+         *
+         * Existing behavior:
+         * checked = dark
+         * unchecked = light
+         */
+        const switches =
+            document.querySelectorAll(
+                WEBZONE_CONFIG.selectors.themeSwitches
+            );
+
+
         switches.forEach(sw => {
-            sw.checked = !isLight; // checked = dark mode, unchecked = light mode
+
+            sw.checked =
+                !isLight;
+
+            sw.setAttribute(
+                "aria-checked",
+                String(!isLight)
+            );
         });
 
-        // 2. Icon and Text Badges
-        const themeIcons = document.querySelectorAll("#themeModeIcon, .theme-mode-icon");
+
+        /*
+         * Icons.
+         */
+        const themeIcons =
+            document.querySelectorAll(
+                WEBZONE_CONFIG.selectors.themeIcons
+            );
+
+
         themeIcons.forEach(icon => {
-            icon.textContent = isLight ? "☀️" : "🌙";
+
+            icon.textContent =
+                isLight
+                    ? "☀️"
+                    : "🌙";
         });
 
-        const themeTexts = document.querySelectorAll("#themeModeText, .theme-mode-text");
+
+        /*
+         * Text labels.
+         */
+        const themeTexts =
+            document.querySelectorAll(
+                WEBZONE_CONFIG.selectors.themeTexts
+            );
+
+
         themeTexts.forEach(text => {
-            text.textContent = isLight ? "Light Mode" : "Dark Mode";
+
+            text.textContent =
+                isLight
+                    ? "Light Mode"
+                    : "Dark Mode";
         });
 
-        // 3. Theme Toggle Buttons
-        const themeButtons = document.querySelectorAll("#themeToggle, .theme-btn-toggle");
-        themeButtons.forEach(btn => {
-            updateThemeButton(btn, isLight);
+
+        /*
+         * Theme buttons.
+         */
+        const themeButtons =
+            document.querySelectorAll(
+                WEBZONE_CONFIG.selectors.themeButtons
+            );
+
+
+        themeButtons.forEach(button => {
+
+            updateThemeButton(
+                button,
+                isLight
+            );
         });
     }
 };
 
-// Global shorthand
+
+/* ==========================================================
+   GLOBAL THEME SHORTHAND
+========================================================== */
+
 window.toggleTheme = function() {
+
     return window.WebZoneTheme.toggle();
 };
 
+
+/* ==========================================================
+   THEME INITIALIZATION
+========================================================== */
+
 function initTheme() {
-    let savedTheme = null;
 
-    try {
-        savedTheme = localStorage.getItem("theme");
-    } catch (error) {
-        console.warn("WebZoneBW: Local storage unavailable.");
+    if (WebZoneState.themeInitialized) {
+        return;
     }
 
-    // Check system preference if no explicit user preference is saved
-    if (!savedTheme && window.matchMedia) {
-        if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-            savedTheme = "light";
-        }
+    WebZoneState.themeInitialized = true;
+
+
+    let savedTheme =
+        getSavedThemePreference();
+
+
+    /*
+     * If there is no explicit preference,
+     * follow the operating system.
+     */
+    if (!savedTheme) {
+
+        savedTheme =
+            getSystemTheme();
     }
 
-    const isLight = savedTheme === "light";
-    
-    // Initial theme setup (instant without animation flash on page load)
-    window.WebZoneTheme.set(isLight ? "light" : "dark", false);
 
-    // Bind event listeners to all theme toggle controls
-    const themeSwitches = document.querySelectorAll("#themeToggleSwitch, input[name='theme-switch']");
+    /*
+     * Initial setup is instant.
+     *
+     * persist = false because system preference
+     * should not automatically become a saved choice.
+     */
+    window.WebZoneTheme.set(
+        savedTheme,
+        false,
+        false
+    );
+
+
+    /*
+     * Theme switches.
+     */
+    const themeSwitches =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.themeSwitches
+        );
+
+
     themeSwitches.forEach(sw => {
-        sw.addEventListener("change", () => {
-            const wantLight = !sw.checked;
-            window.WebZoneTheme.set(wantLight ? "light" : "dark", true);
-        });
+
+        if (
+            sw.dataset.webzoneThemeBound === "true"
+        ) {
+            return;
+        }
+
+        sw.dataset.webzoneThemeBound =
+            "true";
+
+
+        sw.addEventListener(
+            "change",
+            () => {
+
+                const wantLight =
+                    !sw.checked;
+
+                window.WebZoneTheme.set(
+                    wantLight
+                        ? "light"
+                        : "dark",
+                    true,
+                    true
+                );
+            }
+        );
     });
 
-    const themeToggleBtns = document.querySelectorAll("#themeToggle, .theme-btn-toggle, [data-action='toggle-theme']");
-    themeToggleBtns.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            window.WebZoneTheme.toggle();
-        });
+
+    /*
+     * Theme buttons.
+     */
+    const themeButtons =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.themeButtons
+        );
+
+
+    themeButtons.forEach(button => {
+
+        if (
+            button.dataset.webzoneThemeBound === "true"
+        ) {
+            return;
+        }
+
+        button.dataset.webzoneThemeBound =
+            "true";
+
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                window.WebZoneTheme.toggle();
+            }
+        );
     });
 
-    // Listen to OS system color scheme changes if user hasn't explicitly set a preference
+
+    /*
+     * System theme changes.
+     *
+     * Only follow the OS when the user has
+     * NOT manually selected a theme.
+     */
     if (window.matchMedia) {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-        mediaQuery.addEventListener("change", (e) => {
-            let hasSaved = false;
-            try {
-                hasSaved = !!localStorage.getItem("theme");
-            } catch (err) {}
 
-            if (!hasSaved) {
-                window.WebZoneTheme.set(e.matches ? "light" : "dark", true);
-            }
-        });
-    }
+        const mediaQuery =
+            window.matchMedia(
+                "(prefers-color-scheme: light)"
+            );
 
-    // Mobile Hamburger Sidebar Toggle
-    // Handled by initMobileSidebarDrawer()
-}
 
-/* ==========================================================
-   MOBILE SIDEBAR DRAWER & BACKDROP OVERLAY CONTROLLER
-========================================================== */
+        const handleSystemThemeChange =
+            event => {
 
-function initMobileSidebarDrawer() {
-    // 1. Ensure the overlay backdrop exists in DOM
-    let backdrop = document.getElementById("sidebarBackdrop") || document.querySelector(".sidebar-backdrop");
-    if (!backdrop) {
-        backdrop = document.createElement("div");
-        backdrop.id = "sidebarBackdrop";
-        backdrop.className = "sidebar-backdrop";
-        backdrop.setAttribute("aria-hidden", "true");
-        document.body.appendChild(backdrop);
-    }
+                const hasSavedPreference =
+                    Boolean(
+                        getSavedThemePreference()
+                    );
 
-    const sidebars = document.querySelectorAll("#mainSidebar, .sidebar, .er-sidebar");
-    const toggleBtns = document.querySelectorAll("#sidebarToggleBtn, .hamburger-btn, .er-hamburger-btn, [data-action='toggle-sidebar']");
 
-    if (!sidebars.length) return;
+                if (hasSavedPreference) {
+                    return;
+                }
 
-    // 2. Ensure each sidebar has an accessible close button
-    sidebars.forEach(sidebar => {
-        const logo = sidebar.querySelector(".logo");
-        if (logo && !sidebar.querySelector(".sidebar-close-btn")) {
-            const closeBtn = document.createElement("button");
-            closeBtn.type = "button";
-            closeBtn.className = "sidebar-close-btn";
-            closeBtn.id = "sidebarCloseBtn";
-            closeBtn.setAttribute("aria-label", "Close navigation drawer");
-            closeBtn.innerHTML = "&times;";
-            closeBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                closeDrawer();
-            });
-            logo.appendChild(closeBtn);
-        }
-    });
 
-    function isDrawerOpen() {
-        return document.body.classList.contains("sidebar-open") || 
-               Array.from(sidebars).some(sb => sb.classList.contains("open"));
-    }
+                window.WebZoneTheme.set(
+                    event.matches
+                        ? "light"
+                        : "dark",
+                    true,
+                    false
+                );
+            };
 
-    function openDrawer() {
-        sidebars.forEach(sb => sb.classList.add("open"));
-        toggleBtns.forEach(btn => {
-            btn.classList.add("is-active");
-            btn.setAttribute("aria-expanded", "true");
-        });
-        document.body.classList.add("sidebar-open");
-        if (backdrop) backdrop.classList.add("active");
-    }
 
-    function closeDrawer() {
-        sidebars.forEach(sb => sb.classList.remove("open"));
-        toggleBtns.forEach(btn => {
-            btn.classList.remove("is-active");
-            btn.setAttribute("aria-expanded", "false");
-        });
-        document.body.classList.remove("sidebar-open");
-        if (backdrop) backdrop.classList.remove("active");
-    }
+        if (
+            typeof mediaQuery.addEventListener ===
+            "function"
+        ) {
 
-    function toggleDrawer() {
-        if (isDrawerOpen()) {
-            closeDrawer();
-        } else {
-            openDrawer();
+            mediaQuery.addEventListener(
+                "change",
+                handleSystemThemeChange
+            );
+
+        } else if (
+            typeof mediaQuery.addListener ===
+            "function"
+        ) {
+
+            mediaQuery.addListener(
+                handleSystemThemeChange
+            );
         }
     }
-
-    // 3. Bind Hamburger Toggle Buttons
-    toggleBtns.forEach(btn => {
-        btn.setAttribute("aria-expanded", "false");
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            toggleDrawer();
-        });
-    });
-
-    // 4. Backdrop Tap to Close
-    if (backdrop) {
-        backdrop.addEventListener("click", (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            closeDrawer();
-        });
-
-        // Touch support for mobile tap
-        backdrop.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            closeDrawer();
-        }, { passive: false });
-    }
-
-    // 5. Close on Escape Key
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && isDrawerOpen()) {
-            closeDrawer();
-        }
-    });
-
-    // 6. Close when clicking any navigation link inside sidebar
-    const navLinks = document.querySelectorAll(".sidebar-nav a, .sidebar ul li a, .er-sidebar nav a");
-    navLinks.forEach(link => {
-        link.addEventListener("click", () => {
-            if (window.innerWidth <= 860) {
-                closeDrawer();
-            }
-        });
-    });
-
-    // 7. Click outside detector fallback
-    document.addEventListener("click", (e) => {
-        if (!isDrawerOpen()) return;
-
-        let clickedInsideSidebar = false;
-        sidebars.forEach(sb => {
-            if (sb.contains(e.target)) clickedInsideSidebar = true;
-        });
-
-        let clickedToggle = false;
-        toggleBtns.forEach(btn => {
-            if (btn.contains(e.target)) clickedToggle = true;
-        });
-
-        if (!clickedInsideSidebar && !clickedToggle) {
-            closeDrawer();
-        }
-    });
-
-    // 8. Auto close and restore scroll on window resize
-    window.addEventListener("resize", () => {
-        if (window.innerWidth > 860 && isDrawerOpen()) {
-            closeDrawer();
-        }
-    });
-
-    // Expose drawer control API to window
-    window.WebZoneSidebar = {
-        open: openDrawer,
-        close: closeDrawer,
-        toggle: toggleDrawer,
-        isOpen: isDrawerOpen
-    };
 }
 
 
 /* ==========================================================
-   ACTIVE NAVIGATION STATE & MULTI-PAGE PERSISTENCE
+   THEME HELPERS
 ========================================================== */
 
-function initActiveNavigation() {
-    const rawPath = window.location.pathname.toLowerCase();
-    
-    // Determine active page identifier
-    let currentPage = "index.html";
-    if (rawPath.includes("halloween")) {
-        currentPage = "halloween/index.html";
-    } else if (rawPath.includes("soundbox.html")) {
-        currentPage = "soundbox.html";
-    } else if (rawPath.includes("projects.html")) {
-        currentPage = "projects.html";
-    } else if (rawPath.includes("resume.html")) {
-        currentPage = "resume.html";
-    } else if (rawPath.includes("blog.html")) {
-        currentPage = "blog.html";
-    } else if (rawPath.includes("about.html")) {
-        currentPage = "about.html";
-    } else if (rawPath.includes("contact.html")) {
-        currentPage = "contact.html";
-    } else if (rawPath.includes("master.html")) {
-        currentPage = "master.html";
-    } else if (rawPath.includes("privacy.html")) {
-        currentPage = "privacy.html";
-    } else if (rawPath.includes("terms.html")) {
-        currentPage = "terms.html";
-    } else if (rawPath.includes("disclaimer.html")) {
-        currentPage = "disclaimer.html";
-    } else if (rawPath.includes("404.html")) {
-        currentPage = "404.html";
-    } else {
-        // Root or unknown fallback
-        const parts = rawPath.split("/").filter(Boolean);
-        const lastPart = parts[parts.length - 1];
-        if (lastPart && lastPart.endsWith(".html")) {
-            currentPage = lastPart;
-        } else {
-            currentPage = "index.html";
-        }
-    }
+function normalizeTheme(themeName) {
 
-    // Persist current active page
+    return String(themeName).toLowerCase() === "light"
+        ? "light"
+        : "dark";
+}
+
+
+function getSavedThemePreference() {
+
     try {
-        sessionStorage.setItem("webzone_active_nav", currentPage);
-    } catch (e) {}
 
-    // Synchronize all sidebar nav links
-    const allNavLinks = document.querySelectorAll(".sidebar-nav a, .sidebar ul li a, .er-sidebar nav a");
-    
-    allNavLinks.forEach(link => {
-        const href = (link.getAttribute("href") || "").trim().toLowerCase();
-        
-        let isMatch = false;
+        const value =
+            localStorage.getItem(
+                WEBZONE_CONFIG.storage.theme
+            );
 
-        if (currentPage === "halloween/index.html") {
-            isMatch = href.includes("halloween");
-        } else if (currentPage === "index.html") {
-            isMatch = href === "index.html" || href === "./index.html" || href === "/" || href === "./" || href === "../index.html";
-        } else {
-            isMatch = href === currentPage || href === `./${currentPage}` || href.endsWith(currentPage);
+
+        if (
+            value === "light" ||
+            value === "dark"
+        ) {
+
+            return value;
         }
 
-        if (isMatch) {
-            link.classList.add("active");
-            link.setAttribute("aria-current", "page");
-        } else {
-            link.classList.remove("active");
-            link.removeAttribute("aria-current");
-        }
+    } catch (error) {
 
-        // Add persistent click recording
-        link.addEventListener("click", () => {
-            try {
-                sessionStorage.setItem("webzone_active_nav", href);
-            } catch (e) {}
-        });
-    });
+        console.warn(
+            "WebZoneBW: Local storage unavailable."
+        );
+    }
+
+
+    return null;
 }
+
 
 function saveThemePreference(themeStr) {
+
+    const theme =
+        normalizeTheme(themeStr);
+
     try {
-        localStorage.setItem("theme", themeStr);
-    } catch (e) {
-        console.warn("Could not save theme preference");
+
+        localStorage.setItem(
+            WEBZONE_CONFIG.storage.theme,
+            theme
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "WebZoneBW: Could not save theme preference.",
+            error
+        );
     }
 }
 
-function applyStandardTheme(isLight) {
-    window.WebZoneTheme.set(isLight ? "light" : "dark", true);
+
+function getSystemTheme() {
+
+    if (window.matchMedia) {
+
+        return window.matchMedia(
+            "(prefers-color-scheme: light)"
+        ).matches
+            ? "light"
+            : "dark";
+    }
+
+
+    return "dark";
 }
 
 
 /* ==========================================================
-   UPDATE THEME BUTTON
+   STANDARD THEME COMPATIBILITY
+========================================================== */
+
+function applyStandardTheme(isLight) {
+
+    window.WebZoneTheme.set(
+        isLight
+            ? "light"
+            : "dark",
+        true,
+        true
+    );
+}
+
+
+/* ==========================================================
+   THEME BUTTON UI
 ========================================================== */
 
 function updateThemeButton(
     themeToggle,
     isLight
 ) {
-    if (!themeToggle) return;
+
+    if (!themeToggle) {
+        return;
+    }
+
 
     if (isLight) {
+
         themeToggle.setAttribute(
             "aria-label",
             "Switch to dark mode"
         );
+
+        themeToggle.setAttribute(
+            "title",
+            "Switch to dark mode"
+        );
+
+        themeToggle.setAttribute(
+            "aria-pressed",
+            "true"
+        );
+
         themeToggle.innerHTML =
             '<span aria-hidden="true">🌙</span> Dark Mode';
+
     } else {
+
         themeToggle.setAttribute(
             "aria-label",
             "Switch to light mode"
         );
+
+        themeToggle.setAttribute(
+            "title",
+            "Switch to light mode"
+        );
+
+        themeToggle.setAttribute(
+            "aria-pressed",
+            "false"
+        );
+
         themeToggle.innerHTML =
             '<span aria-hidden="true">☀️</span> Light Mode';
     }
 }
+
+
+/* ==========================================================
+   MOBILE SIDEBAR DRAWER
+========================================================== */
+
+function initMobileSidebarDrawer() {
+
+    if (WebZoneState.sidebarInitialized) {
+        return;
+    }
+
+
+    const sidebars =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.sidebars
+        );
+
+
+    if (!sidebars.length) {
+        return;
+    }
+
+
+    WebZoneState.sidebarInitialized =
+        true;
+
+
+    const toggleButtons =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.sidebarToggles
+        );
+
+
+    WebZoneState.sidebar.sidebars =
+        Array.from(sidebars);
+
+    WebZoneState.sidebar.toggleButtons =
+        Array.from(toggleButtons);
+
+
+    /*
+     * Create backdrop if necessary.
+     */
+    let backdrop =
+        document.getElementById(
+            "sidebarBackdrop"
+        ) ||
+        document.querySelector(
+            ".sidebar-backdrop"
+        );
+
+
+    if (!backdrop) {
+
+        backdrop =
+            document.createElement(
+                "div"
+            );
+
+        backdrop.id =
+            "sidebarBackdrop";
+
+        backdrop.className =
+            "sidebar-backdrop";
+
+        backdrop.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        document.body.appendChild(
+            backdrop
+        );
+    }
+
+
+    WebZoneState.sidebar.backdrop =
+        backdrop;
+
+
+    /*
+     * Prepare sidebars.
+     */
+    sidebars.forEach(
+        setupSidebar
+    );
+
+
+    /*
+     * Hamburger buttons.
+     */
+    toggleButtons.forEach(
+        setupSidebarToggle
+    );
+
+
+    /*
+     * Backdrop click.
+     */
+    if (
+        backdrop.dataset.webzoneBound !== "true"
+    ) {
+
+        backdrop.dataset.webzoneBound =
+            "true";
+
+
+        backdrop.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                closeSidebarDrawer();
+            }
+        );
+
+
+        backdrop.addEventListener(
+            "touchstart",
+            event => {
+
+                event.preventDefault();
+
+                closeSidebarDrawer();
+            },
+            {
+                passive: false
+            }
+        );
+    }
+
+
+    /*
+     * Escape key.
+     */
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape" &&
+                isSidebarDrawerOpen()
+            ) {
+
+                closeSidebarDrawer();
+            }
+        }
+    );
+
+
+    /*
+     * Navigation links close drawer on mobile.
+     */
+    const navLinks =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.sidebarNav
+        );
+
+
+    navLinks.forEach(link => {
+
+        if (
+            link.dataset.webzoneDrawerBound === "true"
+        ) {
+            return;
+        }
+
+        link.dataset.webzoneDrawerBound =
+            "true";
+
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    window.innerWidth <=
+                    WEBZONE_CONFIG.mobileBreakpoint
+                ) {
+
+                    closeSidebarDrawer();
+                }
+            }
+        );
+    });
+
+
+    /*
+     * Resize behavior.
+     */
+    window.addEventListener(
+        "resize",
+        handleSidebarResize
+    );
+
+
+    /*
+     * Global fallback:
+     * clicking outside closes the drawer.
+     */
+    document.addEventListener(
+        "click",
+        handleOutsideSidebarClick
+    );
+
+
+    /*
+     * Expose API.
+     */
+    window.WebZoneSidebar = {
+
+        open:
+            openSidebarDrawer,
+
+        close:
+            closeSidebarDrawer,
+
+        toggle:
+            toggleSidebarDrawer,
+
+        isOpen:
+            isSidebarDrawerOpen
+    };
+
+
+    /*
+     * Make sure initial state is closed.
+     */
+    closeSidebarDrawer();
+}
+
+
+/* ==========================================================
+   SIDEBAR SETUP
+========================================================== */
+
+function setupSidebar(sidebar) {
+
+    if (!sidebar) {
+        return;
+    }
+
+
+    /*
+     * Add accessible close button when
+     * a logo exists.
+     */
+    const logo =
+        sidebar.querySelector(
+            ".logo"
+        );
+
+
+    if (
+        logo &&
+        !sidebar.querySelector(
+            ".sidebar-close-btn"
+        )
+    ) {
+
+        const closeBtn =
+            document.createElement(
+                "button"
+            );
+
+
+        closeBtn.type =
+            "button";
+
+        closeBtn.className =
+            "sidebar-close-btn";
+
+        closeBtn.setAttribute(
+            "aria-label",
+            "Close navigation drawer"
+        );
+
+        closeBtn.setAttribute(
+            "title",
+            "Close navigation"
+        );
+
+        closeBtn.innerHTML =
+            '<span aria-hidden="true">&times;</span>';
+
+
+        closeBtn.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                closeSidebarDrawer();
+            }
+        );
+
+
+        logo.appendChild(
+            closeBtn
+        );
+    }
+
+
+    /*
+     * Mark sidebar as navigation.
+     */
+    if (
+        !sidebar.getAttribute("role")
+    ) {
+
+        sidebar.setAttribute(
+            "role",
+            "navigation"
+        );
+    }
+}
+
+
+/* ==========================================================
+   SIDEBAR TOGGLE SETUP
+========================================================== */
+
+function setupSidebarToggle(button) {
+
+    if (!button) {
+        return;
+    }
+
+
+    if (
+        button.dataset.webzoneSidebarBound ===
+        "true"
+    ) {
+
+        return;
+    }
+
+
+    button.dataset.webzoneSidebarBound =
+        "true";
+
+
+    button.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
+    button.setAttribute(
+        "aria-controls",
+        "mainSidebar"
+    );
+
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            toggleSidebarDrawer();
+        }
+    );
+}
+
+
+/* ==========================================================
+   SIDEBAR STATE
+========================================================== */
+
+function isSidebarDrawerOpen() {
+
+    return (
+        WebZoneState.sidebarOpen ||
+        document.body.classList.contains(
+            "sidebar-open"
+        )
+    );
+}
+
+
+/* ==========================================================
+   OPEN SIDEBAR
+========================================================== */
+
+function openSidebarDrawer() {
+
+    const {
+        sidebars,
+        toggleButtons,
+        backdrop
+    } = WebZoneState.sidebar;
+
+
+    if (!sidebars.length) {
+        return;
+    }
+
+
+    sidebars.forEach(sidebar => {
+
+        sidebar.classList.add(
+            "open"
+        );
+
+        sidebar.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+    });
+
+
+    toggleButtons.forEach(button => {
+
+        button.classList.add(
+            "is-active"
+        );
+
+        button.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+    });
+
+
+    document.body.classList.add(
+        "sidebar-open"
+    );
+
+
+    /*
+     * Prevent page scrolling while
+     * mobile navigation is open.
+     */
+    if (
+        window.innerWidth <=
+        WEBZONE_CONFIG.mobileBreakpoint
+    ) {
+
+        document.body.classList.add(
+            "webzone-scroll-lock"
+        );
+    }
+
+
+    if (backdrop) {
+
+        backdrop.classList.add(
+            "active"
+        );
+
+        backdrop.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+    }
+
+
+    WebZoneState.sidebarOpen =
+        true;
+
+
+    window.dispatchEvent(
+        new CustomEvent(
+            "webzone-sidebar-change",
+            {
+                detail: {
+                    open: true
+                }
+            }
+        )
+    );
+}
+
+
+/* ==========================================================
+   CLOSE SIDEBAR
+========================================================== */
+
+function closeSidebarDrawer() {
+
+    const {
+        sidebars,
+        toggleButtons,
+        backdrop
+    } = WebZoneState.sidebar;
+
+
+    sidebars.forEach(sidebar => {
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+        sidebar.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+    });
+
+
+    toggleButtons.forEach(button => {
+
+        button.classList.remove(
+            "is-active"
+        );
+
+        button.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    });
+
+
+    document.body.classList.remove(
+        "sidebar-open"
+    );
+
+    document.body.classList.remove(
+        "webzone-scroll-lock"
+    );
+
+
+    if (backdrop) {
+
+        backdrop.classList.remove(
+            "active"
+        );
+
+        backdrop.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+    }
+
+
+    WebZoneState.sidebarOpen =
+        false;
+
+
+    window.dispatchEvent(
+        new CustomEvent(
+            "webzone-sidebar-change",
+            {
+                detail: {
+                    open: false
+                }
+            }
+        )
+    );
+}
+
+
+/* ==========================================================
+   TOGGLE SIDEBAR
+========================================================== */
+
+function toggleSidebarDrawer() {
+
+    if (
+        isSidebarDrawerOpen()
+    ) {
+
+        closeSidebarDrawer();
+
+    } else {
+
+        openSidebarDrawer();
+    }
+}
+
+
+/* ==========================================================
+   SIDEBAR RESIZE
+========================================================== */
+
+function handleSidebarResize() {
+
+    if (
+        window.innerWidth >
+        WEBZONE_CONFIG.mobileBreakpoint
+    ) {
+
+        if (
+            isSidebarDrawerOpen()
+        ) {
+
+            closeSidebarDrawer();
+        }
+    }
+}
+
+
+/* ==========================================================
+   OUTSIDE SIDEBAR CLICK
+========================================================== */
+
+function handleOutsideSidebarClick(event) {
+
+    if (
+        !isSidebarDrawerOpen()
+    ) {
+
+        return;
+    }
+
+
+    const target =
+        event.target;
+
+
+    const clickedInsideSidebar =
+        WebZoneState.sidebar.sidebars.some(
+            sidebar =>
+                sidebar.contains(target)
+        );
+
+
+    const clickedToggle =
+        WebZoneState.sidebar.toggleButtons.some(
+            button =>
+                button.contains(target)
+        );
+
+
+    if (
+        !clickedInsideSidebar &&
+        !clickedToggle
+    ) {
+
+        closeSidebarDrawer();
+    }
+}
+
+
+/* ==========================================================
+   ACTIVE NAVIGATION
+========================================================== */
+
+function initActiveNavigation() {
+
+    if (WebZoneState.navigationInitialized) {
+        return;
+    }
+
+
+    const navLinks =
+        document.querySelectorAll(
+            WEBZONE_CONFIG.selectors.sidebarNav
+        );
+
+
+    if (!navLinks.length) {
+        return;
+    }
+
+
+    WebZoneState.navigationInitialized =
+        true;
+
+
+    const currentPage =
+        detectCurrentPage();
+
+
+    /*
+     * Store active page for compatibility
+     * with existing WebZoneBW logic.
+     */
+    try {
+
+        sessionStorage.setItem(
+            WEBZONE_CONFIG.storage.activeNavigation,
+            currentPage
+        );
+
+    } catch (error) {
+
+        /*
+         * Session storage can be blocked.
+         * Nothing critical depends on it.
+         */
+    }
+
+
+    navLinks.forEach(link => {
+
+        const href =
+            (
+                link.getAttribute(
+                    "href"
+                ) || ""
+            ).trim();
+
+
+        const isMatch =
+            isNavigationMatch(
+                href,
+                currentPage
+            );
+
+
+        if (isMatch) {
+
+            link.classList.add(
+                "active"
+            );
+
+            link.setAttribute(
+                "aria-current",
+                "page"
+            );
+
+        } else {
+
+            link.classList.remove(
+                "active"
+            );
+
+            link.removeAttribute(
+                "aria-current"
+            );
+        }
+
+
+        /*
+         * Remember clicked destination.
+         */
+        if (
+            link.dataset.webzoneNavBound !==
+            "true"
+        ) {
+
+            link.dataset.webzoneNavBound =
+                "true";
+
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    try {
+
+                        sessionStorage.setItem(
+                            WEBZONE_CONFIG.storage.activeNavigation,
+                            href
+                        );
+
+                    } catch (error) {}
+                }
+            );
+        }
+    });
+}
+
+
+/* ==========================================================
+   CURRENT PAGE DETECTION
+========================================================== */
+
+function detectCurrentPage() {
+
+    const pathname =
+        (
+            window.location.pathname ||
+            "/"
+        ).toLowerCase();
+
+
+    /*
+     * Halloween section.
+     */
+    if (
+        pathname.includes(
+            "/halloween/"
+        ) ||
+        pathname.includes(
+            "/halloween"
+        )
+    ) {
+
+        return "halloween/index.html";
+    }
+
+
+    /*
+     * Known pages.
+     */
+    const knownPages = [
+        "soundbox.html",
+        "projects.html",
+        "resume.html",
+        "blog.html",
+        "about.html",
+        "contact.html",
+        "master.html",
+        "privacy.html",
+        "terms.html",
+        "disclaimer.html",
+        "404.html"
+    ];
+
+
+    for (
+        const page of knownPages
+    ) {
+
+        if (
+            pathname.endsWith(
+                `/${page}`
+            ) ||
+            pathname === page
+        ) {
+
+            return page;
+        }
+    }
+
+
+    /*
+     * Generic HTML page.
+     */
+    const parts =
+        pathname
+            .split("/")
+            .filter(Boolean);
+
+
+    const lastPart =
+        parts[
+            parts.length - 1
+        ];
+
+
+    if (
+        lastPart &&
+        lastPart.endsWith(".html")
+    ) {
+
+        return lastPart;
+    }
+
+
+    /*
+     * Root.
+     */
+    return "index.html";
+}
+
+
+/* ==========================================================
+   NAVIGATION MATCHING
+========================================================== */
+
+function isNavigationMatch(
+    href,
+    currentPage
+) {
+
+    if (!href) {
+        return false;
+    }
+
+
+    const normalizedHref =
+        href
+            .toLowerCase()
+            .split("?")[0]
+            .split("#")[0];
+
+
+    /*
+     * Halloween.
+     */
+    if (
+        currentPage ===
+        "halloween/index.html"
+    ) {
+
+        return (
+            normalizedHref.includes(
+                "halloween"
+            )
+        );
+    }
+
+
+    /*
+     * Homepage.
+     */
+    if (
+        currentPage ===
+        "index.html"
+    ) {
+
+        return (
+            normalizedHref ===
+                "index.html" ||
+
+            normalizedHref ===
+                "./index.html" ||
+
+            normalizedHref ===
+                "/" ||
+
+            normalizedHref ===
+                "./" ||
+
+            normalizedHref ===
+                "../index.html" ||
+
+            normalizedHref ===
+                ""
+        );
+    }
+
+
+    /*
+     * Normal pages.
+     */
+    return (
+        normalizedHref ===
+            currentPage ||
+
+        normalizedHref ===
+            `./${currentPage}` ||
+
+        normalizedHref.endsWith(
+            `/${currentPage}`
+        ) ||
+
+        normalizedHref.endsWith(
+            currentPage
+        )
+    );
+}
+
+
+/* ==========================================================
+   GLOBAL WEBZONEBW API
+========================================================== */
+
+window.WebZoneBW = {
+
+    version:
+        WEBZONE_CONFIG.version,
+
+
+    get state() {
+
+        return {
+            initialized:
+                WebZoneState.initialized,
+
+            theme:
+                WebZoneState.theme,
+
+            reducedMotion:
+                WebZoneState.reducedMotion,
+
+            sidebarOpen:
+                isSidebarDrawerOpen()
+        };
+    },
+
+
+    theme:
+        window.WebZoneTheme,
+
+
+    sidebar:
+        window.WebZoneSidebar || null,
+
+
+    refreshNavigation() {
+
+        WebZoneState.navigationInitialized =
+            false;
+
+        initActiveNavigation();
+    },
+
+
+    refreshSkills() {
+
+        WebZoneState.skillsInitialized =
+            false;
+
+        initSkillBars();
+    },
+
+
+    refreshThemeControls() {
+
+        window.WebZoneTheme.syncUIControls(
+            window.WebZoneTheme.isLight
+        );
+    },
+
+
+    openSidebar() {
+
+        openSidebarDrawer();
+    },
+
+
+    closeSidebar() {
+
+        closeSidebarDrawer();
+    }
+};
+
+
+/* ==========================================================
+   KEEP GLOBAL SIDEBAR API IN SYNC
+========================================================== */
+
+if (!window.WebZoneSidebar) {
+
+    window.WebZoneSidebar = {
+
+        open:
+            openSidebarDrawer,
+
+        close:
+            closeSidebarDrawer,
+
+        toggle:
+            toggleSidebarDrawer,
+
+        isOpen:
+            isSidebarDrawerOpen
+    };
+}
+
+
+/*
+ * Update the WebZoneBW reference after
+ * sidebar API creation.
+ */
+window.WebZoneBW.sidebar =
+    window.WebZoneSidebar;
+
+
+/* ==========================================================
+   COMPATIBILITY EVENTS
+========================================================== */
+
+/*
+ * Allow other scripts to request a theme change:
+ *
+ * window.dispatchEvent(new CustomEvent(
+ *   "webzone-set-theme",
+ *   { detail: { theme: "light" } }
+ * ));
+ */
+window.addEventListener(
+    "webzone-set-theme",
+    event => {
+
+        const theme =
+            event.detail &&
+            event.detail.theme;
+
+
+        if (
+            theme === "light" ||
+            theme === "dark"
+        ) {
+
+            window.WebZoneTheme.set(
+                theme,
+                true,
+                true
+            );
+        }
+    }
+);
+
+
+/*
+ * Allow other components to request
+ * sidebar operations.
+ */
+window.addEventListener(
+    "webzone-toggle-sidebar",
+    () => {
+
+        toggleSidebarDrawer();
+    }
+);
+
+
+/* ==========================================================
+   VISIBILITY RECOVERY
+========================================================== */
+
+/*
+ * Some mobile browsers restore a page from
+ * the back/forward cache with stale UI state.
+ *
+ * Reset drawer state when page becomes visible.
+ */
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (
+            document.visibilityState ===
+            "visible"
+        ) {
+
+            if (
+                window.innerWidth >
+                WEBZONE_CONFIG.mobileBreakpoint
+            ) {
+
+                closeSidebarDrawer();
+            }
+
+
+            /*
+             * Re-sync theme controls in case
+             * another component modified theme state.
+             */
+            if (
+                WebZoneState.themeInitialized
+            ) {
+
+                window.WebZoneTheme.syncUIControls(
+                    window.WebZoneTheme.isLight
+                );
+            }
+        }
+    }
+);
+
+
+/* ==========================================================
+   PAGE LIFECYCLE RECOVERY
+========================================================== */
+
+window.addEventListener(
+    "pageshow",
+    () => {
+
+        /*
+         * Ensure the current theme is reflected
+         * after browser back/forward navigation.
+         */
+        if (
+            WebZoneState.themeInitialized
+        ) {
+
+            window.WebZoneTheme.syncUIControls(
+                window.WebZoneTheme.isLight
+            );
+        }
+
+
+        /*
+         * Desktop should never retain an
+         * open mobile drawer.
+         */
+        if (
+            window.innerWidth >
+            WEBZONE_CONFIG.mobileBreakpoint
+        ) {
+
+            closeSidebarDrawer();
+        }
+    }
+);
+
+
+/* ==========================================================
+   END OF WEBZONEBW CORE CONTROLLER
+========================================================== */
