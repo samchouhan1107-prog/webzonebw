@@ -117,7 +117,13 @@
 
 
     <!-- =====================================================
-         ER STUDIO PAGE-SCOPED LAYOUT
+         WEBZONEBW-ER PAGE-SCOPED LAYOUT SAFETY
+         
+         IMPORTANT:
+         These rules preserve the current desktop/tablet/
+         mobile camera layout.
+         
+         Do not move or restructure these breakpoints.
          ===================================================== -->
 
     <style>
@@ -134,183 +140,27 @@
 
 
         /* =====================================================
-           STANDARD WEBZONEBW PAGE HEADER
-           ===================================================== */
-
-        .er-studio-body .site-page-header {
-            width: 100%;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(8, 8, 13, 0.94);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            position: relative;
-            z-index: 200;
-        }
-
-
-        .er-studio-body .page-header-content {
-            width: 100%;
-            max-width: 1600px;
-            min-height: 78px;
-            margin: 0 auto;
-            padding: 14px 28px;
-            box-sizing: border-box;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-        }
-
-
-        .er-studio-body .page-header-title {
-            min-width: 0;
-        }
-
-
-        .er-studio-body .page-header-brand {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            flex-wrap: wrap;
-
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-        }
-
-
-        .er-studio-body .page-header-brand-main {
-            color: inherit;
-            white-space: nowrap;
-        }
-
-
-        .er-studio-body .page-header-divider {
-            opacity: 0.35;
-        }
-
-
-        .er-studio-body .page-header-section {
-            font-weight: 500;
-            opacity: 0.82;
-            white-space: nowrap;
-        }
-
-
-        .er-studio-body .page-header-description {
-            margin: 5px 0 0;
-            font-size: 0.76rem;
-            line-height: 1.4;
-            opacity: 0.58;
-            letter-spacing: 0.025em;
-        }
-
-
-        .er-studio-body .page-header-actions {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-
-        .er-studio-body .page-header-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-
-            min-height: 38px;
-            padding: 0 12px;
-
-            border-radius: 8px;
-
-            color: inherit;
-            text-decoration: none;
-
-            font-size: 0.82rem;
-            font-weight: 500;
-
-            opacity: 0.78;
-
-            transition:
-                background 0.2s ease,
-                opacity 0.2s ease,
-                transform 0.2s ease;
-        }
-
-
-        .er-studio-body .page-header-action:hover {
-            background: rgba(255, 255, 255, 0.07);
-            opacity: 1;
-            transform: translateY(-1px);
-        }
-
-
-        .er-studio-body .page-header-icon {
-            width: 38px;
-            height: 38px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-
-            background: rgba(255, 255, 255, 0.035);
-            color: inherit;
-
-            cursor: pointer;
-
-            font-size: 1rem;
-
-            transition:
-                background 0.2s ease,
-                border-color 0.2s ease,
-                transform 0.2s ease;
-        }
-
-
-        .er-studio-body .page-header-icon:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.18);
-            transform: translateY(-1px);
-        }
-
-
-        /* =====================================================
-           DESKTOP ER LAYOUT
-           Sidebar gets its own grid column.
+           DESKTOP LAYOUT
            ===================================================== */
 
         .er-studio-body .er-layout-container {
             display: grid;
             grid-template-columns: minmax(230px, 270px) minmax(0, 1fr);
             width: 100%;
-            min-height: calc(100vh - 78px);
+            min-height: 100vh;
         }
 
-
-        /* =====================================================
-           SIDEBAR
-           ===================================================== */
 
         .er-studio-body .er-sidebar {
             position: relative;
             inset: auto;
             width: auto;
             min-width: 0;
-            height: calc(100vh - 78px);
+            height: 100vh;
             z-index: 50;
             overflow-y: auto;
         }
 
-
-        /* =====================================================
-           MAIN AREA
-           ===================================================== */
 
         .er-studio-body .er-main-content {
             min-width: 0;
@@ -318,10 +168,6 @@
             max-width: none;
         }
 
-
-        /* =====================================================
-           WORKSPACE
-           ===================================================== */
 
         .er-studio-body .er-workspace-grid {
             min-width: 0;
@@ -345,20 +191,14 @@
         .er-studio-body #cameraVideo.camera-video {
             position: absolute;
             inset: 0;
-
             width: 100%;
             height: 100%;
-
             max-width: 100%;
             max-height: 100%;
-
             object-fit: cover;
             object-position: center center;
-
             display: block;
-
             z-index: 1;
-
             background: #050507;
         }
 
@@ -366,19 +206,13 @@
         .er-studio-body #cameraCanvas.camera-canvas {
             position: absolute;
             inset: 0;
-
             width: 100%;
             height: 100%;
-
             max-width: 100%;
             max-height: 100%;
-
             object-fit: contain;
-
             display: block;
-
             z-index: 2;
-
             pointer-events: none;
         }
 
@@ -389,10 +223,6 @@
             z-index: 10;
         }
 
-
-        /* =====================================================
-           CAMERA CONTROLS
-           ===================================================== */
 
         .er-studio-body .cam-corner-btn,
         .er-studio-body .cam-zoom-badge,
@@ -416,12 +246,9 @@
             margin: 10px auto 0;
             max-width: 900px;
             padding: 8px 14px;
-
             text-align: center;
-
             font-size: 0.78rem;
             line-height: 1.45;
-
             opacity: 0.72;
         }
 
@@ -442,35 +269,437 @@
 
 
         /* =====================================================
-           MOBILE HEADER
+           HALLOWEEN ER LAUNCH ORB
+           
+           Replaces the pumpkin emoji only.
+           
+           It intentionally keeps a compact footprint so it
+           does not change the camera placeholder layout.
            ===================================================== */
 
-        .er-studio-body .er-mobile-nav-bar {
-            min-height: 58px;
-        }
-
-
-        .er-studio-body .er-mobile-title {
-            display: inline-flex;
+        .er-studio-body .er-launch-icon-wrap {
+            display: flex;
             align-items: center;
-            gap: 6px;
-
-            text-decoration: none;
-            color: inherit;
-
-            font-weight: 600;
-            letter-spacing: 0.025em;
+            justify-content: center;
         }
 
 
-        .er-studio-body .mobile-section-name {
-            opacity: 0.7;
-            font-size: 0.84em;
+        .er-studio-body .er-launch-orb {
+            --orb-x: 0px;
+            --orb-y: 0px;
+
+            position: relative;
+
+            width: 82px;
+            height: 82px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transform:
+                translate3d(
+                    var(--orb-x),
+                    var(--orb-y),
+                    0
+                );
+
+            transition:
+                transform 180ms ease,
+                filter 250ms ease;
+
+            isolation: isolate;
         }
 
 
         /* =====================================================
-           TABLET
+           ORB CORE
+           ===================================================== */
+
+        .er-studio-body .er-orb-core {
+            position: relative;
+
+            width: 60px;
+            height: 60px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle at 35% 28%,
+                    #ffb64a 0%,
+                    #ff7625 35%,
+                    #ed3341 68%,
+                    #64204e 100%
+                );
+
+            border: 1px solid rgba(255,255,255,.28);
+
+            box-shadow:
+                0 0 18px rgba(255,102,0,.42),
+                0 0 38px rgba(255,55,40,.18),
+                inset 0 0 18px rgba(255,255,255,.12);
+
+            z-index: 3;
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================================
+           DIGITAL HALLOWEEN MARK
+           ===================================================== */
+
+        .er-studio-body .er-orb-mark {
+            position: relative;
+
+            width: 36px;
+            height: 32px;
+
+            opacity: .96;
+        }
+
+
+        .er-studio-body .er-mark-eye {
+            position: absolute;
+
+            top: 7px;
+
+            width: 8px;
+            height: 5px;
+
+            background: #170c2d;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 6px rgba(255,255,255,.22);
+        }
+
+
+        .er-studio-body .er-mark-eye.left {
+            left: 4px;
+        }
+
+
+        .er-studio-body .er-mark-eye.right {
+            right: 4px;
+        }
+
+
+        .er-studio-body .er-mark-smile {
+            position: absolute;
+
+            left: 6px;
+            bottom: 3px;
+
+            width: 24px;
+            height: 10px;
+
+            border-bottom:
+                4px solid #170c2d;
+
+            border-radius:
+                0 0 50% 50%;
+        }
+
+
+        /* =====================================================
+           SCAN LIGHT
+           ===================================================== */
+
+        .er-studio-body .er-orb-scan {
+            position: absolute;
+
+            left: -10%;
+            top: -100%;
+
+            width: 120%;
+            height: 35%;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent,
+                    rgba(255,255,255,.32),
+                    transparent
+                );
+
+            animation:
+                erHalloweenOrbScan 2.8s linear infinite;
+
+            pointer-events: none;
+        }
+
+
+        @keyframes erHalloweenOrbScan {
+
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(350%);
+            }
+
+        }
+
+
+        /* =====================================================
+           ORBIT RINGS
+           ===================================================== */
+
+        .er-studio-body .er-orb-ring {
+            position: absolute;
+
+            border-radius: 50%;
+
+            pointer-events: none;
+        }
+
+
+        .er-studio-body .er-orb-ring-outer {
+            width: 82px;
+            height: 82px;
+
+            border:
+                1px solid rgba(255,102,30,.28);
+
+            animation:
+                erHalloweenOrbRotate 8s linear infinite;
+        }
+
+
+        .er-studio-body .er-orb-ring-middle {
+            width: 70px;
+            height: 70px;
+
+            border:
+                1px dashed rgba(190,95,255,.36);
+
+            animation:
+                erHalloweenOrbRotateReverse 6s linear infinite;
+        }
+
+
+        @keyframes erHalloweenOrbRotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @keyframes erHalloweenOrbRotateReverse {
+
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+        /* =====================================================
+           FLOATING PARTICLES
+           ===================================================== */
+
+        .er-studio-body .er-orb-particle {
+            position: absolute;
+
+            width: 4px;
+            height: 4px;
+
+            border-radius: 50%;
+
+            background: #ff9c45;
+
+            box-shadow:
+                0 0 8px rgba(255,120,50,.8);
+
+            z-index: 4;
+
+            animation:
+                erHalloweenParticleFloat 2.6s ease-in-out infinite;
+        }
+
+
+        .er-studio-body .particle-one {
+            top: 5px;
+            right: 16px;
+        }
+
+
+        .er-studio-body .particle-two {
+            bottom: 9px;
+            left: 8px;
+
+            animation-delay: .5s;
+        }
+
+
+        .er-studio-body .particle-three {
+            top: 38px;
+            left: 0;
+
+            animation-delay: 1s;
+        }
+
+
+        .er-studio-body .particle-four {
+            right: 1px;
+            bottom: 27px;
+
+            animation-delay: 1.5s;
+        }
+
+
+        @keyframes erHalloweenParticleFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: .45;
+            }
+
+            50% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =====================================================
+           LAUNCH STATUS
+           ===================================================== */
+
+        .er-studio-body .er-launch-status {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 7px;
+
+            margin-top: 10px;
+
+            font-size: .66rem;
+
+            font-weight: 700;
+
+            letter-spacing: .15em;
+
+            text-transform: uppercase;
+
+            opacity: .68;
+        }
+
+
+        .er-studio-body .er-status-dot {
+            width: 6px;
+            height: 6px;
+
+            flex: 0 0 6px;
+
+            border-radius: 50%;
+
+            background: #7dffb2;
+
+            box-shadow:
+                0 0 8px rgba(125,255,178,.8);
+
+            animation:
+                erHalloweenStatusPulse 1.8s ease-in-out infinite;
+        }
+
+
+        @keyframes erHalloweenStatusPulse {
+
+            0%,
+            100% {
+                opacity: .45;
+                transform: scale(.85);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+
+        }
+
+
+        /* =====================================================
+           HALLOWEEN TITLE ACCENT
+           ===================================================== */
+
+        .er-studio-body .launch-title-accent {
+            display: inline-block;
+
+            margin-left: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff7a00,
+                    #ff3b4d,
+                    #b95cff
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        /* =====================================================
+           ACTIVE LAUNCH STATE
+           ===================================================== */
+
+        .er-studio-body .er-launch-orb.launch-active {
+            filter:
+                brightness(1.25)
+                drop-shadow(
+                    0 0 18px
+                    rgba(255,92,35,.65)
+                );
+        }
+
+
+        .er-studio-body
+        .er-launch-orb.launch-active
+        .er-orb-ring-outer {
+
+            animation-duration: 1s;
+        }
+
+
+        .er-studio-body
+        .er-launch-orb.launch-active
+        .er-orb-ring-middle {
+
+            animation-duration: .8s;
+        }
+
+
+        /* =====================================================
+           DESKTOP / TABLET / MOBILE LAYOUT
+           
+           ORIGINAL BREAKPOINTS PRESERVED.
            ===================================================== */
 
         @media (max-width: 1100px) {
@@ -481,51 +710,29 @@
                     minmax(0, 1fr);
             }
 
-
-            .er-studio-body .page-header-content {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-
         }
 
 
-        /* =====================================================
-           MOBILE / DRAWER
-           ===================================================== */
-
         @media (max-width: 900px) {
-
-            .er-studio-body .site-page-header {
-                display: none;
-            }
-
 
             .er-studio-body .er-layout-container {
                 display: block;
-                min-height: 100vh;
             }
-
 
             .er-studio-body .er-sidebar {
                 position: fixed;
-
                 top: 0;
                 left: 0;
                 bottom: 0;
-
                 width: min(82vw, 300px);
                 height: 100vh;
-
                 z-index: 1000;
             }
-
 
             .er-studio-body .er-main-content {
                 width: 100%;
                 min-width: 0;
             }
-
 
             .er-studio-body .camera-viewport-frame {
                 min-height: min(70vh, 600px);
@@ -534,10 +741,6 @@
         }
 
 
-        /* =====================================================
-           SMALL MOBILE
-           ===================================================== */
-
         @media (max-width: 600px) {
 
             .er-studio-body .camera-viewport-frame {
@@ -545,20 +748,13 @@
                 max-height: 72vh;
             }
 
-
             .er-studio-body #cameraVideo.camera-video {
                 object-fit: cover;
             }
 
-
             .er-camera-privacy-note {
                 font-size: 0.72rem;
                 padding: 7px 10px;
-            }
-
-
-            .er-studio-body .er-mobile-title {
-                font-size: 0.92rem;
             }
 
         }
@@ -597,7 +793,7 @@
 
 
     <!-- =====================================================
-         ER STUDIO CONFIGURATION
+         WEBZONEBW-ER CONFIGURATION
          ===================================================== -->
 
     <script>
@@ -638,7 +834,7 @@
 
 
     <!-- =====================================================
-         WEB APPLICATION STRUCTURED DATA
+         STRUCTURED DATA
          ===================================================== -->
 
     <script type="application/ld+json">
@@ -702,12 +898,11 @@
 
 <body class="er-studio-body">
 
-
 <div class="er-layout-container">
 
 
     <!-- =====================================================
-         SIDEBAR NAVIGATION
+         SIDEBAR
          ===================================================== -->
 
     <aside class="sidebar er-sidebar"
@@ -741,8 +936,6 @@
         </div>
 
 
-        <!-- Sidebar Navigation -->
-
         <nav class="sidebar-nav"
              aria-label="Main Navigation">
 
@@ -750,114 +943,67 @@
 
                 <li>
                     <a href="../index.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            🏠
-                        </span>
-
+                              aria-hidden="true">🏠</span>
                         Dashboard
-
                     </a>
                 </li>
-
 
                 <li>
                     <a href="index.html"
                        class="active er-nav-pill"
                        aria-current="page">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            🔮
-                        </span>
-
+                              aria-hidden="true">🔮</span>
                         WebZoneBW-ER Studio
-
                     </a>
                 </li>
-
 
                 <li>
                     <a href="../projects.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            💼
-                        </span>
-
+                              aria-hidden="true">💼</span>
                         Projects
-
                     </a>
                 </li>
-
 
                 <li>
                     <a href="../resume.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            📄
-                        </span>
-
+                              aria-hidden="true">📄</span>
                         Resume
-
                     </a>
                 </li>
-
 
                 <li>
                     <a href="../blog.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            📝
-                        </span>
-
+                              aria-hidden="true">📝</span>
                         Blog
-
                     </a>
                 </li>
-
 
                 <li>
                     <a href="../soundbox.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            🎵
-                        </span>
-
+                              aria-hidden="true">🎵</span>
                         Sound Box
-
                     </a>
                 </li>
-
 
                 <li>
                     <a href="../about.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            👤
-                        </span>
-
+                              aria-hidden="true">👤</span>
                         About
-
                     </a>
                 </li>
 
-
                 <li>
                     <a href="../contact.html">
-
                         <span class="nav-icon"
-                              aria-hidden="true">
-                            ✉️
-                        </span>
-
+                              aria-hidden="true">✉️</span>
                         Contact
-
                     </a>
                 </li>
 
@@ -866,22 +1012,12 @@
         </nav>
 
 
-        <!-- Dark Mode -->
-
         <div class="sidebar-theme-toggle-row">
 
             <div class="theme-label-group">
-
-                <span aria-hidden="true">
-                    🌙
-                </span>
-
-                <span>
-                    Dark Mode
-                </span>
-
+                <span aria-hidden="true">🌙</span>
+                <span>Dark Mode</span>
             </div>
-
 
             <label class="switch-toggle"
                    for="themeToggleSwitch">
@@ -898,8 +1034,6 @@
         </div>
 
 
-        <!-- User Profile -->
-
         <div class="sidebar-user-card">
 
             <div class="user-avatar-wrap">
@@ -909,11 +1043,9 @@
                 </span>
 
                 <span class="user-online-dot"
-                      title="Online">
-                </span>
+                      title="Online"></span>
 
             </div>
-
 
             <div class="user-info">
 
@@ -933,7 +1065,7 @@
 
 
     <!-- =====================================================
-         MAIN WEBZONEBW CONTENT
+         MAIN ER STUDIO
          ===================================================== -->
 
     <main class="main-content er-main-content">
@@ -957,21 +1089,15 @@
 
             </button>
 
-
-            <a href="../index.html"
-               class="er-mobile-title"
-               aria-label="WEBZONEBW Home">
+            <div class="er-mobile-title">
 
                 <span class="gradient-text">
-                    WEBZONEBW
+                    WEBZONEBW-ER
                 </span>
 
-                <span class="mobile-section-name">
-                    / ER Studio
-                </span>
+                STUDIO
 
-            </a>
-
+            </div>
 
             <button type="button"
                     class="header-icon-btn"
@@ -987,100 +1113,75 @@
 
 
         <!-- =================================================
-             STANDARD WEBZONEBW PAGE HEADER
+             TOP HEADER
              ================================================= -->
 
-        <header class="site-page-header">
+        <header class="er-top-header">
 
-            <div class="page-header-content">
+            <div class="er-title-group">
 
+                <h1 class="er-main-title">
 
-                <!-- PAGE TITLE -->
+                    <span class="brand-prefix">
+                        WEBZONEBW-
+                    </span>
 
-                <div class="page-header-title">
+                    <span class="gradient-text">
+                        ER STUDIO
+                    </span>
 
-                    <div class="page-header-brand">
+                    <span class="sparkle-icon"
+                          aria-hidden="true">
+                        ✨
+                    </span>
 
-                        <span class="page-header-brand-main">
-                            WEBZONEBW
-                        </span>
+                </h1>
 
-                        <span class="page-header-divider">
-                            /
-                        </span>
+                <p class="er-subtitle">
+                    Explore interactive lenses, visual effects and the WEBZONEBW Halloween experience.
+                </p>
 
-                        <span class="page-header-section">
-                            ER Studio
-                        </span>
-
-                    </div>
-
-
-                    <p class="page-header-description">
-
-                        Extended Reality · Interactive Camera ·
-                        Visual Effects
-
-                    </p>
-
-                </div>
+            </div>
 
 
-                <!-- HEADER ACTIONS -->
+            <div class="er-header-utilities">
 
-                <div class="page-header-actions">
+                <button type="button"
+                        class="header-icon-btn"
+                        id="helpModalBtn"
+                        title="How to Use WebZoneBW-ER Studio"
+                        aria-label="Help">
 
+                    ❔
 
-                    <a href="../index.html"
-                       class="page-header-action"
-                       title="Return to WEBZONEBW Dashboard">
-
-                        <span aria-hidden="true">
-                            ⌂
-                        </span>
-
-                        <span>
-                            Dashboard
-                        </span>
-
-                    </a>
+                </button>
 
 
-                    <a href="../projects.html"
-                       class="page-header-action"
-                       title="View WEBZONEBW Projects">
+                <button type="button"
+                        class="header-icon-btn"
+                        id="settingsBtn"
+                        title="Camera &amp; Shader Settings"
+                        aria-label="Camera and Shader Settings">
 
-                        <span aria-hidden="true">
-                            ◈
-                        </span>
+                    ⚙️
 
-                        <span>
-                            Projects
-                        </span>
+                </button>
 
-                    </a>
 
+                <div class="notification-btn-wrap">
 
                     <button type="button"
-                            class="page-header-icon"
-                            id="helpModalBtn"
-                            title="How to use WEBZONEBW-ER Studio"
-                            aria-label="Help">
+                            class="header-icon-btn"
+                            title="Notifications"
+                            aria-label="Notifications">
 
-                        ?
+                        🔔
 
                     </button>
 
-
-                    <button type="button"
-                            class="page-header-icon"
-                            id="settingsBtn"
-                            title="Camera and Studio Settings"
-                            aria-label="Studio Settings">
-
-                        ⚙
-
-                    </button>
+                    <span class="notif-badge">
+                        1
+                    </span>
 
                 </div>
 
@@ -1158,16 +1259,13 @@
 
                     <div class="cam-floating-vertical-stack">
 
-
                         <button type="button"
                                 class="cam-vertical-btn"
                                 id="flipCameraBtnFloating"
                                 title="Flip Camera (Front / Back)"
                                 aria-label="Flip Camera Front or Back">
 
-                            <span>
-                                🔄
-                            </span>
+                            <span>🔄</span>
 
                         </button>
 
@@ -1178,9 +1276,7 @@
                                 title="Toggle Studio Light / Flash"
                                 aria-label="Studio Light">
 
-                            <span>
-                                ⚡
-                            </span>
+                            <span>⚡</span>
 
                         </button>
 
@@ -1191,9 +1287,7 @@
                                 title="AI Auto-HD Retouch &amp; Glow"
                                 aria-label="AI Glow Retouch">
 
-                            <span>
-                                ✨
-                            </span>
+                            <span>✨</span>
 
                         </button>
 
@@ -1204,9 +1298,7 @@
                                 title="Face Tracking &amp; Mesh"
                                 aria-label="Face Tracking and Mesh">
 
-                            <span>
-                                👤
-                            </span>
+                            <span>👤</span>
 
                         </button>
 
@@ -1241,14 +1333,12 @@
                          aria-modal="true"
                          aria-labelledby="permAlertTitle">
 
-
                         <div class="permission-alert-backdrop"
                              onclick="window.closePermissionAlert && window.closePermissionAlert()">
                         </div>
 
 
                         <div class="permission-alert-card">
-
 
                             <div class="perm-alert-header">
 
@@ -1292,19 +1382,17 @@
 
                                 <p id="permAlertMessage">
 
-                                    WEBZONEBW-ER Studio requires browser
-                                    permission to access your
-                                    <strong>Camera</strong> and optionally
-                                    your <strong>Microphone</strong> for live
-                                    visual effects, facial tracking and
-                                    audio-reactive features.
+                                    WEBZONEBW-ER Studio requires browser permission
+                                    to access your <strong>Camera</strong> and
+                                    optionally your <strong>Microphone</strong>
+                                    for live visual effects, facial tracking
+                                    and audio-reactive features.
 
                                 </p>
 
 
                                 <div class="perm-browser-steps"
                                      id="permBrowserSteps">
-
 
                                     <div class="perm-step-item">
 
@@ -1373,7 +1461,6 @@
 
 
                             <div class="perm-alert-actions">
-
 
                                 <button type="button"
                                         class="btn camera-btn-primary perm-action-btn"
@@ -1444,7 +1531,9 @@
                     </div>
 
 
-                    <!-- LIVE CAMERA -->
+                    <!-- =================================================
+                         LIVE CAMERA
+                         ================================================= -->
 
                     <video id="cameraVideo"
                            class="camera-video"
@@ -1466,24 +1555,75 @@
                     </canvas>
 
 
-                    <!-- CAMERA PLACEHOLDER -->
+                    <!-- =================================================
+                         CAMERA PLACEHOLDER
+                         
+                         HALLOWEEN ORB REPLACES ONLY THE OLD
+                         PUMPKIN EMOJI.
+                         ================================================= -->
 
                     <div id="cameraPlaceholder"
                          class="camera-placeholder">
 
 
-                        <div class="placeholder-icon-wrap">
+                        <div class="placeholder-icon-wrap er-launch-icon-wrap">
 
-                            <span class="big-icon"
-                                  aria-hidden="true">
-                                🎃
-                            </span>
+                            <div class="er-launch-orb"
+                                 id="erLaunchOrb"
+                                 aria-label="WEBZONEBW Extended Reality Halloween Studio"
+                                 role="img">
+
+
+                                <!-- ORBIT RINGS -->
+
+                                <div class="er-orb-ring er-orb-ring-outer"></div>
+
+                                <div class="er-orb-ring er-orb-ring-middle"></div>
+
+
+                                <!-- CORE -->
+
+                                <div class="er-orb-core">
+
+                                    <div class="er-orb-mark">
+
+                                        <span class="er-mark-eye left"></span>
+
+                                        <span class="er-mark-eye right"></span>
+
+                                        <span class="er-mark-smile"></span>
+
+                                    </div>
+
+
+                                    <div class="er-orb-scan"></div>
+
+                                </div>
+
+
+                                <!-- PARTICLES -->
+
+                                <span class="er-orb-particle particle-one"></span>
+
+                                <span class="er-orb-particle particle-two"></span>
+
+                                <span class="er-orb-particle particle-three"></span>
+
+                                <span class="er-orb-particle particle-four"></span>
+
+                            </div>
 
                         </div>
 
 
                         <h2 class="placeholder-title">
-                            WebZoneBW-ER Studio Ready
+
+                            WebZoneBW-ER Studio
+
+                            <span class="launch-title-accent">
+                                Ready
+                            </span>
+
                         </h2>
 
 
@@ -1497,7 +1637,6 @@
 
 
                         <div class="placeholder-btn-group">
-
 
                             <button type="button"
                                     class="btn camera-btn-primary"
@@ -1525,6 +1664,21 @@
                                 Test Mode
 
                             </button>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="er-launch-status"
+                             id="erLaunchStatus"
+                             aria-live="polite">
+
+                            <span class="er-status-dot"></span>
+
+                            <span class="er-status-text">
+                                ER STUDIO READY
+                            </span>
 
                         </div>
 
@@ -1844,13 +1998,11 @@
                      role="tablist"
                      aria-label="Effect Categories">
 
-
                     <button type="button"
                             class="cat-pill active"
                             data-cat="all">
                         All
                     </button>
-
 
                     <button type="button"
                             class="cat-pill"
@@ -1858,20 +2010,17 @@
                         Popular
                     </button>
 
-
                     <button type="button"
                             class="cat-pill"
                             data-cat="stylize">
                         Stylize
                     </button>
 
-
                     <button type="button"
                             class="cat-pill"
                             data-cat="scifi">
                         Sci-Fi
                     </button>
-
 
                     <button type="button"
                             class="cat-pill"
@@ -2190,7 +2339,7 @@
             </div>
 
 
-            <!-- EXPERIENCE INFORMATION -->
+            <!-- AI CARD -->
 
             <div class="powered-ai-card">
 
@@ -2201,11 +2350,11 @@
                 <div class="ai-card-text">
 
                     <h3>
-                        WEBZONEBW-ER Studio
+                        Powered by WebZoneBW AI
                     </h3>
 
                     <p>
-                        Interactive Effects · Live Preview · Photo Capture
+                        Smart Effects • Real-time Preview • One Tap Apply
                     </p>
 
                 </div>
@@ -2241,7 +2390,6 @@
                         📸 Snapshot Captured!
                     </h2>
 
-
                     <button type="button"
                             class="snapshot-close-x"
                             id="closeSnapshotXBtn"
@@ -2260,7 +2408,6 @@
 
 
                 <div class="snapshot-btn-row">
-
 
                     <a id="downloadSnapshotBtn"
                        class="btn camera-btn-primary"
@@ -2314,21 +2461,17 @@
                 <nav class="footer-links"
                      aria-label="Footer Navigation">
 
-
                     <a href="../privacy.html">
                         Privacy Policy
                     </a>
-
 
                     <a href="../terms.html">
                         Terms &amp; Conditions
                     </a>
 
-
                     <a href="../disclaimer.html">
                         Disclaimer
                     </a>
-
 
                     <a href="../contact.html">
                         Contact
@@ -2366,7 +2509,10 @@
 
 
 <!-- =====================================================
-     WEBZONEBW JAVASCRIPT
+     EXISTING WEBZONEBW SCRIPTS
+     
+     IMPORTANT:
+     Keep this order.
      ===================================================== -->
 
 <script src="../js/beatles-playlists.js"></script>
@@ -2374,6 +2520,200 @@
 <script src="../js/script.js"></script>
 
 <script src="../js/halloween.js"></script>
+
+
+<!-- =====================================================
+     HALLOWEEN LAUNCH UI
+     
+     This is intentionally separate from the main camera
+     engine. It only controls the launch orb/status UI.
+     ===================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    function initHalloweenLaunchUI() {
+
+        const orb =
+            document.getElementById("erLaunchOrb");
+
+        const status =
+            document.getElementById("erLaunchStatus");
+
+        const startButton =
+            document.getElementById("startExperienceBtn");
+
+        const demoButton =
+            document.getElementById("startDemoBtn");
+
+
+        if (!orb) {
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           READY STATE
+           ----------------------------------------------------- */
+
+        orb.classList.add("halloween-ready");
+
+
+        /* -----------------------------------------------------
+           BUTTON RESPONSE
+           ----------------------------------------------------- */
+
+        function activateOrb() {
+
+            orb.classList.add("launch-active");
+
+            if (status) {
+
+                const text =
+                    status.querySelector(".er-status-text");
+
+                if (text) {
+                    text.textContent = "INITIALIZING ER";
+                }
+
+            }
+
+
+            window.setTimeout(function () {
+
+                orb.classList.remove("launch-active");
+
+                if (status) {
+
+                    const text =
+                        status.querySelector(".er-status-text");
+
+                    if (text) {
+                        text.textContent = "ER STUDIO READY";
+                    }
+
+                }
+
+            }, 1100);
+
+        }
+
+
+        if (startButton) {
+
+            startButton.addEventListener(
+                "click",
+                activateOrb,
+                { passive: true }
+            );
+
+        }
+
+
+        if (demoButton) {
+
+            demoButton.addEventListener(
+                "click",
+                activateOrb,
+                { passive: true }
+            );
+
+        }
+
+
+        /* -----------------------------------------------------
+           DESKTOP POINTER PARALLAX
+           
+           Touch/tablet/mobile devices are untouched.
+           ----------------------------------------------------- */
+
+        if (
+            window.matchMedia &&
+            window.matchMedia("(pointer:fine)").matches
+        ) {
+
+            orb.addEventListener(
+                "pointermove",
+                function (event) {
+
+                    const rect =
+                        orb.getBoundingClientRect();
+
+                    const x =
+                        (
+                            (event.clientX - rect.left)
+                            / rect.width
+                            - 0.5
+                        ) * 8;
+
+                    const y =
+                        (
+                            (event.clientY - rect.top)
+                            / rect.height
+                            - 0.5
+                        ) * 8;
+
+                    orb.style.setProperty(
+                        "--orb-x",
+                        x + "px"
+                    );
+
+                    orb.style.setProperty(
+                        "--orb-y",
+                        y + "px"
+                    );
+
+                },
+                { passive: true }
+            );
+
+
+            orb.addEventListener(
+                "pointerleave",
+                function () {
+
+                    orb.style.setProperty(
+                        "--orb-x",
+                        "0px"
+                    );
+
+                    orb.style.setProperty(
+                        "--orb-y",
+                        "0px"
+                    );
+
+                },
+                { passive: true }
+            );
+
+        }
+
+    }
+
+
+    if (
+        document.readyState === "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initHalloweenLaunchUI,
+            { once: true }
+        );
+
+    } else {
+
+        initHalloweenLaunchUI();
+
+    }
+
+})();
+
+</script>
 
 
 </body>
