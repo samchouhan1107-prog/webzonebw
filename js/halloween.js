@@ -19,14 +19,6 @@ function initWebZoneERStudio() {
     const flipBtn = document.getElementById("flipCameraBtn");
     const faceHudToggle = document.getElementById("toggleFaceHudBtn");
 
-    // Smart Face Framing controls
-    const smartFrameOverlay = document.getElementById("smartFrameOverlay");
-    const smartFrameGuide = document.getElementById("smartFrameGuide");
-    const smartFrameStatusText = document.getElementById("smartFrameStatusText");
-    const mobileCameraStatusText = document.getElementById("mobileCameraStatusText");
-    const frameModeHint = document.getElementById("frameModeHint");
-    const frameModeButtons = document.querySelectorAll(".frame-mode-btn");
-
     // Floating Camera Overlay Actions (Snapchat / Instagram style)
     const flipBtnFloating = document.getElementById("flipCameraBtnFloating");
     const studioLightBtnFloating = document.getElementById("studioLightBtnFloating");
@@ -64,6 +56,19 @@ function initWebZoneERStudio() {
     const downloadLink = document.getElementById("downloadSnapshotBtn");
     const closeSnapBtn = document.getElementById("closeSnapshotBtn");
 
+    // Camera & Microphone Permission Alert Elements
+    const permissionAlertModal = document.getElementById("permissionAlertModal");
+    const permAlertTitle = document.getElementById("permAlertTitle");
+    const permAlertBadge = document.getElementById("permAlertBadge");
+    const permAlertMessage = document.getElementById("permAlertMessage");
+    const permAlertIcon = document.getElementById("permAlertIcon");
+    const permAlertIconWrap = document.getElementById("permAlertIconWrap");
+    const permAlertCloseBtn = document.getElementById("permAlertCloseBtn");
+    const permRetryBtn = document.getElementById("permRetryBtn");
+    const permDemoBtn = document.getElementById("permDemoBtn");
+    const permUploadBtn = document.getElementById("permUploadBtn");
+    const micStatusIndicator = document.getElementById("micStatusIndicator");
+
     if (!canvas || !video) return;
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
@@ -92,11 +97,6 @@ function initWebZoneERStudio() {
     let isDetectingFace = false;
     let lastFaceDetectTimestamp = 0;
     let faceDetectionConfidence = 99.4;
-
-    // Camera composition mode: standard, wide, or automatic full-face guidance.
-    let frameMode = "auto";
-    let faceDetected = false;
-    let lastFrameMessage = "Full Face Auto • Ready";
 
     // Check Native Browser FaceDetector API
     if (typeof window !== "undefined" && "FaceDetector" in window) {
@@ -334,83 +334,10 @@ function initWebZoneERStudio() {
             showFaceHud = !showFaceHud;
             faceHudToggle.classList.toggle("active", showFaceHud);
             faceHudToggle.innerHTML = showFaceHud
-                ? '<span aria-hidden="true">🎯</span> Smart Face Frame: ON'
-                : '<span aria-hidden="true">🎯</span> Smart Face Frame: OFF';
+                ? '<span aria-hidden="true">🎯</span> Face Recognition HUD: ON'
+                : '<span aria-hidden="true">🎯</span> Face Recognition HUD: OFF';
         });
     }
-
-    // Smart Face Framing mode controls
-    function setFrameMode(mode) {
-        frameMode = ["standard", "wide", "auto"].includes(mode) ? mode : "auto";
-        frameModeButtons.forEach(btn => {
-            btn.classList.toggle("active", btn.dataset.frameMode === frameMode);
-        });
-        if (frameModeHint) {
-            frameModeHint.textContent = frameMode === "standard"
-                ? "Natural camera composition with a light framing guide."
-                : frameMode === "wide"
-                    ? "Adds breathing room so the whole face and shoulders stay visible."
-                    : "Automatically keeps the detected face comfortably inside the frame.";
-        }
-        updateSmartFrameUI();
-    }
-
-    frameModeButtons.forEach(btn => {
-        btn.addEventListener("click", () => setFrameMode(btn.dataset.frameMode));
-    });
-
-    function updateSmartFrameUI() {
-        if (!smartFrameGuide) return;
-
-        const x = faceBox.x;
-        const y = faceBox.y;
-        const fw = faceBox.w;
-        const fh = faceBox.h;
-
-        const safeLeft = x - fw / 2;
-        const safeRight = x + fw / 2;
-        const tooWide = fw > (frameMode === "wide" ? 0.66 : 0.56);
-        const tooFarLeft = safeLeft < 0.08;
-        const tooFarRight = safeRight > 0.92;
-        const tooHigh = y - fh / 2 < 0.08;
-        const tooLow = y + fh / 2 > 0.92;
-
-        let state = "good";
-        let message = frameMode === "auto" ? "Full face in frame" : frameMode === "wide" ? "Wide framing ready" : "Standard framing";
-
-        if (frameMode === "auto" && !faceDetected) {
-            state = "warn";
-            message = "Looking for your face…";
-        } else if (tooWide) {
-            state = "alert";
-            message = "Move the camera back a little";
-        } else if (tooFarLeft) {
-            state = "warn";
-            message = "Move slightly right";
-        } else if (tooFarRight) {
-            state = "warn";
-            message = "Move slightly left";
-        } else if (tooHigh) {
-            state = "warn";
-            message = "Lower the camera slightly";
-        } else if (tooLow) {
-            state = "warn";
-            message = "Raise the camera slightly";
-        }
-
-        smartFrameGuide.classList.remove("good", "warn", "alert");
-        smartFrameGuide.classList.add(state);
-        smartFrameGuide.style.left = `${Math.max(18, Math.min(82, x * 100))}%`;
-        smartFrameGuide.style.top = `${Math.max(18, Math.min(82, y * 100))}%`;
-        smartFrameGuide.style.width = `${Math.max(24, Math.min(64, fw * 100))}%`;
-        smartFrameGuide.style.height = `${Math.max(30, Math.min(68, fh * 100))}%`;
-
-        if (smartFrameStatusText) smartFrameStatusText.textContent = message;
-        if (mobileCameraStatusText) mobileCameraStatusText.textContent = message;
-        lastFrameMessage = message;
-    }
-
-    setFrameMode("auto");
 
     // Quick Actions & Drawer Elements
     const quickWebzoneBtn = document.getElementById("quickWebzoneBtn");
@@ -732,6 +659,195 @@ function initWebZoneERStudio() {
         });
     }
 
+    // NEW REDESIGNED UI EVENT LISTENERS
+    const erLensBubbles = document.querySelectorAll(".er-lens-bubble");
+    if (erLensBubbles.length > 0) {
+        erLensBubbles.forEach(bubble => {
+            bubble.addEventListener("click", () => {
+                const targetFilter = bubble.dataset.filter;
+                if (targetFilter) {
+                    selectFilter(targetFilter);
+                    erLensBubbles.forEach(b => b.classList.remove("active"));
+                    bubble.classList.add("active");
+                }
+            });
+        });
+    }
+
+    // Right Drawer / Panel Effects Cards
+    const effectCards = document.querySelectorAll(".effect-card");
+    effectCards.forEach(card => {
+        card.addEventListener("click", () => {
+            const f = card.dataset.filter;
+            if (f) {
+                selectFilter(f);
+                effectCards.forEach(c => c.classList.remove("active"));
+                card.classList.add("active");
+            }
+        });
+    });
+
+    // Category Filter Pills (All, Popular, Stylize, Sci-Fi, Art)
+    const catPills = document.querySelectorAll(".cat-pill");
+    catPills.forEach(pill => {
+        pill.addEventListener("click", () => {
+            catPills.forEach(p => p.classList.remove("active"));
+            pill.classList.add("active");
+            const cat = pill.dataset.cat;
+
+            effectCards.forEach(card => {
+                const cardCats = (card.dataset.cat || "").toLowerCase();
+                if (cat === "all" || cardCats.includes(cat)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    });
+
+    // Search Effects Input
+    const effectsSearchInput = document.getElementById("effectsSearchInput");
+    if (effectsSearchInput) {
+        effectsSearchInput.addEventListener("input", (e) => {
+            const query = (e.target.value || "").toLowerCase().trim();
+            effectCards.forEach(card => {
+                const name = card.querySelector(".effect-name")?.textContent?.toLowerCase() || "";
+                const f = (card.dataset.filter || "").toLowerCase();
+                if (!query || name.includes(query) || f.includes(query)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    }
+
+    // Zoom Level Toggle (1.0x -> 2.0x -> 0.5x -> 1.0x)
+    const zoomLevelBtn = document.getElementById("zoomLevelBtn");
+    const zoomLevelText = document.getElementById("zoomLevelText");
+    let currentZoom = 1.0;
+    const zoomLevels = [1.0, 2.0, 0.5];
+    let zoomIndex = 0;
+
+    if (zoomLevelBtn && zoomLevelText) {
+        zoomLevelBtn.addEventListener("click", () => {
+            zoomIndex = (zoomIndex + 1) % zoomLevels.length;
+            currentZoom = zoomLevels[zoomIndex];
+            zoomLevelText.textContent = `${currentZoom.toFixed(1)}x`;
+            if (canvas) {
+                canvas.style.transform = `scale(${currentZoom})`;
+                canvas.style.transition = "transform 0.25s ease";
+            }
+            showSwipeToast("🔍", `Zoom: ${currentZoom.toFixed(1)}x`);
+        });
+    }
+
+    // Fullscreen Viewport Toggle
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    if (fullscreenBtn && cameraViewport) {
+        fullscreenBtn.addEventListener("click", () => {
+            if (!document.fullscreenElement) {
+                cameraViewport.requestFullscreen?.().catch(err => console.warn(err));
+            } else {
+                document.exitFullscreen?.().catch(err => console.warn(err));
+            }
+        });
+    }
+
+    // Flash / Studio Light Toggle
+    const flashLightBtn = document.getElementById("flashLightBtn");
+    if (flashLightBtn) {
+        flashLightBtn.addEventListener("click", () => {
+            isStudioLightEnabled = !isStudioLightEnabled;
+            flashLightBtn.classList.toggle("active", isStudioLightEnabled);
+            showSwipeToast("⚡", isStudioLightEnabled ? "Studio Light ON" : "Studio Light OFF");
+        });
+    }
+
+    // Face Mesh / Tracking Toggle
+    const toggleFaceMeshBtn = document.getElementById("toggleFaceMeshBtn");
+    if (toggleFaceMeshBtn) {
+        toggleFaceMeshBtn.addEventListener("click", () => {
+            showFaceHud = !showFaceHud;
+            toggleFaceMeshBtn.classList.toggle("active", showFaceHud);
+            showSwipeToast("👤", showFaceHud ? "Biometric Tracking ON" : "Biometric Tracking OFF");
+        });
+    }
+
+    // Open / Close Right Effects Drawer on Mobile & Desktop
+    const openAllEffectsBtn = document.getElementById("openAllEffectsBtn");
+    const effectsPanel = document.getElementById("effectsPanel");
+    const closeEffectsPanelBtn = document.getElementById("closeEffectsPanelBtn");
+    const mobileEffectsToggleBtn = document.getElementById("mobileEffectsToggleBtn");
+
+    function toggleEffectsPanel() {
+        if (!effectsPanel) return;
+        if (window.innerWidth <= 1199) {
+            const isShown = effectsPanel.style.display === "flex";
+            effectsPanel.style.display = isShown ? "none" : "flex";
+        } else {
+            effectsPanel.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
+    if (openAllEffectsBtn) openAllEffectsBtn.addEventListener("click", toggleEffectsPanel);
+    if (mobileEffectsToggleBtn) mobileEffectsToggleBtn.addEventListener("click", toggleEffectsPanel);
+    if (closeEffectsPanelBtn && effectsPanel) {
+        closeEffectsPanelBtn.addEventListener("click", () => {
+            if (window.innerWidth <= 1199) {
+                effectsPanel.style.display = "none";
+            }
+        });
+    }
+
+    // Mobile Sidebar Drawer Toggle
+    const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
+    const mainSidebar = document.getElementById("mainSidebar");
+    if (sidebarToggleBtn && mainSidebar) {
+        sidebarToggleBtn.addEventListener("click", () => {
+            mainSidebar.classList.toggle("open");
+        });
+    }
+
+    // Help Button
+    const helpModalBtn = document.getElementById("helpModalBtn");
+    if (helpModalBtn) {
+        helpModalBtn.addEventListener("click", () => {
+            const howToCard = document.querySelector(".how-to-use-card");
+            if (howToCard) howToCard.scrollIntoView({ behavior: "smooth" });
+            showSwipeToast("❔", "Swipe left/right to change effects!");
+        });
+    }
+
+    // File Upload Button from Controls Bar
+    const fileInput = document.getElementById("fileInput");
+    if (modeUploadBtn && fileInput) {
+        modeUploadBtn.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener("change", (e) => {
+            if (e.target.files && e.target.files[0]) {
+                handleUploadedFile(e.target.files[0]);
+                studioMode = "upload";
+                stopCameraFeed();
+            }
+        });
+    }
+
+    // View All Catalog Button
+    const viewAllCatalogBtn = document.getElementById("viewAllCatalogBtn");
+    if (viewAllCatalogBtn) {
+        viewAllCatalogBtn.addEventListener("click", () => {
+            catPills.forEach(p => p.classList.remove("active"));
+            const allPill = document.querySelector('.cat-pill[data-cat="all"]');
+            if (allPill) allPill.classList.add("active");
+            effectCards.forEach(c => c.style.display = "flex");
+            showSwipeToast("⊞", "Showing all 30+ Effects");
+        });
+    }
+
     // Floating On-Viewport HUD Buttons
     if (flipBtnFloating) {
         flipBtnFloating.addEventListener("click", () => {
@@ -785,7 +901,77 @@ function initWebZoneERStudio() {
     // Clean Direct Snapshot Modal Actions
     // (Local client-side high-fidelity PNG capture without external cloud dependency)
 
-    // Start Camera
+    // Camera & Microphone Permission Alert Helpers
+    function showPermissionAlert(err) {
+        if (!permissionAlertModal) return;
+
+        const errorName = err ? (err.name || "") : "";
+        let title = "Camera & Microphone Access Required";
+        let badge = "Permission Denied";
+        let message = "WEBZONEBW ER Studio requires permission to access your <strong>Camera</strong> and <strong>Microphone</strong> to enable live visual effects, facial tracking, and audio-reactive shaders.";
+        let icon = "⚠️";
+
+        if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
+            title = "Permissions Blocked by Browser";
+            badge = "Access Denied";
+            message = "Access to the <strong>Camera</strong> and <strong>Microphone</strong> was denied. To enable live Extended Reality and realistic portrait lenses, please allow device permissions in your browser settings.";
+            icon = "🚫";
+        } else if (errorName === "NotFoundError" || errorName === "DevicesNotFoundError") {
+            title = "No Camera or Microphone Found";
+            badge = "Hardware Missing";
+            message = "We couldn't detect an active camera or microphone connected to your device. You can connect a device and retry, or use <strong>Test Mode</strong> / <strong>Photo Upload</strong> right away.";
+            icon = "📷";
+        } else if (errorName === "NotReadableError" || errorName === "TrackStartError") {
+            title = "Camera or Mic In Use";
+            badge = "Device Busy";
+            message = "Your camera or microphone is already being used by another application (e.g. Zoom, Google Meet, or another browser window). Please close the other app and retry.";
+            icon = "🔒";
+        } else if (errorName === "OverconstrainedError") {
+            title = "Hardware Resolution Constraint";
+            badge = "Constraint Error";
+            message = "The requested camera resolution is not supported by your hardware. Please retry with standard settings or switch to Test Mode.";
+            icon = "⚙️";
+        }
+
+        if (permAlertTitle) permAlertTitle.textContent = title;
+        if (permAlertBadge) permAlertBadge.textContent = badge;
+        if (permAlertMessage) permAlertMessage.innerHTML = message;
+        if (permAlertIcon) permAlertIcon.textContent = icon;
+
+        permissionAlertModal.style.display = "flex";
+    }
+
+    function closePermissionAlert() {
+        if (permissionAlertModal) {
+            permissionAlertModal.style.display = "none";
+        }
+    }
+    window.closePermissionAlert = closePermissionAlert;
+
+    // Attach Permission Alert Modal Action Listeners
+    if (permAlertCloseBtn) {
+        permAlertCloseBtn.addEventListener("click", closePermissionAlert);
+    }
+    if (permRetryBtn) {
+        permRetryBtn.addEventListener("click", () => {
+            closePermissionAlert();
+            startCamera();
+        });
+    }
+    if (permDemoBtn) {
+        permDemoBtn.addEventListener("click", () => {
+            closePermissionAlert();
+            startDemoMode();
+        });
+    }
+    if (permUploadBtn) {
+        permUploadBtn.addEventListener("click", () => {
+            closePermissionAlert();
+            if (modeUploadBtn) modeUploadBtn.click();
+        });
+    }
+
+    // Start Camera (Requests both Camera and Microphone permissions)
     async function startCamera() {
         studioMode = "camera";
         if (modeCameraBtn) modeCameraBtn.classList.add("active");
@@ -793,58 +979,66 @@ function initWebZoneERStudio() {
         if (uploadDropzone) uploadDropzone.style.display = "none";
 
         setHighlightStep(4);
+        closePermissionAlert();
+
         try {
             if (mediaStream) {
                 mediaStream.getTracks().forEach(track => track.stop());
             }
 
-            const isMobileViewport = window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
-            const isTabletViewport = window.matchMedia && window.matchMedia("(min-width: 768px) and (max-width: 1199px)").matches;
-
-            // Prefer a portrait camera stream on phones. This is the main fix for
-            // the common mobile problem where a 16:9 landscape request makes the
-            // user's face feel cropped inside a portrait UI.
-            const cameraVideo = isMobileViewport
-                ? {
+            // Primary constraint requesting both Camera and Microphone
+            const constraints = {
+                video: {
                     facingMode: isFacingUser ? "user" : "environment",
-                    width: { ideal: 720 },
-                    height: { ideal: 1280 },
-                    aspectRatio: { ideal: 9 / 16 }
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                },
+                audio: true
+            };
+
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+            } catch (initialErr) {
+                // If denied or blocked, propagate error to UI alert
+                if (initialErr.name === "NotAllowedError" || initialErr.name === "PermissionDeniedError") {
+                    throw initialErr;
                 }
-                : isTabletViewport
-                    ? {
-                        facingMode: isFacingUser ? "user" : "environment",
-                        width: { ideal: 960 },
-                        height: { ideal: 1280 },
-                        aspectRatio: { ideal: 3 / 4 }
-                    }
-                    : {
-                        facingMode: isFacingUser ? "user" : "environment",
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
-                        aspectRatio: { ideal: 16 / 9 }
-                    };
+                // If microphone is unavailable on device, attempt video-only fallback
+                console.warn("Audio+Video request had an issue, attempting camera-only fallback:", initialErr);
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: constraints.video,
+                    audio: false
+                });
+            }
 
-            const constraints = { video: cameraVideo, audio: false };
-
-            mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
             setHighlightStep(5);
             video.srcObject = mediaStream;
             video.play();
             isDemoMode = false;
+
+            // Check if audio track is active and show HUD indicator
+            const audioTracks = mediaStream.getAudioTracks();
+            if (micStatusIndicator) {
+                if (audioTracks && audioTracks.length > 0) {
+                    micStatusIndicator.style.display = "inline-flex";
+                    micStatusIndicator.title = "Microphone & Camera Active";
+                } else {
+                    micStatusIndicator.style.display = "none";
+                }
+            }
 
             video.onloadedmetadata = () => {
                 placeholder.style.display = "none";
                 canvas.style.display = "block";
                 canvas.width = video.videoWidth || 640;
                 canvas.height = video.videoHeight || 480;
-                if (mobileCameraStatusText) mobileCameraStatusText.textContent = "Camera live • Full Face Auto";
                 setHighlightStep(6);
                 startRenderLoop();
             };
         } catch (err) {
-            console.warn("Camera access fallback to Test Mode:", err);
-            startDemoMode();
+            console.warn("Camera and Microphone access error:", err);
+            if (micStatusIndicator) micStatusIndicator.style.display = "none";
+            showPermissionAlert(err);
         }
     }
 
@@ -856,7 +1050,6 @@ function initWebZoneERStudio() {
         canvas.style.display = "block";
         canvas.width = 640;
         canvas.height = 480;
-        if (mobileCameraStatusText) mobileCameraStatusText.textContent = "Test Mode • Framing preview";
         setHighlightStep(6);
         startRenderLoop();
     }
@@ -998,17 +1191,7 @@ function initWebZoneERStudio() {
             } else if (isDemoMode) {
                 drawDemoBackground(ctx, w, h);
             } else if (video.readyState >= 2) {
-                // Mirror the front camera in the rendered canvas so the selfie
-                // experience behaves like a normal phone camera.
-                if (isFacingUser) {
-                    ctx.save();
-                    ctx.translate(w, 0);
-                    ctx.scale(-1, 1);
-                    ctx.drawImage(video, 0, 0, w, h);
-                    ctx.restore();
-                } else {
-                    ctx.drawImage(video, 0, 0, w, h);
-                }
+                ctx.drawImage(video, 0, 0, w, h);
             }
 
             // 2. Auto-HD Quality Enhancer (Convolution Sharpness & Clarity)
@@ -1024,7 +1207,7 @@ function initWebZoneERStudio() {
                 applyStudioVignette(ctx, w, h);
             }
 
-            // 5. Smart Face Frame
+            // 5. Face Recognition HUD
             if (showFaceHud) {
                 drawFaceHUD(ctx, w, h, time);
             }
@@ -1053,7 +1236,6 @@ function initWebZoneERStudio() {
                 try {
                     const faces = await nativeFaceDetector.detect(video);
                     if (faces && faces.length > 0) {
-                        faceDetected = true;
                         const b = faces[0].boundingBox;
                         const vw = video.videoWidth || 640;
                         const vh = video.videoHeight || 480;
@@ -1065,20 +1247,18 @@ function initWebZoneERStudio() {
                         const rawH = b.height / vh;
 
                         // Account for video mirroring in user facing mode
-                        faceBox.targetX = rawCx;
+                        faceBox.targetX = isFacingUser ? (1 - rawCx) : rawCx;
                         faceBox.targetY = rawCy;
                         faceBox.targetW = Math.max(0.24, Math.min(0.55, rawW * 1.15));
                         faceBox.targetH = Math.max(0.32, Math.min(0.65, rawH * 1.25));
                         faceDetectionConfidence = 99.6;
                     }
                 } catch (e) {
-                    // Keep the last stable position if native detection fails.
+                    // fall back to optical centroid
                 } finally {
                     isDetectingFace = false;
                 }
             } else {
-                // Browser compatibility fallback: keep a stable center guide.
-                faceDetected = false;
                 // High-performance skin-luminance optical centroid tracker fallback
                 try {
                     const vw = video.videoWidth || 640;
@@ -1097,8 +1277,6 @@ function initWebZoneERStudio() {
         faceBox.y += (faceBox.targetY - faceBox.y) * 0.18;
         if (faceBox.targetW) faceBox.w += (faceBox.targetW - faceBox.w) * 0.15;
         if (faceBox.targetH) faceBox.h += (faceBox.targetH - faceBox.h) * 0.15;
-
-        updateSmartFrameUI();
     }
 
     /* ==========================================================

@@ -82,127 +82,119 @@
 
 <div class="container">
 
+    <!-- Mobile Nav Bar -->
+    <div class="mobile-nav-bar">
+        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-brand-title">
+            <span class="gradient-text">WEBZONEBW</span>
+        </div>
+        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
+    </div>
 
     <!-- =====================================================
-         SIDEBAR
+         STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar">
-
-
-        <!-- Logo -->
+    <aside class="sidebar" id="mainSidebar">
 
         <div class="logo">
-
-            <a
-                href="index.html"
-                aria-label="WebZoneBW Home">
-
-                <img
-                    src="assets/logo.png"
-                    alt="WebZoneBW Logo">
-
+            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
+                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+                <div class="brand-name-group">
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+                </div>
             </a>
-
         </div>
 
-
-        <!-- Theme Toggle -->
-
-        <button
-            id="themeToggle"
-            class="theme-btn"
-            type="button"
-            aria-label="Toggle between light and dark mode">
-
-            <span aria-hidden="true">☀️</span>
-            Light Mode
-
-        </button>
-
-
         <!-- Main Navigation -->
-
-        <nav
-            class="sidebar-nav"
-            aria-label="Main Navigation">
-
+        <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-
                 <li>
-
                     <a href="index.html">
-
-                        <span aria-hidden="true">🏠</span>
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
                         Dashboard
-
                     </a>
-
                 </li>
 
-
                 <li>
-
-                    <a href="about.html">
-
-                        <span aria-hidden="true">👤</span>
-                        About
-
+                    <a href="halloween/index.html">
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        WebZoneBW-ER Studio
                     </a>
-
                 </li>
 
-
                 <li>
-
                     <a href="projects.html">
-
-                        <span aria-hidden="true">💼</span>
+                        <span class="nav-icon" aria-hidden="true">💼</span>
                         Projects
-
                     </a>
-
                 </li>
 
-
                 <li>
-
                     <a href="resume.html">
-
-                        <span aria-hidden="true">📄</span>
+                        <span class="nav-icon" aria-hidden="true">📄</span>
                         Resume
-
                     </a>
-
                 </li>
 
-
                 <li>
-
                     <a href="blog.html">
-
-                        <span aria-hidden="true">📝</span>
+                        <span class="nav-icon" aria-hidden="true">📝</span>
                         Blog
-
                     </a>
-
                 </li>
-
 
                 <li>
-
-                    <a href="contact.html">
-
-                        <span aria-hidden="true">✉️</span>
-                        Contact
-
+                    <a href="soundbox.html">
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        Sound Box
                     </a>
-
                 </li>
 
-            </ul>
+                <li>
+                    <a href="about.html">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        About
+                    </a>
+                </li>
 
+                <li>
+                    <a href="contact.html">
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        Contact
+                    </a>
+                </li>
+            </ul>
         </nav>
+
+        <!-- Dark Mode Switch Toggle -->
+        <div class="sidebar-theme-toggle-row">
+            <div class="theme-label-group">
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                <span id="themeModeText">Dark Mode</span>
+            </div>
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- User Profile Card -->
+        <div class="sidebar-user-card">
+            <div class="user-avatar-wrap">
+                <span class="user-avatar-icon">👨‍💻</span>
+                <span class="user-online-dot" title="Online"></span>
+            </div>
+            <div class="user-info">
+                <strong>Sameer Chouhan</strong>
+                <span>Developer &amp; Creator</span>
+            </div>
+        </div>
 
     </aside>
 
@@ -813,6 +805,7 @@
      SITE JAVASCRIPT
      ===================================================== -->
 
+<script src="js/beatles-playlists.js"></script>
 <script src="js/script.js"></script>
 
 </body>

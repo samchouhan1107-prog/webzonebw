@@ -114,147 +114,123 @@
 
 </head>
 
-
 <body>
 
 <div class="container">
 
+    <!-- Mobile Nav Bar -->
+    <div class="mobile-nav-bar">
+        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-brand-title">
+            <span class="gradient-text">WEBZONEBW</span>
+        </div>
+        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
+    </div>
 
     <!-- =====================================================
-         SIDEBAR
+         STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar">
-
-
-        <!-- Logo -->
+    <aside class="sidebar" id="mainSidebar">
 
         <div class="logo">
-
-            <a href="index.html"
-               aria-label="WebZoneBW Home">
-
-                <img
-                    src="assets/logo.png"
-                    alt="WebZoneBW Logo">
-
+            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
+                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+                <div class="brand-name-group">
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+                </div>
             </a>
-
         </div>
-
-
-        <!-- Theme Toggle & WEBZONE ER Actions (Side-by-Side) -->
-
-        <div class="sidebar-top-actions">
-
-            <button
-                id="themeToggle"
-                class="theme-btn"
-                type="button"
-                aria-label="Toggle website theme">
-
-                <span aria-hidden="true">☀️</span>
-                Light Mode
-
-            </button>
-
-            <a
-                href="halloween/"
-                class="er-btn"
-                aria-label="Launch WEBZONEBW ER Studio">
-
-                <span aria-hidden="true">🔮</span>
-                WEBZONEBW ER
-
-            </a>
-
-        </div>
-
 
         <!-- Main Navigation -->
-
-        <nav
-            class="sidebar-nav"
-            aria-label="Main Navigation">
-
+        <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-
                 <li>
-
                     <a href="index.html">
-
-                        <span aria-hidden="true">🏠</span>
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
                         Dashboard
-
                     </a>
-
                 </li>
 
-
                 <li>
-
-                    <a href="about.html">
-
-                        <span aria-hidden="true">👤</span>
-                        About
-
+                    <a href="halloween/index.html">
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        WebZoneBW-ER Studio
                     </a>
-
                 </li>
 
-
                 <li>
-
                     <a href="projects.html">
-
-                        <span aria-hidden="true">💼</span>
+                        <span class="nav-icon" aria-hidden="true">💼</span>
                         Projects
-
                     </a>
-
                 </li>
 
-
                 <li>
-
                     <a href="resume.html">
-
-                        <span aria-hidden="true">📄</span>
+                        <span class="nav-icon" aria-hidden="true">📄</span>
                         Resume
-
                     </a>
-
                 </li>
 
-
                 <li>
-
-                    <a href="blog.html"
-                       class="active"
-                       aria-current="page">
-
-                        <span aria-hidden="true">📝</span>
+                    <a href="blog.html" class="active" aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">📝</span>
                         Blog
-
                     </a>
-
                 </li>
-
 
                 <li>
-
-                    <a href="contact.html">
-
-                        <span aria-hidden="true">✉️</span>
-                        Contact
-
+                    <a href="soundbox.html">
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        Sound Box
                     </a>
-
                 </li>
 
-            </ul>
+                <li>
+                    <a href="about.html">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        About
+                    </a>
+                </li>
 
+                <li>
+                    <a href="contact.html">
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        Contact
+                    </a>
+                </li>
+            </ul>
         </nav>
+
+        <!-- Dark Mode Switch Toggle -->
+        <div class="sidebar-theme-toggle-row">
+            <div class="theme-label-group">
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                <span id="themeModeText">Dark Mode</span>
+            </div>
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- User Profile Card -->
+        <div class="sidebar-user-card">
+            <div class="user-avatar-wrap">
+                <span class="user-avatar-icon">👨‍💻</span>
+                <span class="user-online-dot" title="Online"></span>
+            </div>
+            <div class="user-info">
+                <strong>Sameer Chouhan</strong>
+                <span>Developer &amp; Creator</span>
+            </div>
+        </div>
 
     </aside>
 
@@ -272,13 +248,21 @@
 
         <header class="top-header">
 
-            <h1>
-                Blog
-            </h1>
+            <div class="header-left">
+                <h1>
+                    Articles, Insights &amp; Tech Blog
+                </h1>
 
-            <p>
-                Technology, technical learning and professional insights.
-            </p>
+                <p class="header-subtitle">
+                    Technology analysis, IT systems engineering and practical tutorials.
+                </p>
+            </div>
+
+            <div class="header-utilities">
+                <a href="soundbox.html" class="header-icon-btn" title="Sound Box" aria-label="Sound Box">🎵</a>
+                <a href="halloween/index.html" class="header-icon-btn" title="ER Studio" aria-label="ER Studio">🔮</a>
+                <span class="header-badge">Live 🟢</span>
+            </div>
 
         </header>
 
@@ -737,6 +721,7 @@
      SITE JAVASCRIPT
      ===================================================== -->
 
+<script src="js/beatles-playlists.js"></script>
 <script src="js/script.js"></script>
 
 </body>

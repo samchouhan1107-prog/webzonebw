@@ -4,1018 +4,601 @@
 <head>
 
     <!-- =====================================================
-         WEBZONEBW — WEBZONE ER (EXTENDED REALITY & AR STUDIO)
+         WEBZONEBW — WEBZONEBW-ER STUDIO (EXTENDED REALITY & AR)
+         Live Facial Recognition, AI Biometrics HUD & Visual Shaders
          ===================================================== -->
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>WEBZONE ER | Extended Reality, Face Recognition &amp; Tech Themes | WebZoneBW</title>
+    <title>WEBZONEBW-ER STUDIO | Next-Gen AR &amp; Live Camera Effects</title>
 
     <meta name="description"
-          content="Explore WEBZONE ER: Browser-based Extended Reality and real-time facial recognition camera studio featuring AI Cyborg HUD, Matrix Rain, DevOps Cloud, and Halloween AR filters.">
+          content="WEBZONEBW-ER Studio: High-performance browser-based Extended Reality and real-time facial recognition camera studio featuring Cyber lenses, Matrix Rain, Anime Cel, and AI Biometric HUD.">
 
-    <meta name="author"
-          content="Sameer Chouhan">
+    <meta name="author" content="WEBZONEBW">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://webzonebw.in/halloween/">
+    <link rel="icon" type="image/png" href="../assets/favicon/favicon.png">
 
-    <meta name="robots"
-          content="index, follow">
-
-    <link rel="canonical"
-          href="https://webzonebw.in/halloween/">
-
-    <link rel="icon"
-          type="image/png"
-          href="../assets/favicon/favicon.png">
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet"
-          href="../css/style.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../css/style.css">
 
 </head>
 
+<body class="er-studio-body">
 
-<body>
-
-<div class="container">
-
+<div class="er-layout-container">
 
     <!-- =====================================================
-         SIDEBAR
+         SIDEBAR NAVIGATION
          ===================================================== -->
 
-    <aside class="sidebar">
+    <aside class="sidebar er-sidebar" id="mainSidebar">
 
         <div class="logo">
-
-            <a href="../index.html"
-               aria-label="WebZoneBW Home">
-
-                <img
-                    src="../assets/logo.png"
-                    alt="WebZoneBW Logo">
-
+            <a href="../index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
+                <img src="../assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+                <div class="brand-name-group">
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+                </div>
             </a>
-
         </div>
 
-
-        <!-- Theme Toggle & WEBZONE ER Actions (Side-by-Side) -->
-
-        <div class="sidebar-top-actions">
-
-            <button
-                id="themeToggle"
-                class="theme-btn"
-                type="button"
-                aria-label="Toggle website theme">
-
-                <span aria-hidden="true">☀️</span>
-                Light Mode
-
-            </button>
-
-            <a
-                href="index.html"
-                class="er-btn active"
-                aria-label="Launch WEBZONEBW ER Studio">
-
-                <span aria-hidden="true">🔮</span>
-                WEBZONEBW ER
-
-            </a>
-
-        </div>
-
-
-        <!-- Main Navigation -->
-
-        <nav
-            class="sidebar-nav"
-            aria-label="Main Navigation">
-
+        <!-- Sidebar Navigation Menu -->
+        <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-
                 <li>
                     <a href="../index.html">
-                        <span aria-hidden="true">🏠</span>
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
                         Dashboard
                     </a>
                 </li>
 
                 <li>
-                    <a href="../about.html">
-                        <span aria-hidden="true">👤</span>
-                        About
+                    <a href="index.html" class="active er-nav-pill" aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        WebZoneBW-ER Studio
                     </a>
                 </li>
 
                 <li>
                     <a href="../projects.html">
-                        <span aria-hidden="true">💼</span>
+                        <span class="nav-icon" aria-hidden="true">💼</span>
                         Projects
                     </a>
                 </li>
 
                 <li>
                     <a href="../resume.html">
-                        <span aria-hidden="true">📄</span>
+                        <span class="nav-icon" aria-hidden="true">📄</span>
                         Resume
                     </a>
                 </li>
 
                 <li>
                     <a href="../blog.html">
-                        <span aria-hidden="true">📝</span>
+                        <span class="nav-icon" aria-hidden="true">📝</span>
                         Blog
                     </a>
                 </li>
 
                 <li>
-                    <a href="../contact.html">
-                        <span aria-hidden="true">✉️</span>
-                        Contact
+                    <a href="../soundbox.html">
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        Sound Box
                     </a>
                 </li>
 
-            </ul>
+                <li>
+                    <a href="../about.html">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        About
+                    </a>
+                </li>
 
+                <li>
+                    <a href="../contact.html">
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        Contact
+                    </a>
+                </li>
+            </ul>
         </nav>
+
+        <!-- Dark Mode Switch Toggle -->
+        <div class="sidebar-theme-toggle-row">
+            <div class="theme-label-group">
+                <span aria-hidden="true">🌙</span>
+                <span>Dark Mode</span>
+            </div>
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <!-- User Profile Card -->
+        <div class="sidebar-user-card">
+            <div class="user-avatar-wrap">
+                <span class="user-avatar-icon">👨‍💻</span>
+                <span class="user-online-dot" title="Online"></span>
+            </div>
+            <div class="user-info">
+                <strong>Sameer Chouhan</strong>
+                <span>Developer &amp; Creator</span>
+            </div>
+        </div>
 
     </aside>
 
 
     <!-- =====================================================
-         MAIN CONTENT
+         MAIN ER STUDIO STAGE
          ===================================================== -->
 
-    <main class="main-content">
+    <main class="main-content er-main-content">
 
+        <!-- Mobile Drawer Hamburger Toggle Header -->
+        <div class="er-mobile-nav-bar">
+            <button type="button" class="er-hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="er-mobile-title">
+                <span class="gradient-text">WEBZONEBW-ER</span> STUDIO
+            </div>
+            <button type="button" class="header-icon-btn" id="mobileEffectsToggleBtn" title="Toggle Effects Panel">
+                ❖
+            </button>
+        </div>
 
-        <!-- =================================================
-             TOP HEADER
-             ================================================= -->
+        <!-- Top Studio Header -->
+        <header class="er-top-header">
+            <div class="er-title-group">
+                <h1 class="er-main-title">
+                    <span class="brand-prefix">WEBZONEBW-</span><span class="gradient-text">ER STUDIO</span> <span class="sparkle-icon">✨</span>
+                </h1>
+                <p class="er-subtitle">
+                    Swipe to explore WebZoneBW-ER Effects ✨
+                </p>
+            </div>
 
-        <header class="top-header">
-
-            <h1>
-                🔮 WEBZONEBW ER Studio
-            </h1>
-
-            <p>
-                Smart Face Framing, Interactive Camera Lenses &amp; Visual Themes
-            </p>
-
+            <div class="er-header-utilities">
+                <button type="button" class="header-icon-btn" id="helpModalBtn" title="How to Use WebZoneBW-ER Studio" aria-label="Help">
+                    ❔
+                </button>
+                <button type="button" class="header-icon-btn" id="settingsBtn" title="Camera &amp; Shader Settings" aria-label="Settings">
+                    ⚙️
+                </button>
+                <div class="notification-btn-wrap">
+                    <button type="button" class="header-icon-btn" title="Notifications" aria-label="Notifications">
+                        🔔
+                    </button>
+                    <span class="notif-badge">1</span>
+                </div>
+            </div>
         </header>
 
 
-        <!-- =================================================
-             HERO SECTION
-             ================================================= -->
+        <!-- =====================================================
+             STUDIO WORKSPACE: CAMERA STAGE + RIGHT EFFECTS PANEL
+             ===================================================== -->
 
-        <section
-            class="hero halloween-hero"
-            aria-labelledby="er-hero-title">
+        <div class="er-workspace-grid">
 
-            <h1 id="er-hero-title">
-                🔮 WEBZONEBW ER Studio
-            </h1>
+            <!-- LEFT/CENTER CAMERA VIEWPORT CARD -->
+            <section class="er-camera-card" aria-label="Live Camera Extended Reality Stage">
 
-            <h3>
-                Signature Promotional Theme • Cartoon Anime Art • Auto-HD Enhancer • Trending Magazine Covers
-            </h3>
+                <!-- Primary Camera Viewport Frame -->
+                <div class="camera-viewport-frame" id="cameraViewport">
 
-            <p>
-                Experience real-time interactive Extended Reality powered by WEBZONEBW. Explore creative camera lenses, Smart Face Framing, high-definition visual themes, magazine styles, and Halloween effects directly in your browser.
-            </p>
-
-            <div class="hero-buttons">
-
-                <button
-                    id="startExperienceBtn"
-                    type="button"
-                    class="btn camera-btn-primary"
-                    aria-label="Start WEBZONEBW ER Experience">
-                    <span aria-hidden="true">📸</span>
-                    Start Live Camera
-                </button>
-
-                <button
-                    id="startDemoBtn"
-                    type="button"
-                    class="btn"
-                    aria-label="Interactive Demo Mode">
-                    <span aria-hidden="true">✨</span>
-                    Test Mode (No Camera Required)
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             LIVE INTERACTIVE ER & CARTOON STUDIO EXPERIENCE
-             ================================================= -->
-
-        <section
-            class="camera-experience-card"
-            aria-labelledby="camera-title">
-
-            <!-- Auto-HD Quality Enhancer Toolbar -->
-            <div class="enhancement-toolbar">
-                <div class="enhancer-badge">
-                    <span aria-hidden="true">✨</span> Auto-HD Quality Enhancer
-                </div>
-                <div class="quality-toggle-group">
-                    <button
-                        id="autoHdBtn"
-                        type="button"
-                        class="quality-pill-btn active"
-                        title="Boosts dynamic contrast, saturation, and unsharp mask clarity">
-                        <span aria-hidden="true">⚡</span> Auto-HD Clarity
-                    </button>
-                    <button
-                        id="studioLightBtn"
-                        type="button"
-                        class="quality-pill-btn active"
-                        title="Applies dynamic studio portrait lighting & vignette">
-                        <span aria-hidden="true">💡</span> Studio Lighting
-                    </button>
-                    <button
-                        id="denoiseBtn"
-                        type="button"
-                        class="quality-pill-btn active"
-                        title="Smooths background noise and boosts facial focus">
-                        <span aria-hidden="true">🎯</span> Denoise &amp; Crisp
-                    </button>
-                </div>
-            </div>
-
-            <!-- Title & HUD Toggle -->
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
-
-                <div>
-                    <h2 id="camera-title" style="margin: 0;">
-                        🔮 Interactive ER &amp; Theme Shaders
-                    </h2>
-                    <p style="color: #94a3b8; margin: 4px 0 0;">
-                        Choose an art style, promotional theme, or trending magazine cover:
-                    </p>
-                </div>
-
-                <!-- Smart Face Frame Toggle -->
-                <button
-                    id="toggleFaceHudBtn"
-                    type="button"
-                    class="btn"
-                    style="font-size: 13px; padding: 7px 14px; background: #1e293b; border-color: #475569; color: #94a3b8;">
-                    <span aria-hidden="true">🎯</span> Smart Face Frame: OFF
-                </button>
-
-            </div>
-
-            <!-- Primary Quick Actions Bar (WebZoneBW Theme & Random visible) -->
-            <div class="quick-effects-bar">
-                <div class="quick-left-group">
-                    <button
-                        id="quickWebzoneBtn"
-                        type="button"
-                        class="webzonebw-primary-btn"
-                        data-filter="webzonebw"
-                        title="Activate Signature WebZoneBW Theme">
-                        <span aria-hidden="true">🌐</span> WebZoneBW Theme
+                    <!-- Floating Top Left: Scan Reticle HUD Toggle -->
+                    <button type="button" class="cam-corner-btn top-left" id="toggleFaceHudBtn" title="Toggle Biometric Reticle HUD" aria-label="Biometric Reticle">
+                        <span aria-hidden="true">🔲</span>
                     </button>
 
-                    <button
-                        id="randomFilterBtn"
-                        type="button"
-                        class="random-filter-btn"
-                        title="Pick a random style or effect (Keyboard: 'R')"
-                        aria-label="Pick Random Style">
-                        <span aria-hidden="true">🎲</span> Random Style
+                    <!-- Floating Top Right: Fullscreen Expand -->
+                    <button type="button" class="cam-corner-btn top-right" id="fullscreenBtn" title="Fullscreen View" aria-label="Fullscreen">
+                        <span aria-hidden="true">⛶</span>
                     </button>
-                </div>
 
-                <!-- Hidden Drawer Toggle -->
-                <button
-                    id="toggleDrawerBtn"
-                    type="button"
-                    class="drawer-toggle-btn"
-                    aria-expanded="false"
-                    aria-controls="effectsHiddenDrawer">
-                    <span aria-hidden="true">🎛️</span> All Effects <span id="drawerArrowIcon" aria-hidden="true">▼</span>
-                </button>
-            </div>
+                    <!-- Floating Bottom Left: Zoom Badge -->
+                    <button type="button" class="cam-zoom-badge" id="zoomLevelBtn" title="Switch Zoom Level (1.0x / 2.0x / 0.5x)" aria-label="Zoom Level">
+                        <span id="zoomLevelText">1.0x</span>
+                    </button>
 
-            <!-- Mobile & Desktop Fingertip Touch Slide Bar -->
-            <div class="touch-slide-controller" id="touchSlideController">
-                <button
-                    id="slidePrevBtn"
-                    type="button"
-                    class="slide-arrow-btn"
-                    title="Previous Effect (Swipe Right or Left Arrow)"
-                    aria-label="Previous Effect">
-                    ◀
-                </button>
-
-                <div class="slide-current-info" id="slideCurrentInfo" title="Tap to toggle effects catalog">
-                    <div class="slide-active-pill" id="slideActivePill">
-                        🌐 WebZoneBW Signature Theme
-                    </div>
-                    <div class="slide-swipe-hint">
-                        <span>👈</span> Swipe with fingertip on camera <span>👉</span>
-                    </div>
-                </div>
-
-                <button
-                    id="slideNextBtn"
-                    type="button"
-                    class="slide-arrow-btn"
-                    title="Next Effect (Swipe Left or Right Arrow)"
-                    aria-label="Next Effect">
-                    ▶
-                </button>
-            </div>
-
-            <!-- Hidden Effects Drawer (Collapsed by default) -->
-            <div id="effectsHiddenDrawer" class="effects-hidden-drawer collapsed">
-                <div class="filter-bar-header" style="margin-bottom: 10px;">
-                    <div class="category-tabs" role="tablist" aria-label="Theme Filter Categories" style="margin-bottom: 0;">
-                        <button
-                            type="button"
-                            class="category-tab-btn active"
-                            data-category="all"
-                            role="tab">
-                            🌟 All Lenses
+                    <!-- Floating Right Vertical Pill Stack -->
+                    <div class="cam-floating-vertical-stack">
+                        <button type="button" class="cam-vertical-btn" id="flipCameraBtnFloating" title="Flip Camera (Front / Back)" aria-label="Flip Camera">
+                            <span>🔄</span>
                         </button>
-                        <button
-                            type="button"
-                            class="category-tab-btn"
-                            data-category="realistic"
-                            role="tab">
-                            📸 Realistic AR (Insta / Snap)
+                        <button type="button" class="cam-vertical-btn" id="flashLightBtn" title="Toggle Studio Light / Flash" aria-label="Studio Light">
+                            <span>⚡</span>
                         </button>
-                        <button
-                            type="button"
-                            class="category-tab-btn"
-                            data-category="tech"
-                            role="tab">
-                            ⚡ Cyber &amp; Sci-Fi
+                        <button type="button" class="cam-vertical-btn active" id="autoHdBtnFloating" title="AI Auto-HD Retouch &amp; Glow (Active)" aria-label="AI Glow Retouch">
+                            <span>✨</span>
                         </button>
-                        <button
-                            type="button"
-                            class="category-tab-btn"
-                            data-category="art"
-                            role="tab">
-                            🎨 Portrait &amp; Anime
-                        </button>
-                        <button
-                            type="button"
-                            class="category-tab-btn"
-                            data-category="magazine"
-                            role="tab">
-                            📰 Magazines
-                        </button>
-                        <button
-                            type="button"
-                            class="category-tab-btn"
-                            data-category="halloween"
-                            role="tab">
-                            🎃 Halloween
+                        <button type="button" class="cam-vertical-btn" id="toggleFaceMeshBtn" title="Face Tracking &amp; Mesh" aria-label="Face Mesh">
+                            <span>👤</span>
                         </button>
                     </div>
-                </div>
 
-                <!-- Compressed Filter Pill Bar with WebZonebw Renamed Effects -->
-                <div class="filter-bar" role="toolbar" aria-label="Compressed ER Filter Options">
-
-                    <!-- 🌟 REALISTIC AR (INSTAGRAM / SNAPCHAT STYLE) -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="goldenhour"
-                        data-category="realistic">
-                        <span aria-hidden="true">🌟</span> Golden Hour Glow
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="sunglasses"
-                        data-category="realistic">
-                        <span aria-hidden="true">🕶️</span> Designer Aviators
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="halo"
-                        data-category="realistic">
-                        <span aria-hidden="true">👑</span> Neon Angel Halo
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="vintage90s"
-                        data-category="realistic">
-                        <span aria-hidden="true">🎞️</span> Retro 90s Kodak
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="kawaii"
-                        data-category="realistic">
-                        <span aria-hidden="true">🌸</span> Kawaii Anime Blush
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cyberwarrior"
-                        data-category="realistic">
-                        <span aria-hidden="true">⚡</span> Cyber Face-Paint
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="noir"
-                        data-category="realistic">
-                        <span aria-hidden="true">🖤</span> Leica Noir Cinema
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="icefrost"
-                        data-category="realistic">
-                        <span aria-hidden="true">❄️</span> Diamond Shimmer
-                    </button>
-
-                    <!-- 🌐 WEBZONEBW SIGNATURE THEME -->
-                    <button
-                        type="button"
-                        class="filter-btn active"
-                        data-filter="webzonebw"
-                        data-category="tech"
-                        style="border-color: #38bdf8; background: rgba(14, 165, 233, 0.2); color: #38bdf8;">
-                        <span aria-hidden="true">🌐</span> WebZonebw Signature
-                    </button>
-
-                    <!-- 1. 🎨 WEBZONEBW ANIME -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cartoon"
-                        data-category="art">
-                        <span aria-hidden="true">🎨</span> WebZonebw Anime
-                    </button>
-
-                    <!-- 2. 📸 WEBZONEBW STUDIO HD -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="studiohd"
-                        data-category="art">
-                        <span aria-hidden="true">📸</span> WebZonebw Studio HD
-                    </button>
-
-                    <!-- 3. 🎬 WEBZONEBW 35MM -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cinematic"
-                        data-category="art">
-                        <span aria-hidden="true">🎬</span> WebZonebw 35mm
-                    </button>
-
-                    <!-- 4. 💡 WEBZONEBW CYBERPUNK -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cyberpunk"
-                        data-category="art">
-                        <span aria-hidden="true">💡</span> WebZonebw Cyberpunk
-                    </button>
-
-                    <!-- 5. 🟢 WEBZONEBW MATRIX RAIN -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="matrix"
-                        data-category="tech">
-                        <span aria-hidden="true">🟢</span> WebZonebw Matrix
-                    </button>
-
-                    <!-- 6. 🤖 WEBZONEBW CYBORG HUD -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cyberhud"
-                        data-category="tech">
-                        <span aria-hidden="true">🤖</span> WebZonebw Cyborg HUD
-                    </button>
-
-                    <!-- 7. 🔐 WEBZONEBW BIO-SCAN -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cybersec"
-                        data-category="tech">
-                        <span aria-hidden="true">🔐</span> WebZonebw Bio-Scan
-                    </button>
-
-                    <!-- 8. 🌐 WEBZONEBW HOLO-GRID -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="hologram"
-                        data-category="tech">
-                        <span aria-hidden="true">🌐</span> WebZonebw Holo-Grid
-                    </button>
-
-                    <!-- 9. ⚡ WEBZONEBW DIGITAL GLITCH -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="glitch"
-                        data-category="tech">
-                        <span aria-hidden="true">⚡</span> WebZonebw Glitch
-                    </button>
-
-                    <!-- 10. 🖌️ WEBZONEBW POP-ART COMIC -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="popart"
-                        data-category="art">
-                        <span aria-hidden="true">🖌️</span> WebZonebw Comic
-                    </button>
-
-                    <!-- 11. 🚀 WEBZONEBW SPACE EXPLORER -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="space"
-                        data-category="tech">
-                        <span aria-hidden="true">🚀</span> WebZonebw Space
-                    </button>
-
-                    <!-- 12. 🦸 WEBZONEBW HERO -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="superhero"
-                        data-category="art">
-                        <span aria-hidden="true">🦸</span> WebZonebw Hero
-                    </button>
-
-                    <!-- 📰 TRENDING MAGAZINE COVERS -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="time"
-                        data-category="magazine">
-                        <span aria-hidden="true">🟥</span> WebZonebw TIME
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="wired"
-                        data-category="magazine">
-                        <span aria-hidden="true">🚀</span> WebZonebw WIRED
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="forbes"
-                        data-category="magazine">
-                        <span aria-hidden="true">💼</span> WebZonebw Forbes
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="vogue"
-                        data-category="magazine">
-                        <span aria-hidden="true">🕶️</span> WebZonebw VOGUE
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="cyber"
-                        data-category="magazine">
-                        <span aria-hidden="true">🎮</span> WebZonebw CyberMag
-                    </button>
-
-                    <!-- 🎃 HALLOWEEN THEMES -->
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="pumpkin"
-                        data-category="halloween">
-                        <span aria-hidden="true">🎃</span> WebZonebw Pumpkin
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="ghost"
-                        data-category="halloween">
-                        <span aria-hidden="true">👻</span> WebZonebw Ghost
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="zombie"
-                        data-category="halloween">
-                        <span aria-hidden="true">🧟</span> WebZonebw Zombie
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="vampire"
-                        data-category="halloween">
-                        <span aria-hidden="true">🧛</span> WebZonebw Vampire
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="skeleton"
-                        data-category="halloween">
-                        <span aria-hidden="true">💀</span> WebZonebw Skeleton
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="spider"
-                        data-category="halloween">
-                        <span aria-hidden="true">🕷️</span> WebZonebw Spider
-                    </button>
-
-                    <button
-                        type="button"
-                        class="filter-btn"
-                        data-filter="bats"
-                        data-category="halloween">
-                        <span aria-hidden="true">🦇</span> WebZonebw Bats
-                    </button>
-
-                </div>
-            </div>
-
-            <!-- Magazine Editor Panel (Custom Headlines & Presets) -->
-            <div id="magazineEditorPanel" class="magazine-editor-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <strong style="color: #f472b6; font-size: 13.5px;">
-                        📰 WebZonebw Magazine Cover Studio
-                    </strong>
-                    <span style="font-size: 12px; color: #94a3b8;">
-                        Customize headline &amp; cover template
-                    </span>
-                </div>
-
-                <div class="magazine-template-grid">
-                    <button type="button" class="magazine-item-btn active" data-mag="time">
-                        🟥 WebZonebw TIME
-                    </button>
-                    <button type="button" class="magazine-item-btn" data-mag="wired">
-                        ⚡ WebZonebw WIRED
-                    </button>
-                    <button type="button" class="magazine-item-btn" data-mag="forbes">
-                        💼 WebZonebw Forbes
-                    </button>
-                    <button type="button" class="magazine-item-btn" data-mag="vogue">
-                        🕶️ WebZonebw VOGUE
-                    </button>
-                    <button type="button" class="magazine-item-btn" data-mag="cyber">
-                        🎮 WebZonebw CyberMag
-                    </button>
-                </div>
-
-                <div class="mag-input-row">
-                    <input
-                        type="text"
-                        id="magHeadlineInput"
-                        class="mag-input"
-                        placeholder="Custom Headline (e.g. THE AI ARCHITECT)"
-                        value="THE AI ARCHITECT">
-                    <input
-                        type="text"
-                        id="magSubheadInput"
-                        class="mag-input"
-                        placeholder="Subtitle / Tagline"
-                        value="Innovating the Future of Extended Reality">
-                </div>
-            </div>
-
-            <!-- Smart framing controls: shared by desktop, tablet and mobile -->
-            <div class="smart-framing-toolbar" id="smartFramingToolbar" aria-label="Camera framing controls">
-                <div class="smart-framing-copy">
-                    <strong>🎯 Smart Face Framing</strong>
-                    <span id="frameModeHint">Keeps the whole face comfortably inside the camera view.</span>
-                </div>
-                <div class="frame-mode-group" role="group" aria-label="Framing mode">
-                    <button type="button" class="frame-mode-btn" data-frame-mode="standard">Standard</button>
-                    <button type="button" class="frame-mode-btn" data-frame-mode="wide">Wide</button>
-                    <button type="button" class="frame-mode-btn active" data-frame-mode="auto">Full Face Auto</button>
-                </div>
-            </div>
-
-            <!-- Viewport Stage -->
-            <div class="camera-viewport" id="cameraViewport">
-
-                <!-- Floating Top Quick HUD Bar (Snapchat / Instagram style) -->
-                <div class="cam-overlay-quick-bar">
-                    <button type="button" id="flipCameraBtnFloating" class="cam-floating-btn" title="Flip Front/Back Camera" aria-label="Flip Camera">
-                        <span>🔄</span>
-                    </button>
-                    <button type="button" id="studioLightBtnFloating" class="cam-floating-btn" title="Studio Ring Light" aria-label="Studio Light">
-                        <span>💡</span>
-                    </button>
-                    <button type="button" id="autoHdBtnFloating" class="cam-floating-btn active" title="Auto-HD Skin Retouch" aria-label="Auto HD Retouch">
-                        <span>✨</span>
-                    </button>
-                    <button type="button" id="toggleFaceHudBtnFloating" class="cam-floating-btn" title="3D Face Fit Reticle" aria-label="Toggle Face HUD">
-                        <span>👤</span>
-                    </button>
+                    <!-- Microphone Status Badge -->
                     <div id="micStatusIndicator" class="cam-floating-badge" style="display: none;" title="Microphone Live">
                         <span class="mic-pulse-dot"></span>
                         <span class="mic-icon">🎤</span>
                     </div>
-                </div>
 
-                <!-- Camera & Microphone Permission Alert Overlay / Modal -->
-                <div id="permissionAlertModal" class="permission-alert-modal" style="display: none;" role="alertdialog" aria-modal="true" aria-labelledby="permAlertTitle">
-                    <div class="permission-alert-backdrop" onclick="window.closePermissionAlert && window.closePermissionAlert()"></div>
-                    <div class="permission-alert-card">
-                        <div class="perm-alert-header">
-                            <div class="perm-alert-icon-wrap" id="permAlertIconWrap">
-                                <span id="permAlertIcon">⚠️</span>
+                    <!-- Camera & Microphone Permission Alert Overlay / Modal -->
+                    <div id="permissionAlertModal" class="permission-alert-modal" style="display: none;" role="alertdialog" aria-modal="true" aria-labelledby="permAlertTitle">
+                        <div class="permission-alert-backdrop" onclick="window.closePermissionAlert && window.closePermissionAlert()"></div>
+                        <div class="permission-alert-card">
+                            <div class="perm-alert-header">
+                                <div class="perm-alert-icon-wrap" id="permAlertIconWrap">
+                                    <span id="permAlertIcon">⚠️</span>
+                                </div>
+                                <div class="perm-alert-title-block">
+                                    <h3 id="permAlertTitle">Camera &amp; Microphone Access Required</h3>
+                                    <span class="perm-alert-badge" id="permAlertBadge">Permission Denied</span>
+                                </div>
+                                <button type="button" class="perm-alert-close-btn" id="permAlertCloseBtn" aria-label="Close Alert">✖</button>
                             </div>
-                            <div class="perm-alert-title-block">
-                                <h3 id="permAlertTitle">Camera &amp; Microphone Access Required</h3>
-                                <span class="perm-alert-badge" id="permAlertBadge">Permission Denied</span>
+
+                            <div class="perm-alert-body">
+                                <p id="permAlertMessage">
+                                    WEBZONEBW ER Studio requires permission to access your <strong>Camera</strong> and <strong>Microphone</strong> to enable live visual effects, facial tracking, and audio-reactive shaders.
+                                </p>
+
+                                <div class="perm-browser-steps" id="permBrowserSteps">
+                                    <div class="perm-step-item">
+                                        <span class="step-num">1</span>
+                                        <div class="step-text">
+                                            <strong>Click the Permissions Icon</strong> in your browser's address bar (the 🔒 lock or 📹 camera icon next to the URL).
+                                        </div>
+                                    </div>
+                                    <div class="perm-step-item">
+                                        <span class="step-num">2</span>
+                                        <div class="step-text">
+                                            Switch <strong>Camera</strong> and <strong>Microphone</strong> from <em>Block</em> to <strong>Allow</strong>.
+                                        </div>
+                                    </div>
+                                    <div class="perm-step-item">
+                                        <span class="step-num">3</span>
+                                        <div class="step-text">
+                                            Click <strong>Request Permissions Again</strong> below to start your live experience.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" class="perm-alert-close-btn" id="permAlertCloseBtn" aria-label="Close Alert">✖</button>
+
+                            <div class="perm-alert-actions">
+                                <button type="button" class="btn camera-btn-primary perm-action-btn" id="permRetryBtn">
+                                    <span aria-hidden="true">🔄</span> Request Permissions Again
+                                </button>
+                                <button type="button" class="btn perm-action-btn" id="permDemoBtn">
+                                    <span aria-hidden="true">✨</span> Switch to Test Mode
+                                </button>
+                                <button type="button" class="btn perm-action-btn" id="permUploadBtn">
+                                    <span aria-hidden="true">📁</span> Upload Photo Instead
+                                </button>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="perm-alert-body">
-                            <p id="permAlertMessage">
-                                WEBZONEBW ER Studio requires permission to access your <strong>Camera</strong> and <strong>Microphone</strong> to enable live visual effects, facial tracking, and audio-reactive shaders.
-                            </p>
+                    <!-- Shutter Flash Overlay -->
+                    <div id="shutterFlashOverlay" class="shutter-flash-overlay"></div>
 
-                            <div class="perm-browser-steps" id="permBrowserSteps">
-                                <div class="perm-step-item">
-                                    <span class="step-num">1</span>
-                                    <div class="step-text">
-                                        <strong>Click the Permissions Icon</strong> in your browser's address bar (the 🔒 lock or 📹 camera icon next to the URL).
-                                    </div>
-                                </div>
-                                <div class="perm-step-item">
-                                    <span class="step-num">2</span>
-                                    <div class="step-text">
-                                        Switch <strong>Camera</strong> and <strong>Microphone</strong> from <em>Block</em> to <strong>Allow</strong>.
-                                    </div>
-                                </div>
-                                <div class="perm-step-item">
-                                    <span class="step-num">3</span>
-                                    <div class="step-text">
-                                        Click <strong>Request Permissions Again</strong> below to start your live experience.
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Swipe Toast Indicator -->
+                    <div id="canvasSwipeToast" class="canvas-swipe-toast" aria-live="polite">
+                        <span id="canvasSwipeIcon">⚡</span>
+                        <span id="canvasSwipeText">Cyber Lens Active</span>
+                    </div>
+
+                    <!-- Hidden Video Feed Element -->
+                    <video
+                        id="cameraVideo"
+                        class="camera-video"
+                        autoplay
+                        playsinline
+                        muted
+                        style="display: none;">
+                    </video>
+
+                    <!-- High-Fidelity Render Canvas (Pixel Care Antialiased) -->
+                    <canvas
+                        id="cameraCanvas"
+                        class="camera-canvas"
+                        style="display: none;">
+                    </canvas>
+
+                    <!-- Standby / Camera Off Placeholder Screen -->
+                    <div id="cameraPlaceholder" class="camera-placeholder">
+                        <div class="placeholder-icon-wrap">
+                            <span class="big-icon" aria-hidden="true">🎨</span>
                         </div>
-
-                        <div class="perm-alert-actions">
-                            <button type="button" class="btn camera-btn-primary perm-action-btn" id="permRetryBtn">
-                                <span aria-hidden="true">🔄</span> Request Permissions Again
+                        <h3 class="placeholder-title">WebZoneBW-ER Studio Ready</h3>
+                        <p class="placeholder-desc">
+                            Start your live camera, upload a photo to enhance, or enter Test Mode to try all 30+ interactive shaders.
+                        </p>
+                        <div class="placeholder-btn-group">
+                            <button
+                                type="button"
+                                class="btn camera-btn-primary"
+                                id="startExperienceBtn"
+                                aria-label="Start Live Camera">
+                                <span aria-hidden="true">📸</span> Start Live Camera
                             </button>
-                            <button type="button" class="btn perm-action-btn" id="permDemoBtn">
-                                <span aria-hidden="true">✨</span> Switch to Test Mode
-                            </button>
-                            <button type="button" class="btn perm-action-btn" id="permUploadBtn">
-                                <span aria-hidden="true">📁</span> Upload Photo Instead
+                            <button
+                                type="button"
+                                class="btn"
+                                id="startDemoBtn"
+                                aria-label="Interactive Demo Mode">
+                                <span aria-hidden="true">✨</span> Test Mode
                             </button>
                         </div>
                     </div>
+
                 </div>
 
-                <!-- Smart Face Framing UX -->
-                <div id="smartFrameOverlay" class="smart-frame-overlay" aria-hidden="true">
-                    <div class="smart-frame-corners"></div>
-                    <div class="smart-frame-guide" id="smartFrameGuide"></div>
-                    <div class="smart-frame-status" id="smartFrameStatus">
-                        <span class="smart-frame-dot"></span>
-                        <span id="smartFrameStatusText">Full Face Auto • Ready</span>
-                    </div>
+                <!-- Swipe Navigation Hint -->
+                <div class="swipe-hint-bar">
+                    <span class="swipe-arrow">←</span>
+                    <span class="swipe-text">Swipe left / right to change effect</span>
+                    <span class="swipe-arrow">→</span>
                 </div>
 
-                <!-- Floating Canvas Swipe Toast (Fingertip Slider) -->
-                <div id="canvasSwipeToast" class="canvas-swipe-toast" aria-live="polite">
-                    <span id="canvasSwipeIcon">👈</span>
-                    <span id="canvasSwipeText">WebZonebw Signature</span>
-                </div>
-
-                <!-- Shutter Flash Animation Effect -->
-                <div id="shutterFlashOverlay" class="shutter-flash-overlay"></div>
-
-                <video
-                    id="cameraVideo"
-                    class="camera-video"
-                    autoplay
-                    playsinline
-                    muted
-                    style="display: none;">
-                </video>
-
-                <canvas
-                    id="cameraCanvas"
-                    class="camera-canvas"
-                    style="display: none;">
-                </canvas>
-
-                <div id="cameraPlaceholder" class="camera-placeholder">
-                    <span class="big-icon" aria-hidden="true">🎨</span>
-                    <h3 style="margin: 0 0 8px; color: #f8fafc;">Studio Ready</h3>
-                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">
-                        Start your live camera, upload a photo to enhance, or enter Test Mode.
-                    </p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                        <button
-                            type="button"
-                            class="btn camera-btn-primary"
-                            onclick="document.getElementById('startExperienceBtn').click()">
-                            <span aria-hidden="true">📸</span> Turn On Camera
+                <!-- Circular Lens Carousel Bar -->
+                <div class="er-lens-carousel-wrap">
+                    <div class="er-lens-track" id="snapLensTrack" role="region" aria-label="AR Lens Carousel">
+                        
+                        <button type="button" class="er-lens-bubble" data-filter="cartoon" title="Anime Cel Shader">
+                            <div class="lens-bubble-circle">🌸</div>
+                            <span class="lens-bubble-label">Anime</span>
                         </button>
-                        <button
-                            type="button"
-                            class="btn"
-                            onclick="document.getElementById('modeUploadBtn').click()">
-                            <span aria-hidden="true">📁</span> Upload Photo
+
+                        <button type="button" class="er-lens-bubble" data-filter="studiohd" title="Studio Portrait HD">
+                            <div class="lens-bubble-circle">👤</div>
+                            <span class="lens-bubble-label">Portrait</span>
                         </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="cinematic" title="Cinematic 35mm Film">
+                            <div class="lens-bubble-circle">🎬</div>
+                            <span class="lens-bubble-label">Cinema</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble active" data-filter="cyberwarrior" title="Cyber Hologram (Active)">
+                            <div class="lens-bubble-circle active-glow">⚡</div>
+                            <span class="lens-bubble-label">Cyber</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="matrix" title="Matrix Rain Green Code">
+                            <div class="lens-bubble-circle">❇️</div>
+                            <span class="lens-bubble-label">Matrix</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="icefrost" title="Hologram Shimmer">
+                            <div class="lens-bubble-circle">🧊</div>
+                            <span class="lens-bubble-label">Holo</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="comic" title="Comic Book Pop-Art">
+                            <div class="lens-bubble-circle">💥</div>
+                            <span class="lens-bubble-label">Comic</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble more-lens-btn" id="openAllEffectsBtn" title="View All 30+ Effects">
+                            <div class="lens-bubble-circle">•••</div>
+                            <span class="lens-bubble-label">More</span>
+                        </button>
+
                     </div>
                 </div>
 
-            </div>
+                <!-- Bottom Camera Action Controls (Flip Camera, Shutter, Upload Photo) -->
+                <div class="er-bottom-controls-bar">
 
-            <div class="mobile-camera-status" id="mobileCameraStatus" aria-live="polite">
-                <span class="status-live-dot"></span>
-                <span id="mobileCameraStatusText">Camera ready</span>
-            </div>
-
-            <!-- ==========================================================
-                 SNAPCHAT / INSTAGRAM STYLE CIRCULAR AR LENS CAROUSEL TRAY
-                 ========================================================== -->
-            <div class="snap-lens-tray-wrapper" id="snapLensTrayWrapper">
-                
-                <div class="snap-lens-track" id="snapLensTrack" role="region" aria-label="Snapchat & Instagram AR Lens Carousel">
-                    <!-- Realistic AR (Snap/Insta) -->
-                    <button type="button" class="snap-lens-bubble active" data-filter="goldenhour" title="Golden Hour Glow">
-                        <span class="snap-lens-icon">🌟</span>
-                        <span class="snap-lens-label">Golden Glow</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="sunglasses" title="Designer Aviators">
-                        <span class="snap-lens-icon">🕶️</span>
-                        <span class="snap-lens-label">Aviators</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="halo" title="Neon Angel Halo">
-                        <span class="snap-lens-icon">👑</span>
-                        <span class="snap-lens-label">Angel Halo</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="vintage90s" title="Retro 90s Kodak Film">
-                        <span class="snap-lens-icon">🎞️</span>
-                        <span class="snap-lens-label">Retro 90s</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="kawaii" title="Kawaii Anime Blush">
-                        <span class="snap-lens-icon">🌸</span>
-                        <span class="snap-lens-label">Kawaii Blush</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="cyberwarrior" title="Cyber Face-Paint">
-                        <span class="snap-lens-icon">⚡</span>
-                        <span class="snap-lens-label">Cyber Paint</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="noir" title="Leica Noir Cinema">
-                        <span class="snap-lens-icon">🖤</span>
-                        <span class="snap-lens-label">Leica Noir</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="icefrost" title="Diamond Shimmer">
-                        <span class="snap-lens-icon">❄️</span>
-                        <span class="snap-lens-label">Diamond Ice</span>
-                    </button>
-                    <!-- Studio & Art Styles -->
-                    <button type="button" class="snap-lens-bubble" data-filter="webzonebw" title="WebZonebw Signature">
-                        <span class="snap-lens-icon">🌐</span>
-                        <span class="snap-lens-label">Signature</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="cartoon" title="Anime Cel-Shader">
-                        <span class="snap-lens-icon">🎨</span>
-                        <span class="snap-lens-label">Anime Cel</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="studiohd" title="Studio Portrait HD">
-                        <span class="snap-lens-icon">📸</span>
-                        <span class="snap-lens-label">Studio HD</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="cinematic" title="35mm Film">
-                        <span class="snap-lens-icon">🎬</span>
-                        <span class="snap-lens-label">35mm Film</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="cyberhud" title="Cyborg HUD">
-                        <span class="snap-lens-icon">🤖</span>
-                        <span class="snap-lens-label">Cyborg HUD</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="matrix" title="Matrix Rain">
-                        <span class="snap-lens-icon">🟢</span>
-                        <span class="snap-lens-label">Matrix Rain</span>
-                    </button>
-                    <!-- Magazines -->
-                    <button type="button" class="snap-lens-bubble" data-filter="vogue" title="VOGUE Cover">
-                        <span class="snap-lens-icon">🕶️</span>
-                        <span class="snap-lens-label">Vogue Mag</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="time" title="TIME Cover">
-                        <span class="snap-lens-icon">🟥</span>
-                        <span class="snap-lens-label">TIME Mag</span>
-                    </button>
-                    <!-- Halloween -->
-                    <button type="button" class="snap-lens-bubble" data-filter="vampire" title="Vampire AR">
-                        <span class="snap-lens-icon">🧛</span>
-                        <span class="snap-lens-label">Vampire</span>
-                    </button>
-                    <button type="button" class="snap-lens-bubble" data-filter="pumpkin" title="Pumpkin AR">
-                        <span class="snap-lens-icon">🎃</span>
-                        <span class="snap-lens-label">Pumpkin</span>
-                    </button>
-                </div>
-
-                <!-- Centered Snapchat / Instagram Shutter Button Controls -->
-                <div class="snap-shutter-bar">
-                    <button
-                        id="flipCameraBtn"
-                        type="button"
-                        class="snap-sub-btn"
-                        title="Flip Camera"
-                        aria-label="Flip Camera">
+                    <button type="button" class="er-action-pill-btn" id="flipCameraBtn" title="Flip Camera">
                         <span aria-hidden="true">🔄</span>
-                        <span class="snap-btn-text">Flip</span>
+                        <span>Flip Camera</span>
                     </button>
 
-                    <!-- Iconic Big Round Shutter Snap Button -->
-                    <button
-                        id="snapPhotoBtn"
-                        type="button"
-                        class="snap-capture-shutter-btn"
-                        title="Capture HD Photo (Instant Snapshot)"
-                        aria-label="Capture Photo">
-                        <div class="shutter-inner-ring">
-                            <span class="shutter-center-core"></span>
+                    <!-- Large Glowing Center Shutter Snap Button -->
+                    <button type="button" class="er-snap-shutter-btn" id="snapPhotoBtn" title="Capture HD Photo" aria-label="Capture Photo">
+                        <div class="shutter-outer-glow">
+                            <div class="shutter-inner-core"></div>
                         </div>
                     </button>
 
-                    <button
-                        id="toggleAudioBtn"
-                        type="button"
-                        class="snap-sub-btn"
-                        title="Toggle Ambient Audio"
-                        aria-label="Toggle Audio">
-                        <span aria-hidden="true">🔊</span>
-                        <span class="snap-btn-text">Audio</span>
+                    <button type="button" class="er-action-pill-btn" id="modeUploadBtn" title="Upload Photo from Device">
+                        <span aria-hidden="true">📁</span>
+                        <span>Upload Photo</span>
+                    </button>
+
+                    <!-- Hidden File Upload Input -->
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+                </div>
+
+            </section>
+
+
+            <!-- RIGHT EFFECTS PANEL: WEBZONEBW-ER EFFECTS (Drawer / Side Panel) -->
+            <aside class="er-effects-panel" id="effectsPanel">
+
+                <div class="effects-panel-header">
+                    <div class="panel-title-group">
+                        <span class="panel-icon">❖</span>
+                        <h3><span class="text-white">WEBZONEBW-</span><span class="gradient-text">ER EFFECTS</span></h3>
+                    </div>
+                    <button type="button" class="panel-close-btn" id="closeEffectsPanelBtn" aria-label="Close Effects Panel">
+                        ✕
                     </button>
                 </div>
 
+                <!-- Search Effects Input -->
+                <div class="effects-search-wrap">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input
+                        type="text"
+                        id="effectsSearchInput"
+                        class="effects-search-input"
+                        placeholder="Search effects..."
+                        aria-label="Search effects">
+                </div>
+
+                <!-- Category Pills (All, Popular, Stylize, Sci-Fi, Art) -->
+                <div class="effects-category-pills" role="tablist" aria-label="Effect Categories">
+                    <button type="button" class="cat-pill active" data-cat="all">All</button>
+                    <button type="button" class="cat-pill" data-cat="popular">Popular</button>
+                    <button type="button" class="cat-pill" data-cat="stylize">Stylize</button>
+                    <button type="button" class="cat-pill" data-cat="scifi">Sci-Fi</button>
+                    <button type="button" class="cat-pill" data-cat="art">Art</button>
+                </div>
+
+                <!-- 3x4 Grid of Effect Cards (Anime, Portrait, Cinema, Cyber, Matrix, AI HUD, Bio-Scan, Holo, Comic, Glitch, Neon, Retro) -->
+                <div class="effects-card-grid" id="effectsCardGrid">
+
+                    <button type="button" class="effect-card" data-filter="cartoon" data-cat="art popular stylize">
+                        <div class="effect-icon-box anime-box">🌸</div>
+                        <span class="effect-name">Anime</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="studiohd" data-cat="popular stylize">
+                        <div class="effect-icon-box portrait-box">👤</div>
+                        <span class="effect-name">Portrait</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="cinematic" data-cat="popular stylize">
+                        <div class="effect-icon-box cinema-box">🎬</div>
+                        <span class="effect-name">Cinema</span>
+                    </button>
+
+                    <button type="button" class="effect-card active" data-filter="cyberwarrior" data-cat="scifi popular">
+                        <div class="effect-icon-box cyber-box">⚡</div>
+                        <span class="effect-name">Cyber</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="matrix" data-cat="scifi">
+                        <div class="effect-icon-box matrix-box">❇️</div>
+                        <span class="effect-name">Matrix</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="cyberhud" data-cat="scifi">
+                        <div class="effect-icon-box aihud-box">🌐</div>
+                        <span class="effect-name">AI HUD</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="skeleton" data-cat="scifi art">
+                        <div class="effect-icon-box bioscan-box">💀</div>
+                        <span class="effect-name">Bio-Scan</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="icefrost" data-cat="scifi stylize">
+                        <div class="effect-icon-box holo-box">🧊</div>
+                        <span class="effect-name">Holo</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="comic" data-cat="art stylize">
+                        <div class="effect-icon-box comic-box">💥</div>
+                        <span class="effect-name">Comic</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="glitch" data-cat="scifi art">
+                        <div class="effect-icon-box glitch-box">🎯</div>
+                        <span class="effect-name">Glitch</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="halo" data-cat="popular stylize">
+                        <div class="effect-icon-box neon-box">🦹</div>
+                        <span class="effect-name">Neon</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="vintage90s" data-cat="stylize art">
+                        <div class="effect-icon-box retro-box">🌅</div>
+                        <span class="effect-name">Retro</span>
+                    </button>
+
+                </div>
+
+                <!-- Bottom View All Effects Action -->
+                <div class="panel-bottom-action">
+                    <button type="button" class="view-all-effects-btn" id="viewAllCatalogBtn">
+                        <span aria-hidden="true">⊞</span> View All Effects (30+)
+                    </button>
+                </div>
+
+            </aside>
+
+        </div>
+
+
+        <!-- =====================================================
+             HOW TO USE & POWERED BY AI FEATURE CARDS (FROM SCREENSHOT 2)
+             ===================================================== -->
+
+        <div class="er-bottom-feature-row">
+
+            <!-- How To Use Section -->
+            <div class="how-to-use-card">
+                <h3 class="how-to-title">HOW TO USE WEBZONEBW-ER STUDIO</h3>
+                
+                <div class="how-to-steps-grid">
+                    <div class="how-to-step">
+                        <div class="step-icon-circle">👆</div>
+                        <div class="step-desc-block">
+                            <strong>Swipe</strong>
+                            <span>Swipe left / right to change effects</span>
+                        </div>
+                    </div>
+
+                    <div class="how-to-step">
+                        <div class="step-icon-circle">✨</div>
+                        <div class="step-desc-block">
+                            <strong>Explore</strong>
+                            <span>Tap "Effects" to view all WebZoneBW-ER Effects</span>
+                        </div>
+                    </div>
+
+                    <div class="how-to-step">
+                        <div class="step-icon-circle">📷</div>
+                        <div class="step-desc-block">
+                            <strong>Capture</strong>
+                            <span>Take photo or upload from gallery</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Extra Camera Controls -->
-            <div class="camera-actions" style="margin-top: 10px;">
-
-                <button
-                    id="stopExperienceBtn"
-                    type="button"
-                    class="btn">
-                    <span aria-hidden="true">⏹️</span> Stop Camera
-                </button>
-
+            <!-- Powered By AI Badge Card -->
+            <div class="powered-ai-card">
+                <div class="ai-card-glow-icon">🔮</div>
+                <div class="ai-card-text">
+                    <h4>Powered by WebZoneBW AI</h4>
+                    <p>Smart Effects • Real-time Preview • One Tap Apply</p>
+                </div>
             </div>
 
-            <!-- Snapshot Preview Modal Area (Instant HD Save) -->
-            <div id="snapshotModal" class="snapshot-preview-modal" style="display: none;">
-                <h3 style="margin: 0 0 8px; color: #f8fafc;">📸 Snapshot Captured!</h3>
+        </div>
+
+
+        <!-- =====================================================
+             SNAPSHOT PREVIEW MODAL (INSTANT HD CAPTURE)
+             ===================================================== -->
+
+        <div id="snapshotModal" class="snapshot-preview-modal" style="display: none;">
+            <div class="snapshot-modal-backdrop" onclick="document.getElementById('closeSnapshotBtn').click()"></div>
+            <div class="snapshot-modal-card">
+                <div class="snapshot-header">
+                    <h3>📸 Snapshot Captured!</h3>
+                    <button type="button" class="snapshot-close-x" id="closeSnapshotXBtn" aria-label="Close Snapshot">✕</button>
+                </div>
                 <img id="snapshotImg" class="snapshot-preview-img" alt="Captured ER Photo">
                 
-                <div style="margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <a id="downloadSnapshotBtn" class="btn camera-btn-primary" download="webzonebw-snapshot.png" style="font-weight: 700;">
+                <div class="snapshot-btn-row">
+                    <a id="downloadSnapshotBtn" class="btn camera-btn-primary" download="webzonebw-snapshot.png">
                         <span aria-hidden="true">💾</span> Save HD Snapshot
                     </a>
                     <button id="closeSnapshotBtn" type="button" class="btn">
@@ -1023,84 +606,33 @@
                     </button>
                 </div>
             </div>
-
-        </section>
-
-
-        <!-- =================================================
-             COMPACT TECHNICAL SPECIFICATIONS SLIDEBAR
-             ================================================= -->
-
-        <details class="tech-specs-slidebar">
-            <summary class="tech-specs-summary">
-                <div class="tech-specs-title-group">
-                    <span>🛠️ Technical Specifications &amp; Architecture</span>
-                    <span class="tech-specs-badge">Client-Side High-Perf</span>
-                </div>
-                <span class="tech-specs-chevron">▼</span>
-            </summary>
-            
-            <div class="tech-specs-content">
-                <div class="tech-specs-grid">
-                    <div class="tech-spec-card">
-                        <h4>🎨 Cartoon &amp; Cel-Shading</h4>
-                        <p>Real-time color quantization, posterization luminance algorithms, and manga edge contours on 60FPS HTML5 canvas.</p>
-                    </div>
-                    <div class="tech-spec-card">
-                        <h4>✨ Auto-HD Quality Enhancer</h4>
-                        <p>Unsharp masking convolution filters, contrast stretching, vibrance boosts, and studio lighting vignette.</p>
-                    </div>
-                    <div class="tech-spec-card">
-                        <h4>👤 3D Biometric Face-Fitting</h4>
-                        <p>Real-time optical face tracking, automatic luminance-skin centroids, and dynamic anatomical reticle fitting.</p>
-                    </div>
-                    <div class="tech-spec-card">
-                        <h4>📰 Magazine Cover Generator</h4>
-                        <p>High-fashion typography compositing (TIME, WIRED, Forbes, VOGUE, CyberMag) with custom headlines &amp; barcodes.</p>
-                    </div>
-                    <div class="tech-spec-card">
-                        <h4>🔒 100% Client-Side Privacy</h4>
-                        <p>Camera frames processed locally in browser RAM with zero external server storage or telemetry leaks.</p>
-                    </div>
-                </div>
-            </div>
-        </details>
+        </div>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              FOOTER
-             ================================================= -->
+             ===================================================== -->
 
         <footer class="site-footer">
-
             <div class="footer-content">
-
                 <p>
-                    © 2026
-                    <strong>WEBZONEBW</strong>. All rights reserved.
+                    © 2026 <strong>WEBZONEBW</strong>. All rights reserved.
                 </p>
-
-                <nav
-                    class="footer-links"
-                    aria-label="Footer Navigation">
-
+                <nav class="footer-links" aria-label="Footer Navigation">
                     <a href="../privacy.html">Privacy Policy</a>
                     <a href="../terms.html">Terms &amp; Conditions</a>
                     <a href="../disclaimer.html">Disclaimer</a>
                     <a href="../contact.html">Contact</a>
-
                 </nav>
-
             </div>
-
         </footer>
 
     </main>
 
 </div>
 
-
-<!-- Main Site Scripts -->
+<!-- Scripts -->
+<script src="../js/beatles-playlists.js"></script>
 <script src="../js/script.js"></script>
 <script src="../js/halloween.js"></script>
 
