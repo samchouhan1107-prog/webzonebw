@@ -4,7 +4,9 @@
 <head>
 
     <!-- =====================================================
-         WEBZONEBW — PROJECTS PAGE
+         WEBZONEBW — PROJECTS
+         Production HTML5 • SEO • Accessibility • Schema
+         Technology Portfolio • Systems Integration • AI
          ===================================================== -->
 
     <meta charset="UTF-8">
@@ -12,37 +14,28 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-
-    <!-- =====================================================
-         GOOGLE ADSENSE
-         ===================================================== -->
-
-    <meta name="google-adsense-account"
-          content="ca-pub-4823379856566931">
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-            crossorigin="anonymous">
-    </script>
-
+    <meta name="theme-color"
+          content="#0b0f19">
 
     <!-- =====================================================
          SEO
          ===================================================== -->
 
-    <title>Projects | Web Development, IT & AI Projects | WebZoneBW</title>
+    <title>
+        Projects | Web Development, IT &amp; AI Projects | WEBZONEBW
+    </title>
 
     <meta name="description"
-          content="Explore Sameer Chouhan's technical projects including WEBZONE-STUDIO, WebZoneBW.in, web development, IT support, systems integration, automation, advertising technology, analytics and continuous technology experimentation.">
+          content="Explore WEBZONEBW projects covering web development, IT support, systems integration, networking, AI-assisted development, automation, advertising technology, analytics and practical technology experimentation.">
 
     <meta name="keywords"
-          content="Sameer Chouhan projects, WebZoneBW projects, WEBZONE-STUDIO, web development, IT support, systems integration, AI projects, automation, advertising technology, networking">
+          content="WEBZONEBW projects, Sameer Chouhan projects, WEBZONE-STUDIO, web development, IT support, systems integration, networking, AI projects, automation, advertising technology, analytics">
 
     <meta name="author"
           content="Sameer Chouhan">
 
     <meta name="robots"
-          content="index, follow">
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
 
     <!-- =====================================================
@@ -63,6 +56,19 @@
 
 
     <!-- =====================================================
+         GOOGLE ADSENSE
+         ===================================================== -->
+
+    <meta name="google-adsense-account"
+          content="ca-pub-4823379856566931">
+
+    <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
+            crossorigin="anonymous">
+    </script>
+
+
+    <!-- =====================================================
          OPEN GRAPH
          ===================================================== -->
 
@@ -70,24 +76,39 @@
           content="website">
 
     <meta property="og:title"
-          content="Projects | WebZoneBW">
+          content="Projects | WEBZONEBW">
 
     <meta property="og:description"
-          content="Explore technical projects, web applications, IT solutions, automation experiments and ongoing development work by Sameer Chouhan.">
+          content="Explore WEBZONEBW technical projects covering web development, IT, networking, systems integration, AI, automation and digital technology.">
 
     <meta property="og:url"
           content="https://webzonebw.in/projects.html">
 
     <meta property="og:site_name"
-          content="WebZoneBW">
+          content="WEBZONEBW">
+
+    <meta property="og:image"
+          content="https://webzonebw.in/assets/images/og-image.png">
+
+    <meta property="og:image:alt"
+          content="WEBZONEBW technology projects">
 
 
     <!-- =====================================================
-         MAIN STYLESHEET
+         TWITTER / SOCIAL PREVIEW
          ===================================================== -->
 
-    <link rel="stylesheet"
-          href="css/style.css">
+    <meta name="twitter:card"
+          content="summary_large_image">
+
+    <meta name="twitter:title"
+          content="Projects | WEBZONEBW">
+
+    <meta name="twitter:description"
+          content="Technical projects, web development, IT solutions, AI experiments, automation and systems integration work.">
+
+    <meta name="twitter:image"
+          content="https://webzonebw.in/assets/images/og-image.png">
 
 
     <!-- =====================================================
@@ -99,26 +120,107 @@
 
 
     <!-- =====================================================
-         STRUCTURED DATA
+         MAIN STYLESHEET
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+
+    <!-- =====================================================
+         ORGANIZATION SCHEMA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://webzonebw.in/#organization",
+        "name": "WEBZONEBW",
+        "url": "https://webzonebw.in/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://webzonebw.in/assets/logo.png"
+        },
+        "description": "WEBZONEBW is a technology-focused digital portfolio and project platform covering IT support, networking, systems integration, cybersecurity, web development, artificial intelligence, automation and practical technology projects.",
+        "founder": {
+            "@type": "Person",
+            "name": "Sameer Chouhan"
+        }
+    }
+    </script>
+
+
+    <!-- =====================================================
+         WEBSITE SCHEMA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://webzonebw.in/#website",
+        "url": "https://webzonebw.in/",
+        "name": "WEBZONEBW",
+        "description": "Technology portfolio, digital workspace and practical technology project hub.",
+        "publisher": {
+            "@id": "https://webzonebw.in/#organization"
+        },
+        "inLanguage": "en"
+    }
+    </script>
+
+
+    <!-- =====================================================
+         COLLECTION PAGE SCHEMA
          ===================================================== -->
 
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "WebZoneBW Projects",
+        "@id": "https://webzonebw.in/projects.html#webpage",
         "url": "https://webzonebw.in/projects.html",
-        "description": "Technical projects and development work by Sameer Chouhan.",
+        "name": "WEBZONEBW Projects",
+        "headline": "Technical Projects & Digital Work",
+        "description": "Technical projects and development work by Sameer Chouhan across web development, IT, networking, systems integration, AI, automation and digital technology.",
+        "isPartOf": {
+            "@id": "https://webzonebw.in/#website"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Technology Projects"
+        },
         "author": {
             "@type": "Person",
             "name": "Sameer Chouhan"
         },
-        "isPartOf": {
-            "@type": "WebSite",
-            "name": "WebZoneBW",
-            "url": "https://webzonebw.in/"
-        }
+        "inLanguage": "en"
     }
+    </script>
+
+
+    <!-- =====================================================
+         GOOGLE ANALYTICS — GA4
+         ===================================================== -->
+
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
+    </script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZFZ54Z2997', {
+            page_title: 'Projects | WEBZONEBW',
+            page_location: window.location.href
+        });
     </script>
 
 </head>
@@ -128,118 +230,333 @@
 
 <div class="container">
 
-    <!-- Mobile Nav Bar -->
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
     <div class="mobile-nav-bar">
-        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+
+        <button
+            type="button"
+            class="hamburger-btn"
+            id="sidebarToggleBtn"
+            aria-label="Toggle Sidebar Navigation"
+            aria-controls="mainSidebar"
+            aria-expanded="false">
+
             <span></span>
             <span></span>
             <span></span>
+
         </button>
+
+
         <div class="mobile-brand-title">
-            <span class="gradient-text">WEBZONEBW</span>
+
+            <span class="gradient-text">
+                WEBZONEBW
+            </span>
+
         </div>
-        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
+
+
+        <a
+            href="halloween/index.html"
+            class="header-icon-btn"
+            title="Launch WEBZONEBW ER Studio"
+            aria-label="Launch WEBZONEBW ER Studio">
+
+            🔮
+
+        </a>
+
     </div>
+
 
     <!-- =====================================================
          STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar" id="mainSidebar">
+    <aside
+        class="sidebar"
+        id="mainSidebar">
+
+
+        <!-- =================================================
+             BRAND
+             ================================================= -->
 
         <div class="logo">
-            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+
+            <a
+                href="index.html"
+                aria-label="WEBZONEBW Home"
+                class="brand-logo-link">
+
+                <img
+                    src="assets/logo.png"
+                    alt="WEBZONEBW Logo"
+                    class="brand-logo-img">
+
                 <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        TECH · AI · INNOVATE
+                    </span>
+
                 </div>
+
             </a>
+
         </div>
 
-        <!-- Main Navigation -->
-        <nav class="sidebar-nav" aria-label="Main Navigation">
+
+        <!-- =================================================
+             MAIN NAVIGATION
+             ================================================= -->
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Main Navigation">
+
             <ul>
+
                 <li>
+
                     <a href="index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            🏠
+
+                        </span>
+
                         Dashboard
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="halloween/index.html">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            🔮
+
+                        </span>
+
                         WebZoneBW-ER Studio
+
                     </a>
+
                 </li>
 
+
                 <li>
-                    <a href="projects.html" class="active" aria-current="page">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
+
+                    <a
+                        href="projects.html"
+                        class="active"
+                        aria-current="page">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            💼
+
+                        </span>
+
                         Projects
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="resume.html">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            📄
+
+                        </span>
+
                         Resume
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            📝
+
+                        </span>
+
                         Blog
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            🎵
+
+                        </span>
+
                         Sound Box
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="about.html">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            👤
+
+                        </span>
+
                         About
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="contact.html">
-                        <span class="nav-icon" aria-hidden="true">✉️</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+
+                            ✉️
+
+                        </span>
+
                         Contact
+
                     </a>
+
                 </li>
+
             </ul>
+
         </nav>
 
-        <!-- Dark Mode Switch Toggle -->
+
+        <!-- =================================================
+             DARK MODE TOGGLE
+             ================================================= -->
+
         <div class="sidebar-theme-toggle-row">
+
             <div class="theme-label-group">
-                <span id="themeModeIcon" aria-hidden="true">🌙</span>
-                <span id="themeModeText">Dark Mode</span>
+
+                <span
+                    id="themeModeIcon"
+                    aria-hidden="true">
+
+                    🌙
+
+                </span>
+
+                <span id="themeModeText">
+                    Dark Mode
+                </span>
+
             </div>
-            <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+
+
+            <label
+                class="switch-toggle"
+                for="themeToggleSwitch">
+
+                <input
+                    type="checkbox"
+                    id="themeToggleSwitch"
+                    checked
+                    aria-label="Toggle Dark Mode">
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>
 
-        <!-- User Profile Card -->
+
+        <!-- =================================================
+             USER PROFILE
+             ================================================= -->
+
         <div class="sidebar-user-card">
+
             <div class="user-avatar-wrap">
-                <span class="user-avatar-icon">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
+
+                <span class="user-avatar-icon">
+                    👨‍💻
+                </span>
+
+                <span
+                    class="user-online-dot"
+                    title="Online">
+                </span>
+
             </div>
+
+
             <div class="user-info">
-                <strong>Sameer Chouhan</strong>
-                <span>Developer &amp; Creator</span>
+
+                <strong>
+                    Sameer Chouhan
+                </strong>
+
+                <span>
+                    Developer &amp; Creator
+                </span>
+
             </div>
+
         </div>
 
     </aside>
@@ -259,6 +576,7 @@
         <header class="top-header">
 
             <div class="header-left">
+
                 <h1>
                     Projects &amp; Systems Integration
                 </h1>
@@ -266,12 +584,38 @@
                 <p class="header-subtitle">
                     Technology, development, experimentation and practical solutions.
                 </p>
+
             </div>
 
+
             <div class="header-utilities">
-                <a href="soundbox.html" class="header-icon-btn" title="Sound Box" aria-label="Sound Box">🎵</a>
-                <a href="halloween/index.html" class="header-icon-btn" title="ER Studio" aria-label="ER Studio">🔮</a>
-                <span class="header-badge">Live 🟢</span>
+
+                <a
+                    href="soundbox.html"
+                    class="header-icon-btn"
+                    title="Sound Box"
+                    aria-label="Sound Box">
+
+                    🎵
+
+                </a>
+
+
+                <a
+                    href="halloween/index.html"
+                    class="header-icon-btn"
+                    title="WEBZONEBW ER Studio"
+                    aria-label="WEBZONEBW ER Studio">
+
+                    🔮
+
+                </a>
+
+
+                <span class="header-badge">
+                    Live 🟢
+                </span>
+
             </div>
 
         </header>
@@ -295,20 +639,22 @@
             </h3>
 
             <p>
-                WebZoneBW is also a workspace for building, testing and
-                documenting practical technology projects.
+                WEBZONEBW is a practical technology workspace for
+                building, testing, documenting and presenting
+                technology projects.
             </p>
 
             <p>
-                This portfolio brings together web applications, development
-                experiments, IT-focused solutions, automation concepts,
-                advertising technology, analytics work and ongoing technical
-                learning.
+                This portfolio brings together web applications,
+                development experiments, IT-focused solutions,
+                automation concepts, advertising technology,
+                analytics work and ongoing technical learning.
             </p>
 
             <p>
-                Projects may evolve over time as new technologies are tested,
-                improved and integrated into the WebZoneBW ecosystem.
+                Projects may evolve over time as technologies are
+                tested, improved, integrated and moved from concept
+                toward practical implementation.
             </p>
 
         </section>
@@ -342,10 +688,10 @@
             </p>
 
             <p>
-                The project has been developed through multiple architectural
+                The project has evolved through multiple architectural
                 iterations with an emphasis on modular controllers,
-                workspace management, preview functionality and extensible
-                AI capabilities.
+                workspace management, preview functionality and
+                extensible AI capabilities.
             </p>
 
             <p>
@@ -361,7 +707,10 @@
                 class="btn"
                 aria-label="View WEBZONE-STUDIO on GitHub">
 
-                <span aria-hidden="true">💻</span>
+                <span aria-hidden="true">
+                    💻
+                </span>
+
                 View on GitHub
 
             </a>
@@ -370,7 +719,7 @@
 
 
         <!-- =================================================
-             FEATURED PROJECT — WEBZONEBW ER STUDIO
+             WEBZONEBW ER STUDIO
              ================================================= -->
 
         <section
@@ -378,20 +727,33 @@
             aria-labelledby="er-title">
 
             <h2 id="er-title">
-                🔮 WEBZONEBW ER Studio
+
+                <span aria-hidden="true">
+                    🔮
+                </span>
+
+                WEBZONEBW ER Studio
+
             </h2>
 
             <h3>
-                Signature Promotional Theme • Cartoon Anime Art • Auto-HD Enhancer • Trending Magazine Covers
+                Signature Promotional Theme • Cartoon Anime Art
+                • Auto-HD Enhancer • Trending Magazine Covers
             </h3>
 
             <p>
-                A high-performance Extended Reality engine featuring WEBZONEBW signature promotional branding, real-time cartoon cel-shading, auto-HD picture quality enhancement, trending magazine covers (TIME, WIRED, Forbes, VOGUE, Cyberpunk), and biometric face recognition with 60FPS canvas rendering.
+                A browser-based Extended Reality experience featuring
+                WEBZONEBW promotional branding, real-time cartoon
+                cel-shading, automatic image enhancement, magazine-style
+                visual compositions and biometric face-recognition
+                experimentation.
             </p>
 
             <p>
                 <strong>Focus:</strong>
-                HTML5 Canvas • Signature Promotional Shaders • Cartoon Cel-Shading • Auto-HD Enhancer • Trending Magazine Compositing • Biometric Vision
+                HTML5 Canvas • Promotional Shaders • Cartoon
+                Cel-Shading • Auto-HD Enhancement • Magazine
+                Compositing • Computer Vision
             </p>
 
             <a
@@ -399,7 +761,10 @@
                 class="btn camera-btn-primary"
                 aria-label="Launch WEBZONEBW ER Studio">
 
-                <span aria-hidden="true">🔮</span>
+                <span aria-hidden="true">
+                    🔮
+                </span>
+
                 Launch WEBZONEBW ER Studio
 
             </a>
@@ -416,21 +781,28 @@
             aria-labelledby="webzone-project-title">
 
             <h2 id="webzone-project-title">
-                🌐 WebZoneBW.in
+
+                <span aria-hidden="true">
+                    🌐
+                </span>
+
+                WebZoneBW.in
+
             </h2>
 
             <p>
-                WebZoneBW.in is the central digital portfolio and technical
-                workspace connecting professional information, projects,
-                technical resources, web development experiments and
-                technology-focused content.
+                WebZoneBW.in is the central digital portfolio and
+                technology workspace connecting professional
+                information, projects, technical resources,
+                web development experiments and technology-focused
+                content.
             </p>
 
             <p>
-                The platform is being developed as an evolving digital
-                environment rather than a static portfolio. Its pages,
-                projects and supporting resources are continuously improved
-                as new work is completed.
+                The platform is being developed as an evolving
+                digital environment rather than a static portfolio.
+                Its pages, projects and supporting resources are
+                continuously improved as new work is completed.
             </p>
 
             <p>
@@ -442,10 +814,13 @@
             <a
                 href="index.html"
                 class="btn"
-                aria-label="Return to WebZoneBW dashboard">
+                aria-label="Return to WEBZONEBW dashboard">
 
-                <span aria-hidden="true">🏠</span>
-                Explore WebZoneBW
+                <span aria-hidden="true">
+                    🏠
+                </span>
+
+                Explore WEBZONEBW
 
             </a>
 
@@ -453,7 +828,7 @@
 
 
         <!-- =================================================
-             MARKETING TECHNOLOGY
+             MARKETING & ADVERTISING TECHNOLOGY
              ================================================= -->
 
         <section
@@ -461,19 +836,28 @@
             aria-labelledby="marketing-project-title">
 
             <h2 id="marketing-project-title">
-                📢 Marketing &amp; Advertising Technology
+
+                <span aria-hidden="true">
+                    📢
+                </span>
+
+                Marketing &amp; Advertising Technology
+
             </h2>
 
             <p>
-                A separate development track has explored the architecture
-                of a digital advertising and traffic-management platform.
+                A separate development track explores the architecture
+                of digital advertising, campaign management and
+                traffic-management systems.
             </p>
 
             <ul>
 
                 <li>
 
-                    <span aria-hidden="true">🎯</span>
+                    <span aria-hidden="true">
+                        🎯
+                    </span>
 
                     Campaign creation and management concepts
 
@@ -482,7 +866,9 @@
 
                 <li>
 
-                    <span aria-hidden="true">📊</span>
+                    <span aria-hidden="true">
+                        📊
+                    </span>
 
                     Campaign analytics and tracking architecture
 
@@ -491,7 +877,9 @@
 
                 <li>
 
-                    <span aria-hidden="true">⚙️</span>
+                    <span aria-hidden="true">
+                        ⚙️
+                    </span>
 
                     Advertisement delivery and rendering components
 
@@ -500,7 +888,9 @@
 
                 <li>
 
-                    <span aria-hidden="true">🌐</span>
+                    <span aria-hidden="true">
+                        🌐
+                    </span>
 
                     Publisher-side advertising integration concepts
 
@@ -509,7 +899,9 @@
 
                 <li>
 
-                    <span aria-hidden="true">📈</span>
+                    <span aria-hidden="true">
+                        📈
+                    </span>
 
                     Traffic and engagement measurement experiments
 
@@ -536,20 +928,26 @@
             aria-labelledby="blog-project-title">
 
             <h2 id="blog-project-title">
-                📝 WebZoneBW1107
+
+                <span aria-hidden="true">
+                    📝
+                </span>
+
+                WebZoneBW1107
+
             </h2>
 
             <p>
-                WebZoneBW1107 is the Blogger-based content platform used
-                for publishing technical articles, web development
-                information, IT Support resources, career guidance and
-                practical learning content.
+                WebZoneBW1107 is the Blogger-based publishing platform
+                used for technical articles, web development information,
+                IT Support resources, career guidance and practical
+                technology learning content.
             </p>
 
             <p>
-                The platform complements WebZoneBW.in by providing a
-                dedicated publishing environment for longer-form content
-                and technical resources.
+                The platform complements WebZoneBW.in by providing
+                a dedicated publishing environment for longer-form
+                content and technical resources.
             </p>
 
             <a
@@ -559,7 +957,10 @@
                 class="btn"
                 aria-label="Visit WebZoneBW1107 Blogger website">
 
-                <span aria-hidden="true">🌐</span>
+                <span aria-hidden="true">
+                    🌐
+                </span>
+
                 Visit Blogger
 
             </a>
@@ -576,7 +977,13 @@
             aria-labelledby="project-areas-title">
 
             <h2 id="project-areas-title">
-                🧩 Project Areas
+
+                <span aria-hidden="true">
+                    🧩
+                </span>
+
+                Project Areas
+
             </h2>
 
             <ul>
@@ -586,42 +993,35 @@
                     Web Development
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🤖</span>
                     AI &amp; Automation
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">🖥️</span>
                     IT Support &amp; Administration
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🌐</span>
                     Networking &amp; Systems Integration
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">📊</span>
                     Analytics &amp; Tracking
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">📢</span>
                     Advertising Technology
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🔐</span>
                     Security &amp; Technical Research
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">📚</span>
@@ -642,7 +1042,13 @@
             aria-labelledby="technology-title">
 
             <h2 id="technology-title">
-                🛠️ Technologies &amp; Technical Areas
+
+                <span aria-hidden="true">
+                    🛠️
+                </span>
+
+                Technologies &amp; Technical Areas
+
             </h2>
 
             <ul>
@@ -652,42 +1058,35 @@
                     HTML5, CSS3 &amp; Responsive Web Design
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">⚡</span>
                     JavaScript &amp; Browser-Based Applications
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">🟢</span>
                     Node.js &amp; Express-Based Applications
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🤖</span>
                     AI-Assisted Development
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">☁️</span>
                     Cloud &amp; Web Platform Concepts
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🖥️</span>
                     Microsoft &amp; Linux Environments
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🌐</span>
                     Networking &amp; Infrastructure
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">📊</span>
@@ -708,26 +1107,32 @@
             aria-labelledby="current-work-title">
 
             <h2 id="current-work-title">
-                🚧 Current Development
+
+                <span aria-hidden="true">
+                    🚧
+                </span>
+
+                Current Development
+
             </h2>
 
             <p>
-                WebZoneBW projects are continuously evolving. Current
+                WEBZONEBW projects are continuously evolving. Current
                 development focuses on improving the website ecosystem,
                 expanding technical documentation, developing practical
                 web tools and experimenting with new application concepts.
             </p>
 
             <p>
-                Some projects are production-oriented, while others remain
-                experimental or are being developed as technical learning
-                exercises.
+                Some projects are production-oriented, while others
+                remain experimental or are being developed as technical
+                learning exercises.
             </p>
 
             <p>
                 The portfolio will continue to be updated as projects
-                move from concept to prototype and from prototype toward
-                usable digital solutions.
+                move from concept to prototype and from prototype
+                toward usable digital solutions.
             </p>
 
         </section>
@@ -742,7 +1147,13 @@
             aria-labelledby="professional-title">
 
             <h2 id="professional-title">
-                👨‍💻 Interested in the Work?
+
+                <span aria-hidden="true">
+                    👨‍💻
+                </span>
+
+                Interested in the Work?
+
             </h2>
 
             <p>
@@ -754,9 +1165,12 @@
             <a
                 href="contact.html"
                 class="btn"
-                aria-label="Go to WebZoneBW contact page">
+                aria-label="Go to WEBZONEBW contact page">
 
-                <span aria-hidden="true">✉️</span>
+                <span aria-hidden="true">
+                    ✉️
+                </span>
+
                 Contact Me
 
             </a>
@@ -773,10 +1187,9 @@
             <div class="footer-content">
 
                 <p>
-
                     © 2026
-                    <strong>WEBZONEBW</strong>. All rights reserved.
-
+                    <strong>WEBZONEBW</strong>.
+                    All rights reserved.
                 </p>
 
 
@@ -805,7 +1218,6 @@
             </div>
 
         </footer>
-
 
     </main>
 

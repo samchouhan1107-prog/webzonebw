@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!--
+    ============================================================
+    WEBZONEBW — XML SITEMAP
+    Primary Website + WEBZONE ER Experience
+    ============================================================
 
-    <!-- =====================================================
-         WEBZONEBW — XML SITEMAP
-         Primary website pages
-         ===================================================== -->
+    Website:
+    https://webzonebw.in/
 
+    Sitemap standard:
+    https://www.sitemaps.org/
+
+    Notes:
+    - Only canonical, indexable pages are included.
+    - Error, maintenance, API and utility routes are excluded.
+    - Last modification dates should only be added when pages
+      are actually updated.
+    ============================================================
+-->
+
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <!-- ========================================================
+         PRIMARY WEBSITE
+         ======================================================== -->
 
     <!-- Homepage -->
 
@@ -50,10 +69,21 @@
     </url>
 
 
-    <!-- =====================================================
-         LEGAL / TRUST PAGES
-         ===================================================== -->
+    <!-- ========================================================
+         WEBZONE ER
+         Interactive / Experimental Experience
+         ======================================================== -->
 
+    <!-- Halloween / WEBZONE ER -->
+
+    <url>
+        <loc>https://webzonebw.in/halloween/</loc>
+    </url>
+
+
+    <!-- ========================================================
+         TRUST & LEGAL
+         ======================================================== -->
 
     <!-- Privacy Policy -->
 
@@ -74,6 +104,5 @@
     <url>
         <loc>https://webzonebw.in/disclaimer.html</loc>
     </url>
-
 
 </urlset>

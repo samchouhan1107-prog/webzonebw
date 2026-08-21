@@ -5,18 +5,14 @@
 
     <!-- =====================================================
          WEBZONEBW — ABOUT
-         Production HTML5 + SEO + AI Structured Data
+         Production HTML5 • SEO • Structured Data •
+         Responsive UI • Accessible Navigation
          ===================================================== -->
 
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-
-
-    <!-- =====================================================
-         BASIC DOCUMENT INFORMATION
-         ===================================================== -->
 
     <title>
         About Sameer Chouhan | IT Support &amp; Technology — WEBZONEBW
@@ -33,6 +29,18 @@
 
     <meta name="theme-color"
           content="#0b0f19">
+
+    <meta name="application-name"
+          content="WEBZONEBW">
+
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+
+    <meta name="apple-mobile-web-app-title"
+          content="WEBZONEBW">
+
+    <meta name="mobile-web-app-capable"
+          content="yes">
 
     <link rel="canonical"
           href="https://webzonebw.in/about.html">
@@ -112,7 +120,383 @@
 
 
     <!-- =====================================================
-         WEBZONEBW — PERSON / ABOUT PAGE SCHEMA
+         ABOUT PAGE MICRO-INTERACTION LAYER
+         
+         Existing site styles remain the primary design system.
+         These rules only polish this page and its icons.
+         ===================================================== -->
+
+    <style>
+
+        /* =====================================================
+           PAGE SMOOTHNESS
+           ===================================================== */
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+
+        /* =====================================================
+           ICON SYSTEM
+           ===================================================== */
+
+        .about-icon {
+            width: 34px;
+            height: 34px;
+
+            flex: 0 0 34px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            font-size: 1rem;
+            line-height: 1;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,.04);
+
+            transition:
+                transform 180ms cubic-bezier(.22,1,.36,1),
+                background-color 180ms ease,
+                border-color 180ms ease,
+                box-shadow 220ms ease,
+                filter 220ms ease;
+        }
+
+
+        .about-icon:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,.09);
+            border-color: rgba(255,255,255,.15);
+            box-shadow:
+                0 8px 22px rgba(0,0,0,.18);
+        }
+
+
+        /* =====================================================
+           NAV ICONS
+           ===================================================== */
+
+        .sidebar-nav .nav-icon {
+            width: 30px;
+            height: 30px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            flex: 0 0 30px;
+
+            font-size: .95rem;
+            line-height: 1;
+
+            border-radius: 9px;
+
+            transition:
+                transform 180ms cubic-bezier(.22,1,.36,1),
+                background-color 180ms ease,
+                filter 180ms ease;
+        }
+
+
+        .sidebar-nav a:hover .nav-icon {
+            transform: scale(1.08);
+            background: rgba(255,255,255,.06);
+        }
+
+
+        .sidebar-nav a.active .nav-icon {
+            transform: scale(1.04);
+        }
+
+
+        /* =====================================================
+           HEADER UTILITY ICON BUTTONS
+           ===================================================== */
+
+        .about-header-icon {
+            width: 42px;
+            height: 42px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            flex: 0 0 42px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-size: 1.05rem;
+            line-height: 1;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid rgba(255,255,255,.09);
+
+            box-shadow:
+                0 4px 14px rgba(0,0,0,.12);
+
+            transition:
+                transform 180ms cubic-bezier(.22,1,.36,1),
+                background-color 180ms ease,
+                border-color 180ms ease,
+                box-shadow 220ms ease,
+                filter 220ms ease;
+        }
+
+
+        .about-header-icon:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,.08);
+            border-color: rgba(255,255,255,.17);
+            box-shadow:
+                0 8px 24px rgba(0,0,0,.2);
+        }
+
+
+        .about-header-icon:active {
+            transform: scale(.94);
+        }
+
+
+        .about-header-icon:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 3px;
+        }
+
+
+        /* =====================================================
+           MOBILE ER BUTTON
+           ===================================================== */
+
+        .about-mobile-er-btn {
+            width: 40px;
+            height: 40px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 11px;
+
+            text-decoration: none;
+
+            font-size: 1rem;
+
+            transition:
+                transform 180ms cubic-bezier(.22,1,.36,1),
+                background-color 180ms ease,
+                box-shadow 220ms ease;
+        }
+
+
+        .about-mobile-er-btn:hover {
+            transform: translateY(-2px);
+        }
+
+
+        .about-mobile-er-btn:active {
+            transform: scale(.94);
+        }
+
+
+        /* =====================================================
+           SNAPSHOT LIST
+           ===================================================== */
+
+        .quick-info ul li {
+            transition:
+                transform 180ms cubic-bezier(.22,1,.36,1),
+                background-color 180ms ease;
+        }
+
+
+        .quick-info ul li:hover {
+            transform: translateX(4px);
+        }
+
+
+        /* =====================================================
+           SKILL BARS
+           ===================================================== */
+
+        .skill-fill {
+            transform-origin: left center;
+            transition:
+                width 900ms cubic-bezier(.22,1,.36,1);
+        }
+
+
+        /* =====================================================
+           CONTENT LINKS
+           ===================================================== */
+
+        .main-content a:not(.about-header-icon):not(.about-mobile-er-btn) {
+            transition:
+                color 180ms ease,
+                opacity 180ms ease;
+        }
+
+
+        /* =====================================================
+           FOOTER LINKS
+           ===================================================== */
+
+        .footer-links a {
+            transition:
+                color 180ms ease,
+                opacity 180ms ease,
+                transform 180ms ease;
+        }
+
+
+        .footer-links a:hover {
+            transform: translateY(-1px);
+        }
+
+
+        /* =====================================================
+           ONLINE STATUS
+           ===================================================== */
+
+        .about-live-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+
+        .about-live-dot {
+            width: 7px;
+            height: 7px;
+
+            flex: 0 0 7px;
+
+            border-radius: 50%;
+
+            background: #72f7a8;
+
+            box-shadow:
+                0 0 8px rgba(114,247,168,.65);
+
+            animation:
+                aboutStatusPulse 2s ease-in-out infinite;
+        }
+
+
+        @keyframes aboutStatusPulse {
+
+            0%,
+            100% {
+                opacity: .55;
+                transform: scale(.88);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.12);
+            }
+
+        }
+
+
+        /* =====================================================
+           USER AVATAR SMOOTHNESS
+           ===================================================== */
+
+        .sidebar-user-card {
+            transition:
+                transform 220ms cubic-bezier(.22,1,.36,1),
+                background-color 220ms ease,
+                box-shadow 220ms ease;
+        }
+
+
+        .sidebar-user-card:hover {
+            transform: translateY(-2px);
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+           ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            .about-icon,
+            .about-header-icon,
+            .about-mobile-er-btn,
+            .quick-info ul li,
+            .sidebar-user-card,
+            .footer-links a,
+            .skill-fill {
+                transition-duration: .01ms !important;
+                animation-duration: .01ms !important;
+            }
+
+            .about-live-dot {
+                animation: none;
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE POLISH
+           ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .about-header-icon {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
+                border-radius: 10px;
+            }
+
+            .about-mobile-er-btn {
+                width: 38px;
+                height: 38px;
+            }
+
+            .about-icon {
+                width: 31px;
+                height: 31px;
+                flex-basis: 31px;
+                border-radius: 8px;
+            }
+
+        }
+
+    </style>
+
+
+    <!-- =====================================================
+         WEBZONEBW — PERSON SCHEMA
          ===================================================== -->
 
     <script type="application/ld+json">
@@ -163,118 +547,295 @@
 
 <div class="container">
 
-    <!-- Mobile Nav Bar -->
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
     <div class="mobile-nav-bar">
-        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+
+        <button type="button"
+                class="hamburger-btn"
+                id="sidebarToggleBtn"
+                aria-label="Toggle Sidebar Navigation"
+                aria-controls="mainSidebar"
+                aria-expanded="false">
+
             <span></span>
             <span></span>
             <span></span>
+
         </button>
+
+
         <div class="mobile-brand-title">
-            <span class="gradient-text">WEBZONEBW</span>
+            <span class="gradient-text">
+                WEBZONEBW
+            </span>
         </div>
-        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
+
+
+        <a href="halloween/index.html"
+           class="about-mobile-er-btn header-icon-btn"
+           title="Launch WEBZONEBW-ER Studio"
+           aria-label="Launch WEBZONEBW-ER Studio">
+
+            🔮
+
+        </a>
+
     </div>
+
 
     <!-- =====================================================
          STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar" id="mainSidebar">
+    <aside class="sidebar"
+           id="mainSidebar"
+           aria-label="WEBZONEBW navigation">
+
+
+        <!-- BRAND -->
 
         <div class="logo">
-            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+
+            <a href="index.html"
+               aria-label="WebZoneBW Home"
+               class="brand-logo-link">
+
+                <img src="assets/logo.png"
+                     alt="WebZoneBW Logo"
+                     class="brand-logo-img">
+
                 <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        TECH · AI · INNOVATE
+                    </span>
+
                 </div>
+
             </a>
+
         </div>
 
-        <!-- Main Navigation -->
-        <nav class="sidebar-nav" aria-label="Main Navigation">
+
+        <!-- =================================================
+             MAIN NAVIGATION
+             ================================================= -->
+
+        <nav class="sidebar-nav"
+             aria-label="Main Navigation">
+
             <ul>
+
                 <li>
                     <a href="index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
-                        Dashboard
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            🏠
+                        </span>
+
+                        <span>
+                            Dashboard
+                        </span>
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="halloween/index.html">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
-                        WebZoneBW-ER Studio
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            🔮
+                        </span>
+
+                        <span>
+                            WebZoneBW-ER Studio
+                        </span>
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="projects.html">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
-                        Projects
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            💼
+                        </span>
+
+                        <span>
+                            Projects
+                        </span>
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="resume.html">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
-                        Resume
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            📄
+                        </span>
+
+                        <span>
+                            Resume
+                        </span>
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
-                        Blog
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            📝
+                        </span>
+
+                        <span>
+                            Blog
+                        </span>
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
-                        Sound Box
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            🎵
+                        </span>
+
+                        <span>
+                            Sound Box
+                        </span>
+
                     </a>
                 </li>
 
+
                 <li>
-                    <a href="about.html" class="active" aria-current="page">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
-                        About
+                    <a href="about.html"
+                       class="active"
+                       aria-current="page">
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            👤
+                        </span>
+
+                        <span>
+                            About
+                        </span>
+
                     </a>
                 </li>
+
 
                 <li>
                     <a href="contact.html">
-                        <span class="nav-icon" aria-hidden="true">✉️</span>
-                        Contact
+
+                        <span class="nav-icon"
+                              aria-hidden="true">
+                            ✉️
+                        </span>
+
+                        <span>
+                            Contact
+                        </span>
+
                     </a>
                 </li>
+
             </ul>
+
         </nav>
 
-        <!-- Dark Mode Switch Toggle -->
+
+        <!-- =================================================
+             DARK MODE
+             ================================================= -->
+
         <div class="sidebar-theme-toggle-row">
+
             <div class="theme-label-group">
-                <span id="themeModeIcon" aria-hidden="true">🌙</span>
-                <span id="themeModeText">Dark Mode</span>
+
+                <span id="themeModeIcon"
+                      aria-hidden="true">
+                    🌙
+                </span>
+
+                <span id="themeModeText">
+                    Dark Mode
+                </span>
+
             </div>
-            <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+
+
+            <label class="switch-toggle"
+                   for="themeToggleSwitch">
+
+                <input type="checkbox"
+                       id="themeToggleSwitch"
+                       checked
+                       aria-label="Toggle Dark Mode">
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>
 
-        <!-- User Profile Card -->
+
+        <!-- =================================================
+             USER PROFILE
+             ================================================= -->
+
         <div class="sidebar-user-card">
+
             <div class="user-avatar-wrap">
-                <span class="user-avatar-icon">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
+
+                <span class="user-avatar-icon"
+                      aria-hidden="true">
+                    👨‍💻
+                </span>
+
+                <span class="user-online-dot"
+                      title="Online"
+                      aria-label="Online status">
+                </span>
+
             </div>
+
+
             <div class="user-info">
-                <strong>Sameer Chouhan</strong>
-                <span>Developer &amp; Creator</span>
+
+                <strong>
+                    Sameer Chouhan
+                </strong>
+
+                <span>
+                    Developer &amp; Creator
+                </span>
+
             </div>
+
         </div>
 
     </aside>
@@ -293,20 +854,62 @@
 
         <header class="top-header">
 
+
             <div class="header-left">
+
                 <h1>
-                    About Sameer Chouhan — IT &amp; Technology Professional
+                    About Sameer Chouhan —
+                    IT &amp; Technology Professional
                 </h1>
 
                 <p class="header-subtitle">
                     IT Support • Systems Integration • Networking • Web Development
                 </p>
+
             </div>
 
-            <div class="header-utilities">
-                <a href="soundbox.html" class="header-icon-btn" title="Sound Box" aria-label="Sound Box">🎵</a>
-                <a href="halloween/index.html" class="header-icon-btn" title="ER Studio" aria-label="ER Studio">🔮</a>
-                <span class="header-badge">Live 🟢</span>
+
+            <div class="header-utilities"
+                 aria-label="Quick access">
+
+
+                <!-- SOUND BOX -->
+
+                <a href="soundbox.html"
+                   class="about-header-icon"
+                   title="Open WEBZONEBW Sound Box"
+                   aria-label="Open WEBZONEBW Sound Box">
+
+                    🎵
+
+                </a>
+
+
+                <!-- ER STUDIO -->
+
+                <a href="halloween/index.html"
+                   class="about-header-icon"
+                   title="Launch WEBZONEBW-ER Studio"
+                   aria-label="Launch WEBZONEBW-ER Studio">
+
+                    🔮
+
+                </a>
+
+
+                <!-- LIVE STATUS -->
+
+                <span class="header-badge about-live-status"
+                      aria-label="WEBZONEBW is live">
+
+                    <span class="about-live-dot"
+                          aria-hidden="true">
+                    </span>
+
+                    Live
+
+                </span>
+
             </div>
 
         </header>
@@ -316,17 +919,19 @@
              HERO
              ================================================= -->
 
-        <section
-            class="hero"
-            aria-labelledby="about-title">
+        <section class="hero"
+                 aria-labelledby="about-title">
+
 
             <h2 id="about-title">
                 Hello, I'm Sameer Chouhan
             </h2>
 
+
             <h3>
                 IT Support • Systems Integration • Web Development
             </h3>
+
 
             <p>
                 I am an IT Support professional passionate about
@@ -342,43 +947,80 @@
              PROFESSIONAL SNAPSHOT
              ================================================= -->
 
-        <section
-            class="quick-info"
-            aria-labelledby="professional-snapshot">
+        <section class="quick-info"
+                 aria-labelledby="professional-snapshot">
+
 
             <h2 id="professional-snapshot">
-                🏆 Professional Snapshot
+
+                <span class="about-icon"
+                      aria-hidden="true">
+                    🏆
+                </span>
+
+                Professional Snapshot
+
             </h2>
+
 
             <ul>
 
                 <li>
-                    <span aria-hidden="true">🏅</span>
+                    <span class="about-icon"
+                          aria-hidden="true">
+                        🏅
+                    </span>
+
                     Microsoft 365 Certified
                 </li>
 
+
                 <li>
-                    <span aria-hidden="true">🤖</span>
+                    <span class="about-icon"
+                          aria-hidden="true">
+                        🤖
+                    </span>
+
                     AI Productivity &amp; Search Tools
                 </li>
 
+
                 <li>
-                    <span aria-hidden="true">🌐</span>
+                    <span class="about-icon"
+                          aria-hidden="true">
+                        🌐
+                    </span>
+
                     Networking Fundamentals
                 </li>
 
+
                 <li>
-                    <span aria-hidden="true">🎨</span>
+                    <span class="about-icon"
+                          aria-hidden="true">
+                        🎨
+                    </span>
+
                     Web Design &amp; Front-End Development
                 </li>
 
+
                 <li>
-                    <span aria-hidden="true">💻</span>
+                    <span class="about-icon"
+                          aria-hidden="true">
+                        💻
+                    </span>
+
                     IT Support &amp; Technical Troubleshooting
                 </li>
 
+
                 <li>
-                    <span aria-hidden="true">⚙️</span>
+                    <span class="about-icon"
+                          aria-hidden="true">
+                        ⚙️
+                    </span>
+
                     Systems Integration Technologies
                 </li>
 
@@ -391,18 +1033,26 @@
              EDUCATION
              ================================================= -->
 
-        <section
-            class="quick-info"
-            aria-labelledby="education-title">
+        <section class="quick-info"
+                 aria-labelledby="education-title">
+
 
             <h2 id="education-title">
-                🎓 Education Journey
+
+                <span class="about-icon"
+                      aria-hidden="true">
+                    🎓
+                </span>
+
+                Education Journey
+
             </h2>
 
 
             <h3>
                 Lakehead University, Canada
             </h3>
+
 
             <p>
                 I began my undergraduate studies at Lakehead University,
@@ -421,6 +1071,7 @@
                 CDI College, Canada
             </h3>
 
+
             <p>
                 To pursue a more practical and career-focused path
                 in IT, I completed a diploma focused on
@@ -436,13 +1087,21 @@
              PROFESSIONAL EXPERIENCE
              ================================================= -->
 
-        <section
-            class="projects"
-            aria-labelledby="experience-title">
+        <section class="projects"
+                 aria-labelledby="experience-title">
+
 
             <h2 id="experience-title">
-                💼 Professional Experience
+
+                <span class="about-icon"
+                      aria-hidden="true">
+                    💼
+                </span>
+
+                Professional Experience
+
             </h2>
+
 
             <p>
                 My experience includes technical support, systems
@@ -459,29 +1118,49 @@
              TECHNICAL SKILLS
              ================================================= -->
 
-        <section
-            class="quick-info"
-            aria-labelledby="skills-title">
+        <section class="quick-info"
+                 aria-labelledby="skills-title">
+
 
             <h2 id="skills-title">
-                📊 Technical Skills
+
+                <span class="about-icon"
+                      aria-hidden="true">
+                    📊
+                </span>
+
+                Technical Skills
+
             </h2>
 
 
+            <!-- IT SUPPORT -->
+
             <div class="skill">
 
                 <div class="skill-title">
 
-                    <span>IT Support</span>
-                    <span>90%</span>
+                    <span>
+                        IT Support
+                    </span>
+
+                    <span>
+                        90%
+                    </span>
 
                 </div>
 
+
                 <div class="skill-bar">
 
-                    <div
-                        class="skill-fill"
-                        data-width="90">
+                    <div class="skill-fill"
+                         data-width="90"
+                         style="width:90%;"
+                         role="progressbar"
+                         aria-label="IT Support skill level"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="90">
                     </div>
 
                 </div>
@@ -489,20 +1168,33 @@
             </div>
 
 
+            <!-- SYSTEMS INTEGRATION -->
+
             <div class="skill">
 
                 <div class="skill-title">
 
-                    <span>Systems Integration</span>
-                    <span>85%</span>
+                    <span>
+                        Systems Integration
+                    </span>
+
+                    <span>
+                        85%
+                    </span>
 
                 </div>
 
+
                 <div class="skill-bar">
 
-                    <div
-                        class="skill-fill"
-                        data-width="85">
+                    <div class="skill-fill"
+                         data-width="85"
+                         style="width:85%;"
+                         role="progressbar"
+                         aria-label="Systems Integration skill level"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="85">
                     </div>
 
                 </div>
@@ -510,20 +1202,33 @@
             </div>
 
 
+            <!-- NETWORKING -->
+
             <div class="skill">
 
                 <div class="skill-title">
 
-                    <span>Networking</span>
-                    <span>80%</span>
+                    <span>
+                        Networking
+                    </span>
+
+                    <span>
+                        80%
+                    </span>
 
                 </div>
 
+
                 <div class="skill-bar">
 
-                    <div
-                        class="skill-fill"
-                        data-width="80">
+                    <div class="skill-fill"
+                         data-width="80"
+                         style="width:80%;"
+                         role="progressbar"
+                         aria-label="Networking skill level"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="80">
                     </div>
 
                 </div>
@@ -531,20 +1236,33 @@
             </div>
 
 
+            <!-- MICROSOFT 365 -->
+
             <div class="skill">
 
                 <div class="skill-title">
 
-                    <span>Microsoft 365</span>
-                    <span>80%</span>
+                    <span>
+                        Microsoft 365
+                    </span>
+
+                    <span>
+                        80%
+                    </span>
 
                 </div>
 
+
                 <div class="skill-bar">
 
-                    <div
-                        class="skill-fill"
-                        data-width="80">
+                    <div class="skill-fill"
+                         data-width="80"
+                         style="width:80%;"
+                         role="progressbar"
+                         aria-label="Microsoft 365 skill level"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="80">
                     </div>
 
                 </div>
@@ -552,20 +1270,33 @@
             </div>
 
 
+            <!-- WEB DEVELOPMENT -->
+
             <div class="skill">
 
                 <div class="skill-title">
 
-                    <span>Web Development</span>
-                    <span>75%</span>
+                    <span>
+                        Web Development
+                    </span>
+
+                    <span>
+                        75%
+                    </span>
 
                 </div>
 
+
                 <div class="skill-bar">
 
-                    <div
-                        class="skill-fill"
-                        data-width="75">
+                    <div class="skill-fill"
+                         data-width="75"
+                         style="width:75%;"
+                         role="progressbar"
+                         aria-label="Web Development skill level"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="75">
                     </div>
 
                 </div>
@@ -573,20 +1304,33 @@
             </div>
 
 
+            <!-- ARTIFICIAL INTELLIGENCE -->
+
             <div class="skill">
 
                 <div class="skill-title">
 
-                    <span>Artificial Intelligence</span>
-                    <span>70%</span>
+                    <span>
+                        Artificial Intelligence
+                    </span>
+
+                    <span>
+                        70%
+                    </span>
 
                 </div>
 
+
                 <div class="skill-bar">
 
-                    <div
-                        class="skill-fill"
-                        data-width="70">
+                    <div class="skill-fill"
+                         data-width="70"
+                         style="width:70%;"
+                         role="progressbar"
+                         aria-label="Artificial Intelligence skill level"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-valuenow="70">
                     </div>
 
                 </div>
@@ -600,13 +1344,21 @@
              CONTINUOUS LEARNING
              ================================================= -->
 
-        <section
-            class="quick-info"
-            aria-labelledby="learning-title">
+        <section class="quick-info"
+                 aria-labelledby="learning-title">
+
 
             <h2 id="learning-title">
-                📚 Continuous Learning
+
+                <span class="about-icon"
+                      aria-hidden="true">
+                    📚
+                </span>
+
+                Continuous Learning
+
             </h2>
+
 
             <p>
                 I enjoy learning through hands-on projects and
@@ -615,6 +1367,7 @@
                 guidance, technical tutorials, and professional
                 growth.
             </p>
+
 
             <p>
                 Explore the
@@ -632,13 +1385,21 @@
              CAREER OBJECTIVE
              ================================================= -->
 
-        <section
-            class="projects"
-            aria-labelledby="career-title">
+        <section class="projects"
+                 aria-labelledby="career-title">
+
 
             <h2 id="career-title">
-                🎯 Career Objective
+
+                <span class="about-icon"
+                      aria-hidden="true">
+                    🎯
+                </span>
+
+                Career Objective
+
             </h2>
+
 
             <p>
                 I am seeking opportunities where I can contribute
@@ -646,6 +1407,7 @@
                 in System Administration, Cloud Technologies,
                 Cybersecurity, and Web Development.
             </p>
+
 
             <p>
                 You can review my
@@ -668,19 +1430,21 @@
 
         <footer class="site-footer">
 
+
             <div class="footer-content">
 
+
                 <p>
-
                     © 2026
-                    <strong>WEBZONEBW</strong>. All rights reserved.
-
+                    <strong>
+                        WEBZONEBW
+                    </strong>.
+                    All rights reserved.
                 </p>
 
 
-                <nav
-                    class="footer-links"
-                    aria-label="Footer Navigation">
+                <nav class="footer-links"
+                     aria-label="Footer Navigation">
 
                     <a href="privacy.html">
                         Privacy Policy
@@ -716,6 +1480,131 @@
 
 <script src="js/beatles-playlists.js"></script>
 <script src="js/script.js"></script>
+
+
+<!-- =====================================================
+     ABOUT PAGE MICRO-INTERACTIONS
+     ===================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    function initAboutPage() {
+
+        /* -----------------------------------------------------
+           SKILL BAR ANIMATION
+           ----------------------------------------------------- */
+
+        const skillBars =
+            document.querySelectorAll(".skill-fill[data-width]");
+
+
+        if (skillBars.length) {
+
+            skillBars.forEach(function (bar) {
+
+                const target =
+                    bar.getAttribute("data-width");
+
+                bar.style.width = "0%";
+
+
+                requestAnimationFrame(function () {
+
+                    requestAnimationFrame(function () {
+
+                        bar.style.width =
+                            target + "%";
+
+                    });
+
+                });
+
+            });
+
+        }
+
+
+        /* -----------------------------------------------------
+           MOBILE SIDEBAR ARIA STATE
+           
+           Existing script.js remains responsible for the
+           actual sidebar behavior.
+           ----------------------------------------------------- */
+
+        const sidebarToggle =
+            document.getElementById("sidebarToggleBtn");
+
+        const sidebar =
+            document.getElementById("mainSidebar");
+
+
+        if (
+            sidebarToggle &&
+            sidebar
+        ) {
+
+            const syncSidebarState =
+                function () {
+
+                    const isOpen =
+                        sidebar.classList.contains("open") ||
+                        sidebar.classList.contains("active");
+
+                    sidebarToggle.setAttribute(
+                        "aria-expanded",
+                        String(isOpen)
+                    );
+
+                };
+
+
+            sidebarToggle.addEventListener(
+                "click",
+                function () {
+
+                    window.setTimeout(
+                        syncSidebarState,
+                        50
+                    );
+
+                },
+                {
+                    passive: true
+                }
+            );
+
+        }
+
+    }
+
+
+    if (
+        document.readyState === "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initAboutPage,
+            {
+                once: true
+            }
+        );
+
+    } else {
+
+        initAboutPage();
+
+    }
+
+})();
+
+</script>
+
 
 </body>
 

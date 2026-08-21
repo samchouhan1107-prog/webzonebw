@@ -5,7 +5,7 @@
 
     <!-- =====================================================
          WEBZONEBW — PRIVACY POLICY
-         Long-Term Website Privacy Policy
+         Production HTML5 • SEO • Structured Data • AdSense
          ===================================================== -->
 
     <meta charset="UTF-8">
@@ -13,19 +13,8 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-
-    <!-- =====================================================
-         GOOGLE ADSENSE
-         ===================================================== -->
-
-    <meta name="google-adsense-account"
-          content="ca-pub-4823379856566931">
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-            crossorigin="anonymous">
-    </script>
-
+    <meta name="theme-color"
+          content="#0b0f19">
 
     <!-- =====================================================
          SEO
@@ -40,16 +29,22 @@
           content="Sameer Chouhan">
 
     <meta name="robots"
-          content="index, follow">
-
-
-    <!-- =====================================================
-         CANONICAL
-         ===================================================== -->
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
     <link rel="canonical"
           href="https://webzonebw.in/privacy.html">
 
+    <!-- =====================================================
+         GOOGLE ADSENSE
+         ===================================================== -->
+
+    <meta name="google-adsense-account"
+          content="ca-pub-4823379856566931">
+
+    <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
+            crossorigin="anonymous">
+    </script>
 
     <!-- =====================================================
          FAVICON
@@ -59,6 +54,46 @@
           type="image/png"
           href="assets/favicon/favicon.png">
 
+    <!-- =====================================================
+         OPEN GRAPH
+         ===================================================== -->
+
+    <meta property="og:type"
+          content="website">
+
+    <meta property="og:title"
+          content="Privacy Policy | WebZoneBW">
+
+    <meta property="og:description"
+          content="Learn how WebZoneBW handles visitor information, analytics, cookies, advertising, external services, and privacy.">
+
+    <meta property="og:url"
+          content="https://webzonebw.in/privacy.html">
+
+    <meta property="og:site_name"
+          content="WEBZONEBW">
+
+    <meta property="og:image"
+          content="https://webzonebw.in/assets/images/og-image.png">
+
+    <meta property="og:image:alt"
+          content="WEBZONEBW Privacy Policy">
+
+    <!-- =====================================================
+         TWITTER / SOCIAL PREVIEW
+         ===================================================== -->
+
+    <meta name="twitter:card"
+          content="summary_large_image">
+
+    <meta name="twitter:title"
+          content="Privacy Policy | WebZoneBW">
+
+    <meta name="twitter:description"
+          content="Privacy information for the WebZoneBW technology portfolio and digital workspace.">
+
+    <meta name="twitter:image"
+          content="https://webzonebw.in/assets/images/og-image.png">
 
     <!-- =====================================================
          MAIN STYLESHEET
@@ -67,24 +102,52 @@
     <link rel="stylesheet"
           href="css/style.css">
 
-
     <!-- =====================================================
-         STRUCTURED DATA
+         STRUCTURED DATA — WEBPAGE
          ===================================================== -->
 
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Privacy Policy | WebZoneBW",
+        "@id": "https://webzonebw.in/privacy.html#webpage",
         "url": "https://webzonebw.in/privacy.html",
-        "description": "Privacy Policy for WebZoneBW.",
+        "name": "Privacy Policy | WebZoneBW",
+        "description": "Privacy Policy for WebZoneBW explaining visitor privacy, information handling, analytics, cookies, advertising, external services, communications, and website data practices.",
         "isPartOf": {
             "@type": "WebSite",
-            "name": "WebZoneBW",
+            "@id": "https://webzonebw.in/#website",
+            "name": "WEBZONEBW",
             "url": "https://webzonebw.in/"
-        }
+        },
+        "about": {
+            "@type": "Organization",
+            "@id": "https://webzonebw.in/#organization",
+            "name": "WEBZONEBW",
+            "url": "https://webzonebw.in/"
+        },
+        "inLanguage": "en"
     }
+    </script>
+
+    <!-- =====================================================
+         GOOGLE ANALYTICS — GA4
+         ===================================================== -->
+
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
+    </script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZFZ54Z2997');
     </script>
 
 </head>
@@ -94,118 +157,299 @@
 
 <div class="container">
 
-    <!-- Mobile Nav Bar -->
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
     <div class="mobile-nav-bar">
-        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+
+        <button
+            type="button"
+            class="hamburger-btn"
+            id="sidebarToggleBtn"
+            aria-label="Toggle Sidebar Navigation"
+            aria-controls="mainSidebar"
+            aria-expanded="false">
+
             <span></span>
             <span></span>
             <span></span>
+
         </button>
+
         <div class="mobile-brand-title">
             <span class="gradient-text">WEBZONEBW</span>
         </div>
-        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
+
+        <a
+            href="halloween/index.html"
+            class="header-icon-btn"
+            title="Launch ER Studio"
+            aria-label="Launch WebZoneBW ER Studio">
+
+            🔮
+
+        </a>
+
     </div>
+
 
     <!-- =====================================================
          STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar" id="mainSidebar">
+    <aside
+        class="sidebar"
+        id="mainSidebar">
+
+        <!-- Brand -->
 
         <div class="logo">
-            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+
+            <a
+                href="index.html"
+                aria-label="WebZoneBW Home"
+                class="brand-logo-link">
+
+                <img
+                    src="assets/logo.png"
+                    alt="WebZoneBW Logo"
+                    class="brand-logo-img">
+
                 <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        TECH · AI · INNOVATE
+                    </span>
+
                 </div>
+
             </a>
+
         </div>
+
 
         <!-- Main Navigation -->
-        <nav class="sidebar-nav" aria-label="Main Navigation">
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Main Navigation">
+
             <ul>
+
                 <li>
+
                     <a href="index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🏠
+                        </span>
+
                         Dashboard
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="halloween/index.html">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🔮
+                        </span>
+
                         WebZoneBW-ER Studio
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="projects.html">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            💼
+                        </span>
+
                         Projects
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="resume.html">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📄
+                        </span>
+
                         Resume
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📝
+                        </span>
+
                         Blog
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🎵
+                        </span>
+
                         Sound Box
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="about.html">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            👤
+                        </span>
+
                         About
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="contact.html">
-                        <span class="nav-icon" aria-hidden="true">✉️</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            ✉️
+                        </span>
+
                         Contact
+
                     </a>
+
                 </li>
+
             </ul>
+
         </nav>
 
-        <!-- Dark Mode Switch Toggle -->
+
+        <!-- =================================================
+             DARK MODE TOGGLE
+             ================================================= -->
+
         <div class="sidebar-theme-toggle-row">
+
             <div class="theme-label-group">
-                <span id="themeModeIcon" aria-hidden="true">🌙</span>
-                <span id="themeModeText">Dark Mode</span>
+
+                <span
+                    id="themeModeIcon"
+                    aria-hidden="true">
+                    🌙
+                </span>
+
+                <span id="themeModeText">
+                    Dark Mode
+                </span>
+
             </div>
-            <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+
+            <label
+                class="switch-toggle"
+                for="themeToggleSwitch">
+
+                <input
+                    type="checkbox"
+                    id="themeToggleSwitch"
+                    checked
+                    aria-label="Toggle Dark Mode">
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>
 
-        <!-- User Profile Card -->
+
+        <!-- =================================================
+             USER PROFILE
+             ================================================= -->
+
         <div class="sidebar-user-card">
+
             <div class="user-avatar-wrap">
-                <span class="user-avatar-icon">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
+
+                <span class="user-avatar-icon">
+                    👨‍💻
+                </span>
+
+                <span
+                    class="user-online-dot"
+                    title="Online"
+                    aria-label="Online">
+                </span>
+
             </div>
+
             <div class="user-info">
-                <strong>Sameer Chouhan</strong>
-                <span>Developer &amp; Creator</span>
+
+                <strong>
+                    Sameer Chouhan
+                </strong>
+
+                <span>
+                    Developer &amp; Creator
+                </span>
+
             </div>
+
         </div>
 
     </aside>
@@ -224,14 +468,46 @@
 
         <header class="top-header">
 
-            <h1>
-                Privacy Policy
-            </h1>
+            <div class="header-left">
 
-            <p>
-                How WebZoneBW handles visitor information,
-                analytics, cookies, advertising, and privacy.
-            </p>
+                <h1>
+                    Privacy Policy
+                </h1>
+
+                <p class="header-subtitle">
+                    How WebZoneBW handles visitor information,
+                    analytics, cookies, advertising, and privacy.
+                </p>
+
+            </div>
+
+            <div class="header-utilities">
+
+                <a
+                    href="soundbox.html"
+                    class="header-icon-btn"
+                    title="Sound Box"
+                    aria-label="Sound Box">
+
+                    🎵
+
+                </a>
+
+                <a
+                    href="halloween/index.html"
+                    class="header-icon-btn"
+                    title="ER Studio"
+                    aria-label="ER Studio">
+
+                    🔮
+
+                </a>
+
+                <span class="header-badge">
+                    Privacy 🔐
+                </span>
+
+            </div>
 
         </header>
 
@@ -240,9 +516,11 @@
              PRIVACY INTRODUCTION
              ================================================= -->
 
-        <section class="featured-card">
+        <section
+            class="featured-card"
+            aria-labelledby="privacy-intro-title">
 
-            <h2>
+            <h2 id="privacy-intro-title">
                 🔐 Your Privacy
             </h2>
 
@@ -331,33 +609,19 @@
 
             <ul>
 
-                <li>
-                    Name
-                </li>
+                <li>Name</li>
 
-                <li>
-                    Email address
-                </li>
+                <li>Email address</li>
 
-                <li>
-                    Phone number
-                </li>
+                <li>Phone number</li>
 
-                <li>
-                    WhatsApp account information
-                </li>
+                <li>WhatsApp account information</li>
 
-                <li>
-                    Professional information
-                </li>
+                <li>Professional information</li>
 
-                <li>
-                    Project or business information
-                </li>
+                <li>Project or business information</li>
 
-                <li>
-                    Messages and inquiries
-                </li>
+                <li>Messages and inquiries</li>
 
                 <li>
                     Other information voluntarily provided by
@@ -395,17 +659,11 @@
 
             <ul>
 
-                <li>
-                    Browser type
-                </li>
+                <li>Browser type</li>
 
-                <li>
-                    Device type
-                </li>
+                <li>Device type</li>
 
-                <li>
-                    Operating system
-                </li>
+                <li>Operating system</li>
 
                 <li>
                     IP address or related network information
@@ -415,17 +673,13 @@
                     Approximate geographic information
                 </li>
 
-                <li>
-                    Pages visited
-                </li>
+                <li>Pages visited</li>
 
                 <li>
                     Referring website or traffic source
                 </li>
 
-                <li>
-                    Date and time of access
-                </li>
+                <li>Date and time of access</li>
 
                 <li>
                     General interaction and usage information
@@ -436,8 +690,9 @@
             <p>
                 Such information may be used for website
                 operation, security, performance monitoring,
-                analytics, advertising measurement, troubleshooting,
-                and improvement of the visitor experience.
+                analytics, advertising measurement,
+                troubleshooting, and improvement of the
+                visitor experience.
             </p>
 
         </section>
@@ -467,25 +722,17 @@
 
             <ul>
 
-                <li>
-                    Pages viewed
-                </li>
+                <li>Pages viewed</li>
 
-                <li>
-                    Traffic sources
-                </li>
+                <li>Traffic sources</li>
 
-                <li>
-                    Device and browser information
-                </li>
+                <li>Device and browser information</li>
 
                 <li>
                     Approximate geographic information
                 </li>
 
-                <li>
-                    Session activity
-                </li>
+                <li>Session activity</li>
 
                 <li>
                     Engagement with website content
@@ -514,7 +761,7 @@
 
 
         <!-- =================================================
-             5. GOOGLE ADSENSE
+             5. GOOGLE ADSENSE AND ADVERTISING
              ================================================= -->
 
         <section>
@@ -575,25 +822,15 @@
 
             <ul>
 
-                <li>
-                    Website functionality
-                </li>
+                <li>Website functionality</li>
 
-                <li>
-                    Analytics
-                </li>
+                <li>Analytics</li>
 
-                <li>
-                    Advertising
-                </li>
+                <li>Advertising</li>
 
-                <li>
-                    Security
-                </li>
+                <li>Security</li>
 
-                <li>
-                    Performance measurement
-                </li>
+                <li>Performance measurement</li>
 
                 <li>
                     User experience improvements
@@ -669,29 +906,17 @@
 
             <ul>
 
-                <li>
-                    Responding to inquiries
-                </li>
+                <li>Responding to inquiries</li>
 
-                <li>
-                    Discussing employment opportunities
-                </li>
+                <li>Discussing employment opportunities</li>
 
-                <li>
-                    Discussing professional services
-                </li>
+                <li>Discussing professional services</li>
 
-                <li>
-                    Discussing technical projects
-                </li>
+                <li>Discussing technical projects</li>
 
-                <li>
-                    Supporting collaboration requests
-                </li>
+                <li>Supporting collaboration requests</li>
 
-                <li>
-                    Providing requested information
-                </li>
+                <li>Providing requested information</li>
 
                 <li>
                     Maintaining appropriate professional
@@ -769,37 +994,21 @@
 
             <ul>
 
-                <li>
-                    Google services
-                </li>
+                <li>Google services</li>
 
-                <li>
-                    Google AdSense
-                </li>
+                <li>Google AdSense</li>
 
-                <li>
-                    Google Analytics
-                </li>
+                <li>Google Analytics</li>
 
-                <li>
-                    Blogger
-                </li>
+                <li>Blogger</li>
 
-                <li>
-                    GitHub
-                </li>
+                <li>GitHub</li>
 
-                <li>
-                    LinkedIn
-                </li>
+                <li>LinkedIn</li>
 
-                <li>
-                    WhatsApp
-                </li>
+                <li>WhatsApp</li>
 
-                <li>
-                    Microsoft services
-                </li>
+                <li>Microsoft services</li>
 
                 <li>
                     Hosting and infrastructure services
@@ -1042,9 +1251,11 @@
              17. CONTACT
              ================================================= -->
 
-        <section class="featured-card">
+        <section
+            class="featured-card"
+            aria-labelledby="contact-title">
 
-            <h2>
+            <h2 id="contact-title">
                 17. Contact
             </h2>
 
@@ -1076,24 +1287,22 @@
             <div class="footer-content">
 
                 <p>
-
                     © 2026
-                    <strong>WEBZONEBW</strong>. All rights reserved.
-
+                    <strong>WEBZONEBW</strong>.
+                    All rights reserved.
                 </p>
-
 
                 <nav
                     class="footer-links"
                     aria-label="Footer Navigation">
 
-                    <a href="privacy.html"
-                       aria-current="page">
+                    <a
+                        href="privacy.html"
+                        aria-current="page">
 
                         Privacy Policy
 
                     </a>
-
 
                     <a href="terms.html">
 
@@ -1101,13 +1310,11 @@
 
                     </a>
 
-
                     <a href="disclaimer.html">
 
                         Disclaimer
 
                     </a>
-
 
                     <a href="contact.html">
 

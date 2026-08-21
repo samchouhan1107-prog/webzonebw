@@ -5,25 +5,13 @@
 
     <!-- =====================================================
          WEBZONEBW — RESUME PAGE
+         Professional Resume • IT Support • Systems • Networking
          ===================================================== -->
 
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-
-
-    <!-- =====================================================
-         GOOGLE ADSENSE
-         ===================================================== -->
-
-    <meta name="google-adsense-account"
-          content="ca-pub-4823379856566931">
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-            crossorigin="anonymous">
-    </script>
 
 
     <!-- =====================================================
@@ -60,6 +48,19 @@
     <link rel="icon"
           type="image/png"
           href="assets/favicon/favicon.png">
+
+
+    <!-- =====================================================
+         GOOGLE ADSENSE
+         ===================================================== -->
+
+    <meta name="google-adsense-account"
+          content="ca-pub-4823379856566931">
+
+    <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
+            crossorigin="anonymous">
+    </script>
 
 
     <!-- =====================================================
@@ -101,6 +102,11 @@
         "name": "Sameer Chouhan — Professional Resume",
         "url": "https://webzonebw.in/resume.html",
         "description": "Professional resume and technical profile of Sameer Chouhan.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "WebZoneBW",
+            "url": "https://webzonebw.in/"
+        },
         "mainEntity": {
             "@type": "Person",
             "name": "Sameer Chouhan",
@@ -109,122 +115,322 @@
     }
     </script>
 
-</head><body>
+</head>
+
+
+<body>
 
 <div class="container">
 
-    <!-- Mobile Nav Bar -->
-    <div class="mobile-nav-bar">
-        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <div class="mobile-brand-title">
-            <span class="gradient-text">WEBZONEBW</span>
-        </div>
-        <a href="halloween/index.html" class="header-icon-btn" title="Launch ER Studio">🔮</a>
-    </div>
 
     <!-- =====================================================
-         STANDARDIZED SIDEBAR
+         MOBILE NAVIGATION
          ===================================================== -->
 
-    <aside class="sidebar" id="mainSidebar">
+    <div class="mobile-nav-bar">
+
+        <button
+            type="button"
+            class="hamburger-btn"
+            id="sidebarToggleBtn"
+            aria-label="Open navigation menu"
+            aria-controls="mainSidebar"
+            aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+        <div class="mobile-brand-title">
+            <span class="gradient-text">
+                WEBZONEBW
+            </span>
+        </div>
+
+
+        <a
+            href="halloween/index.html"
+            class="header-icon-btn"
+            title="Launch WebZoneBW ER Studio"
+            aria-label="Launch WebZoneBW ER Studio">
+
+            🔮
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside
+        class="sidebar"
+        id="mainSidebar">
+
+
+        <!-- =================================================
+             BRAND
+             ================================================= -->
 
         <div class="logo">
-            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+
+            <a
+                href="index.html"
+                aria-label="WebZoneBW Home"
+                class="brand-logo-link">
+
+                <img
+                    src="assets/logo.png"
+                    alt="WebZoneBW Logo"
+                    class="brand-logo-img">
+
                 <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">TECH · AI · INNOVATE</span>
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        TECH · AI · INNOVATE
+                    </span>
+
                 </div>
+
             </a>
+
         </div>
 
-        <!-- Main Navigation -->
-        <nav class="sidebar-nav" aria-label="Main Navigation">
+
+        <!-- =================================================
+             MAIN NAVIGATION
+             ================================================= -->
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Main Navigation">
+
             <ul>
+
                 <li>
+
                     <a href="index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🏠
+                        </span>
+
                         Dashboard
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="halloween/index.html">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🔮
+                        </span>
+
                         WebZoneBW-ER Studio
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="projects.html">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            💼
+                        </span>
+
                         Projects
+
                     </a>
+
                 </li>
 
+
                 <li>
-                    <a href="resume.html" class="active" aria-current="page">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
+
+                    <a
+                        href="resume.html"
+                        class="active"
+                        aria-current="page">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📄
+                        </span>
+
                         Resume
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📝
+                        </span>
+
                         Blog
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🎵
+                        </span>
+
                         Sound Box
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="about.html">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            👤
+                        </span>
+
                         About
+
                     </a>
+
                 </li>
 
+
                 <li>
+
                     <a href="contact.html">
-                        <span class="nav-icon" aria-hidden="true">✉️</span>
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            ✉️
+                        </span>
+
                         Contact
+
                     </a>
+
                 </li>
+
             </ul>
+
         </nav>
 
-        <!-- Dark Mode Switch Toggle -->
+
+        <!-- =================================================
+             THEME SWITCH
+             ================================================= -->
+
         <div class="sidebar-theme-toggle-row">
+
             <div class="theme-label-group">
-                <span id="themeModeIcon" aria-hidden="true">🌙</span>
-                <span id="themeModeText">Dark Mode</span>
+
+                <span
+                    id="themeModeIcon"
+                    aria-hidden="true">
+                    🌙
+                </span>
+
+                <span id="themeModeText">
+                    Dark Mode
+                </span>
+
             </div>
-            <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+
+
+            <label
+                class="switch-toggle"
+                for="themeToggleSwitch">
+
+                <input
+                    type="checkbox"
+                    id="themeToggleSwitch"
+                    checked
+                    aria-label="Toggle dark mode">
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>
 
-        <!-- User Profile Card -->
+
+        <!-- =================================================
+             USER PROFILE
+             ================================================= -->
+
         <div class="sidebar-user-card">
+
             <div class="user-avatar-wrap">
-                <span class="user-avatar-icon">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
+
+                <span
+                    class="user-avatar-icon"
+                    aria-hidden="true">
+                    👨‍💻
+                </span>
+
+                <span
+                    class="user-online-dot"
+                    title="Online">
+                </span>
+
             </div>
+
+
             <div class="user-info">
-                <strong>Sameer Chouhan</strong>
-                <span>Developer &amp; Creator</span>
+
+                <strong>
+                    Sameer Chouhan
+                </strong>
+
+                <span>
+                    Developer &amp; Creator
+                </span>
+
             </div>
+
         </div>
 
     </aside>
@@ -244,19 +450,51 @@
         <header class="top-header">
 
             <div class="header-left">
+
                 <h1>
                     Professional Resume
                 </h1>
 
                 <p class="header-subtitle">
-                    Technical Qualifications, Systems Architecture &amp; Engineering Profile
+                    Technical Qualifications, Systems Architecture
+                    &amp; Engineering Profile
                 </p>
+
             </div>
 
+
             <div class="header-utilities">
-                <a href="soundbox.html" class="header-icon-btn" title="Sound Box" aria-label="Sound Box">🎵</a>
-                <a href="halloween/index.html" class="header-icon-btn" title="ER Studio" aria-label="ER Studio">🔮</a>
-                <span class="header-badge">Live 🟢</span>
+
+                <a
+                    href="soundbox.html"
+                    class="header-icon-btn"
+                    title="Open Sound Box"
+                    aria-label="Open Sound Box">
+
+                    🎵
+
+                </a>
+
+
+                <a
+                    href="halloween/index.html"
+                    class="header-icon-btn"
+                    title="Launch ER Studio"
+                    aria-label="Launch ER Studio">
+
+                    🔮
+
+                </a>
+
+
+                <span
+                    class="header-badge"
+                    aria-label="Website status: Live">
+
+                    Live 🟢
+
+                </span>
+
             </div>
 
         </header>
@@ -286,13 +524,15 @@
             </p>
 
             <p>
-                My background combines hands-on technical support with
-                continuous development of web-based projects and
-                technology solutions.
+                My background combines hands-on technical support
+                with continuous development of web-based projects
+                and technology solutions.
             </p>
 
 
-            <!-- Resume Actions -->
+            <!-- =================================================
+                 RESUME ACTIONS
+                 ================================================= -->
 
             <div class="resume-buttons">
 
@@ -303,7 +543,10 @@
                     class="btn"
                     aria-label="View Sameer Chouhan resume PDF">
 
-                    <span aria-hidden="true">👀</span>
+                    <span aria-hidden="true">
+                        📄
+                    </span>
+
                     View Resume
 
                 </a>
@@ -315,7 +558,10 @@
                     class="btn"
                     aria-label="Download Sameer Chouhan resume PDF">
 
-                    <span aria-hidden="true">⬇️</span>
+                    <span aria-hidden="true">
+                        ⬇️
+                    </span>
+
                     Download PDF
 
                 </a>
@@ -326,7 +572,10 @@
                     class="btn"
                     aria-label="Contact Sameer Chouhan">
 
-                    <span aria-hidden="true">✉️</span>
+                    <span aria-hidden="true">
+                        ✉️
+                    </span>
+
                     Contact
 
                 </a>
@@ -387,8 +636,8 @@
 
             <p>
                 Alongside IT operations, I develop web-based projects
-                and technical tools to strengthen my understanding of
-                modern software, automation and digital platforms.
+                and technical tools to strengthen my understanding
+                of modern software, automation and digital platforms.
             </p>
 
         </section>
@@ -413,42 +662,35 @@
                     L1 / L1.5 IT Support &amp; Service Restoration
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">✔</span>
                     Hardware &amp; Software Troubleshooting
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">✔</span>
                     User Support &amp; Technical Issue Resolution
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">✔</span>
                     Systems Integration &amp; Technical Operations
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">✔</span>
                     Networking &amp; Infrastructure Support
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">✔</span>
                     Microsoft Technology Environments
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">✔</span>
                     Web Development &amp; Digital Platforms
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">✔</span>
@@ -479,42 +721,35 @@
                     Windows 10 / 11
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">☁️</span>
                     Microsoft 365
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">👤</span>
                     Active Directory
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🌐</span>
                     Networking Fundamentals
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">💻</span>
                     HTML, CSS &amp; JavaScript
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🟢</span>
                     Node.js &amp; Web Application Concepts
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🔧</span>
                     Hardware &amp; Software Troubleshooting
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">📊</span>
@@ -545,30 +780,25 @@
                     Network Devices &amp; Connectivity
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🖥️</span>
                     Desktop &amp; Endpoint Support
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">🗄️</span>
                     Servers, Storage &amp; Infrastructure Concepts
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🔐</span>
                     Security &amp; Endpoint Protection Concepts
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">☁️</span>
                     Cloud Platform Concepts
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">⚙️</span>
@@ -593,9 +823,9 @@
             </h2>
 
             <p>
-                My technical development work extends beyond traditional
-                IT support into practical web applications and digital
-                platforms.
+                My technical development work extends beyond
+                traditional IT support into practical web applications
+                and digital platforms.
             </p>
 
             <ul>
@@ -622,12 +852,16 @@
 
             </ul>
 
+
             <a
                 href="projects.html"
                 class="btn"
                 aria-label="View technical projects">
 
-                <span aria-hidden="true">💼</span>
+                <span aria-hidden="true">
+                    💼
+                </span>
+
                 View Projects
 
             </a>
@@ -682,24 +916,20 @@
                     Continuous technical learning
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">🤖</span>
                     AI-assisted development and automation
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">🌐</span>
                     Modern web technologies
                 </li>
 
-
                 <li>
                     <span aria-hidden="true">📊</span>
                     Analytics and digital platform development
                 </li>
-
 
                 <li>
                     <span aria-hidden="true">🔧</span>
@@ -712,7 +942,7 @@
 
 
         <!-- =================================================
-             RESUME DOCUMENT
+             FULL RESUME DOCUMENT
              ================================================= -->
 
         <section
@@ -744,7 +974,10 @@
                     class="btn"
                     aria-label="Open full resume PDF">
 
-                    <span aria-hidden="true">📄</span>
+                    <span aria-hidden="true">
+                        📄
+                    </span>
+
                     Open Full Resume
 
                 </a>
@@ -756,7 +989,10 @@
                     class="btn"
                     aria-label="Download full resume PDF">
 
-                    <span aria-hidden="true">⬇️</span>
+                    <span aria-hidden="true">
+                        ⬇️
+                    </span>
+
                     Download PDF
 
                 </a>
@@ -781,8 +1017,8 @@
             <p>
                 I am interested in opportunities involving IT Support,
                 Help Desk, Systems Support, Systems Integration,
-                Networking, technical operations and related technology
-                roles.
+                Networking, technical operations and related
+                technology roles.
             </p>
 
             <p>
@@ -791,12 +1027,16 @@
                 can complement IT operations.
             </p>
 
+
             <a
                 href="contact.html"
                 class="btn"
                 aria-label="Contact Sameer Chouhan about professional opportunities">
 
-                <span aria-hidden="true">✉️</span>
+                <span aria-hidden="true">
+                    ✉️
+                </span>
+
                 Get in Touch
 
             </a>
@@ -813,10 +1053,9 @@
             <div class="footer-content">
 
                 <p>
-
                     © 2026
-                    <strong>WEBZONEBW</strong>. All rights reserved.
-
+                    <strong>WEBZONEBW</strong>.
+                    All rights reserved.
                 </p>
 
 
@@ -845,7 +1084,6 @@
             </div>
 
         </footer>
-
 
     </main>
 
