@@ -1547,6 +1547,10 @@
                 state.duration
             );
 
+        // Keep navigation recovery accurate even when the visitor changes page
+        // before the normal pause event is dispatched.
+        saveState();
+
     }
 
 
@@ -3405,6 +3409,23 @@
         bindAudioEvents();
 
         bindPlayerEvents();
+
+        // A page navigation destroys the current document and its <audio>
+        // element. Capture the live position before that happens so the next
+        // page can rebuild the player at the same point.
+        window.addEventListener(
+            "pagehide",
+            function () {
+                if (!audio) {
+                    return;
+                }
+
+                state.currentTime = audio.currentTime || 0;
+                state.isPlaying = !audio.paused && !audio.ended;
+                state.volume = audio.volume;
+                saveState();
+            }
+        );
 
 
         /*
