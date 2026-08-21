@@ -134,7 +134,10 @@
     const phasePlaylist = { ...masterPlaylist, id: "phase-5-playlist", title: "Abbey Road Local Track", songs: [track] };
     const favorites = new Set();
 
-    window.BeatlesSoundBox = {
+    // Kept as configuration only: the Soundbox page has its own visual player.
+    // Do not expose this as BeatlesSoundBox, which would replace the existing
+    // 23-track Soundbox interface with a one-track playlist.
+    window.WebZoneSoundboxLocalConfig = {
         engine: new LocalAudioEngine(), masterTracks: [track], phases: [phase], playlists: [masterPlaylist, phasePlaylist],
         activeSongId: track.id, activePlaylistId: masterPlaylist.id, isShuffle: false, isRepeat: false,
         getSongById(id) { return this.masterTracks.find(song => song.id === id) || track; },
@@ -142,4 +145,70 @@
         isFavorite(id) { return favorites.has(id); },
         toggleFavorite(id) { favorites.has(id) ? favorites.delete(id) : favorites.add(id); return favorites.has(id); }
     };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const audio = new Audio(AUDIO_PATH);
+        audio.preload = "metadata";
+        audio.volume = 0.75;
+
+        const $ = id => document.getElementById(id);
+        const title = $("nowPlayingTitle");
+        const album = $("nowPlayingAlbum");
+        const era = $("nowPlayingEra");
+        const chords = $("nowPlayingChords");
+        const vocals = $("nowPlayingPlaylistRef");
+        const vinylTitle = $("vinylSongTitle");
+        const playButton = $("btnPlayPause");
+        const playIcon = $("playIcon");
+        const progress = $("scrubProgress");
+        const scrub = $("scrubBarTrack");
+        const current = $("currentTimeLabel");
+        const total = $("totalDurationLabel");
+        const volume = $("volumeSlider");
+        const record = $("vinylRecord");
+        const visualizer = $("audioVisualizer");
+        const status = $("audioSourceStatus");
+        const formatTime = seconds => {
+            seconds = Number.isFinite(seconds) ? Math.floor(seconds) : 0;
+            return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+        };
+        const setPlayVisual = playing => {
+            if (playIcon) playIcon.innerHTML = playing
+                ? '<path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/>'
+                : '<path d="M8 5v14l11-7L8 5Z"/>';
+            if (playButton) playButton.setAttribute("aria-label", playing ? "Pause Come Together" : "Play Come Together");
+            if (record) record.classList.toggle("spinning", playing);
+            if (visualizer) visualizer.classList.toggle("active", playing);
+        };
+
+        // Make the large Sound Box console identify the local audio it controls.
+        if (title) title.textContent = "Come Together";
+        if (album) album.textContent = "Album: Abbey Road (1969)";
+        if (era) era.textContent = "Phase 5: Experimental & Classic Rock (1968–1969)";
+        if (chords) chords.textContent = "Chords: Dm • A • G • D";
+        if (vocals) vocals.textContent = "Lead Vocals: John Lennon";
+        if (vinylTitle) vinylTitle.textContent = "Come Together";
+        if (status) status.textContent = "💽 Local MP3 • Come Together";
+
+        playButton?.addEventListener("click", () => {
+            if (audio.paused) audio.play().catch(error => console.error("Soundbox audio could not play:", error));
+            else audio.pause();
+        });
+        $("btnPrev")?.addEventListener("click", () => { audio.currentTime = 0; audio.play(); });
+        $("btnNext")?.addEventListener("click", () => { audio.currentTime = 0; audio.play(); });
+        volume?.addEventListener("input", () => { audio.volume = Number(volume.value) / 100; });
+        scrub?.addEventListener("click", event => {
+            if (!audio.duration) return;
+            const rect = scrub.getBoundingClientRect();
+            audio.currentTime = ((event.clientX - rect.left) / rect.width) * audio.duration;
+        });
+        audio.addEventListener("loadedmetadata", () => { if (total) total.textContent = formatTime(audio.duration); });
+        audio.addEventListener("timeupdate", () => {
+            if (current) current.textContent = formatTime(audio.currentTime);
+            if (progress && audio.duration) progress.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        });
+        audio.addEventListener("play", () => setPlayVisual(true));
+        audio.addEventListener("pause", () => setPlayVisual(false));
+        audio.addEventListener("ended", () => { audio.currentTime = 0; setPlayVisual(false); });
+    });
 })();
