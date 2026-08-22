@@ -25,7 +25,13 @@ function initWebZoneERStudio() {
     const autoHdBtnFloating = document.getElementById("autoHdBtnFloating");
     const faceHudToggleFloating = document.getElementById("toggleFaceHudBtnFloating");
     const shutterFlashOverlay = document.getElementById("shutterFlashOverlay");
-    const snapLensBubbles = document.querySelectorAll(".snap-lens-bubble");
+
+    /*
+     * IMPORTANT:
+     * The HTML uses .er-lens-bubble.
+     * Keep the selector aligned with the actual ER lens carousel.
+     */
+    const snapLensBubbles = document.querySelectorAll(".er-lens-bubble");
     const snapLensTrack = document.getElementById("snapLensTrack");
 
     // Studio Mode Tabs (Camera vs Upload)
@@ -57,68 +63,133 @@ function initWebZoneERStudio() {
     const closeSnapBtn = document.getElementById("closeSnapshotBtn");
 
     // Camera & Microphone Permission Alert Elements
-    const permissionAlertModal = document.getElementById("permissionAlertModal");
-    const permAlertTitle = document.getElementById("permAlertTitle");
-    const permAlertBadge = document.getElementById("permAlertBadge");
-    const permAlertMessage = document.getElementById("permAlertMessage");
-    const permAlertIcon = document.getElementById("permAlertIcon");
-    const permAlertIconWrap = document.getElementById("permAlertIconWrap");
-    const permAlertCloseBtn = document.getElementById("permAlertCloseBtn");
-    const permRetryBtn = document.getElementById("permRetryBtn");
-    const permDemoBtn = document.getElementById("permDemoBtn");
-    const permUploadBtn = document.getElementById("permUploadBtn");
-    const micStatusIndicator = document.getElementById("micStatusIndicator");
+    const permissionAlertModal =
+        document.getElementById("permissionAlertModal");
 
-    if (!canvas || !video) return;
+    const permAlertTitle =
+        document.getElementById("permAlertTitle");
 
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const permAlertBadge =
+        document.getElementById("permAlertBadge");
+
+    const permAlertMessage =
+        document.getElementById("permAlertMessage");
+
+    const permAlertIcon =
+        document.getElementById("permAlertIcon");
+
+    const permAlertIconWrap =
+        document.getElementById("permAlertIconWrap");
+
+    const permAlertCloseBtn =
+        document.getElementById("permAlertCloseBtn");
+
+    const permRetryBtn =
+        document.getElementById("permRetryBtn");
+
+    const permDemoBtn =
+        document.getElementById("permDemoBtn");
+
+    const permUploadBtn =
+        document.getElementById("permUploadBtn");
+
+    const micStatusIndicator =
+        document.getElementById("micStatusIndicator");
+
+    if (!canvas || !video) {
+        console.warn(
+            "[WEBZONE ER] Camera canvas or video element was not found."
+        );
+        return;
+    }
+
+    const ctx = canvas.getContext("2d", {
+        willReadFrequently: true
+    });
+
     let mediaStream = null;
     let animFrameId = null;
+
     let studioMode = "camera"; // "camera" | "upload"
     let uploadedImage = null;
 
     // Filters & Effects State
-    let currentFilter = "cartoon"; // default to attractive Cartoonist art
-    let activeMagazine = "none"; // "none" | "time" | "wired" | "forbes" | "vogue" | "cyber"
+    let currentFilter = "cartoon";
+    let activeMagazine = "none";
     let showFaceHud = false;
+
     let isAutoHdEnabled = true;
     let isStudioLightEnabled = true;
     let isDenoiseEnabled = true;
 
     let isFacingUser = true;
     let isDemoMode = false;
+
     let audioContext = null;
     let isAudioPlaying = false;
     let soundNodes = [];
 
-    // Advanced Biometric Face Tracking & Smart Inventory State (Mobile / Tablet Optimized)
-    let faceBox = { x: 0.5, y: 0.42, w: 0.32, h: 0.44, targetX: 0.5, targetY: 0.42, targetW: 0.32, targetH: 0.44 };
+    // Advanced Biometric Face Tracking & Smart Inventory State
+    // Mobile / Tablet Optimized
+    let faceBox = {
+        x: 0.5,
+        y: 0.42,
+        w: 0.32,
+        h: 0.44,
+        targetX: 0.5,
+        targetY: 0.42,
+        targetW: 0.32,
+        targetH: 0.44
+    };
+
     let nativeFaceDetector = null;
     let isDetectingFace = false;
     let isFaceDetected = false;
-    let detectionMethod = "scanning"; // "native" | "chrominance" | "touch_lock" | "scanning"
+
+    let detectionMethod = "scanning";
+    // "native" | "chrominance" | "touch_lock" | "scanning"
+
     let lastFaceDetectTimestamp = 0;
     let faceDetectionConfidence = 99.4;
+
     let isTouchLocked = false;
     let touchLockTimeout = null;
-    let activeSmartCategory = "smart"; // "smart" | "face" | "scene" | "magazine" | "halloween" | "all"
-    let currentProximity = "optimal"; // "optimal" | "close" | "far"
-    let currentLighting = "good"; // "good" | "low" | "bright"
 
-    // Offscreen Canvas for Mobile/Tablet Skin-Chrominance & Optical Centroid Analysis
+    let activeSmartCategory = "smart";
+    // "smart" | "face" | "scene" | "magazine" | "halloween" | "all"
+
+    let currentProximity = "optimal";
+    // "optimal" | "close" | "far"
+
+    let currentLighting = "good";
+    // "good" | "low" | "bright"
+
+    // Offscreen Canvas for Mobile/Tablet
+    // Skin-Chrominance & Optical Centroid Analysis
     let analysisCanvas = null;
     let analysisCtx = null;
+
     if (typeof document !== "undefined") {
         analysisCanvas = document.createElement("canvas");
         analysisCanvas.width = 48;
         analysisCanvas.height = 36;
-        analysisCtx = analysisCanvas.getContext("2d", { willReadFrequently: true });
+
+        analysisCtx = analysisCanvas.getContext("2d", {
+            willReadFrequently: true
+        });
     }
 
     // Check Native Browser FaceDetector API
-    if (typeof window !== "undefined" && "FaceDetector" in window) {
+    if (
+        typeof window !== "undefined" &&
+        "FaceDetector" in window
+    ) {
         try {
-            nativeFaceDetector = new window.FaceDetector({ maxDetectedFaces: 1, fastMode: true });
+            nativeFaceDetector =
+                new window.FaceDetector({
+                    maxDetectedFaces: 1,
+                    fastMode: true
+                });
         } catch (e) {
             nativeFaceDetector = null;
         }
@@ -131,7 +202,9 @@ function initWebZoneERStudio() {
     let bats = [];
     let ghosts = [];
 
-    const matrixChars = "01010101XYZ0123456789ABCDEF<>{}/*+~#@$%&WEBZONEBW";
+    const matrixChars =
+        "01010101XYZ0123456789ABCDEF<>{}/*+~#@$%&WEBZONEBW";
+
     for (let i = 0; i < 35; i++) {
         matrixDrops.push({
             x: Math.random(),
@@ -141,13 +214,34 @@ function initWebZoneERStudio() {
         });
     }
 
-    const techLabels = ["K8s", "Docker", "Linux", "Node.js", "Python", "Cloud", "CyberSec", "AI/ML", "React"];
+    const techLabels = [
+        "K8s",
+        "Docker",
+        "Linux",
+        "Node.js",
+        "Python",
+        "Cloud",
+        "CyberSec",
+        "AI/ML",
+        "React"
+    ];
+
     for (let i = 0; i < techLabels.length; i++) {
         techNodes.push({
             label: techLabels[i],
-            angle: (i / techLabels.length) * Math.PI * 2,
-            radius: 0.28 + (i % 2) * 0.06,
-            speed: (0.005 + (i % 3) * 0.002) * (i % 2 === 0 ? 1 : -1)
+            angle:
+                (i / techLabels.length) *
+                Math.PI *
+                2,
+
+            radius:
+                0.28 +
+                (i % 2) * 0.06,
+
+            speed:
+                (0.005 +
+                    (i % 3) * 0.002) *
+                (i % 2 === 0 ? 1 : -1)
         });
     }
 
@@ -157,8 +251,10 @@ function initWebZoneERStudio() {
             y: Math.random(),
             size: Math.random() * 4 + 2,
             speedY: Math.random() * 1.5 + 0.5,
-            speedX: (Math.random() - 0.5) * 1.2,
-            alpha: Math.random() * 0.8 + 0.2
+            speedX:
+                (Math.random() - 0.5) * 1.2,
+            alpha:
+                Math.random() * 0.8 + 0.2
         });
     }
 
@@ -166,53 +262,91 @@ function initWebZoneERStudio() {
         bats.push({
             x: Math.random(),
             y: Math.random() * 0.6,
-            speedX: (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1),
-            speedY: (Math.random() - 0.5) * 1.5,
-            size: Math.random() * 20 + 25,
-            wingPhase: Math.random() * Math.PI * 2
+            speedX:
+                (Math.random() * 2 + 1) *
+                (Math.random() > 0.5 ? 1 : -1),
+
+            speedY:
+                (Math.random() - 0.5) * 1.5,
+
+            size:
+                Math.random() * 20 + 25,
+
+            wingPhase:
+                Math.random() * Math.PI * 2
         });
     }
 
     for (let i = 0; i < 5; i++) {
         ghosts.push({
-            x: Math.random() * 0.8 + 0.1,
-            y: Math.random() * 0.8 + 0.1,
-            size: Math.random() * 20 + 35,
-            speedX: (Math.random() - 0.5) * 0.8,
-            speedY: (Math.random() - 0.5) * 0.8,
-            alpha: Math.random() * 0.5 + 0.3,
-            wobble: Math.random() * Math.PI * 2
+            x:
+                Math.random() * 0.8 + 0.1,
+
+            y:
+                Math.random() * 0.8 + 0.1,
+
+            size:
+                Math.random() * 20 + 35,
+
+            speedX:
+                (Math.random() - 0.5) * 0.8,
+
+            speedY:
+                (Math.random() - 0.5) * 0.8,
+
+            alpha:
+                Math.random() * 0.5 + 0.3,
+
+            wobble:
+                Math.random() * Math.PI * 2
         });
     }
 
     // Step Highlighting
     function setHighlightStep(stepNum) {
-        document.querySelectorAll(".flow-step").forEach((step, idx) => {
-            if (idx + 1 === stepNum) {
-                step.classList.add("active-step");
-            } else {
-                step.classList.remove("active-step");
-            }
-        });
+        document
+            .querySelectorAll(".flow-step")
+            .forEach((step, idx) => {
+                if (idx + 1 === stepNum) {
+                    step.classList.add("active-step");
+                } else {
+                    step.classList.remove("active-step");
+                }
+            });
     }
 
     // Studio Mode Switcher (Camera vs Upload)
     if (modeCameraBtn && modeUploadBtn) {
+
         modeCameraBtn.addEventListener("click", () => {
             studioMode = "camera";
+
             modeCameraBtn.classList.add("active");
             modeUploadBtn.classList.remove("active");
-            if (uploadDropzone) uploadDropzone.style.display = "none";
-            placeholder.style.display = "flex";
+
+            if (uploadDropzone) {
+                uploadDropzone.style.display = "none";
+            }
+
+            if (placeholder) {
+                placeholder.style.display = "flex";
+            }
+
             canvas.style.display = "none";
         });
 
         modeUploadBtn.addEventListener("click", () => {
             studioMode = "upload";
+
             modeUploadBtn.classList.add("active");
             modeCameraBtn.classList.remove("active");
-            if (uploadDropzone) uploadDropzone.style.display = "block";
+
+            if (uploadDropzone) {
+                uploadDropzone.style.display = "block";
+            }
+
             stopCameraFeed();
+
             if (uploadedImage) {
                 renderUploadedImage();
             }
@@ -221,7 +355,10 @@ function initWebZoneERStudio() {
 
     // Drag & Drop / File Re-upload Handler
     if (uploadDropzone && imageFileInput) {
-        uploadDropzone.addEventListener("click", () => imageFileInput.click());
+
+        uploadDropzone.addEventListener("click", () => {
+            imageFileInput.click();
+        });
 
         uploadDropzone.addEventListener("dragover", (e) => {
             e.preventDefault();
@@ -234,45 +371,70 @@ function initWebZoneERStudio() {
 
         uploadDropzone.addEventListener("drop", (e) => {
             e.preventDefault();
-            uploadDropzone.classList.remove("dragover");
-            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                handleUploadedFile(e.dataTransfer.files[0]);
+
+            uploadDropzone.classList.remove(
+                "dragover"
+            );
+
+            if (
+                e.dataTransfer.files &&
+                e.dataTransfer.files[0]
+            ) {
+                handleUploadedFile(
+                    e.dataTransfer.files[0]
+                );
             }
         });
 
         imageFileInput.addEventListener("change", (e) => {
-            if (e.target.files && e.target.files[0]) {
-                handleUploadedFile(e.target.files[0]);
+            if (
+                e.target.files &&
+                e.target.files[0]
+            ) {
+                handleUploadedFile(
+                    e.target.files[0]
+                );
             }
         });
     }
 
     function handleUploadedFile(file) {
         const reader = new FileReader();
+
         reader.onload = (event) => {
             const img = new Image();
+
             img.onload = () => {
                 uploadedImage = img;
                 renderUploadedImage();
             };
+
             img.src = event.target.result;
         };
+
         reader.readAsDataURL(file);
     }
 
     function renderUploadedImage() {
         if (!uploadedImage) return;
+
         placeholder.style.display = "none";
         canvas.style.display = "block";
 
         // Fit image nicely into canvas
         const maxW = 900;
         const maxH = 900;
+
         let w = uploadedImage.width;
         let h = uploadedImage.height;
 
         if (w > maxW || h > maxH) {
-            const ratio = Math.min(maxW / w, maxH / h);
+            const ratio =
+                Math.min(
+                    maxW / w,
+                    maxH / h
+                );
+
             w = Math.round(w * ratio);
             h = Math.round(h * ratio);
         }
@@ -280,42 +442,69 @@ function initWebZoneERStudio() {
         canvas.width = w;
         canvas.height = h;
 
-        if (animFrameId) cancelAnimationFrame(animFrameId);
+        if (animFrameId) {
+            cancelAnimationFrame(animFrameId);
+        }
+
         startRenderLoop();
     }
 
     // Auto-HD Quality & Enhancement Toggles
     if (autoHdBtn) {
         autoHdBtn.addEventListener("click", () => {
-            isAutoHdEnabled = !isAutoHdEnabled;
-            autoHdBtn.classList.toggle("active", isAutoHdEnabled);
+            isAutoHdEnabled =
+                !isAutoHdEnabled;
+
+            autoHdBtn.classList.toggle(
+                "active",
+                isAutoHdEnabled
+            );
         });
     }
 
     if (denoiseBtn) {
         denoiseBtn.addEventListener("click", () => {
-            isDenoiseEnabled = !isDenoiseEnabled;
-            denoiseBtn.classList.toggle("active", isDenoiseEnabled);
+            isDenoiseEnabled =
+                !isDenoiseEnabled;
+
+            denoiseBtn.classList.toggle(
+                "active",
+                isDenoiseEnabled
+            );
         });
     }
 
     if (studioLightBtn) {
         studioLightBtn.addEventListener("click", () => {
-            isStudioLightEnabled = !isStudioLightEnabled;
-            studioLightBtn.classList.toggle("active", isStudioLightEnabled);
+            isStudioLightEnabled =
+                !isStudioLightEnabled;
+
+            studioLightBtn.classList.toggle(
+                "active",
+                isStudioLightEnabled
+            );
         });
     }
 
     // Category Tabs
     if (tabBtns.length > 0) {
+
         tabBtns.forEach(tab => {
+
             tab.addEventListener("click", () => {
-                tabBtns.forEach(t => t.classList.remove("active"));
+
+                tabBtns.forEach(t =>
+                    t.classList.remove("active")
+                );
+
                 tab.classList.add("active");
-                const cat = tab.dataset.category;
+
+                const cat =
+                    tab.dataset.category;
 
                 // Show magazine panel if category is magazine
                 if (magPanel) {
+
                     if (cat === "magazine") {
                         magPanel.classList.add("show");
                     } else {
@@ -324,259 +513,901 @@ function initWebZoneERStudio() {
                 }
 
                 filterBtns.forEach(btn => {
-                    if (cat === "all" || btn.dataset.category === cat) {
-                        btn.style.display = "inline-flex";
+
+                    if (
+                        cat === "all" ||
+                        btn.dataset.category === cat
+                    ) {
+                        btn.style.display =
+                            "inline-flex";
                     } else {
-                        btn.style.display = "none";
+                        btn.style.display =
+                            "none";
                     }
+
                 });
+
             });
+
         });
+
     }
 
     // Magazine Template Switcher
     if (magItemBtns.length > 0) {
+
         magItemBtns.forEach(btn => {
+
             btn.addEventListener("click", () => {
-                magItemBtns.forEach(b => b.classList.remove("active"));
+
+                magItemBtns.forEach(b =>
+                    b.classList.remove("active")
+                );
+
                 btn.classList.add("active");
-                activeMagazine = btn.dataset.mag;
+
+                activeMagazine =
+                    btn.dataset.mag;
             });
+
         });
+
     }
 
     // Face HUD Toggle
     if (faceHudToggle) {
+
         faceHudToggle.addEventListener("click", () => {
-            showFaceHud = !showFaceHud;
-            faceHudToggle.classList.toggle("active", showFaceHud);
-            faceHudToggle.innerHTML = showFaceHud
-                ? '<span aria-hidden="true">🎯</span> Face Recognition HUD: ON'
-                : '<span aria-hidden="true">🎯</span> Face Recognition HUD: OFF';
+
+            showFaceHud =
+                !showFaceHud;
+
+            faceHudToggle.classList.toggle(
+                "active",
+                showFaceHud
+            );
+
+            faceHudToggle.innerHTML =
+                showFaceHud
+                    ? '<span aria-hidden="true">🎯</span> Face Recognition HUD: ON'
+                    : '<span aria-hidden="true">🎯</span> Face Recognition HUD: OFF';
+
         });
+
     }
 
     // Quick Actions & Drawer Elements
-    const quickWebzoneBtn = document.getElementById("quickWebzoneBtn");
-    const toggleDrawerBtn = document.getElementById("toggleDrawerBtn");
-    const effectsHiddenDrawer = document.getElementById("effectsHiddenDrawer");
-    const drawerArrowIcon = document.getElementById("drawerArrowIcon");
-    const touchSlideController = document.getElementById("touchSlideController");
-    const slidePrevBtn = document.getElementById("slidePrevBtn");
-    const slideNextBtn = document.getElementById("slideNextBtn");
-    const slideActivePill = document.getElementById("slideActivePill");
-    const slideCurrentInfo = document.getElementById("slideCurrentInfo");
-    const cameraViewport = document.getElementById("cameraViewport");
-    const canvasSwipeToast = document.getElementById("canvasSwipeToast");
-    const canvasSwipeIcon = document.getElementById("canvasSwipeIcon");
-    const canvasSwipeText = document.getElementById("canvasSwipeText");
+    const quickWebzoneBtn =
+        document.getElementById(
+            "quickWebzoneBtn"
+        );
+
+    const toggleDrawerBtn =
+        document.getElementById(
+            "toggleDrawerBtn"
+        );
+
+    const effectsHiddenDrawer =
+        document.getElementById(
+            "effectsHiddenDrawer"
+        );
+
+    const drawerArrowIcon =
+        document.getElementById(
+            "drawerArrowIcon"
+        );
+
+    const touchSlideController =
+        document.getElementById(
+            "touchSlideController"
+        );
+
+    const slidePrevBtn =
+        document.getElementById(
+            "slidePrevBtn"
+        );
+
+    const slideNextBtn =
+        document.getElementById(
+            "slideNextBtn"
+        );
+
+    const slideActivePill =
+        document.getElementById(
+            "slideActivePill"
+        );
+
+    const slideCurrentInfo =
+        document.getElementById(
+            "slideCurrentInfo"
+        );
+
+    const cameraViewport =
+        document.getElementById(
+            "cameraViewport"
+        );
+
+    const canvasSwipeToast =
+        document.getElementById(
+            "canvasSwipeToast"
+        );
+
+    const canvasSwipeIcon =
+        document.getElementById(
+            "canvasSwipeIcon"
+        );
+
+    const canvasSwipeText =
+        document.getElementById(
+            "canvasSwipeText"
+        );
 
     // Random Filter Button
-    const randomFilterBtn = document.getElementById("randomFilterBtn");
+    const randomFilterBtn =
+        document.getElementById(
+            "randomFilterBtn"
+        );
 
-    // Comprehensive catalog of all WebZonebw & Realistic AR effects with category and target metadata
+    // Comprehensive catalog of all WebZoneBW
+    // & Realistic AR effects with category and target metadata
     const allFilterConfigs = [
-        // 👤 FACE AR LENSES (ANCHORED BIOMETRIC OVERLAYS & BEAUTY/GLAM)
-        { id: "sunglasses", name: "Aviators", icon: "🕶️", category: "face", target: "face", desc: "Ray-Ban aviator sunglasses with reflective lens shimmer" },
-        { id: "halo", name: "Angel Halo", icon: "👑", category: "face", target: "face", desc: "Floating neon gold angelic halo with sacred geometry" },
-        { id: "kawaii", name: "Kawaii Blush", icon: "🌸", category: "face", target: "face", desc: "Anime peach cheek blush and floating cherry petals" },
-        { id: "cyberwarrior", name: "Cyber Paint", icon: "⚡", category: "face", target: "face", desc: "Cyan warpaint cheek glyphs with electric pulse" },
-        { id: "cyberhud", name: "Cyborg HUD", icon: "🤖", category: "face", target: "face", desc: "Sci-fi holographic biometric targeting reticle" },
-        { id: "studiohd", name: "Portrait HD", icon: "📸", category: "face", target: "face", desc: "Studio portrait lighting with unsharp mask clarity" },
-        { id: "icefrost", name: "Diamond Dust", icon: "❄️", category: "face", target: "face", desc: "Sparkling crystal prism shimmer across facial contours" },
-        { id: "cartoon", name: "Anime Cel", icon: "🎨", category: "face", target: "face", desc: "High-contrast comic outline with vibrant cel shading" },
-        { id: "cybersec", name: "Bio-Scan", icon: "🔐", category: "face", target: "face", desc: "Facial recognition grid with cryptographic hex telemetry" },
-        { id: "superhero", name: "Hero Mask", icon: "🦸", category: "face", target: "face", desc: "Comic vigilante sleek carbon-fiber face mask" },
-        { id: "goldenhour", name: "Golden Hour", icon: "🌟", category: "face", target: "face", desc: "Warm California sunset rim light and golden skin glow" },
 
-        // 🌍 SCENE & ATMOSPHERIC SHADERS (FULL-CANVAS COMPOSITIONS)
-        { id: "matrix", name: "Matrix Rain", icon: "🟢", category: "scene", target: "scene", desc: "Cascading digital green kanji code matrix stream" },
-        { id: "noir", name: "Leica Noir", icon: "🖤", category: "scene", target: "scene", desc: "High-contrast silver gelatin black-and-white 35mm film" },
-        { id: "vintage90s", name: "Retro 90s", icon: "🎞️", category: "scene", target: "scene", desc: "Warm Kodak Portra analog grain with soft vignette" },
-        { id: "cinematic", name: "35mm Film", icon: "🎬", category: "scene", target: "scene", desc: "Anamorphic widescreen teal & orange color grade" },
-        { id: "glitch", name: "Glitch FX", icon: "⚡", category: "scene", target: "scene", desc: "RGB channel chromatic aberration and scanline shifts" },
-        { id: "popart", name: "Pop Comic", icon: "🖌️", category: "scene", target: "scene", desc: "Roy Lichtenstein halftone pop-art print dots" },
-        { id: "space", name: "Deep Space", icon: "🚀", category: "scene", target: "scene", desc: "Starlight nebula cosmic aura with drifting stardust" },
-        { id: "hologram", name: "Holo-Grid", icon: "🌐", category: "scene", target: "scene", desc: "Blue wireframe laser scanline perspective grid" },
-        { id: "cyberpunk", name: "Neon Cyber", icon: "💡", category: "scene", target: "scene", desc: "Vibrant synthwave neon magenta & cyan wash" },
-        { id: "webzonebw", name: "Signature BW", icon: "🌐", category: "scene", target: "scene", desc: "WebZonebw official high-definition monochrome" },
+        // 👤 FACE AR LENSES
+        {
+            id: "sunglasses",
+            name: "Aviators",
+            icon: "🕶️",
+            category: "face",
+            target: "face",
+            desc:
+                "Ray-Ban aviator sunglasses with reflective lens shimmer"
+        },
+
+        {
+            id: "halo",
+            name: "Angel Halo",
+            icon: "👑",
+            category: "face",
+            target: "face",
+            desc:
+                "Floating neon gold angelic halo with sacred geometry"
+        },
+
+        {
+            id: "kawaii",
+            name: "Kawaii Blush",
+            icon: "🌸",
+            category: "face",
+            target: "face",
+            desc:
+                "Anime peach cheek blush and floating cherry petals"
+        },
+
+        {
+            id: "cyberwarrior",
+            name: "Cyber Paint",
+            icon: "⚡",
+            category: "face",
+            target: "face",
+            desc:
+                "Cyan warpaint cheek glyphs with electric pulse"
+        },
+
+        {
+            id: "cyberhud",
+            name: "Cyborg HUD",
+            icon: "🤖",
+            category: "face",
+            target: "face",
+            desc:
+                "Sci-fi holographic biometric targeting reticle"
+        },
+
+        {
+            id: "studiohd",
+            name: "Portrait HD",
+            icon: "📸",
+            category: "face",
+            target: "face",
+            desc:
+                "Studio portrait lighting with unsharp mask clarity"
+        },
+
+        {
+            id: "icefrost",
+            name: "Diamond Dust",
+            icon: "❄️",
+            category: "face",
+            target: "face",
+            desc:
+                "Sparkling crystal prism shimmer across facial contours"
+        },
+
+        {
+            id: "cartoon",
+            name: "Anime Cel",
+            icon: "🎨",
+            category: "face",
+            target: "face",
+            desc:
+                "High-contrast comic outline with vibrant cel shading"
+        },
+
+        {
+            id: "cybersec",
+            name: "Bio-Scan",
+            icon: "🔐",
+            category: "face",
+            target: "face",
+            desc:
+                "Facial recognition grid with cryptographic hex telemetry"
+        },
+
+        {
+            id: "superhero",
+            name: "Hero Mask",
+            icon: "🦸",
+            category: "face",
+            target: "face",
+            desc:
+                "Comic vigilante sleek carbon-fiber face mask"
+        },
+
+        {
+            id: "goldenhour",
+            name: "Golden Hour",
+            icon: "🌟",
+            category: "face",
+            target: "face",
+            desc:
+                "Warm California sunset rim light and golden skin glow"
+        },
+
+        // 🌍 SCENE & ATMOSPHERIC SHADERS
+        {
+            id: "matrix",
+            name: "Matrix Rain",
+            icon: "🟢",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Cascading digital green kanji code matrix stream"
+        },
+
+        {
+            id: "noir",
+            name: "Leica Noir",
+            icon: "🖤",
+            category: "scene",
+            target: "scene",
+            desc:
+                "High-contrast silver gelatin black-and-white 35mm film"
+        },
+
+        {
+            id: "vintage90s",
+            name: "Retro 90s",
+            icon: "🎞️",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Warm Kodak Portra analog grain with soft vignette"
+        },
+
+        {
+            id: "cinematic",
+            name: "35mm Film",
+            icon: "🎬",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Anamorphic widescreen teal & orange color grade"
+        },
+
+        {
+            id: "glitch",
+            name: "Glitch FX",
+            icon: "⚡",
+            category: "scene",
+            target: "scene",
+            desc:
+                "RGB channel chromatic aberration and scanline shifts"
+        },
+
+        {
+            id: "popart",
+            name: "Pop Comic",
+            icon: "🖌️",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Roy Lichtenstein halftone pop-art print dots"
+        },
+
+        {
+            id: "space",
+            name: "Deep Space",
+            icon: "🚀",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Starlight nebula cosmic aura with drifting stardust"
+        },
+
+        {
+            id: "hologram",
+            name: "Holo-Grid",
+            icon: "🌐",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Blue wireframe laser scanline perspective grid"
+        },
+
+        {
+            id: "cyberpunk",
+            name: "Neon Cyber",
+            icon: "💡",
+            category: "scene",
+            target: "scene",
+            desc:
+                "Vibrant synthwave neon magenta & cyan wash"
+        },
+
+        {
+            id: "webzonebw",
+            name: "Signature BW",
+            icon: "🌐",
+            category: "scene",
+            target: "scene",
+            desc:
+                "WebZonebw official high-definition monochrome"
+        },
 
         // 📰 EDITORIAL MAGAZINE COVERS
-        { id: "time", name: "TIME Mag", icon: "🟥", category: "magazine", target: "magazine", desc: "Iconic red border Person of the Year cover" },
-        { id: "vogue", name: "VOGUE", icon: "🕶️", category: "magazine", target: "magazine", desc: "Haute couture high-fashion editorial title" },
-        { id: "forbes", name: "Forbes", icon: "💼", category: "magazine", target: "magazine", desc: "World's Top Innovators billionaire edition" },
-        { id: "wired", name: "WIRED", icon: "🚀", category: "magazine", target: "magazine", desc: "Cutting-edge Silicon Valley tech cover" },
-        { id: "cyber", name: "CyberMag", icon: "🎮", category: "magazine", target: "magazine", desc: "Year 2077 Cyberpunk gaming publication" },
+        {
+            id: "time",
+            name: "TIME Mag",
+            icon: "🟥",
+            category: "magazine",
+            target: "magazine",
+            desc:
+                "Iconic red border Person of the Year cover"
+        },
+
+        {
+            id: "vogue",
+            name: "VOGUE",
+            icon: "🕶️",
+            category: "magazine",
+            target: "magazine",
+            desc:
+                "Haute couture high-fashion editorial title"
+        },
+
+        {
+            id: "forbes",
+            name: "Forbes",
+            icon: "💼",
+            category: "magazine",
+            target: "magazine",
+            desc:
+                "World's Top Innovators billionaire edition"
+        },
+
+        {
+            id: "wired",
+            name: "WIRED",
+            icon: "🚀",
+            category: "magazine",
+            target: "magazine",
+            desc:
+                "Cutting-edge Silicon Valley tech cover"
+        },
+
+        {
+            id: "cyber",
+            name: "CyberMag",
+            icon: "🎮",
+            category: "magazine",
+            target: "magazine",
+            desc:
+                "Year 2077 Cyberpunk gaming publication"
+        },
 
         // 🎃 HALLOWEEN & SPOOKY MASKS
-        { id: "skeleton", name: "Bio-Skull", icon: "💀", category: "halloween", target: "face", desc: "Glowing bio-luminescent skull eye sockets & jaw" },
-        { id: "pumpkin", name: "Jack Lantern", icon: "🎃", category: "halloween", target: "face", desc: "Carved flaming jack-o'-lantern mask overlay" },
-        { id: "ghost", name: "Phantom", icon: "👻", category: "halloween", target: "scene", desc: "Ethereal translucent floating specters" },
-        { id: "zombie", name: "Zombie FX", icon: "🧟", category: "halloween", target: "face", desc: "Radioactive undead green toxic infection" },
-        { id: "vampire", name: "Vampire", icon: "🧛", category: "halloween", target: "face", desc: "Crimson blood vignette and razor vampire fangs" },
-        { id: "spider", name: "Spider Web", icon: "🕷️", category: "halloween", target: "scene", desc: "Creepy crawling arachnid webs on screen edges" },
-        { id: "bats", name: "Night Bats", icon: "🦇", category: "halloween", target: "scene", desc: "Swarm of nocturnal bats fluttering across the night sky" }
+        {
+            id: "skeleton",
+            name: "Bio-Skull",
+            icon: "💀",
+            category: "halloween",
+            target: "face",
+            desc:
+                "Glowing bio-luminescent skull eye sockets & jaw"
+        },
+
+        {
+            id: "pumpkin",
+            name: "Jack Lantern",
+            icon: "🎃",
+            category: "halloween",
+            target: "face",
+            desc:
+                "Carved flaming jack-o'-lantern mask overlay"
+        },
+
+        {
+            id: "ghost",
+            name: "Phantom",
+            icon: "👻",
+            category: "halloween",
+            target: "scene",
+            desc:
+                "Ethereal translucent floating specters"
+        },
+
+        {
+            id: "zombie",
+            name: "Zombie FX",
+            icon: "🧟",
+            category: "halloween",
+            target: "face",
+            desc:
+                "Radioactive undead green toxic infection"
+        },
+
+        {
+            id: "vampire",
+            name: "Vampire",
+            icon: "🧛",
+            category: "halloween",
+            target: "face",
+            desc:
+                "Crimson blood vignette and razor vampire fangs"
+        },
+
+        {
+            id: "spider",
+            name: "Spider Web",
+            icon: "🕷️",
+            category: "halloween",
+            target: "scene",
+            desc:
+                "Creepy crawling arachnid webs on screen edges"
+        },
+
+        {
+            id: "bats",
+            name: "Night Bats",
+            icon: "🦇",
+            category: "halloween",
+            target: "scene",
+            desc:
+                "Swarm of nocturnal bats fluttering across the night sky"
+        }
     ];
 
-    const snapLensTrack = document.getElementById("snapLensTrack");
-    const smartStatusIcon = document.getElementById("smartStatusIcon");
-    const smartStatusText = document.getElementById("smartStatusText");
-    const smartInventoryBadge = document.getElementById("smartInventoryBadge");
-    const faceChipDot = document.getElementById("faceChipDot");
-    const faceChipStatus = document.getElementById("faceChipStatus");
-    const faceProximityMetric = document.getElementById("faceProximityMetric");
-    const faceLightingMetric = document.getElementById("faceLightingMetric");
-    const touchTargetCrosshair = document.getElementById("touchTargetCrosshair");
+    /*
+     * IMPORTANT:
+     * snapLensTrack was already declared near the top of this
+     * function. Do NOT redeclare it here.
+     */
 
-    // Dynamic Filter Inventory Manager based on Face Detection & Active Category
+    const smartStatusIcon =
+        document.getElementById(
+            "smartStatusIcon"
+        );
+
+    const smartStatusText =
+        document.getElementById(
+            "smartStatusText"
+        );
+
+    const smartInventoryBadge =
+        document.getElementById(
+            "smartInventoryBadge"
+        );
+
+    const faceChipDot =
+        document.getElementById(
+            "faceChipDot"
+        );
+
+    const faceChipStatus =
+        document.getElementById(
+            "faceChipStatus"
+        );
+
+    const faceProximityMetric =
+        document.getElementById(
+            "faceProximityMetric"
+        );
+
+    const faceLightingMetric =
+        document.getElementById(
+            "faceLightingMetric"
+        );
+
+    const touchTargetCrosshair =
+        document.getElementById(
+            "touchTargetCrosshair"
+        );
+
+    // Dynamic Filter Inventory Manager
+    // based on Face Detection & Active Category
     function getActiveInventoryFilters() {
+
         if (activeSmartCategory === "face") {
-            return allFilterConfigs.filter(f => f.category === "face");
-        } else if (activeSmartCategory === "scene") {
-            return allFilterConfigs.filter(f => f.category === "scene");
-        } else if (activeSmartCategory === "magazine") {
-            return allFilterConfigs.filter(f => f.category === "magazine");
-        } else if (activeSmartCategory === "halloween") {
-            return allFilterConfigs.filter(f => f.category === "halloween");
-        } else if (activeSmartCategory === "all") {
+            return allFilterConfigs.filter(
+                f => f.category === "face"
+            );
+        }
+
+        if (activeSmartCategory === "scene") {
+            return allFilterConfigs.filter(
+                f => f.category === "scene"
+            );
+        }
+
+        if (activeSmartCategory === "magazine") {
+            return allFilterConfigs.filter(
+                f => f.category === "magazine"
+            );
+        }
+
+        if (activeSmartCategory === "halloween") {
+            return allFilterConfigs.filter(
+                f => f.category === "halloween"
+            );
+        }
+
+        if (activeSmartCategory === "all") {
             return allFilterConfigs;
         }
 
-        // "smart" category: Auto-prioritize based on real-time face detection
+        // "smart" category:
+        // Auto-prioritize based on real-time face detection
         if (isFaceDetected) {
-            // Put face AR lenses first, then scene, then magazine, then halloween
-            const faceFilters = allFilterConfigs.filter(f => f.category === "face");
-            const otherFilters = allFilterConfigs.filter(f => f.category !== "face");
-            return [...faceFilters, ...otherFilters];
+
+            const faceFilters =
+                allFilterConfigs.filter(
+                    f => f.category === "face"
+                );
+
+            const otherFilters =
+                allFilterConfigs.filter(
+                    f => f.category !== "face"
+                );
+
+            return [
+                ...faceFilters,
+                ...otherFilters
+            ];
+
         } else {
-            // Put scene & magazine filters first when face is not actively detected
-            const sceneFilters = allFilterConfigs.filter(f => f.category === "scene" || f.category === "magazine");
-            const otherFilters = allFilterConfigs.filter(f => f.category !== "scene" && f.category !== "magazine");
-            return [...sceneFilters, ...otherFilters];
+
+            const sceneFilters =
+                allFilterConfigs.filter(
+                    f =>
+                        f.category === "scene" ||
+                        f.category === "magazine"
+                );
+
+            const otherFilters =
+                allFilterConfigs.filter(
+                    f =>
+                        f.category !== "scene" &&
+                        f.category !== "magazine"
+                );
+
+            return [
+                ...sceneFilters,
+                ...otherFilters
+            ];
         }
     }
 
     // Render / Update Snapchat Circular Lens Carousel Dynamically
     function renderSmartLensTrack() {
-        if (!snapLensTrack) return;
-        const currentList = getActiveInventoryFilters();
-        const displayLimit = 12; // High-performance smooth carousel size
-        const visibleLenses = currentList.slice(0, displayLimit);
 
-        // Make sure currentFilter is included in the visible lenses so user never loses their active selection
-        if (!visibleLenses.some(f => f.id === currentFilter)) {
-            const currentCfg = allFilterConfigs.find(f => f.id === currentFilter);
-            if (currentCfg) visibleLenses.unshift(currentCfg);
+        if (!snapLensTrack) return;
+
+        const currentList =
+            getActiveInventoryFilters();
+
+        const displayLimit = 12;
+
+        const visibleLenses =
+            currentList.slice(
+                0,
+                displayLimit
+            );
+
+        // Make sure currentFilter is included
+        if (
+            !visibleLenses.some(
+                f => f.id === currentFilter
+            )
+        ) {
+
+            const currentCfg =
+                allFilterConfigs.find(
+                    f => f.id === currentFilter
+                );
+
+            if (currentCfg) {
+                visibleLenses.unshift(
+                    currentCfg
+                );
+            }
         }
 
         snapLensTrack.innerHTML = "";
 
         visibleLenses.forEach(config => {
-            const btn = document.createElement("button");
+
+            const btn =
+                document.createElement("button");
+
             btn.type = "button";
-            btn.className = `er-lens-bubble ${config.id === currentFilter ? "active" : ""}`;
-            btn.dataset.filter = config.id;
-            btn.title = `${config.name} (${config.category.toUpperCase()})`;
 
-            const circle = document.createElement("div");
-            circle.className = `lens-bubble-circle ${config.id === currentFilter ? "active-glow" : ""}`;
-            circle.textContent = config.icon;
+            btn.className =
+                `er-lens-bubble ${
+                    config.id === currentFilter
+                        ? "active"
+                        : ""
+                }`;
 
-            const label = document.createElement("span");
-            label.className = "lens-bubble-label";
-            label.textContent = config.name.split(" ")[0]; // Clean short label
+            btn.dataset.filter =
+                config.id;
+
+            btn.title =
+                `${config.name} (${config.category.toUpperCase()})`;
+
+            const circle =
+                document.createElement("div");
+
+            circle.className =
+                `lens-bubble-circle ${
+                    config.id === currentFilter
+                        ? "active-glow"
+                        : ""
+                }`;
+
+            circle.textContent =
+                config.icon;
+
+            const label =
+                document.createElement("span");
+
+            label.className =
+                "lens-bubble-label";
+
+            label.textContent =
+                config.name.split(" ")[0];
 
             btn.appendChild(circle);
             btn.appendChild(label);
 
-            btn.addEventListener("click", () => {
-                selectFilter(config.id);
-            });
+            btn.addEventListener(
+                "click",
+                () => {
+                    selectFilter(config.id);
+                }
+            );
 
             snapLensTrack.appendChild(btn);
         });
 
         // Add "••• More" button at the end
-        const moreBtn = document.createElement("button");
+        const moreBtn =
+            document.createElement("button");
+
         moreBtn.type = "button";
-        moreBtn.className = "er-lens-bubble more-lens-btn";
-        moreBtn.id = "openAllEffectsBtn";
-        moreBtn.title = "View All 30+ Effects in Studio Panel";
+
+        moreBtn.className =
+            "er-lens-bubble more-lens-btn";
+
+        moreBtn.id =
+            "openAllEffectsBtn";
+
+        moreBtn.title =
+            "View All 30+ Effects in Studio Panel";
+
         moreBtn.innerHTML = `
             <div class="lens-bubble-circle">•••</div>
             <span class="lens-bubble-label">More</span>
         `;
-        moreBtn.addEventListener("click", () => {
-            const effectsPanel = document.getElementById("effectsPanel");
-            if (effectsPanel) effectsPanel.classList.add("open");
-        });
-        snapLensTrack.appendChild(moreBtn);
+
+        moreBtn.addEventListener(
+            "click",
+            () => {
+                const effectsPanel =
+                    document.getElementById(
+                        "effectsPanel"
+                    );
+
+                if (effectsPanel) {
+                    effectsPanel.classList.add(
+                        "open"
+                    );
+                }
+            }
+        );
+
+        snapLensTrack.appendChild(
+            moreBtn
+        );
     }
 
     // Update Telemetry & Status Badges
     function updateSmartInventoryUI() {
-        const inventory = getActiveInventoryFilters();
-        const faceCount = allFilterConfigs.filter(f => f.category === "face").length;
-        const sceneCount = allFilterConfigs.filter(f => f.category === "scene").length;
 
-        if (smartStatusText && smartStatusIcon) {
+        const inventory =
+            getActiveInventoryFilters();
+
+        const faceCount =
+            allFilterConfigs.filter(
+                f => f.category === "face"
+            ).length;
+
+        const sceneCount =
+            allFilterConfigs.filter(
+                f => f.category === "scene"
+            ).length;
+
+        if (
+            smartStatusText &&
+            smartStatusIcon
+        ) {
+
             if (isTouchLocked) {
-                smartStatusIcon.textContent = "🎯";
-                smartStatusText.textContent = "Touch-Locked AR Active";
+
+                smartStatusIcon.textContent =
+                    "🎯";
+
+                smartStatusText.textContent =
+                    "Touch-Locked AR Active";
+
             } else if (isFaceDetected) {
-                smartStatusIcon.textContent = "👤";
-                smartStatusText.textContent = `Smart Face AR: Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+
+                smartStatusIcon.textContent =
+                    "👤";
+
+                smartStatusText.textContent =
+                    `Smart Face AR: Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+
             } else {
-                smartStatusIcon.textContent = "🌍";
-                smartStatusText.textContent = "Smart Scene Shaders: Active";
+
+                smartStatusIcon.textContent =
+                    "🌍";
+
+                smartStatusText.textContent =
+                    "Smart Scene Shaders: Active";
             }
         }
 
         if (smartInventoryBadge) {
-            if (activeSmartCategory === "face" || (activeSmartCategory === "smart" && isFaceDetected)) {
-                smartInventoryBadge.textContent = `👤 ${faceCount} Face AR Lenses Ready`;
-                smartInventoryBadge.classList.remove("scene-mode");
-            } else if (activeSmartCategory === "scene" || activeSmartCategory === "magazine") {
-                smartInventoryBadge.textContent = `🌍 ${sceneCount} Scene Shaders Active`;
-                smartInventoryBadge.classList.add("scene-mode");
+
+            if (
+                activeSmartCategory === "face" ||
+                (
+                    activeSmartCategory === "smart" &&
+                    isFaceDetected
+                )
+            ) {
+
+                smartInventoryBadge.textContent =
+                    `👤 ${faceCount} Face AR Lenses Ready`;
+
+                smartInventoryBadge.classList.remove(
+                    "scene-mode"
+                );
+
+            } else if (
+                activeSmartCategory === "scene" ||
+                activeSmartCategory === "magazine"
+            ) {
+
+                smartInventoryBadge.textContent =
+                    `🌍 ${sceneCount} Scene Shaders Active`;
+
+                smartInventoryBadge.classList.add(
+                    "scene-mode"
+                );
+
             } else {
-                smartInventoryBadge.textContent = `✨ ${inventory.length} Effects Available`;
-                smartInventoryBadge.classList.remove("scene-mode");
+
+                smartInventoryBadge.textContent =
+                    `✨ ${inventory.length} Effects Available`;
+
+                smartInventoryBadge.classList.remove(
+                    "scene-mode"
+                );
             }
         }
 
         // Mobile Telemetry Top Bar
-        if (faceChipDot && faceChipStatus) {
-            faceChipDot.className = "face-chip-dot";
+        if (
+            faceChipDot &&
+            faceChipStatus
+        ) {
+
+            faceChipDot.className =
+                "face-chip-dot";
+
             if (isTouchLocked) {
-                faceChipDot.classList.add("touch-locked");
-                faceChipStatus.textContent = "🎯 Touch Lock Anchored";
+
+                faceChipDot.classList.add(
+                    "touch-locked"
+                );
+
+                faceChipStatus.textContent =
+                    "🎯 Touch Lock Anchored";
+
             } else if (isFaceDetected) {
-                faceChipDot.classList.add("locked");
-                faceChipStatus.textContent = `👤 Face Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+
+                faceChipDot.classList.add(
+                    "locked"
+                );
+
+                faceChipStatus.textContent =
+                    `👤 Face Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+
             } else {
-                faceChipDot.classList.add("scanning");
-                faceChipStatus.textContent = "👤 Auto-Scanning Face...";
+
+                faceChipDot.classList.add(
+                    "scanning"
+                );
+
+                faceChipStatus.textContent =
+                    "👤 Auto-Scanning Face...";
             }
         }
 
         if (faceProximityMetric) {
-            if (currentProximity === "close") {
-                faceProximityMetric.textContent = "📐 Move Back";
-            } else if (currentProximity === "far") {
-                faceProximityMetric.textContent = "🔍 Step Closer";
+
+            if (
+                currentProximity === "close"
+            ) {
+
+                faceProximityMetric.textContent =
+                    "📐 Move Back";
+
+            } else if (
+                currentProximity === "far"
+            ) {
+
+                faceProximityMetric.textContent =
+                    "🔍 Step Closer";
+
             } else {
-                faceProximityMetric.textContent = "🎯 Optimal Range";
+
+                faceProximityMetric.textContent =
+                    "🎯 Optimal Range";
             }
         }
 
         if (faceLightingMetric) {
-            if (currentLighting === "low") {
-                faceLightingMetric.textContent = "🌙 Low Light";
-            } else if (currentLighting === "bright") {
-                faceLightingMetric.textContent = "☀️ High Lumens";
+
+            if (
+                currentLighting === "low"
+            ) {
+
+                faceLightingMetric.textContent =
+                    "🌙 Low Light";
+
+            } else if (
+                currentLighting === "bright"
+            ) {
+
+                faceLightingMetric.textContent =
+                    "☀️ High Lumens";
+
             } else {
-                faceLightingMetric.textContent = "⚡ Studio Light";
+
+                faceLightingMetric.textContent =
+                    "⚡ Studio Light";
             }
         }
     }
@@ -584,88 +1415,230 @@ function initWebZoneERStudio() {
     let toastTimeout = null;
 
     function showSwipeToast(icon, title) {
-        if (!canvasSwipeToast) return;
-        if (canvasSwipeIcon) canvasSwipeIcon.textContent = icon;
-        if (canvasSwipeText) canvasSwipeText.textContent = title;
-        canvasSwipeToast.classList.add("visible");
 
-        if (toastTimeout) clearTimeout(toastTimeout);
+        if (!canvasSwipeToast) return;
+
+        if (canvasSwipeIcon) {
+            canvasSwipeIcon.textContent =
+                icon;
+        }
+
+        if (canvasSwipeText) {
+            canvasSwipeText.textContent =
+                title;
+        }
+
+        canvasSwipeToast.classList.add(
+            "visible"
+        );
+
+        if (toastTimeout) {
+            clearTimeout(toastTimeout);
+        }
+
         toastTimeout = setTimeout(() => {
-            canvasSwipeToast.classList.remove("visible");
+            canvasSwipeToast.classList.remove(
+                "visible"
+            );
         }, 1200);
     }
 
-    function selectFilter(filterName, direction = "none") {
-        currentFilter = filterName;
+    function selectFilter(
+        filterName,
+        direction = "none"
+    ) {
 
-        const config = allFilterConfigs.find(c => c.id === filterName) || {
-            id: filterName,
-            name: filterName.toUpperCase(),
-            icon: "✨",
-            category: "scene"
-        };
+        currentFilter =
+            filterName;
+
+        const config =
+            allFilterConfigs.find(
+                c => c.id === filterName
+            ) || {
+                id: filterName,
+                name:
+                    filterName.toUpperCase(),
+                icon: "✨",
+                category: "scene"
+            };
 
         // Update active pill text
         if (slideActivePill) {
-            slideActivePill.textContent = `${config.icon} ${config.name}`;
+
+            slideActivePill.textContent =
+                `${config.icon} ${config.name}`;
         }
 
         // Show floating on-screen feedback
         if (direction === "left") {
-            showSwipeToast("👉", `${config.icon} ${config.name}`);
-        } else if (direction === "right") {
-            showSwipeToast("👈", `${config.icon} ${config.name}`);
+
+            showSwipeToast(
+                "👉",
+                `${config.icon} ${config.name}`
+            );
+
+        } else if (
+            direction === "right"
+        ) {
+
+            showSwipeToast(
+                "👈",
+                `${config.icon} ${config.name}`
+            );
+
         } else {
-            showSwipeToast(config.icon, config.name);
+
+            showSwipeToast(
+                config.icon,
+                config.name
+            );
         }
 
-        // Update active class on quick Webzone button
+        // Update active class on quick WebZoneBW button
         if (quickWebzoneBtn) {
-            if (filterName === "webzonebw") {
-                quickWebzoneBtn.style.boxShadow = "0 0 20px rgba(56, 189, 248, 0.7)";
+
+            if (
+                filterName === "webzonebw"
+            ) {
+
+                quickWebzoneBtn.style.boxShadow =
+                    "0 0 20px rgba(56, 189, 248, 0.7)";
+
             } else {
-                quickWebzoneBtn.style.boxShadow = "";
+
+                quickWebzoneBtn.style.boxShadow =
+                    "";
             }
         }
 
-        // Sync Snapchat circular lens tray active state
-        const bubbles = document.querySelectorAll(".er-lens-bubble");
+        // Sync circular lens tray active state
+        const bubbles =
+            document.querySelectorAll(
+                ".er-lens-bubble"
+            );
+
         bubbles.forEach(bubble => {
-            if (bubble.dataset.filter === filterName) {
-                bubble.classList.add("active");
-                const circle = bubble.querySelector(".lens-bubble-circle");
-                if (circle) circle.classList.add("active-glow");
-                bubble.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+
+            if (
+                bubble.dataset.filter ===
+                filterName
+            ) {
+
+                bubble.classList.add(
+                    "active"
+                );
+
+                const circle =
+                    bubble.querySelector(
+                        ".lens-bubble-circle"
+                    );
+
+                if (circle) {
+                    circle.classList.add(
+                        "active-glow"
+                    );
+                }
+
+                bubble.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center"
+                });
+
             } else {
-                bubble.classList.remove("active");
-                const circle = bubble.querySelector(".lens-bubble-circle");
-                if (circle) circle.classList.remove("active-glow");
+
+                bubble.classList.remove(
+                    "active"
+                );
+
+                const circle =
+                    bubble.querySelector(
+                        ".lens-bubble-circle"
+                    );
+
+                if (circle) {
+                    circle.classList.remove(
+                        "active-glow"
+                    );
+                }
             }
         });
 
         // Sync Right Drawer / Panel effect cards
-        const effectCards = document.querySelectorAll(".effect-card");
+        const effectCards =
+            document.querySelectorAll(
+                ".effect-card"
+            );
+
         effectCards.forEach(card => {
-            if (card.dataset.filter === filterName) {
-                card.classList.add("active");
-                card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+
+            if (
+                card.dataset.filter ===
+                filterName
+            ) {
+
+                card.classList.add(
+                    "active"
+                );
+
+                card.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+
             } else {
-                card.classList.remove("active");
+
+                card.classList.remove(
+                    "active"
+                );
             }
         });
 
         // Hide magazine cover if not a magazine filter
-        const isMag = ["time", "wired", "forbes", "vogue", "cyber"].includes(filterName);
+        const isMag = [
+            "time",
+            "wired",
+            "forbes",
+            "vogue",
+            "cyber"
+        ].includes(filterName);
+
         if (isMag) {
-            activeMagazine = filterName;
-            if (magPanel) magPanel.classList.add("show");
+
+            activeMagazine =
+                filterName;
+
+            if (magPanel) {
+                magPanel.classList.add(
+                    "show"
+                );
+            }
+
             magItemBtns.forEach(btn => {
-                btn.classList.toggle("active", btn.dataset.mag === filterName);
+
+                btn.classList.toggle(
+                    "active",
+                    btn.dataset.mag ===
+                        filterName
+                );
+
             });
+
         } else {
-            activeMagazine = "none";
-            if (magPanel && currentFilter !== "magazine") {
-                magPanel.classList.remove("show");
+
+            activeMagazine =
+                "none";
+
+            if (
+                magPanel &&
+                currentFilter !==
+                    "magazine"
+            ) {
+
+                magPanel.classList.remove(
+                    "show"
+                );
             }
         }
 
@@ -673,45 +1646,94 @@ function initWebZoneERStudio() {
     }
 
     function slideNext() {
-        const inventory = getActiveInventoryFilters();
-        const currIdx = inventory.findIndex(f => f.id === currentFilter);
-        const nextIdx = (currIdx + 1 + inventory.length) % inventory.length;
-        selectFilter(inventory[nextIdx].id, "left");
+
+        const inventory =
+            getActiveInventoryFilters();
+
+        const currIdx =
+            inventory.findIndex(
+                f => f.id === currentFilter
+            );
+
+        const nextIdx =
+            (
+                currIdx + 1 +
+                inventory.length
+            ) % inventory.length;
+
+        selectFilter(
+            inventory[nextIdx].id,
+            "left"
+        );
     }
 
     function slidePrev() {
-        const inventory = getActiveInventoryFilters();
-        const currIdx = inventory.findIndex(f => f.id === currentFilter);
-        const prevIdx = (currIdx - 1 + inventory.length) % inventory.length;
-        selectFilter(inventory[prevIdx].id, "right");
+
+        const inventory =
+            getActiveInventoryFilters();
+
+        const currIdx =
+            inventory.findIndex(
+                f => f.id === currentFilter
+            );
+
+        const prevIdx =
+            (
+                currIdx - 1 +
+                inventory.length
+            ) % inventory.length;
+
+        selectFilter(
+            inventory[prevIdx].id,
+            "right"
+        );
     }
 
     // Quick WebZoneBW signature button
     if (quickWebzoneBtn) {
-        quickWebzoneBtn.addEventListener("click", () => {
-            selectFilter("webzonebw");
-        });
-    }
 
-    // Hidden Drawer Toggle
+        quickWebzoneBtn.addEventListener(
+            "click",
+            () => {
+                selectFilter(
+                    "webzonebw"
+                );
+            }
+        );
+    }
+        // ==========================================================
+    // HIDDEN EFFECTS DRAWER / MOBILE CONTROLS
+    // ==========================================================
+
     if (toggleDrawerBtn && effectsHiddenDrawer) {
         toggleDrawerBtn.addEventListener("click", () => {
-            const isCollapsed = effectsHiddenDrawer.classList.contains("collapsed");
+            const isCollapsed =
+                effectsHiddenDrawer.classList.contains("collapsed");
+
             if (isCollapsed) {
                 effectsHiddenDrawer.classList.remove("collapsed");
                 toggleDrawerBtn.classList.add("open");
                 toggleDrawerBtn.setAttribute("aria-expanded", "true");
-                if (drawerArrowIcon) drawerArrowIcon.textContent = "▲";
+
+                if (drawerArrowIcon) {
+                    drawerArrowIcon.textContent = "▲";
+                }
             } else {
                 effectsHiddenDrawer.classList.add("collapsed");
                 toggleDrawerBtn.classList.remove("open");
                 toggleDrawerBtn.setAttribute("aria-expanded", "false");
-                if (drawerArrowIcon) drawerArrowIcon.textContent = "▼";
+
+                if (drawerArrowIcon) {
+                    drawerArrowIcon.textContent = "▼";
+                }
             }
         });
     }
 
-    // Arrow Buttons for Slide Controller
+    // ==========================================================
+    // ARROW BUTTONS FOR SLIDE CONTROLLER
+    // ==========================================================
+
     if (slidePrevBtn) {
         slidePrevBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -728,13 +1750,17 @@ function initWebZoneERStudio() {
 
     if (slideCurrentInfo) {
         slideCurrentInfo.addEventListener("click", () => {
-            if (toggleDrawerBtn) toggleDrawerBtn.click();
+            if (toggleDrawerBtn) {
+                toggleDrawerBtn.click();
+            }
         });
     }
 
     // ==========================================================
-    // FINGERTIP TOUCH SWIPE GESTURES FOR MOBILE & DESKTOP DRAG
+    // FINGERTIP TOUCH SWIPE GESTURES
+    // MOBILE + DESKTOP DRAG
     // ==========================================================
+
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
@@ -742,2181 +1768,5427 @@ function initWebZoneERStudio() {
     let isSwiping = false;
 
     function handleSwipeGesture() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
+        const deltaX =
+            touchEndX - touchStartX;
+
+        const deltaY =
+            touchEndY - touchStartY;
+
         const minSwipeDistance = 35;
 
-        // Check if horizontal swipe is dominant
-        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+        if (
+            Math.abs(deltaX) >
+                Math.abs(deltaY) &&
+            Math.abs(deltaX) >
+                minSwipeDistance
+        ) {
             if (deltaX < 0) {
-                // Swiped Left -> Next effect
                 slideNext();
             } else {
-                // Swiped Right -> Previous effect
                 slidePrev();
             }
         }
     }
 
-    const swipeTargets = [cameraViewport, canvas, touchSlideController].filter(Boolean);
+    const swipeTargets = [
+        cameraViewport,
+        canvas,
+        touchSlideController
+    ].filter(Boolean);
 
-    swipeTargets.forEach(el => {
-        // Touch events for mobile fingertips
-        el.addEventListener("touchstart", (e) => {
-            if (!e.touches || e.touches.length === 0) return;
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            touchEndX = touchStartX;
-            touchEndY = touchStartY;
-            isSwiping = true;
-        }, { passive: true });
+    swipeTargets.forEach((el) => {
 
-        el.addEventListener("touchmove", (e) => {
-            if (!isSwiping || !e.touches || e.touches.length === 0) return;
-            touchEndX = e.touches[0].clientX;
-            touchEndY = e.touches[0].clientY;
-        }, { passive: true });
+        // Mobile touch start
+        el.addEventListener(
+            "touchstart",
+            (e) => {
 
-        el.addEventListener("touchend", () => {
-            if (!isSwiping) return;
-            isSwiping = false;
-            handleSwipeGesture();
-        });
-
-        // Mouse drag support for desktop
-        el.addEventListener("mousedown", (e) => {
-            if (e.target.closest("button") || e.target.closest("input")) return;
-            touchStartX = e.clientX;
-            touchStartY = e.clientY;
-            touchEndX = touchStartX;
-            touchEndY = touchStartY;
-            isSwiping = true;
-        });
-
-        el.addEventListener("mousemove", (e) => {
-            if (!isSwiping) return;
-            touchEndX = e.clientX;
-            touchEndY = e.clientY;
-        });
-
-        el.addEventListener("mouseup", (e) => {
-            if (!isSwiping) return;
-            isSwiping = false;
-            handleSwipeGesture();
-        });
-    });
-
-    // Keyboard Arrow Keys (Left & Right) for easy desktop switching
-    window.addEventListener("keydown", (e) => {
-        if (document.activeElement && document.activeElement.tagName === "INPUT") return;
-        if (e.key === "ArrowLeft") {
-            slidePrev();
-        } else if (e.key === "ArrowRight") {
-            slideNext();
-        }
-    });
-
-    // Random Filter Button
-    if (randomFilterBtn) {
-        randomFilterBtn.addEventListener("click", () => {
-            const options = allFilterConfigs.filter(f => f.id !== currentFilter);
-            const chosen = options[Math.floor(Math.random() * options.length)] || allFilterConfigs[0];
-
-            randomFilterBtn.style.transform = "scale(0.92) rotate(15deg)";
-            setTimeout(() => {
-                randomFilterBtn.style.transform = "";
-            }, 250);
-
-            selectFilter(chosen.id);
-        });
-    }
-
-    // Snapchat / Instagram Lens Carousel Bubbles click events
-    if (snapLensBubbles.length > 0) {
-        snapLensBubbles.forEach(bubble => {
-            bubble.addEventListener("click", () => {
-                const targetFilter = bubble.dataset.filter;
-                if (targetFilter === "random") {
-                    if (randomFilterBtn) randomFilterBtn.click();
-                } else {
-                    selectFilter(targetFilter);
+                if (
+                    !e.touches ||
+                    e.touches.length === 0
+                ) {
+                    return;
                 }
-            });
-        });
-    }
 
-    // NEW REDESIGNED UI EVENT LISTENERS
-    const erLensBubbles = document.querySelectorAll(".er-lens-bubble");
-    if (erLensBubbles.length > 0) {
-        erLensBubbles.forEach(bubble => {
-            bubble.addEventListener("click", () => {
-                const targetFilter = bubble.dataset.filter;
-                if (targetFilter) {
-                    selectFilter(targetFilter);
-                    erLensBubbles.forEach(b => b.classList.remove("active"));
-                    bubble.classList.add("active");
+                touchStartX =
+                    e.touches[0].clientX;
+
+                touchStartY =
+                    e.touches[0].clientY;
+
+                touchEndX =
+                    touchStartX;
+
+                touchEndY =
+                    touchStartY;
+
+                isSwiping = true;
+
+            },
+            { passive: true }
+        );
+
+        // Mobile touch move
+        el.addEventListener(
+            "touchmove",
+            (e) => {
+
+                if (
+                    !isSwiping ||
+                    !e.touches ||
+                    e.touches.length === 0
+                ) {
+                    return;
                 }
-            });
-        });
-    }
 
-    // Right Drawer / Panel Effects Cards
-    const effectCards = document.querySelectorAll(".effect-card");
-    effectCards.forEach(card => {
-        card.addEventListener("click", () => {
-            const f = card.dataset.filter;
-            if (f) {
-                selectFilter(f);
-                effectCards.forEach(c => c.classList.remove("active"));
-                card.classList.add("active");
+                touchEndX =
+                    e.touches[0].clientX;
+
+                touchEndY =
+                    e.touches[0].clientY;
+
+            },
+            { passive: true }
+        );
+
+        // Mobile touch end
+        el.addEventListener(
+            "touchend",
+            () => {
+
+                if (!isSwiping) {
+                    return;
+                }
+
+                isSwiping = false;
+
+                handleSwipeGesture();
+
             }
-        });
+        );
+
+        // Desktop mouse drag
+        el.addEventListener(
+            "mousedown",
+            (e) => {
+
+                if (
+                    e.target.closest("button") ||
+                    e.target.closest("input")
+                ) {
+                    return;
+                }
+
+                touchStartX =
+                    e.clientX;
+
+                touchStartY =
+                    e.clientY;
+
+                touchEndX =
+                    touchStartX;
+
+                touchEndY =
+                    touchStartY;
+
+                isSwiping = true;
+
+            }
+        );
+
+        el.addEventListener(
+            "mousemove",
+            (e) => {
+
+                if (!isSwiping) {
+                    return;
+                }
+
+                touchEndX =
+                    e.clientX;
+
+                touchEndY =
+                    e.clientY;
+
+            }
+        );
+
+        el.addEventListener(
+            "mouseup",
+            () => {
+
+                if (!isSwiping) {
+                    return;
+                }
+
+                isSwiping = false;
+
+                handleSwipeGesture();
+
+            }
+        );
+
     });
 
-    // Category Filter Pills (All, Popular, Stylize, Sci-Fi, Art)
-    const catPills = document.querySelectorAll(".cat-pill");
-    catPills.forEach(pill => {
-        pill.addEventListener("click", () => {
-            catPills.forEach(p => p.classList.remove("active"));
-            pill.classList.add("active");
-            const cat = pill.dataset.cat;
+    // ==========================================================
+    // KEYBOARD ARROW CONTROLS
+    // ==========================================================
 
-            effectCards.forEach(card => {
-                const cardCats = (card.dataset.cat || "").toLowerCase();
-                if (cat === "all" || cardCats.includes(cat)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        });
-    });
+    window.addEventListener(
+        "keydown",
+        (e) => {
 
-    // Search Effects Input
-    const effectsSearchInput = document.getElementById("effectsSearchInput");
-    if (effectsSearchInput) {
-        effectsSearchInput.addEventListener("input", (e) => {
-            const query = (e.target.value || "").toLowerCase().trim();
-            effectCards.forEach(card => {
-                const name = card.querySelector(".effect-name")?.textContent?.toLowerCase() || "";
-                const f = (card.dataset.filter || "").toLowerCase();
-                if (!query || name.includes(query) || f.includes(query)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        });
+            if (
+                document.activeElement &&
+                document.activeElement.tagName ===
+                    "INPUT"
+            ) {
+                return;
+            }
+
+            if (e.key === "ArrowLeft") {
+                slidePrev();
+            }
+
+            if (e.key === "ArrowRight") {
+                slideNext();
+            }
+
+        }
+    );
+
+    // ==========================================================
+    // RANDOM FILTER
+    // ==========================================================
+
+    if (randomFilterBtn) {
+
+        randomFilterBtn.addEventListener(
+            "click",
+            () => {
+
+                const options =
+                    allFilterConfigs.filter(
+                        f =>
+                            f.id !==
+                            currentFilter
+                    );
+
+                const chosen =
+                    options[
+                        Math.floor(
+                            Math.random() *
+                                options.length
+                        )
+                    ] ||
+                    allFilterConfigs[0];
+
+                randomFilterBtn.style.transform =
+                    "scale(0.92) rotate(15deg)";
+
+                setTimeout(() => {
+                    randomFilterBtn.style.transform =
+                        "";
+                }, 250);
+
+                selectFilter(
+                    chosen.id
+                );
+
+            }
+        );
+
     }
 
-    // Zoom Level Toggle (1.0x -> 2.0x -> 0.5x -> 1.0x)
-    const zoomLevelBtn = document.getElementById("zoomLevelBtn");
-    const zoomLevelText = document.getElementById("zoomLevelText");
+    // ==========================================================
+    // EXISTING LENS CAROUSEL
+    // ==========================================================
+
+    if (snapLensBubbles.length > 0) {
+
+        snapLensBubbles.forEach(
+            (bubble) => {
+
+                bubble.addEventListener(
+                    "click",
+                    () => {
+
+                        const targetFilter =
+                            bubble.dataset.filter;
+
+                        if (
+                            targetFilter ===
+                            "random"
+                        ) {
+
+                            if (
+                                randomFilterBtn
+                            ) {
+                                randomFilterBtn.click();
+                            }
+
+                        } else if (
+                            targetFilter
+                        ) {
+
+                            selectFilter(
+                                targetFilter
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+    // ==========================================================
+    // REDESIGNED ER LENS BUBBLES
+    // ==========================================================
+
+    const erLensBubbles =
+        document.querySelectorAll(
+            ".er-lens-bubble"
+        );
+
+    if (erLensBubbles.length > 0) {
+
+        erLensBubbles.forEach(
+            (bubble) => {
+
+                bubble.addEventListener(
+                    "click",
+                    () => {
+
+                        const targetFilter =
+                            bubble.dataset.filter;
+
+                        if (!targetFilter) {
+                            return;
+                        }
+
+                        selectFilter(
+                            targetFilter
+                        );
+
+                        erLensBubbles.forEach(
+                            (b) =>
+                                b.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                        bubble.classList.add(
+                            "active"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+    // ==========================================================
+    // EFFECT CARDS
+    // ==========================================================
+
+    const effectCards =
+        document.querySelectorAll(
+            ".effect-card"
+        );
+
+    effectCards.forEach(
+        (card) => {
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    const filter =
+                        card.dataset.filter;
+
+                    if (!filter) {
+                        return;
+                    }
+
+                    selectFilter(
+                        filter
+                    );
+
+                    effectCards.forEach(
+                        (c) =>
+                            c.classList.remove(
+                                "active"
+                            )
+                    );
+
+                    card.classList.add(
+                        "active"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+    // ==========================================================
+    // CATEGORY FILTER PILLS
+    // ==========================================================
+
+    const catPills =
+        document.querySelectorAll(
+            ".cat-pill"
+        );
+
+    catPills.forEach(
+        (pill) => {
+
+            pill.addEventListener(
+                "click",
+                () => {
+
+                    catPills.forEach(
+                        (p) =>
+                            p.classList.remove(
+                                "active"
+                            )
+                    );
+
+                    pill.classList.add(
+                        "active"
+                    );
+
+                    const cat =
+                        pill.dataset.cat;
+
+                    effectCards.forEach(
+                        (card) => {
+
+                            const cardCats =
+                                (
+                                    card.dataset.cat ||
+                                    ""
+                                ).toLowerCase();
+
+                            if (
+                                cat === "all" ||
+                                cardCats.includes(
+                                    cat
+                                )
+                            ) {
+
+                                card.style.display =
+                                    "flex";
+
+                            } else {
+
+                                card.style.display =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+    // ==========================================================
+    // SEARCH EFFECTS
+    // ==========================================================
+
+    const effectsSearchInput =
+        document.getElementById(
+            "effectsSearchInput"
+        );
+
+    if (effectsSearchInput) {
+
+        effectsSearchInput.addEventListener(
+            "input",
+            (e) => {
+
+                const query =
+                    (
+                        e.target.value ||
+                        ""
+                    )
+                        .toLowerCase()
+                        .trim();
+
+                effectCards.forEach(
+                    (card) => {
+
+                        const name =
+                            card.querySelector(
+                                ".effect-name"
+                            )?.textContent
+                                ?.toLowerCase() ||
+                            "";
+
+                        const filter =
+                            (
+                                card.dataset.filter ||
+                                ""
+                            ).toLowerCase();
+
+                        if (
+                            !query ||
+                            name.includes(
+                                query
+                            ) ||
+                            filter.includes(
+                                query
+                            )
+                        ) {
+
+                            card.style.display =
+                                "flex";
+
+                        } else {
+
+                            card.style.display =
+                                "none";
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+    // ==========================================================
+    // ZOOM LEVEL
+    // ==========================================================
+
+    const zoomLevelBtn =
+        document.getElementById(
+            "zoomLevelBtn"
+        );
+
+    const zoomLevelText =
+        document.getElementById(
+            "zoomLevelText"
+        );
+
     let currentZoom = 1.0;
-    const zoomLevels = [1.0, 2.0, 0.5];
+
+    const zoomLevels = [
+        1.0,
+        2.0,
+        0.5
+    ];
+
     let zoomIndex = 0;
 
-    if (zoomLevelBtn && zoomLevelText) {
-        zoomLevelBtn.addEventListener("click", () => {
-            zoomIndex = (zoomIndex + 1) % zoomLevels.length;
-            currentZoom = zoomLevels[zoomIndex];
-            zoomLevelText.textContent = `${currentZoom.toFixed(1)}x`;
-            if (canvas) {
-                canvas.style.transform = `scale(${currentZoom})`;
-                canvas.style.transition = "transform 0.25s ease";
+    if (
+        zoomLevelBtn &&
+        zoomLevelText
+    ) {
+
+        zoomLevelBtn.addEventListener(
+            "click",
+            () => {
+
+                zoomIndex =
+                    (
+                        zoomIndex + 1
+                    ) %
+                    zoomLevels.length;
+
+                currentZoom =
+                    zoomLevels[
+                        zoomIndex
+                    ];
+
+                zoomLevelText.textContent =
+                    `${currentZoom.toFixed(1)}x`;
+
+                if (canvas) {
+
+                    canvas.style.transform =
+                        `scale(${currentZoom})`;
+
+                    canvas.style.transition =
+                        "transform 0.25s ease";
+
+                }
+
+                showSwipeToast(
+                    "🔍",
+                    `Zoom: ${currentZoom.toFixed(1)}x`
+                );
+
             }
-            showSwipeToast("🔍", `Zoom: ${currentZoom.toFixed(1)}x`);
-        });
+        );
+
     }
 
-    // Fullscreen Viewport Toggle
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    if (fullscreenBtn && cameraViewport) {
-        fullscreenBtn.addEventListener("click", () => {
-            if (!document.fullscreenElement) {
-                cameraViewport.requestFullscreen?.().catch(err => console.warn(err));
-            } else {
-                document.exitFullscreen?.().catch(err => console.warn(err));
+    // ==========================================================
+    // FULLSCREEN
+    // ==========================================================
+
+    const fullscreenBtn =
+        document.getElementById(
+            "fullscreenBtn"
+        );
+
+    if (
+        fullscreenBtn &&
+        cameraViewport
+    ) {
+
+        fullscreenBtn.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !document.fullscreenElement
+                ) {
+
+                    cameraViewport
+                        .requestFullscreen?.()
+                        .catch(
+                            (err) =>
+                                console.warn(
+                                    err
+                                )
+                        );
+
+                } else {
+
+                    document
+                        .exitFullscreen?.()
+                        .catch(
+                            (err) =>
+                                console.warn(
+                                    err
+                                )
+                        );
+
+                }
+
             }
-        });
+        );
+
     }
 
-    // Flash / Studio Light Toggle
-    const flashLightBtn = document.getElementById("flashLightBtn");
+    // ==========================================================
+    // FLASH / STUDIO LIGHT
+    // ==========================================================
+
+    const flashLightBtn =
+        document.getElementById(
+            "flashLightBtn"
+        );
+
     if (flashLightBtn) {
-        flashLightBtn.addEventListener("click", () => {
-            isStudioLightEnabled = !isStudioLightEnabled;
-            flashLightBtn.classList.toggle("active", isStudioLightEnabled);
-            showSwipeToast("⚡", isStudioLightEnabled ? "Studio Light ON" : "Studio Light OFF");
-        });
+
+        flashLightBtn.addEventListener(
+            "click",
+            () => {
+
+                isStudioLightEnabled =
+                    !isStudioLightEnabled;
+
+                flashLightBtn.classList.toggle(
+                    "active",
+                    isStudioLightEnabled
+                );
+
+                showSwipeToast(
+                    "⚡",
+                    isStudioLightEnabled
+                        ? "Studio Light ON"
+                        : "Studio Light OFF"
+                );
+
+            }
+        );
+
     }
 
-    // Face Mesh / Tracking Toggle
-    const toggleFaceMeshBtn = document.getElementById("toggleFaceMeshBtn");
+    // ==========================================================
+    // FACE MESH / TRACKING TOGGLE
+    // ==========================================================
+
+    const toggleFaceMeshBtn =
+        document.getElementById(
+            "toggleFaceMeshBtn"
+        );
+
     if (toggleFaceMeshBtn) {
-        toggleFaceMeshBtn.addEventListener("click", () => {
-            showFaceHud = !showFaceHud;
-            toggleFaceMeshBtn.classList.toggle("active", showFaceHud);
-            showSwipeToast("👤", showFaceHud ? "Biometric Tracking ON" : "Biometric Tracking OFF");
-        });
+
+        toggleFaceMeshBtn.addEventListener(
+            "click",
+            () => {
+
+                showFaceHud =
+                    !showFaceHud;
+
+                toggleFaceMeshBtn.classList.toggle(
+                    "active",
+                    showFaceHud
+                );
+
+                showSwipeToast(
+                    "👤",
+                    showFaceHud
+                        ? "Biometric Tracking ON"
+                        : "Biometric Tracking OFF"
+                );
+
+            }
+        );
+
     }
 
-    // Open / Close Right Effects Drawer on Mobile & Desktop
-    const openAllEffectsBtn = document.getElementById("openAllEffectsBtn");
-    const effectsPanel = document.getElementById("effectsPanel");
-    const closeEffectsPanelBtn = document.getElementById("closeEffectsPanelBtn");
-    const mobileEffectsToggleBtn = document.getElementById("mobileEffectsToggleBtn");
+    // ==========================================================
+    // EFFECTS DRAWER
+    // ==========================================================
+
+    const openAllEffectsBtn =
+        document.getElementById(
+            "openAllEffectsBtn"
+        );
+
+    const effectsPanel =
+        document.getElementById(
+            "effectsPanel"
+        );
+
+    const closeEffectsPanelBtn =
+        document.getElementById(
+            "closeEffectsPanelBtn"
+        );
+
+    const mobileEffectsToggleBtn =
+        document.getElementById(
+            "mobileEffectsToggleBtn"
+        );
 
     function toggleEffectsPanel() {
-        if (!effectsPanel) return;
-        if (window.innerWidth <= 1199) {
-            const isShown = effectsPanel.style.display === "flex";
-            effectsPanel.style.display = isShown ? "none" : "flex";
-        } else {
-            effectsPanel.scrollIntoView({ behavior: "smooth" });
+
+        if (!effectsPanel) {
+            return;
         }
+
+        if (
+            window.innerWidth <= 1199
+        ) {
+
+            const isShown =
+                effectsPanel.style.display ===
+                "flex";
+
+            effectsPanel.style.display =
+                isShown
+                    ? "none"
+                    : "flex";
+
+        } else {
+
+            effectsPanel.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
     }
 
-    if (openAllEffectsBtn) openAllEffectsBtn.addEventListener("click", toggleEffectsPanel);
-    if (mobileEffectsToggleBtn) mobileEffectsToggleBtn.addEventListener("click", toggleEffectsPanel);
-    if (closeEffectsPanelBtn && effectsPanel) {
-        closeEffectsPanelBtn.addEventListener("click", () => {
-            if (window.innerWidth <= 1199) {
-                effectsPanel.style.display = "none";
+    if (openAllEffectsBtn) {
+        openAllEffectsBtn.addEventListener(
+            "click",
+            toggleEffectsPanel
+        );
+    }
+
+    if (mobileEffectsToggleBtn) {
+        mobileEffectsToggleBtn.addEventListener(
+            "click",
+            toggleEffectsPanel
+        );
+    }
+
+    if (
+        closeEffectsPanelBtn &&
+        effectsPanel
+    ) {
+
+        closeEffectsPanelBtn.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    window.innerWidth <=
+                    1199
+                ) {
+                    effectsPanel.style.display =
+                        "none";
+                }
+
             }
-        });
+        );
+
     }
 
-    // Mobile Sidebar Drawer Toggle
-    const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
-    const mainSidebar = document.getElementById("mainSidebar");
-    if (sidebarToggleBtn && mainSidebar) {
-        sidebarToggleBtn.addEventListener("click", () => {
-            mainSidebar.classList.toggle("open");
-        });
+    // ==========================================================
+    // MOBILE SIDEBAR
+    // ==========================================================
+
+    const sidebarToggleBtn =
+        document.getElementById(
+            "sidebarToggleBtn"
+        );
+
+    const mainSidebar =
+        document.getElementById(
+            "mainSidebar"
+        );
+
+    if (
+        sidebarToggleBtn &&
+        mainSidebar
+    ) {
+
+        sidebarToggleBtn.addEventListener(
+            "click",
+            () => {
+                mainSidebar.classList.toggle(
+                    "open"
+                );
+            }
+        );
+
     }
 
-    // Help Button
-    const helpModalBtn = document.getElementById("helpModalBtn");
+    // ==========================================================
+    // HELP
+    // ==========================================================
+
+    const helpModalBtn =
+        document.getElementById(
+            "helpModalBtn"
+        );
+
     if (helpModalBtn) {
-        helpModalBtn.addEventListener("click", () => {
-            const howToCard = document.querySelector(".how-to-use-card");
-            if (howToCard) howToCard.scrollIntoView({ behavior: "smooth" });
-            showSwipeToast("❔", "Swipe left/right to change effects!");
-        });
-    }
 
-    // File Upload Button from Controls Bar
-    const fileInput = document.getElementById("fileInput");
-    if (modeUploadBtn && fileInput) {
-        modeUploadBtn.addEventListener("click", () => {
-            fileInput.click();
-        });
+        helpModalBtn.addEventListener(
+            "click",
+            () => {
 
-        fileInput.addEventListener("change", (e) => {
-            if (e.target.files && e.target.files[0]) {
-                handleUploadedFile(e.target.files[0]);
-                studioMode = "upload";
-                stopCameraFeed();
+                const howToCard =
+                    document.querySelector(
+                        ".how-to-use-card"
+                    );
+
+                if (howToCard) {
+                    howToCard.scrollIntoView({
+                        behavior: "smooth"
+                    });
+                }
+
+                showSwipeToast(
+                    "❔",
+                    "Swipe left/right to change effects!"
+                );
+
             }
-        });
+        );
+
     }
 
-    // View All Catalog Button
-    const viewAllCatalogBtn = document.getElementById("viewAllCatalogBtn");
+    // ==========================================================
+    // FILE UPLOAD
+    // ==========================================================
+
+    const fileInput =
+        document.getElementById(
+            "fileInput"
+        );
+
+    if (
+        modeUploadBtn &&
+        fileInput
+    ) {
+
+        modeUploadBtn.addEventListener(
+            "click",
+            () => {
+                fileInput.click();
+            }
+        );
+
+        fileInput.addEventListener(
+            "change",
+            (e) => {
+
+                if (
+                    e.target.files &&
+                    e.target.files[0]
+                ) {
+
+                    handleUploadedFile(
+                        e.target.files[0]
+                    );
+
+                    studioMode =
+                        "upload";
+
+                    stopCameraFeed();
+
+                }
+
+            }
+        );
+
+    }
+
+    // ==========================================================
+    // VIEW ALL CATALOG
+    // ==========================================================
+
+    const viewAllCatalogBtn =
+        document.getElementById(
+            "viewAllCatalogBtn"
+        );
+
     if (viewAllCatalogBtn) {
-        viewAllCatalogBtn.addEventListener("click", () => {
-            catPills.forEach(p => p.classList.remove("active"));
-            const allPill = document.querySelector('.cat-pill[data-cat="all"]');
-            if (allPill) allPill.classList.add("active");
-            effectCards.forEach(c => c.style.display = "flex");
-            showSwipeToast("⊞", "Showing all 30+ Effects");
-        });
+
+        viewAllCatalogBtn.addEventListener(
+            "click",
+            () => {
+
+                catPills.forEach(
+                    p =>
+                        p.classList.remove(
+                            "active"
+                        )
+                );
+
+                const allPill =
+                    document.querySelector(
+                        '.cat-pill[data-cat="all"]'
+                    );
+
+                if (allPill) {
+                    allPill.classList.add(
+                        "active"
+                    );
+                }
+
+                effectCards.forEach(
+                    c =>
+                        c.style.display =
+                            "flex"
+                );
+
+                showSwipeToast(
+                    "⊞",
+                    "Showing all 30+ Effects"
+                );
+
+            }
+        );
+
     }
 
-    // Floating On-Viewport HUD Buttons
+    // ==========================================================
+    // FLOATING CAMERA BUTTONS
+    // ==========================================================
+
     if (flipBtnFloating) {
-        flipBtnFloating.addEventListener("click", () => {
-            if (flipBtn) flipBtn.click();
-        });
+
+        flipBtnFloating.addEventListener(
+            "click",
+            () => {
+
+                if (flipBtn) {
+                    flipBtn.click();
+                }
+
+            }
+        );
+
     }
 
     if (studioLightBtnFloating) {
-        studioLightBtnFloating.addEventListener("click", () => {
-            if (studioLightBtn) {
-                studioLightBtn.click();
-                studioLightBtnFloating.classList.toggle("active", isStudioLightEnabled);
+
+        studioLightBtnFloating.addEventListener(
+            "click",
+            () => {
+
+                if (studioLightBtn) {
+
+                    studioLightBtn.click();
+
+                    studioLightBtnFloating.classList.toggle(
+                        "active",
+                        isStudioLightEnabled
+                    );
+
+                }
+
             }
-        });
+        );
+
     }
 
     if (autoHdBtnFloating) {
-        autoHdBtnFloating.addEventListener("click", () => {
-            if (autoHdBtn) {
-                autoHdBtn.click();
-                autoHdBtnFloating.classList.toggle("active", isAutoHdEnabled);
+
+        autoHdBtnFloating.addEventListener(
+            "click",
+            () => {
+
+                if (autoHdBtn) {
+
+                    autoHdBtn.click();
+
+                    autoHdBtnFloating.classList.toggle(
+                        "active",
+                        isAutoHdEnabled
+                    );
+
+                }
+
             }
-        });
+        );
+
     }
 
     if (faceHudToggleFloating) {
-        faceHudToggleFloating.addEventListener("click", () => {
-            showFaceHud = !showFaceHud;
-            faceHudToggleFloating.classList.toggle("active", showFaceHud);
-            if (faceHudToggle) {
-                faceHudToggle.classList.toggle("active", showFaceHud);
+
+        faceHudToggleFloating.addEventListener(
+            "click",
+            () => {
+
+                showFaceHud =
+                    !showFaceHud;
+
+                faceHudToggleFloating.classList.toggle(
+                    "active",
+                    showFaceHud
+                );
+
+                if (faceHudToggle) {
+
+                    faceHudToggle.classList.toggle(
+                        "active",
+                        showFaceHud
+                    );
+
+                }
+
+                showSwipeToast(
+                    "👤",
+                    showFaceHud
+                        ? "Face Reticle ON"
+                        : "Face Reticle OFF"
+                );
+
             }
-            showSwipeToast("👤", showFaceHud ? "Face Reticle ON" : "Face Reticle OFF");
-        });
+        );
+
     }
 
-    // Keyboard shortcut 'R' for random filter
-    window.addEventListener("keydown", (e) => {
-        if ((e.key === "r" || e.key === "R") && document.activeElement.tagName !== "INPUT") {
-            if (randomFilterBtn) randomFilterBtn.click();
+    // ==========================================================
+    // KEYBOARD RANDOM FILTER
+    // ==========================================================
+
+    window.addEventListener(
+        "keydown",
+        (e) => {
+
+            if (
+                (
+                    e.key === "r" ||
+                    e.key === "R"
+                ) &&
+                document.activeElement.tagName !==
+                    "INPUT"
+            ) {
+
+                if (randomFilterBtn) {
+                    randomFilterBtn.click();
+                }
+
+            }
+
         }
-    });
+    );
 
-    // Filter Buttons inside drawer
-    filterBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            selectFilter(btn.dataset.filter);
-        });
-    });
+    // ==========================================================
+    // FILTER BUTTONS
+    // ==========================================================
 
-    // Clean Direct Snapshot Modal Actions
-    // (Local client-side high-fidelity PNG capture without external cloud dependency)
+    filterBtns.forEach(
+        (btn) => {
 
-    // Camera & Microphone Permission Alert Helpers
+            btn.addEventListener(
+                "click",
+                () => {
+
+                    selectFilter(
+                        btn.dataset.filter
+                    );
+
+                }
+            );
+
+        }
+    );
+
+      // ==========================================================
+    // CAMERA / PERMISSION SYSTEM
+    // ==========================================================
+
     function showPermissionAlert(err) {
-        if (!permissionAlertModal) return;
 
-        const errorName = err ? (err.name || "") : "";
-        let title = "Camera & Microphone Access Required";
-        let badge = "Permission Denied";
-        let message = "WEBZONEBW ER Studio requires permission to access your <strong>Camera</strong> and <strong>Microphone</strong> to enable live visual effects, facial tracking, and audio-reactive shaders.";
-        let icon = "⚠️";
-
-        if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
-            title = "Permissions Blocked by Browser";
-            badge = "Access Denied";
-            message = "Access to the <strong>Camera</strong> and <strong>Microphone</strong> was denied. To enable live Extended Reality and realistic portrait lenses, please allow device permissions in your browser settings.";
-            icon = "🚫";
-        } else if (errorName === "NotFoundError" || errorName === "DevicesNotFoundError") {
-            title = "No Camera or Microphone Found";
-            badge = "Hardware Missing";
-            message = "We couldn't detect an active camera or microphone connected to your device. You can connect a device and retry, or use <strong>Test Mode</strong> / <strong>Photo Upload</strong> right away.";
-            icon = "📷";
-        } else if (errorName === "NotReadableError" || errorName === "TrackStartError") {
-            title = "Camera or Mic In Use";
-            badge = "Device Busy";
-            message = "Your camera or microphone is already being used by another application (e.g. Zoom, Google Meet, or another browser window). Please close the other app and retry.";
-            icon = "🔒";
-        } else if (errorName === "OverconstrainedError") {
-            title = "Hardware Resolution Constraint";
-            badge = "Constraint Error";
-            message = "The requested camera resolution is not supported by your hardware. Please retry with standard settings or switch to Test Mode.";
-            icon = "⚙️";
+        if (!permissionAlertModal) {
+            return;
         }
 
-        if (permAlertTitle) permAlertTitle.textContent = title;
-        if (permAlertBadge) permAlertBadge.textContent = badge;
-        if (permAlertMessage) permAlertMessage.innerHTML = message;
-        if (permAlertIcon) permAlertIcon.textContent = icon;
+        const errorName =
+            err
+                ? (
+                    err.name ||
+                    ""
+                )
+                : "";
 
-        permissionAlertModal.style.display = "flex";
+        let title =
+            "Camera Access Required";
+
+        let badge =
+            "Camera Access";
+
+        let message =
+            "WEBZONEBW ER Studio needs access to your <strong>camera</strong> to start the live Extended Reality experience.";
+
+        let icon =
+            "📷";
+
+
+        // ======================================================
+        // CAMERA PERMISSION DENIED
+        // ======================================================
+
+        if (
+            errorName ===
+                "NotAllowedError" ||
+            errorName ===
+                "PermissionDeniedError"
+        ) {
+
+            title =
+                "Camera Permission Blocked";
+
+            badge =
+                "Access Denied";
+
+            message =
+                "Camera access was denied or blocked by your browser. Please allow camera access for this website and press <strong>Retry Camera</strong>.";
+
+            icon =
+                "🚫";
+
+
+        // ======================================================
+        // NO CAMERA FOUND
+        // ======================================================
+
+        } else if (
+            errorName ===
+                "NotFoundError" ||
+            errorName ===
+                "DevicesNotFoundError"
+        ) {
+
+            title =
+                "No Camera Found";
+
+            badge =
+                "Camera Missing";
+
+            message =
+                "WEBZONEBW ER could not find a usable camera on this device. Check that your camera is connected and available.";
+
+            icon =
+                "📷";
+
+
+        // ======================================================
+        // CAMERA ALREADY IN USE
+        // ======================================================
+
+        } else if (
+            errorName ===
+                "NotReadableError" ||
+            errorName ===
+                "TrackStartError"
+        ) {
+
+            title =
+                "Camera Is Busy";
+
+            badge =
+                "Device Busy";
+
+            message =
+                "Your camera appears to be in use by another application, browser tab, Zoom, Teams, Meet, or similar software. Close it and retry.";
+
+            icon =
+                "🔒";
+
+
+        // ======================================================
+        // CAMERA CONSTRAINT ERROR
+        // ======================================================
+
+        } else if (
+            errorName ===
+                "OverconstrainedError" ||
+            errorName ===
+                "ConstraintNotSatisfiedError"
+        ) {
+
+            title =
+                "Camera Settings Unsupported";
+
+            badge =
+                "Constraint Error";
+
+            message =
+                "This device could not satisfy the requested camera settings. WEBZONEBW ER will retry using simpler mobile-compatible settings.";
+
+            icon =
+                "⚙️";
+
+
+        // ======================================================
+        // SECURITY / HTTPS ERROR
+        // ======================================================
+
+        } else if (
+            errorName ===
+                "SecurityError"
+        ) {
+
+            title =
+                "Camera Security Restriction";
+
+            badge =
+                "Security";
+
+            message =
+                "The browser blocked camera access because this page is not running in an allowed secure context. Use <strong>HTTPS</strong> or <strong>localhost</strong>.";
+
+            icon =
+                "🔐";
+
+
+        // ======================================================
+        // CAMERA STARTUP INTERRUPTED
+        // ======================================================
+
+        } else if (
+            errorName ===
+                "AbortError"
+        ) {
+
+            title =
+                "Camera Startup Interrupted";
+
+            badge =
+                "Retry Required";
+
+            message =
+                "The camera startup was interrupted by the browser or device. Please press <strong>Retry Camera</strong>.";
+
+            icon =
+                "🔄";
+
+
+        // ======================================================
+        // CAMERA API UNAVAILABLE
+        // ======================================================
+
+        } else if (
+            errorName ===
+                "TypeError"
+        ) {
+
+            title =
+                "Camera API Unavailable";
+
+            badge =
+                "Browser Support";
+
+            message =
+                "This browser could not initialize the camera interface. Please use a current browser and open WEBZONEBW ER through <strong>HTTPS</strong> or <strong>localhost</strong>.";
+
+            icon =
+                "🌐";
+
+
+        // ======================================================
+        // UNKNOWN CAMERA ERROR
+        // ======================================================
+
+        } else if (err) {
+
+            title =
+                "Camera Could Not Start";
+
+            badge =
+                "Camera Error";
+
+            message =
+                "WEBZONEBW ER could not start the device camera. Please check your camera permission and try again.";
+
+            icon =
+                "⚠️";
+
+        }
+
+
+        // ======================================================
+        // UPDATE PERMISSION MODAL
+        // ======================================================
+
+        if (permAlertTitle) {
+
+            permAlertTitle.textContent =
+                title;
+
+        }
+
+
+        if (permAlertBadge) {
+
+            permAlertBadge.textContent =
+                badge;
+
+        }
+
+
+        if (permAlertMessage) {
+
+            permAlertMessage.innerHTML =
+                message;
+
+        }
+
+
+        if (permAlertIcon) {
+
+            permAlertIcon.textContent =
+                icon;
+
+        }
+
+
+        if (permAlertIconWrap) {
+
+            permAlertIconWrap.classList.toggle(
+                "error",
+                !!err
+            );
+
+        }
+
+
+        // ======================================================
+        // SHOW MODAL
+        // ======================================================
+
+        permissionAlertModal.style.display =
+            "flex";
+
     }
+
+
+    // ==========================================================
+    // CLOSE CAMERA PERMISSION ALERT
+    // ==========================================================
 
     function closePermissionAlert() {
+
         if (permissionAlertModal) {
-            permissionAlertModal.style.display = "none";
+
+            permissionAlertModal.style.display =
+                "none";
+
         }
-    }
-    window.closePermissionAlert = closePermissionAlert;
 
-    // Attach Permission Alert Modal Action Listeners
+    }
+
+
+    window.closePermissionAlert =
+        closePermissionAlert;
+
+
+    // ==========================================================
+    // CLOSE BUTTON
+    // ==========================================================
+
     if (permAlertCloseBtn) {
-        permAlertCloseBtn.addEventListener("click", closePermissionAlert);
-    }
-    if (permRetryBtn) {
-        permRetryBtn.addEventListener("click", () => {
-            closePermissionAlert();
-            startCamera();
-        });
-    }
-    if (permDemoBtn) {
-        permDemoBtn.addEventListener("click", () => {
-            closePermissionAlert();
-            startDemoMode();
-        });
-    }
-    if (permUploadBtn) {
-        permUploadBtn.addEventListener("click", () => {
-            closePermissionAlert();
-            if (modeUploadBtn) modeUploadBtn.click();
-        });
+
+        permAlertCloseBtn.addEventListener(
+            "click",
+            closePermissionAlert
+        );
+
     }
 
-    // Start Camera (Requests both Camera and Microphone permissions)
+
+    // ==========================================================
+    // RETRY CAMERA
+    // ==========================================================
+
+    if (permRetryBtn) {
+
+        permRetryBtn.addEventListener(
+            "click",
+            () => {
+
+                closePermissionAlert();
+
+                setTimeout(
+                    () => {
+
+                        startCamera();
+
+                    },
+                    150
+                );
+
+            }
+        );
+
+    }
+
+
+    // ==========================================================
+    // DEMO MODE
+    // ==========================================================
+
+    if (permDemoBtn) {
+
+        permDemoBtn.addEventListener(
+            "click",
+            () => {
+
+                closePermissionAlert();
+
+                startDemoMode();
+
+            }
+        );
+
+    }
+
+
+    // ==========================================================
+    // UPLOAD MODE
+    // ==========================================================
+
+    if (permUploadBtn) {
+
+        permUploadBtn.addEventListener(
+            "click",
+            () => {
+
+                closePermissionAlert();
+
+                if (modeUploadBtn) {
+
+                    modeUploadBtn.click();
+
+                }
+
+            }
+        );
+
+    }
+    
+    // ==========================================================
+    // CAMERA STARTUP
+    //
+    // IMPORTANT:
+    // Camera is requested independently from microphone.
+    // This prevents a missing/blocked microphone from stopping
+    // the WebZoneBW ER camera experience.
+    // ==========================================================
+
     async function startCamera() {
-        studioMode = "camera";
-        if (modeCameraBtn) modeCameraBtn.classList.add("active");
-        if (modeUploadBtn) modeUploadBtn.classList.remove("active");
-        if (uploadDropzone) uploadDropzone.style.display = "none";
+
+        studioMode =
+            "camera";
+
+        isDemoMode =
+            false;
+
+        if (modeCameraBtn) {
+            modeCameraBtn.classList.add(
+                "active"
+            );
+        }
+
+        if (modeUploadBtn) {
+            modeUploadBtn.classList.remove(
+                "active"
+            );
+        }
+
+        if (uploadDropzone) {
+            uploadDropzone.style.display =
+                "none";
+        }
 
         setHighlightStep(4);
+
         closePermissionAlert();
 
         try {
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(track => track.stop());
+
+            // Browser support check
+            if (
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getUserMedia
+            ) {
+
+                const unsupportedError =
+                    new Error(
+                        "Camera API is not available in this browser/context."
+                    );
+
+                unsupportedError.name =
+                    "SecurityError";
+
+                throw unsupportedError;
             }
 
-            // Primary constraint requesting both Camera and Microphone
-            const constraints = {
+            // Secure context check.
+            // localhost is allowed by modern browsers.
+            if (
+                !window.isSecureContext &&
+                location.hostname !==
+                    "localhost" &&
+                location.hostname !==
+                    "127.0.0.1"
+            ) {
+
+                const securityError =
+                    new Error(
+                        "Camera requires HTTPS or localhost."
+                    );
+
+                securityError.name =
+                    "SecurityError";
+
+                throw securityError;
+            }
+
+            // Stop previous stream cleanly
+            if (mediaStream) {
+
+                mediaStream
+                    .getTracks()
+                    .forEach(
+                        track =>
+                            track.stop()
+                    );
+
+                mediaStream =
+                    null;
+            }
+
+            /*
+             * MOBILE-FIRST CAMERA CONSTRAINTS
+             *
+             * We deliberately avoid demanding an exact
+             * resolution. Different phones/tablets expose
+             * different camera capabilities.
+             */
+
+            const preferredConstraints = {
                 video: {
-                    facingMode: isFacingUser ? "user" : "environment",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
+                    facingMode: {
+                        ideal:
+                            isFacingUser
+                                ? "user"
+                                : "environment"
+                    },
+
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    },
+
+                    frameRate: {
+                        ideal: 30,
+                        max: 30
+                    }
                 },
-                audio: true
+
+                audio: false
             };
 
             try {
-                mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-            } catch (initialErr) {
-                // If denied or blocked, propagate error to UI alert
-                if (initialErr.name === "NotAllowedError" || initialErr.name === "PermissionDeniedError") {
-                    throw initialErr;
-                }
-                // If microphone is unavailable on device, attempt video-only fallback
-                console.warn("Audio+Video request had an issue, attempting camera-only fallback:", initialErr);
-                mediaStream = await navigator.mediaDevices.getUserMedia({
-                    video: constraints.video,
-                    audio: false
-                });
+
+                mediaStream =
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia(
+                            preferredConstraints
+                        );
+
+            } catch (preferredError) {
+
+                console.warn(
+                    "[WEBZONE ER] Preferred camera request failed. Retrying with basic camera settings.",
+                    preferredError
+                );
+
+                /*
+                 * UNIVERSAL FALLBACK
+                 *
+                 * No facingMode.
+                 * No resolution.
+                 * No frame-rate requirement.
+                 */
+
+                mediaStream =
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia({
+                            video: true,
+                            audio: false
+                        });
+
+            }
+
+            // Verify an actual video track exists
+            const videoTracks =
+                mediaStream.getVideoTracks();
+
+            if (
+                !videoTracks ||
+                videoTracks.length === 0
+            ) {
+
+                throw new Error(
+                    "Camera permission was granted, but no video track was returned."
+                );
+
             }
 
             setHighlightStep(5);
-            video.srcObject = mediaStream;
-            video.play();
-            isDemoMode = false;
 
-            // Check if audio track is active and show HUD indicator
-            const audioTracks = mediaStream.getAudioTracks();
-            if (micStatusIndicator) {
-                if (audioTracks && audioTracks.length > 0) {
-                    micStatusIndicator.style.display = "inline-flex";
-                    micStatusIndicator.title = "Microphone & Camera Active";
-                } else {
-                    micStatusIndicator.style.display = "none";
-                }
+            video.srcObject =
+                mediaStream;
+
+            video.muted =
+                true;
+
+            video.autoplay =
+                true;
+
+            video.playsInline =
+                true;
+
+            /*
+             * Some mobile browsers require play()
+             * after the stream is attached.
+             */
+            try {
+
+                await video.play();
+
+            } catch (playError) {
+
+                console.warn(
+                    "[WEBZONE ER] video.play() was delayed by browser policy.",
+                    playError
+                );
+
             }
 
-            video.onloadedmetadata = () => {
-                placeholder.style.display = "none";
-                canvas.style.display = "block";
-                canvas.width = video.videoWidth || 640;
-                canvas.height = video.videoHeight || 480;
+            // Camera successfully started
+            isDemoMode =
+                false;
+
+            if (micStatusIndicator) {
+
+                /*
+                 * Camera no longer depends on microphone.
+                 * Hide microphone status because we requested
+                 * video-only access.
+                 */
+                micStatusIndicator.style.display =
+                    "none";
+
+            }
+
+            // Camera metadata
+            video.onloadedmetadata =
+                () => {
+
+                    placeholder.style.display =
+                        "none";
+
+                    canvas.style.display =
+                        "block";
+
+                    canvas.width =
+                        video.videoWidth ||
+                        640;
+
+                    canvas.height =
+                        video.videoHeight ||
+                        480;
+
+                    setHighlightStep(6);
+
+                    startRenderLoop();
+
+                    console.log(
+                        "[WEBZONE ER] Camera started successfully:",
+                        {
+                            width:
+                                video.videoWidth,
+
+                            height:
+                                video.videoHeight,
+
+                            facingMode:
+                                isFacingUser
+                                    ? "user"
+                                    : "environment"
+                        }
+                    );
+
+                };
+
+            // Some browsers may already have metadata
+            if (
+                video.readyState >= 2
+            ) {
+
+                placeholder.style.display =
+                    "none";
+
+                canvas.style.display =
+                    "block";
+
+                canvas.width =
+                    video.videoWidth ||
+                    640;
+
+                canvas.height =
+                    video.videoHeight ||
+                    480;
+
                 setHighlightStep(6);
+
                 startRenderLoop();
-            };
+
+            }
+
         } catch (err) {
-            console.warn("Camera and Microphone access error:", err);
-            if (micStatusIndicator) micStatusIndicator.style.display = "none";
-            showPermissionAlert(err);
+
+            console.warn(
+                "[WEBZONE ER] Camera access error:",
+                err
+            );
+
+            if (mediaStream) {
+
+                mediaStream
+                    .getTracks()
+                    .forEach(
+                        track =>
+                            track.stop()
+                    );
+
+                mediaStream =
+                    null;
+            }
+
+            if (micStatusIndicator) {
+                micStatusIndicator.style.display =
+                    "none";
+            }
+
+            showPermissionAlert(
+                err
+            );
+
         }
+
     }
+
+    // ==========================================================
+    // DEMO MODE
+    // ==========================================================
 
     function startDemoMode() {
-        isDemoMode = true;
+
+        isDemoMode =
+            true;
+
         setHighlightStep(5);
+
         stopCameraFeed();
-        placeholder.style.display = "none";
-        canvas.style.display = "block";
-        canvas.width = 640;
-        canvas.height = 480;
+
+        placeholder.style.display =
+            "none";
+
+        canvas.style.display =
+            "block";
+
+        canvas.width =
+            640;
+
+        canvas.height =
+            480;
+
         setHighlightStep(6);
+
         startRenderLoop();
+
     }
+
+    // ==========================================================
+    // STOP CAMERA
+    // ==========================================================
 
     function stopCameraFeed() {
+
         if (mediaStream) {
-            mediaStream.getTracks().forEach(track => track.stop());
-            mediaStream = null;
+
+            mediaStream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+            mediaStream =
+                null;
         }
+
+        if (video) {
+
+            video.pause();
+
+            video.srcObject =
+                null;
+
+        }
+
+        isDemoMode =
+            false;
+
     }
+
+    // ==========================================================
+    // START BUTTON
+    // ==========================================================
 
     if (startBtn) {
-        startBtn.addEventListener("click", () => {
-            setHighlightStep(3);
-            setTimeout(startCamera, 250);
-        });
+
+        startBtn.addEventListener(
+            "click",
+            () => {
+
+                setHighlightStep(3);
+
+                setTimeout(
+                    () => {
+                        startCamera();
+                    },
+                    150
+                );
+
+            }
+        );
+
     }
+
+    // ==========================================================
+    // DEMO BUTTON
+    // ==========================================================
 
     if (demoBtn) {
-        demoBtn.addEventListener("click", () => {
-            setHighlightStep(3);
-            setTimeout(startDemoMode, 250);
-        });
+
+        demoBtn.addEventListener(
+            "click",
+            () => {
+
+                setHighlightStep(3);
+
+                setTimeout(
+                    () => {
+                        startDemoMode();
+                    },
+                    150
+                );
+
+            }
+        );
+
     }
+
+    // ==========================================================
+    // STOP BUTTON
+    // ==========================================================
 
     if (stopBtn) {
-        stopBtn.addEventListener("click", () => {
-            stopCameraFeed();
-            if (animFrameId) {
-                cancelAnimationFrame(animFrameId);
-                animFrameId = null;
+
+        stopBtn.addEventListener(
+            "click",
+            () => {
+
+                stopCameraFeed();
+
+                if (animFrameId) {
+
+                    cancelAnimationFrame(
+                        animFrameId
+                    );
+
+                    animFrameId =
+                        null;
+                }
+
+                placeholder.style.display =
+                    "flex";
+
+                canvas.style.display =
+                    "none";
+
+                setHighlightStep(2);
+
             }
-            placeholder.style.display = "flex";
-            canvas.style.display = "none";
-            setHighlightStep(2);
-        });
+        );
+
     }
+
+    // ==========================================================
+    // CAMERA FLIP
+    // ==========================================================
 
     if (flipBtn) {
-        flipBtn.addEventListener("click", () => {
-            isFacingUser = !isFacingUser;
-            if (!isDemoMode && mediaStream) {
-                startCamera();
+
+        flipBtn.addEventListener(
+            "click",
+            async () => {
+
+                isFacingUser =
+                    !isFacingUser;
+
+                if (
+                    !isDemoMode &&
+                    mediaStream
+                ) {
+
+                    await startCamera();
+
+                }
+
             }
-        });
+        );
+
     }
+
+    // ==========================================================
+    // SNAPSHOT
+    // ==========================================================
 
     if (snapBtn) {
-        snapBtn.addEventListener("click", () => {
-            if (!canvas) return;
 
-            // Trigger Shutter Flash Animation
-            if (shutterFlashOverlay) {
-                shutterFlashOverlay.classList.add("flash");
-                setTimeout(() => {
-                    shutterFlashOverlay.classList.remove("flash");
-                }, 120);
+        snapBtn.addEventListener(
+            "click",
+            () => {
+
+                if (!canvas) {
+                    return;
+                }
+
+                if (shutterFlashOverlay) {
+
+                    shutterFlashOverlay.classList.add(
+                        "flash"
+                    );
+
+                    setTimeout(
+                        () => {
+
+                            shutterFlashOverlay.classList.remove(
+                                "flash"
+                            );
+
+                        },
+                        120
+                    );
+
+                }
+
+                try {
+
+                    const AudioCtx =
+                        window.AudioContext ||
+                        window.webkitAudioContext;
+
+                    if (AudioCtx) {
+
+                        const actx =
+                            new AudioCtx();
+
+                        const osc =
+                            actx.createOscillator();
+
+                        const gain =
+                            actx.createGain();
+
+                        osc.type =
+                            "sine";
+
+                        osc.frequency.setValueAtTime(
+                            800,
+                            actx.currentTime
+                        );
+
+                        osc.frequency.exponentialRampToValueAtTime(
+                            200,
+                            actx.currentTime +
+                                0.08
+                        );
+
+                        gain.gain.setValueAtTime(
+                            0.3,
+                            actx.currentTime
+                        );
+
+                        gain.gain.exponentialRampToValueAtTime(
+                            0.01,
+                            actx.currentTime +
+                                0.08
+                        );
+
+                        osc.connect(gain);
+
+                        gain.connect(
+                            actx.destination
+                        );
+
+                        osc.start();
+
+                        osc.stop(
+                            actx.currentTime +
+                                0.09
+                        );
+
+                    }
+
+                } catch (e) {}
+
+                const dataUrl =
+                    canvas.toDataURL(
+                        "image/png"
+                    );
+
+                if (snapshotImg) {
+                    snapshotImg.src =
+                        dataUrl;
+                }
+
+                if (downloadLink) {
+
+                    downloadLink.href =
+                        dataUrl;
+
+                    downloadLink.download =
+                        `webzone-hd-${currentFilter}-${Date.now()}.png`;
+
+                }
+
+                if (snapshotModal) {
+                    snapshotModal.style.display =
+                        "block";
+                }
+
             }
+        );
 
-            // Play instant shutter sound click via AudioContext
-            try {
-                const actx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = actx.createOscillator();
-                const g = actx.createGain();
-                osc.type = "sine";
-                osc.frequency.setValueAtTime(800, actx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(200, actx.currentTime + 0.08);
-                g.gain.setValueAtTime(0.3, actx.currentTime);
-                g.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.08);
-                osc.connect(g);
-                g.connect(actx.destination);
-                osc.start();
-                osc.stop(actx.currentTime + 0.09);
-            } catch (e) {}
-
-            // Generate High-DPI Snapshot
-            const dataUrl = canvas.toDataURL("image/png");
-            snapshotImg.src = dataUrl;
-            downloadLink.href = dataUrl;
-            downloadLink.download = `webzone-hd-${currentFilter}-${Date.now()}.png`;
-            snapshotModal.style.display = "block";
-        });
     }
+
+    // ==========================================================
+    // CLOSE SNAPSHOT
+    // ==========================================================
 
     if (closeSnapBtn) {
-        closeSnapBtn.addEventListener("click", () => {
-            snapshotModal.style.display = "none";
-        });
+
+        closeSnapBtn.addEventListener(
+            "click",
+            () => {
+
+                if (snapshotModal) {
+                    snapshotModal.style.display =
+                        "none";
+                }
+
+            }
+        );
+
     }
 
+    // ==========================================================
+    // AUDIO
+    // ==========================================================
+
     if (audioBtn) {
-        audioBtn.addEventListener("click", () => {
-            toggleAudio();
-        });
+
+        audioBtn.addEventListener(
+            "click",
+            () => {
+                toggleAudio();
+            }
+        );
+
     }
 
     function toggleAudio() {
+
         if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            const AudioCtx =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+            if (!AudioCtx) {
+                return;
+            }
+
+            audioContext =
+                new AudioCtx();
+
         }
-        if (audioContext.state === "suspended") audioContext.resume();
+
+        if (
+            audioContext.state ===
+            "suspended"
+        ) {
+
+            audioContext.resume();
+
+        }
 
         if (isAudioPlaying) {
-            soundNodes.forEach(node => {
-                try { node.stop ? node.stop() : node.disconnect(); } catch (e) {}
-            });
+
+            soundNodes.forEach(
+                (node) => {
+
+                    try {
+
+                        node.stop
+                            ? node.stop()
+                            : node.disconnect();
+
+                    } catch (e) {}
+
+                }
+            );
+
             soundNodes = [];
-            isAudioPlaying = false;
-            audioBtn.innerHTML = '<span aria-hidden="true">🔊</span> Play Ambient Audio';
+
+            isAudioPlaying =
+                false;
+
+            audioBtn.innerHTML =
+                '<span aria-hidden="true">🔊</span> Play Ambient Audio';
+
         } else {
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(130, audioContext.currentTime);
-            gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+
+            const osc =
+                audioContext.createOscillator();
+
+            const gain =
+                audioContext.createGain();
+
+            osc.type =
+                "sine";
+
+            osc.frequency.setValueAtTime(
+                130,
+                audioContext.currentTime
+            );
+
+            gain.gain.setValueAtTime(
+                0.08,
+                audioContext.currentTime
+            );
+
             osc.connect(gain);
-            gain.connect(audioContext.destination);
+
+            gain.connect(
+                audioContext.destination
+            );
+
             osc.start();
-            soundNodes.push(osc, gain);
-            isAudioPlaying = true;
-            audioBtn.innerHTML = '<span aria-hidden="true">🔇</span> Mute Audio';
+
+            soundNodes.push(
+                osc,
+                gain
+            );
+
+            isAudioPlaying =
+                true;
+
+            audioBtn.innerHTML =
+                '<span aria-hidden="true">🔇</span> Mute Audio';
+
         }
+
     }
 
+    // ==========================================================
     // MAIN RENDER PIPELINE
+    // ==========================================================
+
     function startRenderLoop() {
-        if (animFrameId) cancelAnimationFrame(animFrameId);
+
+        if (animFrameId) {
+            cancelAnimationFrame(
+                animFrameId
+            );
+        }
 
         function render() {
-            const w = canvas.width;
-            const h = canvas.height;
-            const time = performance.now() * 0.001;
+
+            const w =
+                canvas.width;
+
+            const h =
+                canvas.height;
+
+            const time =
+                performance.now() *
+                0.001;
 
             updateFaceTracking();
 
-            // 1. Draw Base Feed (Video / Uploaded Image / Demo Silhouette)
-            if (studioMode === "upload" && uploadedImage) {
-                ctx.drawImage(uploadedImage, 0, 0, w, h);
-            } else if (isDemoMode) {
-                drawDemoBackground(ctx, w, h);
-            } else if (video.readyState >= 2) {
-                ctx.drawImage(video, 0, 0, w, h);
+            // Base feed
+            if (
+                studioMode ===
+                    "upload" &&
+                uploadedImage
+            ) {
+
+                ctx.drawImage(
+                    uploadedImage,
+                    0,
+                    0,
+                    w,
+                    h
+                );
+
+            } else if (
+                isDemoMode
+            ) {
+
+                drawDemoBackground(
+                    ctx,
+                    w,
+                    h
+                );
+
+            } else if (
+                video.readyState >= 2
+            ) {
+
+                ctx.drawImage(
+                    video,
+                    0,
+                    0,
+                    w,
+                    h
+                );
+
             }
 
-            // 2. Auto-HD Quality Enhancer (Convolution Sharpness & Clarity)
-            if (isAutoHdEnabled && (currentFilter === "cartoon" || currentFilter === "studiohd" || currentFilter === "cinematic" || activeMagazine !== "none")) {
-                applyAutoQualityEnhancement(ctx, w, h);
+            // Auto-HD
+            if (
+                isAutoHdEnabled &&
+                (
+                    currentFilter ===
+                        "cartoon" ||
+                    currentFilter ===
+                        "studiohd" ||
+                    currentFilter ===
+                        "cinematic" ||
+                    activeMagazine !==
+                        "none"
+                )
+            ) {
+
+                applyAutoQualityEnhancement(
+                    ctx,
+                    w,
+                    h
+                );
+
             }
 
-            // 3. Apply Selected Theme / Art Shader
-            applyArtThemeShader(ctx, w, h, currentFilter, time);
+            // Theme shader
+            applyArtThemeShader(
+                ctx,
+                w,
+                h,
+                currentFilter,
+                time
+            );
 
-            // 4. Studio Lighting Vignette / Soft Glow
-            if (isStudioLightEnabled) {
-                applyStudioVignette(ctx, w, h);
+            // Studio lighting
+            if (
+                isStudioLightEnabled
+            ) {
+
+                applyStudioVignette(
+                    ctx,
+                    w,
+                    h
+                );
+
             }
 
-            // 5. Face Recognition HUD
+            // Face HUD
             if (showFaceHud) {
-                drawFaceHUD(ctx, w, h, time);
+
+                drawFaceHUD(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
             }
 
-            // 6. Trending Magazine Cover Overlays
-            if (activeMagazine !== "none") {
-                drawMagazineCover(ctx, w, h, activeMagazine);
-            }
+            animFrameId =
+                requestAnimationFrame(
+                    render
+                );
 
-            animFrameId = requestAnimationFrame(render);
         }
 
         render();
+
     }
+        // ==========================================================
+    // FACE TRACKING ENGINE
+    // ==========================================================
 
     async function updateFaceTracking() {
-        const now = performance.now();
-        const time = now * 0.001;
 
-        // Run Real Face Detection asynchronously on active camera video stream
-        if (!isDemoMode && video.readyState >= 2 && !isDetectingFace && (now - lastFaceDetectTimestamp > 120)) {
-            lastFaceDetectTimestamp = now;
+        const now =
+            performance.now();
+
+        const time =
+            now * 0.001;
+
+        /*
+         * Run native face detection asynchronously.
+         *
+         * Detection is throttled so mobile/tablet devices
+         * do not have to process a face on every frame.
+         */
+        if (
+            !isDemoMode &&
+            video.readyState >= 2 &&
+            !isDetectingFace &&
+            (
+                now -
+                lastFaceDetectTimestamp
+            ) > 120
+        ) {
+
+            lastFaceDetectTimestamp =
+                now;
 
             if (nativeFaceDetector) {
-                isDetectingFace = true;
+
+                isDetectingFace =
+                    true;
+
                 try {
-                    const faces = await nativeFaceDetector.detect(video);
-                    if (faces && faces.length > 0) {
-                        const b = faces[0].boundingBox;
-                        const vw = video.videoWidth || 640;
-                        const vh = video.videoHeight || 480;
 
-                        // Normalize coordinates
-                        const rawCx = (b.x + b.width / 2) / vw;
-                        const rawCy = (b.y + b.height / 2) / vh;
-                        const rawW = b.width / vw;
-                        const rawH = b.height / vh;
+                    const faces =
+                        await nativeFaceDetector.detect(
+                            video
+                        );
 
-                        // Account for video mirroring in user facing mode
-                        faceBox.targetX = isFacingUser ? (1 - rawCx) : rawCx;
-                        faceBox.targetY = rawCy;
-                        faceBox.targetW = Math.max(0.24, Math.min(0.55, rawW * 1.15));
-                        faceBox.targetH = Math.max(0.32, Math.min(0.65, rawH * 1.25));
-                        faceDetectionConfidence = 99.6;
+                    if (
+                        faces &&
+                        faces.length > 0
+                    ) {
+
+                        const b =
+                            faces[0].boundingBox;
+
+                        const vw =
+                            video.videoWidth ||
+                            640;
+
+                        const vh =
+                            video.videoHeight ||
+                            480;
+
+                        /*
+                         * Normalize detector coordinates
+                         * into 0 → 1 space.
+                         */
+                        const rawCx =
+                            (
+                                b.x +
+                                b.width / 2
+                            ) / vw;
+
+                        const rawCy =
+                            (
+                                b.y +
+                                b.height / 2
+                            ) / vh;
+
+                        const rawW =
+                            b.width / vw;
+
+                        const rawH =
+                            b.height / vh;
+
+                        /*
+                         * Account for front-camera mirroring.
+                         */
+                        faceBox.targetX =
+                            isFacingUser
+                                ? 1 - rawCx
+                                : rawCx;
+
+                        faceBox.targetY =
+                            rawCy;
+
+                        /*
+                         * Expand the detected box slightly
+                         * so face-mounted effects have room.
+                         */
+                        faceBox.targetW =
+                            Math.max(
+                                0.24,
+                                Math.min(
+                                    0.55,
+                                    rawW * 1.15
+                                )
+                            );
+
+                        faceBox.targetH =
+                            Math.max(
+                                0.32,
+                                Math.min(
+                                    0.65,
+                                    rawH * 1.25
+                                )
+                            );
+
+                        /*
+                         * Native FaceDetector does not expose
+                         * a universal confidence percentage.
+                         *
+                         * Keep this as an internal "detected"
+                         * state rather than presenting a fake
+                         * biometric certainty to the user.
+                         */
+                        faceDetectionConfidence =
+                            1;
+
                     }
+
                 } catch (e) {
-                    // fall back to optical centroid
+
+                    console.warn(
+                        "[WEBZONE ER] Face detection temporarily unavailable.",
+                        e
+                    );
+
                 } finally {
-                    isDetectingFace = false;
+
+                    isDetectingFace =
+                        false;
+
                 }
+
             } else {
-                // High-performance skin-luminance optical centroid tracker fallback
+
+                /*
+                 * Graceful fallback when the browser does not
+                 * expose FaceDetector.
+                 *
+                 * This keeps the camera experience usable
+                 * instead of crashing the render loop.
+                 */
                 try {
-                    const vw = video.videoWidth || 640;
-                    const vh = video.videoHeight || 480;
-                    // Natural subtle head motion centering
-                    faceBox.targetX = 0.5 + Math.sin(time * 0.8) * 0.012;
-                    faceBox.targetY = 0.42 + Math.cos(time * 0.9) * 0.01;
-                    faceBox.targetW = 0.32;
-                    faceBox.targetH = 0.44;
+
+                    faceBox.targetX =
+                        0.5 +
+                        Math.sin(
+                            time * 0.8
+                        ) *
+                        0.012;
+
+                    faceBox.targetY =
+                        0.42 +
+                        Math.cos(
+                            time * 0.9
+                        ) *
+                        0.01;
+
+                    faceBox.targetW =
+                        0.32;
+
+                    faceBox.targetH =
+                        0.44;
+
                 } catch (e) {}
+
             }
+
         }
 
-        // Smooth Lerp tracking for smooth, organic camera filter anchoring
-        faceBox.x += (faceBox.targetX - faceBox.x) * 0.18;
-        faceBox.y += (faceBox.targetY - faceBox.y) * 0.18;
-        if (faceBox.targetW) faceBox.w += (faceBox.targetW - faceBox.w) * 0.15;
-        if (faceBox.targetH) faceBox.h += (faceBox.targetH - faceBox.h) * 0.15;
+        /*
+         * Smooth interpolation.
+         *
+         * This prevents filters from jumping around when
+         * the detector updates its bounding box.
+         */
+        faceBox.x +=
+            (
+                faceBox.targetX -
+                faceBox.x
+            ) *
+            0.18;
+
+        faceBox.y +=
+            (
+                faceBox.targetY -
+                faceBox.y
+            ) *
+            0.18;
+
+        if (faceBox.targetW) {
+
+            faceBox.w +=
+                (
+                    faceBox.targetW -
+                    faceBox.w
+                ) *
+                0.15;
+
+        }
+
+        if (faceBox.targetH) {
+
+            faceBox.h +=
+                (
+                    faceBox.targetH -
+                    faceBox.h
+                ) *
+                0.15;
+
+        }
+
     }
 
-    /* ==========================================================
-       AUTO-HD ENHANCER & STUDIO POST-PROCESSING
-       ========================================================== */
+    // ==========================================================
+    // AUTO-HD IMAGE ENHANCEMENT
+    // ==========================================================
 
-    function applyAutoQualityEnhancement(ctx, w, h) {
-        // High-performance image buffer enhancement
-        // Adds crisp unsharp mask, clarity, and vibrance
+    function applyAutoQualityEnhancement(
+        ctx,
+        w,
+        h
+    ) {
+
         try {
-            const imgData = ctx.getImageData(0, 0, w, h);
-            const d = imgData.data;
-            const contrast = 1.15; // 15% dynamic contrast boost
-            const intercept = 128 * (1 - contrast);
 
-            for (let i = 0; i < d.length; i += 4) {
-                // Contrast stretch
-                d[i] = d[i] * contrast + intercept;
-                d[i + 1] = d[i + 1] * contrast + intercept;
-                d[i + 2] = d[i + 2] * contrast + intercept;
+            const imgData =
+                ctx.getImageData(
+                    0,
+                    0,
+                    w,
+                    h
+                );
 
-                // Vibrance boost (saturate midtones)
-                const avg = (d[i] + d[i + 1] + d[i + 2]) / 3;
-                const max = Math.max(d[i], d[i + 1], d[i + 2]);
-                const amt = ((max - avg) / 255) * 1.3;
-                if (amt > 0) {
-                    d[i] += (d[i] - avg) * amt;
-                    d[i + 1] += (d[i + 1] - avg) * amt;
-                    d[i + 2] += (d[i + 2] - avg) * amt;
+            const d =
+                imgData.data;
+
+            /*
+             * Moderate contrast enhancement.
+             *
+             * Kept deliberately lightweight for mobile
+             * devices.
+             */
+            const contrast =
+                1.15;
+
+            const intercept =
+                128 *
+                (
+                    1 -
+                    contrast
+                );
+
+            for (
+                let i = 0;
+                i < d.length;
+                i += 4
+            ) {
+
+                d[i] =
+                    d[i] *
+                    contrast +
+                    intercept;
+
+                d[i + 1] =
+                    d[i + 1] *
+                    contrast +
+                    intercept;
+
+                d[i + 2] =
+                    d[i + 2] *
+                    contrast +
+                    intercept;
+
+                /*
+                 * Vibrance enhancement.
+                 */
+                const avg =
+                    (
+                        d[i] +
+                        d[i + 1] +
+                        d[i + 2]
+                    ) / 3;
+
+                const max =
+                    Math.max(
+                        d[i],
+                        d[i + 1],
+                        d[i + 2]
+                    );
+
+                const amount =
+                    (
+                        (
+                            max -
+                            avg
+                        ) /
+                        255
+                    ) *
+                    1.3;
+
+                if (
+                    amount > 0
+                ) {
+
+                    d[i] +=
+                        (
+                            d[i] -
+                            avg
+                        ) *
+                        amount;
+
+                    d[i + 1] +=
+                        (
+                            d[i + 1] -
+                            avg
+                        ) *
+                        amount;
+
+                    d[i + 2] +=
+                        (
+                            d[i + 2] -
+                            avg
+                        ) *
+                        amount;
+
                 }
+
             }
-            ctx.putImageData(imgData, 0, 0);
+
+            ctx.putImageData(
+                imgData,
+                0,
+                0
+            );
+
         } catch (e) {
-            // fallback if canvas tainted
+
+            /*
+             * Enhancement is optional.
+             * Never allow it to stop the camera.
+             */
+
         }
+
     }
 
-    function applyStudioVignette(ctx, w, h) {
+    // ==========================================================
+    // STUDIO VIGNETTE
+    // ==========================================================
+
+    function applyStudioVignette(
+        ctx,
+        w,
+        h
+    ) {
+
         ctx.save();
-        const rad = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.75);
-        rad.addColorStop(0, "transparent");
-        rad.addColorStop(1, "rgba(0, 0, 0, 0.45)");
-        ctx.fillStyle = rad;
-        ctx.fillRect(0, 0, w, h);
+
+        const rad =
+            ctx.createRadialGradient(
+                w / 2,
+                h / 2,
+                Math.min(w, h) * 0.35,
+                w / 2,
+                h / 2,
+                Math.max(w, h) * 0.75
+            );
+
+        rad.addColorStop(
+            0,
+            "transparent"
+        );
+
+        rad.addColorStop(
+            1,
+            "rgba(0, 0, 0, 0.45)"
+        );
+
+        ctx.fillStyle =
+            rad;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
         ctx.restore();
+
     }
 
-    /* ==========================================================
-       CARTOONIST, REALISTIC & TECH ART SHADERS
-       ========================================================== */
+    // ==========================================================
+    // MASTER FILTER SHADER ROUTER
+    // ==========================================================
 
-    function applyArtThemeShader(ctx, w, h, filter, time) {
+    function applyArtThemeShader(
+        ctx,
+        w,
+        h,
+        filter,
+        time
+    ) {
+
         switch (filter) {
-            // 🌟 1. GOLDEN HOUR GLOW (INSTAGRAM / SNAPCHAT REALISTIC AR)
+
+            // ==================================================
+            // REALISTIC AR
+            // ==================================================
+
             case "goldenhour":
-                drawGoldenHourGlam(ctx, w, h, time);
+
+                drawGoldenHourGlam(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🕶️ 2. DESIGNER AVIATORS (REALISTIC TRACKED SUNGLASSES)
             case "sunglasses":
-                drawDesignerAviators(ctx, w, h, time);
+
+                drawDesignerAviators(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 👑 3. NEON ANGEL HALO (FLOATING 3D AR HALO)
             case "halo":
-                drawNeonAngelHalo(ctx, w, h, time);
+
+                drawNeonAngelHalo(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🎞️ 4. RETRO 90S KODAK 35MM (WARM VINTAGE FILM + TIMESTAMP)
             case "vintage90s":
-                drawVintage90sFilm(ctx, w, h, time);
+
+                drawVintage90sFilm(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🌸 5. KAWAII ANIME BLUSH & SPARKLES
             case "kawaii":
-                drawKawaiiAnimeBlush(ctx, w, h, time);
+
+                drawKawaiiAnimeBlush(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // ⚡ 6. CYBER WARRIOR FACE-PAINT
             case "cyberwarrior":
-                drawCyberWarriorFacePaint(ctx, w, h, time);
+
+                drawCyberWarriorFacePaint(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🖤 7. LEICA NOIR CINEMA (MONOCHROME ART)
             case "noir":
-                drawLeicaNoirCinema(ctx, w, h, time);
+
+                drawLeicaNoirCinema(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // ❄️ 8. DIAMOND ICE SHIMMER
             case "icefrost":
-                drawDiamondIceFrost(ctx, w, h, time);
+
+                drawDiamondIceFrost(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🌐 WEBZONEBW SIGNATURE PROMOTIONAL THEME
+            // ==================================================
+            // WEBZONEBW SIGNATURE
+            // ==================================================
+
             case "webzonebw":
-                drawWebZoneBWTheme(ctx, w, h, time);
+
+                drawWebZoneBWTheme(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🎨 CARTOON / ANIME CEL-SHADING
+            // ==================================================
+            // ART / PORTRAIT
+            // ==================================================
+
             case "cartoon":
-                drawCartoonCelShader(ctx, w, h, time);
+
+                drawCartoonCelShader(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 💎 STUDIO GLAMOUR PORTRAIT HD
             case "studiohd":
-                drawStudioPortraitHD(ctx, w, h, time);
+
+                drawStudioPortraitHD(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 📰 POP-ART / COMIC DOT MATRIX
             case "popart":
-                drawPopArtMatrix(ctx, w, h, time);
+
+                drawPopArtMatrix(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // ⚡ NEON CYBERPUNK REALISTIC
             case "cyberpunk":
-                drawCyberpunkNeon(ctx, w, h, time);
+
+                drawCyberpunkNeon(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🕶️ 35MM HOLLYWOOD CINEMATIC
             case "cinematic":
-                drawCinematic35mm(ctx, w, h, time);
+
+                drawCinematic35mm(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🤖 AI CYBORG HUD
+            // ==================================================
+            // TECHNOLOGY
+            // ==================================================
+
             case "cyberhud":
-                drawCyberHUDTheme(ctx, w, h, time);
+
+                drawCyberHUDTheme(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // ⚡ MATRIX TERMINAL
             case "matrix":
-                drawMatrixTheme(ctx, w, h, time);
+
+                drawMatrixTheme(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🌐 DEVOPS ARCHITECT
             case "devops":
-                drawDevOpsTheme(ctx, w, h, time);
+
+                drawDevOpsTheme(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🔐 CYBERSEC BIO-SCAN
             case "cybersec":
-                drawCyberSecTheme(ctx, w, h, time);
+
+                drawCyberSecTheme(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🚀 SCI-FI HOLO-GRID
             case "hologram":
-                drawHologramTheme(ctx, w, h, time);
+
+                drawHologramTheme(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // ⚡ DIGITAL GLITCH
             case "glitch":
-                drawDigitalGlitch(ctx, w, h, time);
+
+                drawDigitalGlitch(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🚀 SPACE EXPLORER
             case "space":
-                drawSpaceExplorer(ctx, w, h, time);
+
+                drawSpaceExplorer(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🦸 SUPERHERO
             case "superhero":
-                drawSuperhero(ctx, w, h, time);
+
+                drawSuperhero(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
 
-            // 🎃 HALLOWEEN CLASSICS
+            // ==================================================
+            // HALLOWEEN
+            // ==================================================
+
             case "pumpkin":
-                drawPumpkinEffect(ctx, w, h, time);
+
+                drawPumpkinEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             case "ghost":
-                drawGhostEffect(ctx, w, h, time);
+
+                drawGhostEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             case "zombie":
-                drawZombieEffect(ctx, w, h, time);
+
+                drawZombieEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             case "vampire":
-                drawVampireEffect(ctx, w, h, time);
+
+                drawVampireEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             case "skeleton":
-                drawSkeletonEffect(ctx, w, h, time);
+
+                drawSkeletonEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             case "spider":
-                drawSpiderEffect(ctx, w, h, time);
+
+                drawSpiderEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             case "bats":
-                drawBatsEffect(ctx, w, h, time);
+
+                drawBatsEffect(
+                    ctx,
+                    w,
+                    h,
+                    time
+                );
+
                 break;
+
             default:
+
                 break;
+
         }
+
     }
 
-    /* ==========================================================
-       🌟 REALISTIC AR LENSES (INSTAGRAM & SNAPCHAT STYLE)
-       ========================================================== */
+    // ==========================================================
+    // GOLDEN HOUR GLAM
+    // ==========================================================
 
-    // 🌟 1. GOLDEN HOUR GLAMOUR & SUNSET FLARE
-    function drawGoldenHourGlam(ctx, w, h, time) {
+    function drawGoldenHourGlam(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const rx = (faceBox.w * w) / 2;
-        const ry = (faceBox.h * h) / 2;
 
-        // Warm Golden Sun Gradient Overlay
-        const sunGrad = ctx.createRadialGradient(0, 0, 50, w * 0.5, h * 0.5, w);
-        sunGrad.addColorStop(0, "rgba(251, 191, 36, 0.28)");
-        sunGrad.addColorStop(0.4, "rgba(249, 115, 22, 0.16)");
-        sunGrad.addColorStop(0.8, "rgba(217, 70, 239, 0.08)");
-        sunGrad.addColorStop(1, "rgba(15, 23, 42, 0.15)");
-        ctx.fillStyle = sunGrad;
-        ctx.fillRect(0, 0, w, h);
+        const cx =
+            faceBox.x * w;
 
-        // Sun Flare Discs (Instagram Golden Hour Flare)
-        const flareAngle = Math.PI / 4;
-        const flareDist = Math.min(w, h) * 0.4;
-        for (let i = 1; i <= 4; i++) {
-            const fx = (i * 0.2) * w;
-            const fy = (i * 0.2) * h;
-            const rad = 14 * i;
-            const flareGrad = ctx.createRadialGradient(fx, fy, 0, fx, fy, rad);
-            flareGrad.addColorStop(0, `rgba(253, 224, 71, ${0.35 / i})`);
-            flareGrad.addColorStop(0.7, `rgba(249, 115, 22, ${0.15 / i})`);
-            flareGrad.addColorStop(1, "transparent");
-            ctx.fillStyle = flareGrad;
+        const cy =
+            faceBox.y * h;
+
+        const rx =
+            (
+                faceBox.w *
+                w
+            ) / 2;
+
+        const ry =
+            (
+                faceBox.h *
+                h
+            ) / 2;
+
+        // Warm cinematic lighting
+        const sunGrad =
+            ctx.createRadialGradient(
+                0,
+                0,
+                50,
+                w * 0.5,
+                h * 0.5,
+                w
+            );
+
+        sunGrad.addColorStop(
+            0,
+            "rgba(251, 191, 36, 0.28)"
+        );
+
+        sunGrad.addColorStop(
+            0.4,
+            "rgba(249, 115, 22, 0.16)"
+        );
+
+        sunGrad.addColorStop(
+            0.8,
+            "rgba(217, 70, 239, 0.08)"
+        );
+
+        sunGrad.addColorStop(
+            1,
+            "rgba(15, 23, 42, 0.15)"
+        );
+
+        ctx.fillStyle =
+            sunGrad;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+        // Flare particles
+        for (
+            let i = 1;
+            i <= 4;
+            i++
+        ) {
+
+            const fx =
+                i * 0.2 * w;
+
+            const fy =
+                i * 0.2 * h;
+
+            const rad =
+                14 * i;
+
+            const flareGrad =
+                ctx.createRadialGradient(
+                    fx,
+                    fy,
+                    0,
+                    fx,
+                    fy,
+                    rad
+                );
+
+            flareGrad.addColorStop(
+                0,
+                `rgba(253, 224, 71, ${0.35 / i})`
+            );
+
+            flareGrad.addColorStop(
+                0.7,
+                `rgba(249, 115, 22, ${0.15 / i})`
+            );
+
+            flareGrad.addColorStop(
+                1,
+                "transparent"
+            );
+
+            ctx.fillStyle =
+                flareGrad;
+
             ctx.beginPath();
-            ctx.arc(fx, fy, rad, 0, Math.PI * 2);
+
+            ctx.arc(
+                fx,
+                fy,
+                rad,
+                0,
+                Math.PI * 2
+            );
+
             ctx.fill();
+
         }
 
-        // Rosy Cheek Tint (Biometric Cheek Blusher)
-        const leftCheekX = cx - rx * 0.45;
-        const rightCheekX = cx + rx * 0.45;
-        const cheekY = cy + ry * 0.12;
-        const blushR = Math.max(16, rx * 0.28);
+        // Face-aware blush
+        const leftCheekX =
+            cx -
+            rx * 0.45;
 
-        const blushGradL = ctx.createRadialGradient(leftCheekX, cheekY, 0, leftCheekX, cheekY, blushR);
-        blushGradL.addColorStop(0, "rgba(244, 114, 182, 0.28)");
-        blushGradL.addColorStop(0.6, "rgba(251, 113, 133, 0.12)");
-        blushGradL.addColorStop(1, "transparent");
-        ctx.fillStyle = blushGradL;
-        ctx.beginPath();
-        ctx.arc(leftCheekX, cheekY, blushR, 0, Math.PI * 2);
-        ctx.fill();
+        const rightCheekX =
+            cx +
+            rx * 0.45;
 
-        const blushGradR = ctx.createRadialGradient(rightCheekX, cheekY, 0, rightCheekX, cheekY, blushR);
-        blushGradR.addColorStop(0, "rgba(244, 114, 182, 0.28)");
-        blushGradR.addColorStop(0.6, "rgba(251, 113, 133, 0.12)");
-        blushGradR.addColorStop(1, "transparent");
-        ctx.fillStyle = blushGradR;
-        ctx.beginPath();
-        ctx.arc(rightCheekX, cheekY, blushR, 0, Math.PI * 2);
-        ctx.fill();
+        const cheekY =
+            cy +
+            ry * 0.12;
 
-        // Eye Catchlight Reflections
-        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-        ctx.shadowColor = "#fde047";
-        ctx.shadowBlur = 8;
+        const blushR =
+            Math.max(
+                16,
+                rx * 0.28
+            );
+
+        [
+            leftCheekX,
+            rightCheekX
+        ].forEach(
+            (bx) => {
+
+                const blush =
+                    ctx.createRadialGradient(
+                        bx,
+                        cheekY,
+                        0,
+                        bx,
+                        cheekY,
+                        blushR
+                    );
+
+                blush.addColorStop(
+                    0,
+                    "rgba(244, 114, 182, 0.28)"
+                );
+
+                blush.addColorStop(
+                    0.6,
+                    "rgba(251, 113, 133, 0.12)"
+                );
+
+                blush.addColorStop(
+                    1,
+                    "transparent"
+                );
+
+                ctx.fillStyle =
+                    blush;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    bx,
+                    cheekY,
+                    blushR,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+        );
+
+        // Eye catchlights
+        ctx.fillStyle =
+            "rgba(255,255,255,0.9)";
+
+        ctx.shadowColor =
+            "#fde047";
+
+        ctx.shadowBlur =
+            8;
+
         ctx.beginPath();
-        ctx.arc(cx - rx * 0.35, cy - ry * 0.16, 3.5, 0, Math.PI * 2);
-        ctx.arc(cx + rx * 0.35, cy - ry * 0.16, 3.5, 0, Math.PI * 2);
+
+        ctx.arc(
+            cx - rx * 0.35,
+            cy - ry * 0.16,
+            3.5,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.arc(
+            cx + rx * 0.35,
+            cy - ry * 0.16,
+            3.5,
+            0,
+            Math.PI * 2
+        );
+
         ctx.fill();
 
         ctx.restore();
+
     }
 
-    // 🕶️ 2. DESIGNER AVIATORS (REALISTIC 3D TRACKED SUNGLASSES)
-    function drawDesignerAviators(ctx, w, h, time) {
+    // ==========================================================
+    // DESIGNER AVIATORS
+    // ==========================================================
+
+    function drawDesignerAviators(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h - (faceBox.h * h * 0.14);
-        const rx = (faceBox.w * w) / 2;
-        const lensW = rx * 0.44;
-        const lensH = rx * 0.38;
-        const bridgeGap = rx * 0.16;
 
-        // Frame Drop Shadow
-        ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
-        ctx.shadowBlur = 12;
-        ctx.shadowOffsetY = 6;
+        const cx =
+            faceBox.x * w;
 
-        // Left Teardrop Lens
-        const leftX = cx - bridgeGap - lensW / 2;
-        const rightX = cx + bridgeGap + lensW / 2;
+        const cy =
+            faceBox.y * h -
+            (
+                faceBox.h *
+                h *
+                0.14
+            );
 
-        function drawAviatorLens(x, y, isRight) {
+        const rx =
+            (
+                faceBox.w *
+                w
+            ) / 2;
+
+        const lensW =
+            rx * 0.44;
+
+        const lensH =
+            rx * 0.38;
+
+        const bridgeGap =
+            rx * 0.16;
+
+        ctx.shadowColor =
+            "rgba(0,0,0,0.6)";
+
+        ctx.shadowBlur =
+            12;
+
+        ctx.shadowOffsetY =
+            6;
+
+        const leftX =
+            cx -
+            bridgeGap -
+            lensW / 2;
+
+        const rightX =
+            cx +
+            bridgeGap +
+            lensW / 2;
+
+        function drawAviatorLens(
+            x,
+            y,
+            isRight
+        ) {
+
             ctx.save();
-            ctx.beginPath();
-            ctx.ellipse(x, y, lensW / 2, lensH / 2, (isRight ? 0.08 : -0.08), 0, Math.PI * 2);
 
-            // Sunset Mirrored Polarization Gradient
-            const lensGrad = ctx.createLinearGradient(x, y - lensH / 2, x, y + lensH / 2);
-            lensGrad.addColorStop(0, "rgba(244, 63, 94, 0.88)");
-            lensGrad.addColorStop(0.5, "rgba(251, 146, 60, 0.85)");
-            lensGrad.addColorStop(1, "rgba(56, 189, 248, 0.88)");
-            ctx.fillStyle = lensGrad;
+            ctx.beginPath();
+
+            ctx.ellipse(
+                x,
+                y,
+                lensW / 2,
+                lensH / 2,
+                isRight
+                    ? 0.08
+                    : -0.08,
+                0,
+                Math.PI * 2
+            );
+
+            const lensGrad =
+                ctx.createLinearGradient(
+                    x,
+                    y - lensH / 2,
+                    x,
+                    y + lensH / 2
+                );
+
+            lensGrad.addColorStop(
+                0,
+                "rgba(244, 63, 94, 0.88)"
+            );
+
+            lensGrad.addColorStop(
+                0.5,
+                "rgba(251, 146, 60, 0.85)"
+            );
+
+            lensGrad.addColorStop(
+                1,
+                "rgba(56, 189, 248, 0.88)"
+            );
+
+            ctx.fillStyle =
+                lensGrad;
+
             ctx.fill();
 
-            // Gold Wire Frame Outline
-            ctx.lineWidth = 3.5;
-            ctx.strokeStyle = "#eab308";
-            ctx.shadowColor = "#facc15";
-            ctx.shadowBlur = 4;
+            ctx.lineWidth =
+                3.5;
+
+            ctx.strokeStyle =
+                "#eab308";
+
+            ctx.shadowColor =
+                "#facc15";
+
+            ctx.shadowBlur =
+                4;
+
             ctx.stroke();
 
-            // Specular Glass Glint Sheen
-            const glintGrad = ctx.createLinearGradient(x - lensW / 2, y - lensH / 2, x + lensW / 2, y + lensH / 2);
-            const sheenPos = (Math.sin(time * 1.5) * 0.3) + 0.5;
-            glintGrad.addColorStop(Math.max(0, sheenPos - 0.2), "transparent");
-            glintGrad.addColorStop(sheenPos, "rgba(255, 255, 255, 0.45)");
-            glintGrad.addColorStop(Math.min(1, sheenPos + 0.2), "transparent");
-            ctx.fillStyle = glintGrad;
+            // Animated glass glint
+            const glint =
+                ctx.createLinearGradient(
+                    x - lensW / 2,
+                    y - lensH / 2,
+                    x + lensW / 2,
+                    y + lensH / 2
+                );
+
+            const sheenPos =
+                (
+                    Math.sin(
+                        time * 1.5
+                    ) *
+                    0.3
+                ) +
+                0.5;
+
+            glint.addColorStop(
+                Math.max(
+                    0,
+                    sheenPos - 0.2
+                ),
+                "transparent"
+            );
+
+            glint.addColorStop(
+                sheenPos,
+                "rgba(255,255,255,0.45)"
+            );
+
+            glint.addColorStop(
+                Math.min(
+                    1,
+                    sheenPos + 0.2
+                ),
+                "transparent"
+            );
+
+            ctx.fillStyle =
+                glint;
+
             ctx.fill();
 
             ctx.restore();
+
         }
 
-        drawAviatorLens(leftX, cy, false);
-        drawAviatorLens(rightX, cy, true);
+        drawAviatorLens(
+            leftX,
+            cy,
+            false
+        );
 
-        // Gold Bridge Bars
-        ctx.strokeStyle = "#eab308";
-        ctx.lineWidth = 3;
+        drawAviatorLens(
+            rightX,
+            cy,
+            true
+        );
+
+        // Bridge
+        ctx.strokeStyle =
+            "#eab308";
+
+        ctx.lineWidth =
+            3;
+
         ctx.beginPath();
-        // Top Brow Bar
-        ctx.moveTo(leftX + lensW * 0.2, cy - lensH * 0.4);
-        ctx.lineTo(rightX - lensW * 0.2, cy - lensH * 0.4);
-        // Nose Bridge
-        ctx.moveTo(leftX + lensW * 0.42, cy);
-        ctx.lineTo(rightX - lensW * 0.42, cy);
+
+        ctx.moveTo(
+            leftX +
+                lensW *
+                0.2,
+            cy -
+                lensH *
+                0.4
+        );
+
+        ctx.lineTo(
+            rightX -
+                lensW *
+                0.2,
+            cy -
+                lensH *
+                0.4
+        );
+
+        ctx.moveTo(
+            leftX +
+                lensW *
+                0.42,
+            cy
+        );
+
+        ctx.lineTo(
+            rightX -
+                lensW *
+                0.42,
+            cy
+        );
+
         ctx.stroke();
 
         ctx.restore();
+
     }
 
-    // 👑 3. NEON ANGEL HALO (FLOATING 3D AR HALO)
-    function drawNeonAngelHalo(ctx, w, h, time) {
+    // ==========================================================
+    // NEON ANGEL HALO
+    // ==========================================================
+
+    function drawNeonAngelHalo(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = (faceBox.y * h) - (faceBox.h * h * 0.6) + Math.sin(time * 3) * 8;
-        const haloRx = (faceBox.w * w) * 0.45;
-        const haloRy = haloRx * 0.32;
 
-        // Outer Neon Glow
-        ctx.shadowColor = "#fde047";
-        ctx.shadowBlur = 28;
-        ctx.strokeStyle = "#fef08a";
-        ctx.lineWidth = 6;
+        const cx =
+            faceBox.x * w;
+
+        const cy =
+            (
+                faceBox.y * h
+            ) -
+            (
+                faceBox.h *
+                h *
+                0.6
+            ) +
+            Math.sin(
+                time * 3
+            ) *
+            8;
+
+        const haloRx =
+            (
+                faceBox.w *
+                w
+            ) *
+            0.45;
+
+        const haloRy =
+            haloRx *
+            0.32;
+
+        ctx.shadowColor =
+            "#fde047";
+
+        ctx.shadowBlur =
+            28;
+
+        ctx.strokeStyle =
+            "#fef08a";
+
+        ctx.lineWidth =
+            6;
+
         ctx.beginPath();
-        ctx.ellipse(cx, cy, haloRx, haloRy, -0.05, 0, Math.PI * 2);
+
+        ctx.ellipse(
+            cx,
+            cy,
+            haloRx,
+            haloRy,
+            -0.05,
+            0,
+            Math.PI * 2
+        );
+
         ctx.stroke();
 
-        // Inner Core Bright Line
-        ctx.shadowBlur = 10;
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 3;
+        ctx.shadowBlur =
+            10;
+
+        ctx.strokeStyle =
+            "#ffffff";
+
+        ctx.lineWidth =
+            3;
+
         ctx.stroke();
 
-        // Floating Golden Sparkles Drifting from Halo
-        for (let i = 0; i < 7; i++) {
-            const angle = (time * 1.5 + (i * Math.PI * 2 / 7)) % (Math.PI * 2);
-            const sx = cx + Math.cos(angle) * (haloRx + 12);
-            const sy = cy + Math.sin(angle) * (haloRy + 6) - (Math.sin(time * 2 + i) * 14);
-            const sparkSize = 2 + Math.sin(time * 4 + i) * 1.5;
+        // Floating particles
+        for (
+            let i = 0;
+            i < 7;
+            i++
+        ) {
 
-            ctx.fillStyle = "#ffffff";
-            ctx.shadowColor = "#fde047";
-            ctx.shadowBlur = 12;
+            const angle =
+                (
+                    time * 1.5 +
+                    (
+                        i *
+                        Math.PI *
+                        2 /
+                        7
+                    )
+                ) %
+                (
+                    Math.PI *
+                    2
+                );
+
+            const sx =
+                cx +
+                Math.cos(angle) *
+                (
+                    haloRx +
+                    12
+                );
+
+            const sy =
+                cy +
+                Math.sin(angle) *
+                (
+                    haloRy +
+                    6
+                ) -
+                (
+                    Math.sin(
+                        time * 2 +
+                        i
+                    ) *
+                    14
+                );
+
+            const sparkSize =
+                2 +
+                Math.sin(
+                    time * 4 +
+                    i
+                ) *
+                1.5;
+
+            ctx.fillStyle =
+                "#ffffff";
+
+            ctx.shadowColor =
+                "#fde047";
+
+            ctx.shadowBlur =
+                12;
+
             ctx.beginPath();
-            ctx.arc(sx, sy, Math.max(1, sparkSize), 0, Math.PI * 2);
+
+            ctx.arc(
+                sx,
+                sy,
+                Math.max(
+                    1,
+                    sparkSize
+                ),
+                0,
+                Math.PI * 2
+            );
+
             ctx.fill();
+
         }
 
         ctx.restore();
+
     }
 
-    // 🎞️ 4. RETRO 90S KODAK 35MM FILM
-    function drawVintage90sFilm(ctx, w, h, time) {
+    // ==========================================================
+    // VINTAGE 90S FILM
+    // ==========================================================
+
+    function drawVintage90sFilm(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
 
-        // Warm Kodak Color Tint
-        const filmGrad = ctx.createLinearGradient(0, 0, w, h);
-        filmGrad.addColorStop(0, "rgba(245, 158, 11, 0.12)");
-        filmGrad.addColorStop(0.5, "rgba(234, 88, 12, 0.08)");
-        filmGrad.addColorStop(1, "rgba(120, 53, 15, 0.14)");
-        ctx.fillStyle = filmGrad;
-        ctx.fillRect(0, 0, w, h);
+        const filmGrad =
+            ctx.createLinearGradient(
+                0,
+                0,
+                w,
+                h
+            );
 
-        // Analog Film Grain Noise Dots
-        ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-        const step = 8;
-        for (let x = 0; x < w; x += step * 3) {
-            for (let y = 0; y < h; y += step * 3) {
-                if (Math.random() > 0.6) {
-                    ctx.fillRect(x + (Math.random() * 4), y + (Math.random() * 4), 2, 2);
+        filmGrad.addColorStop(
+            0,
+            "rgba(245,158,11,0.12)"
+        );
+
+        filmGrad.addColorStop(
+            0.5,
+            "rgba(234,88,12,0.08)"
+        );
+
+        filmGrad.addColorStop(
+            1,
+            "rgba(120,53,15,0.14)"
+        );
+
+        ctx.fillStyle =
+            filmGrad;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+        // Film grain
+        ctx.fillStyle =
+            "rgba(0,0,0,0.08)";
+
+        const step =
+            8;
+
+        for (
+            let x = 0;
+            x < w;
+            x += step * 3
+        ) {
+
+            for (
+                let y = 0;
+                y < h;
+                y += step * 3
+            ) {
+
+                if (
+                    Math.random() >
+                    0.6
+                ) {
+
+                    ctx.fillRect(
+                        x +
+                            Math.random() *
+                            4,
+                        y +
+                            Math.random() *
+                            4,
+                        2,
+                        2
+                    );
+
                 }
+
             }
+
         }
 
-        // Retro Orange Digital Date Timestamp ('98 10 31)
-        const dateStr = "'98 10 31  PM 08:42";
-        ctx.font = "bold 20px 'Courier New', monospace";
-        ctx.fillStyle = "#ff6b00";
-        ctx.shadowColor = "rgba(255, 107, 0, 0.8)";
-        ctx.shadowBlur = 10;
-        ctx.textAlign = "right";
-        ctx.fillText(dateStr, w - 24, h - 24);
+        ctx.font =
+            "bold 20px 'Courier New', monospace";
+
+        ctx.fillStyle =
+            "#ff6b00";
+
+        ctx.shadowColor =
+            "rgba(255,107,0,0.8)";
+
+        ctx.shadowBlur =
+            10;
+
+        ctx.textAlign =
+            "right";
+
+        ctx.fillText(
+            "'98 10 31 PM 08:42",
+            w - 24,
+            h - 24
+        );
 
         ctx.restore();
+
     }
 
-    // 🌸 5. KAWAII ANIME BLUSH & SPARKLE HEARTS
-    function drawKawaiiAnimeBlush(ctx, w, h, time) {
+    // ==========================================================
+    // KAWAII ANIME
+    // ==========================================================
+
+    function drawKawaiiAnimeBlush(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const rx = (faceBox.w * w) / 2;
-        const ry = (faceBox.h * h) / 2;
 
-        const leftCheekX = cx - rx * 0.46;
-        const rightCheekX = cx + rx * 0.46;
-        const cheekY = cy + ry * 0.14;
-        const blushR = Math.max(18, rx * 0.28);
+        const cx =
+            faceBox.x * w;
 
-        // Soft Kawaii Pink Blush Discs
-        [leftCheekX, rightCheekX].forEach(bx => {
-            const bgrad = ctx.createRadialGradient(bx, cheekY, 0, bx, cheekY, blushR);
-            bgrad.addColorStop(0, "rgba(244, 114, 182, 0.45)");
-            bgrad.addColorStop(0.7, "rgba(251, 113, 133, 0.2)");
-            bgrad.addColorStop(1, "transparent");
-            ctx.fillStyle = bgrad;
-            ctx.beginPath();
-            ctx.arc(bx, cheekY, blushR, 0, Math.PI * 2);
-            ctx.fill();
+        const cy =
+            faceBox.y * h;
 
-            // Anime Slashes on Cheeks
-            ctx.strokeStyle = "rgba(244, 63, 94, 0.7)";
-            ctx.lineWidth = 2.5;
-            for (let i = -1; i <= 1; i++) {
+        const rx =
+            (
+                faceBox.w *
+                w
+            ) / 2;
+
+        const ry =
+            (
+                faceBox.h *
+                h
+            ) / 2;
+
+        const cheekY =
+            cy +
+            ry * 0.14;
+
+        const blushR =
+            Math.max(
+                18,
+                rx * 0.28
+            );
+
+        [
+            cx - rx * 0.46,
+            cx + rx * 0.46
+        ].forEach(
+            (bx) => {
+
+                const bgrad =
+                    ctx.createRadialGradient(
+                        bx,
+                        cheekY,
+                        0,
+                        bx,
+                        cheekY,
+                        blushR
+                    );
+
+                bgrad.addColorStop(
+                    0,
+                    "rgba(244,114,182,0.45)"
+                );
+
+                bgrad.addColorStop(
+                    0.7,
+                    "rgba(251,113,133,0.2)"
+                );
+
+                bgrad.addColorStop(
+                    1,
+                    "transparent"
+                );
+
+                ctx.fillStyle =
+                    bgrad;
+
                 ctx.beginPath();
-                ctx.moveTo(bx + (i * 7) - 4, cheekY - 5);
-                ctx.lineTo(bx + (i * 7) + 4, cheekY + 5);
-                ctx.stroke();
-            }
-        });
 
-        // Cute Nose Tip Blush
-        const noseGrad = ctx.createRadialGradient(cx, cy + ry * 0.05, 0, cx, cy + ry * 0.05, rx * 0.14);
-        noseGrad.addColorStop(0, "rgba(251, 113, 133, 0.4)");
-        noseGrad.addColorStop(1, "transparent");
-        ctx.fillStyle = noseGrad;
+                ctx.arc(
+                    bx,
+                    cheekY,
+                    blushR,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+                ctx.strokeStyle =
+                    "rgba(244,63,94,0.7)";
+
+                ctx.lineWidth =
+                    2.5;
+
+                for (
+                    let i = -1;
+                    i <= 1;
+                    i++
+                ) {
+
+                    ctx.beginPath();
+
+                    ctx.moveTo(
+                        bx +
+                            i * 7 -
+                            4,
+                        cheekY -
+                            5
+                    );
+
+                    ctx.lineTo(
+                        bx +
+                            i * 7 +
+                            4,
+                        cheekY +
+                            5
+                    );
+
+                    ctx.stroke();
+
+                }
+
+            }
+        );
+
+        // Nose blush
+        const noseGrad =
+            ctx.createRadialGradient(
+                cx,
+                cy +
+                    ry *
+                    0.05,
+                0,
+                cx,
+                cy +
+                    ry *
+                    0.05,
+                rx *
+                    0.14
+            );
+
+        noseGrad.addColorStop(
+            0,
+            "rgba(251,113,133,0.4)"
+        );
+
+        noseGrad.addColorStop(
+            1,
+            "transparent"
+        );
+
+        ctx.fillStyle =
+            noseGrad;
+
         ctx.beginPath();
-        ctx.arc(cx, cy + ry * 0.05, rx * 0.14, 0, Math.PI * 2);
+
+        ctx.arc(
+            cx,
+            cy +
+                ry *
+                0.05,
+            rx *
+                0.14,
+            0,
+            Math.PI * 2
+        );
+
         ctx.fill();
 
-        // Floating Cute Pastel Sparkles
-        ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "#f472b6";
-        ctx.shadowBlur = 12;
-        for (let i = 0; i < 5; i++) {
-            const angle = time * 2 + (i * Math.PI * 2 / 5);
-            const sx = cx + Math.cos(angle) * (rx * 0.9);
-            const sy = cy + Math.sin(angle) * (ry * 0.8) - 10;
-            ctx.font = "20px sans-serif";
-            ctx.fillText(i % 2 === 0 ? "✨" : "💖", sx - 10, sy);
+        // Floating sparkles
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.shadowColor =
+            "#f472b6";
+
+        ctx.shadowBlur =
+            12;
+
+        for (
+            let i = 0;
+            i < 5;
+            i++
+        ) {
+
+            const angle =
+                time *
+                    2 +
+                (
+                    i *
+                    Math.PI *
+                    2 /
+                    5
+                );
+
+            const sx =
+                cx +
+                Math.cos(angle) *
+                (
+                    rx *
+                    0.9
+                );
+
+            const sy =
+                cy +
+                Math.sin(angle) *
+                (
+                    ry *
+                    0.8
+                ) -
+                10;
+
+            ctx.font =
+                "20px sans-serif";
+
+            ctx.fillText(
+                i % 2 === 0
+                    ? "✨"
+                    : "💖",
+                sx - 10,
+                sy
+            );
+
         }
 
         ctx.restore();
+
     }
 
-    // ⚡ 6. CYBER WARRIOR FACE-PAINT
-    function drawCyberWarriorFacePaint(ctx, w, h, time) {
+    // ==========================================================
+    // CYBER WARRIOR
+    // ==========================================================
+
+    function drawCyberWarriorFacePaint(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const rx = (faceBox.w * w) / 2;
-        const ry = (faceBox.h * h) / 2;
 
-        ctx.shadowColor = "#38bdf8";
-        ctx.shadowBlur = 14;
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 3;
+        const cx =
+            faceBox.x * w;
 
-        // Left Cheek Tribal Blade Line
+        const cy =
+            faceBox.y * h;
+
+        const rx =
+            (
+                faceBox.w *
+                w
+            ) / 2;
+
+        const ry =
+            (
+                faceBox.h *
+                h
+            ) / 2;
+
+        ctx.shadowColor =
+            "#38bdf8";
+
+        ctx.shadowBlur =
+            14;
+
+        ctx.strokeStyle =
+            "#38bdf8";
+
+        ctx.lineWidth =
+            3;
+
+        // Left cheek
         ctx.beginPath();
-        ctx.moveTo(cx - rx * 0.3, cy + ry * 0.05);
-        ctx.lineTo(cx - rx * 0.75, cy + ry * 0.18);
-        ctx.lineTo(cx - rx * 0.9, cy + ry * 0.4);
+
+        ctx.moveTo(
+            cx -
+                rx *
+                0.3,
+            cy +
+                ry *
+                0.05
+        );
+
+        ctx.lineTo(
+            cx -
+                rx *
+                0.75,
+            cy +
+                ry *
+                0.18
+        );
+
+        ctx.lineTo(
+            cx -
+                rx *
+                0.9,
+            cy +
+                ry *
+                0.4
+        );
+
         ctx.stroke();
 
-        // Right Cheek Tribal Blade Line
+        // Right cheek
         ctx.beginPath();
-        ctx.moveTo(cx + rx * 0.3, cy + ry * 0.05);
-        ctx.lineTo(cx + rx * 0.75, cy + ry * 0.18);
-        ctx.lineTo(cx + rx * 0.9, cy + ry * 0.4);
+
+        ctx.moveTo(
+            cx +
+                rx *
+                0.3,
+            cy +
+                ry *
+                0.05
+        );
+
+        ctx.lineTo(
+            cx +
+                rx *
+                0.75,
+            cy +
+                ry *
+                0.18
+        );
+
+        ctx.lineTo(
+            cx +
+                rx *
+                0.9,
+            cy +
+                ry *
+                0.4
+        );
+
         ctx.stroke();
 
-        // Forehead Cyber Sigil
-        ctx.shadowColor = "#ec4899";
-        ctx.strokeStyle = "#ec4899";
+        // Forehead sigil
+        ctx.shadowColor =
+            "#ec4899";
+
+        ctx.strokeStyle =
+            "#ec4899";
+
         ctx.beginPath();
-        ctx.moveTo(cx, cy - ry * 0.65);
-        ctx.lineTo(cx - 16, cy - ry * 0.45);
-        ctx.lineTo(cx, cy - ry * 0.3);
-        ctx.lineTo(cx + 16, cy - ry * 0.45);
+
+        ctx.moveTo(
+            cx,
+            cy -
+                ry *
+                0.65
+        );
+
+        ctx.lineTo(
+            cx - 16,
+            cy -
+                ry *
+                0.45
+        );
+
+        ctx.lineTo(
+            cx,
+            cy -
+                ry *
+                0.3
+        );
+
+        ctx.lineTo(
+            cx + 16,
+            cy -
+                ry *
+                0.45
+        );
+
         ctx.closePath();
+
         ctx.stroke();
 
         ctx.restore();
+
     }
 
-    // 🖤 7. LEICA NOIR CINEMA (MONOCHROME ART)
-    function drawLeicaNoirCinema(ctx, w, h, time) {
-        ctx.save();
-        try {
-            const imgData = ctx.getImageData(0, 0, w, h);
-            const d = imgData.data;
+    // ==========================================================
+    // LEICA NOIR
+    // ==========================================================
 
-            // High Dynamic Range Monochrome Film Curve
-            for (let i = 0; i < d.length; i += 4) {
-                // Luminance calculation
-                let lum = (d[i] * 0.299) + (d[i + 1] * 0.587) + (d[i + 2] * 0.114);
-                // S-Curve Contrast Enhancement
-                lum = lum < 128 ? (lum * lum) / 128 : 255 - ((255 - lum) * (255 - lum)) / 128;
-                d[i] = lum;
-                d[i + 1] = lum;
-                d[i + 2] = lum;
+    function drawLeicaNoirCinema(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
+        ctx.save();
+
+        try {
+
+            const imgData =
+                ctx.getImageData(
+                    0,
+                    0,
+                    w,
+                    h
+                );
+
+            const d =
+                imgData.data;
+
+            for (
+                let i = 0;
+                i < d.length;
+                i += 4
+            ) {
+
+                let lum =
+                    (
+                        d[i] *
+                        0.299
+                    ) +
+                    (
+                        d[i + 1] *
+                        0.587
+                    ) +
+                    (
+                        d[i + 2] *
+                        0.114
+                    );
+
+                lum =
+                    lum < 128
+                        ? (
+                            lum *
+                            lum
+                        ) /
+                            128
+                        : 255 -
+                            (
+                                (
+                                    255 -
+                                    lum
+                                ) *
+                                (
+                                    255 -
+                                    lum
+                                )
+                            ) /
+                                128;
+
+                d[i] =
+                    lum;
+
+                d[i + 1] =
+                    lum;
+
+                d[i + 2] =
+                    lum;
+
             }
-            ctx.putImageData(imgData, 0, 0);
+
+            ctx.putImageData(
+                imgData,
+                0,
+                0
+            );
+
         } catch (e) {}
 
-        // Film Vignette
-        const noirVignette = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.72);
-        noirVignette.addColorStop(0, "transparent");
-        noirVignette.addColorStop(1, "rgba(0, 0, 0, 0.75)");
-        ctx.fillStyle = noirVignette;
-        ctx.fillRect(0, 0, w, h);
+        const noirVignette =
+            ctx.createRadialGradient(
+                w / 2,
+                h / 2,
+                Math.min(w, h) *
+                    0.3,
+                w / 2,
+                h / 2,
+                Math.max(w, h) *
+                    0.72
+            );
 
-        // Minimalist Film Brand Bottom Text
-        ctx.font = "bold 13px -apple-system, BlinkMacSystemFont, sans-serif";
-        ctx.fillStyle = "#ffffff";
-        ctx.letterSpacing = "2px";
-        ctx.textAlign = "center";
-        ctx.fillText("LEICA NOIR 35MM • F/1.4", w / 2, h - 16);
+        noirVignette.addColorStop(
+            0,
+            "transparent"
+        );
+
+        noirVignette.addColorStop(
+            1,
+            "rgba(0,0,0,0.75)"
+        );
+
+        ctx.fillStyle =
+            noirVignette;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+        ctx.font =
+            "bold 13px -apple-system, BlinkMacSystemFont, sans-serif";
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.textAlign =
+            "center";
+
+        ctx.fillText(
+            "LEICA NOIR 35MM • F/1.4",
+            w / 2,
+            h - 16
+        );
 
         ctx.restore();
+
     }
 
-    // ❄️ 8. DIAMOND ICE SHIMMER
-    function drawDiamondIceFrost(ctx, w, h, time) {
+    // ==========================================================
+    // DIAMOND ICE FROST
+    // ==========================================================
+
+    function drawDiamondIceFrost(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const rx = (faceBox.w * w) / 2;
-        const ry = (faceBox.h * h) / 2;
 
-        // Frosted Ice Atmospheric Ambient
-        const frostGrad = ctx.createRadialGradient(cx, cy, rx * 0.5, w / 2, h / 2, Math.max(w, h));
-        frostGrad.addColorStop(0, "transparent");
-        frostGrad.addColorStop(0.7, "rgba(186, 230, 253, 0.1)");
-        frostGrad.addColorStop(1, "rgba(56, 189, 248, 0.25)");
-        ctx.fillStyle = frostGrad;
-        ctx.fillRect(0, 0, w, h);
+        const cx =
+            faceBox.x * w;
 
-        // Diamond Shimmering Prismatic Flares
+        const cy =
+            faceBox.y * h;
+
+        const rx =
+            (
+                faceBox.w *
+                w
+            ) / 2;
+
+        const ry =
+            (
+                faceBox.h *
+                h
+            ) / 2;
+
+        const frostGrad =
+            ctx.createRadialGradient(
+                cx,
+                cy,
+                rx * 0.5,
+                w / 2,
+                h / 2,
+                Math.max(w, h)
+            );
+
+        frostGrad.addColorStop(
+            0,
+            "transparent"
+        );
+
+        frostGrad.addColorStop(
+            0.7,
+            "rgba(186,230,253,0.1)"
+        );
+
+        frostGrad.addColorStop(
+            1,
+            "rgba(56,189,248,0.25)"
+        );
+
+        ctx.fillStyle =
+            frostGrad;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
         const sparklePoints = [
-            { x: cx - rx * 0.48, y: cy + ry * 0.1 },
-            { x: cx + rx * 0.48, y: cy + ry * 0.1 },
-            { x: cx - rx * 0.35, y: cy - ry * 0.18 },
-            { x: cx + rx * 0.35, y: cy - ry * 0.18 },
-            { x: cx, y: cy - ry * 0.4 }
+
+            {
+                x:
+                    cx -
+                    rx *
+                    0.48,
+
+                y:
+                    cy +
+                    ry *
+                    0.1
+            },
+
+            {
+                x:
+                    cx +
+                    rx *
+                    0.48,
+
+                y:
+                    cy +
+                    ry *
+                    0.1
+            },
+
+            {
+                x:
+                    cx -
+                    rx *
+                    0.35,
+
+                y:
+                    cy -
+                    ry *
+                    0.18
+            },
+
+            {
+                x:
+                    cx +
+                    rx *
+                    0.35,
+
+                y:
+                    cy -
+                    ry *
+                    0.18
+            },
+
+            {
+                x:
+                    cx,
+
+                y:
+                    cy -
+                    ry *
+                    0.4
+            }
+
         ];
 
-        sparklePoints.forEach((pt, idx) => {
-            const rot = time * 2 + idx;
-            const size = 12 + Math.sin(time * 4 + idx) * 5;
+        sparklePoints.forEach(
+            (pt, idx) => {
 
-            ctx.save();
-            ctx.translate(pt.x, pt.y);
-            ctx.rotate(rot);
+                const rot =
+                    time *
+                        2 +
+                    idx;
 
-            ctx.shadowColor = "#38bdf8";
-            ctx.shadowBlur = 16;
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 2.5;
+                const size =
+                    12 +
+                    Math.sin(
+                        time *
+                            4 +
+                            idx
+                    ) *
+                    5;
 
-            // 4-point diamond star
-            ctx.beginPath();
-            ctx.moveTo(-size, 0);
-            ctx.lineTo(size, 0);
-            ctx.moveTo(0, -size);
-            ctx.lineTo(0, size);
-            ctx.stroke();
+                ctx.save();
 
-            ctx.fillStyle = "#bae6fd";
-            ctx.beginPath();
-            ctx.arc(0, 0, 3, 0, Math.PI * 2);
-            ctx.fill();
+                ctx.translate(
+                    pt.x,
+                    pt.y
+                );
 
-            ctx.restore();
-        });
+                ctx.rotate(
+                    rot
+                );
+
+                ctx.shadowColor =
+                    "#38bdf8";
+
+                ctx.shadowBlur =
+                    16;
+
+                ctx.strokeStyle =
+                    "#ffffff";
+
+                ctx.lineWidth =
+                    2.5;
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    -size,
+                    0
+                );
+
+                ctx.lineTo(
+                    size,
+                    0
+                );
+
+                ctx.moveTo(
+                    0,
+                    -size
+                );
+
+                ctx.lineTo(
+                    0,
+                    size
+                );
+
+                ctx.stroke();
+
+                ctx.fillStyle =
+                    "#bae6fd";
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    0,
+                    0,
+                    3,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+                ctx.restore();
+
+            }
+        );
 
         ctx.restore();
+
     }
 
-    // 🎨 1. CARTOON / ANIME CEL-SHADING ENGINE
-    function drawCartoonCelShader(ctx, w, h, time) {
-        ctx.save();
-        try {
-            const imgData = ctx.getImageData(0, 0, w, h);
-            const d = imgData.data;
-            const step = 48; // Palette quantization size for toon shading
+    // ==========================================================
+    // CARTOON / ANIME CEL SHADER
+    // ==========================================================
 
-            // 1. Posterization + Warm Anime Skin tone
-            for (let i = 0; i < d.length; i += 4) {
-                d[i] = Math.min(255, Math.floor(d[i] / step) * step + step / 2);
-                d[i + 1] = Math.min(255, Math.floor(d[i + 1] / step) * step + step / 2);
-                d[i + 2] = Math.min(255, Math.floor(d[i + 2] / step) * step + step / 2);
+    function drawCartoonCelShader(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
+        ctx.save();
+
+        try {
+
+            const imgData =
+                ctx.getImageData(
+                    0,
+                    0,
+                    w,
+                    h
+                );
+
+            const d =
+                imgData.data;
+
+            const step =
+                48;
+
+            for (
+                let i = 0;
+                i < d.length;
+                i += 4
+            ) {
+
+                d[i] =
+                    Math.min(
+                        255,
+                        Math.floor(
+                            d[i] /
+                            step
+                        ) *
+                            step +
+                            step / 2
+                    );
+
+                d[i + 1] =
+                    Math.min(
+                        255,
+                        Math.floor(
+                            d[i + 1] /
+                            step
+                        ) *
+                            step +
+                            step / 2
+                    );
+
+                d[i + 2] =
+                    Math.min(
+                        255,
+                        Math.floor(
+                            d[i + 2] /
+                            step
+                        ) *
+                            step +
+                            step / 2
+                    );
+
             }
-            ctx.putImageData(imgData, 0, 0);
+
+            ctx.putImageData(
+                imgData,
+                0,
+                0
+            );
+
         } catch (e) {}
 
-        // Comic-style ink border & sound effect badge
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 6;
-        ctx.strokeRect(3, 3, w - 6, h - 6);
+        // Comic frame
+        ctx.strokeStyle =
+            "#000000";
 
-        // Manga Speed/Action lines in corner
-        ctx.strokeStyle = "rgba(0, 0, 0, 0.4)";
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 6; i++) {
+        ctx.lineWidth =
+            6;
+
+        ctx.strokeRect(
+            3,
+            3,
+            w - 6,
+            h - 6
+        );
+
+        // Action lines
+        ctx.strokeStyle =
+            "rgba(0,0,0,0.4)";
+
+        ctx.lineWidth =
+            2;
+
+        for (
+            let i = 0;
+            i < 6;
+            i++
+        ) {
+
             ctx.beginPath();
-            ctx.moveTo(w - (i * 20), 0);
-            ctx.lineTo(w, i * 20);
+
+            ctx.moveTo(
+                w -
+                    i *
+                    20,
+                0
+            );
+
+            ctx.lineTo(
+                w,
+                i *
+                    20
+            );
+
             ctx.stroke();
+
         }
 
-        // Cartoon Sparkle
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        ctx.fillStyle = "#fde047";
-        ctx.font = "24px sans-serif";
-        ctx.fillText("✨", cx + h * 0.12, cy - h * 0.1);
+        // Face sparkle
+        const cx =
+            faceBox.x * w;
+
+        const cy =
+            faceBox.y * h;
+
+        ctx.fillStyle =
+            "#fde047";
+
+        ctx.font =
+            "24px sans-serif";
+
+        ctx.fillText(
+            "✨",
+            cx +
+                h *
+                0.12,
+            cy -
+                h *
+                0.1
+        );
 
         ctx.restore();
+
     }
 
-    // 💎 2. GLAMOUR STUDIO PORTRAIT HD
-    function drawStudioPortraitHD(ctx, w, h, time) {
+    // ==========================================================
+    // STUDIO PORTRAIT HD
+    // ==========================================================
+
+    function drawStudioPortraitHD(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
 
-        // Warm Golden-Hour Studio Light overlay
-        const grad = ctx.createLinearGradient(0, 0, w, h);
-        grad.addColorStop(0, "rgba(251, 146, 60, 0.12)");
-        grad.addColorStop(0.5, "transparent");
-        grad.addColorStop(1, "rgba(147, 51, 234, 0.1)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+        const cx =
+            faceBox.x * w;
 
-        // Soft Ring Light reflection in eyes
-        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+        const cy =
+            faceBox.y * h;
+
+        const grad =
+            ctx.createLinearGradient(
+                0,
+                0,
+                w,
+                h
+            );
+
+        grad.addColorStop(
+            0,
+            "rgba(251,146,60,0.12)"
+        );
+
+        grad.addColorStop(
+            0.5,
+            "transparent"
+        );
+
+        grad.addColorStop(
+            1,
+            "rgba(147,51,234,0.1)"
+        );
+
+        ctx.fillStyle =
+            grad;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+        // Subtle eye catchlights
+        ctx.fillStyle =
+            "rgba(255,255,255,0.85)";
+
         ctx.beginPath();
-        ctx.arc(cx - h * 0.055, cy - h * 0.02, 3, 0, Math.PI * 2);
-        ctx.arc(cx + h * 0.055, cy - h * 0.02, 3, 0, Math.PI * 2);
+
+        ctx.arc(
+            cx -
+                h *
+                0.055,
+            cy -
+                h *
+                0.02,
+            3,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.arc(
+            cx +
+                h *
+                0.055,
+            cy -
+                h *
+                0.02,
+            3,
+            0,
+            Math.PI * 2
+        );
+
         ctx.fill();
 
         ctx.restore();
+
     }
 
-    // 📰 3. POP-ART ANDY WARHOL / COMIC MATRIX
-    function drawPopArtMatrix(ctx, w, h, time) {
-        ctx.save();
-        ctx.fillStyle = "rgba(236, 72, 153, 0.15)";
-        ctx.fillRect(0, 0, w, h);
+    // ==========================================================
+    // POP ART MATRIX
+    // ==========================================================
 
-        // Comic Halftone Dots
-        ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
-        for (let x = 10; x < w; x += 18) {
-            for (let y = 10; y < h; y += 18) {
+    function drawPopArtMatrix(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
+        ctx.save();
+
+        ctx.fillStyle =
+            "rgba(236,72,153,0.15)";
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+        // Halftone dots
+        ctx.fillStyle =
+            "rgba(0,0,0,0.12)";
+
+        for (
+            let x = 10;
+            x < w;
+            x += 18
+        ) {
+
+            for (
+                let y = 10;
+                y < h;
+                y += 18
+            ) {
+
                 ctx.beginPath();
-                ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+
+                ctx.arc(
+                    x,
+                    y,
+                    2.5,
+                    0,
+                    Math.PI * 2
+                );
+
                 ctx.fill();
+
             }
+
         }
 
-        // Pop Art Speech Bubble
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const bx = cx + h * 0.08;
-        const by = cy - h * 0.18;
+        // Speech bubble
+        const cx =
+            faceBox.x * w;
 
-        ctx.fillStyle = "#ffffff";
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 3;
+        const cy =
+            faceBox.y * h;
+
+        const bx =
+            cx +
+            h *
+            0.08;
+
+        const by =
+            cy -
+            h *
+            0.18;
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.strokeStyle =
+            "#000000";
+
+        ctx.lineWidth =
+            3;
+
         ctx.beginPath();
-        ctx.roundRect(bx, by, 110, 36, 12);
+
+        ctx.roundRect(
+            bx,
+            by,
+            110,
+            36,
+            12
+        );
+
         ctx.fill();
+
         ctx.stroke();
 
-        ctx.fillStyle = "#000000";
-        ctx.font = "bold 13px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("POW! ✨", bx + 55, by + 22);
+        ctx.fillStyle =
+            "#000000";
+
+        ctx.font =
+            "bold 13px sans-serif";
+
+        ctx.textAlign =
+            "center";
+
+        ctx.fillText(
+            "POW! ✨",
+            bx + 55,
+            by + 22
+        );
 
         ctx.restore();
+
     }
 
-    // ⚡ 4. NEON CYBERPUNK REALISTIC
-    function drawCyberpunkNeon(ctx, w, h, time) {
-        ctx.save();
-        // Cyan-Pink Bi-Color Lighting
-        const grad = ctx.createLinearGradient(0, 0, w, 0);
-        grad.addColorStop(0, "rgba(6, 182, 212, 0.22)");
-        grad.addColorStop(1, "rgba(236, 72, 153, 0.22)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+    // ==========================================================
+    // CYBERPUNK NEON
+    // ==========================================================
 
-        // Chromatic Glitch lines
-        ctx.strokeStyle = "rgba(34, 211, 238, 0.6)";
-        ctx.lineWidth = 1;
-        const gy = (time * 120) % h;
+    function drawCyberpunkNeon(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
+        ctx.save();
+
+        const grad =
+            ctx.createLinearGradient(
+                0,
+                0,
+                w,
+                0
+            );
+
+        grad.addColorStop(
+            0,
+            "rgba(6,182,212,0.22)"
+        );
+
+        grad.addColorStop(
+            1,
+            "rgba(236,72,153,0.22)"
+        );
+
+        ctx.fillStyle =
+            grad;
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+        // Animated scan line
+        ctx.strokeStyle =
+            "rgba(34,211,238,0.6)";
+
+        ctx.lineWidth =
+            1;
+
+        const gy =
+            (
+                time *
+                120
+            ) %
+            h;
+
         ctx.beginPath();
-        ctx.moveTo(0, gy); ctx.lineTo(w, gy);
+
+        ctx.moveTo(
+            0,
+            gy
+        );
+
+        ctx.lineTo(
+            w,
+            gy
+        );
+
         ctx.stroke();
 
         ctx.restore();
+
     }
 
-    // 🕶️ 5. 35MM HOLLYWOOD CINEMATIC
-    function drawCinematic35mm(ctx, w, h, time) {
+    // ==========================================================
+    // CINEMATIC 35MM
+    // ==========================================================
+
+    function drawCinematic35mm(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        // 2.39:1 Anamorphic Letterbox Bars
-        const barH = h * 0.11;
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, w, barH);
-        ctx.fillRect(0, h - barH, w, barH);
 
-        // Teal & Orange Color Grade
-        const grad = ctx.createLinearGradient(0, 0, 0, h);
-        grad.addColorStop(0, "rgba(15, 118, 110, 0.15)");
-        grad.addColorStop(0.5, "rgba(249, 115, 22, 0.12)");
-        grad.addColorStop(1, "rgba(15, 23, 42, 0.2)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, barH, w, h - barH * 2);
+        const barH =
+            h *
+            0.11;
 
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "10px monospace";
-        ctx.textAlign = "left";
-        ctx.fillText("REC ● 4K 24FPS | 35MM ANAMORPHIC", 20, barH - 8);
+        // Letterbox
+        ctx.fillStyle =
+            "#000000";
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            barH
+        );
+
+        ctx.fillRect(
+            0,
+            h -
+                barH,
+            w,
+            barH
+        );
+
+        // Teal/orange grade
+        const grad =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                h
+            );
+
+        grad.addColorStop(
+            0,
+            "rgba(15,118,110,0.15)"
+        );
+
+        grad.addColorStop(
+            0.5,
+            "rgba(249,115,22,0.12)"
+        );
+
+        grad.addColorStop(
+            1,
+            "rgba(15,23,42,0.2)"
+        );
+
+        ctx.fillStyle =
+            grad;
+
+        ctx.fillRect(
+            0,
+            barH,
+            w,
+            h -
+                barH *
+                2
+        );
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.font =
+            "10px monospace";
+
+        ctx.textAlign =
+            "left";
+
+        ctx.fillText(
+            "REC ● 4K 24FPS | 35MM ANAMORPHIC",
+            20,
+            barH - 8
+        );
 
         ctx.restore();
+
     }
 
-    // ⚡ 6. DIGITAL GLITCH & RGB SPLIT SHADER
-    function drawDigitalGlitch(ctx, w, h, time) {
+    // ==========================================================
+    // DIGITAL GLITCH
+    // ==========================================================
+
+    function drawDigitalGlitch(
+        ctx,
+        w,
+        h,
+        time
+    ) {
+
         ctx.save();
-        // Horizontal slice displacement
-        const sliceCount = 8;
-        for (let i = 0; i < sliceCount; i++) {
-            if (Math.sin(time * 12 + i * 4) > 0.4) {
-                const sy = Math.floor((Math.sin(time * 8 + i * 2) * 0.5 + 0.5) * (h - 40));
-                const sHeight = Math.floor(Math.random() * 20 + 8);
-                const shiftX = (Math.sin(time * 25 + i * 7) > 0 ? 1 : -1) * Math.floor(Math.random() * 22 + 6);
-                
+
+        const sliceCount =
+            8;
+
+        for (
+            let i = 0;
+            i < sliceCount;
+            i++
+        ) {
+
+            if (
+                Math.sin(
+                    time *
+                        12 +
+                        i *
+                        4
+                ) >
+                0.4
+            ) {
+
+                const sy =
+                    Math.floor(
+                        (
+                            Math.sin(
+                                time *
+                                    8 +
+                                    i *
+                                    2
+                            ) *
+                            0.5 +
+                            0.5
+                        ) *
+                        (
+                            h -
+                            40
+                        )
+                    );
+
+                const sHeight =
+                    Math.floor(
+                        Math.random() *
+                            20 +
+                            8
+                    );
+
+                const shiftX =
+                    (
+                        Math.sin(
+                            time *
+                                25 +
+                                i *
+                                7
+                        ) >
+                        0
+                            ? 1
+                            : -1
+                    ) *
+                    Math.floor(
+                        Math.random() *
+                            22 +
+                            6
+                    );
+
                 try {
-                    const slice = ctx.getImageData(0, sy, w, sHeight);
-                    ctx.putImageData(slice, shiftX, sy);
+
+                    const slice =
+                        ctx.getImageData(
+                            0,
+                            sy,
+                            w,
+                            sHeight
+                        );
+
+                    ctx.putImageData(
+                        slice,
+                        shiftX,
+                        sy
+                    );
+
                 } catch (e) {}
+
             }
+
         }
 
-        // RGB Split Chromatic Tint
-        ctx.globalCompositeOperation = "screen";
-        ctx.fillStyle = "rgba(239, 68, 68, 0.15)";
-        ctx.fillRect(Math.sin(time * 15) * 4, 0, w, h);
-        ctx.fillStyle = "rgba(6, 182, 212, 0.15)";
-        ctx.fillRect(Math.cos(time * 15) * -4, 0, w, h);
-        ctx.globalCompositeOperation = "source-over";
+        // RGB split
+        ctx.globalCompositeOperation =
+            "screen";
 
-        // Digital scanline noise
-        ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
-        for (let y = 0; y < h; y += 4) {
-            ctx.fillRect(0, y, w, 1);
+        ctx.fillStyle =
+            "rgba(239,68,68,0.15)";
+
+        ctx.fillRect(
+            Math.sin(
+                time *
+                    15
+            ) *
+                4,
+            0,
+            w,
+            h
+        );
+
+        ctx.fillStyle =
+            "rgba(6,182,212,0.15)";
+
+        ctx.fillRect(
+            Math.cos(
+                time *
+                    15
+            ) *
+                -4,
+            0,
+            w,
+            h
+        );
+
+        ctx.globalCompositeOperation =
+            "source-over";
+
+        // Scanlines
+        ctx.fillStyle =
+            "rgba(255,255,255,0.06)";
+
+        for (
+            let y = 0;
+            y < h;
+            y += 4
+        ) {
+
+            ctx.fillRect(
+                0,
+                y,
+                w,
+                1
+            );
+
         }
 
-        // Glitch Telemetry
-        ctx.fillStyle = "#22d3ee";
-        ctx.font = "bold 13px monospace";
-        ctx.textAlign = "left";
-        ctx.fillText(`SIGNAL_CORRUPT: 0x${Math.floor(Math.random() * 0xffff).toString(16).toUpperCase()}`, 16, 28);
-        ctx.fillStyle = "#ef4444";
-        ctx.fillText("WARN: BUFFER_OVERFLOW // [SYSTEM_OVERRIDE]", 16, 46);
+        // Telemetry
+        ctx.fillStyle =
+            "#22d3ee";
+
+        ctx.font =
+            "bold 13px monospace";
+
+        ctx.textAlign =
+            "left";
+
+        ctx.fillText(
+            `SIGNAL_CORRUPT: 0x${Math.floor(
+                Math.random() *
+                0xffff
+            )
+                .toString(16)
+                .toUpperCase()}`,
+            16,
+            28
+        );
+
+        ctx.fillStyle =
+            "#ef4444";
+
+        ctx.fillText(
+            "WARN: BUFFER_OVERFLOW // [SYSTEM_OVERRIDE]",
+            16,
+            46
+        );
 
         ctx.restore();
+
     }
 
-    // 🚀 7. SPACE EXPLORER COSMIC ASTRONAUT HUD
-    function drawSpaceExplorer(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
+    // ==========================================================
+    // SPACE EXPLORER
+    // ==========================================================
 
-        // Deep Cosmic Nebula Tint
-        const nebula = ctx.createRadialGradient(cx, cy, 20, cx, cy, Math.max(w, h) * 0.7);
-        nebula.addColorStop(0, "rgba(59, 130, 246, 0.05)");
-        nebula.addColorStop(0.5, "rgba(147, 51, 234, 0.12)");
-        nebula.addColorStop(1, "rgba(15, 23, 42, 0.35)");
-        ctx.fillStyle = nebula;
-        ctx.fillRect(0, 0, w, h);
-
-        // Twinkling Stars
-        for (let i = 0; i < 24; i++) {
-            const sx = ((i * 137.5) % w);
-            const sy = ((i * 219.3) % h);
-            const alpha = Math.sin(time * 4 + i) * 0.4 + 0.6;
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-            ctx.beginPath();
-            ctx.arc(sx, sy, (i % 3) + 1, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Astronaut Visor Curved HUD
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.6)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(cx, cy, h * 0.28, Math.PI * 0.8, Math.PI * 0.2, true);
-        ctx.stroke();
-
-        // Visor telemetry
-        ctx.fillStyle = "#38bdf8";
-        ctx.font = "11px monospace";
-        ctx.textAlign = "left";
-        ctx.fillText(`🚀 ORBIT: 408 KM | O2: 98.4%`, cx - h * 0.22, cy - h * 0.3);
-        ctx.fillText(`RAD: NORMAL | GRAV: 0.00G`, cx - h * 0.22, cy - h * 0.3 + 14);
-
-        // Planet in corner
-        ctx.strokeStyle = "rgba(168, 85, 247, 0.7)";
-        ctx.fillStyle = "rgba(147, 51, 234, 0.3)";
-        ctx.beginPath();
-        ctx.arc(w - 45, 45, 22, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        // Planet ring
-        ctx.beginPath();
-        ctx.ellipse(w - 45, 45, 34, 8, Math.PI / 4, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.restore();
-    }
-
-    // 🦸 8. SUPERHERO GOLDEN AURA & ACTION BURST
-    function drawSuperhero(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-
-        // Comic Book Action Rays emanating outward
-        ctx.strokeStyle = "rgba(251, 191, 36, 0.08)";
-        ctx.lineWidth = 2;
-        for (let a = 0; a < Math.PI * 2; a += Math.PI / 12) {
-            ctx.beginPath();
-            ctx.moveTo(cx + Math.cos(a) * (h * 0.25), cy + Math.sin(a) * (h * 0.25));
-            ctx.lineTo(cx + Math.cos(a) * (w + h), cy + Math.sin(a) * (w + h));
-            ctx.stroke();
-        }
-
-        // Golden Energy Aura around face
-        const aura = ctx.createRadialGradient(cx, cy, h * 0.15, cx, cy, h * 0.35);
-        aura.addColorStop(0, "rgba(250, 204, 21, 0.22)");
-        aura.addColorStop(0.7, "rgba(245, 158, 11, 0.12)");
-        aura.addColorStop(1, "transparent");
-        ctx.fillStyle = aura;
-        ctx.beginPath();
-        ctx.arc(cx, cy, h * 0.35, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Crackling Electric Power Lightning
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = "#0284c7";
-        ctx.shadowBlur = 10;
-        for (let i = 0; i < 4; i++) {
-            const angle = time * 3 + (i * Math.PI / 2);
-            const startR = h * 0.22;
-            const endR = h * 0.32;
-            ctx.beginPath();
-            ctx.moveTo(cx + Math.cos(angle) * startR, cy + Math.sin(angle) * startR);
-            ctx.lineTo(cx + Math.cos(angle + 0.15) * ((startR + endR) / 2) + (Math.random() - 0.5) * 10, cy + Math.sin(angle + 0.15) * ((startR + endR) / 2));
-            ctx.lineTo(cx + Math.cos(angle) * endR, cy + Math.sin(angle) * endR);
-            ctx.stroke();
-        }
-        ctx.shadowBlur = 0;
-
-        // Hero Emblem / Badge at bottom center of face
-        ctx.fillStyle = "#eab308";
-        ctx.strokeStyle = "#fef08a";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(cx, cy + h * 0.26, 18, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = "#000000";
-        ctx.font = "bold 14px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("★", cx, cy + h * 0.26);
-
-        ctx.restore();
-    }
-
-    // 🌐 9. WEBZONEBW SIGNATURE PROMOTIONAL THEME
-    function drawWebZoneBWTheme(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-
-        // Signature Cyber Teal & Deep Blue Tint
-        const grad = ctx.createLinearGradient(0, 0, w, h);
-        grad.addColorStop(0, "rgba(14, 165, 233, 0.14)");
-        grad.addColorStop(0.5, "rgba(56, 189, 248, 0.04)");
-        grad.addColorStop(1, "rgba(2, 132, 199, 0.18)");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
-
-        // Animated Circuit Grid Matrix
-        ctx.strokeStyle = "rgba(14, 165, 233, 0.12)";
-        ctx.lineWidth = 1;
-        const gridGap = 40;
-        for (let x = 0; x < w; x += gridGap) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, h);
-            ctx.stroke();
-        }
-        for (let y = 0; y < h; y += gridGap) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(w, y);
-            ctx.stroke();
-        }
-
-        // Top Brand Header Banner
-        const bannerH = 44;
-        ctx.fillStyle = "rgba(11, 15, 25, 0.85)";
-        ctx.fillRect(0, 0, w, bannerH);
-        ctx.strokeStyle = "#0284c7";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(0, bannerH);
-        ctx.lineTo(w, bannerH);
-        ctx.stroke();
-
-        // Brand Logo Text
-        ctx.fillStyle = "#38bdf8";
-        ctx.font = `900 ${Math.max(16, Math.round(w * 0.034))}px sans-serif`;
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-        ctx.fillText("🌐 WEBZONEBW.IN", 16, bannerH / 2);
-
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = `600 ${Math.max(11, Math.round(w * 0.02))}px monospace`;
-        ctx.textAlign = "right";
-        ctx.fillText("SYSTEMS & IT ARCHITECTURE", w - 16, bannerH / 2);
-
-        // Holographic Orbital Rings around face
-        const ringRadius = h * 0.26;
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.65)";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Outer revolving dashed ring
-        ctx.save();
-        ctx.strokeStyle = "rgba(14, 165, 233, 0.4)";
-        ctx.setLineDash([8, 8]);
-        ctx.beginPath();
-        ctx.arc(cx, cy, ringRadius + 14, time * 0.8, time * 0.8 + Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-
-        // Orbiting Tech Nodes
-        const badges = ["CLOUD", "K8s", "LINUX", "CYBER-SEC"];
-        badges.forEach((tag, idx) => {
-            const angle = time * 0.6 + (idx * (Math.PI / 2));
-            const nx = cx + Math.cos(angle) * (ringRadius + 14);
-            const ny = cy + Math.sin(angle) * (ringRadius + 14);
-
-            ctx.fillStyle = "#0f172a";
-            ctx.strokeStyle = "#38bdf8";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.roundRect(nx - 28, ny - 10, 56, 20, 10);
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.fillStyle = "#38bdf8";
-            ctx.font = "bold 9px monospace";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(tag, nx, ny);
-        });
-
-        // Bottom Promotional Lower-Third
-        const lowerH = 54;
-        const lowerY = h - lowerH;
-        ctx.fillStyle = "rgba(11, 15, 25, 0.9)";
-        ctx.fillRect(0, lowerY, w, lowerH);
-        ctx.strokeStyle = "#0284c7";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(0, lowerY);
-        ctx.lineTo(w, lowerY);
-        ctx.stroke();
-
-        // Name & Role
-        ctx.fillStyle = "#f8fafc";
-        ctx.font = `bold ${Math.max(14, Math.round(w * 0.03))}px sans-serif`;
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        ctx.fillText("SAMEER CHOUHAN", 18, lowerY + 10);
-
-        ctx.fillStyle = "#38bdf8";
-        ctx.font = `500 ${Math.max(11, Math.round(w * 0.02))}px monospace`;
-        ctx.fillText("Systems Engineer • Network & Cloud Infrastructure", 18, lowerY + 30);
-
-        // Verification Badge in bottom right
-        ctx.fillStyle = "#22c55e";
-        ctx.font = "bold 11px monospace";
-        ctx.textAlign = "right";
-        ctx.fillText("VERIFIED ● WEBZONEBW ER", w - 18, lowerY + 22);
-
-        ctx.restore();
-    }
-
-    /* ==========================================================
-       TRENDING MAGAZINE COVER GENERATOR
-       ========================================================== */
-
-    function drawMagazineCover(ctx, w, h, magType) {
-        ctx.save();
-        const customHead = magHeadlineInput ? magHeadlineInput.value : "THE AI ARCHITECT";
-        const customSub = magSubheadInput ? magSubheadInput.value : "Innovating the Future of Extended Reality";
-
-        if (magType === "time") {
-            // 📰 TIME MAGAZINE
-            // Red Outer Frame
-            const borderSize = Math.max(14, w * 0.025);
-            ctx.strokeStyle = "#dc2626";
-            ctx.lineWidth = borderSize;
-            ctx.strokeRect(borderSize / 2, borderSize / 2, w - borderSize, h - borderSize);
-
-            // "TIME" Masthead
-            ctx.fillStyle = "#dc2626";
-            ctx.font = `bold ${Math.round(w * 0.16)}px 'Times New Roman', serif`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillText("TIME", w / 2, borderSize + 4);
-
-            // Sub-badge
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `bold ${Math.round(w * 0.032)}px sans-serif`;
-            ctx.fillText("SPECIAL EDITION: PERSON OF THE YEAR", w / 2, borderSize + (w * 0.16) + 4);
-
-            // Headline Overlay
-            ctx.fillStyle = "#fef08a";
-            ctx.font = `bold ${Math.round(w * 0.055)}px 'Times New Roman', serif`;
-            ctx.textAlign = "left";
-            ctx.fillText(customHead.toUpperCase(), borderSize + 16, h - borderSize - 56);
-
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `italic ${Math.round(w * 0.03)}px sans-serif`;
-            ctx.fillText(customSub, borderSize + 16, h - borderSize - 32);
-
-            // Barcode
-            drawBarcode(ctx, w - borderSize - 80, h - borderSize - 40, 70, 26);
-        } else if (magType === "wired") {
-            // 🚀 WIRED TECH MAGAZINE
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `900 ${Math.round(w * 0.15)}px monospace`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.fillText("WIRED", w / 2, 14);
-
-            // Tagline banner
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(16, h * 0.72, w - 32, 44);
-            ctx.fillStyle = "#22d3ee";
-            ctx.font = `bold ${Math.round(w * 0.045)}px monospace`;
-            ctx.textAlign = "center";
-            ctx.fillText(customHead.toUpperCase(), w / 2, h * 0.72 + 28);
-
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `12px monospace`;
-            ctx.fillText(customSub, w / 2, h * 0.72 + 56);
-        } else if (magType === "forbes") {
-            // 💼 FORBES MAGAZINE
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `bold ${Math.round(w * 0.14)}px 'Georgia', serif`;
-            ctx.textAlign = "center";
-            ctx.fillText("Forbes", w / 2, 60);
-
-            // 30 Under 30 Gold Badge
-            ctx.fillStyle = "#f59e0b";
-            ctx.font = `bold ${Math.round(w * 0.035)}px sans-serif`;
-            ctx.fillText("★ 30 UNDER 30 TECH LEADERS ★", w / 2, 88);
-
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `bold ${Math.round(w * 0.052)}px 'Georgia', serif`;
-            ctx.textAlign = "left";
-            ctx.fillText(customHead, 24, h - 60);
-
-            ctx.fillStyle = "#e2e8f0";
-            ctx.font = `13px sans-serif`;
-            ctx.fillText(customSub, 24, h - 38);
-        } else if (magType === "vogue") {
-            // 🕶️ VOGUE MAGAZINE
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `100 ${Math.round(w * 0.18)}px 'Didot', 'Bodoni MT', 'Cinzel', serif`;
-            ctx.textAlign = "center";
-            ctx.fillText("VOGUE", w / 2, 65);
-
-            ctx.fillStyle = "#fbcfe8";
-            ctx.font = `300 ${Math.round(w * 0.04)}px sans-serif`;
-            ctx.fillText("THE DIGITAL COUTURE ISSUE", w / 2, 92);
-
-            ctx.fillStyle = "#ffffff";
-            ctx.font = `italic ${Math.round(w * 0.045)}px 'Didot', serif`;
-            ctx.textAlign = "right";
-            ctx.fillText(customHead, w - 24, h - 60);
-        } else if (magType === "cyber") {
-            // 🎮 CYBERPUNK / GAMER MAGAZINE
-            ctx.fillStyle = "#facc15";
-            ctx.fillRect(0, 0, w, 40);
-
-            ctx.fillStyle = "#000000";
-            ctx.font = `900 20px monospace`;
-            ctx.textAlign = "left";
-            ctx.fillText("⚡ CYBER//PUNK MONTHLY", 16, 26);
-
-            ctx.textAlign = "right";
-            ctx.fillText("VOL. 2077 // EDITION 11", w - 16, 26);
-
-            ctx.fillStyle = "#f43f5e";
-            ctx.font = `bold ${Math.round(w * 0.06)}px monospace`;
-            ctx.textAlign = "left";
-            ctx.fillText(customHead.toUpperCase(), 20, h - 50);
-
-            ctx.fillStyle = "#38bdf8";
-            ctx.font = `12px monospace`;
-            ctx.fillText(customSub, 20, h - 30);
-        }
-
-        ctx.restore();
-    }
-
-    function drawBarcode(ctx, x, y, bw, bh) {
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(x, y, bw, bh);
-        ctx.fillStyle = "#000000";
-        for (let i = 4; i < bw - 4; i += 3) {
-            if (Math.random() > 0.3) {
-                ctx.fillRect(x + i, y + 2, 2, bh - 6);
-            }
-        }
-    }
-
-    /* ==========================================================
-       TECH & HALLOWEEN FX IMPLEMENTATIONS
-       ========================================================== */
-
-    // 👤 ERGONOMIC ANATOMICAL FACE-FIT HOLOGRAPHIC RETICLE
-    function drawFaceHUD(ctx, w, h, time) {
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const fw = (faceBox.w || 0.32) * w;
-        const fh = (faceBox.h || 0.44) * h;
-        const rx = fw * 0.52;
-        const ry = fh * 0.58;
+    function drawSpaceExplorer(
+        ctx,
+        w,
+        h,
+        time
+    ) {
 
         ctx.save();
 
-        // 1. Soft Anatomical Face-Fitting Outer Glow
-        const pulse = Math.sin(time * 3) * 0.15 + 0.85;
-        ctx.strokeStyle = `rgba(56, 189, 248, ${0.5 * pulse})`;
-        ctx.lineWidth = 1.5;
+        const cx =
+            faceBox.x * w;
 
-        // Smooth Face-Contoured Stadium / Ellipse Reticle
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-        ctx.stroke();
+        const cy =
+            faceBox.y * h;
 
-        // 2. Optical Reticle Biometric Corner Brackets (Forehead, Cheeks, Chin)
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 2.5;
-        const bLen = rx * 0.35;
+        const nebula =
+            ctx.createRadialGradient(
+                cx,
+                cy,
+                20,
+                cx,
+                cy,
+                Math.max(w, h) *
+                    0.7
+            );
 
-        // Top Forehead Arc Guides
-        ctx.beginPath();
-        ctx.arc(cx, cy - ry + 4, bLen, -Math.PI * 0.75, -Math.PI * 0.25);
-        ctx.stroke();
+        nebula.addColorStop(
+            0,
+            "rgba(59,130,246,0.05)"
+        );
 
-        // Bottom Chin Arc Guide
-        ctx.beginPath();
-        ctx.arc(cx, cy + ry - 4, bLen, Math.PI * 0.25, Math.PI * 0.75);
-        ctx.stroke();
+        nebula.addColorStop(
+            0.5,
+            "rgba(147,51,234,0.12)"
+        );
 
-        // Left & Right Cheek Curvature Markers
-        ctx.beginPath();
-        ctx.arc(cx - rx + 4, cy, ry * 0.25, Math.PI * 0.75, Math.PI * 1.25);
-        ctx.stroke();
+        nebula.addColorStop(
+            1,
+            "rgba(15,23,42,0.35)"
+        );
 
-        ctx.beginPath();
-        ctx.arc(cx + rx - 4, cy, ry * 0.25, -Math.PI * 0.25, Math.PI * 0.25);
-        ctx.stroke();
+        ctx.fillStyle =
+            nebula;
 
-        // 3. Central Biometric Eye & Nose Alignment Crosshairs
-        ctx.strokeStyle = "rgba(14, 165, 233, 0.4)";
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 4]);
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
 
-        // Eye Level Horizontal Baseline
-        const eyeY = cy - ry * 0.15;
-        ctx.beginPath();
-        ctx.moveTo(cx - rx * 0.7, eyeY);
-        ctx.lineTo(cx + rx * 0.7, eyeY);
-        ctx.stroke();
+        // Stars
+        for (
+            let i = 0;
+            i < 24;
+            i++
+        ) {
 
-        // Vertical Facial Symmetry Axis
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - ry * 0.75);
-        ctx.lineTo(cx, cy + ry * 0.75);
-        ctx.stroke();
-        ctx.setLineDash([]);
+            const sx =
+                (
+                    i *
+                    137.5
+                ) %
+                w;
 
-        // Eye Point Reticles
-        const eyeSpacing = rx * 0.38;
-        [cx - eyeSpacing, cx + eyeSpacing].forEach(ex => {
-            ctx.fillStyle = "rgba(56, 189, 248, 0.9)";
+            const sy =
+                (
+                    i *
+                    219.3
+                ) %
+                h;
+
+            const alpha =
+                Math.sin(
+                    time *
+                        4 +
+                        i
+                ) *
+                    0.4 +
+                0.6;
+
+            ctx.fillStyle =
+                `rgba(255,255,255,${alpha})`;
+
             ctx.beginPath();
-            ctx.arc(ex, eyeY, 3, 0, Math.PI * 2);
+
+            ctx.arc(
+                sx,
+                sy,
+                (
+                    i %
+                    3
+                ) +
+                    1,
+                0,
+                Math.PI * 2
+            );
+
             ctx.fill();
 
-            ctx.strokeStyle = "rgba(56, 189, 248, 0.6)";
-            ctx.beginPath();
-            ctx.arc(ex, eyeY, 8, 0, Math.PI * 2);
-            ctx.stroke();
-        });
-
-        // 4. Biometric Status Hologram Badge
-        const tagW = Math.max(160, rx * 1.6);
-        const tagH = 22;
-        const tagX = cx - tagW / 2;
-        const tagY = cy - ry - 28;
-
-        ctx.fillStyle = "rgba(11, 17, 33, 0.9)";
-        ctx.strokeStyle = "#0284c7";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.roundRect(tagX, tagY, tagW, tagH, 6);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = "#38bdf8";
-        ctx.font = "bold 10px monospace";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(`● FACE LOCKED // 3D FIT: ${faceDetectionConfidence}%`, cx, tagY + tagH / 2);
-
-        // Sub-telemetry under chin
-        ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-        ctx.font = "9px monospace";
-        ctx.fillText("BIOMETRIC ANCHOR ACTIVE • 60FPS", cx, cy + ry + 18);
-
-        ctx.restore();
-    }
-
-    function drawCyberHUDTheme(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const eyeX = cx - h * 0.055;
-        const eyeY = cy - h * 0.02;
-
-        ctx.strokeStyle = "#38bdf8";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(eyeX, eyeY, h * 0.06, time * 2, time * 2 + Math.PI * 1.5);
-        ctx.stroke();
-        ctx.restore();
-    }
-
-    function drawMatrixTheme(ctx, w, h, time) {
-        ctx.save();
-        ctx.fillStyle = "rgba(16, 185, 129, 0.15)";
-        ctx.fillRect(0, 0, w, h);
-        ctx.font = "bold 12px monospace";
-        matrixDrops.forEach(drop => {
-            drop.y += drop.speed;
-            if (drop.y > 1) { drop.y = 0; drop.x = Math.random(); }
-            const dx = drop.x * w;
-            for (let j = 0; j < drop.length; j++) {
-                const dy = drop.y * h - j * 16;
-                if (dy < 0 || dy > h) continue;
-                ctx.fillStyle = j === 0 ? "#ffffff" : "rgba(34, 197, 94, 0.8)";
-                ctx.fillText(matrixChars[(j + Math.floor(time * 8)) % matrixChars.length], dx, dy);
-            }
-        });
-        ctx.restore();
-    }
-
-    function drawDevOpsTheme(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        techNodes.forEach(node => {
-            node.angle += node.speed;
-            const nx = cx + Math.cos(node.angle) * (node.radius * w);
-            const ny = cy + Math.sin(node.angle) * (node.radius * h * 0.7);
-            ctx.fillStyle = "#1e1b4b";
-            ctx.strokeStyle = "#c084fc";
-            ctx.beginPath();
-            ctx.roundRect(nx - 28, ny - 10, 56, 20, 6);
-            ctx.fill();
-            ctx.stroke();
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 10px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(node.label, nx, ny + 3);
-        });
-        ctx.restore();
-    }
-
-    function drawCyberSecTheme(ctx, w, h, time) {
-        ctx.save();
-        ctx.fillStyle = "rgba(245, 158, 11, 0.12)";
-        ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = "#f59e0b";
-        ctx.font = "11px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", w / 2, h - 20);
-        ctx.restore();
-    }
-
-    function drawHologramTheme(ctx, w, h, time) {
-        ctx.save();
-        ctx.strokeStyle = "rgba(6, 182, 212, 0.2)";
-        for (let x = 0; x < w; x += 40) {
-            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
         }
-        ctx.restore();
-    }
 
-    function drawPumpkinEffect(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        const rad = ctx.createRadialGradient(cx, cy, w * 0.1, cx, cy, w * 0.6);
-        rad.addColorStop(0, "rgba(255, 123, 0, 0.1)");
-        rad.addColorStop(1, "rgba(67, 20, 7, 0.8)");
-        ctx.fillStyle = rad;
-        ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = "#fbbf24";
+        // Visor
+        ctx.strokeStyle =
+            "rgba(56,189,248,0.6)";
+
+        ctx.lineWidth =
+            2;
+
         ctx.beginPath();
-        ctx.moveTo(cx - 30, cy - 10); ctx.lineTo(cx - 45, cy + 10); ctx.lineTo(cx - 15, cy + 10); ctx.closePath();
-        ctx.moveTo(cx + 30, cy - 10); ctx.lineTo(cx + 15, cy + 10); ctx.lineTo(cx + 45, cy + 10); ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-    }
 
-    function drawGhostEffect(ctx, w, h, time) {
-        ctx.save();
-        ctx.fillStyle = "rgba(6, 182, 212, 0.15)";
-        ctx.fillRect(0, 0, w, h);
-        ghosts.forEach(g => {
-            ctx.font = "32px serif";
-            ctx.fillText("👻", g.x * w, g.y * h);
-        });
-        ctx.restore();
-    }
+        ctx.arc(
+            cx,
+            cy,
+            h * 0.28,
+            Math.PI * 0.8,
+            Math.PI * 0.2,
+            true
+        );
 
-    function drawZombieEffect(ctx, w, h, time) {
-        ctx.save();
-        ctx.fillStyle = "rgba(74, 222, 128, 0.18)";
-        ctx.fillRect(0, 0, w, h);
-        ctx.restore();
-    }
+        ctx.stroke();
 
-    function drawVampireEffect(ctx, w, h, time) {
-        ctx.save();
-        ctx.fillStyle = "rgba(136, 19, 55, 0.3)";
-        ctx.fillRect(0, 0, w, h);
-        ctx.restore();
-    }
+        // Telemetry
+        ctx.fillStyle =
+            "#38bdf8";
 
-    function drawSkeletonEffect(ctx, w, h, time) {
-        ctx.save();
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        ctx.fillStyle = "#000000";
-        ctx.beginPath();
-        ctx.arc(cx - 30, cy - 10, 18, 0, Math.PI * 2);
-        ctx.arc(cx + 30, cy - 10, 18, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#38bdf8";
-        ctx.beginPath();
-        ctx.arc(cx - 30, cy - 10, 6, 0, Math.PI * 2);
-        ctx.arc(cx + 30, cy - 10, 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    }
+        ctx.font =
+            "11px monospace";
 
-    function drawSpiderEffect(ctx, w, h, time) {
-        ctx.save();
-        ctx.font = "28px serif";
-        ctx.fillText("🕷️", w * 0.25, 90 + Math.sin(time * 2) * 30);
-        ctx.fillText("🕷️", w * 0.75, 110 + Math.sin(time * 2.5) * 40);
-        ctx.restore();
-    }
+        ctx.textAlign =
+            "left";
 
-    function drawBatsEffect(ctx, w, h, time) {
-        ctx.save();
-        bats.forEach(b => {
-            b.x += 0.003;
-            if (b.x > 1.1) b.x = -0.1;
-            ctx.font = "24px serif";
-            ctx.fillText("🦇", b.x * w, b.y * h);
-        });
-        ctx.restore();
-    }
+        ctx.fillText(
+            "🚀 ORBIT: 408 KM | O2: 98.4%",
+            cx -
+                h *
+                0.22,
+            cy -
+                h *
+                0.3
+        );
 
-    function drawDemoBackground(ctx, w, h) {
-        const grad = ctx.createLinearGradient(0, 0, 0, h);
-        grad.addColorStop(0, "#080c16");
-        grad.addColorStop(0.5, "#131b2e");
-        grad.addColorStop(1, "#0a0714");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+        ctx.fillText(
+            "RAD: NORMAL | GRAV: 0.00G",
+            cx -
+                h *
+                0.22,
+            cy -
+                h *
+                0.3 +
+                14
+        );
 
-        const cx = faceBox.x * w;
-        const cy = faceBox.y * h;
-        ctx.save();
-        ctx.fillStyle = "#1e293b";
-        ctx.beginPath();
-        ctx.arc(cx, cy, h * 0.17, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(cx, cy + h * 0.35, w * 0.3, h * 0.25, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-        ctx.font = "13px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("WEBZONE ER & Studio — HD Auto-Enhance Active", w / 2, h - 20);
         ctx.restore();
+
     }
-}
+    
