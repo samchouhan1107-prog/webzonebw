@@ -2,14 +2,14 @@
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "@id": "https://webzonebw.in/halloween/#webzonebw-er",
+  "@id": "https://webzonebw.in/er/#webzonebw-er",
 
   "name": "WEBZONEBW-ER Studio",
   "alternateName": "WebZoneBW Extended Reality Studio",
 
   "description": "WEBZONEBW-ER Studio is an interactive browser-based Extended Reality experience featuring live camera effects, facial tracking, visual filters, creative lenses, photo capture, and experimental AI-powered visual experiences for the WebZoneBW Halloween experience.",
 
-  "url": "https://webzonebw.in/halloween/",
+  "url": "https://webzonebw.in/er/",
 
   "applicationCategory": "MultimediaApplication",
   "applicationSubCategory": "Augmented Reality",

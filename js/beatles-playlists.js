@@ -1956,7 +1956,7 @@
                 }
 
                 const link = event.target.closest(
-                    'a[href*="halloween/index.html"]'
+                    'a[href*="er/index.html"], a[href*="/er/"], a[href*="halloween/index.html"], a[href*="/halloween/"]'
                 );
 
                 if (!link || !audio) {

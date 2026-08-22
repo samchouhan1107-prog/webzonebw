@@ -149,14 +149,51 @@ app.use(
    ------------------------------------------------------------
    Supported URLs:
 
-   /halloween
-   /halloween/
    /er
    /er/
+   /halloween
+   /halloween/
    ============================================================ */
 
 app.get(
-    ["/halloween", "/halloween/", "/er", "/er/"],
+    ["/er", "/er/"],
+    (req, res) => {
+        const erIndex = path.join(
+            __dirname,
+            "er",
+            "index.html"
+        );
+
+        res.sendFile(erIndex, (error) => {
+            if (error) {
+                // Fallback to halloween/index.html if needed
+                const halloweenIndex = path.join(
+                    __dirname,
+                    "halloween",
+                    "index.html"
+                );
+
+                res.sendFile(halloweenIndex, (fallbackErr) => {
+                    if (fallbackErr) {
+                        console.error(
+                            "[ER] Unable to load ER studio:",
+                            fallbackErr.message
+                        );
+
+                        if (!res.headersSent) {
+                            res.status(500).send(
+                                "WEBZONE ER Studio is temporarily unavailable."
+                            );
+                        }
+                    }
+                });
+            }
+        });
+    }
+);
+
+app.get(
+    ["/halloween", "/halloween/"],
     (req, res) => {
         const halloweenIndex = path.join(
             __dirname,
@@ -166,27 +203,48 @@ app.get(
 
         res.sendFile(halloweenIndex, (error) => {
             if (error) {
-                console.error(
-                    "[HALLOWEEN] Unable to load studio:",
-                    error.message
+                const erIndex = path.join(
+                    __dirname,
+                    "er",
+                    "index.html"
                 );
 
-                if (!res.headersSent) {
-                    res.status(500).send(
-                        "WEBZONE ER Studio is temporarily unavailable."
-                    );
-                }
+                res.sendFile(erIndex, (fallbackErr) => {
+                    if (fallbackErr) {
+                        console.error(
+                            "[HALLOWEEN] Unable to load studio:",
+                            fallbackErr.message
+                        );
+
+                        if (!res.headersSent) {
+                            res.status(500).send(
+                                "WEBZONE ER Studio is temporarily unavailable."
+                            );
+                        }
+                    }
+                });
             }
         });
     }
 );
 
 /* ============================================================
-   WEBZONE ER ASSET ROUTE
+   WEBZONE ER & HALLOWEEN ASSET ROUTES
    ------------------------------------------------------------
-   Keeps the Halloween folder accessible as a dedicated
-   experience while allowing its own CSS / JS / media files.
+   Keeps the er and halloween folders accessible as dedicated
+   experiences while allowing their own CSS / JS / media files.
    ============================================================ */
+
+app.use(
+    "/er",
+    express.static(
+        path.join(__dirname, "er"),
+        {
+            extensions: ["html", "htm"],
+            fallthrough: true
+        }
+    )
+);
 
 app.use(
     "/halloween",

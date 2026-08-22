@@ -809,6 +809,9 @@ function getSavedThemePreference() {
         const value =
             localStorage.getItem(
                 WEBZONE_CONFIG.storage.theme
+            ) ||
+            localStorage.getItem(
+                "webzonebw-theme"
             );
 
 
@@ -841,6 +844,11 @@ function saveThemePreference(themeStr) {
 
         localStorage.setItem(
             WEBZONE_CONFIG.storage.theme,
+            theme
+        );
+
+        localStorage.setItem(
+            "webzonebw-theme",
             theme
         );
 
@@ -1715,8 +1723,19 @@ function detectCurrentPage() {
 
 
     /*
-     * Halloween section.
+     * WEBZONE ER / Halloween section.
      */
+    if (
+        pathname.includes("/er/") ||
+        pathname.endsWith("/er") ||
+        pathname === "/er" ||
+        pathname.endsWith("er/index.html")
+    ) {
+
+        return "er/index.html";
+    }
+
+
     if (
         pathname.includes(
             "/halloween/"
@@ -1817,17 +1836,17 @@ function isNavigationMatch(
 
 
     /*
-     * Halloween.
+     * WEBZONE ER / Halloween.
      */
     if (
-        currentPage ===
-        "halloween/index.html"
+        currentPage === "er/index.html" ||
+        currentPage === "halloween/index.html"
     ) {
 
         return (
-            normalizedHref.includes(
-                "halloween"
-            )
+            normalizedHref.includes("er/") ||
+            normalizedHref.includes("er/index.html") ||
+            normalizedHref.includes("halloween")
         );
     }
 
