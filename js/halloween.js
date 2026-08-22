@@ -124,6 +124,7 @@ function initWebZoneERStudio() {
 
     let isFacingUser = true;
     let isDemoMode = false;
+    let isCameraStarting = false;
 
     let audioContext = null;
     let isAudioPlaying = false;
@@ -2899,7 +2900,7 @@ function initWebZoneERStudio() {
                 "Access Denied";
 
             message =
-                "Camera access was denied or blocked by your browser. Please allow camera access for this website and press <strong>Retry Camera</strong>.";
+                "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Retry Camera</strong>. Also check Windows Settings → Privacy &amp; security → Camera.";
 
             icon =
                 "🚫";
@@ -3114,6 +3115,10 @@ function initWebZoneERStudio() {
         // SHOW MODAL
         // ======================================================
 
+        permissionAlertModal.classList.add(
+            "is-open"
+        );
+
         permissionAlertModal.style.display =
             "flex";
 
@@ -3127,6 +3132,10 @@ function initWebZoneERStudio() {
     function closePermissionAlert() {
 
         if (permissionAlertModal) {
+
+            permissionAlertModal.classList.remove(
+                "is-open"
+            );
 
             permissionAlertModal.style.display =
                 "none";
@@ -3224,6 +3233,211 @@ function initWebZoneERStudio() {
 
     }
     
+    function waitForCameraRelease(ms) {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, ms);
+        });
+    }
+
+    async function queryCameraPermissionState() {
+        try {
+            if (
+                navigator.permissions &&
+                navigator.permissions.query
+            ) {
+                const status =
+                    await navigator.permissions.query({
+                        name: "camera"
+                    });
+
+                return status.state || "unknown";
+            }
+        } catch (e) {
+            /* Some browsers reject Permissions.query({ name: "camera" }). */
+        }
+
+        return "unknown";
+    }
+
+    function isFatalCameraError(err) {
+        const name = err && err.name ? err.name : "";
+
+        return (
+            name === "NotAllowedError" ||
+            name === "PermissionDeniedError" ||
+            name === "SecurityError"
+        );
+    }
+
+    async function pickCameraDeviceId(facingUser) {
+        try {
+            const devices =
+                await navigator.mediaDevices.enumerateDevices();
+
+            const cameras =
+                devices.filter(
+                    (device) =>
+                        device.kind === "videoinput"
+                );
+
+            if (!cameras.length) {
+                return null;
+            }
+
+            const frontCam = cameras.find((device) =>
+                /front|user|face|integrated/i.test(
+                    device.label
+                )
+            );
+
+            const rearCam = cameras.find((device) =>
+                /back|rear|environment|world/i.test(
+                    device.label
+                )
+            );
+
+            if (facingUser && frontCam) {
+                return frontCam.deviceId;
+            }
+
+            if (!facingUser && rearCam) {
+                return rearCam.deviceId;
+            }
+
+            if (!facingUser && cameras.length > 1) {
+                return cameras[cameras.length - 1].deviceId;
+            }
+
+            return cameras[0].deviceId;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    async function requestCameraStream(facingUser) {
+        const facingMode = facingUser
+            ? "user"
+            : "environment";
+
+        const attempts = [
+            {
+                audio: false,
+                video: {
+                    facingMode: {
+                        ideal: facingMode
+                    },
+                    width: {
+                        ideal: 1280
+                    },
+                    height: {
+                        ideal: 720
+                    }
+                }
+            },
+            {
+                audio: false,
+                video: {
+                    facingMode: facingMode
+                }
+            }
+        ];
+
+        const deviceId =
+            await pickCameraDeviceId(facingUser);
+
+        if (deviceId) {
+            attempts.push({
+                audio: false,
+                video: {
+                    deviceId: {
+                        ideal: deviceId
+                    }
+                }
+            });
+        }
+
+        attempts.push({
+            audio: false,
+            video: true
+        });
+
+        let lastError = null;
+
+        for (let i = 0; i < attempts.length; i += 1) {
+            try {
+                return await navigator.mediaDevices.getUserMedia(
+                    attempts[i]
+                );
+            } catch (err) {
+                lastError = err;
+
+                if (isFatalCameraError(err)) {
+                    throw err;
+                }
+
+                console.warn(
+                    "[WEBZONE ER] Camera constraint attempt failed. Trying a simpler request.",
+                    err
+                );
+            }
+        }
+
+        throw lastError || new Error(
+            "Camera permission was granted, but no video track was returned."
+        );
+    }
+
+    function attachLiveCameraFeed() {
+        placeholder.style.display =
+            "none";
+
+        canvas.style.display =
+            "block";
+
+        canvas.width =
+            video.videoWidth ||
+            640;
+
+        canvas.height =
+            video.videoHeight ||
+            480;
+
+        video.dataset.facingMode =
+            isFacingUser
+                ? "user"
+                : "environment";
+
+        video.dataset.cameraMode =
+            isFacingUser
+                ? "front"
+                : "back";
+
+        canvas.classList.toggle(
+            "camera-mirrored",
+            isFacingUser
+        );
+
+        video.classList.toggle(
+            "camera-mirrored",
+            isFacingUser
+        );
+
+        setHighlightStep(6);
+
+        startRenderLoop();
+
+        console.log(
+            "[WEBZONE ER] Camera started successfully:",
+            {
+                width: video.videoWidth,
+                height: video.videoHeight,
+                facingMode: isFacingUser
+                    ? "user"
+                    : "environment"
+            }
+        );
+    }
+
     // ==========================================================
     // CAMERA STARTUP
     //
@@ -3234,6 +3448,12 @@ function initWebZoneERStudio() {
     // ==========================================================
 
     async function startCamera() {
+
+        if (isCameraStarting) {
+            return;
+        }
+
+        isCameraStarting = true;
 
         studioMode =
             "camera";
@@ -3302,13 +3522,27 @@ function initWebZoneERStudio() {
                 throw securityError;
             }
 
-            // Stop previous stream cleanly
+            const permissionState =
+                await queryCameraPermissionState();
+
+            if (permissionState === "denied") {
+                const deniedError =
+                    new Error(
+                        "Camera permission is blocked in the browser."
+                    );
+
+                deniedError.name =
+                    "NotAllowedError";
+
+                throw deniedError;
+            }
+
             if (mediaStream) {
 
                 mediaStream
                     .getTracks()
                     .forEach(
-                        track =>
+                        (track) =>
                             track.stop()
                     );
 
@@ -3316,73 +3550,22 @@ function initWebZoneERStudio() {
                     null;
             }
 
-            /*
-             * MOBILE-FIRST CAMERA CONSTRAINTS
-             *
-             * We deliberately avoid demanding an exact
-             * resolution. Different phones/tablets expose
-             * different camera capabilities.
-             */
-
-            const preferredConstraints = {
-                video: {
-                    facingMode: {
-                        ideal:
-                            isFacingUser
-                                ? "user"
-                                : "environment"
-                    },
-
-                    width: {
-                        ideal: 1280
-                    },
-
-                    height: {
-                        ideal: 720
-                    },
-
-                    frameRate: {
-                        ideal: 30,
-                        max: 30
-                    }
-                },
-
-                audio: false
-            };
-
-            try {
-
-                mediaStream =
-                    await navigator
-                        .mediaDevices
-                        .getUserMedia(
-                            preferredConstraints
-                        );
-
-            } catch (preferredError) {
-
-                console.warn(
-                    "[WEBZONE ER] Preferred camera request failed. Retrying with basic camera settings.",
-                    preferredError
-                );
-
-                /*
-                 * UNIVERSAL FALLBACK
-                 *
-                 * No facingMode.
-                 * No resolution.
-                 * No frame-rate requirement.
-                 */
-
-                mediaStream =
-                    await navigator
-                        .mediaDevices
-                        .getUserMedia({
-                            video: true,
-                            audio: false
-                        });
-
+            if (video) {
+                video.pause();
+                video.srcObject = null;
             }
+
+            /*
+             * Windows often keeps the webcam locked for a
+             * short time after track.stop(). Requesting a
+             * new stream immediately causes NotReadableError.
+             */
+            await waitForCameraRelease(280);
+
+            mediaStream =
+                await requestCameraStream(
+                    isFacingUser
+                );
 
             // Verify an actual video track exists
             const videoTracks =
@@ -3401,114 +3584,35 @@ function initWebZoneERStudio() {
 
             setHighlightStep(5);
 
-            video.srcObject =
-                mediaStream;
+            video.setAttribute("playsinline", "true");
+            video.setAttribute("webkit-playsinline", "true");
+            video.muted = true;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.srcObject = mediaStream;
 
-            video.muted =
-                true;
+            isDemoMode = false;
 
-            video.autoplay =
-                true;
+            if (micStatusIndicator) {
+                micStatusIndicator.style.display =
+                    "none";
+            }
 
-            video.playsInline =
-                true;
+            video.onloadedmetadata = () => {
+                attachLiveCameraFeed();
+            };
 
-            /*
-             * Some mobile browsers require play()
-             * after the stream is attached.
-             */
             try {
-
                 await video.play();
-
             } catch (playError) {
-
                 console.warn(
                     "[WEBZONE ER] video.play() was delayed by browser policy.",
                     playError
                 );
-
             }
 
-            // Camera successfully started
-            isDemoMode =
-                false;
-
-            if (micStatusIndicator) {
-
-                /*
-                 * Camera no longer depends on microphone.
-                 * Hide microphone status because we requested
-                 * video-only access.
-                 */
-                micStatusIndicator.style.display =
-                    "none";
-
-            }
-
-            // Camera metadata
-            video.onloadedmetadata =
-                () => {
-
-                    placeholder.style.display =
-                        "none";
-
-                    canvas.style.display =
-                        "block";
-
-                    canvas.width =
-                        video.videoWidth ||
-                        640;
-
-                    canvas.height =
-                        video.videoHeight ||
-                        480;
-
-                    setHighlightStep(6);
-
-                    startRenderLoop();
-
-                    console.log(
-                        "[WEBZONE ER] Camera started successfully:",
-                        {
-                            width:
-                                video.videoWidth,
-
-                            height:
-                                video.videoHeight,
-
-                            facingMode:
-                                isFacingUser
-                                    ? "user"
-                                    : "environment"
-                        }
-                    );
-
-                };
-
-            // Some browsers may already have metadata
-            if (
-                video.readyState >= 2
-            ) {
-
-                placeholder.style.display =
-                    "none";
-
-                canvas.style.display =
-                    "block";
-
-                canvas.width =
-                    video.videoWidth ||
-                    640;
-
-                canvas.height =
-                    video.videoHeight ||
-                    480;
-
-                setHighlightStep(6);
-
-                startRenderLoop();
-
+            if (video.readyState >= 2) {
+                attachLiveCameraFeed();
             }
 
         } catch (err) {
@@ -3523,7 +3627,7 @@ function initWebZoneERStudio() {
                 mediaStream
                     .getTracks()
                     .forEach(
-                        track =>
+                        (track) =>
                             track.stop()
                     );
 
@@ -3540,9 +3644,13 @@ function initWebZoneERStudio() {
                 err
             );
 
+        } finally {
+            isCameraStarting = false;
         }
 
     }
+
+    window.webzoneStartERCamera = startCamera;
 
     // ==========================================================
     // DEMO MODE
@@ -3727,6 +3835,15 @@ function initWebZoneERStudio() {
         snapBtn.addEventListener(
             "click",
             () => {
+
+                if (
+                    !mediaStream &&
+                    !isDemoMode &&
+                    studioMode !== "upload"
+                ) {
+                    startCamera();
+                    return;
+                }
 
                 if (!canvas) {
                     return;
@@ -7191,4 +7308,5 @@ function initWebZoneERStudio() {
         ctx.restore();
 
     }
-    
+
+}

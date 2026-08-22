@@ -39,6 +39,28 @@ const PROJECT_NAME = "WEBZONEBW";
 app.disable("x-powered-by");
 
 /* ============================================================
+   MEDIA PERMISSIONS
+   ------------------------------------------------------------
+   Chrome blocks getUserMedia when Permissions-Policy
+   omits camera, or when a reverse proxy sends camera=().
+   Explicitly allow same-origin camera for ER Studio.
+   ============================================================ */
+
+app.use((req, res, next) => {
+    res.setHeader(
+        "Permissions-Policy",
+        "camera=(self), microphone=()"
+    );
+
+    res.setHeader(
+        "Feature-Policy",
+        "camera 'self'; microphone 'none'"
+    );
+
+    next();
+});
+
+/* ============================================================
    REQUEST PARSERS
    ------------------------------------------------------------
    Supports:

@@ -2841,7 +2841,11 @@ textarea:focus-visible {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scaleX(-1); /* Mirror view for front camera */
+}
+
+.camera-video.camera-mirrored,
+.camera-canvas.camera-mirrored {
+    transform: scaleX(-1);
 }
 
 .camera-placeholder {
@@ -4667,16 +4671,17 @@ body.light-mode .error-contact-row {
 }
 
 .permission-alert-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 99;
-    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
+}
+
+.permission-alert-modal.is-open {
+    display: flex;
 }
 
 .permission-alert-backdrop {
