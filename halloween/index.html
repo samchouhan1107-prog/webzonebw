@@ -22,7 +22,9 @@
             crossorigin="anonymous">
     </script>
 
-    <title>WEBZONEBW-ER Studio | Halloween AR Camera &amp; Live Effects</title>
+    <title>
+        WEBZONEBW-ER Studio | Halloween AR Camera &amp; Live Effects
+    </title>
 
     <meta name="description"
           content="Explore the WEBZONEBW-ER Studio Halloween experience with live browser camera effects, AR-style lenses, visual shaders, photo capture and interactive effects.">
@@ -588,57 +590,6 @@
             animation-duration: .8s;
         }
 
-        /* =====================================================
-           ER BOOT / ERROR STATE
-           ===================================================== */
-
-        .er-studio-body .er-runtime-status {
-            position: fixed;
-            left: 50%;
-            bottom: 14px;
-            transform: translateX(-50%);
-            z-index: 9999;
-
-            max-width: min(92vw, 680px);
-
-            padding: 8px 14px;
-
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 999px;
-
-            background: rgba(10,10,16,.92);
-            backdrop-filter: blur(12px);
-
-            color: rgba(255,255,255,.76);
-
-            font:
-                600 11px/1.3
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
-
-            letter-spacing: .04em;
-
-            box-shadow:
-                0 8px 30px rgba(0,0,0,.35);
-
-            pointer-events: none;
-
-            opacity: 0;
-            transition: opacity .2s ease;
-        }
-
-        .er-studio-body .er-runtime-status.visible {
-            opacity: 1;
-        }
-
-        .er-studio-body .er-runtime-status.error {
-            border-color: rgba(255,90,90,.35);
-            color: rgba(255,210,210,.9);
-        }
-
         @media (max-width: 1100px) {
 
             .er-studio-body .er-layout-container {
@@ -727,13 +678,11 @@
 
         window.WEBZONEBW_ER_CONFIG = {
 
-            version: "1.1",
+            version: "1.0",
 
             experience: "WEBZONEBW-ER",
 
             seasonalTheme: "Halloween",
-
-            pageRoot: "/Halloween/",
 
             initialCamera: "user",
 
@@ -755,11 +704,7 @@
 
             preserveLensSettings: true,
 
-            preserveEffects: true,
-
-            isolatedPage: true,
-
-            loadBeatlesModule: false
+            preserveEffects: true
 
         };
 
@@ -873,19 +818,6 @@
 
 <body class="er-studio-body">
 
-
-<!-- =====================================================
-     ER RUNTIME STATUS
-     ===================================================== -->
-
-<div id="erRuntimeStatus"
-     class="er-runtime-status"
-     role="status"
-     aria-live="polite">
-    WEBZONEBW-ER Studio loading...
-</div>
-
-
 <div class="er-layout-container">
 
 
@@ -930,14 +862,14 @@
             <ul>
 
                 <li>
-                    <a href="WebZoneBW-ER.Studio.html">
+                    <a href="index.html">
                         <span class="nav-icon" aria-hidden="true">🏠</span>
                         Dashboard
                     </a>
                 </li>
 
                 <li>
-                    <a href="WebZoneBW-ER.Studio.html"
+                    <a href="index.html"
                        class="active er-nav-pill"
                        aria-current="page">
                         <span class="nav-icon" aria-hidden="true">🔮</span>
@@ -1323,7 +1255,7 @@
                          aria-labelledby="permAlertTitle">
 
                         <div class="permission-alert-backdrop"
-                             id="permissionAlertBackdrop">
+                             onclick="window.closePermissionAlert && window.closePermissionAlert()">
                         </div>
 
                         <div class="permission-alert-card">
@@ -2461,7 +2393,7 @@
              aria-labelledby="snapshotTitle">
 
             <div class="snapshot-modal-backdrop"
-                 id="snapshotModalBackdrop">
+                 onclick="document.getElementById('closeSnapshotBtn').click()">
             </div>
 
 
@@ -2582,18 +2514,13 @@
 
 
 <!-- =====================================================
-     WEBZONEBW-ER SCRIPTS
-     
-     IMPORTANT:
-     Beatles playlist JS intentionally removed from this page.
-     This page should only load modules required by ER Studio.
+     WEBZONEBW SCRIPTS
+     ROOT-LEVEL PATHS
      ===================================================== -->
 
-<script src="js/script.js"
-        defer></script>
-
-<script src="js/halloween.js"
-        defer></script>
+<script src="js/beatles-playlists.js"></script>
+<script src="js/script.js"></script>
+<script src="js/halloween.js"></script>
 
 
 <!-- =====================================================
@@ -2866,7 +2793,8 @@
 
             startButton.addEventListener(
                 "click",
-                activateOrb
+                activateOrb,
+                { passive: true }
             );
 
         }
@@ -2876,7 +2804,8 @@
 
             demoButton.addEventListener(
                 "click",
-                activateOrb
+                activateOrb,
+                { passive: true }
             );
 
         }
@@ -2899,14 +2828,6 @@
 
                     const rect =
                         orb.getBoundingClientRect();
-
-
-                    if (
-                        !rect.width ||
-                        !rect.height
-                    ) {
-                        return;
-                    }
 
 
                     const x =
@@ -2942,7 +2863,8 @@
                         y + "px"
                     );
 
-                }
+                },
+                { passive: true }
             );
 
 
@@ -2960,7 +2882,8 @@
                         "0px"
                     );
 
-                }
+                },
+                { passive: true }
             );
 
         }
@@ -2983,160 +2906,6 @@
         initHalloweenLaunchUI();
 
     }
-
-})();
-
-</script>
-
-
-<!-- =====================================================
-     SAFE ER RUNTIME MONITOR
-     ===================================================== -->
-
-<script>
-
-(function () {
-
-    "use strict";
-
-
-    const status =
-        document.getElementById("erRuntimeStatus");
-
-
-    function showStatus(message, isError) {
-
-        if (!status) {
-            return;
-        }
-
-
-        status.textContent =
-            message;
-
-
-        status.classList.toggle(
-            "error",
-            !!isError
-        );
-
-
-        status.classList.add(
-            "visible"
-        );
-
-
-        window.clearTimeout(
-            showStatus.timer
-        );
-
-
-        showStatus.timer =
-            window.setTimeout(
-                function () {
-
-                    status.classList.remove(
-                        "visible"
-                    );
-
-                },
-                isError
-                    ? 7000
-                    : 1800
-            );
-
-    }
-
-
-    window.WEBZONEBW_ER_STATUS =
-        showStatus;
-
-
-    window.addEventListener(
-        "error",
-        function (event) {
-
-            /*
-             * Do not replace the entire page with
-             * an error screen. Keep the ER interface
-             * usable and expose a small diagnostic state.
-             */
-
-            const message =
-                event && event.message
-                    ? event.message
-                    : "A WebZoneBW-ER module reported an error.";
-
-            console.error(
-                "[WEBZONEBW-ER]",
-                message,
-                event.error || ""
-            );
-
-
-            showStatus(
-                "ER module warning — check browser console.",
-                true
-            );
-
-        }
-    );
-
-
-    window.addEventListener(
-        "unhandledrejection",
-        function (event) {
-
-            console.error(
-                "[WEBZONEBW-ER] Promise error:",
-                event.reason
-            );
-
-
-            showStatus(
-                "ER module warning — check browser console.",
-                true
-            );
-
-        }
-    );
-
-
-    window.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            window.setTimeout(
-                function () {
-
-                    const config =
-                        window.WEBZONEBW_ER_CONFIG;
-
-
-                    if (!config) {
-
-                        showStatus(
-                            "ER configuration unavailable.",
-                            true
-                        );
-
-                        return;
-
-                    }
-
-
-                    showStatus(
-                        "WEBZONEBW-ER Studio ready.",
-                        false
-                    );
-
-                },
-                500
-            );
-
-        },
-        { once: true }
-    );
 
 })();
 

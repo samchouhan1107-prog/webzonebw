@@ -157,7 +157,7 @@ app.get("/api/status", (req, res) => {
 app.use(
     express.static(__dirname, {
         extensions: ["html", "htm"],
-        index: "WebZOneBW-ER.Studio.html",
+        index: "index.html",
         fallthrough: true,
         redirect: true,
         maxAge: process.env.NODE_ENV === "production"
@@ -183,16 +183,16 @@ app.get(
         const erIndex = path.join(
             __dirname,
             "er",
-            "WebZoneBW-ER.Studio.html"
+            "index.html"
         );
 
         res.sendFile(erIndex, (error) => {
             if (error) {
-                // Fallback to halloween/WebZoneBW-ER.Studio.html if needed
+                // Fallback to halloween/index.html if needed
                 const halloweenIndex = path.join(
                     __dirname,
                     "halloween",
-                    "WebZoneBW-ER.Studio.html"
+                    "index.html"
                 );
 
                 res.sendFile(halloweenIndex, (fallbackErr) => {
@@ -220,7 +220,7 @@ app.get(
         const halloweenIndex = path.join(
             __dirname,
             "halloween",
-            "WebZoneBW-ER.Studio.html"
+            "index.html"
         );
 
         res.sendFile(halloweenIndex, (error) => {
@@ -228,7 +228,7 @@ app.get(
                 const erIndex = path.join(
                     __dirname,
                     "er",
-                    "WebZoneBW-ER.Studio.html"
+                    "index.html"
                 );
 
                 res.sendFile(erIndex, (fallbackErr) => {
@@ -346,7 +346,7 @@ app.use((req, res, next) => {
 
     const indexFile = path.join(
         __dirname,
-        "WeBZoneBW-ER.Studio.html"
+        "index.html"
     );
 
     res.sendFile(indexFile, (error) => {
