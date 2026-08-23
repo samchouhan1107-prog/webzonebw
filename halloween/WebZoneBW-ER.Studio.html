@@ -10,12 +10,17 @@
 
     <meta charset="UTF-8">
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-     crossorigin="anonymous">
-    </script>
-    
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
+
+    <!-- =====================================================
+         GOOGLE ADSENSE
+         ===================================================== -->
+
+    <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
+            crossorigin="anonymous">
+    </script>
 
     <title>
         WEBZONEBW-ER Studio | Halloween AR Camera &amp; Live Effects
@@ -60,10 +65,10 @@
 
     <link rel="icon"
           type="image/png"
-          href="../assets/favicon/favicon.png">
+          href="assets/favicon/favicon.png">
 
     <link rel="shortcut icon"
-          href="../assets/favicon.ico.ico">
+          href="assets/favicon.ico">
 
 
     <!-- =====================================================
@@ -117,7 +122,7 @@
          ===================================================== -->
 
     <link rel="stylesheet"
-          href="../css/style.css">
+          href="css/style.css">
 
 
     <!-- =====================================================
@@ -125,15 +130,6 @@
          ===================================================== -->
 
     <style>
-
-        /* =====================================================
-           THEME BRIDGE
-           
-           The main WEBZONEBW stylesheet controls the actual
-           visual theme. These classes provide a safe bridge
-           for the ER page so the page does not get stuck in
-           dark mode.
-           ===================================================== */
 
         html.er-theme-light,
         body.er-theme-light {
@@ -145,21 +141,11 @@
             color-scheme: dark;
         }
 
-
-        /* =====================================================
-           GLOBAL ER PAGE SAFETY
-           ===================================================== */
-
         .er-studio-body {
             margin: 0;
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-
-        /* =====================================================
-           DESKTOP LAYOUT
-           ===================================================== */
 
         .er-studio-body .er-layout-container {
             display: grid;
@@ -167,7 +153,6 @@
             width: 100%;
             min-height: 100vh;
         }
-
 
         .er-studio-body .er-sidebar {
             position: relative;
@@ -179,23 +164,16 @@
             overflow-y: auto;
         }
 
-
         .er-studio-body .er-main-content {
             min-width: 0;
             width: 100%;
             max-width: none;
         }
 
-
         .er-studio-body .er-workspace-grid {
             min-width: 0;
             width: 100%;
         }
-
-
-        /* =====================================================
-           CAMERA VIEWPORT
-           ===================================================== */
 
         .er-studio-body .camera-viewport-frame {
             position: relative;
@@ -204,7 +182,6 @@
             overflow: hidden;
             isolation: isolate;
         }
-
 
         .er-studio-body #cameraVideo.camera-video {
             position: absolute;
@@ -220,7 +197,6 @@
             background: #050507;
         }
 
-
         .er-studio-body #cameraCanvas.camera-canvas {
             position: absolute;
             inset: 0;
@@ -234,13 +210,11 @@
             pointer-events: none;
         }
 
-
         .er-studio-body #cameraPlaceholder {
             position: absolute;
             inset: 0;
             z-index: 10;
         }
-
 
         .er-studio-body .cam-corner-btn,
         .er-studio-body .cam-zoom-badge,
@@ -250,15 +224,9 @@
             z-index: 20;
         }
 
-
         .er-studio-body .permission-alert-modal {
             z-index: 100;
         }
-
-
-        /* =====================================================
-           CAMERA PRIVACY
-           ===================================================== */
 
         .er-camera-privacy-note {
             margin: 10px auto 0;
@@ -270,32 +238,20 @@
             opacity: 0.72;
         }
 
-
         .er-camera-privacy-note strong {
             opacity: 0.95;
         }
-
-
-        /* =====================================================
-           EFFECTS PANEL
-           ===================================================== */
 
         .er-studio-body .er-effects-panel {
             min-width: 0;
             max-width: 100%;
         }
 
-
-        /* =====================================================
-           HALLOWEEN LAUNCH ORB
-           ===================================================== */
-
         .er-studio-body .er-launch-icon-wrap {
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
 
         .er-studio-body .er-launch-orb {
             --orb-x: 0px;
@@ -322,11 +278,6 @@
 
             isolation: isolate;
         }
-
-
-        /* =====================================================
-           ORB CORE
-           ===================================================== */
 
         .er-studio-body .er-orb-core {
             position: relative;
@@ -360,18 +311,12 @@
             overflow: hidden;
         }
 
-
-        /* =====================================================
-           DIGITAL HALLOWEEN MARK
-           ===================================================== */
-
         .er-studio-body .er-orb-mark {
             position: relative;
             width: 36px;
             height: 32px;
             opacity: .96;
         }
-
 
         .er-studio-body .er-mark-eye {
             position: absolute;
@@ -387,16 +332,13 @@
                 0 0 6px rgba(255,255,255,.22);
         }
 
-
         .er-studio-body .er-mark-eye.left {
             left: 4px;
         }
 
-
         .er-studio-body .er-mark-eye.right {
             right: 4px;
         }
-
 
         .er-studio-body .er-mark-smile {
             position: absolute;
@@ -413,11 +355,6 @@
             border-radius:
                 0 0 50% 50%;
         }
-
-
-        /* =====================================================
-           SCAN LIGHT
-           ===================================================== */
 
         .er-studio-body .er-orb-scan {
             position: absolute;
@@ -442,7 +379,6 @@
             pointer-events: none;
         }
 
-
         @keyframes erHalloweenOrbScan {
 
             0% {
@@ -455,17 +391,11 @@
 
         }
 
-
-        /* =====================================================
-           ORBIT RINGS
-           ===================================================== */
-
         .er-studio-body .er-orb-ring {
             position: absolute;
             border-radius: 50%;
             pointer-events: none;
         }
-
 
         .er-studio-body .er-orb-ring-outer {
             width: 82px;
@@ -478,7 +408,6 @@
                 erHalloweenOrbRotate 8s linear infinite;
         }
 
-
         .er-studio-body .er-orb-ring-middle {
             width: 70px;
             height: 70px;
@@ -489,7 +418,6 @@
             animation:
                 erHalloweenOrbRotateReverse 6s linear infinite;
         }
-
 
         @keyframes erHalloweenOrbRotate {
 
@@ -503,7 +431,6 @@
 
         }
 
-
         @keyframes erHalloweenOrbRotateReverse {
 
             from {
@@ -515,11 +442,6 @@
             }
 
         }
-
-
-        /* =====================================================
-           FLOATING PARTICLES
-           ===================================================== */
 
         .er-studio-body .er-orb-particle {
             position: absolute;
@@ -540,12 +462,10 @@
                 erHalloweenParticleFloat 2.6s ease-in-out infinite;
         }
 
-
         .er-studio-body .particle-one {
             top: 5px;
             right: 16px;
         }
-
 
         .er-studio-body .particle-two {
             bottom: 9px;
@@ -553,20 +473,17 @@
             animation-delay: .5s;
         }
 
-
         .er-studio-body .particle-three {
             top: 38px;
             left: 0;
             animation-delay: 1s;
         }
 
-
         .er-studio-body .particle-four {
             right: 1px;
             bottom: 27px;
             animation-delay: 1.5s;
         }
-
 
         @keyframes erHalloweenParticleFloat {
 
@@ -582,11 +499,6 @@
             }
 
         }
-
-
-        /* =====================================================
-           LAUNCH STATUS
-           ===================================================== */
 
         .er-studio-body .er-launch-status {
             display: flex;
@@ -606,7 +518,6 @@
             opacity: .68;
         }
 
-
         .er-studio-body .er-status-dot {
             width: 6px;
             height: 6px;
@@ -624,7 +535,6 @@
                 erHalloweenStatusPulse 1.8s ease-in-out infinite;
         }
 
-
         @keyframes erHalloweenStatusPulse {
 
             0%,
@@ -639,11 +549,6 @@
             }
 
         }
-
-
-        /* =====================================================
-           HALLOWEEN TITLE ACCENT
-           ===================================================== */
 
         .er-studio-body .launch-title-accent {
             display: inline-block;
@@ -664,11 +569,6 @@
             color: transparent;
         }
 
-
-        /* =====================================================
-           ACTIVE LAUNCH STATE
-           ===================================================== */
-
         .er-studio-body .er-launch-orb.launch-active {
             filter:
                 brightness(1.25)
@@ -678,24 +578,17 @@
                 );
         }
 
-
         .er-studio-body
         .er-launch-orb.launch-active
         .er-orb-ring-outer {
             animation-duration: 1s;
         }
 
-
         .er-studio-body
         .er-launch-orb.launch-active
         .er-orb-ring-middle {
             animation-duration: .8s;
         }
-
-
-        /* =====================================================
-           DESKTOP / TABLET
-           ===================================================== */
 
         @media (max-width: 1100px) {
 
@@ -706,11 +599,6 @@
             }
 
         }
-
-
-        /* =====================================================
-           MOBILE
-           ===================================================== */
 
         @media (max-width: 900px) {
 
@@ -741,7 +629,6 @@
 
         }
 
-
         @media (max-width: 600px) {
 
             .er-studio-body .camera-viewport-frame {
@@ -760,22 +647,12 @@
 
         }
 
-
-        /* =====================================================
-           ACCESSIBILITY
-           ===================================================== */
-
         .er-studio-body button:focus-visible,
         .er-studio-body a:focus-visible,
         .er-studio-body input:focus-visible {
             outline: 2px solid currentColor;
             outline-offset: 3px;
         }
-
-
-        /* =====================================================
-           REDUCED MOTION
-           ===================================================== */
 
         @media (prefers-reduced-motion: reduce) {
 
@@ -836,9 +713,6 @@
 
     <!-- =====================================================
          THEME BOOTSTRAP
-         
-         Runs before the page renders so the ER page does
-         not visibly flash into the wrong theme.
          ===================================================== -->
 
     <script>
@@ -957,11 +831,11 @@
 
         <div class="logo">
 
-            <a href="../index.html"
+            <a href="index.html"
                aria-label="WebZoneBW Home"
                class="brand-logo-link">
 
-                <img src="../assets/logo.png"
+                <img src="assets/logo.png"
                      alt="WebZoneBW Logo"
                      class="brand-logo-img">
 
@@ -988,7 +862,7 @@
             <ul>
 
                 <li>
-                    <a href="../WebZoneBW-ER.Studio.html">
+                    <a href="WebZoneBW-ER.Studio.html">
                         <span class="nav-icon" aria-hidden="true">🏠</span>
                         Dashboard
                     </a>
@@ -1004,42 +878,42 @@
                 </li>
 
                 <li>
-                    <a href="../projects.html">
+                    <a href="projects.html">
                         <span class="nav-icon" aria-hidden="true">💼</span>
                         Projects
                     </a>
                 </li>
 
                 <li>
-                    <a href="../resume.html">
+                    <a href="resume.html">
                         <span class="nav-icon" aria-hidden="true">📄</span>
                         Resume
                     </a>
                 </li>
 
                 <li>
-                    <a href="../blog.html">
+                    <a href="blog.html">
                         <span class="nav-icon" aria-hidden="true">📝</span>
                         Blog
                     </a>
                 </li>
 
                 <li>
-                    <a href="../soundbox.html">
+                    <a href="soundbox.html">
                         <span class="nav-icon" aria-hidden="true">🎵</span>
                         Sound Box
                     </a>
                 </li>
 
                 <li>
-                    <a href="../about.html">
+                    <a href="about.html">
                         <span class="nav-icon" aria-hidden="true">👤</span>
                         About
                     </a>
                 </li>
 
                 <li>
-                    <a href="../contact.html">
+                    <a href="contact.html">
                         <span class="nav-icon" aria-hidden="true">✉️</span>
                         Contact
                     </a>
@@ -1050,9 +924,7 @@
         </nav>
 
 
-        <!-- =================================================
-             THEME SWITCH
-             ================================================= -->
+        <!-- THEME SWITCH -->
 
         <div class="sidebar-theme-toggle-row">
 
@@ -1160,9 +1032,7 @@
         </div>
 
 
-        <!-- =================================================
-             TOP HEADER
-             ================================================= -->
+        <!-- TOP HEADER -->
 
         <header class="er-top-header">
 
@@ -1230,9 +1100,9 @@
         </header>
 
 
-        <!-- =================================================
+        <!-- =====================================================
              ER WORKSPACE
-             ================================================= -->
+             ===================================================== -->
 
         <div class="er-workspace-grid">
 
@@ -1258,23 +1128,39 @@
                     </button>
 
 
-                    <!-- =================================================
-                         MOBILE / TABLET FACE BIOMETRIC TELEMETRY BAR
-                         ================================================= -->
                     <div class="mobile-face-telemetry-bar"
                          id="mobileFaceTelemetryBar"
                          title="Biometric Face Engine Status • Tap to toggle Reticle HUD / Reset Lock"
                          role="status"
                          aria-live="polite">
 
-                        <div class="face-telemetry-chip" id="faceTelemetryChip">
-                            <span class="face-chip-dot scanning" id="faceChipDot"></span>
-                            <span class="face-chip-status" id="faceChipStatus">👤 Scanning Face...</span>
+                        <div class="face-telemetry-chip"
+                             id="faceTelemetryChip">
+
+                            <span class="face-chip-dot scanning"
+                                  id="faceChipDot">
+                            </span>
+
+                            <span class="face-chip-status"
+                                  id="faceChipStatus">
+                                👤 Scanning Face...
+                            </span>
+
                         </div>
 
-                        <div class="face-telemetry-chip-secondary" id="faceTelemetryChipSecondary">
-                            <span class="face-chip-metric" id="faceProximityMetric">🎯 Optimal Range</span>
-                            <span class="face-chip-metric" id="faceLightingMetric">⚡ Good Light</span>
+                        <div class="face-telemetry-chip-secondary"
+                             id="faceTelemetryChipSecondary">
+
+                            <span class="face-chip-metric"
+                                  id="faceProximityMetric">
+                                🎯 Optimal Range
+                            </span>
+
+                            <span class="face-chip-metric"
+                                  id="faceLightingMetric">
+                                ⚡ Good Light
+                            </span>
+
                         </div>
 
                     </div>
@@ -1548,9 +1434,7 @@
                     </canvas>
 
 
-                    <!-- =================================================
-                         CAMERA PLACEHOLDER
-                         ================================================= -->
+                    <!-- CAMERA PLACEHOLDER -->
 
                     <div id="cameraPlaceholder"
                          class="camera-placeholder">
@@ -1674,25 +1558,34 @@
                 </div>
 
 
-                <!-- =================================================
-                     SMART INVENTORY ADAPTIVE RIBBON
-                     ================================================= -->
-                <div class="smart-inventory-ribbon" id="smartInventoryRibbon">
+                <!-- SMART INVENTORY -->
+
+                <div class="smart-inventory-ribbon"
+                     id="smartInventoryRibbon">
 
                     <div class="smart-inventory-header">
 
                         <div class="smart-inventory-status">
-                            <span class="smart-status-icon" id="smartStatusIcon">✨</span>
-                            <span class="smart-status-text" id="smartStatusText">
+
+                            <span class="smart-status-icon"
+                                  id="smartStatusIcon">
+                                ✨
+                            </span>
+
+                            <span class="smart-status-text"
+                                  id="smartStatusText">
                                 Smart Adaptive: Ready
                             </span>
+
                         </div>
 
-                        <span class="smart-inventory-badge" id="smartInventoryBadge">
+                        <span class="smart-inventory-badge"
+                              id="smartInventoryBadge">
                             👤 9 Face AR Lenses Ready
                         </span>
 
                     </div>
+
 
                     <div class="smart-inventory-category-pills"
                          id="smartCategoryPills"
@@ -1701,43 +1594,37 @@
 
                         <button type="button"
                                 class="smart-cat-btn active"
-                                data-smart-cat="smart"
-                                title="Auto-adapts based on real-time face detection">
+                                data-smart-cat="smart">
                             🌟 Smart
                         </button>
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="face"
-                                title="Face-Anchored AR Lenses">
+                                data-smart-cat="face">
                             👤 Face AR
                         </button>
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="scene"
-                                title="Full-Frame Scene Shaders">
+                                data-smart-cat="scene">
                             🌍 Scene
                         </button>
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="magazine"
-                                title="Magazine Editorial Covers">
+                                data-smart-cat="magazine">
                             📰 Magazines
                         </button>
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="halloween"
-                                title="Halloween Special Masks">
+                                data-smart-cat="halloween">
                             🎃 Halloween
                         </button>
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="all"
-                                title="Browse all 30+ effects">
+                                data-smart-cat="all">
                             ✨ All
                         </button>
 
@@ -1746,9 +1633,7 @@
                 </div>
 
 
-                <!-- =================================================
-                     LENS CAROUSEL
-                     ================================================= -->
+                <!-- LENS CAROUSEL -->
 
                 <div class="er-lens-carousel-wrap">
 
@@ -1890,12 +1775,9 @@
                 </div>
 
 
-                <!-- =================================================
-                     CAMERA CONTROLS
-                     ================================================= -->
+                <!-- CAMERA CONTROLS -->
 
                 <div class="er-bottom-controls-bar">
-
 
                     <button type="button"
                             class="er-action-pill-btn"
@@ -2023,43 +1905,37 @@
 
                     <button type="button"
                             class="cat-pill active"
-                            data-cat="smart"
-                            title="Auto-detect face and prioritize matching filters">
+                            data-cat="smart">
                         🌟 Smart
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="face"
-                            title="Face-anchored AR lenses">
+                            data-cat="face">
                         👤 Face AR
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="scene"
-                            title="Atmospheric &amp; full stage scene shaders">
+                            data-cat="scene">
                         🌍 Scene
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="magazine"
-                            title="Editorial magazine covers">
+                            data-cat="magazine">
                         📰 Magazines
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="halloween"
-                            title="Spooky Halloween masks and overlays">
+                            data-cat="halloween">
                         🎃 Halloween
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="all"
-                            title="Browse all filters">
+                            data-cat="all">
                         ✨ All
                     </button>
 
@@ -2070,7 +1946,8 @@
                      id="effectsCardGrid">
 
 
-                    <!-- 👤 FACE AR FILTERS -->
+                    <!-- FACE AR -->
+
                     <button type="button"
                             class="effect-card"
                             data-filter="sunglasses"
@@ -2080,6 +1957,7 @@
                         <span class="effect-name">Aviators</span>
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2091,6 +1969,7 @@
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="kawaii"
@@ -2100,6 +1979,7 @@
                         <span class="effect-name">Kawaii Blush</span>
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card active"
@@ -2111,6 +1991,7 @@
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="cyberhud"
@@ -2120,6 +2001,7 @@
                         <span class="effect-name">Cyborg HUD</span>
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2131,6 +2013,7 @@
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="icefrost"
@@ -2140,6 +2023,7 @@
                         <span class="effect-name">Diamond Dust</span>
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2151,7 +2035,9 @@
                         <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
-                    <!-- 🌍 SCENE & ATMOSPHERE SHADERS -->
+
+                    <!-- SCENE -->
+
                     <button type="button"
                             class="effect-card"
                             data-filter="matrix"
@@ -2161,6 +2047,7 @@
                         <span class="effect-name">Matrix Rain</span>
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2172,6 +2059,7 @@
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="vintage90s"
@@ -2181,6 +2069,7 @@
                         <span class="effect-name">Retro 90s</span>
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2192,6 +2081,7 @@
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="glitch"
@@ -2201,6 +2091,7 @@
                         <span class="effect-name">Glitch FX</span>
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2212,6 +2103,7 @@
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="space"
@@ -2222,7 +2114,9 @@
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
-                    <!-- 📰 MAGAZINES -->
+
+                    <!-- MAGAZINES -->
+
                     <button type="button"
                             class="effect-card"
                             data-filter="time"
@@ -2232,6 +2126,7 @@
                         <span class="effect-name">TIME Mag</span>
                         <span class="effect-target-tag mag-tag">📰 Magazine</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2243,6 +2138,7 @@
                         <span class="effect-target-tag mag-tag">📰 Magazine</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="forbes"
@@ -2252,6 +2148,7 @@
                         <span class="effect-name">Forbes</span>
                         <span class="effect-target-tag mag-tag">📰 Magazine</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2263,6 +2160,7 @@
                         <span class="effect-target-tag mag-tag">📰 Magazine</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="cyber"
@@ -2273,7 +2171,9 @@
                         <span class="effect-target-tag mag-tag">📰 Magazine</span>
                     </button>
 
-                    <!-- 🎃 HALLOWEEN -->
+
+                    <!-- HALLOWEEN -->
+
                     <button type="button"
                             class="effect-card"
                             data-filter="skeleton"
@@ -2283,6 +2183,7 @@
                         <span class="effect-name">Bio-Scan</span>
                         <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2294,6 +2195,7 @@
                         <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="ghost"
@@ -2303,6 +2205,7 @@
                         <span class="effect-name">Phantom</span>
                         <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2314,6 +2217,7 @@
                         <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="vampire"
@@ -2324,6 +2228,7 @@
                         <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
                     </button>
 
+
                     <button type="button"
                             class="effect-card"
                             data-filter="spider"
@@ -2333,6 +2238,7 @@
                         <span class="effect-name">Spider Web</span>
                         <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
                     </button>
+
 
                     <button type="button"
                             class="effect-card"
@@ -2383,7 +2289,6 @@
 
 
                 <div class="how-to-steps-grid">
-
 
                     <div class="how-to-step">
 
@@ -2487,7 +2392,6 @@
              aria-modal="true"
              aria-labelledby="snapshotTitle">
 
-
             <div class="snapshot-modal-backdrop"
                  onclick="document.getElementById('closeSnapshotBtn').click()">
             </div>
@@ -2562,19 +2466,19 @@
                 <nav class="footer-links"
                      aria-label="Footer Navigation">
 
-                    <a href="../privacy.html">
+                    <a href="privacy.html">
                         Privacy Policy
                     </a>
 
-                    <a href="../terms.html">
+                    <a href="terms.html">
                         Terms &amp; Conditions
                     </a>
 
-                    <a href="../disclaimer.html">
+                    <a href="disclaimer.html">
                         Disclaimer
                     </a>
 
-                    <a href="../contact.html">
+                    <a href="contact.html">
                         Contact
                     </a>
 
@@ -2610,25 +2514,17 @@
 
 
 <!-- =====================================================
-     EXISTING WEBZONEBW SCRIPTS
-     
-     IMPORTANT:
-     Keep this order.
+     WEBZONEBW SCRIPTS
+     ROOT-LEVEL PATHS
      ===================================================== -->
 
-<script src="../js/beatles-playlists.js"></script>
-
-<script src="../js/script.js"></script>
-
-<script src="../js/halloween.js"></script>
+<script src="js/beatles-playlists.js"></script>
+<script src="js/script.js"></script>
+<script src="js/halloween.js"></script>
 
 
 <!-- =====================================================
      ER THEME CONTROLLER
-     
-     This is deliberately placed after the existing site
-     scripts so it can synchronize the ER toggle without
-     replacing the existing script.js functionality.
      ===================================================== -->
 
 <script>
@@ -2993,6 +2889,7 @@
         }
 
     }
+
 
     if (
         document.readyState === "loading"
