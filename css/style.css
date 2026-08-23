@@ -1,4 +1,4 @@
-/* ==========================================================
+* ==========================================================
    WEBZONEBW v2.2
    Professional Technology Portfolio
    Sameer Chouhan
@@ -2841,11 +2841,7 @@ textarea:focus-visible {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.camera-video.camera-mirrored,
-.camera-canvas.camera-mirrored {
-    transform: scaleX(-1);
+    transform: scaleX(-1); /* Mirror view for front camera */
 }
 
 .camera-placeholder {
@@ -4671,17 +4667,16 @@ body.light-mode .error-contact-row {
 }
 
 .permission-alert-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 4000;
-    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-}
-
-.permission-alert-modal.is-open {
-    display: flex;
 }
 
 .permission-alert-backdrop {
@@ -6950,20 +6945,6 @@ body.light-mode .cam-floating-badge {
 
 /* Final shared-theme safeguards: keep navigation and Sound Box surfaces aligned
    after page-specific styles have loaded. */
-.sidebar, .er-sidebar { background: var(--bg-sidebar); border-right-color: var(--border-color); }
-.sidebar ul li a, .sidebar-nav ul li a { color: var(--text-secondary); }
-.sidebar ul li a:hover, .sidebar-nav ul li a:hover { background: var(--surface-card-hover); color: var(--text-heading); border-left-color: var(--brand-cyan); }
-.sidebar ul li a.active, .sidebar-nav ul li a.active { background: rgba(56, 189, 248, 0.12); color: var(--brand-cyan); border-left-color: var(--brand-cyan); box-shadow: none; }
-
-body.light-mode .sidebar ul li a:hover, body.light-mode .sidebar-nav ul li a:hover { background: #e2e8f0; color: var(--text-heading); border-left-color: var(--text-link); }
-body.light-mode .sidebar ul li a.active, body.light-mode .sidebar-nav ul li a.active { background: rgba(2, 132, 199, 0.1); color: var(--text-link); border-left-color: var(--text-link); box-shadow: none; }
-
-body.light-mode .fabfour-spotlight-section { background: var(--surface-card); }
-body.light-mode .fab-card { background: var(--surface-card); border-color: var(--border-color); }
-body.light-mode .fab-card h4 { color: var(--text-heading); }
-body.light-mode .fab-card p { color: var(--text-muted); }
-body.light-mode .fab-role { color: var(--brand-cyan); }
-
 /* Sound Box member spotlight */
 .fabfour-spotlight-section {
     position: relative;
@@ -7110,6 +7091,21 @@ body.light-mode .fab-role { color: var(--brand-cyan); }
     background: rgba(56, 189, 248, 0.12);
     color: var(--brand-cyan);
     border-left-color: var(--brand-cyan);
+    box-shadow: none;
+}
+
+body.light-mode .sidebar ul li a:hover,
+body.light-mode .sidebar-nav ul li a:hover {
+    background: #e2e8f0;
+    color: var(--text-heading);
+    border-left-color: var(--text-link);
+}
+
+body.light-mode .sidebar ul li a.active,
+body.light-mode .sidebar-nav ul li a.active {
+    background: rgba(2, 132, 199, 0.1);
+    color: var(--text-link);
+    border-left-color: var(--text-link);
     box-shadow: none;
 }
 
@@ -8430,7 +8426,7 @@ body.light-mode .global-dock-link:hover {
    RESPONSIVE BREAKPOINTS (TABLET & MOBILE SCREENSHOT SPEC)
 ========================================================== */
 
-/* TABLET (768px - 1199px): Sidebar becomes drawer, 1-col workspace */
+/* TABLET (768px - 1199px): Compact one-column workspace */
 @media (max-width: 1199px) {
 
     .er-workspace-grid {
@@ -8468,8 +8464,16 @@ body.light-mode .global-dock-link:hover {
 
 }
 
-/* MOBILE (up to 767px): Mobile camera first, hamburger drawer */
+/* MOBILE (up to 767px): Mobile camera first, hamburger sidebar drawer */
 @media (max-width: 767px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .settings-slider-drawer {
+        max-width: min(500px, 92vw);
+    }
 
     .er-sidebar {
         position: fixed;
@@ -8551,4 +8555,3 @@ body.light-mode .global-dock-link:hover {
     }
 
 }
-
