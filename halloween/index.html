@@ -1,2961 +1,2034 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <!-- =====================================================
-         WEBZONEBW — WEBZONEBW-ER STUDIO
-         Extended Reality / AR / Halloween Experience
-         ===================================================== -->
-
     <meta charset="UTF-8">
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-     crossorigin="anonymous">
-    </script>
-    
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        WEBZONEBW-ER Studio | Halloween AR Camera &amp; Live Effects
-    </title>
-
-    <meta name="description"
-          content="Explore the WEBZONEBW-ER Studio Halloween experience with live browser camera effects, AR-style lenses, visual shaders, photo capture and interactive effects.">
-
-    <meta name="author"
-          content="Sameer Chouhan">
-
-    <meta name="robots"
-          content="index, follow, max-image-preview:large">
-
-    <meta name="theme-color"
-          content="#08080d">
-
-    <meta name="application-name"
-          content="WEBZONEBW-ER Studio">
-
-    <meta name="apple-mobile-web-app-capable"
-          content="yes">
-
-    <meta name="apple-mobile-web-app-title"
-          content="WEBZONEBW-ER">
-
-    <meta name="mobile-web-app-capable"
-          content="yes">
-
-
-    <!-- =====================================================
-         CANONICAL
-         ===================================================== -->
-
-    <link rel="canonical"
-          href="https://webzonebw.in/Halloween/">
-
-
-    <!-- =====================================================
-         FAVICON
-         ===================================================== -->
-
-    <link rel="icon"
-          type="image/png"
-          href="../assets/favicon/favicon.png">
-
-    <link rel="shortcut icon"
-          href="../assets/favicon.ico.ico">
-
-
-    <!-- =====================================================
-         OPEN GRAPH
-         ===================================================== -->
-
-    <meta property="og:type"
-          content="website">
-
-    <meta property="og:title"
-          content="WEBZONEBW-ER Studio | Halloween AR Experience">
-
-    <meta property="og:description"
-          content="A browser-based Halloween AR experience featuring live camera effects, interactive lenses, visual shaders and HD photo capture.">
-
-    <meta property="og:url"
-          content="https://webzonebw.in/Halloween/">
-
-    <meta property="og:site_name"
-          content="WEBZONEBW">
-
-    <meta property="og:locale"
-          content="en_IN">
-
-    <meta property="og:image"
-          content="https://webzonebw.in/assets/logo.png">
-
-    <meta property="og:image:alt"
-          content="WEBZONEBW Halloween Extended Reality Studio">
-
-
-    <!-- =====================================================
-         TWITTER / SOCIAL CARD
-         ===================================================== -->
-
-    <meta name="twitter:card"
-          content="summary_large_image">
-
-    <meta name="twitter:title"
-          content="WEBZONEBW-ER Studio | Halloween AR Experience">
-
-    <meta name="twitter:description"
-          content="Explore live camera lenses, visual effects and interactive Halloween AR features from WEBZONEBW.">
-
-    <meta name="twitter:image"
-          content="https://webzonebw.in/assets/logo.png">
-
-
-    <!-- =====================================================
-         MAIN WEBZONEBW STYLESHEET
-         ===================================================== -->
-
-    <link rel="stylesheet"
-          href="../css/style.css">
-
-
-    <!-- =====================================================
-         WEBZONEBW-ER LAYOUT SAFETY
-         ===================================================== -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEBZONEBW v2.2 — Professional Technology Portfolio | Sameer Chouhan</title>
     <style>
-
-        /* =====================================================
-           THEME BRIDGE
-           
-           The main WEBZONEBW stylesheet controls the actual
-           visual theme. These classes provide a safe bridge
-           for the ER page so the page does not get stuck in
-           dark mode.
-           ===================================================== */
-
-        html.er-theme-light,
-        body.er-theme-light {
-            color-scheme: light;
-        }
-
-        html.er-theme-dark,
-        body.er-theme-dark {
-            color-scheme: dark;
-        }
-
-
-        /* =====================================================
-           GLOBAL ER PAGE SAFETY
-           ===================================================== */
-
-        .er-studio-body {
-            margin: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-
-        /* =====================================================
-           DESKTOP LAYOUT
-           ===================================================== */
-
-        .er-studio-body .er-layout-container {
-            display: grid;
-            grid-template-columns: minmax(230px, 270px) minmax(0, 1fr);
-            width: 100%;
-            min-height: 100vh;
-        }
-
-
-        .er-studio-body .er-sidebar {
-            position: relative;
-            inset: auto;
-            width: auto;
-            min-width: 0;
-            height: 100vh;
-            z-index: 50;
-            overflow-y: auto;
-        }
-
-
-        .er-studio-body .er-main-content {
-            min-width: 0;
-            width: 100%;
-            max-width: none;
-        }
-
-
-        .er-studio-body .er-workspace-grid {
-            min-width: 0;
-            width: 100%;
-        }
-
-
-        /* =====================================================
-           CAMERA VIEWPORT
-           ===================================================== */
-
-        .er-studio-body .camera-viewport-frame {
-            position: relative;
-            width: 100%;
-            min-height: 420px;
-            overflow: hidden;
-            isolation: isolate;
-        }
-
-
-        .er-studio-body #cameraVideo.camera-video {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-            object-position: center center;
-            display: block;
-            z-index: 1;
-            background: #050507;
-        }
-
-
-        .er-studio-body #cameraCanvas.camera-canvas {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: block;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-
-        .er-studio-body #cameraPlaceholder {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-        }
-
-
-        .er-studio-body .cam-corner-btn,
-        .er-studio-body .cam-zoom-badge,
-        .er-studio-body .cam-floating-vertical-stack,
-        .er-studio-body .cam-floating-badge,
-        .er-studio-body .canvas-swipe-toast {
-            z-index: 20;
-        }
-
-
-        .er-studio-body .permission-alert-modal {
-            z-index: 100;
-        }
-
-
-        /* =====================================================
-           CAMERA PRIVACY
-           ===================================================== */
-
-        .er-camera-privacy-note {
-            margin: 10px auto 0;
-            max-width: 900px;
-            padding: 8px 14px;
-            text-align: center;
-            font-size: 0.78rem;
-            line-height: 1.45;
-            opacity: 0.72;
-        }
-
-
-        .er-camera-privacy-note strong {
-            opacity: 0.95;
-        }
-
-
-        /* =====================================================
-           EFFECTS PANEL
-           ===================================================== */
-
-        .er-studio-body .er-effects-panel {
-            min-width: 0;
-            max-width: 100%;
-        }
-
-
-        /* =====================================================
-           HALLOWEEN LAUNCH ORB
-           ===================================================== */
-
-        .er-studio-body .er-launch-icon-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-
-        .er-studio-body .er-launch-orb {
-            --orb-x: 0px;
-            --orb-y: 0px;
-
-            position: relative;
-            width: 82px;
-            height: 82px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            transform:
-                translate3d(
-                    var(--orb-x),
-                    var(--orb-y),
-                    0
-                );
-
-            transition:
-                transform 180ms ease,
-                filter 250ms ease;
-
-            isolation: isolate;
-        }
-
-
-        /* =====================================================
-           ORB CORE
-           ===================================================== */
-
-        .er-studio-body .er-orb-core {
-            position: relative;
-
-            width: 60px;
-            height: 60px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background:
-                radial-gradient(
-                    circle at 35% 28%,
-                    #ffb64a 0%,
-                    #ff7625 35%,
-                    #ed3341 68%,
-                    #64204e 100%
-                );
-
-            border: 1px solid rgba(255,255,255,.28);
-
-            box-shadow:
-                0 0 18px rgba(255,102,0,.42),
-                0 0 38px rgba(255,55,40,.18),
-                inset 0 0 18px rgba(255,255,255,.12);
-
-            z-index: 3;
-            overflow: hidden;
-        }
-
-
-        /* =====================================================
-           DIGITAL HALLOWEEN MARK
-           ===================================================== */
-
-        .er-studio-body .er-orb-mark {
-            position: relative;
-            width: 36px;
-            height: 32px;
-            opacity: .96;
-        }
-
-
-        .er-studio-body .er-mark-eye {
-            position: absolute;
-            top: 7px;
-
-            width: 8px;
-            height: 5px;
-
-            background: #170c2d;
-            border-radius: 50%;
-
-            box-shadow:
-                0 0 6px rgba(255,255,255,.22);
-        }
-
-
-        .er-studio-body .er-mark-eye.left {
-            left: 4px;
-        }
-
-
-        .er-studio-body .er-mark-eye.right {
-            right: 4px;
-        }
-
-
-        .er-studio-body .er-mark-smile {
-            position: absolute;
-
-            left: 6px;
-            bottom: 3px;
-
-            width: 24px;
-            height: 10px;
-
-            border-bottom:
-                4px solid #170c2d;
-
-            border-radius:
-                0 0 50% 50%;
-        }
-
-
-        /* =====================================================
-           SCAN LIGHT
-           ===================================================== */
-
-        .er-studio-body .er-orb-scan {
-            position: absolute;
-
-            left: -10%;
-            top: -100%;
-
-            width: 120%;
-            height: 35%;
-
-            background:
-                linear-gradient(
-                    to bottom,
-                    transparent,
-                    rgba(255,255,255,.32),
-                    transparent
-                );
-
-            animation:
-                erHalloweenOrbScan 2.8s linear infinite;
-
-            pointer-events: none;
-        }
-
-
-        @keyframes erHalloweenOrbScan {
-
-            0% {
-                transform: translateY(0);
-            }
-
-            100% {
-                transform: translateY(350%);
-            }
-
-        }
-
-
-        /* =====================================================
-           ORBIT RINGS
-           ===================================================== */
-
-        .er-studio-body .er-orb-ring {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-
-        .er-studio-body .er-orb-ring-outer {
-            width: 82px;
-            height: 82px;
-
-            border:
-                1px solid rgba(255,102,30,.28);
-
-            animation:
-                erHalloweenOrbRotate 8s linear infinite;
-        }
-
-
-        .er-studio-body .er-orb-ring-middle {
-            width: 70px;
-            height: 70px;
-
-            border:
-                1px dashed rgba(190,95,255,.36);
-
-            animation:
-                erHalloweenOrbRotateReverse 6s linear infinite;
-        }
-
-
-        @keyframes erHalloweenOrbRotate {
-
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-
-        }
-
-
-        @keyframes erHalloweenOrbRotateReverse {
-
-            from {
-                transform: rotate(360deg);
-            }
-
-            to {
-                transform: rotate(0deg);
-            }
-
-        }
-
-
-        /* =====================================================
-           FLOATING PARTICLES
-           ===================================================== */
-
-        .er-studio-body .er-orb-particle {
-            position: absolute;
-
-            width: 4px;
-            height: 4px;
-
-            border-radius: 50%;
-
-            background: #ff9c45;
-
-            box-shadow:
-                0 0 8px rgba(255,120,50,.8);
-
-            z-index: 4;
-
-            animation:
-                erHalloweenParticleFloat 2.6s ease-in-out infinite;
-        }
-
-
-        .er-studio-body .particle-one {
-            top: 5px;
-            right: 16px;
-        }
-
-
-        .er-studio-body .particle-two {
-            bottom: 9px;
-            left: 8px;
-            animation-delay: .5s;
-        }
-
-
-        .er-studio-body .particle-three {
-            top: 38px;
-            left: 0;
-            animation-delay: 1s;
-        }
-
-
-        .er-studio-body .particle-four {
-            right: 1px;
-            bottom: 27px;
-            animation-delay: 1.5s;
-        }
-
-
-        @keyframes erHalloweenParticleFloat {
-
-            0%,
-            100% {
-                transform: translateY(0);
-                opacity: .45;
-            }
-
-            50% {
-                transform: translateY(-8px);
-                opacity: 1;
-            }
-
-        }
-
-
-        /* =====================================================
-           LAUNCH STATUS
-           ===================================================== */
-
-        .er-studio-body .er-launch-status {
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            gap: 7px;
-            margin-top: 10px;
-
-            font-size: .66rem;
-            font-weight: 700;
-
-            letter-spacing: .15em;
-            text-transform: uppercase;
-
-            opacity: .68;
-        }
-
-
-        .er-studio-body .er-status-dot {
-            width: 6px;
-            height: 6px;
-
-            flex: 0 0 6px;
-
-            border-radius: 50%;
-
-            background: #7dffb2;
-
-            box-shadow:
-                0 0 8px rgba(125,255,178,.8);
-
-            animation:
-                erHalloweenStatusPulse 1.8s ease-in-out infinite;
-        }
-
-
-        @keyframes erHalloweenStatusPulse {
-
-            0%,
-            100% {
-                opacity: .45;
-                transform: scale(.85);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.15);
-            }
-
-        }
-
-
-        /* =====================================================
-           HALLOWEEN TITLE ACCENT
-           ===================================================== */
-
-        .er-studio-body .launch-title-accent {
-            display: inline-block;
-
-            margin-left: 4px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ff7a00,
-                    #ff3b4d,
-                    #b95cff
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-
-        /* =====================================================
-           ACTIVE LAUNCH STATE
-           ===================================================== */
-
-        .er-studio-body .er-launch-orb.launch-active {
-            filter:
-                brightness(1.25)
-                drop-shadow(
-                    0 0 18px
-                    rgba(255,92,35,.65)
-                );
-        }
-
-
-        .er-studio-body
-        .er-launch-orb.launch-active
-        .er-orb-ring-outer {
-            animation-duration: 1s;
-        }
-
-
-        .er-studio-body
-        .er-launch-orb.launch-active
-        .er-orb-ring-middle {
-            animation-duration: .8s;
-        }
-
-
-        /* =====================================================
-           DESKTOP / TABLET
-           ===================================================== */
-
-        @media (max-width: 1100px) {
-
-            .er-studio-body .er-layout-container {
-                grid-template-columns:
-                    minmax(210px, 240px)
-                    minmax(0, 1fr);
-            }
-
-        }
-
-
-        /* =====================================================
-           MOBILE
-           ===================================================== */
-
-        @media (max-width: 900px) {
-
-            .er-studio-body .er-layout-container {
-                display: block;
-            }
-
-            .er-studio-body .er-sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
-
-                width: min(82vw, 300px);
-                height: 100vh;
-
-                z-index: 1000;
-            }
-
-            .er-studio-body .er-main-content {
-                width: 100%;
-                min-width: 0;
-            }
-
-            .er-studio-body .camera-viewport-frame {
-                min-height: min(70vh, 600px);
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            .er-studio-body .camera-viewport-frame {
-                min-height: 58vh;
-                max-height: 72vh;
-            }
-
-            .er-studio-body #cameraVideo.camera-video {
-                object-fit: cover;
-            }
-
-            .er-camera-privacy-note {
-                font-size: 0.72rem;
-                padding: 7px 10px;
-            }
-
-        }
-
-
-        /* =====================================================
-           ACCESSIBILITY
-           ===================================================== */
-
-        .er-studio-body button:focus-visible,
-        .er-studio-body a:focus-visible,
-        .er-studio-body input:focus-visible {
-            outline: 2px solid currentColor;
-            outline-offset: 3px;
-        }
-
-
-        /* =====================================================
-           REDUCED MOTION
-           ===================================================== */
-
-        @media (prefers-reduced-motion: reduce) {
-
-            .er-studio-body *,
-            .er-studio-body *::before,
-            .er-studio-body *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-
-        }
-
-    </style>
-
-
-    <!-- =====================================================
-         WEBZONEBW-ER CONFIGURATION
-         ===================================================== -->
-
-    <script>
-
-        window.WEBZONEBW_ER_CONFIG = {
-
-            version: "1.0",
-
-            experience: "WEBZONEBW-ER",
-
-            seasonalTheme: "Halloween",
-
-            initialCamera: "user",
-
-            facingMode: "user",
-
-            preferredFacingMode: "user",
-
-            allowCamera: true,
-
-            allowMicrophone: true,
-
-            allowPhotoUpload: true,
-
-            allowCameraFlip: true,
-
-            cameraFit: "cover",
-
-            cameraObjectPosition: "center center",
-
-            preserveLensSettings: true,
-
-            preserveEffects: true
-
-        };
-
-    </script>
-
-
-    <!-- =====================================================
-         THEME BOOTSTRAP
-         
-         Runs before the page renders so the ER page does
-         not visibly flash into the wrong theme.
-         ===================================================== -->
-
-    <script>
-
-        (function () {
-
-            "use strict";
-
-            try {
-
-                const savedTheme =
-                    localStorage.getItem("theme") ||
-                    localStorage.getItem("webzonebw-theme");
-
-                const isLight =
-                    savedTheme === "light";
-
-                document.documentElement.classList.toggle(
-                    "er-theme-light",
-                    isLight
-                );
-
-                document.documentElement.classList.toggle(
-                    "er-theme-dark",
-                    !isLight
-                );
-
-            } catch (error) {
-
-                document.documentElement.classList.add(
-                    "er-theme-dark"
-                );
-
-            }
-
-        })();
-
-    </script>
-
-
-    <!-- =====================================================
-         STRUCTURED DATA
-         ===================================================== -->
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@graph": [
-
-            {
-                "@type": "WebApplication",
-                "@id": "https://webzonebw.in/Halloween/#application",
-                "name": "WEBZONEBW-ER Studio",
-                "alternateName": "WEBZONEBW Extended Reality Studio",
-                "url": "https://webzonebw.in/Halloween/",
-                "description": "A browser-based Extended Reality and AR-style camera experience featuring interactive visual effects, lenses, photo capture and seasonal Halloween experiences.",
-                "applicationCategory": "MultimediaApplication",
-                "applicationSubCategory": "Augmented Reality",
-                "operatingSystem": "Web Browser",
-                "browserRequirements": "Requires a modern browser with camera support for live camera features.",
-                "inLanguage": "en",
-                "isAccessibleForFree": true,
-                "author": {
-                    "@type": "Person",
-                    "@id": "https://webzonebw.in/about.html#sameer-chouhan",
-                    "name": "Sameer Chouhan",
-                    "url": "https://webzonebw.in/about.html"
-                },
-                "publisher": {
-                    "@type": "Organization",
-                    "@id": "https://webzonebw.in/#organization",
-                    "name": "WEBZONEBW",
-                    "url": "https://webzonebw.in/",
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": "https://webzonebw.in/assets/logo.png"
-                    }
-                }
-            },
-
-            {
-                "@type": "WebPage",
-                "@id": "https://webzonebw.in/Halloween/#webpage",
-                "url": "https://webzonebw.in/Halloween/",
-                "name": "WEBZONEBW-ER Studio | Halloween AR Camera & Live Effects",
-                "description": "Interactive WEBZONEBW Extended Reality Studio featuring browser camera access, AR-style lenses, visual shaders, photo capture and Halloween experiences.",
-                "isPartOf": {
-                    "@type": "WebSite",
-                    "@id": "https://webzonebw.in/#website"
-                },
-                "about": {
-                    "@id": "https://webzonebw.in/Halloween/#application"
-                },
-                "inLanguage": "en"
-            }
-
-        ]
+/* ==========================================================
+   WEBZONEBW v2.2
+   Professional Technology Portfolio
+   Sameer Chouhan
+   ----------------------------------------------------------
+   Design:
+   - Professional dark default
+   - Clean light mode
+   - Recruiter friendly
+   - Legal-page optimized
+   - SEO / AI-content friendly
+   - Responsive
+   - Lightweight
+   - Accessibility focused
+   - No unnecessary visual effects
+   ========================================================== */
+
+
+/* ==========================================================
+   01 — RESET
+========================================================== */
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    -webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family:
+        "Segoe UI",
+        -apple-system,
+        BlinkMacSystemFont,
+        system-ui,
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    background: var(--bg-dark, #0a0e1a);
+    color: var(--text-main, #f1f5f9);
+
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+a,
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+
+/* ==========================================================
+   02 — GLOBAL TRANSITIONS & EYE-CARE THEME DYNAMICS
+========================================================== */
+
+:root {
+    /* Brand Accent Tokens - Tuned for eye comfort and reduced harsh glare */
+    --brand-gold: #d4af37;
+    --brand-gold-hover: #e6c860;
+    --brand-gold-muted: #b45309;
+    --brand-gold-glow: rgba(212, 175, 55, 0.22);
+    --brand-cyan: #38bdf8;
+    --brand-cyan-hover: #0ea5e9;
+    --brand-cyan-muted: #0284c7;
+    --brand-cyan-glow: rgba(56, 189, 248, 0.2);
+    --brand-purple: #8b5cf6;
+    --brand-purple-hover: #a78bfa;
+    --brand-purple-glow: rgba(139, 92, 246, 0.25);
+    --brand-green: #10b981;
+    --brand-green-glow: rgba(16, 185, 129, 0.2);
+    --brand-red: #ef4444;
+
+    /* Eye-Smoothness Theme Transition Dynamics */
+    --theme-transition-duration: 0.3s;
+    --theme-transition-timing: cubic-bezier(0.25, 1, 0.5, 1);
+
+    /* Shape & Radius Tokens */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* ==========================================
+       DARK THEME (Eye-Care Slate Midnight)
+       ========================================== */
+    --bg-base: #0a0e1a;
+    --bg-dark: #0a0e1a;
+    --bg-body: #0a0e1a;
+    --bg-sidebar: #0e1324;
+    --bg-header: rgba(14, 19, 36, 0.88);
+    --bg-overlay: rgba(10, 14, 26, 0.85);
+
+    /* Surfaces & Cards - Gentle Depth, Non-Harsh */
+    --surface-card: #11172c;
+    --surface-card-hover: #161e38;
+    --surface-card-active: #1c2646;
+    --surface-card-elevated: #161e38;
+    --surface-input: #0e1324;
+    --surface-input-focus: #11172c;
+    --surface-badge: rgba(139, 92, 246, 0.14);
+    --surface-badge-gold: rgba(212, 175, 55, 0.14);
+    --surface-dock: rgba(17, 23, 44, 0.95);
+    --surface-modal: #0e1324;
+    --surface-highlight: rgba(212, 175, 55, 0.12);
+    --surface-tooltip: #1e293b;
+
+    /* Text & Typography - Anti-Glare Soft White & Balanced Contrast */
+    --text-main: #f1f5f9;
+    --text-heading: #ffffff;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --text-inverse: #0a0e1a;
+    --text-gold: #d4af37;
+    --text-cyan: #38bdf8;
+    --text-purple: #a78bfa;
+    --text-link: #38bdf8;
+    --text-link-hover: #7dd3fc;
+
+    /* Borders & Outlines */
+    --border-color: #1e2844;
+    --border-color-light: #283556;
+    --border-color-subtle: rgba(255, 255, 255, 0.08);
+    --border-color-hover: #3b4d75;
+    --border-color-focus: #38bdf8;
+    --border-color-gold: rgba(212, 175, 55, 0.35);
+
+    /* Shadows & Depth */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.22);
+    --shadow-glow-gold: 0 0 16px rgba(212, 175, 55, 0.2);
+    --shadow-glow-cyan: 0 0 16px rgba(56, 189, 248, 0.2);
+    --shadow-glow-purple: 0 0 16px rgba(139, 92, 246, 0.25);
+    --shadow-dock: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+
+    /* Legacy Backward Compatibility aliases */
+    --accent-purple: var(--brand-purple);
+    --accent-purple-glow: var(--brand-purple-glow);
+}
+
+/* ==========================================================
+   LIGHT THEME (Eye-Care Soft Daylight Canvas)
+   ========================================================== */
+:root[data-theme="light"],
+body.light-mode {
+    --bg-base: #f8fafc;
+    --bg-dark: #f8fafc;
+    --bg-body: #f8fafc;
+    --bg-sidebar: #ffffff;
+    --bg-header: rgba(255, 255, 255, 0.92);
+    --bg-overlay: rgba(15, 23, 42, 0.35);
+
+    /* Surfaces & Cards - Crisp and Soft to Reduce Glare */
+    --surface-card: #ffffff;
+    --surface-card-hover: #f8fafc;
+    --surface-card-active: #f1f5f9;
+    --surface-card-elevated: #ffffff;
+    --surface-input: #ffffff;
+    --surface-input-focus: #ffffff;
+    --surface-badge: rgba(99, 102, 241, 0.08);
+    --surface-badge-gold: rgba(212, 175, 55, 0.14);
+    --surface-dock: rgba(255, 255, 255, 0.96);
+    --surface-modal: #ffffff;
+    --surface-highlight: rgba(212, 175, 55, 0.12);
+    --surface-tooltip: #0f172a;
+
+    /* Text & Typography - High Legibility Charcoal (No Stark Bleed) */
+    --text-main: #1e293b;
+    --text-heading: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --text-inverse: #ffffff;
+    --text-gold: #b45309;
+    --text-cyan: #0284c7;
+    --text-purple: #6d28d9;
+    --text-link: #0284c7;
+    --text-link-hover: #0369a1;
+
+    /* Borders & Outlines - Soft Non-Harsh Separators */
+    --border-color: #e2e8f0;
+    --border-color-light: #cbd5e1;
+    --border-color-subtle: rgba(0, 0, 0, 0.05);
+    --border-color-hover: #94a3b8;
+    --border-color-focus: #0284c7;
+    --border-color-gold: rgba(212, 175, 55, 0.45);
+
+    /* Shadows & Depth - Balanced Ambient Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.03);
+    --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.08), 0 4px 8px rgba(15, 23, 42, 0.03);
+    --shadow-card: 0 2px 12px rgba(15, 23, 42, 0.05);
+    --shadow-glow-gold: 0 0 14px rgba(212, 175, 55, 0.2);
+    --shadow-glow-cyan: 0 0 14px rgba(2, 132, 199, 0.16);
+    --shadow-glow-purple: 0 0 14px rgba(109, 40, 217, 0.15);
+    --shadow-dock: 0 14px 35px rgba(0, 0, 0, 0.1), 0 0 18px rgba(212, 175, 55, 0.18);
+}
+
+/* Global Eye-Smoothness Transition Rules */
+html,
+body,
+a,
+button,
+.btn,
+.sidebar,
+.sidebar ul li a,
+.featured-card,
+.quick-info,
+.projects,
+.contact-section,
+.legal-page,
+.legal-page section,
+.hero,
+.top-header,
+.modal-content,
+.switch-slider,
+.theme-btn,
+input,
+textarea,
+select {
+    transition:
+        background-color var(--theme-transition-duration) var(--theme-transition-timing),
+        color var(--theme-transition-duration) var(--theme-transition-timing),
+        border-color var(--theme-transition-duration) var(--theme-transition-timing),
+        box-shadow var(--theme-transition-duration) var(--theme-transition-timing);
+}
+
+/* Smooth Theme Switching Class - applied dynamically during toggle */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+    transition:
+        background-color var(--theme-transition-duration) var(--theme-transition-timing) !important,
+        background var(--theme-transition-duration) var(--theme-transition-timing) !important,
+        color var(--theme-transition-duration) var(--theme-transition-timing) !important,
+        border-color var(--theme-transition-duration) var(--theme-transition-timing) !important,
+        box-shadow var(--theme-transition-duration) var(--theme-transition-timing) !important,
+        fill var(--theme-transition-duration) var(--theme-transition-timing) !important,
+        stroke var(--theme-transition-duration) var(--theme-transition-timing) !important;
+    transition-delay: 0s !important;
+}
+
+
+/* ==========================================================
+   03 — MAIN LAYOUT & UNIFIED ARCHITECTURE
+========================================================== */
+
+body {
+    background: var(--bg-dark);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container,
+.er-layout-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background: var(--bg-dark);
+}
+
+
+/* ==========================================================
+   04 — STANDARDIZED UNIFIED SIDEBAR
+========================================================== */
+
+.sidebar,
+.er-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 270px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 18px 20px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    z-index: 1000;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #2a3754 transparent;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 05 — BRAND LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    padding: 4px 0 16px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand-logo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.sc-logo-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #38bdf8, #8b5cf6);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.brand-name-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-heading);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.brand-sub {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--brand-cyan);
+    letter-spacing: 1.2px;
+}
+
+body.light-mode .brand-sub {
+    color: var(--text-link);
+}
+
+
+/* ==========================================================
+   07 — SIDEBAR NAVIGATION MENU
+========================================================== */
+
+.sidebar-nav {
+    flex: 1;
+    margin: 8px 0;
+    overflow-y: auto;
+}
+
+.sidebar ul,
+.sidebar-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar ul li,
+.sidebar-nav ul li {
+    margin: 4px 0;
+}
+
+.sidebar ul li a,
+.sidebar-nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.sidebar ul li a .nav-icon {
+    font-size: 17px;
+    width: 22px;
+    text-align: center;
+}
+
+.sidebar ul li a:hover,
+.sidebar-nav ul li a:hover {
+    background: var(--surface-card-hover);
+    color: var(--text-heading);
+    border-left-color: var(--brand-cyan);
+    transform: translateX(3px);
+}
+
+.sidebar ul li a.active,
+.sidebar-nav ul li a.active {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--brand-cyan);
+    border-left-color: var(--brand-cyan);
+    font-weight: 700;
+    box-shadow: none;
+}
+
+body.light-mode .sidebar ul li a.active,
+body.light-mode .sidebar-nav ul li a.active {
+    background: rgba(2, 132, 199, 0.1);
+    color: var(--text-link);
+    border-left-color: var(--text-link);
+    box-shadow: none;
+}
+
+
+/* ==========================================================
+   07B — SIDEBAR THEME TOGGLE & USER PROFILE CARD
+========================================================== */
+
+.sidebar-theme-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.theme-label-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.switch-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.switch-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #334155;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.switch-toggle input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+}
+
+.switch-toggle input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* User Card */
+.sidebar-user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-top: auto;
+}
+
+.user-avatar-wrap {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #38bdf8;
+    border: 1px solid var(--border-color-light);
+}
+
+.user-online-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border: 2px solid #090d1a;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #22c55e;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.user-info strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-info span {
+    font-size: 11px;
+    color: #a855f7;
+    font-weight: 600;
+}
+
+
+/* ==========================================================
+   08 — MAIN CONTENT WORKSPACE
+========================================================== */
+
+.main-content,
+.er-main-content {
+    width: calc(100% - 270px);
+    margin-left: 270px;
+    padding: 34px 44px 50px;
+    max-width: 1800px;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================
+   09 — TOP HEADER WITH UTILITIES
+========================================================== */
+
+.top-header,
+.er-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.top-header h1,
+.er-top-header h1 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: clamp(24px, 3.2vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.top-header p,
+.header-subtitle {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+}
+
+.header-utilities {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-icon-btn {
+    width: 40px;
+    height: 40px;
+    background: #0c1020;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 17px;
+    transition: all 0.2s ease;
+}
+
+.header-icon-btn:hover {
+    background: #151d36;
+    border-color: #8b5cf6;
+    transform: translateY(-2px);
+}
+
+.header-badge {
+    padding: 6px 12px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #4ade80;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 20px;
+}
+
+
+/* ==========================================================
+   09B — MOBILE NAVIGATION BAR & SIDEBAR OVERLAY BACKDROP
+========================================================== */
+
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: rgba(5, 7, 15, 0.78);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1150;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.sidebar-open .sidebar-backdrop,
+.sidebar-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+body.light-mode .sidebar-backdrop {
+    background: rgba(15, 23, 42, 0.52);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.mobile-nav-bar,
+.er-mobile-nav-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+}
+
+.hamburger-btn,
+.er-hamburger-btn {
+    width: 42px;
+    height: 42px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.hamburger-btn:hover,
+.er-hamburger-btn:hover {
+    background: var(--surface-card-hover);
+    border-color: var(--border-color-hover);
+    transform: scale(1.04);
+}
+
+.hamburger-btn span,
+.er-hamburger-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-main);
+    border-radius: 2px;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, background-color 0.2s ease;
+    transform-origin: center;
+}
+
+.hamburger-btn.is-active span:nth-child(1),
+.er-hamburger-btn.is-active span:nth-child(1),
+body.sidebar-open .hamburger-btn span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.is-active span:nth-child(2),
+.er-hamburger-btn.is-active span:nth-child(2),
+body.sidebar-open .hamburger-btn span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburger-btn.is-active span:nth-child(3),
+.er-hamburger-btn.is-active span:nth-child(3),
+body.sidebar-open .hamburger-btn span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.sidebar-close-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-close-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+    transform: scale(1.06);
+}
+
+body.light-mode .sidebar-close-btn {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+body.light-mode .sidebar-close-btn:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.mobile-brand-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: 0.5px;
+}
+
+
+/* ==========================================================
+   10 — HERO
+========================================================== */
+
+.hero {
+    padding: 42px 44px;
+    background: #111c30;
+    border: 1px solid #263449;
+    border-radius: 16px;
+}
+
+.hero h1 {
+    margin: 0 0 12px;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.hero h3 {
+    margin: 0 0 22px;
+    color: #cbd5e1;
+    font-size: clamp(18px, 2vw, 23px);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.hero p {
+    max-width: 900px;
+    margin: 0 0 14px;
+    color: #dbe4ee;
+    font-size: 17px;
+    line-height: 1.75;
+}
+
+
+/* ==========================================================
+   11 — HERO BUTTONS
+========================================================== */
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+
+/* ==========================================================
+   12 — GLOBAL BUTTON
+========================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 18px;
+    background: #263449;
+    color: #ffffff;
+    border: 1px solid #3b4a60;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+.btn:hover {
+    background: #334155;
+    border-color: #64748b;
+    transform: translateY(-1px);
+}
+
+.hero-buttons .btn {
+    min-width: 175px;
+}
+
+
+/* ==========================================================
+   13 — FEATURED CARD
+========================================================== */
+
+.featured-card {
+    margin-top: 26px;
+    padding: 30px;
+    background: #111c30;
+    border: 1px solid #263449;
+    border-radius: 16px;
+}
+
+.featured-card:hover {
+    border-color: #3b4a60;
+}
+
+.featured-card h2 {
+    margin: 0 0 12px;
+    font-size: 25px;
+    line-height: 1.3;
+}
+
+.featured-card h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.featured-card p {
+    max-width: 850px;
+    margin: 0 0 20px;
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+
+/* ==========================================================
+   14 — QUICK INFORMATION
+========================================================== */
+
+.quick-info {
+    margin-top: 26px;
+    padding: 30px;
+    background: #111c30;
+    border: 1px solid #263449;
+    border-radius: 16px;
+}
+
+.quick-info h2 {
+    margin: 0 0 18px;
+    font-size: 25px;
+    line-height: 1.3;
+}
+
+.quick-info p {
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.75;
+    margin: 0 0 18px;
+}
+
+.quick-info ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.quick-info li {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 11px 0;
+    color: #cbd5e1;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.quick-info li:last-child {
+    border-bottom: none;
+}
+
+
+/* ==========================================================
+   15 — PROJECTS
+========================================================== */
+
+.projects {
+    margin-top: 26px;
+    padding: 30px;
+    background: #111c30;
+    border: 1px solid #263449;
+    border-radius: 16px;
+}
+
+.projects h2 {
+    margin: 0 0 18px;
+    font-size: 25px;
+    line-height: 1.3;
+}
+
+.projects h3 {
+    margin: 0 0 12px;
+    font-size: 21px;
+}
+
+.projects p {
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.75;
+    margin: 0 0 18px;
+}
+
+.projects ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.projects li {
+    padding: 11px 0;
+    color: #cbd5e1;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.projects li:last-child {
+    border-bottom: none;
+}
+
+.projects .btn {
+    margin-top: 18px;
+}
+
+
+/* ==========================================================
+   16 — CONTACT SECTION
+========================================================== */
+
+.contact-section {
+    margin-top: 26px;
+    padding: 30px;
+    background: #111c30;
+    border: 1px solid #263449;
+    border-radius: 16px;
+}
+
+.contact-section h2 {
+    margin: 0 0 14px;
+    font-size: 25px;
+    line-height: 1.3;
+}
+
+.contact-section p {
+    color: #cbd5e1;
+    line-height: 1.75;
+    margin: 0 0 22px;
+}
+
+
+/* ==========================================================
+   17 — SOCIAL LINKS
+========================================================== */
+
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 150px;
+    padding: 11px 16px;
+    background: #1e293b;
+    color: #ffffff;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.social-links a:hover {
+    background: #334155;
+    border-color: #475569;
+    transform: translateY(-1px);
+}
+
+
+/* ==========================================================
+   18 — CONTACT / FORM ELEMENTS
+========================================================== */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 13px 14px;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: #64748b;
+    box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.12);
+}
+
+form input::placeholder,
+form textarea::placeholder {
+    color: #64748b;
+}
+
+form textarea {
+    min-height: 160px;
+    resize: vertical;
+}
+
+form .btn {
+    width: fit-content;
+}
+
+
+/* ==========================================================
+   19 — SKILLS
+========================================================== */
+
+.skills-section {
+    margin-top: 26px;
+}
+
+.skill {
+    margin-bottom: 20px;
+}
+
+.skill-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 7px;
+    color: #f8fafc;
+    font-weight: 600;
+}
+
+.skill-bar {
+    height: 9px;
+    background: #263449;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+    width: 0;
+    background: #94a3b8;
+    border-radius: 20px;
+    transition: width 1.2s ease;
+}
+
+
+/* ==========================================================
+   20 — FOOTER
+========================================================== */
+
+.site-footer {
+    margin-top: 55px;
+    padding: 28px 15px;
+    border-top: 1px solid #263449;
+}
+
+.footer-content {
+    max-width: 1100px;
+    margin: auto;
+    text-align: center;
+}
+
+.footer-content p {
+    margin: 0 0 16px;
+    color: #94a3b8;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    color: #f8fafc;
+}
+
+
+/* ==========================================================
+   21 — LEGAL / INFORMATION PAGES
+========================================================== */
+
+.legal-page {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+}
+
+.legal-page section {
+    padding: 32px;
+    margin-bottom: 25px;
+    background: #111c30;
+    border: 1px solid #263449;
+    border-radius: 16px;
+}
+
+.legal-page section:first-of-type {
+    margin-top: 0;
+}
+
+.legal-page h1 {
+    margin: 0 0 25px;
+    font-size: clamp(32px, 4vw, 44px);
+    line-height: 1.2;
+}
+
+.legal-page h2 {
+    margin: 0 0 14px;
+    color: #f8fafc;
+    font-size: 25px;
+    line-height: 1.35;
+}
+
+.legal-page h3 {
+    margin: 24px 0 10px;
+    color: #e2e8f0;
+    font-size: 19px;
+    line-height: 1.4;
+}
+
+.legal-page p {
+    max-width: 900px;
+    color: #cbd5e1;
+    line-height: 1.8;
+    margin: 0 0 16px;
+}
+
+.legal-page p:last-child {
+    margin-bottom: 0;
+}
+
+.legal-page ul,
+.legal-page ol {
+    max-width: 900px;
+    margin: 0 0 18px;
+    padding-left: 25px;
+}
+
+.legal-page li {
+    margin-bottom: 9px;
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.legal-page a {
+    color: #e2e8f0;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+.legal-page a:hover {
+    color: #ffffff;
+}
+
+.legal-page strong {
+    color: #f8fafc;
+}
+
+.legal-page hr {
+    border: none;
+    border-top: 1px solid #263449;
+    margin: 25px 0;
+}
+
+
+/* ==========================================================
+   22 — CONTENT READABILITY
+========================================================== */
+
+.main-content p {
+    overflow-wrap: break-word;
+}
+
+.main-content a {
+    overflow-wrap: anywhere;
+}
+
+main section + section {
+    scroll-margin-top: 20px;
+}
+
+
+/* ==========================================================
+   23 — SIDEBAR SCROLLBAR
+========================================================== */
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 20px;
+}
+
+
+/* ==========================================================
+   24 — LARGE SCREENS
+========================================================== */
+
+@media (max-width: 1400px) {
+    .main-content {
+        padding: 35px 40px 45px;
     }
-    </script>
+    .hero {
+        padding: 38px;
+    }
+}
 
+
+/* ==========================================================
+   25 — TABLETS
+========================================================== */
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 230px;
+    }
+    .main-content {
+        margin-left: 230px;
+        width: calc(100% - 230px);
+        padding: 30px;
+    }
+    .hero {
+        padding: 32px;
+    }
+    .hero h1 {
+        font-size: 42px;
+    }
+    .hero-buttons {
+        justify-content: flex-start;
+    }
+    .legal-page {
+        max-width: 100%;
+    }
+}
+
+
+/* ==========================================================
+   26 — MOBILE & TABLET DRAWER
+========================================================== */
+
+@media (max-width: 860px) {
+    .container {
+        display: block;
+    }
+
+    body.sidebar-open {
+        overflow: hidden;
+        touch-action: none;
+    }
+
+    .mobile-nav-bar,
+    .er-mobile-nav-bar {
+        display: flex !important;
+        position: sticky;
+        top: 0;
+        z-index: 1080;
+    }
+
+    .sidebar,
+    .er-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: -320px !important;
+        width: 285px !important;
+        max-width: 86vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 100vh !important;
+        padding: 20px 16px 28px !important;
+        background: var(--bg-sidebar) !important;
+        border-right: 1px solid var(--border-color) !important;
+        border-bottom: none !important;
+        z-index: 1200 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        display: flex !important;
+        flex-direction: column !important;
+        box-shadow: 0 0 45px rgba(0, 0, 0, 0.75) !important;
+        transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1), transform 0.32s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .sidebar.open,
+    .er-sidebar.open,
+    body.sidebar-open .sidebar,
+    body.sidebar-open .er-sidebar {
+        left: 0 !important;
+        transform: translateX(0) !important;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2px 0 14px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-close-btn {
+        display: flex !important;
+    }
+
+    .sidebar-nav {
+        margin-top: 8px;
+        overflow-y: auto;
+        padding: 0;
+        flex: 1;
+    }
+
+    .sidebar ul,
+    .sidebar-nav ul {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        gap: 5px !important;
+    }
+
+    .sidebar ul li,
+    .sidebar-nav ul li {
+        margin: 0;
+        width: 100%;
+    }
+
+    .sidebar ul li a,
+    .sidebar-nav ul li a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        border-left: 3px solid transparent;
+        border-bottom: none !important;
+        min-height: 44px;
+        color: var(--text-secondary);
+        background: transparent;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar-nav ul li a:hover {
+        background: var(--surface-card-hover);
+        color: var(--text-heading);
+        border-left-color: var(--brand-cyan);
+        transform: translateX(3px);
+    }
+
+    .sidebar ul li a.active,
+    .sidebar-nav ul li a.active {
+        background: rgba(56, 189, 248, 0.12) !important;
+        color: var(--brand-cyan) !important;
+        border-left: 3px solid var(--brand-cyan) !important;
+        border-bottom: none !important;
+        font-weight: 700;
+        box-shadow: none;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: none;
+        padding: 22px 16px 35px;
+    }
+
+    .top-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .top-header h1 {
+        font-size: 30px;
+    }
+
+    .top-header p {
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 28px 22px;
+        border-radius: 14px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+        text-align: center;
+    }
+
+    .hero h3 {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .hero p {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 9px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .featured-card,
+    .quick-info,
+    .projects,
+    .contact-section {
+        padding: 23px;
+        border-radius: 14px;
+    }
+
+    .social-links {
+        flex-direction: column;
+    }
+
+    .social-links a {
+        width: 100%;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 9px;
+    }
+}
+
+
+/* ==========================================================
+   27 — SMALL PHONES
+========================================================== */
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 18px 12px 30px;
+    }
+    .hero {
+        padding: 24px 18px;
+    }
+    .hero h1 {
+        font-size: 29px;
+    }
+}
+
+
+/* ==========================================================
+   28 — LIGHT MODE STYLES
+========================================================== */
+
+body.light-mode {
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode h5,
+body.light-mode h6 {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+body.light-mode p,
+body.light-mode li {
+    color: #334155;
+    line-height: 1.7;
+}
+
+body.light-mode strong,
+body.light-mode b {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+body.light-mode a {
+    color: #0284c7;
+    transition: color 0.2s ease;
+}
+
+body.light-mode a:hover {
+    color: #0369a1;
+}
+
+body.light-mode .sidebar {
+    background: #ffffff;
+    border-right-color: #e2e8f0;
+    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03);
+}
+
+body.light-mode .logo {
+    border-bottom-color: #e2e8f0;
+}
+
+body.light-mode .brand-title {
+    color: #0f172a;
+}
+
+body.light-mode .brand-sub {
+    color: #0284c7;
+    font-weight: 600;
+}
+
+body.light-mode .sidebar ul li a,
+body.light-mode .sidebar-nav ul li a {
+    color: #475569;
+    font-weight: 600;
+    border-left-color: transparent;
+}
+
+body.light-mode .sidebar ul li a:hover,
+body.light-mode .sidebar-nav ul li a:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-left-color: #0284c7;
+}
+
+body.light-mode .sidebar ul li a.active,
+body.light-mode .sidebar-nav ul li a.active {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-left-color: #0284c7;
+    font-weight: 700;
+}
+
+body.light-mode .sidebar-theme-toggle-row {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+body.light-mode .sidebar-user-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+body.light-mode .user-avatar-wrap {
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
+}
+
+body.light-mode .user-info strong {
+    color: #0f172a;
+}
+
+body.light-mode .hero {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    border: 1px solid #bae6fd;
+    box-shadow: 0 10px 30px -4px rgba(2, 132, 199, 0.08);
+}
+
+body.light-mode .featured-card,
+body.light-mode .quick-info,
+body.light-mode .projects,
+body.light-mode .contact-section,
+body.light-mode .legal-page section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+body.light-mode .btn {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    border: 1px solid #0284c7;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.22);
+}
+
+body.light-mode .btn:hover {
+    background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+}
+
+body.light-mode .social-links a {
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+}
+
+body.light-mode form input,
+body.light-mode form textarea {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+}
+
+body.light-mode .site-footer {
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+
+/* ==========================================================
+   29 — ACCESSIBILITY
+========================================================== */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #94a3b8;
+    outline-offset: 3px;
+}
+    </style>
 </head>
+<body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
+    <header class="mobile-nav-bar">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <span class="mobile-brand-title">WEBZONEBW</span>
+        <div style="width: 42px;"></div>
+    </header>
 
-<body class="er-studio-body">
-
-<div class="er-layout-container">
-
-
-    <!-- =====================================================
-         SIDEBAR
-         ===================================================== -->
-
-    <aside class="sidebar er-sidebar"
-           id="mainSidebar"
-           aria-label="WEBZONEBW navigation">
-
-        <div class="logo">
-
-            <a href="../index.html"
-               aria-label="WebZoneBW Home"
-               class="brand-logo-link">
-
-                <img src="../assets/logo.png"
-                     alt="WebZoneBW Logo"
-                     class="brand-logo-img">
-
-                <div class="brand-name-group">
-
-                    <span class="brand-title">
-                        WEBZONEBW
-                    </span>
-
-                    <span class="brand-sub">
-                        SYSTEMS · SUPPORT · INFRASTRUCTURE
-                    </span>
-
-                </div>
-
-            </a>
-
-        </div>
-
-
-        <nav class="sidebar-nav"
-             aria-label="Main Navigation">
-
-            <ul>
-
-                <li>
-                    <a href="../index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
-                        Dashboard
-                    </a>
-                </li>
-
-                <li>
-                    <a href="WebZoneBW-ER.Studio.html"
-                       class="active er-nav-pill"
-                       aria-current="page">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
-                        WebZoneBW-ER Studio
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../projects.html">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
-                        Projects
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../resume.html">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
-                        Resume
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
-                        Blog
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
-                        Sound Box
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../about.html">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
-                        About
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../contact.html">
-                        <span class="nav-icon" aria-hidden="true">✉️</span>
-                        Contact
-                    </a>
-                </li>
-
-            </ul>
-
-        </nav>
-
-
-        <!-- =================================================
-             THEME SWITCH
-             ================================================= -->
-
-        <div class="sidebar-theme-toggle-row">
-
-            <div class="theme-label-group">
-
-                <span id="themeModeIcon"
-                      aria-hidden="true">
-                    🌙
-                </span>
-
-                <span id="themeModeText">
-                    Dark Mode
-                </span>
-
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <a href="#" class="brand-logo-link">
+                    <div class="sc-logo-badge">SC</div>
+                    <div class="brand-name-group">
+                        <span class="brand-title">WEBZONEBW</span>
+                        <span class="brand-sub">PORTFOLIO v2.2</span>
+                    </div>
+                </a>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">&times;</button>
             </div>
 
-            <label class="switch-toggle"
-                   for="themeToggleSwitch">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#hero" class="active"><span class="nav-icon">🏠</span> Overview</a></li>
+                    <li><a href="#featured"><span class="nav-icon">✨</span> Featured Work</a></li>
+                    <li><a href="#quick-info"><span class="nav-icon">ℹ️</span> About Me</a></li>
+                    <li><a href="#projects"><span class="nav-icon">🚀</span> Projects</a></li>
+                    <li><a href="#skills"><span class="nav-icon">⚡</span> Skills</a></li>
+                    <li><a href="#contact"><span class="nav-icon">📬</span> Contact</a></li>
+                </ul>
+            </nav>
 
-                <input type="checkbox"
-                       id="themeToggleSwitch"
-                       checked
-                       aria-label="Toggle Dark Mode">
-
-                <span class="toggle-slider"></span>
-
-            </label>
-
-        </div>
-
-
-        <div class="sidebar-user-card">
-
-            <div class="user-avatar-wrap">
-
-                <span class="user-avatar-icon">
-                    👨‍💻
-                </span>
-
-                <span class="user-online-dot"
-                      title="Online"></span>
-
+            <div class="sidebar-theme-toggle-row">
+                <div class="theme-label-group">
+                    <span>🌙 Eye Care Theme</span>
+                </div>
+                <label class="switch-toggle" aria-label="Toggle Dark/Light Mode">
+                    <input type="checkbox" id="themeToggleInput">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
 
-            <div class="user-info">
-
-                <strong>
-                    Sameer Chouhan
-                </strong>
-
-                <span>
-                    Developer &amp; Creator
-                </span>
-
+            <div class="sidebar-user-card">
+                <div class="user-avatar-wrap">
+                    SC
+                    <div class="user-online-dot"></div>
+                </div>
+                <div class="user-info">
+                    <strong>Sameer Chouhan</strong>
+                    <span>Tech Portfolio</span>
+                </div>
             </div>
+        </aside>
 
-        </div>
-
-    </aside>
-
-
-    <!-- =====================================================
-         MAIN ER STUDIO
-         ===================================================== -->
-
-    <main class="main-content er-main-content">
-
-
-        <!-- MOBILE NAVIGATION -->
-
-        <div class="er-mobile-nav-bar">
-
-            <button type="button"
-                    class="er-hamburger-btn"
-                    id="sidebarToggleBtn"
-                    aria-label="Toggle Sidebar Navigation"
-                    aria-controls="mainSidebar">
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-            </button>
-
-            <div class="er-mobile-title">
-
-                <span class="gradient-text">
-                    WEBZONEBW-ER
-                </span>
-
-                STUDIO
-
-            </div>
-
-            <button type="button"
-                    class="header-icon-btn"
-                    id="mobileEffectsToggleBtn"
-                    title="Toggle Effects Panel"
-                    aria-label="Toggle Effects Panel">
-
-                ❖
-
-            </button>
-
-        </div>
-
-
-        <!-- =================================================
-             TOP HEADER
-             ================================================= -->
-
-        <header class="er-top-header">
-
-            <div class="er-title-group">
-
-                <h1 class="er-main-title">
-
-                    <span class="brand-prefix">
-                        WEBZONEBW-
-                    </span>
-
-                    <span class="gradient-text">
-                        ER STUDIO
-                    </span>
-
-                </h1>
-
-                <p class="er-subtitle">
-                    Explore interactive lenses, visual effects and the WEBZONEBW Halloween experience.
-                </p>
-
-            </div>
-
-
-            <div class="er-header-utilities">
-
-                <button type="button"
-                        class="header-icon-btn"
-                        id="helpModalBtn"
-                        title="How to Use WebZoneBW-ER Studio"
-                        aria-label="Help">
-                    ❔
-                </button>
-
-                <button type="button"
-                        class="header-icon-btn"
-                        id="settingsBtn"
-                        title="Camera &amp; Shader Settings"
-                        aria-label="Camera and Shader Settings">
-                    ⚙️
-                </button>
-
-                <div class="notification-btn-wrap">
-
-                    <button type="button"
-                            class="header-icon-btn"
-                            title="Notifications"
-                            aria-label="Notifications">
-                        🔔
-                    </button>
-
-                    <span class="notif-badge">
-                        1
-                    </span>
-
+        <!-- Main Content Workspace -->
+        <main class="main-content">
+            <header class="top-header" id="hero">
+                <div>
+                    <h1>Sameer Chouhan</h1>
+                    <p>Professional Technology Portfolio & Software Engineering Workspace</p>
                 </div>
-
-            </div>
-
-        </header>
-
-
-        <!-- =================================================
-             ER WORKSPACE
-             ================================================= -->
-
-        <div class="er-workspace-grid">
-
-
-            <!-- =================================================
-                 CAMERA STAGE
-                 ================================================= -->
-
-            <section class="er-camera-card"
-                     aria-label="Live Camera Extended Reality Stage">
-
-                <div class="camera-viewport-frame"
-                     id="cameraViewport"
-                     aria-label="Live WEBZONEBW-ER camera viewport">
-
-
-                    <button type="button"
-                            class="cam-corner-btn top-left"
-                            id="toggleFaceHudBtn"
-                            title="Toggle Biometric Reticle HUD"
-                            aria-label="Toggle Biometric Reticle HUD">
-                        <span aria-hidden="true">🔲</span>
-                    </button>
-
-
-                    <!-- =================================================
-                         CAMERA STUDIO LIVE HUD PILL (PRO MINIMALIST HUD)
-                         ================================================= -->
-                    <div class="camera-studio-hud-pill"
-                         id="mobileFaceTelemetryBar"
-                         title="Studio Camera Engine • Status"
-                         role="status"
-                         aria-live="polite">
-                        <span class="studio-status-dot scanning" id="faceChipDot"></span>
-                        <span class="studio-status-text" id="faceChipStatus">STUDIO LIVE</span>
-                        <span class="studio-status-badge" id="faceProximityMetric">1080p HD</span>
-                        <span class="studio-status-badge" id="faceLightingMetric" style="display:none;"></span>
-                    </div>
-
-
-                    <div id="touchTargetCrosshair"
-                         class="touch-target-crosshair"
-                         aria-hidden="true">
-                    </div>
-
-
-                    <button type="button"
-                            class="cam-corner-btn top-right"
-                            id="fullscreenBtn"
-                            title="Fullscreen View"
-                            aria-label="Fullscreen View">
-                        <span aria-hidden="true">⛶</span>
-                    </button>
-
-
-                    <button type="button"
-                            class="cam-zoom-badge"
-                            id="zoomLevelBtn"
-                            title="Switch Zoom Level"
-                            aria-label="Zoom Level">
-
-                        <span id="zoomLevelText">
-                            1.0x
-                        </span>
-
-                    </button>
-
-
-                    <div class="cam-floating-vertical-stack">
-
-                        <button type="button"
-                                class="cam-vertical-btn"
-                                id="flipCameraBtnFloating"
-                                title="Flip Camera (Front / Back)"
-                                aria-label="Flip Camera Front or Back">
-                            <span>🔄</span>
-                        </button>
-
-                        <button type="button"
-                                class="cam-vertical-btn"
-                                id="flashLightBtn"
-                                title="Toggle Studio Light / Flash"
-                                aria-label="Studio Light">
-                            <span>⚡</span>
-                        </button>
-
-                        <button type="button"
-                                class="cam-vertical-btn active"
-                                id="autoHdBtnFloating"
-                                title="Studio Auto-HD Glow"
-                                aria-label="Auto HD Glow">
-                            <span>💡</span>
-                        </button>
-
-                        <button type="button"
-                                class="cam-vertical-btn"
-                                id="toggleFaceMeshBtn"
-                                title="Face Tracking &amp; Mesh"
-                                aria-label="Face Tracking and Mesh">
-                            <span>👤</span>
-                        </button>
-
-                    </div>
-
-
-                    <div id="micStatusIndicator"
-                         class="cam-floating-badge"
-                         style="display:none;"
-                         title="Microphone Live"
-                         aria-live="polite">
-
-                        <span class="mic-pulse-dot"></span>
-                        <span class="mic-icon">🎤</span>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         PERMISSION MODAL
-                         ================================================= -->
-
-                    <div id="permissionAlertModal"
-                         class="permission-alert-modal"
-                         style="display:none;"
-                         role="alertdialog"
-                         aria-modal="true"
-                         aria-labelledby="permAlertTitle">
-
-                        <div class="permission-alert-backdrop"
-                             onclick="window.closePermissionAlert && window.closePermissionAlert()">
-                        </div>
-
-                        <div class="permission-alert-card">
-
-                            <div class="perm-alert-header">
-
-                                <div class="perm-alert-icon-wrap"
-                                     id="permAlertIconWrap">
-                                    <span id="permAlertIcon">⚠️</span>
-                                </div>
-
-                                <div class="perm-alert-title-block">
-
-                                    <h3 id="permAlertTitle">
-                                        Camera &amp; Microphone Access Required
-                                    </h3>
-
-                                    <span class="perm-alert-badge"
-                                          id="permAlertBadge">
-                                        Permission Required
-                                    </span>
-
-                                </div>
-
-                                <button type="button"
-                                        class="perm-alert-close-btn"
-                                        id="permAlertCloseBtn"
-                                        aria-label="Close Permission Alert">
-                                    ✖
-                                </button>
-
-                            </div>
-
-
-                            <div class="perm-alert-body">
-
-                                <p id="permAlertMessage">
-
-                                    WEBZONEBW-ER Studio requires browser permission
-                                    to access your <strong>Camera</strong> and
-                                    optionally your <strong>Microphone</strong>
-                                    for live visual effects, facial tracking
-                                    and audio-reactive features.
-
-                                </p>
-
-
-                                <div class="perm-browser-steps"
-                                     id="permBrowserSteps">
-
-                                    <div class="perm-step-item">
-
-                                        <span class="step-num">1</span>
-
-                                        <div class="step-text">
-
-                                            <strong>
-                                                Allow Camera Access
-                                            </strong>
-
-                                            Choose <strong>Allow</strong>
-                                            when Chrome asks for camera
-                                            permission. If the address bar
-                                            shows a camera with a red line,
-                                            click that icon and switch Camera
-                                            to <strong>Allow</strong>.
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="perm-step-item">
-
-                                        <span class="step-num">2</span>
-
-                                        <div class="step-text">
-
-                                            <strong>
-                                                Allow Microphone When Needed
-                                            </strong>
-
-                                            Microphone access is only required
-                                            for features that use audio input.
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="perm-step-item">
-
-                                        <span class="step-num">3</span>
-
-                                        <div class="step-text">
-
-                                            <strong>
-                                                Start the Experience
-                                            </strong>
-
-                                            After permission is granted,
-                                            request access again or start
-                                            the live camera.
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="perm-alert-actions">
-
-                                <button type="button"
-                                        class="btn camera-btn-primary perm-action-btn"
-                                        id="permRetryBtn">
-                                    🔄 Request Permissions Again
-                                </button>
-
-                                <button type="button"
-                                        class="btn perm-action-btn"
-                                        id="permDemoBtn">
-                                    🧪 Switch to Test Mode
-                                </button>
-
-                                <button type="button"
-                                        class="btn perm-action-btn"
-                                        id="permUploadBtn">
-                                    📁 Upload Photo Instead
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div id="shutterFlashOverlay"
-                         class="shutter-flash-overlay">
-                    </div>
-
-
-                    <div id="canvasSwipeToast"
-                         class="canvas-swipe-toast"
-                         aria-live="polite">
-
-                        <span id="canvasSwipeIcon">⚡</span>
-
-                        <span id="canvasSwipeText">
-                            Cyber Lens Active
-                        </span>
-
-                    </div>
-
-
-                    <!-- LIVE CAMERA -->
-
-                    <video id="cameraVideo"
-                           class="camera-video"
-                           autoplay
-                           playsinline
-                           muted
-                           preload="none"
-                           data-facing-mode="user"
-                           data-camera-mode="front"
-                           aria-label="Live camera preview">
-                    </video>
-
-
-                    <canvas id="cameraCanvas"
-                            class="camera-canvas"
-                            aria-label="Processed camera effects canvas">
-                    </canvas>
-
-
-                    <!-- =================================================
-                         CAMERA STUDIO PLACEHOLDER
-                         ================================================= -->
-
-                    <div id="cameraPlaceholder"
-                         class="camera-placeholder">
-
-                        <div class="studio-viewfinder-graphic">
-                            📸
-                        </div>
-
-                        <h2 class="placeholder-title">
-                            WebZoneBW-ER Studio
-                            <span class="launch-title-accent">Live</span>
-                        </h2>
-
-                        <p class="placeholder-desc">
-                            High-definition real-time visual lenses, face tracking AR,
-                            cinematic color grading, and editorial magazine overlays.
-                        </p>
-
-                        <div class="placeholder-btn-group">
-
-                            <button type="button"
-                                    class="btn camera-btn-primary"
-                                    id="startExperienceBtn"
-                                    aria-label="Start Live Front Camera">
-                                📸 Start Studio Camera
-                            </button>
-
-                            <button type="button"
-                                    class="btn"
-                                    id="startDemoBtn"
-                                    aria-label="Interactive Demo Mode">
-                                🧪 Test FX Mode
-                            </button>
-
-                        </div>
-
-                        <div class="er-launch-status"
-                             id="erLaunchStatus"
-                             aria-live="polite">
-
-                            <span class="er-status-dot"></span>
-
-                            <span class="er-status-text">
-                                STUDIO ENGINE READY
-                            </span>
-
-                        </div>
-
-                    </div>
-
+                <div class="header-utilities">
+                    <span class="header-badge">● Available for Hire</span>
                 </div>
+            </header>
 
-
-                <p class="er-camera-privacy-note">
-
-                    <strong>Camera privacy:</strong>
-                    your camera is accessed only after browser permission
-                    is granted. You can stop access at any time using your
-                    browser's site permissions.
-
-                </p>
-
-
-                <div class="swipe-hint-bar">
-
-                    <span class="swipe-arrow">←</span>
-
-                    <span class="swipe-text">
-                        Swipe left / right to change effect
-                    </span>
-
-                    <span class="swipe-arrow">→</span>
-
+            <section class="hero">
+                <h1>Building Next-Gen Web Solutions</h1>
+                <h3>High-Performance, Accessible, and Recruiter-Friendly Architecture</h3>
+                <p>Welcome to WEBZONEBW v2.2. A meticulously engineered technology portfolio designed with eye-comfort aesthetics, responsive mobile drawer layouts, and robust semantic structure optimized for both human recruiters and AI evaluation agents.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn">Explore Projects</a>
+                    <a href="#contact" class="btn" style="background: transparent; border-color: #3b4a60;">Get in Touch</a>
                 </div>
-
-
-                <!-- =================================================
-                     SMART INVENTORY ADAPTIVE RIBBON
-                     ================================================= -->
-                <div class="smart-inventory-ribbon" id="smartInventoryRibbon">
-
-                    <div class="smart-inventory-header">
-
-                        <div class="smart-inventory-status">
-                            <span class="smart-status-icon" id="smartStatusIcon">⚡</span>
-                            <span class="smart-status-text" id="smartStatusText">
-                                Smart Adaptive: Ready
-                            </span>
-                        </div>
-
-                        <span class="smart-inventory-badge" id="smartInventoryBadge">
-                            👤 9 Face AR Lenses Ready
-                        </span>
-
-                    </div>
-
-                    <div class="smart-inventory-category-pills"
-                         id="smartCategoryPills"
-                         role="tablist"
-                         aria-label="Smart Filter Inventory Categories">
-
-                        <button type="button"
-                                class="smart-cat-btn active"
-                                data-smart-cat="smart"
-                                title="Auto-adapts based on real-time face detection">
-                            🌟 Smart
-                        </button>
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="face"
-                                title="Face-Anchored AR Lenses">
-                            👤 Face AR
-                        </button>
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="scene"
-                                title="Full-Frame Scene Shaders">
-                            🌍 Scene
-                        </button>
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="magazine"
-                                title="Magazine Editorial Covers">
-                            📰 Magazines
-                        </button>
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="halloween"
-                                title="Halloween Special Masks">
-                            🎃 Halloween
-                        </button>
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="all"
-                                title="Browse all 30+ effects">
-                            🌟 All
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     LENS CAROUSEL
-                     ================================================= -->
-
-                <div class="er-lens-carousel-wrap">
-
-                    <div class="er-lens-track"
-                         id="snapLensTrack"
-                         role="region"
-                         aria-label="AR Lens Carousel">
-
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="cartoon"
-                                title="Anime Cel Shader">
-
-                            <div class="lens-bubble-circle">
-                                🌸
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Anime
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="studiohd"
-                                title="Studio Portrait HD">
-
-                            <div class="lens-bubble-circle">
-                                👤
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Portrait
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="cinematic"
-                                title="Cinematic 35mm Film">
-
-                            <div class="lens-bubble-circle">
-                                🎬
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Cinema
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble active"
-                                data-filter="cyberwarrior"
-                                title="Cyber Hologram Active">
-
-                            <div class="lens-bubble-circle active-glow">
-                                ⚡
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Cyber
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="matrix"
-                                title="Matrix Rain Green Code">
-
-                            <div class="lens-bubble-circle">
-                                ❇️
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Matrix
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="icefrost"
-                                title="Hologram Shimmer">
-
-                            <div class="lens-bubble-circle">
-                                🧊
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Holo
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="comic"
-                                title="Comic Book Pop-Art">
-
-                            <div class="lens-bubble-circle">
-                                💥
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Comic
-                            </span>
-
-                        </button>
-
-
-                        <button type="button"
-                                class="er-lens-bubble more-lens-btn"
-                                id="openAllEffectsBtn"
-                                title="View All 30+ Effects">
-
-                            <div class="lens-bubble-circle">
-                                •••
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                More
-                            </span>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     CAMERA CONTROLS
-                     ================================================= -->
-
-                <div class="er-bottom-controls-bar">
-
-
-                    <button type="button"
-                            class="er-action-pill-btn"
-                            id="flipCameraBtn"
-                            title="Flip Camera"
-                            aria-label="Flip Camera">
-
-                        <span aria-hidden="true">
-                            🔄
-                        </span>
-
-                        <span>
-                            Flip Camera
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="er-snap-shutter-btn"
-                            id="snapPhotoBtn"
-                            title="Capture HD Photo"
-                            aria-label="Capture HD Photo">
-
-                        <div class="shutter-outer-glow">
-
-                            <div class="shutter-inner-core"></div>
-
-                        </div>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="er-action-pill-btn"
-                            id="modeUploadBtn"
-                            title="Upload Photo from Device"
-                            aria-label="Upload Photo">
-
-                        <span aria-hidden="true">
-                            📁
-                        </span>
-
-                        <span>
-                            Upload Photo
-                        </span>
-
-                    </button>
-
-
-                    <input type="file"
-                           id="fileInput"
-                           accept="image/*"
-                           style="display:none;"
-                           aria-label="Upload an image">
-
-                </div>
-
             </section>
 
+            <section class="featured-card" id="featured">
+                <h2>Featured Architecture</h2>
+                <h3>Unified Design & Eye-Care Dynamics</h3>
+                <p>Engineered from the ground up to reduce eye strain during extended coding sessions while maintaining pristine visual contrast across both Midnight Slate Dark mode and Soft Daylight Light mode.</p>
+                <div class="social-links">
+                    <span class="btn" style="min-width:auto; background:#1e293b;">Responsive Grid</span>
+                    <span class="btn" style="min-width:auto; background:#1e293b;">Zero Bloat</span>
+                    <span class="btn" style="min-width:auto; background:#1e293b;">WCAG Accessible</span>
+                </div>
+            </section>
 
-            <!-- =================================================
-                 EFFECTS PANEL
-                 ================================================= -->
+            <section class="quick-info" id="quick-info">
+                <h2>Professional Profile</h2>
+                <p>Passionate software technologist specializing in full-stack architecture, clean code standards, and lightning-fast web experiences.</p>
+                <ul>
+                    <li><strong>Specialty:</strong> Scalable Web Applications & UI/UX Engineering</li>
+                    <li><strong>Core Stack:</strong> JavaScript (ES6+), TypeScript, React, Node.js, Python, CSS3 Grid/Flexbox</li>
+                    <li><strong>Philosophy:</strong> Performance first, accessibility always, clean maintainable codebases.</li>
+                </ul>
+            </section>
 
-            <aside class="er-effects-panel"
-                   id="effectsPanel"
-                   aria-label="WEBZONEBW-ER Effects">
+            <section class="projects" id="projects">
+                <h2>Core Projects</h2>
+                <h3>WEBZONEBW Enterprise Suite</h3>
+                <p>A comprehensive ecosystem of modular web tools, interactive design templates, and high-performance utility widgets.</p>
+                <ul>
+                    <li><strong>WEBZONEBW Core v2.2:</strong> Flagship modular portfolio platform featuring dynamic eye-care theme switching and off-canvas mobile navigation.</li>
+                    <li><strong>LegalPages AI Generator:</strong> Automated policy document generator optimized for legal compliance and rapid recruiter review.</li>
+                </ul>
+                <a href="#contact" class="btn">Request Project Demo</a>
+            </section>
 
-
-                <div class="effects-panel-header">
-
-                    <div class="panel-title-group">
-
-                        <span class="panel-icon">
-                            ❖
-                        </span>
-
-                        <h2>
-
-                            <span class="text-white">
-                                WEBZONEBW-
-                            </span>
-
-                            <span class="gradient-text">
-                                ER EFFECTS
-                            </span>
-
-                        </h2>
-
+            <section class="skills-section" id="skills">
+                <div class="featured-card">
+                    <h2>Technical Proficiency</h2>
+                    
+                    <div class="skill">
+                        <div class="skill-title"><span>Frontend Engineering (HTML5 / CSS3 / JavaScript)</span><span>95%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
                     </div>
 
-
-                    <button type="button"
-                            class="panel-close-btn"
-                            id="closeEffectsPanelBtn"
-                            aria-label="Close Effects Panel">
-
-                        ✕
-
-                    </button>
-
-                </div>
-
-
-                <div class="effects-search-wrap">
-
-                    <span class="search-icon"
-                          aria-hidden="true">
-                        🔍
-                    </span>
-
-                    <input type="text"
-                           id="effectsSearchInput"
-                           class="effects-search-input"
-                           placeholder="Search effects..."
-                           aria-label="Search effects">
-
-                </div>
-
-
-                <div class="effects-category-pills"
-                     role="tablist"
-                     aria-label="Effect Categories">
-
-                    <button type="button"
-                            class="cat-pill active"
-                            data-cat="smart"
-                            title="Auto-detect face and prioritize matching filters">
-                        🌟 Smart
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="face"
-                            title="Face-anchored AR lenses">
-                        👤 Face AR
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="scene"
-                            title="Atmospheric &amp; full stage scene shaders">
-                        🌍 Scene
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="magazine"
-                            title="Editorial magazine covers">
-                        📰 Magazines
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="halloween"
-                            title="Spooky Halloween masks and overlays">
-                        🎃 Halloween
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="all"
-                            title="Browse all filters">
-                        🌟 All
-                    </button>
-
-                </div>
-
-
-                <div class="effects-card-grid"
-                     id="effectsCardGrid">
-
-
-                    <!-- 👤 FACE AR FILTERS -->
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="sunglasses"
-                            data-cat="face popular"
-                            data-target="face">
-                        <div class="effect-icon-box glass-box">🕶️</div>
-                        <span class="effect-name">Aviators</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="halo"
-                            data-cat="face popular"
-                            data-target="face">
-                        <div class="effect-icon-box neon-box">👑</div>
-                        <span class="effect-name">Angel Halo</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="kawaii"
-                            data-cat="face"
-                            data-target="face">
-                        <div class="effect-icon-box anime-box">🌸</div>
-                        <span class="effect-name">Kawaii Blush</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card active"
-                            data-filter="cyberwarrior"
-                            data-cat="face popular"
-                            data-target="face">
-                        <div class="effect-icon-box cyber-box">⚡</div>
-                        <span class="effect-name">Cyber Paint</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cyberhud"
-                            data-cat="face"
-                            data-target="face">
-                        <div class="effect-icon-box aihud-box">🤖</div>
-                        <span class="effect-name">Cyborg HUD</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="studiohd"
-                            data-cat="face popular"
-                            data-target="face">
-                        <div class="effect-icon-box portrait-box">📸</div>
-                        <span class="effect-name">Studio Portrait</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="icefrost"
-                            data-cat="face"
-                            data-target="face">
-                        <div class="effect-icon-box holo-box">❄️</div>
-                        <span class="effect-name">Diamond Dust</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cartoon"
-                            data-cat="face"
-                            data-target="face">
-                        <div class="effect-icon-box anime-box">🎨</div>
-                        <span class="effect-name">Anime Cel</span>
-                        <span class="effect-target-tag face-tag">👤 Face AR</span>
-                    </button>
-
-                    <!-- 🌍 SCENE & ATMOSPHERE SHADERS -->
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="matrix"
-                            data-cat="scene"
-                            data-target="scene">
-                        <div class="effect-icon-box matrix-box">❇️</div>
-                        <span class="effect-name">Matrix Rain</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="noir"
-                            data-cat="scene"
-                            data-target="scene">
-                        <div class="effect-icon-box retro-box">🖤</div>
-                        <span class="effect-name">Leica Noir</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="vintage90s"
-                            data-cat="scene"
-                            data-target="scene">
-                        <div class="effect-icon-box retro-box">🎞️</div>
-                        <span class="effect-name">Retro 90s</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cinematic"
-                            data-cat="scene popular"
-                            data-target="scene">
-                        <div class="effect-icon-box cinema-box">🎬</div>
-                        <span class="effect-name">35mm Film</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="glitch"
-                            data-cat="scene"
-                            data-target="scene">
-                        <div class="effect-icon-box glitch-box">🎯</div>
-                        <span class="effect-name">Glitch FX</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="comic"
-                            data-cat="scene"
-                            data-target="scene">
-                        <div class="effect-icon-box comic-box">💥</div>
-                        <span class="effect-name">Pop Comic</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="space"
-                            data-cat="scene"
-                            data-target="scene">
-                        <div class="effect-icon-box holo-box">🚀</div>
-                        <span class="effect-name">Deep Nebula</span>
-                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                    </button>
-
-                    <!-- 📰 MAGAZINES -->
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="time"
-                            data-cat="magazine"
-                            data-target="magazine">
-                        <div class="effect-icon-box cinema-box">🟥</div>
-                        <span class="effect-name">TIME Mag</span>
-                        <span class="effect-target-tag mag-tag">📰 Magazine</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="vogue"
-                            data-cat="magazine"
-                            data-target="magazine">
-                        <div class="effect-icon-box portrait-box">🕶️</div>
-                        <span class="effect-name">VOGUE</span>
-                        <span class="effect-target-tag mag-tag">📰 Magazine</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="forbes"
-                            data-cat="magazine"
-                            data-target="magazine">
-                        <div class="effect-icon-box cyber-box">💼</div>
-                        <span class="effect-name">Forbes</span>
-                        <span class="effect-target-tag mag-tag">📰 Magazine</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="wired"
-                            data-cat="magazine"
-                            data-target="magazine">
-                        <div class="effect-icon-box aihud-box">🚀</div>
-                        <span class="effect-name">WIRED</span>
-                        <span class="effect-target-tag mag-tag">📰 Magazine</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cyber"
-                            data-cat="magazine"
-                            data-target="magazine">
-                        <div class="effect-icon-box glitch-box">🎮</div>
-                        <span class="effect-name">CyberMag</span>
-                        <span class="effect-target-tag mag-tag">📰 Magazine</span>
-                    </button>
-
-                    <!-- 🎃 HALLOWEEN -->
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="skeleton"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box bioscan-box">💀</div>
-                        <span class="effect-name">Bio-Scan</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="pumpkin"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box anime-box">🎃</div>
-                        <span class="effect-name">Jack Lantern</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="ghost"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box holo-box">👻</div>
-                        <span class="effect-name">Phantom</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="zombie"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box matrix-box">🧟</div>
-                        <span class="effect-name">Zombie FX</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="vampire"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box retro-box">🧛</div>
-                        <span class="effect-name">Vampire Fangs</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="spider"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box glitch-box">🕷️</div>
-                        <span class="effect-name">Spider Web</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="bats"
-                            data-cat="halloween"
-                            data-target="halloween">
-                        <div class="effect-icon-box cinema-box">🦇</div>
-                        <span class="effect-name">Night Bats</span>
-                        <span class="effect-target-tag spooky-tag">🎃 Spooky</span>
-                    </button>
-
-                </div>
-
-
-                <div class="panel-bottom-action">
-
-                    <button type="button"
-                            class="view-all-effects-btn"
-                            id="viewAllCatalogBtn">
-
-                        <span aria-hidden="true">
-                            ⊞
-                        </span>
-
-                        View All Effects (30+)
-
-                    </button>
-
-                </div>
-
-            </aside>
-
-        </div>
-
-
-        <!-- =====================================================
-             HOW TO USE
-             ===================================================== -->
-
-        <div class="er-bottom-feature-row">
-
-
-            <div class="how-to-use-card">
-
-                <h2 class="how-to-title">
-                    HOW TO USE WEBZONEBW-ER STUDIO
-                </h2>
-
-
-                <div class="how-to-steps-grid">
-
-
-                    <div class="how-to-step">
-
-                        <div class="step-icon-circle">
-                            👆
-                        </div>
-
-                        <div class="step-desc-block">
-
-                            <strong>
-                                Swipe
-                            </strong>
-
-                            <span>
-                                Swipe left / right to change effects
-                            </span>
-
-                        </div>
-
+                    <div class="skill">
+                        <div class="skill-title"><span>React & Modern Frameworks</span><span>90%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 90%;"></div></div>
                     </div>
 
-
-                    <div class="how-to-step">
-
-                        <div class="step-icon-circle">
-                            🎨
-                        </div>
-
-                        <div class="step-desc-block">
-
-                            <strong>
-                                Explore
-                            </strong>
-
-                            <span>
-                                Open Effects to explore the available
-                                WEBZONEBW-ER visual experiences
-                            </span>
-
-                        </div>
-
+                    <div class="skill">
+                        <div class="skill-title"><span>Backend & API Integration (Node.js / Python)</span><span>85%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
                     </div>
 
-
-                    <div class="how-to-step">
-
-                        <div class="step-icon-circle">
-                            📷
-                        </div>
-
-                        <div class="step-desc-block">
-
-                            <strong>
-                                Capture
-                            </strong>
-
-                            <span>
-                                Take a photo or upload one from your device
-                            </span>
-
-                        </div>
-
+                    <div class="skill">
+                        <div class="skill-title"><span>UI/UX & Responsive Architecture</span><span>92%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 92%;"></div></div>
                     </div>
+                </div>
+            </section>
 
+            <section class="contact-section" id="contact">
+                <h2>Get in Touch</h2>
+                <p>Interested in collaborating or discussing exciting opportunities? Drop a message below or connect via social channels.</p>
+                
+                <div class="social-links">
+                    <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="mailto:contact@webzonebw.com">Email Me</a>
                 </div>
 
-            </div>
+                <form onsubmit="event.preventDefault(); alert('Thank you for your message! This is a demo form.');">
+                    <div>
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com" required>
+                    </div>
+                    <div>
+                        <label for="message">Message</label>
+                        <textarea id="message" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </section>
 
-
-            <div class="powered-ai-card">
-
-                <div class="ai-card-glow-icon">
-                    🔮
+            <footer class="site-footer">
+                <div class="footer-content">
+                    <p>&copy; 2026 Sameer Chouhan (WEBZONEBW v2.2). All rights reserved.</p>
+                    <div class="footer-links">
+                        <a href="#hero">Back to Top</a>
+                        <a href="#quick-info">About</a>
+                        <a href="#contact">Contact</a>
+                    </div>
                 </div>
-
-                <div class="ai-card-text">
-
-                    <h3>
-                        Powered by WebZoneBW
-                    </h3>
-
-                    <p>
-                        Smart Effects • Real-time Preview • One Tap Apply
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             SNAPSHOT MODAL
-             ===================================================== -->
-
-        <div id="snapshotModal"
-             class="snapshot-preview-modal"
-             style="display:none;"
-             role="dialog"
-             aria-modal="true"
-             aria-labelledby="snapshotTitle">
-
-
-            <div class="snapshot-modal-backdrop"
-                 onclick="document.getElementById('closeSnapshotBtn').click()">
-            </div>
-
-
-            <div class="snapshot-modal-card">
-
-                <div class="snapshot-header">
-
-                    <h2 id="snapshotTitle">
-                        📸 Snapshot Captured!
-                    </h2>
-
-                    <button type="button"
-                            class="snapshot-close-x"
-                            id="closeSnapshotXBtn"
-                            aria-label="Close Snapshot">
-                        ✕
-                    </button>
-
-                </div>
-
-
-                <img id="snapshotImg"
-                     class="snapshot-preview-img"
-                     alt="Captured WEBZONEBW-ER Photo">
-
-
-                <div class="snapshot-btn-row">
-
-                    <a id="downloadSnapshotBtn"
-                       class="btn camera-btn-primary"
-                       download="webzonebw-er-snapshot.png">
-
-                        💾 Save HD Snapshot
-
-                    </a>
-
-
-                    <button id="closeSnapshotBtn"
-                            type="button"
-                            class="btn">
-
-                        ✕ Close
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =====================================================
-             FOOTER
-             ===================================================== -->
-
-        <footer class="site-footer">
-
-            <div class="footer-content">
-
-                <p>
-
-                    © 2026
-                    <strong>WEBZONEBW</strong>.
-                    All rights reserved.
-
-                </p>
-
-
-                <nav class="footer-links"
-                     aria-label="Footer Navigation">
-
-                    <a href="../privacy.html">
-                        Privacy Policy
-                    </a>
-
-                    <a href="../terms.html">
-                        Terms &amp; Conditions
-                    </a>
-
-                    <a href="../disclaimer.html">
-                        Disclaimer
-                    </a>
-
-                    <a href="../contact.html">
-                        Contact
-                    </a>
-
-                </nav>
-
-            </div>
-
-        </footer>
-
-    </main>
-
-</div>
-
-
-<!-- =====================================================
-     NOSCRIPT
-     ===================================================== -->
-
-<noscript>
-
-    <div style="
-        padding:20px;
-        text-align:center;
-        font-family:system-ui,sans-serif;
-    ">
-
-        WEBZONEBW-ER Studio requires JavaScript for
-        live camera effects and interactive features.
-
+            </footer>
+        </main>
     </div>
 
-</noscript>
-
-
-<!-- =====================================================
-     EXISTING WEBZONEBW SCRIPTS
-     
-     IMPORTANT:
-     Keep this order.
-     ===================================================== -->
-
-<script src="../js/beatles-playlists.js"></script>
-
-<script src="../js/script.js"></script>
-
-<script src="../js/halloween.js"></script>
-
-
-<!-- =====================================================
-     ER THEME CONTROLLER
-     
-     This is deliberately placed after the existing site
-     scripts so it can synchronize the ER toggle without
-     replacing the existing script.js functionality.
-     ===================================================== -->
-
-<script>
-
-(function () {
-
-    "use strict";
-
-
-    function getSavedTheme() {
-
-        try {
-
-            const saved =
-                localStorage.getItem("theme") ||
-                localStorage.getItem("webzonebw-theme");
-
-            return saved === "light"
-                ? "light"
-                : "dark";
-
-        } catch (error) {
-
-            return "dark";
-
-        }
-
-    }
-
-
-    function applyERTheme(theme) {
-
-        const isLight =
-            theme === "light";
-
-
-        document.documentElement.classList.toggle(
-            "er-theme-light",
-            isLight
-        );
-
-        document.documentElement.classList.toggle(
-            "er-theme-dark",
-            !isLight
-        );
-
-
-        document.body.classList.toggle(
-            "er-theme-light",
-            isLight
-        );
-
-        document.body.classList.toggle(
-            "er-theme-dark",
-            !isLight
-        );
-
-
-        const toggle =
-            document.getElementById("themeToggleSwitch");
-
-        const icon =
-            document.getElementById("themeModeIcon");
-
-        const text =
-            document.getElementById("themeModeText");
-
-
-        if (toggle) {
-
-            toggle.checked = !isLight;
-
-        }
-
-
-        if (icon) {
-
-            icon.textContent =
-                isLight
-                    ? "☀️"
-                    : "🌙";
-
-        }
-
-
-        if (text) {
-
-            text.textContent =
-                isLight
-                    ? "Light Mode"
-                    : "Dark Mode";
-
-        }
-
-
-        try {
-
-            localStorage.setItem(
-                "theme",
-                theme
-            );
-
-            localStorage.setItem(
-                "webzonebw-theme",
-                theme
-            );
-
-        } catch (error) {
-
-            /* Storage unavailable — theme still works. */
-
-        }
-
-    }
-
-
-    function initERTheme() {
-
-        const toggle =
-            document.getElementById(
-                "themeToggleSwitch"
-            );
-
-
-        applyERTheme(
-            getSavedTheme()
-        );
-
-
-        if (!toggle) {
-            return;
-        }
-
-
-        toggle.addEventListener(
-            "change",
-            function () {
-
-                const theme =
-                    toggle.checked
-                        ? "dark"
-                        : "light";
-
-
-                applyERTheme(theme);
-
+    <script>
+        // Theme Toggle Functionality
+        const themeToggleInput = document.getElementById('themeToggleInput');
+        const bodyEl = document.body;
+
+        function setTheme(isLight) {
+            if (isLight) {
+                bodyEl.classList.add('light-mode');
+                bodyEl.setAttribute('data-theme', 'light');
+                themeToggleInput.checked = true;
+                localStorage.setItem('webzonebw_theme', 'light');
+            } else {
+                bodyEl.classList.remove('light-mode');
+                bodyEl.removeAttribute('data-theme');
+                themeToggleInput.checked = false;
+                localStorage.setItem('webzonebw_theme', 'dark');
             }
-        );
-
-    }
-
-
-    if (
-        document.readyState === "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            initERTheme,
-            { once: true }
-        );
-
-    } else {
-
-        initERTheme();
-
-    }
-
-})();
-
-</script>
-
-
-<!-- =====================================================
-     HALLOWEEN LAUNCH UI
-     ===================================================== -->
-
-<script>
-
-(function () {
-
-    "use strict";
-
-
-    function initHalloweenLaunchUI() {
-
-        const orb =
-            document.getElementById("erLaunchOrb");
-
-        const status =
-            document.getElementById("erLaunchStatus");
-
-        const startButton =
-            document.getElementById("startExperienceBtn");
-
-        const demoButton =
-            document.getElementById("startDemoBtn");
-
-
-        if (!orb) {
-            return;
         }
 
+        // Initialize theme from storage
+        const savedTheme = localStorage.getItem('webzonebw_theme');
+        if (savedTheme === 'light') {
+            setTheme(true);
+        }
 
-        orb.classList.add(
-            "halloween-ready"
-        );
+        themeToggleInput.addEventListener('change', () => {
+            bodyEl.classList.add('theme-transitioning');
+            setTheme(themeToggleInput.checked);
+            setTimeout(() => {
+                bodyEl.classList.remove('theme-transitioning');
+            }, 300);
+        });
 
+        // Mobile Sidebar Drawer Functionality
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
 
-        function activateOrb() {
+        function toggleSidebar(open) {
+            if (open) {
+                sidebar.classList.add('open');
+                bodyEl.classList.add('sidebar-open');
+                sidebarBackdrop.classList.add('active');
+                hamburgerBtn.classList.add('is-active');
+            } else {
+                sidebar.classList.remove('open');
+                bodyEl.classList.remove('sidebar-open');
+                sidebarBackdrop.classList.remove('active');
+                hamburgerBtn.classList.remove('is-active');
+            }
+        }
 
-            orb.classList.add(
-                "launch-active"
-            );
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = sidebar.classList.contains('open');
+            toggleSidebar(!isOpen);
+        });
 
+        sidebarCloseBtn.addEventListener('click', () => toggleSidebar(false));
+        sidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
 
-            if (status) {
-
-                const text =
-                    status.querySelector(
-                        ".er-status-text"
-                    );
-
-                if (text) {
-
-                    text.textContent =
-                        "INITIALIZING ER";
-
+        // Close sidebar on navigation link click on mobile
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 860) {
+                    toggleSidebar(false);
                 }
+            });
+        });
 
-            }
+        // Animate skill bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.skill-fill').forEach(fill => {
+                        fill.style.width = fill.style.width; // Triggers transition
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
 
-
-            window.setTimeout(
-                function () {
-
-                    orb.classList.remove(
-                        "launch-active"
-                    );
-
-
-                    if (status) {
-
-                        const text =
-                            status.querySelector(
-                                ".er-status-text"
-                            );
-
-                        if (text) {
-
-                            text.textContent =
-                                "ER STUDIO READY";
-
-                        }
-
-                    }
-
-                },
-                1100
-            );
-
-        }
-
-
-        if (startButton) {
-
-            startButton.addEventListener(
-                "click",
-                activateOrb,
-                { passive: true }
-            );
-
-        }
-
-
-        if (demoButton) {
-
-            demoButton.addEventListener(
-                "click",
-                activateOrb,
-                { passive: true }
-            );
-
-        }
-
-
-        /* =================================================
-           DESKTOP POINTER PARALLAX
-           ================================================= */
-
-        if (
-            window.matchMedia &&
-            window.matchMedia(
-                "(pointer:fine)"
-            ).matches
-        ) {
-
-            orb.addEventListener(
-                "pointermove",
-                function (event) {
-
-                    const rect =
-                        orb.getBoundingClientRect();
-
-
-                    const x =
-                        (
-                            (
-                                event.clientX -
-                                rect.left
-                            ) /
-                            rect.width -
-                            0.5
-                        ) * 8;
-
-
-                    const y =
-                        (
-                            (
-                                event.clientY -
-                                rect.top
-                            ) /
-                            rect.height -
-                            0.5
-                        ) * 8;
-
-
-                    orb.style.setProperty(
-                        "--orb-x",
-                        x + "px"
-                    );
-
-
-                    orb.style.setProperty(
-                        "--orb-y",
-                        y + "px"
-                    );
-
-                },
-                { passive: true }
-            );
-
-
-            orb.addEventListener(
-                "pointerleave",
-                function () {
-
-                    orb.style.setProperty(
-                        "--orb-x",
-                        "0px"
-                    );
-
-                    orb.style.setProperty(
-                        "--orb-y",
-                        "0px"
-                    );
-
-                },
-                { passive: true }
-            );
-
-        }
-
-    }
-
-    if (
-        document.readyState === "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            initHalloweenLaunchUI,
-            { once: true }
-        );
-
-    } else {
-
-        initHalloweenLaunchUI();
-
-    }
-
-})();
-
-</script>
-
-
+        const skillsSection = document.getElementById('skills');
+        if (skillsSection) observer.observe(skillsSection);
+    </script>
 </body>
-
 </html>

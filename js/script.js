@@ -2,24 +2,18 @@
    WebZoneBW
    ----------------------------------------------------------
    Core JavaScript Controller
-   Version: 2.0
+   Version: 2.1
    ----------------------------------------------------------
-   Features:
-   - Skill bar animation
-   - Dark / Light theme
-   - Theme persistence
-   - System theme detection
-   - Reduced-motion support
-   - Accessible theme controls
-   - Mobile sidebar drawer
-   - Backdrop / Escape / outside-click handling
-   - Active navigation detection
-   - Multi-page navigation persistence
-   - Global WebZoneTheme API
-   - Global WebZoneSidebar API
-   - Global WebZoneBW API
-   - Lightweight static-site compatible
-   - Safe initialization
+   Updated:
+   - Standardized all ER routes to /er/index.html
+   - Removed legacy WebZoneBW-ER.Studio.html references
+   - Corrected ER navigation detection
+   - Corrected Halloween navigation detection
+   - Corrected root-page detection
+   - Preserved theme controller
+   - Preserved mobile sidebar
+   - Preserved active navigation
+   - Preserved WebZoneBW APIs
    ========================================================== */
 
 "use strict";
@@ -30,10 +24,13 @@
 ========================================================== */
 
 const WEBZONE_CONFIG = Object.freeze({
-    version: "2.0",
+
+    version: "2.1",
 
     selectors: {
-        skillBars: ".skill-fill",
+
+        skillBars:
+            ".skill-fill",
 
         themeSwitches:
             "#themeToggleSwitch, input[name='theme-switch']",
@@ -58,15 +55,22 @@ const WEBZONE_CONFIG = Object.freeze({
     },
 
     storage: {
-        theme: "theme",
-        activeNavigation: "webzone_active_nav"
+
+        theme:
+            "theme",
+
+        activeNavigation:
+            "webzone_active_nav"
     },
 
-    mobileBreakpoint: 860,
+    mobileBreakpoint:
+        860,
 
-    themeTransitionDuration: 380,
+    themeTransitionDuration:
+        380,
 
-    skillThreshold: 0.4
+    skillThreshold:
+        0.4
 });
 
 
@@ -75,26 +79,47 @@ const WEBZONE_CONFIG = Object.freeze({
 ========================================================== */
 
 const WebZoneState = {
-    initialized: false,
-    themeInitialized: false,
-    sidebarInitialized: false,
-    navigationInitialized: false,
-    skillsInitialized: false,
 
-    sidebarOpen: false,
+    initialized:
+        false,
 
-    theme: "dark",
+    themeInitialized:
+        false,
 
-    reducedMotion: false,
+    sidebarInitialized:
+        false,
 
-    transitionTimeout: null,
+    navigationInitialized:
+        false,
 
-    mediaQuery: null,
+    skillsInitialized:
+        false,
+
+    sidebarOpen:
+        false,
+
+    theme:
+        "dark",
+
+    reducedMotion:
+        false,
+
+    transitionTimeout:
+        null,
+
+    mediaQuery:
+        null,
 
     sidebar: {
-        backdrop: null,
-        sidebars: [],
-        toggleButtons: []
+
+        backdrop:
+            null,
+
+        sidebars:
+            [],
+
+        toggleButtons:
+            []
     }
 };
 
@@ -103,39 +128,64 @@ const WebZoneState = {
    DOM READY
 ========================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    if (WebZoneState.initialized) {
-        return;
+        if (
+            WebZoneState.initialized
+        ) {
+            return;
+        }
+
+        WebZoneState.initialized =
+            true;
+
+        safeInit(
+            "Skill bars",
+            initSkillBars
+        );
+
+        updateReducedMotionState();
+
+        safeInit(
+            "Theme controller",
+            initTheme
+        );
+
+        safeInit(
+            "Mobile sidebar",
+            initMobileSidebarDrawer
+        );
+
+        safeInit(
+            "Active navigation",
+            initActiveNavigation
+        );
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "webzone-ready",
+                {
+                    detail: {
+                        version:
+                            WEBZONE_CONFIG.version
+                    }
+                }
+            )
+        );
     }
-
-    WebZoneState.initialized = true;
-
-    safeInit("Skill bars", initSkillBars);
-    safeInit("Theme controller", initTheme);
-    safeInit("Mobile sidebar", initMobileSidebarDrawer);
-    safeInit("Active navigation", initActiveNavigation);
-
-    updateReducedMotionState();
-
-    /*
-     * Public application-ready event.
-     */
-    window.dispatchEvent(
-        new CustomEvent("webzone-ready", {
-            detail: {
-                version: WEBZONE_CONFIG.version
-            }
-        })
-    );
-});
+);
 
 
 /* ==========================================================
    SAFE INITIALIZER
 ========================================================== */
 
-function safeInit(name, initializer) {
+function safeInit(
+    name,
+    initializer
+) {
 
     try {
 
@@ -158,37 +208,50 @@ function safeInit(name, initializer) {
 function updateReducedMotionState() {
 
     if (!window.matchMedia) {
-        WebZoneState.reducedMotion = false;
+
+        WebZoneState.reducedMotion =
+            false;
+
         return;
     }
 
     const mediaQuery =
-        window.matchMedia("(prefers-reduced-motion: reduce)");
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        );
 
-    WebZoneState.mediaQuery = mediaQuery;
+    WebZoneState.mediaQuery =
+        mediaQuery;
 
     WebZoneState.reducedMotion =
         mediaQuery.matches;
 
-    const handleMotionChange = event => {
+    const handleMotionChange =
+        event => {
 
-        WebZoneState.reducedMotion =
-            event.matches;
+            WebZoneState.reducedMotion =
+                event.matches;
 
-        document.documentElement.classList.toggle(
-            "webzone-reduced-motion",
-            event.matches
-        );
-    };
+            document.documentElement.classList.toggle(
+                "webzone-reduced-motion",
+                event.matches
+            );
+        };
 
-    if (typeof mediaQuery.addEventListener === "function") {
+    if (
+        typeof mediaQuery.addEventListener ===
+        "function"
+    ) {
 
         mediaQuery.addEventListener(
             "change",
             handleMotionChange
         );
 
-    } else if (typeof mediaQuery.addListener === "function") {
+    } else if (
+        typeof mediaQuery.addListener ===
+        "function"
+    ) {
 
         mediaQuery.addListener(
             handleMotionChange
@@ -208,7 +271,9 @@ function updateReducedMotionState() {
 
 function initSkillBars() {
 
-    if (WebZoneState.skillsInitialized) {
+    if (
+        WebZoneState.skillsInitialized
+    ) {
         return;
     }
 
@@ -221,49 +286,56 @@ function initSkillBars() {
         return;
     }
 
-    WebZoneState.skillsInitialized = true;
+    WebZoneState.skillsInitialized =
+        true;
 
-    /*
-     * Reduced motion:
-     * Immediately display final values.
-     */
-    if (WebZoneState.reducedMotion) {
+    if (
+        WebZoneState.reducedMotion
+    ) {
 
-        skills.forEach(applySkillWidth);
-
-        return;
-    }
-
-
-    /*
-     * IntersectionObserver fallback.
-     */
-    if (!("IntersectionObserver" in window)) {
-
-        skills.forEach(applySkillWidth);
+        skills.forEach(
+            applySkillWidth
+        );
 
         return;
     }
 
+    if (
+        !("IntersectionObserver" in window)
+    ) {
+
+        skills.forEach(
+            applySkillWidth
+        );
+
+        return;
+    }
 
     const observer =
         new IntersectionObserver(
-            (entries, observerInstance) => {
+            (
+                entries,
+                observerInstance
+            ) => {
 
-                entries.forEach(entry => {
+                entries.forEach(
+                    entry => {
 
-                    if (!entry.isIntersecting) {
-                        return;
+                        if (
+                            !entry.isIntersecting
+                        ) {
+                            return;
+                        }
+
+                        applySkillWidth(
+                            entry.target
+                        );
+
+                        observerInstance.unobserve(
+                            entry.target
+                        );
                     }
-
-                    applySkillWidth(
-                        entry.target
-                    );
-
-                    observerInstance.unobserve(
-                        entry.target
-                    );
-                });
+                );
             },
             {
                 threshold:
@@ -271,25 +343,29 @@ function initSkillBars() {
             }
         );
 
+    skills.forEach(
+        skill => {
 
-    skills.forEach(skill => {
+            if (
+                !skill.style.width &&
+                skill.dataset.width
+            ) {
 
-        /*
-         * Start from zero where possible.
-         */
-        if (
-            !skill.style.width &&
-            skill.dataset.width
-        ) {
-            skill.style.width = "0%";
+                skill.style.width =
+                    "0%";
+            }
+
+            observer.observe(
+                skill
+            );
         }
-
-        observer.observe(skill);
-    });
+    );
 }
 
 
-function applySkillWidth(skill) {
+function applySkillWidth(
+    skill
+) {
 
     if (!skill) {
         return;
@@ -304,20 +380,23 @@ function applySkillWidth(skill) {
 
     let width =
         parseFloat(
-            String(rawWidth).replace("%", "")
+            String(rawWidth)
+                .replace("%", "")
         );
 
-    if (Number.isNaN(width)) {
+    if (
+        Number.isNaN(width)
+    ) {
         return;
     }
 
-    /*
-     * Prevent invalid values.
-     */
     width =
         Math.max(
             0,
-            Math.min(100, width)
+            Math.min(
+                100,
+                width
+            )
         );
 
     skill.style.width =
@@ -344,13 +423,15 @@ window.WebZoneTheme = {
 
     get isLight() {
 
-        return this.current === "light";
+        return this.current ===
+            "light";
     },
 
 
     get isDark() {
 
-        return this.current === "dark";
+        return this.current ===
+            "dark";
     },
 
 
@@ -378,16 +459,13 @@ window.WebZoneTheme = {
     ) {
 
         const theme =
-            normalizeTheme(themeName);
+            normalizeTheme(
+                themeName
+            );
 
         const wantLight =
             theme === "light";
 
-
-        /*
-         * Only animate if requested and
-         * reduced motion is not enabled.
-         */
         if (
             smooth &&
             !WebZoneState.reducedMotion
@@ -396,28 +474,16 @@ window.WebZoneTheme = {
             this.enableSmoothTransition();
         }
 
-
-        /*
-         * HTML data-theme.
-         */
         document.documentElement.setAttribute(
             "data-theme",
             theme
         );
 
-
-        /*
-         * Existing WebZoneBW body compatibility.
-         */
         document.body.classList.toggle(
             "light-mode",
             wantLight
         );
 
-
-        /*
-         * Maintain theme class helpers.
-         */
         document.documentElement.classList.toggle(
             "theme-light",
             wantLight
@@ -428,25 +494,13 @@ window.WebZoneTheme = {
             !wantLight
         );
 
-
         WebZoneState.theme =
             theme;
 
-
-        /*
-         * Synchronize every theme control.
-         */
         this.syncUIControls(
             wantLight
         );
 
-
-        /*
-         * Persist ONLY when explicitly requested.
-         *
-         * This prevents system-theme detection from
-         * accidentally becoming a permanent preference.
-         */
         if (persist) {
 
             saveThemePreference(
@@ -454,18 +508,19 @@ window.WebZoneTheme = {
             );
         }
 
-
-        /*
-         * Notify all WebZone components.
-         */
         window.dispatchEvent(
             new CustomEvent(
                 "webzone-theme-change",
                 {
                     detail: {
+
                         theme,
-                        isLight: wantLight,
-                        isDark: !wantLight
+
+                        isLight:
+                            wantLight,
+
+                        isDark:
+                            !wantLight
                     }
                 }
             )
@@ -484,7 +539,6 @@ window.WebZoneTheme = {
             return;
         }
 
-
         if (
             WebZoneState.transitionTimeout
         ) {
@@ -494,7 +548,6 @@ window.WebZoneTheme = {
             );
         }
 
-
         document.documentElement.classList.add(
             "theme-transitioning"
         );
@@ -503,104 +556,93 @@ window.WebZoneTheme = {
             "theme-transitioning"
         );
 
-
         WebZoneState.transitionTimeout =
-            setTimeout(() => {
+            setTimeout(
+                () => {
 
-                document.documentElement.classList.remove(
-                    "theme-transitioning"
-                );
+                    document.documentElement.classList.remove(
+                        "theme-transitioning"
+                    );
 
-                document.body.classList.remove(
-                    "theme-transitioning"
-                );
+                    document.body.classList.remove(
+                        "theme-transitioning"
+                    );
 
-                WebZoneState.transitionTimeout =
-                    null;
+                    WebZoneState.transitionTimeout =
+                        null;
 
-            }, duration);
+                },
+                duration
+            );
     },
 
 
-    syncUIControls(isLight) {
+    syncUIControls(
+        isLight
+    ) {
 
-        /*
-         * Toggle switches.
-         *
-         * Existing behavior:
-         * checked = dark
-         * unchecked = light
-         */
         const switches =
             document.querySelectorAll(
                 WEBZONE_CONFIG.selectors.themeSwitches
             );
 
+        switches.forEach(
+            sw => {
 
-        switches.forEach(sw => {
+                sw.checked =
+                    !isLight;
 
-            sw.checked =
-                !isLight;
+                sw.setAttribute(
+                    "aria-checked",
+                    String(!isLight)
+                );
+            }
+        );
 
-            sw.setAttribute(
-                "aria-checked",
-                String(!isLight)
-            );
-        });
-
-
-        /*
-         * Icons.
-         */
         const themeIcons =
             document.querySelectorAll(
                 WEBZONE_CONFIG.selectors.themeIcons
             );
 
+        themeIcons.forEach(
+            icon => {
 
-        themeIcons.forEach(icon => {
+                icon.textContent =
+                    isLight
+                        ? "☀️"
+                        : "🌙";
+            }
+        );
 
-            icon.textContent =
-                isLight
-                    ? "☀️"
-                    : "🌙";
-        });
-
-
-        /*
-         * Text labels.
-         */
         const themeTexts =
             document.querySelectorAll(
                 WEBZONE_CONFIG.selectors.themeTexts
             );
 
+        themeTexts.forEach(
+            text => {
 
-        themeTexts.forEach(text => {
+                text.textContent =
+                    isLight
+                        ? "Light Mode"
+                        : "Dark Mode";
+            }
+        );
 
-            text.textContent =
-                isLight
-                    ? "Light Mode"
-                    : "Dark Mode";
-        });
-
-
-        /*
-         * Theme buttons.
-         */
         const themeButtons =
             document.querySelectorAll(
                 WEBZONE_CONFIG.selectors.themeButtons
             );
 
+        themeButtons.forEach(
+            button => {
 
-        themeButtons.forEach(button => {
-
-            updateThemeButton(
-                button,
-                isLight
-            );
-        });
+                updateThemeButton(
+                    button,
+                    isLight
+                );
+            }
+        );
     }
 };
 
@@ -609,10 +651,11 @@ window.WebZoneTheme = {
    GLOBAL THEME SHORTHAND
 ========================================================== */
 
-window.toggleTheme = function() {
+window.toggleTheme =
+    function () {
 
-    return window.WebZoneTheme.toggle();
-};
+        return window.WebZoneTheme.toggle();
+    };
 
 
 /* ==========================================================
@@ -621,127 +664,103 @@ window.toggleTheme = function() {
 
 function initTheme() {
 
-    if (WebZoneState.themeInitialized) {
+    if (
+        WebZoneState.themeInitialized
+    ) {
         return;
     }
 
-    WebZoneState.themeInitialized = true;
-
+    WebZoneState.themeInitialized =
+        true;
 
     let savedTheme =
         getSavedThemePreference();
 
-
-    /*
-     * If there is no explicit preference,
-     * follow the operating system.
-     */
     if (!savedTheme) {
 
         savedTheme =
             getSystemTheme();
     }
 
-
-    /*
-     * Initial setup is instant.
-     *
-     * persist = false because system preference
-     * should not automatically become a saved choice.
-     */
     window.WebZoneTheme.set(
         savedTheme,
         false,
         false
     );
 
-
-    /*
-     * Theme switches.
-     */
     const themeSwitches =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.themeSwitches
         );
 
+    themeSwitches.forEach(
+        sw => {
 
-    themeSwitches.forEach(sw => {
-
-        if (
-            sw.dataset.webzoneThemeBound === "true"
-        ) {
-            return;
-        }
-
-        sw.dataset.webzoneThemeBound =
-            "true";
-
-
-        sw.addEventListener(
-            "change",
-            () => {
-
-                const wantLight =
-                    !sw.checked;
-
-                window.WebZoneTheme.set(
-                    wantLight
-                        ? "light"
-                        : "dark",
-                    true,
-                    true
-                );
+            if (
+                sw.dataset.webzoneThemeBound ===
+                "true"
+            ) {
+                return;
             }
-        );
-    });
 
+            sw.dataset.webzoneThemeBound =
+                "true";
 
-    /*
-     * Theme buttons.
-     */
+            sw.addEventListener(
+                "change",
+                () => {
+
+                    const wantLight =
+                        !sw.checked;
+
+                    window.WebZoneTheme.set(
+                        wantLight
+                            ? "light"
+                            : "dark",
+                        true,
+                        true
+                    );
+                }
+            );
+        }
+    );
+
     const themeButtons =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.themeButtons
         );
 
+    themeButtons.forEach(
+        button => {
 
-    themeButtons.forEach(button => {
-
-        if (
-            button.dataset.webzoneThemeBound === "true"
-        ) {
-            return;
-        }
-
-        button.dataset.webzoneThemeBound =
-            "true";
-
-
-        button.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-
-                window.WebZoneTheme.toggle();
+            if (
+                button.dataset.webzoneThemeBound ===
+                "true"
+            ) {
+                return;
             }
-        );
-    });
 
+            button.dataset.webzoneThemeBound =
+                "true";
 
-    /*
-     * System theme changes.
-     *
-     * Only follow the OS when the user has
-     * NOT manually selected a theme.
-     */
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    window.WebZoneTheme.toggle();
+                }
+            );
+        }
+    );
+
     if (window.matchMedia) {
 
         const mediaQuery =
             window.matchMedia(
                 "(prefers-color-scheme: light)"
             );
-
 
         const handleSystemThemeChange =
             event => {
@@ -751,11 +770,11 @@ function initTheme() {
                         getSavedThemePreference()
                     );
 
-
-                if (hasSavedPreference) {
+                if (
+                    hasSavedPreference
+                ) {
                     return;
                 }
-
 
                 window.WebZoneTheme.set(
                     event.matches
@@ -765,7 +784,6 @@ function initTheme() {
                     false
                 );
             };
-
 
         if (
             typeof mediaQuery.addEventListener ===
@@ -794,9 +812,12 @@ function initTheme() {
    THEME HELPERS
 ========================================================== */
 
-function normalizeTheme(themeName) {
+function normalizeTheme(
+    themeName
+) {
 
-    return String(themeName).toLowerCase() === "light"
+    return String(themeName)
+        .toLowerCase() === "light"
         ? "light"
         : "dark";
 }
@@ -814,7 +835,6 @@ function getSavedThemePreference() {
                 "webzonebw-theme"
             );
 
-
         if (
             value === "light" ||
             value === "dark"
@@ -830,15 +850,18 @@ function getSavedThemePreference() {
         );
     }
 
-
     return null;
 }
 
 
-function saveThemePreference(themeStr) {
+function saveThemePreference(
+    themeStr
+) {
 
     const theme =
-        normalizeTheme(themeStr);
+        normalizeTheme(
+            themeStr
+        );
 
     try {
 
@@ -873,7 +896,6 @@ function getSystemTheme() {
             : "dark";
     }
 
-
     return "dark";
 }
 
@@ -882,7 +904,9 @@ function getSystemTheme() {
    STANDARD THEME COMPATIBILITY
 ========================================================== */
 
-function applyStandardTheme(isLight) {
+function applyStandardTheme(
+    isLight
+) {
 
     window.WebZoneTheme.set(
         isLight
@@ -906,7 +930,6 @@ function updateThemeButton(
     if (!themeToggle) {
         return;
     }
-
 
     if (isLight) {
 
@@ -957,31 +980,28 @@ function updateThemeButton(
 
 function initMobileSidebarDrawer() {
 
-    if (WebZoneState.sidebarInitialized) {
+    if (
+        WebZoneState.sidebarInitialized
+    ) {
         return;
     }
-
 
     const sidebars =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.sidebars
         );
 
-
     if (!sidebars.length) {
         return;
     }
 
-
     WebZoneState.sidebarInitialized =
         true;
-
 
     const toggleButtons =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.sidebarToggles
         );
-
 
     WebZoneState.sidebar.sidebars =
         Array.from(sidebars);
@@ -989,10 +1009,6 @@ function initMobileSidebarDrawer() {
     WebZoneState.sidebar.toggleButtons =
         Array.from(toggleButtons);
 
-
-    /*
-     * Create backdrop if necessary.
-     */
     let backdrop =
         document.getElementById(
             "sidebarBackdrop"
@@ -1000,7 +1016,6 @@ function initMobileSidebarDrawer() {
         document.querySelector(
             ".sidebar-backdrop"
         );
-
 
     if (!backdrop) {
 
@@ -1025,37 +1040,24 @@ function initMobileSidebarDrawer() {
         );
     }
 
-
     WebZoneState.sidebar.backdrop =
         backdrop;
 
-
-    /*
-     * Prepare sidebars.
-     */
     sidebars.forEach(
         setupSidebar
     );
 
-
-    /*
-     * Hamburger buttons.
-     */
     toggleButtons.forEach(
         setupSidebarToggle
     );
 
-
-    /*
-     * Backdrop click.
-     */
     if (
-        backdrop.dataset.webzoneBound !== "true"
+        backdrop.dataset.webzoneBound !==
+        "true"
     ) {
 
         backdrop.dataset.webzoneBound =
             "true";
-
 
         backdrop.addEventListener(
             "click",
@@ -1066,7 +1068,6 @@ function initMobileSidebarDrawer() {
                 closeSidebarDrawer();
             }
         );
-
 
         backdrop.addEventListener(
             "touchstart",
@@ -1082,10 +1083,6 @@ function initMobileSidebarDrawer() {
         );
     }
 
-
-    /*
-     * Escape key.
-     */
     document.addEventListener(
         "keydown",
         event => {
@@ -1100,66 +1097,50 @@ function initMobileSidebarDrawer() {
         }
     );
 
-
-    /*
-     * Navigation links close drawer on mobile.
-     */
     const navLinks =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.sidebarNav
         );
 
+    navLinks.forEach(
+        link => {
 
-    navLinks.forEach(link => {
-
-        if (
-            link.dataset.webzoneDrawerBound === "true"
-        ) {
-            return;
-        }
-
-        link.dataset.webzoneDrawerBound =
-            "true";
-
-
-        link.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    window.innerWidth <=
-                    WEBZONE_CONFIG.mobileBreakpoint
-                ) {
-
-                    closeSidebarDrawer();
-                }
+            if (
+                link.dataset.webzoneDrawerBound ===
+                "true"
+            ) {
+                return;
             }
-        );
-    });
 
+            link.dataset.webzoneDrawerBound =
+                "true";
 
-    /*
-     * Resize behavior.
-     */
+            link.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        window.innerWidth <=
+                        WEBZONE_CONFIG.mobileBreakpoint
+                    ) {
+
+                        closeSidebarDrawer();
+                    }
+                }
+            );
+        }
+    );
+
     window.addEventListener(
         "resize",
         handleSidebarResize
     );
 
-
-    /*
-     * Global fallback:
-     * clicking outside closes the drawer.
-     */
     document.addEventListener(
         "click",
         handleOutsideSidebarClick
     );
 
-
-    /*
-     * Expose API.
-     */
     window.WebZoneSidebar = {
 
         open:
@@ -1175,10 +1156,6 @@ function initMobileSidebarDrawer() {
             isSidebarDrawerOpen
     };
 
-
-    /*
-     * Make sure initial state is closed.
-     */
     closeSidebarDrawer();
 }
 
@@ -1187,22 +1164,18 @@ function initMobileSidebarDrawer() {
    SIDEBAR SETUP
 ========================================================== */
 
-function setupSidebar(sidebar) {
+function setupSidebar(
+    sidebar
+) {
 
     if (!sidebar) {
         return;
     }
 
-
-    /*
-     * Add accessible close button when
-     * a logo exists.
-     */
     const logo =
         sidebar.querySelector(
             ".logo"
         );
-
 
     if (
         logo &&
@@ -1215,7 +1188,6 @@ function setupSidebar(sidebar) {
             document.createElement(
                 "button"
             );
-
 
         closeBtn.type =
             "button";
@@ -1236,7 +1208,6 @@ function setupSidebar(sidebar) {
         closeBtn.innerHTML =
             '<span aria-hidden="true">&times;</span>';
 
-
         closeBtn.addEventListener(
             "click",
             event => {
@@ -1247,18 +1218,15 @@ function setupSidebar(sidebar) {
             }
         );
 
-
         logo.appendChild(
             closeBtn
         );
     }
 
-
-    /*
-     * Mark sidebar as navigation.
-     */
     if (
-        !sidebar.getAttribute("role")
+        !sidebar.getAttribute(
+            "role"
+        )
     ) {
 
         sidebar.setAttribute(
@@ -1273,37 +1241,33 @@ function setupSidebar(sidebar) {
    SIDEBAR TOGGLE SETUP
 ========================================================== */
 
-function setupSidebarToggle(button) {
+function setupSidebarToggle(
+    button
+) {
 
     if (!button) {
         return;
     }
 
-
     if (
         button.dataset.webzoneSidebarBound ===
         "true"
     ) {
-
         return;
     }
 
-
     button.dataset.webzoneSidebarBound =
         "true";
-
 
     button.setAttribute(
         "aria-expanded",
         "false"
     );
 
-
     button.setAttribute(
         "aria-controls",
         "mainSidebar"
     );
-
 
     button.addEventListener(
         "click",
@@ -1344,49 +1308,45 @@ function openSidebarDrawer() {
         sidebars,
         toggleButtons,
         backdrop
-    } = WebZoneState.sidebar;
-
+    } =
+        WebZoneState.sidebar;
 
     if (!sidebars.length) {
         return;
     }
 
+    sidebars.forEach(
+        sidebar => {
 
-    sidebars.forEach(sidebar => {
+            sidebar.classList.add(
+                "open"
+            );
 
-        sidebar.classList.add(
-            "open"
-        );
+            sidebar.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+        }
+    );
 
-        sidebar.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-    });
+    toggleButtons.forEach(
+        button => {
 
+            button.classList.add(
+                "is-active"
+            );
 
-    toggleButtons.forEach(button => {
-
-        button.classList.add(
-            "is-active"
-        );
-
-        button.setAttribute(
-            "aria-expanded",
-            "true"
-        );
-    });
-
+            button.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+        }
+    );
 
     document.body.classList.add(
         "sidebar-open"
     );
 
-
-    /*
-     * Prevent page scrolling while
-     * mobile navigation is open.
-     */
     if (
         window.innerWidth <=
         WEBZONE_CONFIG.mobileBreakpoint
@@ -1396,7 +1356,6 @@ function openSidebarDrawer() {
             "webzone-scroll-lock"
         );
     }
-
 
     if (backdrop) {
 
@@ -1410,10 +1369,8 @@ function openSidebarDrawer() {
         );
     }
 
-
     WebZoneState.sidebarOpen =
         true;
-
 
     window.dispatchEvent(
         new CustomEvent(
@@ -1438,34 +1395,36 @@ function closeSidebarDrawer() {
         sidebars,
         toggleButtons,
         backdrop
-    } = WebZoneState.sidebar;
+    } =
+        WebZoneState.sidebar;
 
+    sidebars.forEach(
+        sidebar => {
 
-    sidebars.forEach(sidebar => {
+            sidebar.classList.remove(
+                "open"
+            );
 
-        sidebar.classList.remove(
-            "open"
-        );
+            sidebar.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+        }
+    );
 
-        sidebar.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-    });
+    toggleButtons.forEach(
+        button => {
 
+            button.classList.remove(
+                "is-active"
+            );
 
-    toggleButtons.forEach(button => {
-
-        button.classList.remove(
-            "is-active"
-        );
-
-        button.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-    });
-
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+        }
+    );
 
     document.body.classList.remove(
         "sidebar-open"
@@ -1474,7 +1433,6 @@ function closeSidebarDrawer() {
     document.body.classList.remove(
         "webzone-scroll-lock"
     );
-
 
     if (backdrop) {
 
@@ -1488,10 +1446,8 @@ function closeSidebarDrawer() {
         );
     }
 
-
     WebZoneState.sidebarOpen =
         false;
-
 
     window.dispatchEvent(
         new CustomEvent(
@@ -1550,33 +1506,34 @@ function handleSidebarResize() {
    OUTSIDE SIDEBAR CLICK
 ========================================================== */
 
-function handleOutsideSidebarClick(event) {
+function handleOutsideSidebarClick(
+    event
+) {
 
     if (
         !isSidebarDrawerOpen()
     ) {
-
         return;
     }
-
 
     const target =
         event.target;
 
-
     const clickedInsideSidebar =
         WebZoneState.sidebar.sidebars.some(
             sidebar =>
-                sidebar.contains(target)
+                sidebar.contains(
+                    target
+                )
         );
-
 
     const clickedToggle =
         WebZoneState.sidebar.toggleButtons.some(
             button =>
-                button.contains(target)
+                button.contains(
+                    target
+                )
         );
-
 
     if (
         !clickedInsideSidebar &&
@@ -1594,34 +1551,27 @@ function handleOutsideSidebarClick(event) {
 
 function initActiveNavigation() {
 
-    if (WebZoneState.navigationInitialized) {
+    if (
+        WebZoneState.navigationInitialized
+    ) {
         return;
     }
-
 
     const navLinks =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.sidebarNav
         );
 
-
     if (!navLinks.length) {
         return;
     }
 
-
     WebZoneState.navigationInitialized =
         true;
-
 
     const currentPage =
         detectCurrentPage();
 
-
-    /*
-     * Store active page for compatibility
-     * with existing WebZoneBW logic.
-     */
     try {
 
         sessionStorage.setItem(
@@ -1629,88 +1579,84 @@ function initActiveNavigation() {
             currentPage
         );
 
-    } catch (error) {
+    } catch (error) {}
 
-        /*
-         * Session storage can be blocked.
-         * Nothing critical depends on it.
-         */
-    }
+    navLinks.forEach(
+        link => {
 
+            const href =
+                (
+                    link.getAttribute(
+                        "href"
+                    ) || ""
+                ).trim();
 
-    navLinks.forEach(link => {
+            const isMatch =
+                isNavigationMatch(
+                    href,
+                    currentPage
+                );
 
-        const href =
-            (
-                link.getAttribute(
-                    "href"
-                ) || ""
-            ).trim();
+            if (isMatch) {
 
+                link.classList.add(
+                    "active"
+                );
 
-        const isMatch =
-            isNavigationMatch(
-                href,
-                currentPage
-            );
+                link.setAttribute(
+                    "aria-current",
+                    "page"
+                );
 
+            } else {
 
-        if (isMatch) {
+                link.classList.remove(
+                    "active"
+                );
 
-            link.classList.add(
-                "active"
-            );
+                link.removeAttribute(
+                    "aria-current"
+                );
+            }
 
-            link.setAttribute(
-                "aria-current",
-                "page"
-            );
+            if (
+                link.dataset.webzoneNavBound !==
+                "true"
+            ) {
 
-        } else {
+                link.dataset.webzoneNavBound =
+                    "true";
 
-            link.classList.remove(
-                "active"
-            );
+                link.addEventListener(
+                    "click",
+                    () => {
 
-            link.removeAttribute(
-                "aria-current"
-            );
+                        try {
+
+                            sessionStorage.setItem(
+                                WEBZONE_CONFIG.storage.activeNavigation,
+                                href
+                            );
+
+                        } catch (error) {}
+                    }
+                );
+            }
         }
-
-
-        /*
-         * Remember clicked destination.
-         */
-        if (
-            link.dataset.webzoneNavBound !==
-            "true"
-        ) {
-
-            link.dataset.webzoneNavBound =
-                "true";
-
-
-            link.addEventListener(
-                "click",
-                () => {
-
-                    try {
-
-                        sessionStorage.setItem(
-                            WEBZONE_CONFIG.storage.activeNavigation,
-                            href
-                        );
-
-                    } catch (error) {}
-                }
-            );
-        }
-    });
+    );
 }
 
 
 /* ==========================================================
    CURRENT PAGE DETECTION
+   ----------------------------------------------------------
+   IMPORTANT:
+   ER is now standardized to:
+
+       /er/index.html
+
+   Legacy WebZoneBW-ER.Studio.html
+   references have been removed.
 ========================================================== */
 
 function detectCurrentPage() {
@@ -1722,47 +1668,88 @@ function detectCurrentPage() {
         ).toLowerCase();
 
 
-    /*
-     * WEBZONE ER / Halloween section.
-     */
+    /* ------------------------------------------------------
+       WEBZONE ER
+       ------------------------------------------------------ */
+
     if (
-        pathname.includes("/er/") ||
-        pathname.endsWith("/er") ||
         pathname === "/er" ||
-        pathname.endsWith("er/WebZoneBW-ER.Studio.html")
+        pathname === "/er/" ||
+        pathname.includes("/er/index.html")
     ) {
 
-        return "er/WebZoneBW-ER.Studio.html";
+        return "er/index.html";
     }
 
+
+    /* ------------------------------------------------------
+       HALLOWEEN
+       ------------------------------------------------------ */
 
     if (
-        pathname.includes(
-            "/halloween/"
-        ) ||
-        pathname.includes(
-            "/halloween"
-        )
+        pathname === "/halloween" ||
+        pathname === "/halloween/" ||
+        pathname.includes("/halloween/index.html")
     ) {
 
-        return "halloween/WebZoneBW-ER.Studio.html";
+        return "halloween/index.html";
     }
 
 
-    /*
-     * Known pages.
-     */
+    /* ------------------------------------------------------
+       ROOT WEBSITE
+       ------------------------------------------------------ */
+
+    if (
+        pathname === "/" ||
+        pathname.endsWith("/index.html")
+    ) {
+
+        /*
+         * Do NOT classify /er/index.html or
+         * /halloween/index.html as the root page.
+         */
+
+        if (
+            pathname.includes("/er/") ||
+            pathname.includes("/halloween/")
+        ) {
+
+            return pathname.includes("/er/")
+                ? "er/index.html"
+                : "halloween/index.html";
+        }
+
+        return "index.html";
+    }
+
+
+    /* ------------------------------------------------------
+       KNOWN PAGES
+       ------------------------------------------------------ */
+
     const knownPages = [
+
         "soundbox.html",
+
         "projects.html",
+
         "resume.html",
+
         "blog.html",
+
         "about.html",
+
         "contact.html",
+
         "master.html",
+
         "privacy.html",
+
         "terms.html",
+
         "disclaimer.html",
+
         "404.html"
     ];
 
@@ -1783,14 +1770,16 @@ function detectCurrentPage() {
     }
 
 
-    /*
-     * Generic HTML page.
-     */
+    /* ------------------------------------------------------
+       GENERIC HTML PAGE
+       ------------------------------------------------------ */
+
     const parts =
         pathname
             .split("/")
-            .filter(Boolean);
-
+            .filter(
+                Boolean
+            );
 
     const lastPart =
         parts[
@@ -1807,10 +1796,11 @@ function detectCurrentPage() {
     }
 
 
-    /*
-     * Root.
-     */
-    return "WebZoneBW-ER.Studio.html";
+    /* ------------------------------------------------------
+       FINAL DEFAULT
+       ------------------------------------------------------ */
+
+    return "index.html";
 }
 
 
@@ -1827,44 +1817,75 @@ function isNavigationMatch(
         return false;
     }
 
-
     const normalizedHref =
         href
             .toLowerCase()
             .split("?")[0]
-            .split("#")[0];
+            .split("#")[0]
+            .replace(/^\.\//, "");
 
 
-    /*
-     * WEBZONE ER / Halloween.
-     */
+    /* ------------------------------------------------------
+       WEBZONE ER
+       ------------------------------------------------------ */
+
     if (
-        currentPage === "er/WebZoneBW-ER.Studio.html" ||
-        currentPage === "halloween/WebZoneBW-ER.Studio.html"
+        currentPage ===
+        "er/index.html"
     ) {
 
         return (
-            normalizedHref.includes("er/") ||
-            normalizedHref.includes("er/WebZoneBW-ER.Studio.html") ||
-            normalizedHref.includes("halloween")
+
+            normalizedHref ===
+                "er/" ||
+
+            normalizedHref ===
+                "er/index.html" ||
+
+            normalizedHref.endsWith(
+                "/er/index.html"
+            )
         );
     }
 
 
-    /*
-     * Homepage.
-     */
+    /* ------------------------------------------------------
+       HALLOWEEN
+       ------------------------------------------------------ */
+
+    if (
+        currentPage ===
+        "halloween/index.html"
+    ) {
+
+        return (
+
+            normalizedHref ===
+                "halloween/" ||
+
+            normalizedHref ===
+                "halloween/index.html" ||
+
+            normalizedHref.endsWith(
+                "/halloween/index.html"
+            )
+        );
+    }
+
+
+    /* ------------------------------------------------------
+       HOMEPAGE
+       ------------------------------------------------------ */
+
     if (
         currentPage ===
         "index.html"
     ) {
 
         return (
-            normalizedHref ===
-                "index.html" ||
 
             normalizedHref ===
-                "./index.html" ||
+                "index.html" ||
 
             normalizedHref ===
                 "/" ||
@@ -1881,10 +1902,12 @@ function isNavigationMatch(
     }
 
 
-    /*
-     * Normal pages.
-     */
+    /* ------------------------------------------------------
+       NORMAL PAGES
+       ------------------------------------------------------ */
+
     return (
+
         normalizedHref ===
             currentPage ||
 
@@ -1911,10 +1934,10 @@ window.WebZoneBW = {
     version:
         WEBZONE_CONFIG.version,
 
-
     get state() {
 
         return {
+
             initialized:
                 WebZoneState.initialized,
 
@@ -1929,14 +1952,11 @@ window.WebZoneBW = {
         };
     },
 
-
     theme:
         window.WebZoneTheme,
 
-
     sidebar:
         window.WebZoneSidebar || null,
-
 
     refreshNavigation() {
 
@@ -1946,7 +1966,6 @@ window.WebZoneBW = {
         initActiveNavigation();
     },
 
-
     refreshSkills() {
 
         WebZoneState.skillsInitialized =
@@ -1955,7 +1974,6 @@ window.WebZoneBW = {
         initSkillBars();
     },
 
-
     refreshThemeControls() {
 
         window.WebZoneTheme.syncUIControls(
@@ -1963,12 +1981,10 @@ window.WebZoneBW = {
         );
     },
 
-
     openSidebar() {
 
         openSidebarDrawer();
     },
-
 
     closeSidebar() {
 
@@ -1981,7 +1997,9 @@ window.WebZoneBW = {
    KEEP GLOBAL SIDEBAR API IN SYNC
 ========================================================== */
 
-if (!window.WebZoneSidebar) {
+if (
+    !window.WebZoneSidebar
+) {
 
     window.WebZoneSidebar = {
 
@@ -2000,10 +2018,6 @@ if (!window.WebZoneSidebar) {
 }
 
 
-/*
- * Update the WebZoneBW reference after
- * sidebar API creation.
- */
 window.WebZoneBW.sidebar =
     window.WebZoneSidebar;
 
@@ -2012,14 +2026,6 @@ window.WebZoneBW.sidebar =
    COMPATIBILITY EVENTS
 ========================================================== */
 
-/*
- * Allow other scripts to request a theme change:
- *
- * window.dispatchEvent(new CustomEvent(
- *   "webzone-set-theme",
- *   { detail: { theme: "light" } }
- * ));
- */
 window.addEventListener(
     "webzone-set-theme",
     event => {
@@ -2027,7 +2033,6 @@ window.addEventListener(
         const theme =
             event.detail &&
             event.detail.theme;
-
 
         if (
             theme === "light" ||
@@ -2044,10 +2049,6 @@ window.addEventListener(
 );
 
 
-/*
- * Allow other components to request
- * sidebar operations.
- */
 window.addEventListener(
     "webzone-toggle-sidebar",
     () => {
@@ -2061,12 +2062,6 @@ window.addEventListener(
    VISIBILITY RECOVERY
 ========================================================== */
 
-/*
- * Some mobile browsers restore a page from
- * the back/forward cache with stale UI state.
- *
- * Reset drawer state when page becomes visible.
- */
 document.addEventListener(
     "visibilitychange",
     () => {
@@ -2084,11 +2079,6 @@ document.addEventListener(
                 closeSidebarDrawer();
             }
 
-
-            /*
-             * Re-sync theme controls in case
-             * another component modified theme state.
-             */
             if (
                 WebZoneState.themeInitialized
             ) {
@@ -2110,10 +2100,6 @@ window.addEventListener(
     "pageshow",
     () => {
 
-        /*
-         * Ensure the current theme is reflected
-         * after browser back/forward navigation.
-         */
         if (
             WebZoneState.themeInitialized
         ) {
@@ -2123,11 +2109,6 @@ window.addEventListener(
             );
         }
 
-
-        /*
-         * Desktop should never retain an
-         * open mobile drawer.
-         */
         if (
             window.innerWidth >
             WEBZONE_CONFIG.mobileBreakpoint

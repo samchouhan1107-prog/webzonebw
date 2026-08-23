@@ -2,9 +2,13 @@
    WEBZONEBW — WEB SERVER
    WEBZONE ER • HALLOWEEN • STATIC SITE ENGINE
    ------------------------------------------------------------
-   Version: 2.0
+   Version: 2.1
    Port:    3000
    Runtime: Node.js + Express
+   ------------------------------------------------------------
+   STANDARD PAGE STRUCTURE
+   /er/index.html
+   /halloween/index.html
    ============================================================ */
 
 "use strict";
@@ -29,7 +33,7 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
 
-const SERVER_VERSION = "2.0.0";
+const SERVER_VERSION = "2.1.0";
 const PROJECT_NAME = "WEBZONEBW";
 
 /* ============================================================
@@ -39,11 +43,7 @@ const PROJECT_NAME = "WEBZONEBW";
 app.disable("x-powered-by");
 
 /* ============================================================
-   MEDIA PERMISSIONS
-   ------------------------------------------------------------
-   Chrome blocks getUserMedia when Permissions-Policy
-   omits camera, or when a reverse proxy sends camera=().
-   Explicitly allow same-origin camera for ER Studio.
+   MEDIA / CAMERA PERMISSIONS
    ============================================================ */
 
 app.use((req, res, next) => {
@@ -62,11 +62,6 @@ app.use((req, res, next) => {
 
 /* ============================================================
    REQUEST PARSERS
-   ------------------------------------------------------------
-   Supports:
-   - JSON APIs
-   - Base64 image payloads
-   - URL encoded forms
    ============================================================ */
 
 app.use(
@@ -102,7 +97,7 @@ app.use((req, res, next) => {
 });
 
 /* ============================================================
-   HEALTH / STATUS API
+   HEALTH API
    ============================================================ */
 
 app.get("/api/health", (req, res) => {
@@ -118,7 +113,7 @@ app.get("/api/health", (req, res) => {
 });
 
 /* ============================================================
-   SERVER INFORMATION
+   SERVER STATUS API
    ============================================================ */
 
 app.get("/api/status", (req, res) => {
@@ -141,17 +136,17 @@ app.get("/api/status", (req, res) => {
 });
 
 /* ============================================================
-   STATIC FILE ENGINE
+   ROOT STATIC FILE ENGINE
    ------------------------------------------------------------
-   Serves:
-   - HTML
-   - CSS
-   - JavaScript
-   - Images
-   - Fonts
-   - Audio
-   - Video
-   - Other static assets
+   Handles:
+   HTML
+   CSS
+   JavaScript
+   Images
+   Fonts
+   Audio
+   Video
+   Other assets
    ============================================================ */
 
 app.use(
@@ -160,21 +155,24 @@ app.use(
         index: "index.html",
         fallthrough: true,
         redirect: true,
-        maxAge: process.env.NODE_ENV === "production"
-            ? "1d"
-            : 0
+        maxAge:
+            process.env.NODE_ENV === "production"
+                ? "1d"
+                : 0
     })
 );
 
 /* ============================================================
-   WEBZONE ER / HALLOWEEN STUDIO
+   WEBZONE ER STUDIO
    ------------------------------------------------------------
-   Supported URLs:
-
-   /er
+   STANDARD:
+   
    /er/
-   /halloween
-   /halloween/
+   /er/index.html
+   
+   Both resolve to:
+   
+   /er/index.html
    ============================================================ */
 
 app.get(
@@ -188,31 +186,33 @@ app.get(
 
         res.sendFile(erIndex, (error) => {
             if (error) {
-                // Fallback to halloween/WebZoneBW-ER.Studio.html if needed
-                const halloweenIndex = path.join(
-                    __dirname,
-                    "halloween",
-                    "WebZoneBW-ER.Studio.html"
+                console.error(
+                    "[ER] Unable to load er/index.html:",
+                    error.message
                 );
 
-                res.sendFile(halloweenIndex, (fallbackErr) => {
-                    if (fallbackErr) {
-                        console.error(
-                            "[ER] Unable to load ER studio:",
-                            fallbackErr.message
-                        );
-
-                        if (!res.headersSent) {
-                            res.status(500).send(
-                                "WEBZONE ER Studio is temporarily unavailable."
-                            );
-                        }
-                    }
-                });
+                if (!res.headersSent) {
+                    res.status(404).send(
+                        "WEBZONE ER Studio is unavailable."
+                    );
+                }
             }
         });
     }
 );
+
+/* ============================================================
+   HALLOWEEN STUDIO
+   ------------------------------------------------------------
+   STANDARD:
+   
+   /halloween/
+   /halloween/index.html
+   
+   Both resolve to:
+   
+   /halloween/index.html
+   ============================================================ */
 
 app.get(
     ["/halloween", "/halloween/"],
@@ -220,41 +220,38 @@ app.get(
         const halloweenIndex = path.join(
             __dirname,
             "halloween",
-            "WebZoneBW-ER.Studio.html"
+            "index.html"
         );
 
         res.sendFile(halloweenIndex, (error) => {
             if (error) {
-                const erIndex = path.join(
-                    __dirname,
-                    "er",
-                    "WebZoneBW-ER.Studio.html"
+                console.error(
+                    "[HALLOWEEN] Unable to load halloween/index.html:",
+                    error.message
                 );
 
-                res.sendFile(erIndex, (fallbackErr) => {
-                    if (fallbackErr) {
-                        console.error(
-                            "[HALLOWEEN] Unable to load studio:",
-                            fallbackErr.message
-                        );
-
-                        if (!res.headersSent) {
-                            res.status(500).send(
-                                "WEBZONE ER Studio is temporarily unavailable."
-                            );
-                        }
-                    }
-                });
+                if (!res.headersSent) {
+                    res.status(404).send(
+                        "WEBZONE Halloween Studio is unavailable."
+                    );
+                }
             }
         });
     }
 );
 
 /* ============================================================
-   WEBZONE ER & HALLOWEEN ASSET ROUTES
+   ER STATIC ASSETS
    ------------------------------------------------------------
-   Keeps the er and halloween folders accessible as dedicated
-   experiences while allowing their own CSS / JS / media files.
+   Everything inside /er is available using /er/...
+   
+   Examples:
+   
+   /er/index.html
+   /er/style.css
+   /er/script.js
+   /er/assets/...
+   /er/images/...
    ============================================================ */
 
 app.use(
@@ -263,10 +260,15 @@ app.use(
         path.join(__dirname, "er"),
         {
             extensions: ["html", "htm"],
+            index: "index.html",
             fallthrough: true
         }
     )
 );
+
+/* ============================================================
+   HALLOWEEN STATIC ASSETS
+   ============================================================ */
 
 app.use(
     "/halloween",
@@ -274,6 +276,7 @@ app.use(
         path.join(__dirname, "halloween"),
         {
             extensions: ["html", "htm"],
+            index: "index.html",
             fallthrough: true
         }
     )
@@ -297,27 +300,28 @@ app.get(
             "404.html"
         );
 
-        res.status(404).sendFile(errorPage, (error) => {
-            if (error) {
-                console.error(
-                    "[404] Unable to load 404 page:",
-                    error.message
-                );
-
-                if (!res.headersSent) {
-                    res.status(404).send(
-                        "WEBZONEBW — Page not found."
+        res.status(404).sendFile(
+            errorPage,
+            (error) => {
+                if (error) {
+                    console.error(
+                        "[404] Unable to load 404 page:",
+                        error.message
                     );
+
+                    if (!res.headersSent) {
+                        res.status(404).send(
+                            "WEBZONEBW — Page not found."
+                        );
+                    }
                 }
             }
-        });
+        );
     }
 );
 
 /* ============================================================
    API 404 HANDLER
-   ------------------------------------------------------------
-   Prevents API requests from accidentally receiving index.html.
    ============================================================ */
 
 app.use("/api", (req, res) => {
@@ -332,20 +336,24 @@ app.use("/api", (req, res) => {
 
 /* ============================================================
    CLIENT-SIDE ROUTING FALLBACK
-   ------------------------------------------------------------
-   Express 5 compatible.
-
-   Only GET / HEAD requests that reach this point are sent
-   to the main WEBZONEBW application.
    ============================================================ */
 
 app.use((req, res, next) => {
-    if (req.method !== "GET" && req.method !== "HEAD") {
+    if (
+        req.method !== "GET" &&
+        req.method !== "HEAD"
+    ) {
         return next();
     }
 
-    // Do not serve index.html for missing asset or API requests
-    if (req.path.startsWith("/api/") || req.path.startsWith("/assets/") || path.extname(req.path)) {
+    /*
+     * Never return index.html for missing assets.
+     */
+    if (
+        req.path.startsWith("/api/") ||
+        req.path.startsWith("/assets/") ||
+        path.extname(req.path)
+    ) {
         return res.status(404).send("Not Found");
     }
 
@@ -354,67 +362,84 @@ app.use((req, res, next) => {
         "index.html"
     );
 
-    res.sendFile(indexFile, (error) => {
-        if (error) {
-            next(error);
+    res.sendFile(
+        indexFile,
+        (error) => {
+            if (error) {
+                next(error);
+            }
         }
-    });
+    );
 });
 
 /* ============================================================
    GLOBAL ERROR HANDLER
    ============================================================ */
 
-app.use((error, req, res, next) => {
-    console.error(
-        "[WEBZONEBW ERROR]",
-        error
-    );
+app.use(
+    (error, req, res, next) => {
+        console.error(
+            "[WEBZONEBW ERROR]",
+            error
+        );
 
-    if (res.headersSent) {
-        return next(error);
+        if (res.headersSent) {
+            return next(error);
+        }
+
+        const statusCode =
+            error.status ||
+            error.statusCode ||
+            500;
+
+        if (
+            req.originalUrl.startsWith("/api")
+        ) {
+            return res
+                .status(statusCode)
+                .json({
+                    success: false,
+                    error:
+                        process.env.NODE_ENV ===
+                        "production"
+                            ? "Internal server error"
+                            : error.message,
+                    timestamp:
+                        new Date().toISOString()
+                });
+        }
+
+        return res
+            .status(statusCode)
+            .send(
+                "WEBZONEBW — Internal Server Error"
+            );
     }
-
-    const statusCode =
-        error.status ||
-        error.statusCode ||
-        500;
-
-    /* API error */
-    if (req.originalUrl.startsWith("/api")) {
-        return res.status(statusCode).json({
-            success: false,
-            error:
-                process.env.NODE_ENV === "production"
-                    ? "Internal server error"
-                    : error.message,
-            timestamp: new Date().toISOString()
-        });
-    }
-
-    /* Website error */
-    return res.status(statusCode).send(
-        "WEBZONEBW — Internal Server Error"
-    );
-});
+);
 
 /* ============================================================
    PROCESS ERROR HANDLING
    ============================================================ */
 
-process.on("uncaughtException", (error) => {
-    console.error(
-        "[FATAL] Uncaught Exception:",
-        error
-    );
-});
+process.on(
+    "uncaughtException",
+    (error) => {
+        console.error(
+            "[FATAL] Uncaught Exception:",
+            error
+        );
+    }
+);
 
-process.on("unhandledRejection", (reason) => {
-    console.error(
-        "[FATAL] Unhandled Promise Rejection:",
-        reason
-    );
-});
+process.on(
+    "unhandledRejection",
+    (reason) => {
+        console.error(
+            "[FATAL] Unhandled Promise Rejection:",
+            reason
+        );
+    }
+);
 
 /* ============================================================
    SERVER START
@@ -425,21 +450,67 @@ const server = app.listen(
     HOST,
     () => {
         console.log("");
-        console.log("================================================");
-        console.log(" WEBZONEBW SERVER");
-        console.log("================================================");
-        console.log(` Project   : ${PROJECT_NAME}`);
-        console.log(` Version   : ${SERVER_VERSION}`);
-        console.log(` Node.js   : ${process.version}`);
-        console.log(` Environment: ${process.env.NODE_ENV || "development"}`);
-        console.log(` Host      : ${HOST}`);
-        console.log(` Port      : ${PORT}`);
-        console.log(` Local     : http://localhost:${PORT}`);
-        console.log(` ER Studio : http://localhost:${PORT}/er`);
-        console.log(` Halloween : http://localhost:${PORT}/halloween`);
-        console.log(` Health    : http://localhost:${PORT}/api/health`);
-        console.log(` Status    : http://localhost:${PORT}/api/status`);
-        console.log("================================================");
+        console.log(
+            "================================================"
+        );
+        console.log(
+            " WEBZONEBW SERVER"
+        );
+        console.log(
+            "================================================"
+        );
+
+        console.log(
+            ` Project    : ${PROJECT_NAME}`
+        );
+
+        console.log(
+            ` Version    : ${SERVER_VERSION}`
+        );
+
+        console.log(
+            ` Node.js    : ${process.version}`
+        );
+
+        console.log(
+            ` Environment: ${
+                process.env.NODE_ENV ||
+                "development"
+            }`
+        );
+
+        console.log(
+            ` Host       : ${HOST}`
+        );
+
+        console.log(
+            ` Port       : ${PORT}`
+        );
+
+        console.log(
+            ` Local      : http://localhost:${PORT}`
+        );
+
+        console.log(
+            ` ER Studio  : http://localhost:${PORT}/er/`
+        );
+
+        console.log(
+            ` Halloween  : http://localhost:${PORT}/halloween/`
+        );
+
+        console.log(
+            ` Health     : http://localhost:${PORT}/api/health`
+        );
+
+        console.log(
+            ` Status     : http://localhost:${PORT}/api/status`
+        );
+
+        console.log(
+            "================================================"
+        );
+
         console.log("");
     }
 );
@@ -470,5 +541,12 @@ const shutdown = (signal) => {
     }, 10000).unref();
 };
 
-process.on("SIGINT", () => shutdown("SIGINT"));
-process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on(
+    "SIGINT",
+    () => shutdown("SIGINT")
+);
+
+process.on(
+    "SIGTERM",
+    () => shutdown("SIGTERM")
+);
