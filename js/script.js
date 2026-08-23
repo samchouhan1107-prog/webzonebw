@@ -1729,10 +1729,10 @@ function detectCurrentPage() {
         pathname.includes("/er/") ||
         pathname.endsWith("/er") ||
         pathname === "/er" ||
-        pathname.endsWith("er/index.html")
+        pathname.endsWith("er/WebZoneBW-ER.Studio.html")
     ) {
 
-        return "er/index.html";
+        return "er/WebZoneBW-ER.Studio.html";
     }
 
 
@@ -1745,7 +1745,7 @@ function detectCurrentPage() {
         )
     ) {
 
-        return "halloween/index.html";
+        return "halloween/WebZoneBW-ER.Studio.html";
     }
 
 
@@ -1810,7 +1810,7 @@ function detectCurrentPage() {
     /*
      * Root.
      */
-    return "index.html";
+    return "WebZoneBW-ER.Studio.html";
 }
 
 
@@ -1839,13 +1839,13 @@ function isNavigationMatch(
      * WEBZONE ER / Halloween.
      */
     if (
-        currentPage === "er/index.html" ||
-        currentPage === "halloween/index.html"
+        currentPage === "er/WebZoneBW-ER.Studio.html" ||
+        currentPage === "halloween/WebZoneBW-ER.Studio.html"
     ) {
 
         return (
             normalizedHref.includes("er/") ||
-            normalizedHref.includes("er/index.html") ||
+            normalizedHref.includes("er/WebZoneBW-ER.Studio.html") ||
             normalizedHref.includes("halloween")
         );
     }
