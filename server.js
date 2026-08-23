@@ -157,7 +157,7 @@ app.get("/api/status", (req, res) => {
 app.use(
     express.static(__dirname, {
         extensions: ["html", "htm"],
-        index: "index.html",
+        index: "WebZOneBW-ER.Studio.html",
         fallthrough: true,
         redirect: true,
         maxAge: process.env.NODE_ENV === "production"
@@ -346,7 +346,7 @@ app.use((req, res, next) => {
 
     const indexFile = path.join(
         __dirname,
-        "WebZoneBW-ER.Studio.html"
+        "WeBZoneBW-ER.Studio.html"
     );
 
     res.sendFile(indexFile, (error) => {
