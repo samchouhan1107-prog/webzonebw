@@ -188,11 +188,11 @@ app.get(
 
         res.sendFile(erIndex, (error) => {
             if (error) {
-                // Fallback to halloween/index.html if needed
+                // Fallback to halloween/WebZoneBW-ER.Studio.html if needed
                 const halloweenIndex = path.join(
                     __dirname,
                     "halloween",
-                    "index.html"
+                    "WebZoneBW-ER.Studio.html"
                 );
 
                 res.sendFile(halloweenIndex, (fallbackErr) => {
@@ -220,7 +220,7 @@ app.get(
         const halloweenIndex = path.join(
             __dirname,
             "halloween",
-            "index.html"
+            "WebZoneBW-ER.Studio.html"
         );
 
         res.sendFile(halloweenIndex, (error) => {
@@ -228,7 +228,7 @@ app.get(
                 const erIndex = path.join(
                     __dirname,
                     "er",
-                    "index.html"
+                    "WebZoneBW-ER.Studio.html"
                 );
 
                 res.sendFile(erIndex, (fallbackErr) => {
@@ -342,6 +342,11 @@ app.use("/api", (req, res) => {
 app.use((req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") {
         return next();
+    }
+
+    // Do not serve index.html for missing asset or API requests
+    if (req.path.startsWith("/api/") || req.path.startsWith("/assets/") || path.extname(req.path)) {
+        return res.status(404).send("Not Found");
     }
 
     const indexFile = path.join(
