@@ -995,7 +995,7 @@
                 </li>
 
                 <li>
-                    <a href="WebZoneBW-ER.Studio.html"
+                    <a href="index.html"
                        class="active er-nav-pill"
                        aria-current="page">
                         <span class="nav-icon" aria-hidden="true">🔮</span>
@@ -1178,6 +1178,11 @@
                         ER STUDIO
                     </span>
 
+                    <span class="sparkle-icon"
+                          aria-hidden="true">
+                        ✨
+                    </span>
+
                 </h1>
 
                 <p class="er-subtitle">
@@ -1254,17 +1259,24 @@
 
 
                     <!-- =================================================
-                         CAMERA STUDIO LIVE HUD PILL (PRO MINIMALIST HUD)
+                         MOBILE / TABLET FACE BIOMETRIC TELEMETRY BAR
                          ================================================= -->
-                    <div class="camera-studio-hud-pill"
+                    <div class="mobile-face-telemetry-bar"
                          id="mobileFaceTelemetryBar"
-                         title="Studio Camera Engine • Status"
+                         title="Biometric Face Engine Status • Tap to toggle Reticle HUD / Reset Lock"
                          role="status"
                          aria-live="polite">
-                        <span class="studio-status-dot scanning" id="faceChipDot"></span>
-                        <span class="studio-status-text" id="faceChipStatus">STUDIO LIVE</span>
-                        <span class="studio-status-badge" id="faceProximityMetric">1080p HD</span>
-                        <span class="studio-status-badge" id="faceLightingMetric" style="display:none;"></span>
+
+                        <div class="face-telemetry-chip" id="faceTelemetryChip">
+                            <span class="face-chip-dot scanning" id="faceChipDot"></span>
+                            <span class="face-chip-status" id="faceChipStatus">👤 Scanning Face...</span>
+                        </div>
+
+                        <div class="face-telemetry-chip-secondary" id="faceTelemetryChipSecondary">
+                            <span class="face-chip-metric" id="faceProximityMetric">🎯 Optimal Range</span>
+                            <span class="face-chip-metric" id="faceLightingMetric">⚡ Good Light</span>
+                        </div>
+
                     </div>
 
 
@@ -1317,9 +1329,9 @@
                         <button type="button"
                                 class="cam-vertical-btn active"
                                 id="autoHdBtnFloating"
-                                title="Studio Auto-HD Glow"
-                                aria-label="Auto HD Glow">
-                            <span>💡</span>
+                                title="AI Auto-HD Retouch &amp; Glow"
+                                aria-label="AI Glow Retouch">
+                            <span>✨</span>
                         </button>
 
                         <button type="button"
@@ -1419,11 +1431,8 @@
                                             </strong>
 
                                             Choose <strong>Allow</strong>
-                                            when Chrome asks for camera
-                                            permission. If the address bar
-                                            shows a camera with a red line,
-                                            click that icon and switch Camera
-                                            to <strong>Allow</strong>.
+                                            when your browser asks for camera
+                                            permission.
 
                                         </div>
 
@@ -1482,7 +1491,7 @@
                                 <button type="button"
                                         class="btn perm-action-btn"
                                         id="permDemoBtn">
-                                    🧪 Switch to Test Mode
+                                    ✨ Switch to Test Mode
                                 </button>
 
                                 <button type="button"
@@ -1535,26 +1544,68 @@
                             aria-label="Processed camera effects canvas">
                     </canvas>
 
+
                     <!-- =================================================
-                         CAMERA STUDIO PLACEHOLDER
+                         CAMERA PLACEHOLDER
                          ================================================= -->
 
                     <div id="cameraPlaceholder"
                          class="camera-placeholder">
 
-                        <div class="studio-viewfinder-graphic">
-                            📸
+                        <div class="placeholder-icon-wrap er-launch-icon-wrap">
+
+                            <div class="er-launch-orb"
+                                 id="erLaunchOrb"
+                                 aria-label="WEBZONEBW Extended Reality Halloween Studio"
+                                 role="img">
+
+                                <div class="er-orb-ring er-orb-ring-outer"></div>
+
+                                <div class="er-orb-ring er-orb-ring-middle"></div>
+
+                                <div class="er-orb-core">
+
+                                    <div class="er-orb-mark">
+
+                                        <span class="er-mark-eye left"></span>
+                                        <span class="er-mark-eye right"></span>
+                                        <span class="er-mark-smile"></span>
+
+                                    </div>
+
+                                    <div class="er-orb-scan"></div>
+
+                                </div>
+
+                                <span class="er-orb-particle particle-one"></span>
+                                <span class="er-orb-particle particle-two"></span>
+                                <span class="er-orb-particle particle-three"></span>
+                                <span class="er-orb-particle particle-four"></span>
+
+                            </div>
+
                         </div>
 
+
                         <h2 class="placeholder-title">
+
                             WebZoneBW-ER Studio
-                            <span class="launch-title-accent">Live</span>
+
+                            <span class="launch-title-accent">
+                                Ready
+                            </span>
+
                         </h2>
 
+
                         <p class="placeholder-desc">
-                            High-definition real-time visual lenses, face tracking AR,
-                            cinematic color grading, and editorial magazine overlays.
+
+                            Start your live front camera,
+                            upload a photo, or enter Test Mode
+                            to explore the interactive effects.
+
                         </p>
+
 
                         <div class="placeholder-btn-group">
 
@@ -1562,17 +1613,23 @@
                                     class="btn camera-btn-primary"
                                     id="startExperienceBtn"
                                     aria-label="Start Live Front Camera">
-                                📸 Start Studio Camera
+
+                                📸 Start Live Camera
+
                             </button>
+
 
                             <button type="button"
                                     class="btn"
                                     id="startDemoBtn"
                                     aria-label="Interactive Demo Mode">
-                                🧪 Test FX Mode
+
+                                ✨ Test Mode
+
                             </button>
 
                         </div>
+
 
                         <div class="er-launch-status"
                              id="erLaunchStatus"
@@ -1581,7 +1638,7 @@
                             <span class="er-status-dot"></span>
 
                             <span class="er-status-text">
-                                STUDIO ENGINE READY
+                                ER STUDIO READY
                             </span>
 
                         </div>
@@ -1622,7 +1679,7 @@
                     <div class="smart-inventory-header">
 
                         <div class="smart-inventory-status">
-                            <span class="smart-status-icon" id="smartStatusIcon">⚡</span>
+                            <span class="smart-status-icon" id="smartStatusIcon">✨</span>
                             <span class="smart-status-text" id="smartStatusText">
                                 Smart Adaptive: Ready
                             </span>
@@ -1678,7 +1735,7 @@
                                 class="smart-cat-btn"
                                 data-smart-cat="all"
                                 title="Browse all 30+ effects">
-                            🌟 All
+                            ✨ All
                         </button>
 
                     </div>
@@ -2000,7 +2057,7 @@
                             class="cat-pill"
                             data-cat="all"
                             title="Browse all filters">
-                        🌟 All
+                        ✨ All
                     </button>
 
                 </div>
@@ -2349,7 +2406,7 @@
                     <div class="how-to-step">
 
                         <div class="step-icon-circle">
-                            🎨
+                            ✨
                         </div>
 
                         <div class="step-desc-block">
