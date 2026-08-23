@@ -183,16 +183,16 @@ app.get(
         const erIndex = path.join(
             __dirname,
             "er",
-            "index.html"
+            "WebZoneBW-ER.Studio.html"
         );
 
         res.sendFile(erIndex, (error) => {
             if (error) {
-                // Fallback to halloween/index.html if needed
+                // Fallback to halloween/WebZoneBW-ER.Studio.html if needed
                 const halloweenIndex = path.join(
                     __dirname,
                     "halloween",
-                    "index.html"
+                    "WebZoneBW-ER.Studio.html"
                 );
 
                 res.sendFile(halloweenIndex, (fallbackErr) => {
@@ -220,7 +220,7 @@ app.get(
         const halloweenIndex = path.join(
             __dirname,
             "halloween",
-            "index.html"
+            "WebZoneBW-ER.Studio.html"
         );
 
         res.sendFile(halloweenIndex, (error) => {
@@ -228,7 +228,7 @@ app.get(
                 const erIndex = path.join(
                     __dirname,
                     "er",
-                    "index.html"
+                    "WebZoneBW-ER.Studio.html"
                 );
 
                 res.sendFile(erIndex, (fallbackErr) => {
@@ -346,7 +346,7 @@ app.use((req, res, next) => {
 
     const indexFile = path.join(
         __dirname,
-        "index.html"
+        "WebZoneBW-ER.Studio.html"
     );
 
     res.sendFile(indexFile, (error) => {
