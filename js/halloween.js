@@ -126,6 +126,59 @@ function initWebZoneERStudio() {
     let isDemoMode = false;
     let isCameraStarting = false;
 
+    // ==========================================================
+    // MOBILE / TABLET PERFORMANCE GUARD
+    // Keep the live camera smooth by separating the browser
+    // camera resolution from the effect-processing resolution.
+    // Full-resolution getImageData() on every frame can stall
+    // mobile GPUs and make the camera appear frozen.
+    // ==========================================================
+    const erPerf = {
+        frame: 0,
+        lastEnhance: 0,
+        lastFaceUpdate: 0,
+        processingMax: 960,
+        mobileMax: 640,
+        tabletMax: 800,
+        enhancementInterval: 8,
+        running: false
+    };
+
+    function isERMobile() {
+        return window.matchMedia && window.matchMedia("(max-width: 700px)").matches;
+    }
+
+    function isERTablet() {
+        return window.matchMedia && window.matchMedia("(min-width: 701px) and (max-width: 1100px)").matches;
+    }
+
+    function getERProcessingMax() {
+        if (isERMobile()) return erPerf.mobileMax;
+        if (isERTablet()) return erPerf.tabletMax;
+        return erPerf.processingMax;
+    }
+
+    function resizeProcessingCanvas(sourceW, sourceH) {
+        const sw = sourceW || 640;
+        const sh = sourceH || 480;
+        const maxSide = getERProcessingMax();
+        const scale = Math.min(1, maxSide / Math.max(sw, sh));
+        const nextW = Math.max(320, Math.round(sw * scale));
+        const nextH = Math.max(240, Math.round(sh * scale));
+
+        if (canvas.width !== nextW || canvas.height !== nextH) {
+            canvas.width = nextW;
+            canvas.height = nextH;
+        }
+    }
+
+    function setImmersiveCameraMode(active) {
+        document.documentElement.classList.toggle("webzonebw-er-camera-active", active);
+        if (document.body) {
+            document.body.classList.toggle("webzonebw-er-camera-active", active);
+        }
+    }
+
     let audioContext = null;
     let isAudioPlaying = false;
     let soundNodes = [];
@@ -986,6 +1039,34 @@ function initWebZoneERStudio() {
             desc:
                 "Swarm of nocturnal bats fluttering across the night sky"
         }
+,
+
+        {
+            id: "ai-background",
+            name: "AI Depth BG",
+            icon: "🧠",
+            category: "scene",
+            target: "scene",
+            desc: "Lightweight browser depth-style background separation for mobile and tablet"
+        },
+
+        {
+            id: "dollar-rain",
+            name: "Dollar Rain",
+            icon: "💵",
+            category: "scene",
+            target: "scene",
+            desc: "Animated dollar-note rain with WebZoneBW neon styling"
+        },
+
+        {
+            id: "celebrity-spotlight",
+            name: "Celebrity Spotlight",
+            icon: "⭐",
+            category: "face",
+            target: "face",
+            desc: "Stylized celebrity-inspired face frame; no identity or face-swap claim"
+        },
     ];
 
     /*
@@ -2092,6 +2173,39 @@ function initWebZoneERStudio() {
             }
         );
 
+    }
+
+    // ==========================================================
+    // MOBILE LENS TOUCH / POINTER CONTROLLER
+    // ==========================================================
+    if (snapLensTrack) {
+        snapLensTrack.style.touchAction = "pan-x";
+
+        let lensTouchX = 0;
+        let lensTouchY = 0;
+        let lensDragging = false;
+
+        snapLensTrack.addEventListener("pointerdown", (event) => {
+            lensTouchX = event.clientX;
+            lensTouchY = event.clientY;
+            lensDragging = false;
+            try { snapLensTrack.setPointerCapture(event.pointerId); } catch (_) {}
+        }, { passive: true });
+
+        snapLensTrack.addEventListener("pointermove", (event) => {
+            if (Math.abs(event.clientX - lensTouchX) > 12 || Math.abs(event.clientY - lensTouchY) > 12) {
+                lensDragging = true;
+            }
+        }, { passive: true });
+
+        snapLensTrack.addEventListener("pointerup", (event) => {
+            const dx = event.clientX - lensTouchX;
+            const dy = event.clientY - lensTouchY;
+            if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+                snapLensTrack.scrollBy({ left: dx < 0 ? 220 : -220, behavior: "smooth" });
+            }
+            lensDragging = false;
+        }, { passive: true });
     }
 
     // ==========================================================
@@ -3394,13 +3508,14 @@ function initWebZoneERStudio() {
         canvas.style.display =
             "block";
 
-        canvas.width =
-            video.videoWidth ||
-            640;
+        resizeProcessingCanvas(
+            video.videoWidth || 640,
+            video.videoHeight || 480
+        );
 
-        canvas.height =
-            video.videoHeight ||
-            480;
+        setImmersiveCameraMode(
+            isERMobile() || isERTablet()
+        );
 
         video.dataset.facingMode =
             isFacingUser
@@ -3671,11 +3786,7 @@ function initWebZoneERStudio() {
         canvas.style.display =
             "block";
 
-        canvas.width =
-            640;
-
-        canvas.height =
-            480;
+        resizeProcessingCanvas(640, 480);
 
         setHighlightStep(6);
 
@@ -3688,6 +3799,9 @@ function initWebZoneERStudio() {
     // ==========================================================
 
     function stopCameraFeed() {
+
+        erPerf.running = false;
+        setImmersiveCameraMode(false);
 
         if (mediaStream) {
 
@@ -4093,132 +4207,78 @@ function initWebZoneERStudio() {
     function startRenderLoop() {
 
         if (animFrameId) {
-            cancelAnimationFrame(
-                animFrameId
-            );
+            cancelAnimationFrame(animFrameId);
         }
 
+        erPerf.running = true;
+        erPerf.frame = 0;
+
         function render() {
+            if (!erPerf.running) return;
 
-            const w =
-                canvas.width;
+            const w = canvas.width || 640;
+            const h = canvas.height || 480;
+            const time = performance.now() * 0.001;
+            erPerf.frame += 1;
 
-            const h =
-                canvas.height;
-
-            const time =
-                performance.now() *
-                0.001;
-
-            updateFaceTracking();
-
-            // Base feed
+            // Face detection is intentionally decoupled from the
+            // paint loop. This prevents async detector work from
+            // competing with every camera frame.
             if (
-                studioMode ===
-                    "upload" &&
-                uploadedImage
+                erPerf.frame % (isERMobile() ? 4 : 2) === 0 &&
+                time * 1000 - erPerf.lastFaceUpdate > (isERMobile() ? 180 : 120)
             ) {
-
-                ctx.drawImage(
-                    uploadedImage,
-                    0,
-                    0,
-                    w,
-                    h
-                );
-
-            } else if (
-                isDemoMode
-            ) {
-
-                drawDemoBackground(
-                    ctx,
-                    w,
-                    h
-                );
-
-            } else if (
-                video.readyState >= 2
-            ) {
-
-                ctx.drawImage(
-                    video,
-                    0,
-                    0,
-                    w,
-                    h
-                );
-
+                erPerf.lastFaceUpdate = time * 1000;
+                updateFaceTracking();
             }
 
-            // Auto-HD
-            if (
+            // Base live feed
+            if (studioMode === "upload" && uploadedImage) {
+                ctx.drawImage(uploadedImage, 0, 0, w, h);
+            } else if (isDemoMode) {
+                drawDemoBackground(ctx, w, h);
+            } else if (video.readyState >= 2) {
+                ctx.drawImage(video, 0, 0, w, h);
+            }
+
+            // Auto-HD is deliberately throttled on phones/tablets.
+            // The old version performed a full-frame getImageData()
+            // on every RAF frame, which is the primary freeze risk.
+            const enhancementWanted =
                 isAutoHdEnabled &&
+                !isERMobile() &&
                 (
-                    currentFilter ===
-                        "cartoon" ||
-                    currentFilter ===
-                        "studiohd" ||
-                    currentFilter ===
-                        "cinematic" ||
-                    activeMagazine !==
-                        "none"
-                )
-            ) {
-
-                applyAutoQualityEnhancement(
-                    ctx,
-                    w,
-                    h
+                    currentFilter === "cartoon" ||
+                    currentFilter === "studiohd" ||
+                    currentFilter === "cinematic" ||
+                    activeMagazine !== "none"
                 );
 
+            if (enhancementWanted && erPerf.frame - erPerf.lastEnhance >= erPerf.enhancementInterval) {
+                erPerf.lastEnhance = erPerf.frame;
+                applyAutoQualityEnhancement(ctx, w, h);
             }
 
-            // Theme shader
-            applyArtThemeShader(
-                ctx,
-                w,
-                h,
-                currentFilter,
-                time
-            );
-
-            // Studio lighting
-            if (
-                isStudioLightEnabled
-            ) {
-
-                applyStudioVignette(
-                    ctx,
-                    w,
-                    h
-                );
-
+            // AI-style background depth can run at the normal paint rate
+            // because it uses the already-rendered frame rather than a
+            // second camera stream.
+            if (currentFilter === "ai-background") {
+                drawAIBackgroundDepth(ctx, w, h);
             }
 
-            // Face HUD
-            if (showFaceHud) {
+            applyArtThemeShader(ctx, w, h, currentFilter, time);
 
-                drawFaceHUD(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
+            if (isStudioLightEnabled) {
+                applyStudioVignette(ctx, w, h);
             }
 
-            animFrameId =
-                requestAnimationFrame(
-                    render
-                );
-
+            animFrameId = requestAnimationFrame(render);
         }
 
         render();
-
     }
-        // ==========================================================
+
+    // ==========================================================
     // FACE TRACKING ENGINE
     // ==========================================================
 
@@ -4340,9 +4400,12 @@ function initWebZoneERStudio() {
                          * state rather than presenting a fake
                          * biometric certainty to the user.
                          */
-                        faceDetectionConfidence =
-                            1;
+                        faceDetectionConfidence = 100;
+                        isFaceDetected = true;
+                        detectionMethod = "native";
 
+                    } else {
+                        isFaceDetected = false;
                     }
 
                 } catch (e) {
@@ -4361,36 +4424,44 @@ function initWebZoneERStudio() {
 
             } else {
 
-                /*
-                 * Graceful fallback when the browser does not
-                 * expose FaceDetector.
-                 *
-                 * This keeps the camera experience usable
-                 * instead of crashing the render loop.
-                 */
+                // Lightweight browser fallback for Safari/iOS and
+                // browsers that do not expose FaceDetector.
                 try {
+                    if (analysisCanvas && analysisCtx) {
+                        analysisCtx.drawImage(video, 0, 0, 48, 36);
+                        const pixels = analysisCtx.getImageData(0, 0, 48, 36).data;
+                        let skin = 0;
+                        let samples = 0;
 
-                    faceBox.targetX =
-                        0.5 +
-                        Math.sin(
-                            time * 0.8
-                        ) *
-                        0.012;
+                        for (let py = 4; py < 32; py += 2) {
+                            for (let px = 4; px < 44; px += 2) {
+                                const idx = (py * 48 + px) * 4;
+                                const r = pixels[idx];
+                                const g = pixels[idx + 1];
+                                const b = pixels[idx + 2];
+                                const max = Math.max(r, g, b);
+                                const min = Math.min(r, g, b);
+                                if (r > 70 && g > 35 && b > 20 && r > g * 1.08 && g > b * 1.05 && max - min > 18) skin++;
+                                samples++;
+                            }
+                        }
 
-                    faceBox.targetY =
-                        0.42 +
-                        Math.cos(
-                            time * 0.9
-                        ) *
-                        0.01;
+                        const ratio = skin / Math.max(1, samples);
+                        isFaceDetected = ratio > 0.14;
+                        detectionMethod = isFaceDetected ? "chrominance" : "scanning";
+                        faceDetectionConfidence = Math.max(0, Math.min(99, ratio * 220));
 
-                    faceBox.targetW =
-                        0.32;
-
-                    faceBox.targetH =
-                        0.44;
-
-                } catch (e) {}
+                        if (isFaceDetected) {
+                            faceBox.targetX = 0.5;
+                            faceBox.targetY = 0.42;
+                            faceBox.targetW = 0.32;
+                            faceBox.targetH = 0.44;
+                        }
+                    }
+                } catch (e) {
+                    isFaceDetected = false;
+                    detectionMethod = "scanning";
+                }
 
             }
 
@@ -4617,6 +4688,97 @@ function initWebZoneERStudio() {
 
         ctx.restore();
 
+    }
+
+    // ==========================================================
+    // LIGHTWEIGHT AI-STYLE BACKGROUND DEPTH
+    // ==========================================================
+    function drawAIBackgroundDepth(ctx, w, h) {
+        if (!isFaceDetected) return;
+
+        // Lightweight on-device depth styling. It uses the detected face
+        // box and a radial mask instead of running a heavyweight ML model
+        // every frame, keeping mobile/tablet camera playback smooth.
+        const cx = faceBox.x * w;
+        const cy = faceBox.y * h;
+        const radius = Math.max(w, h) * 0.58;
+
+        ctx.save();
+        const grad = ctx.createRadialGradient(cx, cy, radius * 0.22, cx, cy, radius);
+        grad.addColorStop(0, "rgba(5,5,7,0)");
+        grad.addColorStop(0.52, "rgba(5,5,7,.05)");
+        grad.addColorStop(0.78, "rgba(5,5,7,.28)");
+        grad.addColorStop(1, "rgba(5,5,7,.62)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = "rgba(56,189,248,.28)";
+        ctx.lineWidth = Math.max(1.5, w * 0.002);
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, faceBox.w * w * 0.62, faceBox.h * h * 0.68, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    // ==========================================================
+    // DOLLAR RAIN
+    // ==========================================================
+    function drawDollarRainEffect(ctx, w, h, time) {
+        ctx.save();
+        ctx.font = `700 ${Math.max(16, Math.min(34, w * 0.035))}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const count = isERMobile() ? 18 : 30;
+        for (let i = 0; i < count; i++) {
+            const x = ((i * 83.17) % 100) / 100 * w;
+            const speed = 0.05 + ((i * 17) % 9) * 0.008;
+            const y = ((time * speed + i * 0.071) % 1.25 - 0.12) * h;
+            const rot = Math.sin(time * 2 + i) * 0.35;
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rot);
+            ctx.globalAlpha = 0.45 + ((i * 13) % 5) * 0.1;
+            ctx.fillStyle = "#7dffb2";
+            ctx.shadowColor = "rgba(125,255,178,.8)";
+            ctx.shadowBlur = 8;
+            ctx.fillText("$", 0, 0);
+            ctx.restore();
+        }
+        ctx.restore();
+    }
+
+    // ==========================================================
+    // STYLIZED CELEBRITY-INSPIRED SPOTLIGHT
+    // ==========================================================
+    function drawCelebritySpotlight(ctx, w, h, time) {
+        const cx = faceBox.x * w;
+        const cy = faceBox.y * h;
+        const rx = Math.max(55, faceBox.w * w * 0.62);
+        const ry = Math.max(75, faceBox.h * h * 0.62);
+
+        ctx.save();
+        ctx.globalAlpha = 0.22;
+        const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rx, ry) * 1.5);
+        halo.addColorStop(0, "rgba(56,189,248,.65)");
+        halo.addColorStop(.55, "rgba(168,85,247,.25)");
+        halo.addColorStop(1, "transparent");
+        ctx.fillStyle = halo;
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1;
+
+        ctx.strokeStyle = "rgba(125,255,178,.9)";
+        ctx.lineWidth = Math.max(2, w * 0.004);
+        ctx.shadowColor = "rgba(125,255,178,.8)";
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx, ry, Math.sin(time) * 0.015, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.font = `700 ${Math.max(11, Math.min(18, w * 0.02))}px Orbitron, Arial, sans-serif`;
+        ctx.fillStyle = "rgba(255,255,255,.92)";
+        ctx.textAlign = "center";
+        ctx.fillText("CELEBRITY SPOTLIGHT • WEBZONEBW", cx, Math.max(18, cy - ry - 14));
+        ctx.restore();
     }
 
     // ==========================================================
@@ -4969,6 +5131,18 @@ function initWebZoneERStudio() {
                     h,
                     time
                 );
+
+                break;
+
+            case "dollar-rain":
+
+                drawDollarRainEffect(ctx, w, h, time);
+
+                break;
+
+            case "celebrity-spotlight":
+
+                drawCelebritySpotlight(ctx, w, h, time);
 
                 break;
 
