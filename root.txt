@@ -1,90 +1,198 @@
+```text
 WEBZONEBW/
 │
 ├── index.html
-│   └── Main homepage / Dashboard
+│   └── Main homepage / professional dashboard
 │
 ├── about.html
 │   └── Personal profile, education, experience, skills & career objective
 │
 ├── projects.html
-│   └── Portfolio projects, technical work & future projects
+│   └── Portfolio projects, technical work, experiments & future projects
 │
 ├── resume.html
-│   └── Professional resume page + PDF view/download
+│   └── Professional resume page with PDF viewing/download
 │
 ├── blog.html
-│   └── WebZoneBW1107 technical blog introduction & links
+│   └── WebZoneBW technical blog introduction & article links
 │
 ├── contact.html
-│   └── Contact information, professional profiles & contact form
+│   └── Contact information, professional profiles & contact functionality
 │
 ├── privacy.html
-│   └── Privacy Policy — data, cookies, Analytics & advertising information
+│   └── Privacy Policy — data, cookies, analytics & advertising information
 │
 ├── terms.html
 │   └── Terms & Conditions for using WebZoneBW
 │
 ├── disclaimer.html
-│   └── Disclaimer — educational content, projects, external links & advertising
+│   └── Disclaimer — educational content, projects, external services & advertising
 │
 ├── robots.txt
-│   └── Search-engine crawler instructions + sitemap location
+│   └── Search-engine crawler instructions & sitemap location
 │
 ├── sitemap.xml
-│   └── Search-engine sitemap containing public WEBZONEBW pages
+│   └── Sitemap containing publicly available WebZoneBW pages
 │
 ├── llms.txt
-│   └── AI-readable description of WEBZONEBW, content areas, projects & featured articles
+│   └── AI-readable description of WebZoneBW, content areas & projects
 │
 ├── ads.txt
 │   └── Google AdSense authorized seller declaration
 │
+├── CNAME
+│   └── Custom domain configuration for webzonebw.in
+│
+├── README.md
+│   └── Project documentation, architecture, features & development notes
+│
+├── package.json
+│   └── Local development dependencies & server configuration
+│
+├── start-webzonebw.bat
+│   └── Windows local-development server launcher
+│
 ├── schema/
 │   │
 │   ├── organization.json
-│   │   └── WEBZONEBW Organization entity — name, URL, logo & description
+│   │   └── WEBZONEBW Organization structured-data definition
 │   │
 │   ├── website.json
-│   │   └── WEBZONEBW WebSite entity — website identity & publisher relationship
+│   │   └── WEBZONEBW WebSite structured-data definition
 │   │
 │   └── article.json
-│       └── Article structured data for featured technical content
+│       └── Article structured-data definition for technical content
 │
 ├── seo/
 │   │
 │   ├── meta.html
-│   │   └── Title, meta description, canonical & crawler metadata reference
+│   │   └── SEO title, descriptions, canonical & crawler metadata reference
 │   │
 │   ├── open-graph.html
-│   │   └── Social sharing title, description & image metadata
+│   │   └── Social-sharing title, description & image metadata reference
 │   │
 │   └── structured-data.html
 │       └── JSON-LD implementation reference for Organization, WebSite & Articles
 │
 ├── css/
-│   └── style.css
-│       └── Global website design, layout, responsive/mobile styling & themes
+│   │
+│   ├── style.css
+│   │   └── Global WebZoneBW design system & core styling
+│   │
+│   ├── dashboard.css
+│   │   └── Homepage/dashboard-specific styling
+│   │
+│   ├── sidebar.css
+│   │   └── Navigation/sidebar styling
+│   │
+│   ├── responsive.css
+│   │   └── Desktop, tablet & mobile responsive behavior
+│   │
+│   └── animations.css
+│       └── UI transitions & animation effects
 │
 ├── js/
-│   └── script.js
-│       └── Theme toggle, UI interactions & frontend functionality
+│   │
+│   ├── script.js
+│   │   └── Core frontend functionality & UI interactions
+│   │
+│   ├── soundbox-audio-map.js
+│   │   └── Sound Box audio path/track mapping
+│   │
+│   └── audio-manifest.json
+│       └── Machine-readable Sound Box audio asset manifest
 │
-└── assets/
+├── assets/
+│   │
+│   ├── logo.png
+│   │   └── WebZoneBW primary website logo
+│   │
+│   ├── favicon.ico
+│   │   └── Browser tab favicon
+│   │
+│   ├── images/
+│   │   │
+│   │   ├── og-image.png
+│   │   │   └── Default social/AI preview image
+│   │   │
+│   │   └── webzonebw-cover.png
+│   │       └── Main WebZoneBW brand/visual cover
+│   │
+│   ├── resume/
+│   │   └── Sameer_Chouhan.pdf
+│   │       └── Downloadable professional resume
+│   │
+│   └── audio/
+│       │
+│       ├── phase-01-beatlemania-dawn.mp3
+│       │   └── WEBZONEBW Sound Box Phase 01
+│       │
+│       ├── phase-02-stereo-groove.mp3
+│       │   └── WEBZONEBW Sound Box Phase 02
+│       │
+│       ├── phase-03-psychedelic-orbit.mp3
+│       │   └── WEBZONEBW Sound Box Phase 03
+│       │
+│       ├── phase-04-studio-mosaic.mp3
+│       │   └── WEBZONEBW Sound Box Phase 04
+│       │
+│       ├── phase-05-roots-and-return.mp3
+│       │   └── WEBZONEBW Sound Box Phase 05
+│       │
+│       └── phase-06-final-horizon.mp3
+│           └── WEBZONEBW Sound Box Phase 06
+│
+├── er/
+│   │
+│   └── index.html
+│       └── WEBZONEBW-ER experimental camera / extended-reality experience
+│
+└── halloween/
     │
-    ├── logo.png
-    │   └── WebZoneBW website logo
-    │
-    ├── favicon.ico
-    │   └── Browser tab favicon
-    │
-    ├── images/
-    │   │
-    │   ├── og-image.png
-    │   │   └── Default social/AI preview image
-    │   │
-    │   └── webzonebw-cover.png
-    │       └── Main WEBZONEBW visual/brand cover
-    │
-    └── resume/
-        └── Sameer_Chouhan.pdf
-            └── Downloadable professional resume
+    └── index.html
+        └── Seasonal Halloween experience — DEVELOPMENT / UNPUBLISHED
+```
+
+### Current deployment status
+
+```text
+PUBLIC / PRODUCTION
+────────────────────────────────────────
+index.html             ✅ LIVE
+about.html             ✅ LIVE
+projects.html          ✅ LIVE
+resume.html             ✅ LIVE
+blog.html              ✅ LIVE
+contact.html           ✅ LIVE
+privacy.html           ✅ LIVE
+terms.html             ✅ LIVE
+disclaimer.html        ✅ LIVE
+er/index.html          ✅ LIVE
+
+
+SEASONAL / UNPUBLISHED
+────────────────────────────────────────
+halloween/index.html   🔒 NOT PUBLICLY LAUNCHED
+                       🎃 Development / testing only
+
+
+SUPPORT / SEO
+────────────────────────────────────────
+robots.txt             ✅
+sitemap.xml            ✅
+llms.txt               ✅
+ads.txt                ✅
+CNAME                  ✅
+schema/                ✅
+seo/                   ✅
+
+
+DEVELOPMENT
+────────────────────────────────────────
+package.json           🛠 Local development
+start-webzonebw.bat    🛠 Windows launcher
+```
+
+**Important:** I would **not** describe `halloween/` as a live website section in the README anymore. It is a seasonal project being prepared privately, while `/er/` is currently the active experimental experience.
+
+Also, your original tree only listed `css/style.css` and `js/script.js`, but the structure we've been working toward includes the additional modular CSS/audio files. If those files **do not physically exist in your current folder**, don't create empty entries just for documentation—the README should ultimately mirror the actual repository.
