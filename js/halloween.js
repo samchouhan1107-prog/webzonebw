@@ -2298,28 +2298,90 @@ function initWebZoneERStudio() {
                                 )
                             ) {
 
-                                card.style.display =
-                                    "flex";
-
-                            } else {
-
-                                card.style.display =
-                                    "none";
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
-        }
-    );
-
-    // ==========================================================
-    // SEARCH EFFECTS
-    // ==========================================================
+                                                            card.style.display =
+                                                                "flex";
+                                                        } else {
+                                                            card.style.display =
+                                                                "none";
+                                                        }
+                                                    }
+                                                );
+                                                // Keep the smart ribbon and lens carousel in sync
+                                                activeSmartCategory = cat;
+                                                smartCatBtns.forEach(
+                                                    b => b.classList.toggle(
+                                                        "active",
+                                                        b.dataset.smartCat === cat
+                                                    )
+                                                );
+                                                renderSmartLensTrack();
+                                                updateSmartInventoryUI();
+                                            }
+                                        );
+                                    }
+                                );
+                                // ==========================================================
+                                // SMART CATEGORY RIBBON TABS (DESKTOP + MOBILE)
+                                // Previously these tabs had no click handler, so the
+                                // category selection never changed. This wires them to the
+                                // dynamic lens carousel and inventory UI.
+                                // ==========================================================
+                                const smartCatBtns =
+                                    document.querySelectorAll(
+                                        ".smart-cat-btn"
+                                    );
+                                function applySmartCategory(cat) {
+                                    if (!cat) {
+                                        return;
+                                    }
+                                    activeSmartCategory = cat;
+                                    smartCatBtns.forEach(
+                                        btn => btn.classList.toggle(
+                                            "active",
+                                            btn.dataset.smartCat === cat
+                                        )
+                                    );
+                                    // Keep the effects-panel pills in sync
+                                    catPills.forEach(
+                                        pill => pill.classList.toggle(
+                                            "active",
+                                            pill.dataset.cat === cat
+                                        )
+                                    );
+                                    // Filter the effects panel cards
+                                    effectCards.forEach(
+                                        card => {
+                                            const cardCats =
+                                                (
+                                                    card.dataset.cat ||
+                                                    ""
+                                                ).toLowerCase();
+                                            const show =
+                                                cat === "all" ||
+                                                cardCats.includes(cat);
+                                            card.style.display =
+                                                show ? "flex" : "none";
+                                        }
+                                    );
+                                    renderSmartLensTrack();
+                                    updateSmartInventoryUI();
+                                }
+                                smartCatBtns.forEach(
+                                    btn => {
+                                        btn.addEventListener(
+                                            "click",
+                                            () => applySmartCategory(
+                                                btn.dataset.smartCat
+                                            )
+                                        );
+                                    }
+                                );
+                                // Initial render so the carousel and badges are live
+                                renderSmartLensTrack();
+                                updateSmartInventoryUI();
+                                // ==========================================================
+                                // SEARCH EFFECTS
+                                // ==========================================================
 
     const effectsSearchInput =
         document.getElementById(
@@ -3346,7 +3408,7 @@ function initWebZoneERStudio() {
         );
 
     }
-    
+
     function waitForCameraRelease(ms) {
         return new Promise((resolve) => {
             window.setTimeout(resolve, ms);
