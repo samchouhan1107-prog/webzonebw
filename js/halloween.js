@@ -2346,6 +2346,73 @@ function initWebZoneERStudio() {
     }
 
     // ==========================================================
+    // MOBILE SIDEBAR
+    // ==========================================================
+
+    const sidebarToggleBtn =
+        document.getElementById(
+            "sidebarToggleBtn"
+        );
+
+    const mainSidebar =
+        document.getElementById(
+            "mainSidebar"
+        );
+
+    function closeSidebar() {
+        if (!mainSidebar) return;
+        mainSidebar.classList.remove("open");
+        document.body.classList.remove("sidebar-open");
+        const bd = document.getElementById("sidebarBackdrop");
+        if (bd) bd.remove();
+    }
+
+    function openSidebar() {
+        if (!mainSidebar) return;
+        let bd = document.getElementById("sidebarBackdrop");
+        if (!bd) {
+            bd = document.createElement("div");
+            bd.id = "sidebarBackdrop";
+            bd.className = "sidebar-backdrop";
+            bd.setAttribute("aria-hidden", "true");
+            document.body.appendChild(bd);
+            bd.addEventListener("click", closeSidebar);
+        }
+        mainSidebar.classList.add("open");
+        document.body.classList.add("sidebar-open");
+    }
+
+    function toggleSidebar() {
+        if (!mainSidebar) return;
+        if (mainSidebar.classList.contains("open")) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    }
+
+    if (sidebarToggleBtn && mainSidebar) {
+        sidebarToggleBtn.addEventListener("click", toggleSidebar);
+    }
+
+    /* Close sidebar when a nav link is tapped */
+    if (mainSidebar) {
+        mainSidebar.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", closeSidebar);
+        });
+    }
+
+    /* Close sidebar on Escape */
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+            if (mainSidebar && mainSidebar.classList.contains("open")) {
+                closeSidebar();
+                e.stopPropagation();
+            }
+        }
+    });
+
+    // ==========================================================
     // EFFECTS DRAWER
     // ==========================================================
 
@@ -2379,14 +2446,20 @@ function initWebZoneERStudio() {
             window.innerWidth <= 1199
         ) {
 
+            /* Close sidebar first if open */
+            closeSidebar();
+
             const isShown =
                 effectsPanel.style.display ===
                 "flex";
 
-            effectsPanel.style.display =
-                isShown
-                    ? "none"
-                    : "flex";
+            if (isShown) {
+                effectsPanel.style.display = "none";
+                effectsPanel.classList.remove("mobile-overlay");
+            } else {
+                effectsPanel.style.display = "flex";
+                effectsPanel.classList.add("mobile-overlay");
+            }
 
         } else {
 
@@ -2427,38 +2500,9 @@ function initWebZoneERStudio() {
                 ) {
                     effectsPanel.style.display =
                         "none";
+                    effectsPanel.classList.remove("mobile-overlay");
                 }
 
-            }
-        );
-
-    }
-
-    // ==========================================================
-    // MOBILE SIDEBAR
-    // ==========================================================
-
-    const sidebarToggleBtn =
-        document.getElementById(
-            "sidebarToggleBtn"
-        );
-
-    const mainSidebar =
-        document.getElementById(
-            "mainSidebar"
-        );
-
-    if (
-        sidebarToggleBtn &&
-        mainSidebar
-    ) {
-
-        sidebarToggleBtn.addEventListener(
-            "click",
-            () => {
-                mainSidebar.classList.toggle(
-                    "open"
-                );
             }
         );
 

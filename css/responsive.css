@@ -27,6 +27,18 @@
         left: 0;
     }
 
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 1190;
+        -webkit-tap-highlight-color: transparent;
+    }
+
     .mobile-nav-bar,
     .er-mobile-nav-bar {
         display: flex;
@@ -331,6 +343,22 @@
     body.sidebar-open .sidebar,
     body.sidebar-open .er-sidebar {
         left: 0;
+    }
+
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 1190;
+    }
+
+    .er-layout-container {
+        display: flex;
+        flex-direction: column;
     }
 
     .mobile-nav-bar,

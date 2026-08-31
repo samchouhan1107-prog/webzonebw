@@ -1657,6 +1657,46 @@ main section + section {
         transform: translateX(0);
     }
 
+    /* Sidebar backdrop overlay */
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 1190;
+        -webkit-tap-highlight-color: transparent;
+        animation: sidebarBackdropIn 0.25s ease;
+    }
+
+    @keyframes sidebarBackdropIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    /* ER effects panel as bottom-sheet overlay on mobile */
+    .er-effects-panel.mobile-overlay {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        max-height: 85vh;
+        z-index: 1180;
+        border-radius: 20px 20px 0 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        animation: effectsPanelSlideUp 0.3s ease;
+    }
+
+    @keyframes effectsPanelSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
     .logo {
         display: flex;
         align-items: center;
@@ -7995,6 +8035,11 @@ body.light-mode .global-dock-link:hover {
         max-width: min(500px, 92vw);
     }
 
+    .er-layout-container {
+        display: flex;
+        flex-direction: column;
+    }
+
     .er-sidebar {
         position: fixed;
         top: 0;
@@ -8022,6 +8067,36 @@ body.light-mode .global-dock-link:hover {
 
     .camera-viewport-frame {
         aspect-ratio: 4 / 3;
+    }
+
+    /* Effects panel hidden by default on mobile, shown as overlay via JS */
+    .er-effects-panel {
+        display: none !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 82vh;
+        z-index: 1180;
+        border-radius: 20px 20px 0 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .er-effects-panel.mobile-overlay {
+        display: flex !important;
+        animation: effectsPanelSlideUp 0.3s ease;
+    }
+
+    /* Hide the bottom "View All" section on mobile since it opens overlay */
+    .panel-bottom-action {
+        display: none;
+    }
+
+    /* Hide the category pills ribbon below camera on mobile — it's redundant */
+    .smart-inventory-ribbon {
+        display: none;
     }
 
     .how-to-steps-grid {
