@@ -179,6 +179,17 @@ function initWebZoneERStudio() {
         }
     }
 
+    function isElementInViewport(el) {
+        if (!el) return true;
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= -rect.height &&
+            rect.left >= -rect.width &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + rect.height &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth) + rect.width
+        );
+    }
+
     let audioContext = null;
     let isAudioPlaying = false;
     let soundNodes = [];
@@ -1621,11 +1632,13 @@ function initWebZoneERStudio() {
                     );
                 }
 
-                bubble.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center"
-                });
+                if (!isElementInViewport(bubble)) {
+                    bubble.scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center"
+                    });
+                }
 
             } else {
 
@@ -1663,11 +1676,13 @@ function initWebZoneERStudio() {
                     "active"
                 );
 
-                card.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "nearest"
-                });
+                if (!isElementInViewport(card)) {
+                    card.scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "nearest"
+                    });
+                }
 
             } else {
 
@@ -2034,6 +2049,13 @@ function initWebZoneERStudio() {
 
             if (e.key === "ArrowRight") {
                 slideNext();
+            }
+
+            if (
+                (e.key === "r" || e.key === "R") &&
+                randomFilterBtn
+            ) {
+                randomFilterBtn.click();
             }
 
         }
@@ -2981,32 +3003,6 @@ function initWebZoneERStudio() {
     }
 
     // ==========================================================
-    // KEYBOARD RANDOM FILTER
-    // ==========================================================
-
-    window.addEventListener(
-        "keydown",
-        (e) => {
-
-            if (
-                (
-                    e.key === "r" ||
-                    e.key === "R"
-                ) &&
-                document.activeElement.tagName !==
-                    "INPUT"
-            ) {
-
-                if (randomFilterBtn) {
-                    randomFilterBtn.click();
-                }
-
-            }
-
-        }
-    );
-
-    // ==========================================================
     // FILTER BUTTONS
     // ==========================================================
 
@@ -3863,6 +3859,12 @@ function initWebZoneERStudio() {
     function stopCameraFeed() {
 
         erPerf.running = false;
+
+        if (animFrameId) {
+            cancelAnimationFrame(animFrameId);
+            animFrameId = null;
+        }
+
         setImmersiveCameraMode(false);
 
         if (mediaStream) {
@@ -3889,6 +3891,10 @@ function initWebZoneERStudio() {
 
         isDemoMode =
             false;
+
+        isFaceDetected = false;
+        detectionMethod = "scanning";
+        faceDetectionConfidence = 0;
 
     }
 
