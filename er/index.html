@@ -135,6 +135,14 @@
 
 
     <!-- =====================================================
+         RESPONSIVE LAYOUT
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="../css/responsive.css">
+
+
+    <!-- =====================================================
          WEBZONEBW-ER LAYOUT SAFETY
          ===================================================== -->
 
@@ -173,6 +181,86 @@
         overflow-x: hidden;
         overscroll-behavior-x: none;
     }
+
+
+        /* =====================================================
+           VOLCANIC ATMOSPHERIC BACKGROUND
+           ===================================================== */
+
+        .er-studio-body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 80%, rgba(194, 65, 12, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 20% 60%, rgba(154, 52, 18, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 80% 40%, rgba(124, 45, 18, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #030712 0%, #070913 40%, #0d0a08 100%);
+        }
+
+        .er-studio-body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+
+        /* Floating embers layer */
+        .er-volcanic-embers {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .er-volcanic-embers .ember {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: rgba(255, 107, 26, 0.6);
+            box-shadow: 0 0 6px rgba(255, 107, 26, 0.4);
+            animation: erEmberFloat linear infinite;
+            opacity: 0;
+        }
+
+        .er-volcanic-embers .ember:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
+        .er-volcanic-embers .ember:nth-child(2) { left: 25%; animation-duration: 15s; animation-delay: 2s; width: 3px; height: 3px; }
+        .er-volcanic-embers .ember:nth-child(3) { left: 40%; animation-duration: 10s; animation-delay: 4s; }
+        .er-volcanic-embers .ember:nth-child(4) { left: 60%; animation-duration: 14s; animation-delay: 1s; }
+        .er-volcanic-embers .ember:nth-child(5) { left: 75%; animation-duration: 11s; animation-delay: 3s; width: 2.5px; height: 2.5px; }
+        .er-volcanic-embers .ember:nth-child(6) { left: 90%; animation-duration: 13s; animation-delay: 5s; }
+        .er-volcanic-embers .ember:nth-child(7) { left: 50%; animation-duration: 16s; animation-delay: 6s; }
+        .er-volcanic-embers .ember:nth-child(8) { left: 15%; animation-duration: 9s; animation-delay: 7s; width: 1.5px; height: 1.5px; }
+
+        @keyframes erEmberFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-20vh) translateX(30px);
+                opacity: 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .er-volcanic-embers .ember {
+                animation: none;
+                display: none;
+            }
+        }
 
 
         /* =====================================================
@@ -1200,6 +1288,20 @@
 
 
 <body class="er-studio-body">
+
+<!-- =====================================================
+     VOLCANIC ATMOSPHERIC EMBERS
+     ===================================================== -->
+<div class="er-volcanic-embers" aria-hidden="true">
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+    <span class="ember"></span>
+</div>
 
 <div class="er-layout-container">
 
