@@ -1,0 +1,59 @@
+
+================================================
+ WEBZONEBW SERVER
+================================================
+ Project    : WEBZONEBW
+ Version    : 2.2.0
+ Node.js    : v24.18.0
+ Environment: production
+ Host       : 0.0.0.0
+ Port       : 3000
+ Local      : http://localhost:3000
+ ER Studio  : http://localhost:3000/er/
+ Halloween  : http://localhost:3000/halloween/
+ Health     : http://localhost:3000/api/health
+ API Status : http://localhost:3000/api/status
+ Web Status : http://localhost:3000/status
+================================================
+
+[WEBZONEBW] GET / 200 14ms
+[WEBZONEBW] GET /assets/favicon/favicon.png 200 2ms
+[WEBZONEBW] GET /css/style.css 200 2ms
+[WEBZONEBW] GET /lab.html 200 1ms
+[WEBZONEBW] GET /index.html 200 2ms
+[WEBZONEBW] GET /er/index.html 200 2ms
+[WEBZONEBW] GET /projects.html 200 2ms
+[WEBZONEBW] GET /resume.html 200 2ms
+[WEBZONEBW] GET /blog.html 200 2ms
+[WEBZONEBW] GET /about.html 200 1ms
+[WEBZONEBW] GET /contact.html 200 2ms
+[WEBZONEBW] GET /assets/resume/Sameer_Chouhan.pdf 200 1ms
+[WEBZONEBW] GET /privacy.html 200 1ms
+[WEBZONEBW] GET /terms.html 200 2ms
+[WEBZONEBW] GET /disclaimer.html 200 2ms
+[WEBZONEBW] GET /index.html 200 2ms
+[WEBZONEBW] GET /about.html 200 2ms
+[WEBZONEBW] GET /soundbox.html 200 2ms
+[WEBZONEBW] GET /blog.html 200 2ms
+[WEBZONEBW] GET /contact.html 200 2ms
+[WEBZONEBW] GET /master.html 200 2ms
+[WEBZONEBW] GET /privacy.html 200 2ms
+[WEBZONEBW] GET /terms.html 200 2ms
+[WEBZONEBW] GET /disclaimer.html 200 3ms
+[WEBZONEBW] GET /projects.html 200 2ms
+[WEBZONEBW] GET /resume.html 200 2ms
+[WEBZONEBW] GET /soundbox.html 200 2ms
+[WEBZONEBW] GET /lab.html 200 1ms
+[WEBZONEBW] GET /css/responsive.css 200 1ms
+[WEBZONEBW] GET /er/ 200 2ms
+[WEBZONEBW] GET /assets/favicon.ico.ico 200 1ms
+[WEBZONEBW] GET / 200 21ms
+[WEBZONEBW] GET /css/style.css 200 4ms
+[WEBZONEBW] GET /assets/logo.png 200 1ms
+[WEBZONEBW] GET /js/beatles-playlists.js 200 2ms
+[WEBZONEBW] GET /js/script.js 200 2ms
+[WEBZONEBW] GET /lab.html 200 3ms
+[WEBZONEBW] GET /css/style.css 200 2ms
+[WEBZONEBW] GET /css/responsive.css 200 6ms
+[WEBZONEBW] GET /js/script.js 200 1ms
+[WEBZONEBW] GET /assets/favicon/favicon.png 200 1ms
