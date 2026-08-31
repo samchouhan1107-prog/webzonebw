@@ -55,8 +55,8 @@ function initWebZoneERStudio() {
     const video = document.getElementById("cameraVideo");
     const canvas = document.getElementById("cameraCanvas");
     const placeholder = document.getElementById("cameraPlaceholder");
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const tabBtns = document.querySelectorAll(".category-tab-btn");
+    const filterBtns = [];
+    const tabBtns = [];
     const snapshotModal = document.getElementById("snapshotModal");
     const snapshotImg = document.getElementById("snapshotImg");
     const downloadLink = document.getElementById("downloadSnapshotBtn");
@@ -551,52 +551,7 @@ function initWebZoneERStudio() {
         });
     }
 
-    // Category Tabs
-    if (tabBtns.length > 0) {
-
-        tabBtns.forEach(tab => {
-
-            tab.addEventListener("click", () => {
-
-                tabBtns.forEach(t =>
-                    t.classList.remove("active")
-                );
-
-                tab.classList.add("active");
-
-                const cat =
-                    tab.dataset.category;
-
-                // Show magazine panel if category is magazine
-                if (magPanel) {
-
-                    if (cat === "magazine") {
-                        magPanel.classList.add("show");
-                    } else {
-                        magPanel.classList.remove("show");
-                    }
-                }
-
-                filterBtns.forEach(btn => {
-
-                    if (
-                        cat === "all" ||
-                        btn.dataset.category === cat
-                    ) {
-                        btn.style.display =
-                            "inline-flex";
-                    } else {
-                        btn.style.display =
-                            "none";
-                    }
-
-                });
-
-            });
-
-        });
-
-    }
+    // Category Tabs (legacy .category-tab-btn removed — handled by catPills below)
 
     // Magazine Template Switcher
     if (magItemBtns.length > 0) {
@@ -1208,7 +1163,7 @@ function initWebZoneERStudio() {
         const currentList =
             getActiveInventoryFilters();
 
-        const displayLimit = 12;
+        const displayLimit = 7;
 
         const visibleLenses =
             currentList.slice(
@@ -2278,132 +2233,73 @@ function initWebZoneERStudio() {
     // CATEGORY FILTER PILLS
     // ==========================================================
 
-    const catPills =
-        document.querySelectorAll(
-            ".cat-pill"
-        );
+    const catPills = document.querySelectorAll(".cat-pill");
 
-    catPills.forEach(
-        (pill) => {
+    catPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+            applySmartCategory(pill.dataset.cat);
+        });
+    });
 
-            pill.addEventListener(
-                "click",
-                () => {
+    // ==========================================================
+    // SMART CATEGORY RIBBON TABS (DESKTOP + MOBILE)
+    // ==========================================================
 
-                    catPills.forEach(
-                        (p) =>
-                            p.classList.remove(
-                                "active"
-                            )
-                    );
+    const smartCatBtns = document.querySelectorAll(".smart-cat-btn");
 
-                    pill.classList.add(
-                        "active"
-                    );
+    function applySmartCategory(cat) {
+        if (!cat) return;
 
-                    const cat =
-                        pill.dataset.cat;
+        activeSmartCategory = cat;
 
-                    effectCards.forEach(
-                        (card) => {
+        // Sync smart ribbon tabs
+        smartCatBtns.forEach((btn) => {
+            btn.classList.toggle(
+                "active",
+                btn.dataset.smartCat === cat
+            );
+        });
 
-                            const cardCats =
-                                (
-                                    card.dataset.cat ||
-                                    ""
-                                ).toLowerCase();
+        // Sync effects-panel pills
+        catPills.forEach((pill) => {
+            pill.classList.toggle(
+                "active",
+                pill.dataset.cat === cat
+            );
+        });
 
-                            if (
-                                cat === "all" ||
-                                cardCats.includes(
-                                    cat
-                                )
-                            ) {
+        // Filter the effects panel cards
+        effectCards.forEach((card) => {
+            const cardCats = (
+                card.dataset.cat || ""
+            ).toLowerCase();
 
-                                                            card.style.display =
-                                                                "flex";
-                                                        } else {
-                                                            card.style.display =
-                                                                "none";
-                                                        }
-                                                    }
-                                                );
-                                                // Keep the smart ribbon and lens carousel in sync
-                                                activeSmartCategory = cat;
-                                                smartCatBtns.forEach(
-                                                    b => b.classList.toggle(
-                                                        "active",
-                                                        b.dataset.smartCat === cat
-                                                    )
-                                                );
-                                                renderSmartLensTrack();
-                                                updateSmartInventoryUI();
-                                            }
-                                        );
-                                    }
-                                );
-                                // ==========================================================
-                                // SMART CATEGORY RIBBON TABS (DESKTOP + MOBILE)
-                                // Previously these tabs had no click handler, so the
-                                // category selection never changed. This wires them to the
-                                // dynamic lens carousel and inventory UI.
-                                // ==========================================================
-                                const smartCatBtns =
-                                    document.querySelectorAll(
-                                        ".smart-cat-btn"
-                                    );
-                                function applySmartCategory(cat) {
-                                    if (!cat) {
-                                        return;
-                                    }
-                                    activeSmartCategory = cat;
-                                    smartCatBtns.forEach(
-                                        btn => btn.classList.toggle(
-                                            "active",
-                                            btn.dataset.smartCat === cat
-                                        )
-                                    );
-                                    // Keep the effects-panel pills in sync
-                                    catPills.forEach(
-                                        pill => pill.classList.toggle(
-                                            "active",
-                                            pill.dataset.cat === cat
-                                        )
-                                    );
-                                    // Filter the effects panel cards
-                                    effectCards.forEach(
-                                        card => {
-                                            const cardCats =
-                                                (
-                                                    card.dataset.cat ||
-                                                    ""
-                                                ).toLowerCase();
-                                            const show =
-                                                cat === "all" ||
-                                                cardCats.includes(cat);
-                                            card.style.display =
-                                                show ? "flex" : "none";
-                                        }
-                                    );
-                                    renderSmartLensTrack();
-                                    updateSmartInventoryUI();
-                                }
-                                smartCatBtns.forEach(
-                                    btn => {
-                                        btn.addEventListener(
-                                            "click",
-                                            () => applySmartCategory(
-                                                btn.dataset.smartCat
-                                            )
-                                        );
-                                    }
-                                );
-                                // Initial render so the carousel and badges are live
-                                renderSmartLensTrack();
-                                updateSmartInventoryUI();
-                                // ==========================================================
-                                // SEARCH EFFECTS
-                                // ==========================================================
+            // "smart" and "all" show every card
+            const show =
+                cat === "all" ||
+                cat === "smart" ||
+                cardCats.includes(cat);
+
+            card.style.display = show ? "flex" : "none";
+        });
+
+        renderSmartLensTrack();
+        updateSmartInventoryUI();
+    }
+
+    smartCatBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            applySmartCategory(btn.dataset.smartCat);
+        });
+    });
+
+    // Initial render so the carousel and badges are live
+    renderSmartLensTrack();
+    updateSmartInventoryUI();
+
+    // ==========================================================
+    // SEARCH EFFECTS
+    // ==========================================================
 
     const effectsSearchInput =
         document.getElementById(
@@ -2424,8 +2320,31 @@ function initWebZoneERStudio() {
                         .toLowerCase()
                         .trim();
 
+                // If search is empty, restore category filter
+                if (!query) {
+                    applySmartCategory(activeSmartCategory);
+                    return;
+                }
+
                 effectCards.forEach(
                     (card) => {
+
+                        const cardCats =
+                            (
+                                card.dataset.cat ||
+                                ""
+                            ).toLowerCase();
+
+                        // First check category match
+                        const categoryMatch =
+                            activeSmartCategory === "all" ||
+                            activeSmartCategory === "smart" ||
+                            cardCats.includes(activeSmartCategory);
+
+                        if (!categoryMatch) {
+                            card.style.display = "none";
+                            return;
+                        }
 
                         const name =
                             card.querySelector(
@@ -2441,13 +2360,9 @@ function initWebZoneERStudio() {
                             ).toLowerCase();
 
                         if (
-                            !query ||
-                            name.includes(
-                                query
-                            ) ||
-                            filter.includes(
-                                query
-                            )
+                            name.includes(query) ||
+                            filter.includes(query) ||
+                            cardCats.includes(query)
                         ) {
 
                             card.style.display =
@@ -2870,29 +2785,7 @@ function initWebZoneERStudio() {
             "click",
             () => {
 
-                catPills.forEach(
-                    p =>
-                        p.classList.remove(
-                            "active"
-                        )
-                );
-
-                const allPill =
-                    document.querySelector(
-                        '.cat-pill[data-cat="all"]'
-                    );
-
-                if (allPill) {
-                    allPill.classList.add(
-                        "active"
-                    );
-                }
-
-                effectCards.forEach(
-                    c =>
-                        c.style.display =
-                            "flex"
-                );
+                applySmartCategory("all");
 
                 showSwipeToast(
                     "⊞",
