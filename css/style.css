@@ -200,8 +200,8 @@ body.light-mode {
 
     --surface: #ffffff;
     --surface-card: #ffffff;
-    --surface-card-hover: #f8fafc;
-    --surface-card-active: #f1f5f9;
+    --surface-card-hover: #f3f3f3;
+    --surface-card-active: #e8e8e8;
     --surface-elevated: #ffffff;
     --surface-card-elevated: #ffffff;
     --surface-input: #ffffff;
@@ -209,28 +209,28 @@ body.light-mode {
     --surface-badge: rgba(2, 132, 199, 0.08);
     --surface-badge-gold: rgba(212, 175, 55, 0.14);
     --surface-modal: #ffffff;
-    --surface-highlight: rgba(2, 132, 199, 0.08);
-    --surface-tooltip: #0f172a;
+    --surface-highlight: #e0e0e0;
+    --surface-tooltip: #1a1a1a;
 
-    --text-main: #1e293b;
-    --text-heading: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-    --text-dim: #94a3b8;
+    --text-main: #333333;
+    --text-heading: #1a1a1a;
+    --text-secondary: #555555;
+    --text-muted: #6b6b6b;
+    --text-dim: #999999;
     --text-link: #0284c7;
     --text-link-hover: #0369a1;
 
-    --border: #e2e8f0;
-    --border-light: #cbd5e1;
-    --border-color: #e2e8f0;
-    --border-color-light: #cbd5e1;
-    --border-color-hover: #94a3b8;
+    --border: #d5d5d5;
+    --border-light: #c0c0c0;
+    --border-color: #d5d5d5;
+    --border-color-light: #c0c0c0;
+    --border-color-hover: #999999;
     --border-color-focus: #0284c7;
     --border-color-gold: rgba(212, 175, 55, 0.45);
 
-    --accent: #0284c7;
-    --accent-soft: rgba(2, 132, 199, 0.1);
-    --accent-hover: #0369a1;
+    --accent: #0066cc;
+    --accent-soft: rgba(0, 102, 204, 0.1);
+    --accent-hover: #0052a3;
 
     --success: #059669;
     --success-soft: rgba(5, 150, 105, 0.1);
@@ -244,6 +244,122 @@ body.light-mode {
     --shadow-elevated: 0 6px 20px rgba(15, 23, 42, 0.08);
     --shadow-glow-cyan: 0 0 14px rgba(2, 132, 199, 0.16);
 }
+
+/* ==========================================================
+   LIGHT MODE — Comprehensive Section Overrides
+   Ensures every section reads clearly on the light canvas
+   ========================================================== */
+body.light-mode .user-avatar-wrap {
+    background: #e0e0e0;
+    border-color: #c0c0c0;
+}
+body.light-mode .user-online-dot {
+    border-color: #ffffff;
+}
+body.light-mode .user-info strong {
+    color: var(--text-heading);
+}
+body.light-mode .user-info span {
+    color: var(--accent);
+}
+body.light-mode .toggle-slider {
+    background-color: #c0c0c0;
+}
+body.light-mode .sidebar-theme-toggle-row {
+    background: var(--surface-highlight);
+    border-color: var(--border-color);
+}
+body.light-mode .sidebar-close-btn {
+    background: var(--surface-highlight);
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+body.light-mode .sidebar-nav::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+}
+
+/* --- Section text readability --- */
+body.light-mode .featured-card p,
+body.light-mode .quick-info p,
+body.light-mode .quick-info li,
+body.light-mode .projects p,
+body.light-mode .projects li,
+body.light-mode .contact-section p,
+body.light-mode .legal-page p,
+body.light-mode .legal-page li {
+    color: var(--text-secondary);
+}
+
+/* --- Section headings --- */
+body.light-mode .legal-page h2 {
+    color: var(--text-heading);
+}
+body.light-mode .legal-page h3 {
+    color: var(--text-main);
+}
+body.light-mode .legal-page strong {
+    color: var(--text-heading);
+}
+
+/* --- Legal page links & hr --- */
+body.light-mode .legal-page a {
+    color: var(--accent);
+}
+body.light-mode .legal-page a:hover {
+    color: var(--accent-hover);
+}
+body.light-mode .legal-page hr {
+    border-top-color: var(--border-color);
+}
+
+/* --- Social links --- */
+body.light-mode .social-links a {
+    background: var(--surface-card);
+    color: var(--text-main);
+    border-color: var(--border-color-light);
+}
+body.light-mode .social-links a:hover {
+    background: var(--surface-highlight);
+    border-color: var(--border-color-hover);
+}
+
+/* --- Form labels --- */
+body.light-mode form label {
+    color: var(--text-main);
+}
+
+/* --- Skills --- */
+body.light-mode .skill-title {
+    color: var(--text-heading);
+}
+body.light-mode .skill-fill {
+    background: var(--accent);
+}
+
+/* --- Footer --- */
+body.light-mode .footer-content p {
+    color: var(--text-muted);
+}
+body.light-mode .footer-links a {
+    color: var(--text-muted);
+}
+body.light-mode .footer-links a:hover {
+    color: var(--text-heading);
+}
+
+/* --- Header badge --- */
+body.light-mode .header-badge {
+    color: #059669;
+}
+
+/* --- Quick info borders --- */
+body.light-mode .quick-info li {
+    border-bottom-color: var(--border-color);
+}
+body.light-mode .projects li {
+    border-bottom-color: var(--border-color);
+}
+
 
 /* Global Eye-Smoothness Transition Rules */
 html,

@@ -72,24 +72,18 @@ WebZoneBW/
 │
 ├── css/
 │   ├── style.css
-│   ├── dashboard.css
-│   ├── sidebar.css
-│   ├── responsive.css
-│   └── animations.css
+│   └── responsive.css
 │
 ├── js/
 │   ├── ...
 │
 ├── assets/
 │   ├── logo.png
-│   ├── icons/
+│   ├── favicon/
+│   ├── resume/
+│   │   └── Sameer_Chouhan.pdf
 │   └── audio/
-│       ├── phase-01-beatlemania-dawn.mp3
-│       ├── phase-02-stereo-groove.mp3
-│       ├── phase-03-psychedelic-orbit.mp3
-│       ├── phase-04-studio-mosaic.mp3
-│       ├── phase-05-roots-and-return.mp3
-│       └── phase-06-final-horizon.mp3
+│       └── The Beatles - Come Together.mp3
 │
 └── README.md
 ```

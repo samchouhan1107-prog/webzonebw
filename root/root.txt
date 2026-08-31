@@ -79,44 +79,39 @@ WEBZONEBW/
 │   ├── style.css
 │   │   └── Global WebZoneBW design system & core styling
 │   │
-│   ├── dashboard.css
-│   │   └── Homepage/dashboard-specific styling
-│   │
-│   ├── sidebar.css
-│   │   └── Navigation/sidebar styling
-│   │
-│   ├── responsive.css
-│   │   └── Desktop, tablet & mobile responsive behavior
-│   │
-│   └── animations.css
-│       └── UI transitions & animation effects
+│   └── responsive.css
+│       └── Desktop, tablet & mobile responsive behavior
 │
 ├── js/
 │   │
 │   ├── script.js
 │   │   └── Core frontend functionality & UI interactions
 │   │
-│   ├── soundbox-audio-map.js
-│   │   └── Sound Box audio path/track mapping
+│   ├── halloween.js
+│   │   └── ER Studio camera filter engine
 │   │
-│   └── audio-manifest.json
-│       └── Machine-readable Sound Box audio asset manifest
+│   ├── webzonebw-player.js
+│   │   └── Soundbox music player engine
+│   │
+│   ├── beatles-playlists.js
+│   │   └── Beatles playlist data & mappings
+│   │
+│   └── soundbox-engine.js
+│       └── Soundbox audio engine utilities
 │
 ├── assets/
 │   │
 │   ├── logo.png
 │   │   └── WebZoneBW primary website logo
 │   │
-│   ├── favicon.ico
-│   │   └── Browser tab favicon
+│   ├── favicon/
+│   │   └── favicon.png
 │   │
-│   ├── images/
-│   │   │
-│   │   ├── og-image.png
-│   │   │   └── Default social/AI preview image
-│   │   │
-│   │   └── webzonebw-cover.png
-│   │       └── Main WebZoneBW brand/visual cover
+│   ├── resume/
+│   │   └── Sameer_Chouhan.pdf
+│   │
+│   └── audio/
+│       └── The Beatles - Come Together.mp3
 │   │
 │   ├── resume/
 │   │   └── Sameer_Chouhan.pdf
