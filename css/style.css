@@ -5057,14 +5057,121 @@ body.light-mode .cam-floating-badge {
 
 /* Circular Lens Carousel Bar */
 .er-lens-carousel-wrap {
-    overflow-x: auto;
-    padding: 8px 4px 14px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 8px 0;
 }
 
 .er-lens-carousel-wrap::-webkit-scrollbar {
     display: none;
+}
+
+/* Carousel Arrow Buttons */
+.carousel-arrow-btn {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid #334155;
+    color: #e2e8f0;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+    touch-action: manipulation;
+    line-height: 1;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.er-lens-carousel-wrap:hover .carousel-arrow-btn,
+.er-lens-carousel-wrap:focus-within .carousel-arrow-btn,
+.carousel-arrow-btn:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.carousel-arrow-btn:hover {
+    background: #1e293b;
+    border-color: #475569;
+    color: #ffffff;
+}
+
+.carousel-arrow-btn:active {
+    transform: scale(0.9);
+}
+
+.carousel-arrow-btn.carousel-arrow-left {
+    margin-right: 4px;
+}
+
+.carousel-arrow-btn.carousel-arrow-right {
+    margin-left: 4px;
+}
+
+/* Hide arrows when not needed (handled by JS via .has-overflow class) */
+.er-lens-carousel-wrap:not(.has-overflow) .carousel-arrow-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Always show arrows on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .er-lens-carousel-wrap .carousel-arrow-btn {
+        opacity: 0.7;
+        pointer-events: auto;
+    }
+}
+
+/* Playlist filter pills arrow wrapper */
+.playlist-filter-scroll-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.playlist-filter-scroll-wrap .er-lens-track,
+.playlist-filter-pills {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    display: flex;
+    gap: 8px;
+    scroll-behavior: smooth;
+    padding: 2px 0;
+}
+
+.playlist-filter-pills::-webkit-scrollbar {
+    display: none;
+}
+
+/* Smart inventory category pills arrow wrapper */
+.smart-category-scroll-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.smart-category-scroll-wrap .smart-inventory-category-pills {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
 }
 
 .er-lens-track {
@@ -8139,5 +8246,64 @@ body {
         width: 32px;
         height: 32px;
         font-size: 14px;
+    }
+}
+
+/* ==========================================================
+   SOUNDBOX — PLAYLIST FILTER SCROLL WRAPPER
+========================================================== */
+
+.playlist-filter-scroll-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.playlist-filter-scroll-wrap .playlist-filter-pills {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    display: flex;
+    gap: 8px;
+    scroll-behavior: smooth;
+    padding: 2px 0;
+}
+
+.playlist-filter-scroll-wrap .playlist-filter-pills::-webkit-scrollbar {
+    display: none;
+}
+
+/* Playlist arrow theming for light/dark mode */
+.playlist-filter-scroll-wrap .carousel-arrow-btn {
+    background: var(--surface-card);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.playlist-filter-scroll-wrap .carousel-arrow-btn:hover {
+    background: var(--surface-card-hover);
+    border-color: var(--border-color-hover);
+    color: var(--text-heading);
+}
+
+body.light-mode .playlist-filter-scroll-wrap .carousel-arrow-btn {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+body.light-mode .playlist-filter-scroll-wrap .carousel-arrow-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .playlist-filter-scroll-wrap .carousel-arrow-btn {
+        opacity: 0.7;
+        pointer-events: auto;
     }
 }

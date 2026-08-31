@@ -672,15 +672,14 @@ function initWebZoneERStudio() {
     // & Realistic AR effects with category and target metadata
     const allFilterConfigs = [
 
-        // 👤 FACE AR LENSES
+        // 👤 FACE AR LENSES (verified working)
         {
             id: "sunglasses",
             name: "Aviators",
             icon: "🕶️",
             category: "face",
             target: "face",
-            desc:
-                "Ray-Ban aviator sunglasses with reflective lens shimmer"
+            desc: "Ray-Ban aviator sunglasses with reflective lens shimmer"
         },
 
         {
@@ -689,88 +688,7 @@ function initWebZoneERStudio() {
             icon: "👑",
             category: "face",
             target: "face",
-            desc:
-                "Floating neon gold angelic halo with sacred geometry"
-        },
-
-        {
-            id: "kawaii",
-            name: "Kawaii Blush",
-            icon: "🌸",
-            category: "face",
-            target: "face",
-            desc:
-                "Anime peach cheek blush and floating cherry petals"
-        },
-
-        {
-            id: "cyberwarrior",
-            name: "Cyber Paint",
-            icon: "⚡",
-            category: "face",
-            target: "face",
-            desc:
-                "Cyan warpaint cheek glyphs with electric pulse"
-        },
-
-        {
-            id: "cyberhud",
-            name: "Cyborg HUD",
-            icon: "🤖",
-            category: "face",
-            target: "face",
-            desc:
-                "Sci-fi holographic biometric targeting reticle"
-        },
-
-        {
-            id: "studiohd",
-            name: "Portrait HD",
-            icon: "📸",
-            category: "face",
-            target: "face",
-            desc:
-                "Studio portrait lighting with unsharp mask clarity"
-        },
-
-        {
-            id: "icefrost",
-            name: "Diamond Dust",
-            icon: "❄️",
-            category: "face",
-            target: "face",
-            desc:
-                "Sparkling crystal prism shimmer across facial contours"
-        },
-
-        {
-            id: "cartoon",
-            name: "Anime Cel",
-            icon: "🎨",
-            category: "face",
-            target: "face",
-            desc:
-                "High-contrast comic outline with vibrant cel shading"
-        },
-
-        {
-            id: "cybersec",
-            name: "Bio-Scan",
-            icon: "🔐",
-            category: "face",
-            target: "face",
-            desc:
-                "Facial recognition grid with cryptographic hex telemetry"
-        },
-
-        {
-            id: "superhero",
-            name: "Hero Mask",
-            icon: "🦸",
-            category: "face",
-            target: "face",
-            desc:
-                "Comic vigilante sleek carbon-fiber face mask"
+            desc: "Floating neon gold angelic halo with sacred geometry"
         },
 
         {
@@ -779,29 +697,26 @@ function initWebZoneERStudio() {
             icon: "🌟",
             category: "face",
             target: "face",
-            desc:
-                "Warm California sunset rim light and golden skin glow"
+            desc: "Warm California sunset rim light and golden skin glow"
         },
 
-        // 🌍 SCENE & ATMOSPHERIC SHADERS
         {
-            id: "matrix",
-            name: "Matrix Rain",
-            icon: "🟢",
-            category: "scene",
-            target: "scene",
-            desc:
-                "Cascading digital green kanji code matrix stream"
+            id: "cartoon",
+            name: "Anime Cel",
+            icon: "🎨",
+            category: "face",
+            target: "face",
+            desc: "High-contrast comic outline with vibrant cel shading"
         },
 
+        // 🌍 SCENE & ATMOSPHERIC SHADERS (verified working)
         {
             id: "noir",
             name: "Leica Noir",
             icon: "🖤",
             category: "scene",
             target: "scene",
-            desc:
-                "High-contrast silver gelatin black-and-white 35mm film"
+            desc: "High-contrast silver gelatin black-and-white 35mm film"
         },
 
         {
@@ -810,8 +725,7 @@ function initWebZoneERStudio() {
             icon: "🎞️",
             category: "scene",
             target: "scene",
-            desc:
-                "Warm Kodak Portra analog grain with soft vignette"
+            desc: "Warm Kodak Portra analog grain with soft vignette"
         },
 
         {
@@ -820,8 +734,7 @@ function initWebZoneERStudio() {
             icon: "🎬",
             category: "scene",
             target: "scene",
-            desc:
-                "Anamorphic widescreen teal & orange color grade"
+            desc: "Anamorphic widescreen teal & orange color grade"
         },
 
         {
@@ -830,18 +743,7 @@ function initWebZoneERStudio() {
             icon: "⚡",
             category: "scene",
             target: "scene",
-            desc:
-                "RGB channel chromatic aberration and scanline shifts"
-        },
-
-        {
-            id: "popart",
-            name: "Pop Comic",
-            icon: "🖌️",
-            category: "scene",
-            target: "scene",
-            desc:
-                "Roy Lichtenstein halftone pop-art print dots"
+            desc: "RGB channel chromatic aberration and scanline shifts"
         },
 
         {
@@ -850,18 +752,7 @@ function initWebZoneERStudio() {
             icon: "🚀",
             category: "scene",
             target: "scene",
-            desc:
-                "Starlight nebula cosmic aura with drifting stardust"
-        },
-
-        {
-            id: "hologram",
-            name: "Holo-Grid",
-            icon: "🌐",
-            category: "scene",
-            target: "scene",
-            desc:
-                "Blue wireframe laser scanline perspective grid"
+            desc: "Starlight nebula cosmic aura with drifting stardust"
         },
 
         {
@@ -870,168 +761,7 @@ function initWebZoneERStudio() {
             icon: "💡",
             category: "scene",
             target: "scene",
-            desc:
-                "Vibrant synthwave neon magenta & cyan wash"
-        },
-
-        {
-            id: "webzonebw",
-            name: "Signature BW",
-            icon: "🌐",
-            category: "scene",
-            target: "scene",
-            desc:
-                "WebZonebw official high-definition monochrome"
-        },
-
-        // 📰 EDITORIAL MAGAZINE COVERS
-        {
-            id: "time",
-            name: "TIME Mag",
-            icon: "🟥",
-            category: "magazine",
-            target: "magazine",
-            desc:
-                "Iconic red border Person of the Year cover"
-        },
-
-        {
-            id: "vogue",
-            name: "VOGUE",
-            icon: "🕶️",
-            category: "magazine",
-            target: "magazine",
-            desc:
-                "Haute couture high-fashion editorial title"
-        },
-
-        {
-            id: "forbes",
-            name: "Forbes",
-            icon: "💼",
-            category: "magazine",
-            target: "magazine",
-            desc:
-                "World's Top Innovators billionaire edition"
-        },
-
-        {
-            id: "wired",
-            name: "WIRED",
-            icon: "🚀",
-            category: "magazine",
-            target: "magazine",
-            desc:
-                "Cutting-edge Silicon Valley tech cover"
-        },
-
-        {
-            id: "cyber",
-            name: "CyberMag",
-            icon: "🎮",
-            category: "magazine",
-            target: "magazine",
-            desc:
-                "Year 2077 Cyberpunk gaming publication"
-        },
-
-        // 🎃 HALLOWEEN & SPOOKY MASKS
-        {
-            id: "skeleton",
-            name: "Bio-Skull",
-            icon: "💀",
-            category: "halloween",
-            target: "face",
-            desc:
-                "Glowing bio-luminescent skull eye sockets & jaw"
-        },
-
-        {
-            id: "pumpkin",
-            name: "Jack Lantern",
-            icon: "🎃",
-            category: "halloween",
-            target: "face",
-            desc:
-                "Carved flaming jack-o'-lantern mask overlay"
-        },
-
-        {
-            id: "ghost",
-            name: "Phantom",
-            icon: "👻",
-            category: "halloween",
-            target: "scene",
-            desc:
-                "Ethereal translucent floating specters"
-        },
-
-        {
-            id: "zombie",
-            name: "Zombie FX",
-            icon: "🧟",
-            category: "halloween",
-            target: "face",
-            desc:
-                "Radioactive undead green toxic infection"
-        },
-
-        {
-            id: "vampire",
-            name: "Vampire",
-            icon: "🧛",
-            category: "halloween",
-            target: "face",
-            desc:
-                "Crimson blood vignette and razor vampire fangs"
-        },
-
-        {
-            id: "spider",
-            name: "Spider Web",
-            icon: "🕷️",
-            category: "halloween",
-            target: "scene",
-            desc:
-                "Creepy crawling arachnid webs on screen edges"
-        },
-
-        {
-            id: "bats",
-            name: "Night Bats",
-            icon: "🦇",
-            category: "halloween",
-            target: "scene",
-            desc:
-                "Swarm of nocturnal bats fluttering across the night sky"
-        }
-,
-
-        {
-            id: "ai-background",
-            name: "AI Depth BG",
-            icon: "🧠",
-            category: "scene",
-            target: "scene",
-            desc: "Lightweight browser depth-style background separation for mobile and tablet"
-        },
-
-        {
-            id: "dollar-rain",
-            name: "Dollar Rain",
-            icon: "💵",
-            category: "scene",
-            target: "scene",
-            desc: "Animated dollar-note rain with WebZoneBW neon styling"
-        },
-
-        {
-            id: "celebrity-spotlight",
-            name: "Celebrity Spotlight",
-            icon: "⭐",
-            category: "face",
-            target: "face",
-            desc: "Stylized celebrity-inspired face frame; no identity or face-swap claim"
+            desc: "Vibrant synthwave neon magenta & cyan wash"
         },
     ];
 
@@ -2184,6 +1914,52 @@ function initWebZoneERStudio() {
             lensDragging = false;
         }, { passive: true });
     }
+
+    // ==========================================================
+    // CAROUSEL ARROW NAVIGATION
+    // ==========================================================
+
+    const lensArrowLeft = document.getElementById("lensArrowLeft");
+    const lensArrowRight = document.getElementById("lensArrowRight");
+
+    function setupCarouselArrows(track, arrowLeft, arrowRight, scrollAmount) {
+        if (!track || !arrowLeft || !arrowRight) return;
+
+        function updateArrowVisibility() {
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            const atStart = track.scrollLeft <= 4;
+            const atEnd = track.scrollLeft >= maxScroll - 4;
+            const hasOverflow = maxScroll > 8;
+
+            const wrap = track.closest(".er-lens-carousel-wrap") || track.parentElement;
+            if (wrap) {
+                wrap.classList.toggle("has-overflow", hasOverflow);
+            }
+
+            arrowLeft.style.opacity = atStart ? "0" : "0.85";
+            arrowLeft.style.pointerEvents = atStart ? "none" : "auto";
+            arrowRight.style.opacity = atEnd ? "0" : "0.85";
+            arrowRight.style.pointerEvents = atEnd ? "none" : "auto";
+        }
+
+        arrowLeft.addEventListener("click", () => {
+            track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+            setTimeout(updateArrowVisibility, 350);
+        });
+
+        arrowRight.addEventListener("click", () => {
+            track.scrollBy({ left: scrollAmount, behavior: "smooth" });
+            setTimeout(updateArrowVisibility, 350);
+        });
+
+        track.addEventListener("scroll", updateArrowVisibility, { passive: true });
+
+        updateArrowVisibility();
+        setTimeout(updateArrowVisibility, 500);
+        window.addEventListener("resize", updateArrowVisibility);
+    }
+
+    setupCarouselArrows(snapLensTrack, lensArrowLeft, lensArrowRight, 200);
 
     // ==========================================================
     // EFFECT CARDS
@@ -4848,20 +4624,7 @@ function initWebZoneERStudio() {
 
                 break;
 
-            // ==================================================
-            // WEBZONEBW SIGNATURE
-            // ==================================================
-
-            case "webzonebw":
-
-                drawWebZoneBWTheme(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
+            // (webzonebw removed — drawWebZoneBWTheme not implemented)
 
             // ==================================================
             // ART / PORTRAIT
@@ -4926,60 +4689,7 @@ function initWebZoneERStudio() {
             // TECHNOLOGY
             // ==================================================
 
-            case "cyberhud":
-
-                drawCyberHUDTheme(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "matrix":
-
-                drawMatrixTheme(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "devops":
-
-                drawDevOpsTheme(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "cybersec":
-
-                drawCyberSecTheme(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "hologram":
-
-                drawHologramTheme(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
+            // (cyberhud, matrix, devops, cybersec, hologram removed — functions not implemented)
 
             case "glitch":
 
@@ -5003,97 +4713,7 @@ function initWebZoneERStudio() {
 
                 break;
 
-            case "superhero":
-
-                drawSuperhero(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            // ==================================================
-            // HALLOWEEN
-            // ==================================================
-
-            case "pumpkin":
-
-                drawPumpkinEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "ghost":
-
-                drawGhostEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "zombie":
-
-                drawZombieEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "vampire":
-
-                drawVampireEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "skeleton":
-
-                drawSkeletonEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "spider":
-
-                drawSpiderEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
-
-            case "bats":
-
-                drawBatsEffect(
-                    ctx,
-                    w,
-                    h,
-                    time
-                );
-
-                break;
+            // (superhero, pumpkin, ghost, zombie, vampire, skeleton, spider, bats removed — functions not implemented)
 
             case "dollar-rain":
 

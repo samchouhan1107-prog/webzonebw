@@ -1072,12 +1072,16 @@
 
         .er-lens-carousel-wrap {
             width: 100%;
+            display: flex;
+            align-items: center;
             overflow: hidden;
             touch-action: pan-x;
             -webkit-overflow-scrolling: touch;
         }
 
         .er-lens-track {
+            flex: 1;
+            min-width: 0;
             display: flex;
             gap: 10px;
             overflow-x: auto;
@@ -1086,7 +1090,7 @@
             scrollbar-width: none;
             overscroll-behavior-x: contain;
             touch-action: pan-x;
-            padding: 6px 10px 10px;
+            padding: 6px 4px 10px;
         }
 
         .er-lens-track::-webkit-scrollbar { display: none; }
@@ -2180,28 +2184,8 @@
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="magazine"
-                                title="Magazine Editorial Covers">
-
-                            📰 Magazines
-
-                        </button>
-
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="halloween"
-                                title="Halloween Special Masks">
-
-                            🎃 Halloween
-
-                        </button>
-
-
-                        <button type="button"
-                                class="smart-cat-btn"
                                 data-smart-cat="all"
-                                title="Browse all 30+ effects">
+                                title="Browse all 10 effects">
 
                             ✨ All
 
@@ -2213,10 +2197,20 @@
 
 
                 <!-- =================================================
-                     LENS CAROUSEL
+                     LENS CAROUSEL WITH ARROW NAVIGATION
                      ================================================= -->
 
                 <div class="er-lens-carousel-wrap">
+
+                    <button type="button"
+                            class="carousel-arrow-btn carousel-arrow-left"
+                            id="lensArrowLeft"
+                            aria-label="Scroll filters left"
+                            title="Previous filters">
+
+                        ‹
+
+                    </button>
 
                     <div class="er-lens-track"
                          id="snapLensTrack"
@@ -2224,173 +2218,70 @@
                          aria-label="AR Lens Carousel">
 
 
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="cartoon"
-                                title="Anime Cel Shader">
-
-                            <div class="lens-bubble-circle">
-                                🌸
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Anime
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="cartoon" title="Anime Cel Shader">
+                            <div class="lens-bubble-circle">🎨</div>
+                            <span class="lens-bubble-label">Anime</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="studiohd"
-                                title="Studio Portrait HD">
-
-                            <div class="lens-bubble-circle">
-                                👤
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Portrait
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="sunglasses" title="Designer Aviators">
+                            <div class="lens-bubble-circle">🕶️</div>
+                            <span class="lens-bubble-label">Aviators</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="cinematic"
-                                title="Cinematic 35mm Film">
-
-                            <div class="lens-bubble-circle">
-                                🎬
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Cinema
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="halo" title="Angel Halo">
+                            <div class="lens-bubble-circle">👑</div>
+                            <span class="lens-bubble-label">Halo</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble active"
-                                data-filter="cyberwarrior"
-                                title="Cyber Hologram Active">
-
-                            <div class="lens-bubble-circle active-glow">
-                                ⚡
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Cyber
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="goldenhour" title="Golden Hour Glow">
+                            <div class="lens-bubble-circle">🌟</div>
+                            <span class="lens-bubble-label">Golden</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="matrix"
-                                title="Matrix Rain Green Code">
-
-                            <div class="lens-bubble-circle">
-                                ❇️
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Matrix
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="cinematic" title="35mm Film">
+                            <div class="lens-bubble-circle">🎬</div>
+                            <span class="lens-bubble-label">Cinema</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="icefrost"
-                                title="Hologram Shimmer">
-
-                            <div class="lens-bubble-circle">
-                                🧊
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Holo
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="noir" title="Leica Noir">
+                            <div class="lens-bubble-circle">🖤</div>
+                            <span class="lens-bubble-label">Noir</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="comic"
-                                title="Comic Book Pop-Art">
-
-                            <div class="lens-bubble-circle">
-                                💥
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                Comic
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="vintage90s" title="Retro 90s Film">
+                            <div class="lens-bubble-circle">🎞️</div>
+                            <span class="lens-bubble-label">Retro</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble more-lens-btn"
-                                id="openAllEffectsBtn"
-                                title="View All 30+ Effects">
-
-                            <div class="lens-bubble-circle">
-                                •••
-                            </div>
-
-                            <span class="lens-bubble-label">
-                                More
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="glitch" title="Digital Glitch FX">
+                            <div class="lens-bubble-circle">⚡</div>
+                            <span class="lens-bubble-label">Glitch</span>
                         </button>
 
-
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="ai-background"
-                                title="AI Depth Background">
-
-                            <div class="lens-bubble-circle">🧠</div>
-
-                            <span class="lens-bubble-label">
-                                AI BG
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="space" title="Deep Space Explorer">
+                            <div class="lens-bubble-circle">🚀</div>
+                            <span class="lens-bubble-label">Space</span>
                         </button>
 
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="dollar-rain"
-                                title="Dollar Rain">
-
-                            <div class="lens-bubble-circle">💵</div>
-
-                            <span class="lens-bubble-label">
-                                $ Rain
-                            </span>
-
+                        <button type="button" class="er-lens-bubble" data-filter="cyberpunk" title="Neon Cyberpunk">
+                            <div class="lens-bubble-circle">💡</div>
+                            <span class="lens-bubble-label">Neon</span>
                         </button>
 
-                        <button type="button"
-                                class="er-lens-bubble"
-                                data-filter="celebrity-spotlight"
-                                title="Celebrity Spotlight">
-
-                            <div class="lens-bubble-circle">⭐</div>
-
-                            <span class="lens-bubble-label">
-                                Star
-                            </span>
-
+                        <button type="button" class="er-lens-bubble more-lens-btn" id="openAllEffectsBtn" title="View All 10 Effects">
+                            <div class="lens-bubble-circle">•••</div>
+                            <span class="lens-bubble-label">More</span>
                         </button>
-</div>
+
+                    <button type="button"
+                            class="carousel-arrow-btn carousel-arrow-right"
+                            id="lensArrowRight"
+                            aria-label="Scroll filters right"
+                            title="Next filters">
+
+                        ›
+
+                    </button>
 
                 </div>
 
@@ -2558,26 +2449,6 @@
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="magazine"
-                            title="Editorial magazine covers">
-
-                        📰 Magazines
-
-                    </button>
-
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="halloween"
-                            title="Spooky Halloween masks and overlays">
-
-                        🎃 Halloween
-
-                    </button>
-
-
-                    <button type="button"
-                            class="cat-pill"
                             data-cat="all"
                             title="Browse all filters">
 
@@ -2591,781 +2462,69 @@
                 <div class="effects-card-grid"
                      id="effectsCardGrid">
 
-
-                    <!-- =================================================
-                         FACE AR FILTERS
-                         ================================================= -->
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="sunglasses"
-                            data-cat="face popular"
-                            data-target="face">
-
-                        <div class="effect-icon-box glass-box">
-                            🕶️
-                        </div>
-
-                        <span class="effect-name">
-                            Aviators
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <!-- FACE AR — verified working -->
+                    <button type="button" class="effect-card" data-filter="sunglasses" data-cat="face" data-target="face">
+                        <div class="effect-icon-box glass-box">🕶️</div>
+                        <span class="effect-name">Aviators</span>
+                        <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="halo"
-                            data-cat="face popular"
-                            data-target="face">
-
-                        <div class="effect-icon-box neon-box">
-                            👑
-                        </div>
-
-                        <span class="effect-name">
-                            Angel Halo
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="halo" data-cat="face" data-target="face">
+                        <div class="effect-icon-box neon-box">👑</div>
+                        <span class="effect-name">Angel Halo</span>
+                        <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="kawaii"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box anime-box">
-                            🌸
-                        </div>
-
-                        <span class="effect-name">
-                            Kawaii Blush
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="goldenhour" data-cat="face" data-target="face">
+                        <div class="effect-icon-box portrait-box">🌟</div>
+                        <span class="effect-name">Golden Hour</span>
+                        <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cyberwarrior"
-                            data-cat="face popular"
-                            data-target="face">
-
-                        <div class="effect-icon-box cyber-box">
-                            ⚡
-                        </div>
-
-                        <span class="effect-name">
-                            Cyber Paint
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="cartoon" data-cat="face" data-target="face">
+                        <div class="effect-icon-box anime-box">🎨</div>
+                        <span class="effect-name">Anime Cel</span>
+                        <span class="effect-target-tag face-tag">👤 Face AR</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cyberhud"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box aihud-box">
-                            🤖
-                        </div>
-
-                        <span class="effect-name">
-                            Cyborg HUD
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <!-- SCENE SHADERS — verified working -->
+                    <button type="button" class="effect-card" data-filter="noir" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box retro-box">🖤</div>
+                        <span class="effect-name">Leica Noir</span>
+                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="studiohd"
-                            data-cat="face popular"
-                            data-target="face">
-
-                        <div class="effect-icon-box portrait-box">
-                            📸
-                        </div>
-
-                        <span class="effect-name">
-                            Studio Portrait
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="vintage90s" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box retro-box">🎞️</div>
+                        <span class="effect-name">Retro 90s</span>
+                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="icefrost"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box holo-box">
-                            ❄️
-                        </div>
-
-                        <span class="effect-name">
-                            Diamond Dust
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="cinematic" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box cinema-box">🎬</div>
+                        <span class="effect-name">35mm Film</span>
+                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cartoon"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box anime-box">
-                            🎨
-                        </div>
-
-                        <span class="effect-name">
-                            Anime Cel
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="glitch" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box glitch-box">⚡</div>
+                        <span class="effect-name">Glitch FX</span>
+                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cybersec"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box aihud-box">
-                            🔐
-                        </div>
-
-                        <span class="effect-name">
-                            Bio-Scan
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="space" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box holo-box">🚀</div>
+                        <span class="effect-name">Deep Space</span>
+                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="superhero"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box cyber-box">
-                            🦸
-                        </div>
-
-                        <span class="effect-name">
-                            Hero Mask
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="goldenhour"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box portrait-box">
-                            🌟
-                        </div>
-
-                        <span class="effect-name">
-                            Golden Hour
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="celebrity-spotlight"
-                            data-cat="face"
-                            data-target="face">
-
-                        <div class="effect-icon-box neon-box">
-                            ⭐
-                        </div>
-
-                        <span class="effect-name">
-                            Spotlight
-                        </span>
-
-                        <span class="effect-target-tag face-tag">
-                            👤 Face AR
-                        </span>
-
-                    </button>
-
-
-                    <!-- =================================================
-                         SCENE & ATMOSPHERE SHADERS
-                         ================================================= -->
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="matrix"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box matrix-box">
-                            ❇️
-                        </div>
-
-                        <span class="effect-name">
-                            Matrix Rain
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="noir"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box retro-box">
-                            🖤
-                        </div>
-
-                        <span class="effect-name">
-                            Leica Noir
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="vintage90s"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box retro-box">
-                            🎞️
-                        </div>
-
-                        <span class="effect-name">
-                            Retro 90s
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cinematic"
-                            data-cat="scene popular"
-                            data-target="scene">
-
-                        <div class="effect-icon-box cinema-box">
-                            🎬
-                        </div>
-
-                        <span class="effect-name">
-                            35mm Film
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="glitch"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box glitch-box">
-                            🎯
-                        </div>
-
-                        <span class="effect-name">
-                            Glitch FX
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="popart"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box comic-box">
-                            💥
-                        </div>
-
-                        <span class="effect-name">
-                            Pop Comic
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="space"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box holo-box">
-                            🚀
-                        </div>
-
-                        <span class="effect-name">
-                            Deep Nebula
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="hologram"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box holo-box">
-                            🌐
-                        </div>
-
-                        <span class="effect-name">
-                            Holo-Grid
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cyberpunk"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box neon-box">
-                            💡
-                        </div>
-
-                        <span class="effect-name">
-                            Neon Cyber
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="webzonebw"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box matrix-box">
-                            🌐
-                        </div>
-
-                        <span class="effect-name">
-                            Signature BW
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="ai-background"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box aihud-box">
-                            🧠
-                        </div>
-
-                        <span class="effect-name">
-                            AI Depth BG
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="dollar-rain"
-                            data-cat="scene"
-                            data-target="scene">
-
-                        <div class="effect-icon-box cinema-box">
-                            💵
-                        </div>
-
-                        <span class="effect-name">
-                            Dollar Rain
-                        </span>
-
-                        <span class="effect-target-tag scene-tag">
-                            🌍 Scene
-                        </span>
-
-                    </button>
-
-
-                    <!-- =================================================
-                         MAGAZINES
-                         ================================================= -->
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="time"
-                            data-cat="magazine"
-                            data-target="magazine">
-
-                        <div class="effect-icon-box cinema-box">
-                            🟥
-                        </div>
-
-                        <span class="effect-name">
-                            TIME Mag
-                        </span>
-
-                        <span class="effect-target-tag mag-tag">
-                            📰 Magazine
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="vogue"
-                            data-cat="magazine"
-                            data-target="magazine">
-
-                        <div class="effect-icon-box portrait-box">
-                            🕶️
-                        </div>
-
-                        <span class="effect-name">
-                            VOGUE
-                        </span>
-
-                        <span class="effect-target-tag mag-tag">
-                            📰 Magazine
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="forbes"
-                            data-cat="magazine"
-                            data-target="magazine">
-
-                        <div class="effect-icon-box cyber-box">
-                            💼
-                        </div>
-
-                        <span class="effect-name">
-                            Forbes
-                        </span>
-
-                        <span class="effect-target-tag mag-tag">
-                            📰 Magazine
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="wired"
-                            data-cat="magazine"
-                            data-target="magazine">
-
-                        <div class="effect-icon-box aihud-box">
-                            🚀
-                        </div>
-
-                        <span class="effect-name">
-                            WIRED
-                        </span>
-
-                        <span class="effect-target-tag mag-tag">
-                            📰 Magazine
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="cyber"
-                            data-cat="magazine"
-                            data-target="magazine">
-
-                        <div class="effect-icon-box glitch-box">
-                            🎮
-                        </div>
-
-                        <span class="effect-name">
-                            CyberMag
-                        </span>
-
-                        <span class="effect-target-tag mag-tag">
-                            📰 Magazine
-                        </span>
-
-                    </button>
-
-
-                    <!-- =================================================
-                         HALLOWEEN
-                         ================================================= -->
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="skeleton"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box bioscan-box">
-                            💀
-                        </div>
-
-                        <span class="effect-name">
-                            Bio-Scan
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="pumpkin"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box anime-box">
-                            🎃
-                        </div>
-
-                        <span class="effect-name">
-                            Jack Lantern
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="ghost"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box holo-box">
-                            👻
-                        </div>
-
-                        <span class="effect-name">
-                            Phantom
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="zombie"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box matrix-box">
-                            🧟
-                        </div>
-
-                        <span class="effect-name">
-                            Zombie FX
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="vampire"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box retro-box">
-                            🧛
-                        </div>
-
-                        <span class="effect-name">
-                            Vampire Fangs
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="spider"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box glitch-box">
-                            🕷️
-                        </div>
-
-                        <span class="effect-name">
-                            Spider Web
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
-                    </button>
-
-
-                    <button type="button"
-                            class="effect-card"
-                            data-filter="bats"
-                            data-cat="halloween"
-                            data-target="halloween">
-
-                        <div class="effect-icon-box cinema-box">
-                            🦇
-                        </div>
-
-                        <span class="effect-name">
-                            Night Bats
-                        </span>
-
-                        <span class="effect-target-tag spooky-tag">
-                            🎃 Spooky
-                        </span>
-
+                    <button type="button" class="effect-card" data-filter="cyberpunk" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box neon-box">💡</div>
+                        <span class="effect-name">Neon Cyber</span>
+                        <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
                 </div>
-
-
                 <div class="panel-bottom-action">
 
                     <button type="button"
@@ -3376,7 +2535,7 @@
                             ⊞
                         </span>
 
-                        View All Effects (30+)
+                        View All Effects (10)
 
                     </button>
 

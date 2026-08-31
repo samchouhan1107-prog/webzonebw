@@ -444,7 +444,9 @@
             </div>
 
             <!-- Filter Category Pills -->
-            <div class="playlist-filter-pills" role="tablist" aria-label="Playlist Categories" style="margin-bottom: 16px;">
+            <div class="playlist-filter-scroll-wrap">
+                <button type="button" class="carousel-arrow-btn carousel-arrow-left" id="playlistArrowLeft" aria-label="Scroll playlists left">‹</button>
+                <div class="playlist-filter-pills" role="tablist" aria-label="Playlist Categories">
                 <button type="button" class="filter-pill active" data-phase="all">All 23 Tracks (Phases 1–6)</button>
                 <button type="button" class="filter-pill" data-phase="1">Phase 1 (Tracks 1–5)</button>
                 <button type="button" class="filter-pill" data-phase="2">Phase 2 (Tracks 6–9)</button>
@@ -452,6 +454,8 @@
                 <button type="button" class="filter-pill" data-phase="4">Phase 4 (Tracks 14–17)</button>
                 <button type="button" class="filter-pill" data-phase="5">Phase 5 (Tracks 18–21)</button>
                 <button type="button" class="filter-pill" data-phase="6">Phase 6 (Tracks 22–23)</button>
+            </div>
+                <button type="button" class="carousel-arrow-btn carousel-arrow-right" id="playlistArrowRight" aria-label="Scroll playlists right">›</button>
             </div>
 
             <div class="track-table-wrap">
@@ -1874,6 +1878,31 @@ document.addEventListener("DOMContentLoaded", () => {
             renderTracklist();
         });
     });
+
+    // Playlist Filter Arrow Navigation
+    const playlistPillsWrap = document.querySelector(".playlist-filter-scroll-wrap");
+    const playlistPillsTrack = document.querySelector(".playlist-filter-pills");
+    const playlistArrowL = document.getElementById("playlistArrowLeft");
+    const playlistArrowR = document.getElementById("playlistArrowRight");
+
+    if (playlistPillsTrack && playlistArrowL && playlistArrowR) {
+        function updatePlaylistArrows() {
+            const maxScroll = playlistPillsTrack.scrollWidth - playlistPillsTrack.clientWidth;
+            const atStart = playlistPillsTrack.scrollLeft <= 4;
+            const atEnd = playlistPillsTrack.scrollLeft >= maxScroll - 4;
+            const hasOverflow = maxScroll > 8;
+            if (playlistPillsWrap) playlistPillsWrap.classList.toggle("has-overflow", hasOverflow);
+            playlistArrowL.style.opacity = atStart ? "0" : "0.85";
+            playlistArrowL.style.pointerEvents = atStart ? "none" : "auto";
+            playlistArrowR.style.opacity = atEnd ? "0" : "0.85";
+            playlistArrowR.style.pointerEvents = atEnd ? "none" : "auto";
+        }
+        playlistArrowL.addEventListener("click", () => { playlistPillsTrack.scrollBy({ left: -200, behavior: "smooth" }); setTimeout(updatePlaylistArrows, 350); });
+        playlistArrowR.addEventListener("click", () => { playlistPillsTrack.scrollBy({ left: 200, behavior: "smooth" }); setTimeout(updatePlaylistArrows, 350); });
+        playlistPillsTrack.addEventListener("scroll", updatePlaylistArrows, { passive: true });
+        updatePlaylistArrows();
+        window.addEventListener("resize", updatePlaylistArrows);
+    }
 
     // Multi-tab synchronization hook
     window.onSoundBoxAudioEngineUpdate = () => {
