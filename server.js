@@ -1,6 +1,6 @@
 /* ============================================================
    WEBZONEBW — WEB SERVER
-   WEBZONE ER • HALLOWEEN • STATIC SITE ENGINE
+   WEBZONE ER • STATIC SITE ENGINE
    ------------------------------------------------------------
    Version: 2.2
    Port:    3000
@@ -489,14 +489,13 @@ app.get(
 );
 
 /* ============================================================
-   HALLOWEEN STUDIO
+   WEBZONEBW-ER ROUTE ALIAS (SEASONAL FILTER PACK)
    ------------------------------------------------------------
-   /halloween
-   /halloween/
+   /halloween and /halloween/ are personal-reference aliases
+   for the WEBZONEBW-ER studio. The seasonal (October) filter
+   pack will live inside WEBZONEBW-ER, not as a separate site.
 
-   Resolve to:
-
-   /halloween/index.html
+   Resolves to the ER studio page.
    ============================================================ */
 
 app.get(
@@ -506,15 +505,15 @@ app.get(
     ],
     (req, res) => {
 
-        const halloweenIndex =
+        const erIndex =
             path.join(
                 __dirname,
-                "halloween",
+                "er",
                 "index.html"
             );
 
         res.sendFile(
-            halloweenIndex,
+            erIndex,
             (error) => {
 
                 if (!error) {
@@ -522,15 +521,15 @@ app.get(
                 }
 
                 console.error(
-                    "[HALLOWEEN] Unable to load " +
-                    "halloween/index.html:",
+                    "[WEBZONEBW-ER] Unable to load " +
+                    "er/index.html:",
                     error.message
                 );
 
                 if (!res.headersSent) {
 
                     res.status(404).send(
-                        "WEBZONE Halloween Studio is unavailable."
+                        "WEBZONEBW-ER Studio is unavailable."
                     );
 
                 }
@@ -616,7 +615,10 @@ app.use(
 );
 
 /* ============================================================
-   HALLOWEEN STATIC ASSETS
+   WEBZONEBW-ER STATIC ASSETS (SEASONAL FILTER PACK)
+   ------------------------------------------------------------
+   The /halloween namespace keeps serving the seasonal filter
+   assets (js/halloween.js) used by the WEBZONEBW-ER studio.
    ============================================================ */
 
 app.use(
@@ -1023,7 +1025,7 @@ const server =
             );
 
             console.log(
-                ` Halloween  : http://localhost:${PORT}/halloween/`
+                ` ER Studio  : http://localhost:${PORT}/er/ (alias: /halloween/)`
             );
 
             console.log(

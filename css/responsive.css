@@ -405,7 +405,7 @@
 @media (min-width: 769px) and (max-width: 1024px) {
 
     .er-workspace-grid {
-        grid-template-columns: 1fr 280px;
+        grid-template-columns: minmax(0, 1fr) 280px;
         gap: 18px;
     }
 
@@ -423,7 +423,7 @@
 @media (min-width: 1280px) {
 
     .er-workspace-grid {
-        grid-template-columns: 1fr 380px;
+        grid-template-columns: minmax(0, 1fr) 380px;
     }
 
     .main-content,

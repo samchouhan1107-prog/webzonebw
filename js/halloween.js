@@ -2798,8 +2798,25 @@ function initWebZoneERStudio() {
             badge =
                 "Access Denied";
 
-            message =
-                "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Retry Camera</strong>. Also check Windows Settings → Privacy &amp; security → Camera.";
+            /*
+             * Platform-aware guidance so mobile users are not
+             * sent to Windows settings.
+             */
+            const isTouchDevice =
+                /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+                (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.userAgent));
+
+            if (isTouchDevice) {
+
+                message =
+                    "Your browser blocked the camera for this site. Tap the <strong>lock / camera icon</strong> in the address bar (or open Safari/Chrome site settings), set <strong>Camera → Allow</strong>, then reload the page. On iOS also check Settings → Safari/Chrome → Camera.";
+
+            } else {
+
+                message =
+                    "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Retry Camera</strong>. Also check Windows Settings → Privacy &amp; security → Camera.";
+
+            }
 
             icon =
                 "🚫";

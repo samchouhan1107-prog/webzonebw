@@ -2,7 +2,7 @@
 
 /* Soundbox page adapter for the local audio inventory. */
 (function () {
-    const AUDIO_PATH = "assets/audio/The Beatles - Come Together.mp3";
+    const AUDIO_PATH = "/assets/audio/The Beatles - Come Together.mp3";
     const track = {
         id: "p5-track-18",
         num: 18,

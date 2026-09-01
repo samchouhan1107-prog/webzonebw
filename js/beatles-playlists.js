@@ -193,7 +193,28 @@
             return "";
         }
 
-        return String(path).trim();
+        let normalized =
+            String(path).trim();
+
+        /*
+         * Root-relative resolution.
+         *
+         * Relative "assets/..." paths break on sub-page
+         * routes such as /er/index.html, where the browser
+         * resolves them to /er/assets/... and gets a 404.
+         * Audio lives at the site root, so anchor these
+         * paths to "/" regardless of the current page.
+         */
+        if (
+            normalized.startsWith("assets/") &&
+            !/^(https?:|\/|data:|blob:)/i.test(normalized)
+        ) {
+
+            normalized = "/" + normalized;
+
+        }
+
+        return normalized;
 
     }
 
@@ -551,16 +572,16 @@
                     "4:19",
 
                 audioFile:
-                    "assets/audio/The Beatles - Come Together.mp3",
+                    "/assets/audio/The Beatles - Come Together.mp3",
 
                 audioPath:
-                    "assets/audio/The Beatles - Come Together.mp3",
+                    "/assets/audio/The Beatles - Come Together.mp3",
 
                 fileName:
                     "The Beatles - Come Together.mp3",
 
                 audio:
-                    "assets/audio/The Beatles - Come Together.mp3",
+                    "/assets/audio/The Beatles - Come Together.mp3",
 
                 audioType:
                     "mp3",

@@ -4789,7 +4789,13 @@ body.light-mode .cam-floating-badge {
 
 .er-workspace-grid {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    /*
+     * minmax(0, 1fr) — not bare 1fr. A bare 1fr track has
+     * min-width:auto, so wide children (camera card,
+     * filter grid) force the track open and push the
+     * effects panel past the viewport edge.
+     */
+    grid-template-columns: minmax(0, 1fr) 340px;
     gap: 24px;
     align-items: start;
     margin-bottom: 28px;
@@ -5726,7 +5732,7 @@ body.light-mode .cam-floating-badge {
 
 .er-bottom-feature-row {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: minmax(0, 1fr) 340px;
     gap: 24px;
     margin-bottom: 24px;
 }
@@ -7841,10 +7847,37 @@ body.light-mode .fab-role {
     color: var(--text-link);
 }
 
-body.light-mode .how-to-card,
+body.light-mode .how-to-card {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+/* How-to card headings/labels are orange/#94a3b8 on dark;
+   keep them readable on the white light-mode surface. */
+body.light-mode .how-to-title {
+    color: #c2410c;
+}
+
+body.light-mode .step-label {
+    color: #0f172a;
+}
+
 body.light-mode .powered-ai-card {
     background: #ffffff;
     border-color: #e2e8f0;
+}
+
+/*
+ * Card text inherits dark-theme colors (#ff8c42 heading,
+ * #94a3b8 body). On the white light-mode background the
+ * body text becomes near-invisible, so darken it here.
+ */
+body.light-mode .ai-card-text h4 {
+    color: #c2410c;
+}
+
+body.light-mode .ai-card-text p {
+    color: #475569;
 }
 
 body.light-mode .step-desc-block strong {

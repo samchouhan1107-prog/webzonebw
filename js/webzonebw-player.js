@@ -227,14 +227,17 @@
          *
          * assets/audio/file.mp3
          *
-         * keep it exactly in that structure.
+         * anchor it to the site root. A page-relative
+         * path breaks on sub-page routes such as
+         * /er/index.html, where the browser resolves
+         * it to /er/assets/audio/... and gets a 404.
          */
 
         if (
             audioPath.startsWith("assets/audio/")
         ) {
 
-            return audioPath;
+            return "/" + audioPath;
 
         }
 
@@ -244,15 +247,14 @@
          *
          * /assets/audio/file.mp3
          *
-         * remove the leading slash so the path
-         * remains relative to the current website.
+         * it is already root-relative — keep it.
          */
 
         if (
             audioPath.startsWith("/assets/audio/")
         ) {
 
-            return audioPath.substring(1);
+            return audioPath;
 
         }
 
@@ -268,6 +270,7 @@
          */
 
         return (
+            "/" +
             CONFIG.audioBasePath +
             audioPath.replace(/^\/+/, "")
         );
