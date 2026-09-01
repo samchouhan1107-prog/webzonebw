@@ -2362,9 +2362,16 @@ function initWebZoneERStudio() {
     function closeSidebar() {
         if (!mainSidebar) return;
         mainSidebar.classList.remove("open");
+        mainSidebar.setAttribute("aria-hidden", "true");
         document.body.classList.remove("sidebar-open");
+        document.body.classList.remove("webzone-scroll-lock");
+        document.body.style.position = "";
         const bd = document.getElementById("sidebarBackdrop");
         if (bd) bd.remove();
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.classList.remove("is-active");
+            sidebarToggleBtn.setAttribute("aria-expanded", "false");
+        }
     }
 
     function openSidebar() {
@@ -2379,7 +2386,14 @@ function initWebZoneERStudio() {
             bd.addEventListener("click", closeSidebar);
         }
         mainSidebar.classList.add("open");
+        mainSidebar.setAttribute("aria-hidden", "false");
         document.body.classList.add("sidebar-open");
+        document.body.classList.add("webzone-scroll-lock");
+        document.body.style.position = "relative";
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.classList.add("is-active");
+            sidebarToggleBtn.setAttribute("aria-expanded", "true");
+        }
     }
 
     function toggleSidebar() {

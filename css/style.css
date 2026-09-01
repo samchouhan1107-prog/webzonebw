@@ -423,6 +423,11 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    overflow-x: hidden;
+}
+
+html, body {
+    overscroll-behavior-x: none;
 }
 
 .container,
@@ -1727,8 +1732,10 @@ main section + section {
         display: block;
     }
 
-    body.sidebar-open {
+    body.sidebar-open,
+    body.webzone-scroll-lock {
         overflow: hidden;
+        overscroll-behavior: contain;
         touch-action: none;
     }
 
@@ -1746,39 +1753,43 @@ main section + section {
     .er-sidebar {
         position: fixed;
         top: 0;
-        left: -320px;
-        width: 285px;
+        left: 0;
+        width: min(82vw, 300px);
         max-width: 86vw;
         height: 100vh;
         height: 100dvh;
         min-height: 100vh;
-        padding: 20px 16px 28px;
+        padding: 20px 16px calc(28px + env(safe-area-inset-bottom, 0px));
         background: var(--bg-sidebar);
         border-right: 1px solid var(--border-color);
         border-bottom: none;
-        z-index: 1200;
+        z-index: 1301;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
         display: flex;
         flex-direction: column;
         box-shadow: 0 0 45px rgba(0, 0, 0, 0.75);
-        transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1), transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(-110%);
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.32s ease;
     }
 
     .sidebar.open,
     .er-sidebar.open,
     body.sidebar-open .sidebar,
     body.sidebar-open .er-sidebar {
-        left: 0;
         transform: translateX(0);
+        box-shadow: 0 0 45px rgba(0, 0, 0, 0.75);
     }
 
     /* Sidebar backdrop overlay */
     .sidebar-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.55);
-        z-index: 1190;
+        background: rgba(2, 6, 23, 0.72);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 1290;
         -webkit-tap-highlight-color: transparent;
         animation: sidebarBackdropIn 0.25s ease;
     }
@@ -1834,6 +1845,7 @@ main section + section {
     .sidebar-nav {
         margin-top: 8px;
         overflow-y: auto;
+        overscroll-behavior: contain;
         padding: 0;
         flex: 1;
     }

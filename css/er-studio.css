@@ -1,0 +1,646 @@
+/* =====================================================
+   WEBZONEBW-ER STUDIO — PAGE-LEVEL STYLES
+   Extracted from er/index.html.
+   Loaded after style.css / responsive.css; these rules
+   are ER-Studio specific safety and theming overrides.
+   ===================================================== */
+
+/* -----------------------------------------------------
+   1. THEME BRIDGE
+   ----------------------------------------------------- */
+
+html.er-theme-light,
+body.er-theme-light {
+    color-scheme: light;
+}
+
+html.er-theme-dark,
+body.er-theme-dark {
+    color-scheme: dark;
+}
+
+
+/* -----------------------------------------------------
+   2. GLOBAL PAGE SAFETY
+   ----------------------------------------------------- */
+
+html {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+body.er-studio-body {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh; /* dvh last: progressive enhancement wins where supported */
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+}
+
+
+/* -----------------------------------------------------
+   3. VOLCANIC ATMOSPHERIC BACKGROUND
+   ----------------------------------------------------- */
+
+.er-studio-body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 80%, rgba(194, 65, 12, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 20% 60%, rgba(154, 52, 18, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 40%, rgba(124, 45, 18, 0.05) 0%, transparent 50%),
+        linear-gradient(180deg, #030712 0%, #070913 40%, #0d0a08 100%);
+}
+
+.er-studio-body > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Floating embers layer */
+.er-volcanic-embers {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.er-volcanic-embers .ember {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: rgba(255, 107, 26, 0.6);
+    box-shadow: 0 0 6px rgba(255, 107, 26, 0.4);
+    animation: erEmberFloat linear infinite;
+    opacity: 0;
+}
+
+.er-volcanic-embers .ember:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: 0s; }
+.er-volcanic-embers .ember:nth-child(2) { left: 25%; animation-duration: 15s; animation-delay: 2s; width: 3px; height: 3px; }
+.er-volcanic-embers .ember:nth-child(3) { left: 40%; animation-duration: 10s; animation-delay: 4s; }
+.er-volcanic-embers .ember:nth-child(4) { left: 60%; animation-duration: 14s; animation-delay: 1s; }
+.er-volcanic-embers .ember:nth-child(5) { left: 75%; animation-duration: 11s; animation-delay: 3s; width: 2.5px; height: 2.5px; }
+.er-volcanic-embers .ember:nth-child(6) { left: 90%; animation-duration: 13s; animation-delay: 5s; }
+.er-volcanic-embers .ember:nth-child(7) { left: 50%; animation-duration: 16s; animation-delay: 6s; }
+.er-volcanic-embers .ember:nth-child(8) { left: 15%; animation-duration: 9s; animation-delay: 7s; width: 1.5px; height: 1.5px; }
+
+@keyframes erEmberFloat {
+    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.7; }
+    50%  { opacity: 0.4; }
+    90%  { opacity: 0.15; }
+    100% { transform: translateY(-20vh) translateX(30px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .er-volcanic-embers .ember {
+        animation: none;
+        display: none;
+    }
+}
+
+
+/* -----------------------------------------------------
+   4. DESKTOP LAYOUT
+   ----------------------------------------------------- */
+
+.er-studio-body .er-layout-container {
+    display: grid;
+    grid-template-columns: minmax(230px, 270px) minmax(0, 1fr);
+    width: 100%;
+    min-height: 100vh;
+}
+
+.er-studio-body .er-sidebar {
+    position: relative;
+    inset: auto;
+    width: auto;
+    min-width: 0;
+    height: 100vh;
+    z-index: 50;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.er-studio-body .er-main-content {
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+}
+
+.er-studio-body .er-workspace-grid {
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* -----------------------------------------------------
+   5. CAMERA VIEWPORT
+   ----------------------------------------------------- */
+
+.er-studio-body .camera-viewport-frame {
+    position: relative;
+    width: 100%;
+    min-height: 420px;
+    overflow: hidden;
+    isolation: isolate;
+    contain: layout paint;
+    background: #050507;
+    touch-action: manipulation;
+}
+
+/*
+ * LIVE CAMERA VIDEO
+ * Keep the video element stable: no filters, transforms
+ * or animations directly on the video — avoids GPU stalls.
+ */
+.er-studio-body #cameraVideo.camera-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    z-index: 1;
+    background: #050507;
+    border: 0;
+    outline: 0;
+    pointer-events: none;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: auto;
+}
+
+/* PROCESSED CANVAS */
+.er-studio-body #cameraCanvas.camera-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    z-index: 2;
+    pointer-events: none;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* CAMERA PLACEHOLDER */
+.er-studio-body #cameraPlaceholder {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* CAMERA UI Z-INDEX */
+.er-studio-body .cam-corner-btn,
+.er-studio-body .cam-zoom-badge,
+.er-studio-body .cam-floating-vertical-stack,
+.er-studio-body .cam-floating-badge,
+.er-studio-body .canvas-swipe-toast,
+.er-studio-body .mobile-face-telemetry-bar,
+.er-studio-body .touch-target-crosshair {
+    z-index: 20;
+}
+
+.er-studio-body .permission-alert-modal {
+    z-index: 100;
+}
+
+
+/* -----------------------------------------------------
+   6. CAMERA PRIVACY NOTE
+   ----------------------------------------------------- */
+
+.er-camera-privacy-note {
+    margin: 10px auto 0;
+    max-width: 900px;
+    padding: 8px 14px;
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    opacity: 0.72;
+}
+
+.er-camera-privacy-note strong {
+    opacity: 0.95;
+}
+
+
+/* -----------------------------------------------------
+   7. EFFECTS PANEL
+   ----------------------------------------------------- */
+
+.er-studio-body .er-effects-panel {
+    min-width: 0;
+    max-width: 100%;
+}
+
+
+/* -----------------------------------------------------
+   8. VOLCANIC LAUNCH ORB
+   ----------------------------------------------------- */
+
+.er-studio-body .er-launch-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.er-studio-body .er-launch-orb {
+    --orb-x: 0px;
+    --orb-y: 0px;
+    position: relative;
+    width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate3d(var(--orb-x), var(--orb-y), 0);
+    transition: transform 180ms ease, filter 250ms ease;
+    isolation: isolate;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ORB CORE */
+.er-studio-body .er-orb-core {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, #ff6b1a 0%, #c2410c 35%, #9a3412 68%, #1a0f0a 100%);
+    border: 1px solid rgba(255, 255, 255, .28);
+    box-shadow:
+        0 0 18px rgba(255, 102, 0, .42),
+        0 0 38px rgba(255, 55, 40, .18),
+        inset 0 0 18px rgba(255, 255, 255, .12);
+    z-index: 3;
+    overflow: hidden;
+}
+
+/* DIGITAL VOLCANIC MARK */
+.er-studio-body .er-orb-mark {
+    position: relative;
+    width: 36px;
+    height: 32px;
+    opacity: .96;
+}
+
+.er-studio-body .er-mark-eye {
+    position: absolute;
+    top: 7px;
+    width: 8px;
+    height: 5px;
+    background: #0d0a08;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, .22);
+}
+
+.er-studio-body .er-mark-eye.left  { left: 4px; }
+.er-studio-body .er-mark-eye.right { right: 4px; }
+
+.er-studio-body .er-mark-smile {
+    position: absolute;
+    left: 6px;
+    bottom: 3px;
+    width: 24px;
+    height: 10px;
+    border-bottom: 4px solid #0d0a08;
+    border-radius: 0 0 50% 50%;
+}
+
+/* ORB SCAN LIGHT */
+.er-studio-body .er-orb-scan {
+    position: absolute;
+    left: -10%;
+    top: -100%;
+    width: 120%;
+    height: 35%;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .32), transparent);
+    animation: erHalloweenOrbScan 2.8s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes erHalloweenOrbScan {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(350%); }
+}
+
+/* ORBIT RINGS */
+.er-studio-body .er-orb-ring {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.er-studio-body .er-orb-ring-outer {
+    width: 82px;
+    height: 82px;
+    border: 1px solid rgba(255, 102, 30, .28);
+    animation: erHalloweenOrbRotate 8s linear infinite;
+}
+
+.er-studio-body .er-orb-ring-middle {
+    width: 70px;
+    height: 70px;
+    border: 1px dashed rgba(217, 119, 6, .36);
+    animation: erHalloweenOrbRotateReverse 6s linear infinite;
+}
+
+@keyframes erHalloweenOrbRotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes erHalloweenOrbRotateReverse {
+    from { transform: rotate(360deg); }
+    to   { transform: rotate(0deg); }
+}
+
+/* FLOATING PARTICLES */
+.er-studio-body .er-orb-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ff9c45;
+    box-shadow: 0 0 8px rgba(255, 120, 50, .8);
+    z-index: 4;
+    animation: erHalloweenParticleFloat 2.6s ease-in-out infinite;
+}
+
+.er-studio-body .particle-one   { top: 5px; right: 16px; }
+.er-studio-body .particle-two   { bottom: 9px; left: 8px; animation-delay: .5s; }
+.er-studio-body .particle-three { top: 38px; left: 0; animation-delay: 1s; }
+.er-studio-body .particle-four  { right: 1px; bottom: 27px; animation-delay: 1.5s; }
+
+@keyframes erHalloweenParticleFloat {
+    0%, 100% { transform: translateY(0); opacity: .45; }
+    50%      { transform: translateY(-8px); opacity: 1; }
+}
+
+/* LAUNCH STATUS */
+.er-studio-body .er-launch-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 10px;
+    font-size: .66rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    opacity: .68;
+}
+
+.er-studio-body .er-status-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: #7dffb2;
+    box-shadow: 0 0 8px rgba(125, 255, 178, .8);
+    animation: erHalloweenStatusPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes erHalloweenStatusPulse {
+    0%, 100% { opacity: .45; transform: scale(.85); }
+    50%      { opacity: 1; transform: scale(1.15); }
+}
+
+/* VOLCANIC TITLE ACCENT */
+.er-studio-body .launch-title-accent {
+    display: inline-block;
+    margin-left: 4px;
+    background: linear-gradient(90deg, #ff6b1a, #c2410c, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* ACTIVE LAUNCH STATE */
+.er-studio-body .er-launch-orb.launch-active {
+    filter: brightness(1.25) drop-shadow(0 0 18px rgba(255, 92, 35, .65));
+}
+
+.er-studio-body .er-launch-orb.launch-active .er-orb-ring-outer  { animation-duration: 1s; }
+.er-studio-body .er-launch-orb.launch-active .er-orb-ring-middle { animation-duration: .8s; }
+
+
+/* -----------------------------------------------------
+   9. RESPONSIVE BREAKPOINTS
+   ----------------------------------------------------- */
+
+/* Desktop / tablet */
+@media (max-width: 1100px) {
+    .er-studio-body .er-layout-container {
+        grid-template-columns: minmax(210px, 240px) minmax(0, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+
+    .er-studio-body .er-layout-container {
+        display: block;
+    }
+
+    .er-studio-body .er-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(82vw, 300px);
+        height: 100vh;
+        height: 100dvh;
+        z-index: 1000;
+    }
+
+    .er-studio-body .er-main-content {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .er-studio-body .camera-viewport-frame {
+        min-height: min(70vh, 600px);
+        min-height: min(70dvh, 600px);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .er-studio-body .camera-viewport-frame {
+        min-height: min(58vh, 500px);
+        min-height: min(58dvh, 500px);
+        max-height: min(72vh, 700px);
+        max-height: min(72dvh, 700px);
+    }
+
+    .er-studio-body #cameraVideo.camera-video {
+        object-fit: cover;
+        object-position: center center;
+    }
+
+    .er-camera-privacy-note {
+        font-size: 0.72rem;
+        padding: 7px 10px;
+    }
+}
+
+/* Small phone camera safety */
+@media (max-width: 420px) {
+    .er-studio-body .camera-viewport-frame {
+        min-height: min(56vh, 460px);
+        min-height: min(56dvh, 460px);
+        max-height: min(70vh, 600px);
+        max-height: min(70dvh, 600px);
+    }
+}
+
+
+/* -----------------------------------------------------
+   10. ACCESSIBILITY & CONTROLS
+   ----------------------------------------------------- */
+
+.er-studio-body button:focus-visible,
+.er-studio-body a:focus-visible,
+.er-studio-body input:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+/* Disable text selection on camera controls */
+.er-studio-body .camera-viewport-frame button,
+.er-studio-body .er-lens-carousel-wrap,
+.er-studio-body .er-bottom-controls-bar {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .er-studio-body *,
+    .er-studio-body *::before,
+    .er-studio-body *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* -----------------------------------------------------
+   11. MOBILE IMMERSIVE CAMERA MODE
+   ----------------------------------------------------- */
+
+html.webzonebw-er-camera-active,
+body.webzonebw-er-camera-active {
+    background: #050507;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+.webzonebw-er-camera-active .er-layout-container { min-height: 100dvh; }
+.webzonebw-er-camera-active .er-sidebar          { display: none; }
+
+.webzonebw-er-camera-active .er-main-content {
+    min-height: 100dvh;
+    width: 100%;
+}
+
+.webzonebw-er-camera-active .er-camera-card {
+    min-height: 100dvh;
+    border-radius: 0;
+}
+
+.webzonebw-er-camera-active .camera-viewport-frame {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+}
+
+/* Lens carousel */
+.er-lens-carousel-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+}
+
+.er-lens-track {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    padding: 6px 4px 10px;
+}
+
+.er-lens-track::-webkit-scrollbar { display: none; }
+
+.er-lens-bubble {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 900px) {
+    .er-studio-body:not(.webzonebw-er-camera-active) .camera-viewport-frame {
+        min-height: min(72dvh, 760px);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .er-studio-body .camera-viewport-frame {
+        height: min(78dvh, 760px);
+        min-height: 520px;
+        max-height: none;
+    }
+
+    .er-studio-body #cameraCanvas.camera-canvas {
+        object-fit: cover;
+    }
+
+    .webzonebw-er-camera-active .er-header,
+    .webzonebw-er-camera-active header {
+        display: none;
+    }
+
+    .webzonebw-er-camera-active .er-workspace-grid {
+        display: block;
+    }
+}

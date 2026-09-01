@@ -2322,7 +2322,7 @@
                 right: 0;
                 bottom: 0;
 
-                z-index: 99999;
+                z-index: 900;
 
                 background:
                     rgba(8, 10, 18, .96);

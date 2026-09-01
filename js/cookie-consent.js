@@ -65,7 +65,7 @@
         banner.setAttribute("aria-label", "Cookie Consent");
         banner.setAttribute("aria-live", "polite");
         banner.style.cssText =
-            "position:fixed;bottom:0;left:0;right:0;z-index:9999;" +
+            "position:fixed;bottom:calc(78px + env(safe-area-inset-bottom));left:0;right:0;z-index:9999;" +
             "background:#0f172a;border-top:1px solid #1e293b;" +
             "box-shadow:0 -8px 32px rgba(0,0,0,0.5);" +
             "padding:16px 20px;" +

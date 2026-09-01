@@ -32,6 +32,7 @@
 "use strict";
 
 import express from "express";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -329,6 +330,57 @@ app.use(
     })
 );
 
+function resolveHtmlPageFromRoute(requestPath) {
+
+    const trimmedPath =
+        (requestPath || "/")
+            .trim()
+            .replace(/\\/g, "/");
+
+    if (!trimmedPath || trimmedPath === "/") {
+        return path.join(__dirname, "index.html");
+    }
+
+    const normalizedPath =
+        trimmedPath.startsWith("/")
+            ? trimmedPath
+            : `/${trimmedPath}`;
+
+    const routeName =
+        normalizedPath
+            .replace(/\/+$/, "")
+            .toLowerCase();
+
+    const explicitRoutes = {
+        "/soundbox": path.join(__dirname, "soundbox.html"),
+        "/music": path.join(__dirname, "soundbox.html"),
+        "/er": path.join(__dirname, "er", "index.html"),
+        "/er/": path.join(__dirname, "er", "index.html"),
+        "/halloween": path.join(__dirname, "halloween", "index.html"),
+        "/halloween/": path.join(__dirname, "halloween", "index.html")
+    };
+
+    if (explicitRoutes[routeName]) {
+        return explicitRoutes[routeName];
+    }
+
+    if (path.extname(normalizedPath)) {
+        const pagePath = path.join(__dirname, normalizedPath.replace(/^\//, ""));
+        if (fs.existsSync(pagePath) && fs.statSync(pagePath).isFile()) {
+            return pagePath;
+        }
+    }
+
+    const extensionlessPath =
+        path.join(__dirname, `${normalizedPath.replace(/^\//, "")}.html`);
+
+    if (fs.existsSync(extensionlessPath) && fs.statSync(extensionlessPath).isFile()) {
+        return extensionlessPath;
+    }
+
+    return null;
+}
+
 /* ============================================================
    WEBZONE ER STUDIO
    ------------------------------------------------------------
@@ -371,6 +423,61 @@ app.get(
 
                     res.status(404).send(
                         "WEBZONE ER Studio is unavailable."
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+/* ============================================================
+   SOUND BOX ROUTES
+   ------------------------------------------------------------
+   /soundbox
+   /soundbox/
+   /music
+   /music/
+
+   Resolve to:
+
+   /soundbox.html
+   ============================================================ */
+
+app.get(
+    [
+        "/soundbox",
+        "/soundbox/",
+        "/music",
+        "/music/"
+    ],
+    (req, res) => {
+
+        const soundboxPage =
+            path.join(
+                __dirname,
+                "soundbox.html"
+            );
+
+        res.sendFile(
+            soundboxPage,
+            (error) => {
+
+                if (!error) {
+                    return;
+                }
+
+                console.error(
+                    "[SOUNDBOX] Unable to load soundbox.html:",
+                    error.message
+                );
+
+                if (!res.headersSent) {
+
+                    res.status(404).send(
+                        "WEBZONEBW Sound Box is unavailable."
                     );
 
                 }
@@ -722,6 +829,22 @@ app.use(
                 .status(404)
                 .send("Not Found");
 
+        }
+
+        const resolvedPage =
+            resolveHtmlPageFromRoute(requestPath);
+
+        if (resolvedPage) {
+            return res.sendFile(
+                resolvedPage,
+                (error) => {
+
+                    if (error) {
+                        next(error);
+                    }
+
+                }
+            );
         }
 
         /*

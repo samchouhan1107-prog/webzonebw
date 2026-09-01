@@ -1097,6 +1097,21 @@ function initMobileSidebarDrawer() {
         }
     );
 
+    window.addEventListener(
+        "popstate",
+        () => {
+
+            if (
+                isSidebarDrawerOpen() &&
+                window.innerWidth <=
+                WEBZONE_CONFIG.mobileBreakpoint
+            ) {
+
+                closeSidebarDrawer();
+            }
+        }
+    );
+
     const navLinks =
         document.querySelectorAll(
             WEBZONE_CONFIG.selectors.sidebarNav
@@ -1355,6 +1370,7 @@ function openSidebarDrawer() {
         document.body.classList.add(
             "webzone-scroll-lock"
         );
+        document.body.style.position = "relative";
     }
 
     if (backdrop) {
@@ -1433,6 +1449,7 @@ function closeSidebarDrawer() {
     document.body.classList.remove(
         "webzone-scroll-lock"
     );
+    document.body.style.position = "";
 
     if (backdrop) {
 
