@@ -15,8 +15,7 @@
     Notes:
     - Only canonical, indexable pages are included.
     - Error, maintenance, API and utility routes are excluded.
-    - Last modification dates should only be added when pages
-      are actually updated.
+    - Last modification dates reflect when pages were last updated.
     ============================================================
 -->
 
@@ -31,6 +30,7 @@
 
     <url>
         <loc>https://webzonebw.in/</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -38,12 +38,14 @@
 
     <url>
         <loc>https://webzonebw.in/soundbox.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
     <!-- About -->
 
     <url>
         <loc>https://webzonebw.in/about.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -51,6 +53,7 @@
 
     <url>
         <loc>https://webzonebw.in/projects.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -58,6 +61,7 @@
 
     <url>
         <loc>https://webzonebw.in/resume.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -65,6 +69,7 @@
 
     <url>
         <loc>https://webzonebw.in/blog.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -72,6 +77,7 @@
 
     <url>
         <loc>https://webzonebw.in/contact.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -84,12 +90,7 @@
 
     <url>
         <loc>https://webzonebw.in/er/</loc>
-    </url>
-
-    <!-- Halloween / Seasonal Experience -->
-
-    <url>
-        <loc>https://webzonebw.in/halloween/</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -101,6 +102,7 @@
 
     <url>
         <loc>https://webzonebw.in/privacy.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -108,6 +110,7 @@
 
     <url>
         <loc>https://webzonebw.in/terms.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 
@@ -115,6 +118,7 @@
 
     <url>
         <loc>https://webzonebw.in/disclaimer.html</loc>
+        <lastmod>2026-09-01</lastmod>
     </url>
 
 </urlset>
