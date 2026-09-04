@@ -39,6 +39,11 @@
 
         function getSavedTheme() {
             try {
+                /* v2.1: Try namespaced cookie first */
+                if (window.WebZoneCookie) {
+                    var ck = window.WebZoneCookie.getNS("global", "theme");
+                    if (ck === THEME_LIGHT || ck === THEME_DARK) return ck;
+                }
                 var saved =
                     localStorage.getItem("theme") ||
                     localStorage.getItem("webzonebw-theme");
@@ -53,8 +58,12 @@
             try {
                 localStorage.setItem("theme", theme);
                 localStorage.setItem("webzonebw-theme", theme);
+                /* v2.1: Also persist via namespaced cookie */
+                if (window.WebZoneCookie) {
+                    window.WebZoneCookie.setNS("global", "theme", theme, { days: 365 });
+                }
             } catch (error) {
-                /* Storage unavailable — theme stays active for this session. */
+                /* Storage unavailable */
             }
         }
 

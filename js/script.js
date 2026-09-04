@@ -826,6 +826,11 @@ function normalizeTheme(
 function getSavedThemePreference() {
 
     try {
+        /* v2.1: Try namespaced cookie first via WebZoneCookie */
+        if (window.WebZoneCookie) {
+            var ckTheme = window.WebZoneCookie.getNS("global", "theme");
+            if (ckTheme === "light" || ckTheme === "dark") return ckTheme;
+        }
 
         const value =
             localStorage.getItem(
@@ -839,7 +844,6 @@ function getSavedThemePreference() {
             value === "light" ||
             value === "dark"
         ) {
-
             return value;
         }
 
@@ -874,6 +878,11 @@ function saveThemePreference(
             "webzonebw-theme",
             theme
         );
+
+        /* v2.1: Also persist via namespaced cookie */
+        if (window.WebZoneCookie) {
+            window.WebZoneCookie.setNS("global", "theme", theme, { days: 365 });
+        }
 
     } catch (error) {
 
@@ -1700,17 +1709,8 @@ function detectCurrentPage() {
 
 
     /* ------------------------------------------------------
-       HALLOWEEN
+       HALLOWEEN (removed — route no longer exists)
        ------------------------------------------------------ */
-
-    if (
-        pathname === "/halloween" ||
-        pathname === "/halloween/" ||
-        pathname.includes("/halloween/index.html")
-    ) {
-
-        return "halloween/index.html";
-    }
 
 
     /* ------------------------------------------------------
@@ -1728,13 +1728,10 @@ function detectCurrentPage() {
          */
 
         if (
-            pathname.includes("/er/") ||
-            pathname.includes("/halloween/")
+            pathname.includes("/er/")
         ) {
 
-            return pathname.includes("/er/")
-                ? "er/index.html"
-                : "halloween/index.html";
+            return "er/index.html";
         }
 
         return "index.html";
@@ -1759,15 +1756,11 @@ function detectCurrentPage() {
 
         "contact.html",
 
-        "master.html",
-
         "privacy.html",
 
         "terms.html",
 
-        "disclaimer.html",
-
-        "404.html"
+        "disclaimer.html"
     ];
 
 
@@ -1861,30 +1854,6 @@ function isNavigationMatch(
 
             normalizedHref.endsWith(
                 "/er/index.html"
-            )
-        );
-    }
-
-
-    /* ------------------------------------------------------
-       HALLOWEEN
-       ------------------------------------------------------ */
-
-    if (
-        currentPage ===
-        "halloween/index.html"
-    ) {
-
-        return (
-
-            normalizedHref ===
-                "halloween/" ||
-
-            normalizedHref ===
-                "halloween/index.html" ||
-
-            normalizedHref.endsWith(
-                "/halloween/index.html"
             )
         );
     }
@@ -2006,7 +1975,27 @@ window.WebZoneBW = {
     closeSidebar() {
 
         closeSidebarDrawer();
-    }
+    },
+
+    /* v2.1: Cleanup / destroy for lifecycle management */
+    destroy() {
+        /* Clear transition timeout */
+        if (WebZoneState.transitionTimeout) {
+            clearTimeout(WebZoneState.transitionTimeout);
+            WebZoneState.transitionTimeout = null;
+        }
+        /* Close sidebar */
+        closeSidebarDrawer();
+        /* Reset init flags */
+        WebZoneState.initialized = false;
+        WebZoneState.themeInitialized = false;
+        WebZoneState.sidebarInitialized = false;
+        WebZoneState.navigationInitialized = false;
+        WebZoneState.skillsInitialized = false;
+    },
+
+    /* v2.1: Cookie namespace helper */
+    cookie: window.WebZoneCookie || null
 };
 
 
