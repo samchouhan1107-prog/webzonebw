@@ -1,5 +1,5 @@
 /* ==========================================================
-   WEBZONEBW — Cookie Consent Banner v2.1
+   WEBZONEBW � Cookie Consent Banner v2.1
    ----------------------------------------------------------
    GDPR / ePrivacy compliance for AdSense approval.
    Uses WebZoneCookie utility for namespaced storage.

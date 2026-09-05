@@ -1,10 +1,10 @@
 /* ==========================================================
-   WEBZONEBW — Cookie Utility Service v1.0
+   WEBZONEBW � Cookie Utility Service v1.0
    ----------------------------------------------------------
    Shared, namespaced cookie API for all components.
    Namespace convention:
-     Global prefs  → webzonebw_global_<key>
-     Component     → webzonebw_<component>_<key>
+     Global prefs  ? webzonebw_global_<key>
+     Component     ? webzonebw_<component>_<key>
    ========================================================== */
 
 (function () {

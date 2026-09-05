@@ -17,7 +17,7 @@
 
 
 /* ==========================================================
-   01 — RESET
+   01 � RESET
 ========================================================== */
 
 html {
@@ -83,7 +83,7 @@ button {
 
 
 /* ==========================================================
-   02 — GLOBAL TRANSITIONS & EYE-CARE THEME DYNAMICS
+   02 � GLOBAL TRANSITIONS & EYE-CARE THEME DYNAMICS
 ========================================================== */
 
 :root {
@@ -246,7 +246,7 @@ body.light-mode {
 }
 
 /* ==========================================================
-   LIGHT MODE — Comprehensive Section Overrides
+   LIGHT MODE � Comprehensive Section Overrides
    Ensures every section reads clearly on the light canvas
    ========================================================== */
 body.light-mode .user-avatar-wrap {
@@ -415,7 +415,7 @@ select {
 
 
 /* ==========================================================
-   03 — MAIN LAYOUT & UNIFIED ARCHITECTURE
+   03 � MAIN LAYOUT & UNIFIED ARCHITECTURE
 ========================================================== */
 
 body {
@@ -443,7 +443,7 @@ html, body {
 
 
 /* ==========================================================
-   04 — STANDARDIZED UNIFIED SIDEBAR
+   04 � STANDARDIZED UNIFIED SIDEBAR
 ========================================================== */
 
 .sidebar,
@@ -465,7 +465,7 @@ html, body {
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 05 — BRAND LOGO */
+/* 05 � BRAND LOGO */
 .logo {
     text-align: left;
     padding: 4px 0 16px;
@@ -534,7 +534,7 @@ body.light-mode .brand-sub {
 
 
 /* ==========================================================
-   07 — SIDEBAR NAVIGATION MENU
+   07 � SIDEBAR NAVIGATION MENU
 ========================================================== */
 
 .sidebar-nav {
@@ -603,7 +603,7 @@ body.light-mode .sidebar-nav ul li a.active {
 
 
 /* ==========================================================
-   07B — SIDEBAR THEME TOGGLE & USER PROFILE CARD
+   07B � SIDEBAR THEME TOGGLE & USER PROFILE CARD
 ========================================================== */
 
 .sidebar-theme-toggle-row {
@@ -734,7 +734,7 @@ body.light-mode .sidebar-nav ul li a.active {
 
 
 /* ==========================================================
-   08 — MAIN CONTENT WORKSPACE
+   08 � MAIN CONTENT WORKSPACE
 ========================================================== */
 
 .main-content,
@@ -748,7 +748,7 @@ body.light-mode .sidebar-nav ul li a.active {
 
 
 /* ==========================================================
-   09 — TOP HEADER WITH UTILITIES
+   09 � TOP HEADER WITH UTILITIES
 ========================================================== */
 
 .top-header,
@@ -816,7 +816,7 @@ body.light-mode .sidebar-nav ul li a.active {
 
 
 /* ==========================================================
-   09B — MOBILE NAVIGATION BAR & SIDEBAR OVERLAY BACKDROP
+   09B � MOBILE NAVIGATION BAR & SIDEBAR OVERLAY BACKDROP
 ========================================================== */
 
 .sidebar-backdrop {
@@ -975,7 +975,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   10 — HERO
+   10 � HERO
 ========================================================== */
 
 .hero {
@@ -1024,7 +1024,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   11 — HERO BUTTONS
+   11 � HERO BUTTONS
 ========================================================== */
 
 .hero-buttons {
@@ -1041,7 +1041,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   12 — GLOBAL BUTTON
+   12 � GLOBAL BUTTON
 ========================================================== */
 
 .btn {
@@ -1089,7 +1089,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   11b — HERO TRUST SIGNAL
+   11b � HERO TRUST SIGNAL
 ========================================================== */
 
 .hero-trust-signal {
@@ -1104,7 +1104,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   13 — FEATURED CARD
+   13 � FEATURED CARD
 ========================================================== */
 
 .featured-card {
@@ -1153,7 +1153,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   14 — QUICK INFORMATION
+   14 � QUICK INFORMATION
 ========================================================== */
 
 .quick-info {
@@ -1215,7 +1215,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   15 — PROJECTS
+   15 � PROJECTS
 ========================================================== */
 
 .projects {
@@ -1281,7 +1281,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   16 — CONTACT SECTION
+   16 � CONTACT SECTION
 ========================================================== */
 
 .contact-section {
@@ -1314,7 +1314,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   17 — SOCIAL LINKS
+   17 � SOCIAL LINKS
 ========================================================== */
 
 .social-links {
@@ -1364,7 +1364,7 @@ body.light-mode .sidebar-close-btn:hover {
 
 
 /* ==========================================================
-   18 — CONTACT / FORM ELEMENTS
+   18 � CONTACT / FORM ELEMENTS
 ========================================================== */
 
 form {
@@ -1431,7 +1431,7 @@ form .btn {
 
 
 /* ==========================================================
-   19 — SKILLS
+   19 � SKILLS
 ========================================================== */
 
 .skills-section {
@@ -1480,7 +1480,7 @@ form .btn {
 
 
 /* ==========================================================
-   20 — FOOTER
+   20 � FOOTER
 ========================================================== */
 
 .site-footer {
@@ -1533,7 +1533,7 @@ form .btn {
 
 
 /* ==========================================================
-   20b — FOOTER SECTION LABEL
+   20b � FOOTER SECTION LABEL
 ========================================================== */
 
 .footer-section-label {
@@ -1564,7 +1564,7 @@ form .btn {
 
 
 /* ==========================================================
-   20d — ABOUT PAGE PLACEHOLDERS & TEAM
+   20d � ABOUT PAGE PLACEHOLDERS & TEAM
 ========================================================== */
 
 .placeholder-value {
@@ -1657,7 +1657,7 @@ form .btn {
 
 
 /* ==========================================================
-   20e — CONTACT PAGE DETAILS & RESPONSE NOTE
+   20e � CONTACT PAGE DETAILS & RESPONSE NOTE
 ========================================================== */
 
 .contact-details-list {
@@ -1688,7 +1688,7 @@ form .btn {
 
 
 /* ==========================================================
-   21 — LEGAL / INFORMATION PAGES
+   21 � LEGAL / INFORMATION PAGES
 ========================================================== */
 
 .legal-page {
@@ -1802,7 +1802,7 @@ form .btn {
 
 
 /* ==========================================================
-   22 — CONTENT READABILITY
+   22 � CONTENT READABILITY
 ========================================================== */
 
 .main-content p {
@@ -1819,7 +1819,7 @@ main section + section {
 
 
 /* ==========================================================
-   23 — SIDEBAR SCROLLBAR
+   23 � SIDEBAR SCROLLBAR
 ========================================================== */
 
 .sidebar-nav::-webkit-scrollbar {
@@ -1838,7 +1838,7 @@ main section + section {
 
 
 /* ==========================================================
-   24 — LARGE SCREENS
+   24 � LARGE SCREENS
 ========================================================== */
 
 @media (max-width: 1400px) {
@@ -1855,7 +1855,7 @@ main section + section {
 
 
 /* ==========================================================
-   25 — TABLETS
+   25 � TABLETS
 ========================================================== */
 
 @media (max-width: 1024px) {
@@ -1892,11 +1892,11 @@ main section + section {
 
 
 /* ==========================================================
-   26 — MOBILE
+   26 � MOBILE
 ========================================================== */
 
 /* ==========================================================
-   26 — MOBILE & TABLET DRAWER
+   26 � MOBILE & TABLET DRAWER
 ========================================================== */
 
 @media (max-width: 860px) {
@@ -2234,7 +2234,7 @@ main section + section {
 
 
 /* ==========================================================
-   27 — SMALL PHONES
+   27 � SMALL PHONES
 ========================================================== */
 
 @media (max-width: 480px) {
@@ -2309,7 +2309,7 @@ main section + section {
 
 
 /* ==========================================================
-    29 — ACCESSIBILITY
+    29 � ACCESSIBILITY
 ========================================================== */
 
 
@@ -2325,7 +2325,7 @@ textarea:focus-visible {
 
 
 /* ==========================================================
-   30 — HALLOWEEN SLIDE & AR EXPERIENCE
+   30 � HALLOWEEN SLIDE & AR EXPERIENCE
 ========================================================== */
 
 .halloween-hero {
@@ -2783,7 +2783,7 @@ body.light-mode .snapshot-preview-img {
 }
 
 /* ==========================================================
-   30.1 — SIDEBAR ACTION BUTTONS & ER BUTTON (RESPONSIVE)
+   30.1 � SIDEBAR ACTION BUTTONS & ER BUTTON (RESPONSIVE)
 ========================================================== */
 
 .sidebar-top-actions {
@@ -2890,7 +2890,7 @@ body.light-mode .er-btn.active {
 }
 
 /* ==========================================================
-   30.4 — COMPACT TECHNICAL SPECIFICATIONS SLIDE DRAWER
+   30.4 � COMPACT TECHNICAL SPECIFICATIONS SLIDE DRAWER
 ========================================================== */
 .tech-specs-slidebar {
     margin: 20px 0 28px;
@@ -3094,7 +3094,7 @@ body.light-mode .tech-filter-tag {
 }
 
 /* ==========================================================
-   30.2 — STUDIO MODES, MAGAZINE COVERS & AUTO-HD ENHANCER
+   30.2 � STUDIO MODES, MAGAZINE COVERS & AUTO-HD ENHANCER
 ========================================================== */
 
 .studio-mode-tabs {
@@ -3351,7 +3351,7 @@ body.light-mode .mag-input {
 }
 
 /* ==========================================================
-   30.3 — QUICK ACTIONS, HIDDEN DRAWER & FINGERTIP TOUCH SLIDER
+   30.3 � QUICK ACTIONS, HIDDEN DRAWER & FINGERTIP TOUCH SLIDER
 ========================================================== */
 
 /* Primary Quick Effects Bar */
@@ -3565,7 +3565,7 @@ body.light-mode .effects-hidden-drawer {
 }
 
 /* ==========================================================
-   30.2 — SNAPCHAT / INSTAGRAM AR LENS STUDIO & CONTROLS
+   30.2 � SNAPCHAT / INSTAGRAM AR LENS STUDIO & CONTROLS
 ========================================================== */
 
 /* Floating Quick Actions on Camera Viewport */
@@ -3852,7 +3852,7 @@ body.light-mode .snap-capture-shutter-btn .shutter-center-core {
 }
 
 /* ==========================================================
-   30.3 — 404 & MAINTENANCE CENTER STYLES
+   30.3 � 404 & MAINTENANCE CENTER STYLES
 ========================================================== */
 
 .maintenance-section {
@@ -4353,7 +4353,7 @@ body.light-mode .error-contact-row {
 }
 
 /* ==========================================================
-   30.4 — CAMERA & MICROPHONE PERMISSION MODAL & HUD BADGES
+   30.4 � CAMERA & MICROPHONE PERMISSION MODAL & HUD BADGES
 ========================================================== */
 
 .cam-floating-badge {
@@ -4597,7 +4597,7 @@ body.light-mode .cam-floating-badge {
 }
 
 /* ==========================================================
-   31 — REDUCED MOTION
+   31 � REDUCED MOTION
 ========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -4617,7 +4617,7 @@ body.light-mode .cam-floating-badge {
 
 
 /* ==========================================================
-   32 — WEBZONEBW-ER STUDIO REDESIGNED LAYOUT (SCREENSHOT SPEC)
+   32 � WEBZONEBW-ER STUDIO REDESIGNED LAYOUT (SCREENSHOT SPEC)
 ========================================================== */
 
 .er-studio-body {
@@ -4963,7 +4963,7 @@ body.light-mode .cam-floating-badge {
 .er-workspace-grid {
     display: grid;
     /*
-     * minmax(0, 1fr) — not bare 1fr. A bare 1fr track has
+     * minmax(0, 1fr) � not bare 1fr. A bare 1fr track has
      * min-width:auto, so wide children (camera card,
      * filter grid) force the track open and push the
      * effects panel past the viewport edge.
@@ -8428,7 +8428,7 @@ body.light-mode .global-dock-link:hover {
         display: none;
     }
 
-    /* Hide the category pills ribbon below camera on mobile — it's redundant */
+    /* Hide the category pills ribbon below camera on mobile � it's redundant */
     .smart-inventory-ribbon {
         display: none;
     }
@@ -8576,7 +8576,7 @@ body {
     }
 }
 
-/* ER Studio immersive camera active state — proper mobile layout */
+/* ER Studio immersive camera active state � proper mobile layout */
 @media (max-width: 700px) {
     .webzonebw-er-camera-active .er-bottom-controls-bar {
         position: fixed;
@@ -8621,7 +8621,7 @@ body {
     }
 }
 
-/* ER Studio desktop — wider effects panel */
+/* ER Studio desktop � wider effects panel */
 @media (min-width: 1025px) {
     .er-workspace-grid {
         grid-template-columns: 1fr 360px;
@@ -8659,7 +8659,7 @@ body {
 }
 
 /* ==========================================================
-   SOUNDBOX — PLAYLIST FILTER SCROLL WRAPPER
+   SOUNDBOX � PLAYLIST FILTER SCROLL WRAPPER
 ========================================================== */
 
 .playlist-filter-scroll-wrap {

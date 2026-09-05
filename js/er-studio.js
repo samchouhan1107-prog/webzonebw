@@ -1,13 +1,13 @@
 /* =====================================================
-   WEBZONEBW-ER STUDIO — PAGE CONTROLLERS
+   WEBZONEBW-ER STUDIO � PAGE CONTROLLERS
    Extracted from er/index.html.
 
    Modules (each isolated in its own IIFE, single
    responsibility, no cross-dependencies):
-     1. ERThemeController      — theme persistence & toggle
-     2. ERHalloweenLaunchUI    — launch orb animation & parallax
-     3. ERCameraStabilityGuard — resume stalled/paused camera
-     4. ERReadyMarker          — marks page as initialized
+     1. ERThemeController      � theme persistence & toggle
+     2. ERHalloweenLaunchUI    � launch orb animation & parallax
+     3. ERCameraStabilityGuard � resume stalled/paused camera
+     4. ERReadyMarker          � marks page as initialized
 
    NOTE: none of these modules call getUserMedia(); the
    existing halloween.js camera controller owns the stream.
@@ -83,7 +83,7 @@
             var text = document.getElementById("themeModeText");
 
             if (toggle) { toggle.checked = !isLight; }
-            if (icon) { icon.textContent = isLight ? "☀️" : "🌙"; }
+            if (icon) { icon.textContent = isLight ? "??" : "??"; }
             if (text) { text.textContent = isLight ? "Light Mode" : "Dark Mode"; }
 
             persistTheme(theme);
@@ -220,7 +220,7 @@
             if (video.readyState >= 2 && video.paused) {
                 var playPromise = video.play();
 
-                /* Browser may require a user gesture — never force it. */
+                /* Browser may require a user gesture � never force it. */
                 if (playPromise && typeof playPromise.catch === "function") {
                     playPromise.catch(function () { /* no-op */ });
                 }
@@ -264,7 +264,7 @@
 
             video.addEventListener("pause", function () {
                 /*
-                 * Do not restart immediately — the camera controller
+                 * Do not restart immediately � the camera controller
                  * may intentionally pause the video while changing
                  * lenses or switching cameras.
                  */

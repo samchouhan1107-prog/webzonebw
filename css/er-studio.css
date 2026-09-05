@@ -1,5 +1,5 @@
 /* =====================================================
-   WEBZONEBW-ER STUDIO — PAGE-LEVEL STYLES
+   WEBZONEBW-ER STUDIO � PAGE-LEVEL STYLES
    Extracted from er/index.html.
    Loaded after style.css / responsive.css; these rules
    are ER-Studio specific safety and theming overrides.
@@ -168,7 +168,7 @@ body.er-studio-body {
 /*
  * LIVE CAMERA VIDEO
  * Keep the video element stable: no filters, transforms
- * or animations directly on the video — avoids GPU stalls.
+ * or animations directly on the video � avoids GPU stalls.
  */
 .er-studio-body #cameraVideo.camera-video {
     position: absolute;

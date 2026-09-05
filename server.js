@@ -1,6 +1,6 @@
 /* ============================================================
-   WEBZONEBW — WEB SERVER
-   WEBZONE ER • STATIC SITE ENGINE
+   WEBZONEBW � WEB SERVER
+   WEBZONE ER � STATIC SITE ENGINE
    ------------------------------------------------------------
    Version: 2.2
    Port:    3000
@@ -711,7 +711,7 @@ app.get(
                 if (!res.headersSent) {
 
                     res.status(404).send(
-                        "WEBZONEBW — Page not found."
+                        "WEBZONEBW � Page not found."
                     );
 
                 }
@@ -932,7 +932,7 @@ app.use(
         return res
             .status(statusCode)
             .send(
-                "WEBZONEBW — Internal Server Error"
+                "WEBZONEBW � Internal Server Error"
             );
 
     }

@@ -1,6 +1,6 @@
 /* ==========================================================
-   WEBZONE ER — EXTENDED REALITY & PHOTO STUDIO ENGINE
-   Cartoonist Shaders • Auto-HD Enhancer • Trending Magazines
+   WEBZONE ER � EXTENDED REALITY & PHOTO STUDIO ENGINE
+   Cartoonist Shaders � Auto-HD Enhancer � Trending Magazines
    ========================================================== */
 
 "use strict";
@@ -551,7 +551,7 @@ function initWebZoneERStudio() {
         });
     }
 
-    // Category Tabs (legacy .category-tab-btn removed — handled by catPills below)
+    // Category Tabs (legacy .category-tab-btn removed � handled by catPills below)
 
     // Magazine Template Switcher
     if (magItemBtns.length > 0) {
@@ -589,8 +589,8 @@ function initWebZoneERStudio() {
 
             faceHudToggle.innerHTML =
                 showFaceHud
-                    ? '<span aria-hidden="true">🎯</span> Face Recognition HUD: ON'
-                    : '<span aria-hidden="true">🎯</span> Face Recognition HUD: OFF';
+                    ? '<span aria-hidden="true">??</span> Face Recognition HUD: ON'
+                    : '<span aria-hidden="true">??</span> Face Recognition HUD: OFF';
 
         });
 
@@ -672,11 +672,11 @@ function initWebZoneERStudio() {
     // & Realistic AR effects with category and target metadata
     const allFilterConfigs = [
 
-        // 👤 FACE AR LENSES (verified working)
+        // ?? FACE AR LENSES (verified working)
         {
             id: "sunglasses",
             name: "Aviators",
-            icon: "🕶️",
+            icon: "???",
             category: "face",
             target: "face",
             desc: "Ray-Ban aviator sunglasses with reflective lens shimmer"
@@ -685,7 +685,7 @@ function initWebZoneERStudio() {
         {
             id: "halo",
             name: "Angel Halo",
-            icon: "👑",
+            icon: "??",
             category: "face",
             target: "face",
             desc: "Floating neon gold angelic halo with sacred geometry"
@@ -694,7 +694,7 @@ function initWebZoneERStudio() {
         {
             id: "goldenhour",
             name: "Golden Hour",
-            icon: "🌟",
+            icon: "??",
             category: "face",
             target: "face",
             desc: "Warm California sunset rim light and golden skin glow"
@@ -703,17 +703,17 @@ function initWebZoneERStudio() {
         {
             id: "cartoon",
             name: "Anime Cel",
-            icon: "🎨",
+            icon: "??",
             category: "face",
             target: "face",
             desc: "High-contrast comic outline with vibrant cel shading"
         },
 
-        // 🌍 SCENE & ATMOSPHERIC SHADERS (verified working)
+        // ?? SCENE & ATMOSPHERIC SHADERS (verified working)
         {
             id: "noir",
             name: "Leica Noir",
-            icon: "🖤",
+            icon: "??",
             category: "scene",
             target: "scene",
             desc: "High-contrast silver gelatin black-and-white 35mm film"
@@ -722,7 +722,7 @@ function initWebZoneERStudio() {
         {
             id: "vintage90s",
             name: "Retro 90s",
-            icon: "🎞️",
+            icon: "???",
             category: "scene",
             target: "scene",
             desc: "Warm Kodak Portra analog grain with soft vignette"
@@ -731,7 +731,7 @@ function initWebZoneERStudio() {
         {
             id: "cinematic",
             name: "35mm Film",
-            icon: "🎬",
+            icon: "??",
             category: "scene",
             target: "scene",
             desc: "Anamorphic widescreen teal & orange color grade"
@@ -740,7 +740,7 @@ function initWebZoneERStudio() {
         {
             id: "glitch",
             name: "Glitch FX",
-            icon: "⚡",
+            icon: "?",
             category: "scene",
             target: "scene",
             desc: "RGB channel chromatic aberration and scanline shifts"
@@ -749,7 +749,7 @@ function initWebZoneERStudio() {
         {
             id: "space",
             name: "Deep Space",
-            icon: "🚀",
+            icon: "??",
             category: "scene",
             target: "scene",
             desc: "Starlight nebula cosmic aura with drifting stardust"
@@ -758,7 +758,7 @@ function initWebZoneERStudio() {
         {
             id: "cyberpunk",
             name: "Neon Cyber",
-            icon: "💡",
+            icon: "??",
             category: "scene",
             target: "scene",
             desc: "Vibrant synthwave neon magenta & cyan wash"
@@ -977,7 +977,7 @@ function initWebZoneERStudio() {
             snapLensTrack.appendChild(btn);
         });
 
-        // Add "••• More" button at the end
+        // Add "��� More" button at the end
         const moreBtn =
             document.createElement("button");
 
@@ -993,7 +993,7 @@ function initWebZoneERStudio() {
             "View All 30+ Effects in Studio Panel";
 
         moreBtn.innerHTML = `
-            <div class="lens-bubble-circle">•••</div>
+            <div class="lens-bubble-circle">���</div>
             <span class="lens-bubble-label">More</span>
         `;
 
@@ -1042,7 +1042,7 @@ function initWebZoneERStudio() {
             if (isTouchLocked) {
 
                 smartStatusIcon.textContent =
-                    "🎯";
+                    "??";
 
                 smartStatusText.textContent =
                     "Touch-Locked AR Active";
@@ -1050,7 +1050,7 @@ function initWebZoneERStudio() {
             } else if (isFaceDetected) {
 
                 smartStatusIcon.textContent =
-                    "👤";
+                    "??";
 
                 smartStatusText.textContent =
                     `Smart Face AR: Locked (${faceDetectionConfidence.toFixed(0)}%)`;
@@ -1058,7 +1058,7 @@ function initWebZoneERStudio() {
             } else {
 
                 smartStatusIcon.textContent =
-                    "🌍";
+                    "??";
 
                 smartStatusText.textContent =
                     "Smart Scene Shaders: Active";
@@ -1076,7 +1076,7 @@ function initWebZoneERStudio() {
             ) {
 
                 smartInventoryBadge.textContent =
-                    `👤 ${faceCount} Face AR Lenses Ready`;
+                    `?? ${faceCount} Face AR Lenses Ready`;
 
                 smartInventoryBadge.classList.remove(
                     "scene-mode"
@@ -1088,7 +1088,7 @@ function initWebZoneERStudio() {
             ) {
 
                 smartInventoryBadge.textContent =
-                    `🌍 ${sceneCount} Scene Shaders Active`;
+                    `?? ${sceneCount} Scene Shaders Active`;
 
                 smartInventoryBadge.classList.add(
                     "scene-mode"
@@ -1097,7 +1097,7 @@ function initWebZoneERStudio() {
             } else {
 
                 smartInventoryBadge.textContent =
-                    `✨ ${inventory.length} Effects Available`;
+                    `? ${inventory.length} Effects Available`;
 
                 smartInventoryBadge.classList.remove(
                     "scene-mode"
@@ -1121,7 +1121,7 @@ function initWebZoneERStudio() {
                 );
 
                 faceChipStatus.textContent =
-                    "🎯 Touch Lock Anchored";
+                    "?? Touch Lock Anchored";
 
             } else if (isFaceDetected) {
 
@@ -1130,7 +1130,7 @@ function initWebZoneERStudio() {
                 );
 
                 faceChipStatus.textContent =
-                    `👤 Face Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+                    `?? Face Locked (${faceDetectionConfidence.toFixed(0)}%)`;
 
             } else {
 
@@ -1139,7 +1139,7 @@ function initWebZoneERStudio() {
                 );
 
                 faceChipStatus.textContent =
-                    "👤 Auto-Scanning Face...";
+                    "?? Auto-Scanning Face...";
             }
         }
 
@@ -1150,19 +1150,19 @@ function initWebZoneERStudio() {
             ) {
 
                 faceProximityMetric.textContent =
-                    "📐 Move Back";
+                    "?? Move Back";
 
             } else if (
                 currentProximity === "far"
             ) {
 
                 faceProximityMetric.textContent =
-                    "🔍 Step Closer";
+                    "?? Step Closer";
 
             } else {
 
                 faceProximityMetric.textContent =
-                    "🎯 Optimal Range";
+                    "?? Optimal Range";
             }
         }
 
@@ -1173,19 +1173,19 @@ function initWebZoneERStudio() {
             ) {
 
                 faceLightingMetric.textContent =
-                    "🌙 Low Light";
+                    "?? Low Light";
 
             } else if (
                 currentLighting === "bright"
             ) {
 
                 faceLightingMetric.textContent =
-                    "☀️ High Lumens";
+                    "?? High Lumens";
 
             } else {
 
                 faceLightingMetric.textContent =
-                    "⚡ Studio Light";
+                    "? Studio Light";
             }
         }
     }
@@ -1236,7 +1236,7 @@ function initWebZoneERStudio() {
                 id: filterName,
                 name:
                     filterName.toUpperCase(),
-                icon: "✨",
+                icon: "?",
                 category: "scene"
             };
 
@@ -1251,7 +1251,7 @@ function initWebZoneERStudio() {
         if (direction === "left") {
 
             showSwipeToast(
-                "👉",
+                "??",
                 `${config.icon} ${config.name}`
             );
 
@@ -1260,7 +1260,7 @@ function initWebZoneERStudio() {
         ) {
 
             showSwipeToast(
-                "👈",
+                "??",
                 `${config.icon} ${config.name}`
             );
 
@@ -1498,7 +1498,7 @@ function initWebZoneERStudio() {
                 toggleDrawerBtn.setAttribute("aria-expanded", "true");
 
                 if (drawerArrowIcon) {
-                    drawerArrowIcon.textContent = "▲";
+                    drawerArrowIcon.textContent = "?";
                 }
             } else {
                 effectsHiddenDrawer.classList.add("collapsed");
@@ -1506,7 +1506,7 @@ function initWebZoneERStudio() {
                 toggleDrawerBtn.setAttribute("aria-expanded", "false");
 
                 if (drawerArrowIcon) {
-                    drawerArrowIcon.textContent = "▼";
+                    drawerArrowIcon.textContent = "?";
                 }
             }
         });
@@ -2217,7 +2217,7 @@ function initWebZoneERStudio() {
                 }
 
                 showSwipeToast(
-                    "🔍",
+                    "??",
                     `Zoom: ${currentZoom.toFixed(1)}x`
                 );
 
@@ -2299,7 +2299,7 @@ function initWebZoneERStudio() {
                 );
 
                 showSwipeToast(
-                    "⚡",
+                    "?",
                     isStudioLightEnabled
                         ? "Studio Light ON"
                         : "Studio Light OFF"
@@ -2334,7 +2334,7 @@ function initWebZoneERStudio() {
                 );
 
                 showSwipeToast(
-                    "👤",
+                    "??",
                     showFaceHud
                         ? "Biometric Tracking ON"
                         : "Biometric Tracking OFF"
@@ -2549,7 +2549,7 @@ function initWebZoneERStudio() {
                 }
 
                 showSwipeToast(
-                    "❔",
+                    "?",
                     "Swipe left/right to change effects!"
                 );
 
@@ -2622,7 +2622,7 @@ function initWebZoneERStudio() {
                 applySmartCategory("all");
 
                 showSwipeToast(
-                    "⊞",
+                    "?",
                     "Showing all 30+ Effects"
                 );
 
@@ -2718,7 +2718,7 @@ function initWebZoneERStudio() {
                 }
 
                 showSwipeToast(
-                    "👤",
+                    "??",
                     showFaceHud
                         ? "Face Reticle ON"
                         : "Face Reticle OFF"
@@ -2778,7 +2778,7 @@ function initWebZoneERStudio() {
             "WEBZONEBW ER Studio needs access to your <strong>camera</strong> to start the live Extended Reality experience.";
 
         let icon =
-            "📷";
+            "??";
 
 
         // ======================================================
@@ -2809,17 +2809,17 @@ function initWebZoneERStudio() {
             if (isTouchDevice) {
 
                 message =
-                    "Your browser blocked the camera for this site. Tap the <strong>lock / camera icon</strong> in the address bar (or open Safari/Chrome site settings), set <strong>Camera → Allow</strong>, then reload the page. On iOS also check Settings → Safari/Chrome → Camera.";
+                    "Your browser blocked the camera for this site. Tap the <strong>lock / camera icon</strong> in the address bar (or open Safari/Chrome site settings), set <strong>Camera ? Allow</strong>, then reload the page. On iOS also check Settings ? Safari/Chrome ? Camera.";
 
             } else {
 
                 message =
-                    "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Retry Camera</strong>. Also check Windows Settings → Privacy &amp; security → Camera.";
+                    "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Retry Camera</strong>. Also check Windows Settings ? Privacy &amp; security ? Camera.";
 
             }
 
             icon =
-                "🚫";
+                "??";
 
 
         // ======================================================
@@ -2843,7 +2843,7 @@ function initWebZoneERStudio() {
                 "WEBZONEBW ER could not find a usable camera on this device. Check that your camera is connected and available.";
 
             icon =
-                "📷";
+                "??";
 
 
         // ======================================================
@@ -2867,7 +2867,7 @@ function initWebZoneERStudio() {
                 "Your camera appears to be in use by another application, browser tab, Zoom, Teams, Meet, or similar software. Close it and retry.";
 
             icon =
-                "🔒";
+                "??";
 
 
         // ======================================================
@@ -2891,7 +2891,7 @@ function initWebZoneERStudio() {
                 "This device could not satisfy the requested camera settings. WEBZONEBW ER will retry using simpler mobile-compatible settings.";
 
             icon =
-                "⚙️";
+                "??";
 
 
         // ======================================================
@@ -2913,7 +2913,7 @@ function initWebZoneERStudio() {
                 "The browser blocked camera access because this page is not running in an allowed secure context. Use <strong>HTTPS</strong> or <strong>localhost</strong>.";
 
             icon =
-                "🔐";
+                "??";
 
 
         // ======================================================
@@ -2935,7 +2935,7 @@ function initWebZoneERStudio() {
                 "The camera startup was interrupted by the browser or device. Please press <strong>Retry Camera</strong>.";
 
             icon =
-                "🔄";
+                "??";
 
 
         // ======================================================
@@ -2957,7 +2957,7 @@ function initWebZoneERStudio() {
                 "This browser could not initialize the camera interface. Please use a current browser and open WEBZONEBW ER through <strong>HTTPS</strong> or <strong>localhost</strong>.";
 
             icon =
-                "🌐";
+                "??";
 
 
         // ======================================================
@@ -2976,7 +2976,7 @@ function initWebZoneERStudio() {
                 "WEBZONEBW ER could not start the device camera. Please check your camera permission and try again.";
 
             icon =
-                "⚠️";
+                "??";
 
         }
 
@@ -3966,7 +3966,7 @@ function initWebZoneERStudio() {
                 false;
 
             audioBtn.innerHTML =
-                '<span aria-hidden="true">🔊</span> Play Ambient Audio';
+                '<span aria-hidden="true">??</span> Play Ambient Audio';
 
         } else {
 
@@ -4006,7 +4006,7 @@ function initWebZoneERStudio() {
                 true;
 
             audioBtn.innerHTML =
-                '<span aria-hidden="true">🔇</span> Mute Audio';
+                '<span aria-hidden="true">??</span> Mute Audio';
 
         }
 
@@ -4151,7 +4151,7 @@ function initWebZoneERStudio() {
 
                         /*
                          * Normalize detector coordinates
-                         * into 0 → 1 space.
+                         * into 0 ? 1 space.
                          */
                         const rawCx =
                             (
@@ -4589,7 +4589,7 @@ function initWebZoneERStudio() {
         ctx.font = `700 ${Math.max(11, Math.min(18, w * 0.02))}px Orbitron, Arial, sans-serif`;
         ctx.fillStyle = "rgba(255,255,255,.92)";
         ctx.textAlign = "center";
-        ctx.fillText("CELEBRITY SPOTLIGHT • WEBZONEBW", cx, Math.max(18, cy - ry - 14));
+        ctx.fillText("CELEBRITY SPOTLIGHT � WEBZONEBW", cx, Math.max(18, cy - ry - 14));
         ctx.restore();
     }
 
@@ -4699,7 +4699,7 @@ function initWebZoneERStudio() {
 
                 break;
 
-            // (webzonebw removed — drawWebZoneBWTheme not implemented)
+            // (webzonebw removed � drawWebZoneBWTheme not implemented)
 
             // ==================================================
             // ART / PORTRAIT
@@ -4764,7 +4764,7 @@ function initWebZoneERStudio() {
             // TECHNOLOGY
             // ==================================================
 
-            // (cyberhud, matrix, devops, cybersec, hologram removed — functions not implemented)
+            // (cyberhud, matrix, devops, cybersec, hologram removed � functions not implemented)
 
             case "glitch":
 
@@ -4788,7 +4788,7 @@ function initWebZoneERStudio() {
 
                 break;
 
-            // (superhero, pumpkin, ghost, zombie, vampire, skeleton, spider, bats removed — functions not implemented)
+            // (superhero, pumpkin, ghost, zombie, vampire, skeleton, spider, bats removed � functions not implemented)
 
             case "dollar-rain":
 
@@ -5760,8 +5760,8 @@ function initWebZoneERStudio() {
 
             ctx.fillText(
                 i % 2 === 0
-                    ? "✨"
-                    : "💖",
+                    ? "?"
+                    : "??",
                 sx - 10,
                 sy
             );
@@ -6051,7 +6051,7 @@ function initWebZoneERStudio() {
             "center";
 
         ctx.fillText(
-            "LEICA NOIR 35MM • F/1.4",
+            "LEICA NOIR 35MM � F/1.4",
             w / 2,
             h - 16
         );
@@ -6414,7 +6414,7 @@ function initWebZoneERStudio() {
             "24px sans-serif";
 
         ctx.fillText(
-            "✨",
+            "?",
             cx +
                 h *
                 0.12,
@@ -6620,7 +6620,7 @@ function initWebZoneERStudio() {
             "center";
 
         ctx.fillText(
-            "POW! ✨",
+            "POW! ?",
             bx + 55,
             by + 22
         );
@@ -6784,7 +6784,7 @@ function initWebZoneERStudio() {
             "left";
 
         ctx.fillText(
-            "REC ● 4K 24FPS | 35MM ANAMORPHIC",
+            "REC ? 4K 24FPS | 35MM ANAMORPHIC",
             20,
             barH - 8
         );
@@ -7115,7 +7115,7 @@ function initWebZoneERStudio() {
             "left";
 
         ctx.fillText(
-            "🚀 ORBIT: 408 KM | O2: 98.4%",
+            "?? ORBIT: 408 KM | O2: 98.4%",
             cx -
                 h *
                 0.22,
