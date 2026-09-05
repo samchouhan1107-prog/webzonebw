@@ -303,10 +303,13 @@ body.light-mode .legal-page strong {
 
 /* --- Legal page links & hr --- */
 body.light-mode .legal-page a {
-    color: var(--accent);
+    color: var(--accent-color);
 }
 body.light-mode .legal-page a:hover {
     color: var(--accent-hover);
+}
+body.light-mode .legal-page strong {
+    color: var(--text-heading);
 }
 body.light-mode .legal-page hr {
     border-top-color: var(--border-color);
@@ -1726,7 +1729,7 @@ form .btn {
 }
 
 .legal-page a {
-    color: #e2e8f0;
+    color: var(--accent-color);
 
     text-decoration: underline;
 
@@ -1736,11 +1739,11 @@ form .btn {
 }
 
 .legal-page a:hover {
-    color: #ffffff;
+    color: var(--accent-hover);
 }
 
 .legal-page strong {
-    color: #f8fafc;
+    color: var(--text-heading);
 }
 
 .legal-page hr {
@@ -2371,7 +2374,7 @@ textarea:focus-visible {
 
 .flow-step.active-step .step-num {
     background: #ff7b00;
-    color: #000;
+    color: var(--text-heading);
 }
 
 .step-icon {

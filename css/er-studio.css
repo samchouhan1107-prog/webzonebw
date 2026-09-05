@@ -57,6 +57,14 @@ body.er-studio-body {
         linear-gradient(180deg, #030712 0%, #070913 40%, #0d0a08 100%);
 }
 
+.er-theme-light .er-studio-body::before {
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 80%, rgba(194, 65, 12, 0.03) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 20% 60%, rgba(154, 52, 18, 0.02) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 40%, rgba(124, 45, 18, 0.02) 0%, transparent 50%),
+        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 40%, #e2e8f0 100%);
+}
+
 .er-studio-body > * {
     position: relative;
     z-index: 1;
