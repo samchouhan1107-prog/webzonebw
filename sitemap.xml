@@ -30,22 +30,23 @@
 
     <url>
         <loc>https://webzonebw.in/</loc>
-        <lastmod>2026-09-01</lastmod>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
-    <!-- Sound Box -->
-
-    <url>
-        <loc>https://webzonebw.in/soundbox.html</loc>
-        <lastmod>2026-09-01</lastmod>
-    </url>
-
-    <!-- About -->
+    <!-- About Us -->
 
     <url>
         <loc>https://webzonebw.in/about.html</loc>
-        <lastmod>2026-09-01</lastmod>
+        <lastmod>2026-09-15</lastmod>
+    </url>
+
+
+    <!-- Contact Us -->
+
+    <url>
+        <loc>https://webzonebw.in/contact.html</loc>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
@@ -53,7 +54,7 @@
 
     <url>
         <loc>https://webzonebw.in/projects.html</loc>
-        <lastmod>2026-09-01</lastmod>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
@@ -61,7 +62,7 @@
 
     <url>
         <loc>https://webzonebw.in/resume.html</loc>
-        <lastmod>2026-09-01</lastmod>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
@@ -69,15 +70,43 @@
 
     <url>
         <loc>https://webzonebw.in/blog.html</loc>
-        <lastmod>2026-09-01</lastmod>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
-    <!-- Contact -->
+    <!-- Sound Box -->
 
     <url>
-        <loc>https://webzonebw.in/contact.html</loc>
-        <lastmod>2026-09-01</lastmod>
+        <loc>https://webzonebw.in/soundbox.html</loc>
+        <lastmod>2026-09-15</lastmod>
+    </url>
+
+
+    <!-- ========================================================
+         TRUST & LEGAL
+         ======================================================== -->
+
+    <!-- Privacy Policy -->
+
+    <url>
+        <loc>https://webzonebw.in/privacy.html</loc>
+        <lastmod>2026-09-15</lastmod>
+    </url>
+
+
+    <!-- Terms of Service -->
+
+    <url>
+        <loc>https://webzonebw.in/terms.html</loc>
+        <lastmod>2026-09-15</lastmod>
+    </url>
+
+
+    <!-- Disclaimer -->
+
+    <url>
+        <loc>https://webzonebw.in/disclaimer.html</loc>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
@@ -90,35 +119,17 @@
 
     <url>
         <loc>https://webzonebw.in/er/</loc>
-        <lastmod>2026-09-01</lastmod>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 
     <!-- ========================================================
-         TRUST & LEGAL
+         HARDWARE TROUBLESHOOTING ARTICLE
          ======================================================== -->
 
-    <!-- Privacy Policy -->
-
     <url>
-        <loc>https://webzonebw.in/privacy.html</loc>
-        <lastmod>2026-09-01</lastmod>
-    </url>
-
-
-    <!-- Terms & Conditions -->
-
-    <url>
-        <loc>https://webzonebw.in/terms.html</loc>
-        <lastmod>2026-09-01</lastmod>
-    </url>
-
-
-    <!-- Disclaimer -->
-
-    <url>
-        <loc>https://webzonebw.in/disclaimer.html</loc>
-        <lastmod>2026-09-01</lastmod>
+        <loc>https://webzonebw.in/articles/hardware-troubleshooting/</loc>
+        <lastmod>2026-09-15</lastmod>
     </url>
 
 </urlset>

@@ -357,7 +357,11 @@ function resolveHtmlPageFromRoute(requestPath) {
         "/er": path.join(__dirname, "er", "index.html"),
         "/er/": path.join(__dirname, "er", "index.html"),
         "/halloween": path.join(__dirname, "halloween", "index.html"),
-        "/halloween/": path.join(__dirname, "halloween", "index.html")
+        "/halloween/": path.join(__dirname, "halloween", "index.html"),
+        "/privacy-policy": path.join(__dirname, "privacy.html"),
+        "/terms-of-service": path.join(__dirname, "terms.html"),
+        "/about-us": path.join(__dirname, "about.html"),
+        "/contact-us": path.join(__dirname, "contact.html")
     };
 
     if (explicitRoutes[routeName]) {

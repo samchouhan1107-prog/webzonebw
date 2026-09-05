@@ -2127,5 +2127,221 @@ window.addEventListener(
 
 
 /* ==========================================================
+   WEBZONEBW — CONTACT FORM CONTROLLER
+========================================================== */
+
+(function () {
+
+    "use strict";
+
+    var CONTACT_FORM_ID = "webzonebw-contact-form";
+    var SUBMIT_BTN_ID   = "contact-submit-btn";
+    var STATUS_ID       = "contact-form-status";
+
+    var HONEYPOT_FIELD  = "contact-website";
+
+    var RATE_LIMIT_MS   = 15000;
+    var lastSubmitTime  = 0;
+
+    var fields = {
+        name:    { input: "contact-name",    error: "contact-name-error"    },
+        email:   { input: "contact-email",   error: "contact-email-error"   },
+        subject: { input: "contact-subject", error: "contact-subject-error" },
+        message: { input: "contact-message",  error: "contact-message-error" }
+    };
+
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+
+    function clearErrors() {
+        var keys = Object.keys(fields);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            var errEl = document.getElementById(fields[key].error);
+            var inpEl = document.getElementById(fields[key].input);
+            if (errEl) { errEl.textContent = ""; }
+            if (inpEl) { inpEl.classList.remove("invalid"); }
+        }
+    }
+
+
+    function setError(fieldKey, message) {
+        var errEl = document.getElementById(fields[fieldKey].error);
+        var inpEl = document.getElementById(fields[fieldKey].input);
+        if (errEl) { errEl.textContent = message; }
+        if (inpEl) { inpEl.classList.add("invalid"); }
+    }
+
+
+    function validate() {
+        var valid = true;
+
+        var nameEl = document.getElementById(fields.name.input);
+        var emailEl = document.getElementById(fields.email.input);
+        var subjectEl = document.getElementById(fields.subject.input);
+        var messageEl = document.getElementById(fields.message.input);
+
+        if (!nameEl || !emailEl || !subjectEl || !messageEl) {
+            return false;
+        }
+
+        var name = nameEl.value.trim();
+        var email = emailEl.value.trim();
+        var subject = subjectEl.value.trim();
+        var message = messageEl.value.trim();
+
+        if (!name) {
+            setError("name", "Please enter your name.");
+            valid = false;
+        }
+
+        if (!email) {
+            setError("email", "Please enter your email address.");
+            valid = false;
+        } else if (!isValidEmail(email)) {
+            setError("email", "Please enter a valid email address.");
+            valid = false;
+        }
+
+        if (!subject) {
+            setError("subject", "Please enter a subject.");
+            valid = false;
+        }
+
+        if (!message) {
+            setError("message", "Please enter your message.");
+            valid = false;
+        } else if (message.length < 10) {
+            setError("message", "Message must be at least 10 characters.");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+
+    function setStatus(type, text) {
+        var el = document.getElementById(STATUS_ID);
+        if (!el) { return; }
+        el.className = "form-status " + type;
+        el.textContent = text;
+    }
+
+
+    function setLoading(loading) {
+        var btn = document.getElementById(SUBMIT_BTN_ID);
+        if (!btn) { return; }
+
+        var textEl = btn.querySelector(".btn-text");
+        var loadEl = btn.querySelector(".btn-loading");
+
+        if (loading) {
+            btn.disabled = true;
+            if (textEl) { textEl.style.display = "none"; }
+            if (loadEl) { loadEl.style.display = "inline"; }
+        } else {
+            btn.disabled = false;
+            if (textEl) { textEl.style.display = "inline"; }
+            if (loadEl) { loadEl.style.display = "none"; }
+        }
+    }
+
+
+    function buildPayload() {
+        return {
+            name:    document.getElementById(fields.name.input).value.trim(),
+            email:   document.getElementById(fields.email.input).value.trim(),
+            subject: document.getElementById(fields.subject.input).value.trim(),
+            message: document.getElementById(fields.message.input).value.trim(),
+            timestamp: new Date().toISOString()
+        };
+    }
+
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        clearErrors();
+
+        /* Honeypot check */
+        var honeypot = document.getElementById(HONEYPOT_FIELD);
+        if (honeypot && honeypot.value) {
+            return;
+        }
+
+        /* Rate limit */
+        var now = Date.now();
+        if (now - lastSubmitTime < RATE_LIMIT_MS) {
+            setStatus(
+                "error",
+                "Please wait a moment before sending another message."
+            );
+            return;
+        }
+
+        if (!validate()) {
+            return;
+        }
+
+        var payload = buildPayload();
+
+        setLoading(true);
+        setStatus("", "");
+
+        /*
+         * -------------------------------------------------------
+         * API INTEGRATION POINT
+         * -------------------------------------------------------
+         * Replace this section with your actual backend
+         * endpoint when ready:
+         *
+         *   fetch("/api/contact", {
+         *       method: "POST",
+         *       headers: { "Content-Type": "application/json" },
+         *       body: JSON.stringify(payload)
+         *   })
+         *
+         * Until then, the form collects and validates data
+         * but does not pretend to send it.
+         * -------------------------------------------------------
+         */
+        setTimeout(function () {
+
+            setLoading(false);
+
+            setStatus(
+                "error",
+                "The contact form is not yet connected to a " +
+                "backend service. Please email us directly at " +
+                "contact@webzonebw.in or use WhatsApp."
+            );
+
+            lastSubmitTime = Date.now();
+
+        }, 800);
+    }
+
+
+    function init() {
+        var form = document.getElementById(CONTACT_FORM_ID);
+        if (!form) { return; }
+
+        form.addEventListener("submit", handleSubmit);
+    }
+
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+
+})();
+
+
+/* ==========================================================
    END OF WEBZONEBW CORE CONTROLLER
 ========================================================== */

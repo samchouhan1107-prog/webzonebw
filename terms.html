@@ -4,24 +4,34 @@
 <head>
 
     <!-- =====================================================
-         WEBZONEBW — TERMS & CONDITIONS
-         Long-Term Website Terms
+         WEBZONEBW — TERMS OF SERVICE
+         Production HTML5 • SEO • Structured Data • AdSense
          ===================================================== -->
 
     <meta charset="UTF-8">
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-ZFZ54Z2997');
-    </script>
-
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
+    <meta name="theme-color"
+          content="#030712">
+
+    <!-- =====================================================
+         SEO
+         ===================================================== -->
+
+    <title>Terms of Service | WebZoneBW — Website Terms</title>
+
+    <meta name="description"
+          content="Terms of Service governing the use of WebZoneBW, including website content, intellectual property, advertising, acceptable use, disclaimers, limitation of liability, and visitor responsibilities.">
+
+    <meta name="author"
+          content="Sameer Chouhan">
+
+    <meta name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+    <link rel="canonical"
+          href="https://webzonebw.in/terms.html">
 
     <!-- =====================================================
          GOOGLE ADSENSE
@@ -35,31 +45,6 @@
             crossorigin="anonymous">
     </script>
 
-
-    <!-- =====================================================
-         SEO
-         ===================================================== -->
-
-    <title>Terms &amp; Conditions | WebZoneBW</title>
-
-    <meta name="description"
-          content="Terms and Conditions governing the use of WebZoneBW, including website content, projects, resources, external links, intellectual property, advertising, acceptable use, and visitor responsibilities.">
-
-    <meta name="author"
-          content="Sameer Chouhan">
-
-    <meta name="robots"
-          content="index, follow">
-
-
-    <!-- =====================================================
-         CANONICAL
-         ===================================================== -->
-
-    <link rel="canonical"
-          href="https://webzonebw.in/terms.html">
-
-
     <!-- =====================================================
          PERFORMANCE — PRECONNECT HINTS
          ===================================================== -->
@@ -70,14 +55,9 @@
     <link rel="preconnect"
           href="https://www.googletagmanager.com">
 
-    <!-- =====================================================
-         FAVICON
-         ===================================================== -->
-
     <link rel="icon"
           type="image/png"
           href="assets/favicon/favicon.png">
-
 
     <!-- =====================================================
          OPEN GRAPH
@@ -87,10 +67,10 @@
           content="website">
 
     <meta property="og:title"
-          content="Terms & Conditions | WebZoneBW">
+          content="Terms of Service | WebZoneBW">
 
     <meta property="og:description"
-          content="Terms and Conditions governing the use of WebZoneBW, including website content, projects, resources, external links, intellectual property, advertising, acceptable use, and visitor responsibilities.">
+          content="Terms of Service governing the use of WebZoneBW, including website content, intellectual property, advertising, acceptable use, and visitor responsibilities.">
 
     <meta property="og:url"
           content="https://webzonebw.in/terms.html">
@@ -102,8 +82,7 @@
           content="https://webzonebw.in/assets/logo.png">
 
     <meta property="og:image:alt"
-          content="WEBZONEBW technology portfolio">
-
+          content="WEBZONEBW Terms of Service">
 
     <!-- =====================================================
          TWITTER / SOCIAL CARD
@@ -113,14 +92,13 @@
           content="summary_large_image">
 
     <meta name="twitter:title"
-          content="Terms & Conditions | WebZoneBW">
+          content="Terms of Service | WebZoneBW">
 
     <meta name="twitter:description"
-          content="Terms and Conditions governing the use of WebZoneBW.">
+          content="Terms of Service governing the use of WebZoneBW.">
 
     <meta name="twitter:image"
           content="https://webzonebw.in/assets/logo.png">
-
 
     <!-- =====================================================
          MAIN STYLESHEET
@@ -132,9 +110,7 @@
     <!-- RESPONSIVE LAYOUT -->
     <link
         rel="stylesheet"
-        href="css/responsive.css"
-    >
-
+        href="css/responsive.css">
 
     <!-- =====================================================
          STRUCTURED DATA
@@ -144,15 +120,45 @@
     {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Terms & Conditions | WebZoneBW",
+        "@id": "https://webzonebw.in/terms.html#webpage",
         "url": "https://webzonebw.in/terms.html",
-        "description": "Terms and Conditions governing the use of WebZoneBW.",
+        "name": "Terms of Service | WebZoneBW",
+        "description": "Terms of Service governing the use of WebZoneBW, including website content, intellectual property, advertising, acceptable use, disclaimers, and visitor responsibilities.",
         "isPartOf": {
             "@type": "WebSite",
-            "name": "WebZoneBW",
+            "@id": "https://webzonebw.in/#website",
+            "name": "WEBZONEBW",
             "url": "https://webzonebw.in/"
-        }
+        },
+        "about": {
+            "@type": "Organization",
+            "@id": "https://webzonebw.in/#organization",
+            "name": "WEBZONEBW",
+            "url": "https://webzonebw.in/"
+        },
+        "inLanguage": "en",
+        "dateModified": "2026-09-15"
     }
+    </script>
+
+    <!-- =====================================================
+         GOOGLE ANALYTICS — GA4
+         ===================================================== -->
+
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
+    </script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZFZ54Z2997');
     </script>
 
 </head>
@@ -162,38 +168,76 @@
 
 <div class="container">
 
-    <!-- Mobile Nav Bar -->
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
     <div class="mobile-nav-bar">
-        <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation">
+
+        <button
+            type="button"
+            class="hamburger-btn"
+            id="sidebarToggleBtn"
+            aria-label="Toggle Sidebar Navigation"
+            aria-controls="mainSidebar"
+            aria-expanded="false">
+
             <span></span>
             <span></span>
             <span></span>
+
         </button>
+
         <div class="mobile-brand-title">
             <span class="gradient-text">WEBZONEBW</span>
         </div>
-        
+
     </div>
+
 
     <!-- =====================================================
          STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside class="sidebar" id="mainSidebar">
+    <aside
+        class="sidebar"
+        id="mainSidebar">
 
         <div class="logo">
-            <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+
+            <a
+                href="index.html"
+                aria-label="WebZoneBW Home"
+                class="brand-logo-link">
+
+                <img
+                    src="assets/logo.png"
+                    alt="WebZoneBW Logo"
+                    class="brand-logo-img">
+
                 <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">SYSTEMS · SUPPORT · INFRASTRUCTURE</span>
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        SYSTEMS · SUPPORT · INFRASTRUCTURE
+                    </span>
+
                 </div>
+
             </a>
+
         </div>
 
-        <!-- Main Navigation -->
-        <nav class="sidebar-nav" aria-label="Main Navigation">
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Main Navigation">
+
             <ul>
+
                 <li>
                     <a href="index.html">
                         <span class="nav-icon" aria-hidden="true">🏠</span>
@@ -239,41 +283,85 @@
                 <li>
                     <a href="about.html">
                         <span class="nav-icon" aria-hidden="true">👤</span>
-                        About
+                        About Us
                     </a>
                 </li>
 
                 <li>
                     <a href="contact.html">
                         <span class="nav-icon" aria-hidden="true">✉️</span>
-                        Contact
+                        Contact Us
                     </a>
                 </li>
+
+                <li>
+                    <a href="privacy.html">
+                        <span class="nav-icon" aria-hidden="true">🔒</span>
+                        Privacy Policy
+                    </a>
+                </li>
+
+                <li>
+                    <a href="terms.html"
+                       class="active"
+                       aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">📋</span>
+                        Terms of Service
+                    </a>
+                </li>
+
             </ul>
+
         </nav>
 
-        <!-- Dark Mode Switch Toggle -->
+
         <div class="sidebar-theme-toggle-row">
+
             <div class="theme-label-group">
+
                 <span id="themeModeIcon" aria-hidden="true">🌙</span>
+
                 <span id="themeModeText">Dark Mode</span>
+
             </div>
+
             <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+
+                <input
+                    type="checkbox"
+                    id="themeToggleSwitch"
+                    checked
+                    aria-label="Toggle Dark Mode">
+
                 <span class="toggle-slider"></span>
+
             </label>
+
         </div>
 
-        <!-- User Profile Card -->
+
         <div class="sidebar-user-card">
+
             <div class="user-avatar-wrap">
+
                 <span class="user-avatar-icon">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
+
+                <span
+                    class="user-online-dot"
+                    title="Online"
+                    aria-label="Online">
+                </span>
+
             </div>
+
             <div class="user-info">
+
                 <strong>Sameer Chouhan</strong>
+
                 <span>Developer &amp; Creator</span>
+
             </div>
+
         </div>
 
     </aside>
@@ -292,14 +380,36 @@
 
         <header class="top-header">
 
-            <h1>
-                Terms &amp; Conditions
-            </h1>
+            <div class="header-left">
 
-            <p>
-                Rules and conditions governing access to and use
-                of WebZoneBW.
-            </p>
+                <h1>
+                    Terms of Service
+                </h1>
+
+                <p class="header-subtitle">
+                    Rules and conditions governing access to and use
+                    of WebZoneBW.
+                </p>
+
+            </div>
+
+            <div class="header-utilities">
+
+                <a
+                    href="er/index.html"
+                    class="header-icon-btn"
+                    title="ER Studio"
+                    aria-label="ER Studio">
+
+                    🔮
+
+                </a>
+
+                <span class="header-badge">
+                    Legal 📋
+                </span>
+
+            </div>
 
         </header>
 
@@ -319,9 +429,13 @@
             </p>
 
             <p>
-                These Terms &amp; Conditions describe the general
+                These Terms of Service describe the general
                 rules, responsibilities, limitations, and conditions
                 that apply when accessing or using this website.
+            </p>
+
+            <p>
+                <strong>Effective Date:</strong> September 15, 2026.
             </p>
 
             <p>
@@ -381,9 +495,10 @@
 
             <p>
                 By accessing, browsing, or using WebZoneBW, you
-                agree to comply with these Terms &amp; Conditions
+                agree to comply with these Terms of Service
                 and any other applicable policies published on
-                the website.
+                the website, including the
+                <a href="privacy.html">Privacy Policy</a>.
             </p>
 
             <p>
@@ -423,41 +538,23 @@
 
             <ul>
 
-                <li>
-                    Professional information
-                </li>
+                <li>Professional information</li>
 
-                <li>
-                    Technical skills and experience
-                </li>
+                <li>Technical skills and experience</li>
 
-                <li>
-                    Projects and demonstrations
-                </li>
+                <li>Projects and demonstrations</li>
 
-                <li>
-                    Web development resources
-                </li>
+                <li>Web development resources</li>
 
-                <li>
-                    IT Support information
-                </li>
+                <li>IT Support information</li>
 
-                <li>
-                    Networking and systems information
-                </li>
+                <li>Networking and systems information</li>
 
-                <li>
-                    Tutorials and technical documentation
-                </li>
+                <li>Tutorials and technical documentation</li>
 
-                <li>
-                    Career and professional development resources
-                </li>
+                <li>Career and professional development resources</li>
 
-                <li>
-                    Links to external services and resources
-                </li>
+                <li>Links to external services and resources</li>
 
             </ul>
 
@@ -670,14 +767,6 @@
             </p>
 
             <p>
-                These may include services such as Google,
-                GitHub, Blogger, LinkedIn, Microsoft, WhatsApp,
-                hosting providers, documentation platforms,
-                advertising services, and other third-party
-                providers.
-            </p>
-
-            <p>
                 External websites and services operate independently
                 from WebZoneBW.
             </p>
@@ -710,7 +799,7 @@
             <p>
                 WebZoneBW may display advertisements through
                 third-party advertising services, including
-                Google AdSense or other advertising providers.
+                Google AdSense.
             </p>
 
             <p>
@@ -836,50 +925,153 @@
 
 
         <!-- =================================================
-             13. LIMITATION OF LIABILITY
+             13. DISCLAIMER OF WARRANTIES
              ================================================= -->
 
         <section>
 
             <h2>
-                13. Limitation of Liability
+                13. Disclaimer of Warranties
             </h2>
 
             <p>
-                WebZoneBW and its owner provide website content
-                and resources in good faith for general
-                informational, educational, professional, and
-                portfolio purposes.
+                WebZoneBW and its content are provided on an
+                <strong>"as is"</strong> and
+                <strong>"as available"</strong> basis without
+                warranties of any kind, whether express or implied.
             </p>
 
             <p>
-                Reasonable efforts may be made to maintain useful
-                and accurate information; however, no guarantee
-                is made that all information will always be
-                complete, accurate, current, error-free, or
-                suitable for every purpose.
+                To the fullest extent permitted by applicable law,
+                WebZoneBW and its owner disclaim all warranties,
+                including but not limited to implied warranties of
+                merchantability, fitness for a particular purpose,
+                non-infringement, and accuracy of information.
             </p>
 
             <p>
-                To the extent permitted by applicable law,
-                WebZoneBW and its owner shall not be responsible
-                for losses, damages, interruptions, technical
-                failures, decisions, or consequences resulting
-                from reliance on website content or third-party
-                services accessed through the website.
+                No guarantee is made that the website will be
+                uninterrupted, error-free, secure, or free of
+                viruses or other harmful components.
             </p>
 
         </section>
 
 
         <!-- =================================================
-             14. PRIVACY
+             14. LIMITATION OF LIABILITY
              ================================================= -->
 
         <section>
 
             <h2>
-                14. Privacy
+                14. Limitation of Liability
+            </h2>
+
+            <p>
+                To the maximum extent permitted by applicable law,
+                WebZoneBW and its owner shall not be liable for any
+                direct, indirect, incidental, consequential,
+                special, punitive, or other damages arising out of
+                or in connection with:
+            </p>
+
+            <ul>
+
+                <li>
+                    Access to or use of the website
+                </li>
+
+                <li>
+                    Inability to access or use the website
+                </li>
+
+                <li>
+                    Reliance on any information presented on
+                    the website
+                </li>
+
+                <li>
+                    Errors, omissions, or inaccuracies in
+                    website content
+                </li>
+
+                <li>
+                    Third-party services, links, or
+                    advertisements
+                </li>
+
+                <li>
+                    Technical failures, security incidents,
+                    or unauthorized access
+                </li>
+
+            </ul>
+
+            <p>
+                This limitation applies regardless of the legal
+                theory (contract, tort, negligence, strict
+                liability, or otherwise) and even if WebZoneBW
+                has been advised of the possibility of such
+                damages.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             15. INDEMNIFICATION
+             ================================================= -->
+
+        <section>
+
+            <h2>
+                15. Indemnification
+            </h2>
+
+            <p>
+                To the extent permitted by applicable law, you
+                agree to indemnify, defend, and hold harmless
+                WebZoneBW and its owner from and against any
+                claims, liabilities, damages, losses, costs, or
+                expenses (including reasonable legal fees) arising
+                out of or related to:
+            </p>
+
+            <ul>
+
+                <li>
+                    Your use of or access to the website
+                </li>
+
+                <li>
+                    Your violation of these Terms of Service
+                </li>
+
+                <li>
+                    Your violation of any applicable law,
+                    regulation, or third-party rights
+                </li>
+
+                <li>
+                    Any content you submit, post, or transmit
+                    through the website or related communication
+                    channels
+                </li>
+
+            </ul>
+
+        </section>
+
+
+        <!-- =================================================
+             16. PRIVACY
+             ================================================= -->
+
+        <section>
+
+            <h2>
+                16. Privacy
             </h2>
 
             <p>
@@ -901,13 +1093,13 @@
 
 
         <!-- =================================================
-             15. COMMUNICATION
+             17. COMMUNICATION
              ================================================= -->
 
         <section>
 
             <h2>
-                15. Professional Communication
+                17. Professional Communication
             </h2>
 
             <p>
@@ -933,13 +1125,13 @@
 
 
         <!-- =================================================
-             16. DOWNLOADS
+             18. DOWNLOADS
              ================================================= -->
 
         <section>
 
             <h2>
-                16. Downloads and Files
+                18. Downloads and Files
             </h2>
 
             <p>
@@ -963,13 +1155,13 @@
 
 
         <!-- =================================================
-             17. THIRD-PARTY CONTENT
+             19. THIRD-PARTY CONTENT
              ================================================= -->
 
         <section>
 
             <h2>
-                17. Third-Party Content
+                19. Third-Party Content
             </h2>
 
             <p>
@@ -988,13 +1180,13 @@
 
 
         <!-- =================================================
-             18. CHANGES TO THE WEBSITE
+             20. CHANGES TO THE WEBSITE
              ================================================= -->
 
         <section>
 
             <h2>
-                18. Changes to WebZoneBW
+                20. Changes to WebZoneBW
             </h2>
 
             <p>
@@ -1013,17 +1205,17 @@
 
 
         <!-- =================================================
-             19. CHANGES TO THESE TERMS
+             21. CHANGES TO THESE TERMS
              ================================================= -->
 
         <section>
 
             <h2>
-                19. Changes to These Terms
+                21. Changes to These Terms
             </h2>
 
             <p>
-                These Terms &amp; Conditions may be changed or
+                These Terms of Service may be changed or
                 expanded when necessary to reflect changes to
                 WebZoneBW, its content, services, technology,
                 features, legal requirements, or operating
@@ -1032,7 +1224,9 @@
 
             <p>
                 The current version of these Terms will remain
-                available on this page.
+                available on this page. The effective date at
+                the top of this page indicates when the Terms
+                were last updated.
             </p>
 
             <p>
@@ -1045,13 +1239,13 @@
 
 
         <!-- =================================================
-             20. SEVERABILITY
+             22. SEVERABILITY
              ================================================= -->
 
         <section>
 
             <h2>
-                20. Severability
+                22. Severability
             </h2>
 
             <p>
@@ -1065,19 +1259,58 @@
 
 
         <!-- =================================================
-             21. GOVERNING LAW
+             23. TERMINATION
              ================================================= -->
 
         <section>
 
             <h2>
-                21. Applicable Law
+                23. Termination
             </h2>
 
             <p>
-                These Terms are intended to operate subject to
-                applicable laws and regulations governing the
-                website, its owner, and the visitor.
+                WebZoneBW reserves the right to restrict or
+                terminate access to the website or any part of
+                the website at any time, without prior notice,
+                for conduct that WebZoneBW believes violates
+                these Terms, is harmful to other users, third
+                parties, or the business interests of WebZoneBW,
+                or as required by applicable law.
+            </p>
+
+            <p>
+                All provisions of these Terms that by their
+                nature should survive termination shall survive,
+                including but not limited to intellectual property
+                provisions, disclaimers, limitations of liability,
+                and indemnification.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             24. GOVERNING LAW
+             ================================================= -->
+
+        <section>
+
+            <h2>
+                24. Governing Law and Jurisdiction
+            </h2>
+
+            <p>
+                These Terms are governed by and construed in
+                accordance with the laws of
+                <strong>[ADD APPLICABLE JURISDICTION]</strong>,
+                without regard to its conflict of law principles.
+            </p>
+
+            <p>
+                Any disputes arising under or in connection with
+                these Terms shall be subject to the exclusive
+                jurisdiction of the courts located in
+                <strong>[ADD APPLICABLE JURISDICTION]</strong>.
             </p>
 
             <p>
@@ -1091,20 +1324,24 @@
 
 
         <!-- =================================================
-             22. CONTACT
+             25. CONTACT
              ================================================= -->
 
         <section class="featured-card">
 
             <h2>
-                22. Contact
+                25. Contact
             </h2>
 
             <p>
-                If you have questions regarding these Terms
-                &amp; Conditions or the use of WebZoneBW, please
-                contact Sameer Chouhan through the website's
-                Contact page.
+                If you have questions regarding these Terms of
+                Service or the use of WebZoneBW, please
+                contact us through the
+                <a href="contact.html">Contact page</a>
+                or via email at
+                <a href="mailto:contact@webzonebw.in">
+                    contact@webzonebw.in
+                </a>.
             </p>
 
             <a
@@ -1128,43 +1365,38 @@
             <div class="footer-content">
 
                 <p>
-
                     © 2026
-                    <strong>WEBZONEBW</strong>. All rights reserved.
-
+                    <strong>WEBZONEBW</strong>.
+                    All rights reserved.
                 </p>
-
 
                 <nav
                     class="footer-links"
                     aria-label="Footer Navigation">
 
-                    <a href="privacy.html">
+                    <span class="footer-section-label">
+                        Company / Legal
+                    </span>
 
-                        Privacy Policy
-
+                    <a href="about.html">
+                        About Us
                     </a>
 
+                    <a href="contact.html">
+                        Contact Us
+                    </a>
+
+                    <a href="privacy.html">
+                        Privacy Policy
+                    </a>
 
                     <a href="terms.html"
                        aria-current="page">
-
-                        Terms &amp; Conditions
-
+                        Terms of Service
                     </a>
-
 
                     <a href="disclaimer.html">
-
                         Disclaimer
-
-                    </a>
-
-
-                    <a href="contact.html">
-
-                        Contact
-
                     </a>
 
                     <a
