@@ -303,7 +303,7 @@ body.light-mode .legal-page strong {
 
 /* --- Legal page links & hr --- */
 body.light-mode .legal-page a {
-    color: var(--accent-color);
+    color: var(--accent);
 }
 body.light-mode .legal-page a:hover {
     color: var(--accent-hover);
@@ -1729,7 +1729,7 @@ form .btn {
 }
 
 .legal-page a {
-    color: var(--accent-color);
+    color: var(--accent);
 
     text-decoration: underline;
 
