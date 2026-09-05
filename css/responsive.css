@@ -467,3 +467,151 @@
         transition: none;
     }
 }
+
+/* ==========================================================
+   TOP HEADER BAR — Sidebar becomes a horizontal top bar
+   (Desktop ≥ 861px. Mobile ≤ 860px keeps the slide-in drawer.)
+   Loaded last so it overrides the fixed-left layout cleanly.
+   ========================================================= */
+
+@media (min-width: 861px) {
+
+    /* --- Stack container vertically (top bar above content) --- */
+    .container,
+    .er-layout-container {
+        flex-direction: column;
+    }
+
+    /* --- Horizontal top bar --- */
+    .sidebar,
+    .er-sidebar {
+        position: sticky;
+        top: 0;
+        left: auto;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        flex-direction: row;
+        align-items: center;
+        gap: 18px;
+        padding: 10px 24px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--bg-sidebar);
+        box-shadow: var(--shadow-sm);
+        overflow: visible;
+        z-index: 1000;
+    }
+
+    /* Brand — compact, no divider */
+    .sidebar .logo {
+        padding: 0;
+        margin: 0;
+        border-bottom: none;
+        flex-shrink: 0;
+    }
+
+    .sidebar .brand-logo-img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .sidebar .brand-sub {
+        display: none;
+    }
+
+    /* Nav — horizontal row */
+    .sidebar-nav,
+    .er-sidebar .sidebar-nav {
+        flex: 1;
+        margin: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sidebar ul,
+    .sidebar-nav ul {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar ul li,
+    .sidebar-nav ul li {
+        margin: 0;
+    }
+
+    .sidebar ul li a,
+    .sidebar-nav ul li a {
+        padding: 8px 14px;
+        border-left: none;
+        border-radius: var(--radius-md, 10px);
+        white-space: nowrap;
+    }
+
+    .sidebar ul li a.active,
+    .sidebar-nav ul li a.active {
+        border-left: none;
+    }
+
+    /* Theme toggle — inline compact */
+    .sidebar-theme-toggle-row {
+        flex-shrink: 0;
+        padding: 6px 12px;
+        margin: 0;
+    }
+
+    /* User card — compact inline, role text hidden */
+    .sidebar-user-card {
+        flex-shrink: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+        background: transparent;
+    }
+
+    .sidebar-user-card .user-info span {
+        display: none;
+    }
+
+    .sidebar-close-btn {
+        display: none !important;
+    }
+
+    /* Hamburger is mobile-only */
+    .mobile-nav-bar,
+    .er-mobile-nav-bar {
+        display: none !important;
+    }
+
+    /* Main content — full width below the top bar */
+    .main-content,
+    .er-main-content {
+        width: 100%;
+        margin-left: 0;
+        max-width: 1400px;
+        padding: 34px 44px 50px;
+    }
+}
+
+@media (min-width: 861px) and (max-width: 1024px) {
+
+    .main-content,
+    .er-main-content {
+        padding: 28px 30px 44px;
+    }
+}
+
+/* Light-mode polish for the top bar */
+body.light-mode .sidebar,
+body.light-mode .er-sidebar {
+    background: var(--bg-sidebar);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}

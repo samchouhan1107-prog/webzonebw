@@ -4,7 +4,7 @@
 <head>
 
     <!-- =====================================================
-         WEBZONEBW — DASHBOARD
+         WEBZONEBW — DEVELOPER TOOLS PLATFORM
          Production HTML5 • SEO • Structured Data • GA4
          ===================================================== -->
 
@@ -16,7 +16,7 @@
 
     <meta
         name="theme-color"
-        content="#030712"
+        content="#0a0e1a"
     >
 
     <!-- =====================================================
@@ -24,12 +24,12 @@
          ===================================================== -->
 
     <title>
-        WEBZONEBW — IT Portfolio &amp; Digital Workspace
+        WEBZONEBW — Powerful Web Tools, Built for the Modern Web
     </title>
 
     <meta
         name="description"
-        content="WEBZONEBW is Sameer Chouhan's technology portfolio and digital workspace covering IT support, networking, systems integration, cybersecurity, web development, AI, technical projects and practical technology work."
+        content="Explore practical web, image, developer and performance tools designed to help you build, test and improve your websites. Built by Sameer Chouhan."
     >
 
     <meta
@@ -99,85 +99,38 @@
          OPEN GRAPH
          ===================================================== -->
 
-    <meta
-        property="og:type"
-        content="website"
-    >
-
-    <meta
-        property="og:title"
-        content="WEBZONEBW — IT Portfolio & Digital Workspace"
-    >
-
-    <meta
-        property="og:description"
-        content="Explore WEBZONEBW — a technology portfolio covering IT support, networking, cybersecurity, web development, AI, systems integration and practical technology projects."
-    >
-
-    <meta
-        property="og:url"
-        content="https://webzonebw.in/"
-    >
-
-    <meta
-        property="og:site_name"
-        content="WEBZONEBW"
-    >
-
-    <meta
-        property="og:image"
-        content="https://webzonebw.in/assets/logo.png"
-    >
-
-    <meta
-        property="og:image:alt"
-        content="WEBZONEBW technology portfolio"
-    >
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="WEBZONEBW — Powerful Web Tools, Built for the Modern Web">
+    <meta property="og:description" content="Explore practical web, image, developer and performance tools designed to help you build, test and improve your websites.">
+    <meta property="og:url" content="https://webzonebw.in/">
+    <meta property="og:site_name" content="WEBZONEBW">
+    <meta property="og:image" content="https://webzonebw.in/assets/logo.png">
+    <meta property="og:image:alt" content="WEBZONEBW developer tools platform">
 
     <!-- =====================================================
          TWITTER / SOCIAL PREVIEW
          ===================================================== -->
 
-    <meta
-        name="twitter:card"
-        content="summary_large_image"
-    >
-
-    <meta
-        name="twitter:title"
-        content="WEBZONEBW — Technology Portfolio"
-    >
-
-    <meta
-        name="twitter:description"
-        content="IT support, networking, cybersecurity, web development, AI, systems integration and practical technology projects."
-    >
-
-    <meta
-        name="twitter:image"
-        content="https://webzonebw.in/assets/logo.png"
-    >
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WEBZONEBW — Web Tools Platform">
+    <meta name="twitter:description" content="Practical web, image, developer and performance tools for modern websites.">
+    <meta name="twitter:image" content="https://webzonebw.in/assets/logo.png">
 
     <!-- =====================================================
          MAIN STYLESHEET
          ===================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="css/style.css"
-    >
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
 
     <!-- =====================================================
-         RESPONSIVE LAYOUT
+         HOMEPAGE STYLES
          ===================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="css/responsive.css"
-    >
+    <link rel="stylesheet" href="css/home.css">
 
     <!-- =====================================================
-         WEBZONEBW — ORGANIZATION SCHEMA
+         STRUCTURED DATA
          ===================================================== -->
 
     <script type="application/ld+json">
@@ -191,7 +144,7 @@
             "@type": "ImageObject",
             "url": "https://webzonebw.in/assets/logo.png"
         },
-        "description": "WEBZONEBW is a technology-focused digital portfolio, knowledge hub, workspace and project platform covering IT support, networking, systems integration, cybersecurity, web development, artificial intelligence, automation and practical technology projects.",
+        "description": "WEBZONEBW is a developer tools platform covering web tools, image tools, developer utilities, SEO tools and performance utilities.",
         "founder": {
             "@type": "Person",
             "name": "Sameer Chouhan",
@@ -200,10 +153,6 @@
     }
     </script>
 
-    <!-- =====================================================
-         WEBZONEBW — WEBSITE SCHEMA
-         ===================================================== -->
-
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -211,31 +160,17 @@
         "@id": "https://webzonebw.in/#website",
         "url": "https://webzonebw.in/",
         "name": "WEBZONEBW",
-        "description": "Technology portfolio, digital workspace and practical technology knowledge hub.",
+        "description": "Developer tools platform — web tools, image tools, developer utilities, SEO and performance tools.",
         "publisher": {
             "@id": "https://webzonebw.in/#organization"
         },
-        "inLanguage": "en"
-    }
-    </script>
-
-    <!-- =====================================================
-         WEBZONEBW — WEBPAGE SCHEMA
-         ===================================================== -->
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "@id": "https://webzonebw.in/#webpage",
-        "url": "https://webzonebw.in/",
-        "name": "WEBZONEBW — Technology Portfolio, Projects & Digital Workspace",
-        "description": "Technology portfolio and digital workspace showcasing IT support, networking, systems integration, cybersecurity, web development, AI and practical technology projects.",
-        "isPartOf": {
-            "@id": "https://webzonebw.in/#website"
-        },
-        "about": {
-            "@id": "https://webzonebw.in/#organization"
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://webzonebw.in/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
         },
         "inLanguage": "en"
     }
@@ -245,18 +180,10 @@
          GOOGLE ANALYTICS — GA4
          ===================================================== -->
 
-    <script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
-    </script>
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
+        function gtag(){dataLayer.push(arguments);}
         gtag("js", new Date());
         gtag("config", "G-ZFZ54Z2997");
     </script>
@@ -266,11 +193,7 @@
 
 <body>
 
-<a
-    href="#main-content"
-    class="skip-link">
-
-</a>
+<a href="#main-content" class="skip-link"></a>
 
 
 <div class="container">
@@ -295,15 +218,9 @@
 
         </button>
 
-
         <div class="mobile-brand-title">
-            <span class="gradient-text">
-                WEBZONEBW
-            </span>
+            <span class="gradient-text">WEBZONEBW</span>
         </div>
-
-
-        
 
     </div>
 
@@ -312,271 +229,85 @@
          STANDARDIZED SIDEBAR
          ===================================================== -->
 
-    <aside
-        class="sidebar"
-        id="mainSidebar"
-        aria-label="Website sidebar">
-
-
-        <!-- Brand -->
+    <aside class="sidebar" id="mainSidebar" aria-label="Website sidebar">
 
         <div class="logo">
-
-            <a
-                href="index.html"
-                aria-label="WEBZONEBW Home"
-                class="brand-logo-link">
-
-                <img
-                    src="assets/logo.png"
-                    alt="WEBZONEBW Logo"
-                    class="brand-logo-img"
-                >
-
+            <a href="index.html" aria-label="WEBZONEBW Home" class="brand-logo-link">
+                <img src="assets/logo.png" alt="WEBZONEBW Logo" class="brand-logo-img">
                 <div class="brand-name-group">
-
-                    <span class="brand-title">
-                        WEBZONEBW
-                    </span>
-
-                    <span class="brand-sub">
-                        SYSTEMS · SUPPORT · INFRASTRUCTURE
-                    </span>
-
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">TOOLS · RESOURCES · DEVELOPER</span>
                 </div>
-
             </a>
-
         </div>
 
-
-        <!-- =================================================
-             MAIN NAVIGATION
-             ================================================= -->
-
-        <nav
-            class="sidebar-nav"
-            aria-label="Main Navigation">
-
+        <nav class="sidebar-nav" aria-label="Main Navigation">
             <ul>
-
                 <li>
-
-                    <a
-                        href="index.html"
-                        class="active"
-                        aria-current="page">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            🏠
-                        </span>
-
-                        <span>
-                            Dashboard
-                        </span>
-
+                    <a href="index.html" class="active" aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        <span>Home</span>
                     </a>
-
                 </li>
-
-
                 <li>
-
                     <a href="er/index.html">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            🔮
-                        </span>
-
-                        <span>
-                            WebZoneBW-ER Studio
-                        </span>
-
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        <span>ER Studio</span>
                     </a>
-
                 </li>
-
-
                 <li>
-
                     <a href="projects.html">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            💼
-                        </span>
-
-                        <span>
-                            Projects
-                        </span>
-
+                        <span class="nav-icon" aria-hidden="true">💼</span>
+                        <span>Projects</span>
                     </a>
-
                 </li>
-
-
                 <li>
-
                     <a href="resume.html">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            📄
-                        </span>
-
-                        <span>
-                            Resume
-                        </span>
-
+                        <span class="nav-icon" aria-hidden="true">📄</span>
+                        <span>Resume</span>
                     </a>
-
                 </li>
-
-
                 <li>
-
                     <a href="blog.html">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            📝
-                        </span>
-
-                        <span>
-                            Blog
-                        </span>
-
+                        <span class="nav-icon" aria-hidden="true">📝</span>
+                        <span>Blog</span>
                     </a>
-
                 </li>
-
-
                 <li>
-
                     <a href="about.html">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            👤
-                        </span>
-
-                        <span>
-                            About
-                        </span>
-
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        <span>About</span>
                     </a>
-
                 </li>
-
-
                 <li>
-
                     <a href="contact.html">
-
-                        <span
-                            class="nav-icon"
-                            aria-hidden="true">
-                            ✉️
-                        </span>
-
-                        <span>
-                            Contact
-                        </span>
-
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        <span>Contact</span>
                     </a>
-
                 </li>
-
             </ul>
-
         </nav>
 
-
-        <!-- =================================================
-             DARK MODE TOGGLE
-             ================================================= -->
-
         <div class="sidebar-theme-toggle-row">
-
             <div class="theme-label-group">
-
-                <span
-                    id="themeModeIcon"
-                    aria-hidden="true">
-                    🌙
-                </span>
-
-                <span id="themeModeText">
-                    Dark Mode
-                </span>
-
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                <span id="themeModeText">Dark Mode</span>
             </div>
-
-
-            <label
-                class="switch-toggle"
-                for="themeToggleSwitch">
-
-                <input
-                    type="checkbox"
-                    id="themeToggleSwitch"
-                    checked
-                    aria-label="Toggle dark mode"
-                >
-
-                <span
-                    class="toggle-slider"
-                    aria-hidden="true">
-                </span>
-
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle dark mode">
+                <span class="toggle-slider" aria-hidden="true"></span>
             </label>
-
         </div>
 
-
-        <!-- =================================================
-             USER PROFILE CARD
-             ================================================= -->
-
         <div class="sidebar-user-card">
-
             <div class="user-avatar-wrap">
-
-                <span
-                    class="user-avatar-icon"
-                    aria-hidden="true">
-                    👨‍💻
-                </span>
-
-                <span
-                    class="user-online-dot"
-                    title="Online"
-                    aria-label="Online">
-                </span>
-
+                <span class="user-avatar-icon" aria-hidden="true">👨‍💻</span>
+                <span class="user-online-dot" title="Online" aria-label="Online"></span>
             </div>
-
-
             <div class="user-info">
-
-                <strong>
-                    Sameer Chouhan
-                </strong>
-
-                <span>
-                    Developer &amp; Creator
-                </span>
-
+                <strong>Sameer Chouhan</strong>
+                <span>Developer &amp; Creator</span>
             </div>
-
         </div>
 
     </aside>
@@ -586,56 +317,59 @@
          MAIN CONTENT
          ===================================================== -->
 
-    <main
-        class="main-content"
-        id="main-content">
+    <main class="main-content" id="main-content">
 
 
         <!-- =================================================
-             PAGE HEADER
+             HEADER
              ================================================= -->
 
-        <header class="top-header">
+        <header class="site-header" role="banner">
 
-            <div class="header-left">
+            <div class="header-row-primary">
 
-                <h1>
-                    WEBZONEBW — Technology Portfolio &amp; Digital Workspace
-                </h1>
+                <a href="index.html" class="header-brand" aria-label="WEBZONEBW Home">
+                    <span class="header-brand-text">WEBZONEBW</span>
+                </a>
 
-                <p class="header-subtitle">
-                    Technology • Infrastructure • Security • AI &amp; Solutions
-                </p>
+                <nav class="header-nav" aria-label="Primary navigation">
+                    <a href="index.html" class="header-nav-link active" aria-current="page">Home</a>
+                    <a href="er/index.html" class="header-nav-link">ER Studio</a>
+                    <a href="projects.html" class="header-nav-link">Projects</a>
+                    <a href="resume.html" class="header-nav-link">Resume</a>
+                    <a href="blog.html" class="header-nav-link">Blog</a>
+                    <a href="about.html" class="header-nav-link">About</a>
+                </nav>
+
+                <div class="header-actions">
+                    <button
+                        type="button"
+                        class="header-search-toggle"
+                        id="headerSearchToggle"
+                        aria-label="Search tools"
+                        aria-expanded="false">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                    <a href="contact.html" class="header-sign-in">Sign In</a>
+                </div>
 
             </div>
 
-
-            <div
-                class="header-utilities"
-                aria-label="Quick actions">
-
-
-                <a
-                    href="er/index.html"
-                    class="header-icon-btn"
-                    title="Launch WEBZONEBW-ER Studio"
-                    aria-label="Launch WEBZONEBW-ER Studio">
-
-                    <span aria-hidden="true">
-                        🔮
+            <div class="header-row-secondary">
+                <span class="header-secondary-label">WEBZONEBW</span>
+                <div class="header-secondary-links">
+                    <a href="#tools-section" class="header-secondary-link">Tools</a>
+                    <a href="#explore-section" class="header-secondary-link">Resources</a>
+                    <button type="button" class="header-secondary-link header-theme-btn" id="headerThemeBtn">
+                        <span aria-hidden="true">🌙</span> Theme
+                    </button>
+                    <span class="header-secondary-link header-lang" title="Language — coming soon">
+                        <span aria-hidden="true">🌐</span> EN
                     </span>
-
-                </a>
-
-
-                <span
-                    class="header-badge"
-                    title="WEBZONEBW is online">
-
-                    Live 🟢
-
-                </span>
-
+                </div>
             </div>
 
         </header>
@@ -645,93 +379,144 @@
              HERO
              ================================================= -->
 
-        <section
-            class="hero"
-            aria-labelledby="hero-title">
+        <section class="hero-section" aria-labelledby="hero-title">
 
-            <h2 id="hero-title">
-                Hello, I'm Sameer Chouhan.
-            </h2>
+            <div class="hero-content">
 
-            <h3>
-                IT Support • Networking • Systems Integration
-                • Web Development
-            </h3>
+                <div class="hero-text">
 
-            <p>
-                WEBZONEBW is my professional technology portfolio,
-                bringing together technical experience, projects,
-                practical learning, and ongoing development across
-                IT and technology.
-            </p>
+                    <h1 id="hero-title" class="hero-headline">
+                        Powerful Web Tools, Built for the Modern Web
+                    </h1>
 
-            <p>
-                Explore my work, review my experience, and follow
-                the projects I'm building as I continue developing
-                practical solutions for real-world technology
-                challenges.
-            </p>
+                    <p class="hero-sub">
+                        Explore practical web, image, developer and performance tools
+                        designed to help you build, test and improve your websites.
+                    </p>
+
+                    <div class="hero-search" role="search" aria-label="Search tools">
+                        <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input
+                            type="search"
+                            id="heroSearchInput"
+                            class="hero-search-input"
+                            placeholder="Search tools, resources, articles..."
+                            autocomplete="off"
+                            aria-label="Search tools and resources"
+                        >
+                        <kbd class="hero-search-kbd" aria-hidden="true">/</kbd>
+                    </div>
+
+                    <div class="hero-cta-row">
+                        <a href="#tools-section" class="hero-btn hero-btn-primary">
+                            Explore Tools
+                        </a>
+                        <a href="about.html" class="hero-btn hero-btn-secondary">
+                            About WEBZONEBW
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="hero-visual-inner">
+                        <div class="hv-node hv-node-1"></div>
+                        <div class="hv-node hv-node-2"></div>
+                        <div class="hv-node hv-node-3"></div>
+                        <div class="hv-node hv-node-4"></div>
+                        <div class="hv-node hv-node-5"></div>
+                        <div class="hv-line hv-line-1"></div>
+                        <div class="hv-line hv-line-2"></div>
+                        <div class="hv-line hv-line-3"></div>
+                        <div class="hv-browser">
+                            <div class="hv-browser-bar">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="hv-browser-body">
+                                <div class="hv-code-line"></div>
+                                <div class="hv-code-line hv-code-short"></div>
+                                <div class="hv-code-line"></div>
+                                <div class="hv-code-line hv-code-mid"></div>
+                                <div class="hv-code-line hv-code-short"></div>
+                            </div>
+                        </div>
+                        <div class="hv-ring"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
 
 
-            <!-- =================================================
-                 HERO ACTIONS
-                 ================================================= -->
+        <!-- =================================================
+             TOOL DISCOVERY
+             ================================================= -->
 
-            <div
-                class="hero-buttons"
-                aria-label="Primary actions">
+        <section class="tools-section" id="tools-section" aria-labelledby="tools-title">
 
+            <div class="section-header">
+                <h2 id="tools-title">Tool Categories</h2>
+                <p>Professional tools for developers, designers, and web professionals.</p>
+            </div>
 
-                <a
-                    href="assets/resume/Sameer_Chouhan.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn"
-                    aria-label="View Sameer Chouhan resume">
+            <div class="tools-grid">
 
-                    <span aria-hidden="true">
-                        📄
-                    </span>
-
-                    <span>
-                        View Resume
-                    </span>
-
+                <a href="projects.html" class="tool-card">
+                    <div class="tool-card-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3 class="tool-card-name">Web Tools</h3>
+                    <p class="tool-card-desc">Development utilities, code helpers, and web building tools for modern projects.</p>
+                    <span class="tool-card-cta">Open Tools →</span>
                 </a>
 
-
-                <a
-                    href="assets/resume/Sameer_Chouhan.pdf"
-                    download
-                    class="btn"
-                    aria-label="Download Sameer Chouhan resume">
-
-                    <span aria-hidden="true">
-                        ⬇️
-                    </span>
-
-                    <span>
-                        Download Resume
-                    </span>
-
+                <a href="er/index.html" class="tool-card">
+                    <div class="tool-card-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    </div>
+                    <h3 class="tool-card-name">Image Tools</h3>
+                    <p class="tool-card-desc">Visual effects, image enhancement, and creative processing with ER Studio.</p>
+                    <span class="tool-card-cta">Open Tools →</span>
                 </a>
 
+                <a href="blog.html" class="tool-card">
+                    <div class="tool-card-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3 class="tool-card-name">Developer Tools</h3>
+                    <p class="tool-card-desc">Technical resources, coding guides, and developer-focused utilities.</p>
+                    <span class="tool-card-cta">Open Tools →</span>
+                </a>
 
-                <a
-                    href="https://wa.me/918198091036?text=Hello%20Sameer%2C%20I%20visited%20your%20WebZoneBW%20portfolio%20and%20would%20like%20to%20connect."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn"
-                    aria-label="Contact Sameer Chouhan through WhatsApp">
+                <a href="projects.html" class="tool-card">
+                    <div class="tool-card-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    <h3 class="tool-card-name">SEO Tools</h3>
+                    <p class="tool-card-desc">Search optimization utilities, meta tag tools, and indexing helpers.</p>
+                    <span class="tool-card-cta">Open Tools →</span>
+                </a>
 
-                    <span aria-hidden="true">
-                        💬
-                    </span>
+                <a href="projects.html" class="tool-card">
+                    <div class="tool-card-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3 class="tool-card-name">Performance</h3>
+                    <p class="tool-card-desc">Speed testing, optimization tools, and site performance utilities.</p>
+                    <span class="tool-card-cta">Open Tools →</span>
+                </a>
 
-                    <span>
-                        WhatsApp Me
-                    </span>
-
+                <a href="soundbox.html" class="tool-card">
+                    <div class="tool-card-icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                    <h3 class="tool-card-name">Utilities</h3>
+                    <p class="tool-card-desc">Sound box, playlist tools, and creative web utilities.</p>
+                    <span class="tool-card-cta">Open Tools →</span>
                 </a>
 
             </div>
@@ -740,282 +525,120 @@
 
 
         <!-- =================================================
-             FEATURED PLATFORM
+             ADVERTISEMENT
              ================================================= -->
 
-        <section
-            class="featured-card"
-            aria-labelledby="featured-title">
-
-            <h2 id="featured-title">
-
-                <span aria-hidden="true">
-                    🚀
-                </span>
-
-                Featured Platform
-
-            </h2>
-
-            <h3>
-                WEBZONEBW Technical Blog
-            </h3>
-
-            <p>
-                The WEBZONEBW technical blog documents practical IT,
-                networking, infrastructure, cybersecurity,
-                troubleshooting, web development, and technology
-                topics.
-            </p>
-
-            <p>
-                It also reflects an ongoing learning journey,
-                turning technical concepts and practical experience
-                into useful, understandable resources.
-            </p>
-
-            <a
-                href="https://webzonebw1107.blogspot.com/2026/07/webzonebw1107-more-than-resume.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn"
-                aria-label="Explore the WEBZONEBW technical blog">
-
-                <span aria-hidden="true">
-                    🌐
-                </span>
-
-                <span>
-                    Explore the Blog
-                </span>
-
-            </a>
-
-        </section>
-
-
-        <!-- =================================================
-             WEBZONEBW ER STUDIO
-             ================================================= -->
-
-        <section
-            class="featured-card"
-            aria-labelledby="er-dashboard-title">
-
-            <h2 id="er-dashboard-title">
-
-                <span aria-hidden="true">
-                    🔮
-                </span>
-
-                WEBZONEBW ER Studio
-
-            </h2>
-
-            <h3>
-                Interactive Browser-Based Extended Reality Experience
-            </h3>
-
-            <p>
-                Experience the WEBZONEBW-ER Studio with interactive
-                browser-based visual effects, promotional branding,
-                creative camera experiences, image enhancement,
-                magazine-inspired visual treatments, and other
-                experimental technology features.
-            </p>
-
-            <a
-                href="er/index.html"
-                class="btn camera-btn-primary"
-                aria-label="Launch WEBZONEBW ER Studio">
-
-                <span aria-hidden="true">
-                    🔮
-                </span>
-
-                <span>
-                    Launch WEBZONEBW ER Studio
-                </span>
-
-            </a>
-
-        </section>
-
-
-        <!-- =================================================
-             QUICK INFORMATION
-             ================================================= -->
-
-        <section
-            class="quick-info"
-            aria-labelledby="quick-info-title">
-
-            <h2 id="quick-info-title">
-                Quick Information
-            </h2>
-
-            <ul>
-
-                <li>
-
-                    <span aria-hidden="true">
-                        🎓
-                    </span>
-
-                    <span>
-                        Diploma Graduate — Canada
-                    </span>
-
-                </li>
-
-
-                <li>
-
-                    <span aria-hidden="true">
-                        💻
-                    </span>
-
-                    <span>
-                        IT Support &amp; Technical Experience
-                    </span>
-
-                </li>
-
-
-                <li>
-
-                    <span aria-hidden="true">
-                        🌐
-                    </span>
-
-                    <span>
-                        Networking &amp; Systems Integration
-                    </span>
-
-                </li>
-
-
-                <li>
-
-                    <span aria-hidden="true">
-                        🛡️
-                    </span>
-
-                    <span>
-                        Network Security &amp; Infrastructure
-                    </span>
-
-                </li>
-
-
-                <li>
-
-                    <span aria-hidden="true">
-                        📍
-                    </span>
-
-                    <span>
-                        Punjab, India
-                    </span>
-
-                </li>
-
-
-                <li>
-
-                    <span aria-hidden="true">
-                        🌍
-                    </span>
-
-                    <span>
-                        Open to Relocation
-                    </span>
-
-                </li>
-
-            </ul>
-
-        </section>
+        <div class="ad-container" aria-label="Advertisement">
+            <span class="ad-label">ADVERTISEMENT</span>
+            <div class="ad-slot">
+                <!-- Responsive ad slot — managed via AdSense dashboard -->
+            </div>
+        </div>
 
 
         <!-- =================================================
              EXPLORE WEBZONEBW
              ================================================= -->
 
-        <section
-            class="quick-info"
-            aria-labelledby="explore-title">
+        <section class="explore-section" id="explore-section" aria-labelledby="explore-title">
 
-            <h2 id="explore-title">
-                Explore WEBZONEBW
-            </h2>
+            <div class="section-header">
+                <h2 id="explore-title">Explore WEBZONEBW</h2>
+                <p>Everything you need — tools, resources, and developer content in one place.</p>
+            </div>
 
-            <p>
-                The portfolio is organized around the areas
-                that represent my technical journey.
-            </p>
+            <div class="explore-grid">
 
-            <ul>
+                <div class="explore-card">
+                    <span class="explore-card-icon" aria-hidden="true">🚀</span>
+                    <h3>Featured Tools</h3>
+                    <p>ER Studio interactive experiences, web development utilities, and creative tools.</p>
+                    <a href="er/index.html" class="explore-card-link">Launch ER Studio →</a>
+                </div>
 
-                <li>
+                <div class="explore-card">
+                    <span class="explore-card-icon" aria-hidden="true">💼</span>
+                    <h3>Technical Projects</h3>
+                    <p>Practical work across IT support, networking, cybersecurity, and web development.</p>
+                    <a href="projects.html" class="explore-card-link">View Projects →</a>
+                </div>
 
-                    <span aria-hidden="true">
-                        💼
-                    </span>
+                <div class="explore-card">
+                    <span class="explore-card-icon" aria-hidden="true">📝</span>
+                    <h3>Developer Articles</h3>
+                    <p>Technical guides, troubleshooting resources, and learning materials.</p>
+                    <a href="blog.html" class="explore-card-link">Read Blog →</a>
+                </div>
 
-                    <span>
-                        <strong>Projects</strong> —
-                        Practical technical work and development.
-                    </span>
+                <div class="explore-card">
+                    <span class="explore-card-icon" aria-hidden="true">📄</span>
+                    <h3>Professional Profile</h3>
+                    <p>Resume, certifications, experience, and technical background.</p>
+                    <a href="resume.html" class="explore-card-link">View Resume →</a>
+                </div>
 
-                </li>
+                <div class="explore-card">
+                    <span class="explore-card-icon" aria-hidden="true">🎵</span>
+                    <h3>Sound Box</h3>
+                    <p>Curated Beatles playlists, discography explorer, and audio player.</p>
+                    <a href="soundbox.html" class="explore-card-link">Open Sound Box →</a>
+                </div>
 
+                <div class="explore-card">
+                    <span class="explore-card-icon" aria-hidden="true">✉️</span>
+                    <h3>Get in Touch</h3>
+                    <p>Connect regarding opportunities, projects, or collaboration.</p>
+                    <a href="contact.html" class="explore-card-link">Contact →</a>
+                </div>
 
-                <li>
+            </div>
 
-                    <span aria-hidden="true">
-                        📄
-                    </span>
-
-                    <span>
-                        <strong>Resume</strong> —
-                        Professional experience, education,
-                        and technical background.
-                    </span>
-
-                </li>
-
-
-                <li>
-
-                    <span aria-hidden="true">
-                        📝
-                    </span>
-
-                    <span>
-                        <strong>Blog</strong> —
-                        Technical articles, guides,
-                        troubleshooting resources, and learning.
-                    </span>
-
-                </li>
+        </section>
 
 
-                <li>
+        <!-- =================================================
+             QUICK INFO
+             ================================================= -->
 
-                    <span aria-hidden="true">
-                        ✉️
-                    </span>
+        <section class="quick-info-section" aria-labelledby="quick-info-title">
 
-                    <span>
-                        <strong>Contact</strong> —
-                        Connect regarding opportunities,
-                        projects, or collaboration.
-                    </span>
+            <div class="section-header">
+                <h2 id="quick-info-title">About WEBZONEBW</h2>
+            </div>
 
-                </li>
+            <div class="quick-info-grid">
 
-            </ul>
+                <div class="quick-info-item">
+                    <span class="quick-info-icon" aria-hidden="true">🎓</span>
+                    <span>Diploma Graduate — Canada</span>
+                </div>
+
+                <div class="quick-info-item">
+                    <span class="quick-info-icon" aria-hidden="true">💻</span>
+                    <span>IT Support &amp; Technical Experience</span>
+                </div>
+
+                <div class="quick-info-item">
+                    <span class="quick-info-icon" aria-hidden="true">🌐</span>
+                    <span>Networking &amp; Systems Integration</span>
+                </div>
+
+                <div class="quick-info-item">
+                    <span class="quick-info-icon" aria-hidden="true">🛡️</span>
+                    <span>Network Security &amp; Infrastructure</span>
+                </div>
+
+                <div class="quick-info-item">
+                    <span class="quick-info-icon" aria-hidden="true">📍</span>
+                    <span>Punjab, India</span>
+                </div>
+
+                <div class="quick-info-item">
+                    <span class="quick-info-icon" aria-hidden="true">🌍</span>
+                    <span>Open to Relocation</span>
+                </div>
+
+            </div>
 
         </section>
 
@@ -1029,38 +652,17 @@
             <div class="footer-content">
 
                 <p>
-                    © 2026
+                    &copy; 2026
                     <strong>WEBZONEBW</strong>.
                     All rights reserved.
                 </p>
 
-
-                <nav
-                    class="footer-links"
-                    aria-label="Footer Navigation">
-
-                    <a href="privacy.html">
-                        Privacy Policy
-                    </a>
-
-                    <a href="terms.html">
-                        Terms &amp; Conditions
-                    </a>
-
-                    <a href="disclaimer.html">
-                        Disclaimer
-                    </a>
-
-                    <a href="contact.html">
-                        Contact
-                    </a>
-
-                    <a
-                        href="#"
-                        id="webzonebw-cookie-settings">
-                        Cookie Settings
-                    </a>
-
+                <nav class="footer-links" aria-label="Footer Navigation">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="disclaimer.html">Disclaimer</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="#" id="webzonebw-cookie-settings">Cookie Settings</a>
                 </nav>
 
             </div>
