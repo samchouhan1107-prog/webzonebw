@@ -1581,10 +1581,56 @@ form .btn {
     border: 1px dashed var(--border-color-light);
 }
 
-.ownership-details p {
-    margin-bottom: 10px;
+.ownership-details {
+    background: var(--surface-card);
 
-    line-height: 1.7;
+    border: 1px solid var(--border-color-light);
+
+    border-radius: 12px;
+
+    padding: 20px 24px;
+
+    margin-top: 16px;
+}
+
+.ownership-row {
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 12px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.ownership-row:last-child {
+    border-bottom: none;
+}
+
+.ownership-label {
+    flex-shrink: 0;
+
+    width: 160px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: var(--text-muted);
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+}
+
+.ownership-value {
+    font-size: 15px;
+
+    color: var(--text-heading);
+
+    word-break: break-word;
 }
 
 .team-member-card {
