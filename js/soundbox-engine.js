@@ -7,7 +7,7 @@
         id: "p5-track-18",
         num: 18,
         phaseNum: 5,
-        phaseName: "Phase 5: Experimental & Classic Rock (1968�1969)",
+        phaseName: "Phase 5: Experimental & Classic Rock (1968–1969)",
         title: "Come Together",
         album: "Abbey Road",
         albumGroup: "Abbey Road (1969)",
@@ -35,7 +35,7 @@
                 id: "file-stem-p5",
                 name: "The Beatles - Come Together.mp3",
                 filePath: AUDIO_PATH,
-                label: "Come Together � Abbey Road (1969)",
+                label: "Come Together — Abbey Road (1969)",
                 phaseNum: 5,
                 era: "Abbey Road",
                 type: "MP3 Audio",
@@ -119,17 +119,17 @@
         id: "phase-5",
         name: track.phaseName,
         shortName: "Phase 5: Classic Rock",
-        era: "1968�1969",
+        era: "1968–1969",
         albums: "Abbey Road (1969)",
         badge: "Local MP3",
-        icon: "??",
+        icon: "🎵",
         coverColor: "linear-gradient(135deg, #0284c7, #082f49)",
         desc: "The local Come Together MP3 is ready to play.",
         trackIds: [track.id]
     };
     const masterPlaylist = {
         id: "beatles-6-phases-complete", title: "Soundbox Local Audio", tagline: "Your local MP3 track.",
-        era: "1969", category: "Local", badge: "? Local Audio", coverColor: phase.coverColor, icon: "??", songs: [track]
+        era: "1969", category: "Local", badge: "★ Local Audio", coverColor: phase.coverColor, icon: "🎵", songs: [track]
     };
     const phasePlaylist = { ...masterPlaylist, id: "phase-5-playlist", title: "Abbey Road Local Track", songs: [track] };
     const favorites = new Set();
@@ -198,11 +198,11 @@
         // Make the large Sound Box console identify the local audio it controls.
         if (title) title.textContent = "Come Together";
         if (album) album.textContent = "Album: Abbey Road (1969)";
-        if (era) era.textContent = "Phase 5: Experimental & Classic Rock (1968�1969)";
-        if (chords) chords.textContent = "Chords: Dm � A � G � D";
+        if (era) era.textContent = "Phase 5: Experimental & Classic Rock (1968–1969)";
+        if (chords) chords.textContent = "Chords: Dm • A • G • D";
         if (vocals) vocals.textContent = "Lead Vocals: John Lennon";
         if (vinylTitle) vinylTitle.textContent = "Come Together";
-        if (status) status.textContent = "?? Local MP3 � Come Together";
+        if (status) status.textContent = "💽 Local MP3 • Come Together";
 
         playButton?.addEventListener("click", () => {
             if (audio.paused) {

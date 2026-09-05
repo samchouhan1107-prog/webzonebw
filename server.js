@@ -1,6 +1,6 @@
 /* ============================================================
-   WEBZONEBW � WEB SERVER
-   WEBZONE ER � STATIC SITE ENGINE
+   WEBZONEBW — WEB SERVER
+   WEBZONE ER • STATIC SITE ENGINE
    ------------------------------------------------------------
    Version: 2.2
    Port:    3000
@@ -301,29 +301,63 @@ app.use(
 
         lastModified: true,
 
-        maxAge: IS_PRODUCTION
-            ? "1d"
-            : 0,
+        maxAge: 0,
 
         setHeaders: (res, filePath) => {
 
-            /*
-             * Prevent stale HTML during development.
-             */
-            if (
-                !IS_PRODUCTION &&
-                (
+            if (!IS_PRODUCTION) {
+
+                if (
                     filePath.endsWith(".html") ||
                     filePath.endsWith(".htm")
-                )
-            ) {
+                ) {
+                    res.setHeader("Cache-Control", "no-cache");
+                }
 
-                res.setHeader(
-                    "Cache-Control",
-                    "no-cache"
-                );
+                return;
 
             }
+
+            /*
+             * PRODUCTION CACHING TIERS
+             *
+             * HTML      → no-cache  (always revalidate)
+             * CSS / JS  → 7 days    (versioned via filenames or rebuild)
+             * Images    → 30 days   (rarely change)
+             * Audio     → 7 days    (static assets)
+             * Fonts     → 365 days  (immutable)
+             */
+
+            const ext =
+                path.extname(filePath).toLowerCase();
+
+            const htmlExts  = [".html", ".htm"];
+            const styleExts = [".css"];
+            const scriptExts = [".js", ".mjs"];
+            const imageExts = [".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".avif"];
+            const fontExts  = [".woff", ".woff2", ".ttf", ".otf", ".eot"];
+            const audioExts = [".mp3", ".wav", ".ogg", ".m4a"];
+
+            let cacheDuration;
+
+            if (htmlExts.includes(ext)) {
+                cacheDuration = 0;
+            } else if (styleExts.includes(ext) || scriptExts.includes(ext)) {
+                cacheDuration = 7 * 24 * 60 * 60;
+            } else if (imageExts.includes(ext)) {
+                cacheDuration = 30 * 24 * 60 * 60;
+            } else if (audioExts.includes(ext)) {
+                cacheDuration = 7 * 24 * 60 * 60;
+            } else if (fontExts.includes(ext)) {
+                cacheDuration = 365 * 24 * 60 * 60;
+            } else {
+                cacheDuration = 24 * 60 * 60;
+            }
+
+            res.setHeader(
+                "Cache-Control",
+                `public, max-age=${cacheDuration}`
+            );
 
         }
 
@@ -711,7 +745,7 @@ app.get(
                 if (!res.headersSent) {
 
                     res.status(404).send(
-                        "WEBZONEBW � Page not found."
+                        "WEBZONEBW — Page not found."
                     );
 
                 }
@@ -932,7 +966,7 @@ app.use(
         return res
             .status(statusCode)
             .send(
-                "WEBZONEBW � Internal Server Error"
+                "WEBZONEBW — Internal Server Error"
             );
 
     }

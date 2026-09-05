@@ -1,25 +1,25 @@
 /* ==========================================================
-   WEBZONEBW � SITE-WIDE SOUND BOX PLAYER
+   WEBZONEBW — SITE-WIDE SOUND BOX PLAYER
    ==========================================================
    File:
        js/webzonebw-player.js
 
    Purpose:
-       � Persistent WEBZONEBW music player
-       � Beatles playlist integration
-       � Previous / Play / Next
-       � Progress control
-       � Volume control
-       � Track information
-       � Playlist drawer
-       � Session playback memory
-       � Automatic next-track playback
-       � Missing-file protection
-       � Mobile responsive player
-       � Existing WEBZONEBW theme integration
-       � Supports:
+       • Persistent WEBZONEBW music player
+       • Beatles playlist integration
+       • Previous / Play / Next
+       • Progress control
+       • Volume control
+       • Track information
+       • Playlist drawer
+       • Session playback memory
+       • Automatic next-track playback
+       • Missing-file protection
+       • Mobile responsive player
+       • Existing WEBZONEBW theme integration
+       • Supports:
            assets/audio/file.mp3
-       � Supports Beatles track fields:
+       • Supports Beatles track fields:
            audioFile
            audioPath
            fileName
@@ -247,7 +247,7 @@
          *
          * /assets/audio/file.mp3
          *
-         * it is already root-relative � keep it.
+         * it is already root-relative — keep it.
          */
 
         if (
@@ -623,7 +623,7 @@
                     5,
 
                 phaseName:
-                    "Phase 5: Experimental & Classic Rock (1968�1969)",
+                    "Phase 5: Experimental & Classic Rock (1968–1969)",
 
                 title:
                     "Come Together",
@@ -894,7 +894,7 @@
                         class="webzonebw-track-icon"
                         aria-hidden="true">
 
-                        ??
+                        🎵
 
                     </div>
 
@@ -940,7 +940,7 @@
                         aria-label="Previous track"
                         title="Previous Track">
 
-                        ?
+                        ◀
 
                     </button>
 
@@ -952,7 +952,7 @@
                         aria-label="Play"
                         title="Play">
 
-                        ?
+                        ▶
 
                     </button>
 
@@ -964,7 +964,7 @@
                         aria-label="Next track"
                         title="Next Track">
 
-                        ?
+                        ▶
 
                     </button>
 
@@ -1012,7 +1012,7 @@
                         aria-label="Mute"
                         title="Mute">
 
-                        ??
+                        🔊
 
                     </button>
 
@@ -1035,7 +1035,7 @@
                         aria-label="Open playlist"
                         title="Open Playlist">
 
-                        ?
+                        ☰
 
                     </button>
 
@@ -1047,7 +1047,7 @@
                         aria-label="Minimize player"
                         title="Minimize Player">
 
-                        ?
+                        ↓
 
                     </button>
 
@@ -1066,7 +1066,7 @@
                     class="webzonebw-playlist-header">
 
                     <strong>
-                        ?? WEBZONEBW SOUND BOX
+                        🎵 WEBZONEBW SOUND BOX
                     </strong>
 
 
@@ -1076,7 +1076,7 @@
                         class="webzonebw-player-btn"
                         aria-label="Close playlist">
 
-                        ?
+                        ✕
 
                     </button>
 
@@ -1273,7 +1273,7 @@
             track.album
                 ? `${track.album}${
                     track.year
-                        ? " � " + track.year
+                        ? " • " + track.year
                         : ""
                 }`
                 : "WEBZONEBW Sound Box";
@@ -1488,7 +1488,7 @@
         if (state.isPlaying) {
 
             playButton.textContent =
-                "??";
+                "❚❚";
 
 
             playButton.setAttribute(
@@ -1505,7 +1505,7 @@
         } else {
 
             playButton.textContent =
-                "?";
+                "▶";
 
 
             playButton.setAttribute(
@@ -1706,7 +1706,7 @@
         ) {
 
             muteButton.textContent =
-                "??";
+                "🔇";
 
 
             muteButton.setAttribute(
@@ -1725,7 +1725,7 @@
         ) {
 
             muteButton.textContent =
-                "??";
+                "🔉";
 
 
             muteButton.setAttribute(
@@ -1742,7 +1742,7 @@
         } else {
 
             muteButton.textContent =
-                "??";
+                "🔊";
 
 
             muteButton.setAttribute(
@@ -1847,7 +1847,7 @@
 
                             ${
                                 track.album
-                                    ? " � " +
+                                    ? " • " +
                                       escapeHTML(
                                           track.album
                                       )
@@ -1924,8 +1924,8 @@
 
             minimizeButton.textContent =
                 state.expanded
-                    ? "?"
-                    : "?";
+                    ? "↑"
+                    : "↓";
 
         }
 

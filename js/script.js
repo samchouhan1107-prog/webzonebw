@@ -609,8 +609,8 @@ window.WebZoneTheme = {
 
                 icon.textContent =
                     isLight
-                        ? "??"
-                        : "??";
+                        ? "☀️"
+                        : "🌙";
             }
         );
 
@@ -958,7 +958,7 @@ function updateThemeButton(
         );
 
         themeToggle.innerHTML =
-            '<span aria-hidden="true">??</span> Dark Mode';
+            '<span aria-hidden="true">🌙</span> Dark Mode';
 
     } else {
 
@@ -978,7 +978,7 @@ function updateThemeButton(
         );
 
         themeToggle.innerHTML =
-            '<span aria-hidden="true">??</span> Light Mode';
+            '<span aria-hidden="true">☀️</span> Light Mode';
     }
 }
 
@@ -1709,7 +1709,7 @@ function detectCurrentPage() {
 
 
     /* ------------------------------------------------------
-       HALLOWEEN (removed � route no longer exists)
+       HALLOWEEN (removed — route no longer exists)
        ------------------------------------------------------ */
 
 
@@ -1723,8 +1723,7 @@ function detectCurrentPage() {
     ) {
 
         /*
-         * Do NOT classify /er/index.html or
-         * /halloween/index.html as the root page.
+         * Do NOT classify /er/index.html as the root page.
          */
 
         if (
