@@ -34,6 +34,8 @@ import path from "path";
 import https from "https";
 import http from "http";
 import { fileURLToPath } from "url";
+import compression from "compression";
+import helmet from "helmet";
 
 /* ============================================================
    PATH CONFIGURATION
@@ -65,6 +67,41 @@ const IS_PRODUCTION =
    ============================================================ */
 
 app.disable("x-powered-by");
+
+/* ============================================================
+   COMPRESSION
+   ------------------------------------------------------------
+   Gzip / Brotli compression for all responses.
+   Reduces payload sizes significantly.
+   ============================================================ */
+
+app.use(
+    compression({
+        level: 6,
+        threshold: 1024,
+        filter: (req, res) => {
+            if (req.headers["x-no-compression"]) {
+                return false;
+            }
+            return compression.filter(req, res);
+        }
+    })
+);
+
+/* ============================================================
+   SECURITY HEADERS — HELMET
+   ------------------------------------------------------------
+   Sets various HTTP security headers automatically.
+   CSP is relaxed for external assets (AdSense, GA4, etc.)
+   ============================================================ */
+
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+        crossOriginEmbedderPolicy: false,
+        crossOriginResourcePolicy: false
+    })
+);
 
 /*
  * Express should trust a reverse proxy only when explicitly
@@ -176,6 +213,62 @@ app.use((req, res, next) => {
 
     next();
 });
+
+/* ============================================================
+   SIMPLE RATE LIMITER
+   ------------------------------------------------------------
+   In-memory rate limiter for API endpoints.
+   Limits each IP to 60 requests per minute.
+   ============================================================ */
+
+const apiRequestCounts = new Map();
+
+function rateLimiter(req, res, next) {
+
+    const ip = req.ip || req.connection.remoteAddress;
+    const now = Date.now();
+    const windowMs = 60 * 1000;
+    const maxRequests = 60;
+
+    if (!apiRequestCounts.has(ip)) {
+        apiRequestCounts.set(ip, []);
+    }
+
+    const timestamps = apiRequestCounts.get(ip);
+
+    /* Remove expired entries. */
+    while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
+        timestamps.shift();
+    }
+
+    if (timestamps.length >= maxRequests) {
+        return res.status(429).json({
+            success: false,
+            error: "Too many requests. Please try again later.",
+            retryAfter: Math.ceil(windowMs / 1000)
+        });
+    }
+
+    timestamps.push(now);
+    next();
+}
+
+/* Clean up stale IPs every 5 minutes. */
+setInterval(() => {
+    const now = Date.now();
+    const windowMs = 60 * 1000;
+    for (const [ip, timestamps] of apiRequestCounts) {
+        while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
+            timestamps.shift();
+        }
+        if (timestamps.length === 0) {
+            apiRequestCounts.delete(ip);
+        }
+    }
+}, 5 * 60 * 1000).unref();
+
+/* Apply rate limiter to all API routes. */
+app.use("/api", rateLimiter);
 
 /* ============================================================
    HEALTH API
@@ -634,6 +727,74 @@ app.get(
 
             }
         );
+
+    }
+);
+
+/* ============================================================
+   RSS FEED
+   ------------------------------------------------------------
+   /feed.xml
+   /rss.xml
+   /feed
+   /rss
+   ============================================================ */
+
+app.get(
+    [
+        "/feed.xml",
+        "/rss.xml",
+        "/feed",
+        "/rss"
+    ],
+    (req, res) => {
+
+        const feedPath = path.join(__dirname, "feed.xml");
+
+        if (fs.existsSync(feedPath)) {
+
+            res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
+            res.sendFile(feedPath);
+
+        } else {
+
+            res.status(404).json({
+                success: false,
+                error: "RSS feed not found"
+            });
+
+        }
+
+    }
+);
+
+/* ============================================================
+   500 ERROR PAGE
+   ------------------------------------------------------------
+   /500
+   /500.html
+   /error
+   ============================================================ */
+
+app.get(
+    [
+        "/500",
+        "/500.html",
+        "/error"
+    ],
+    (req, res) => {
+
+        const errorPage = path.join(__dirname, "500.html");
+
+        if (fs.existsSync(errorPage)) {
+
+            res.status(500).sendFile(errorPage);
+
+        } else {
+
+            res.status(500).send("WEBZONEBW - Internal Server Error");
+
+        }
 
     }
 );

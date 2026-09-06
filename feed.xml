@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    ============================================================
+    WEBZONEBW — RSS FEED
+    Technology, IT Support, Web Development & Projects
+    ============================================================
+
+    Feed URL:
+    https://webzonebw.in/feed.xml
+
+    RSS Standard:
+    https://www.rssboard.org/rss-specification
+    ============================================================
+-->
+
+<rss
+    version="2.0"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <channel>
+
+        <title>
+            WEBZONEBW — Technology, IT Support &amp; Web Development
+        </title>
+
+        <link>
+            https://webzonebw.in/
+        </link>
+
+        <description>
+            Technology portfolio, IT support, networking, systems integration, cybersecurity, web development, AI, practical projects and professional insights from WEBZONEBW.
+        </description>
+
+        <language>
+            en
+        </language>
+
+        <copyright>
+            © 2026 WEBZONEBW. All rights reserved.
+        </copyright>
+
+        <lastBuildDate>
+            Tue, 15 Sep 2026 00:00:00 +0530
+        </lastBuildDate>
+
+        <atom:link
+            href="https://webzonebw.in/feed.xml"
+            rel="self"
+            type="application/rss+xml">
+
+        </atom:link>
+
+        <image>
+            <url>https://webzonebw.in/assets/logo.png</url>
+            <title>WEBZONEBW</title>
+            <link>https://webzonebw.in/</link>
+        </image>
+
+        <!-- ====================================================
+             HARDWARE TROUBLESHOOTING ARTICLE
+             ==================================================== -->
+
+        <item>
+            <title>Hardware Troubleshooting Guide</title>
+            <link>https://webzonebw.in/articles/hardware-troubleshooting/</link>
+            <description>Comprehensive hardware troubleshooting guide covering diagnostics, testing procedures, common failure patterns, and repair strategies for IT support professionals.</description>
+            <pubDate>Sun, 07 Sep 2026 00:00:00 +0530</pubDate>
+            <guid>https://webzonebw.in/articles/hardware-troubleshooting/</guid>
+            <category>Hardware</category>
+            <category>IT Support</category>
+            <category>Troubleshooting</category>
+            <dc:creator>Sameer Chouhan</dc:creator>
+        </item>
+
+        <!-- ====================================================
+             ER STUDIO LAUNCH
+             ==================================================== -->
+
+        <item>
+            <title>WEBZONEBW-ER Studio — Extended Reality Experience</title>
+            <link>https://webzonebw.in/er/</link>
+            <description>Interactive browser-based Extended Reality experience featuring live camera effects, facial tracking, visual filters, creative lenses, and photo capture.</description>
+            <pubDate>Sun, 15 Sep 2026 00:00:00 +0530</pubDate>
+            <guid>https://webzonebw.in/er/</guid>
+            <category>Extended Reality</category>
+            <category>Web Development</category>
+            <dc:creator>Sameer Chouhan</dc:creator>
+        </item>
+
+        <!-- ====================================================
+             ABOUT WEBZONEBW
+             ==================================================== -->
+
+        <item>
+            <title>WEBZONEBW — Technology Portfolio &amp; Digital Workspace</title>
+            <link>https://webzonebw.in/about.html</link>
+            <description>Explore WEBZONEBW — a technology portfolio covering IT support, networking, cybersecurity, web development, AI, systems integration and practical technology projects.</description>
+            <pubDate>Sun, 15 Sep 2026 00:00:00 +0530</pubDate>
+            <guid>https://webzonebw.in/about.html</guid>
+            <category>Portfolio</category>
+            <dc:creator>Sameer Chouhan</dc:creator>
+        </item>
+
+        <!-- ====================================================
+             SOUND BOX
+             ==================================================== -->
+
+        <item>
+            <title>WEBZONEBW Sound Box — Music Player</title>
+            <link>https://webzonebw.in/soundbox.html</link>
+            <description>Interactive music player experience with curated playlists and audio visualization.</description>
+            <pubDate>Sun, 15 Sep 2026 00:00:00 +0530</pubDate>
+            <guid>https://webzonebw.in/soundbox.html</guid>
+            <category>Music</category>
+            <category>Interactive</category>
+            <dc:creator>Sameer Chouhan</dc:creator>
+        </item>
+
+    </channel>
+
+</rss>

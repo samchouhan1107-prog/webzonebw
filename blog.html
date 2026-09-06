@@ -145,6 +145,16 @@
 
 
     <!-- =====================================================
+         RSS FEED
+         ===================================================== -->
+
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="WEBZONEBW Blog RSS Feed"
+        href="https://webzonebw.in/feed.xml">
+
+    <!-- =====================================================
          STRUCTURED DATA — WEBSITE
          ===================================================== -->
 
@@ -158,6 +168,11 @@
         "description": "WEBZONEBW technology portfolio, projects, technical resources and professional workspace.",
         "publisher": {
             "@id": "https://webzonebw.in/#person"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://webzonebw.in/blog.html?q={search_term_string}",
+            "query-input": "required name=search_term_string"
         },
         "inLanguage": "en"
     }

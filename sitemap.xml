@@ -134,4 +134,16 @@
         <priority>0.8</priority>
     </url>
 
+
+    <!-- ========================================================
+         RSS FEED
+         ======================================================== -->
+
+    <url>
+        <loc>https://webzonebw.in/feed.xml</loc>
+        <lastmod>2026-09-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
 </urlset>
