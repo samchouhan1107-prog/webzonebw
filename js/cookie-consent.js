@@ -106,6 +106,8 @@
         var backdrop = document.createElement("div");
         backdrop.id = BACKDROP_ID;
         backdrop.setAttribute("aria-hidden", "true");
+        backdrop.style.cursor = "pointer";
+        backdrop.addEventListener("click", function () { acceptCookies(); });
 
         var banner = document.createElement("div");
         banner.id = BANNER_ID;
