@@ -75,6 +75,8 @@ const expectedSidebarLinks = [
     "about.html",
     "contact.html",
     "privacy.html",
+    "cookie-policy.html",
+    "privacy-center.html",
     "terms.html"
 ];
 
@@ -83,6 +85,8 @@ const mainPages = [
     "about.html",
     "contact.html",
     "privacy.html",
+    "cookie-policy.html",
+    "privacy-center.html",
     "terms.html",
     "projects.html",
     "resume.html",
@@ -115,6 +119,8 @@ mainPages.forEach(function (page) {
     assert(html.includes('about.html'),             page + " footer missing about.html");
     assert(html.includes('contact.html'),           page + " footer missing contact.html");
     assert(html.includes('privacy.html'),           page + " footer missing privacy.html");
+    assert(html.includes('cookie-policy.html'),      page + " footer missing cookie-policy.html");
+    assert(html.includes('privacy-center.html'),     page + " footer missing privacy-center.html");
     assert(html.includes('terms.html'),             page + " footer missing terms.html");
     assert(html.includes('disclaimer.html'),        page + " footer missing disclaimer.html");
     assert(html.includes("Terms of Service"),       page + " footer still says 'Terms & Conditions'");

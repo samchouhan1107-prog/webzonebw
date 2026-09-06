@@ -452,6 +452,8 @@ function resolveHtmlPageFromRoute(requestPath) {
         "/halloween/": path.join(__dirname, "halloween", "index.html"),
         "/privacy-policy": path.join(__dirname, "privacy.html"),
         "/terms-of-service": path.join(__dirname, "terms.html"),
+        "/cookie-policy": path.join(__dirname, "cookie-policy.html"),
+        "/privacy-center": path.join(__dirname, "privacy-center.html"),
         "/about-us": path.join(__dirname, "about.html"),
         "/contact-us": path.join(__dirname, "contact.html")
     };

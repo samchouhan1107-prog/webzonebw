@@ -1757,6 +1757,10 @@ function detectCurrentPage() {
 
         "privacy.html",
 
+        "cookie-policy.html",
+
+        "privacy-center.html",
+
         "terms.html",
 
         "disclaimer.html"
