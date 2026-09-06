@@ -4013,6 +4013,86 @@ function initWebZoneERStudio() {
     }
 
     // ==========================================================
+    // DEMO MODE BACKGROUND
+    // ==========================================================
+
+    function drawDemoBackground(ctx, w, h) {
+        const time = performance.now() * 0.001;
+
+        // Deep space gradient base
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, "#030712");
+        grad.addColorStop(0.4, "#0a0e1a");
+        grad.addColorStop(0.7, "#0f172a");
+        grad.addColorStop(1, "#1e1b4b");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Starfield
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+        for (let i = 0; i < 60; i++) {
+            const sx = (Math.sin(i * 127.1 + 0.5) * 0.5 + 0.5) * w;
+            const sy = (Math.cos(i * 311.7 + 0.3) * 0.5 + 0.5) * h;
+            const sz = 0.5 + Math.sin(time * 1.5 + i) * 0.4;
+            ctx.globalAlpha = Math.max(0.1, sz);
+            ctx.beginPath();
+            ctx.arc(sx, sy, sz + 0.3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // WEBZONEBW watermark
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        ctx.fillStyle = "#38bdf8";
+        ctx.font = "bold " + Math.round(h * 0.12) + "px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("WEBZONEBW-ER", w / 2, h * 0.35);
+
+        ctx.globalAlpha = 0.08;
+        ctx.font = Math.round(h * 0.04) + "px monospace";
+        ctx.fillStyle = "#a78bfa";
+        ctx.fillText("DEMO MODE — SELECT A LENS EFFECT", w / 2, h * 0.50);
+        ctx.restore();
+
+        // Floating tech nodes
+        for (let i = 0; i < techNodes.length; i++) {
+            const node = techNodes[i];
+            node.angle += node.speed;
+            const nx = w * 0.5 + Math.cos(node.angle) * w * node.radius * 0.4;
+            const ny = h * 0.5 + Math.sin(node.angle) * h * node.radius * 0.4;
+
+            ctx.save();
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = "#38bdf8";
+            ctx.font = "11px monospace";
+            ctx.textAlign = "center";
+            ctx.fillText(node.label, nx, ny);
+            ctx.restore();
+        }
+
+        // Matrix rain
+        ctx.save();
+        ctx.font = "12px monospace";
+        ctx.textAlign = "center";
+        for (let i = 0; i < matrixDrops.length; i++) {
+            const d = matrixDrops[i];
+            d.y += d.speed;
+            if (d.y > 1.05) { d.y = -0.05; }
+            const mx = d.x * w;
+            const my = d.y * h;
+
+            for (let c = 0; c < Math.min(d.length, 6); c++) {
+                ctx.globalAlpha = Math.max(0, 0.55 - c * 0.09);
+                ctx.fillStyle = c === 0 ? "#38bdf8" : "#a78bfa";
+                ctx.fillText(matrixChars[(i + c + Math.floor(time * 3)) % matrixChars.length], mx, my - c * 14);
+            }
+        }
+        ctx.restore();
+    }
+
+    // ==========================================================
     // MAIN RENDER PIPELINE
     // ==========================================================
 
