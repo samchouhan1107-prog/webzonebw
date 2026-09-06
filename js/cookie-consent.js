@@ -170,8 +170,8 @@
         banner.appendChild(inner);
 
         document.head.appendChild(getStyles());
-        document.body.appendChild(backdrop);
         document.body.appendChild(banner);
+        document.body.appendChild(backdrop);
 
         setTimeout(function () { btnAccept.focus(); }, 500);
     }
