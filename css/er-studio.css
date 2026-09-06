@@ -652,3 +652,182 @@ body.webzonebw-er-camera-active {
         display: block;
     }
 }
+
+
+/* -----------------------------------------------------
+   12. QUALITY TOGGLE BUTTONS (Effects Panel)
+   ----------------------------------------------------- */
+
+.er-quality-toggles {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+
+.er-quality-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.er-quality-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.er-quality-toggle-btn.active {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+}
+
+.er-theme-light .er-quality-toggle-btn {
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.03);
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.er-theme-light .er-quality-toggle-btn.active {
+    border-color: rgba(14, 116, 144, 0.4);
+    background: rgba(14, 116, 144, 0.08);
+    color: #0e7490;
+}
+
+
+/* -----------------------------------------------------
+   13. UPLOAD DROPZONE
+   ----------------------------------------------------- */
+
+.er-upload-dropzone {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5, 5, 7, 0.92);
+    border: 2px dashed rgba(56, 189, 248, 0.35);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.er-upload-dropzone.dragover {
+    border-color: #38bdf8;
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.dropzone-inner {
+    text-align: center;
+    padding: 20px;
+}
+
+.dropzone-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.dropzone-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 6px;
+}
+
+.dropzone-subtext {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+}
+
+.er-theme-light .er-upload-dropzone {
+    background: rgba(248, 250, 252, 0.95);
+}
+
+.er-theme-light .dropzone-text {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.er-theme-light .dropzone-subtext {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+
+/* -----------------------------------------------------
+   14. BOTTOM CONTROLS BAR — MOBILE RESPONSIVE
+   ----------------------------------------------------- */
+
+@media (max-width: 600px) {
+    .er-bottom-controls-bar {
+        gap: 6px;
+        padding: 6px 8px;
+    }
+
+    .er-action-pill-btn {
+        padding: 6px 10px;
+        font-size: 0.72rem;
+    }
+
+    .er-action-pill-btn span:last-child {
+        display: none;
+    }
+
+    .er-action-pill-btn {
+        min-width: 40px;
+        justify-content: center;
+    }
+
+    .er-snap-shutter-btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .cam-floating-vertical-stack {
+        gap: 6px;
+        bottom: 60px;
+        right: 8px;
+    }
+
+    .cam-vertical-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 13px;
+    }
+
+    .er-quality-toggles {
+        gap: 4px;
+    }
+
+    .er-quality-toggle-btn {
+        padding: 4px 8px;
+        font-size: 0.68rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .cam-floating-vertical-stack {
+        gap: 5px;
+        right: 6px;
+    }
+
+    .cam-vertical-btn {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+        font-size: 12px;
+    }
+}

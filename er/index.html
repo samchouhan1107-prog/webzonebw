@@ -758,6 +758,32 @@
 
                         </button>
 
+
+                        <button type="button"
+                                class="cam-vertical-btn"
+                                id="toggleFaceHudBtnFloating"
+                                title="Toggle Face Recognition HUD"
+                                aria-label="Toggle Face Recognition HUD">
+
+                            <span>
+                                🎯
+                            </span>
+
+                        </button>
+
+
+                        <button type="button"
+                                class="cam-vertical-btn"
+                                id="studioLightBtnFloating"
+                                title="Studio Lighting"
+                                aria-label="Studio Lighting">
+
+                            <span>
+                                💡
+                            </span>
+
+                        </button>
+
                     </div>
 
 
@@ -1093,6 +1119,21 @@
 
                     </div>
 
+                    <!-- Upload Dropzone (hidden by default) -->
+                    <div id="uploadDropzone"
+                         class="er-upload-dropzone"
+                         style="display:none;"
+                         role="region"
+                         aria-label="Upload an image via drag and drop">
+
+                        <div class="dropzone-inner">
+                            <span class="dropzone-icon">📁</span>
+                            <p class="dropzone-text">Drag &amp; drop a photo here, or tap to browse</p>
+                            <p class="dropzone-subtext">Supports JPG, PNG, WebP</p>
+                        </div>
+
+                    </div>
+
                 </div>
 
 
@@ -1313,7 +1354,24 @@
                         </span>
 
                         <span>
-                            Flip Camera
+                            Flip
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="er-action-pill-btn"
+                            id="stopExperienceBtn"
+                            title="Stop Camera"
+                            aria-label="Stop Camera">
+
+                        <span aria-hidden="true">
+                            ⏹
+                        </span>
+
+                        <span>
+                            Stop
                         </span>
 
                     </button>
@@ -1336,6 +1394,41 @@
 
                     <button type="button"
                             class="er-action-pill-btn"
+                            id="toggleAudioBtn"
+                            title="Toggle Ambient Audio"
+                            aria-label="Toggle Ambient Audio">
+
+                        <span aria-hidden="true">
+                            🔊
+                        </span>
+
+                        <span>
+                            Audio
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="er-action-pill-btn"
+                            id="modeCameraBtn"
+                            title="Switch to Camera Mode"
+                            aria-label="Switch to Camera Mode"
+                            style="display:none;">
+
+                        <span aria-hidden="true">
+                            🎥
+                        </span>
+
+                        <span>
+                            Camera
+                        </span>
+
+                    </button>
+
+
+                    <button type="button"
+                            class="er-action-pill-btn"
                             id="modeUploadBtn"
                             title="Upload Photo from Device"
                             aria-label="Upload Photo">
@@ -1345,7 +1438,7 @@
                         </span>
 
                         <span>
-                            Upload Photo
+                            Upload
                         </span>
 
                     </button>
@@ -1356,6 +1449,12 @@
                            accept="image/*"
                            style="display:none;"
                            aria-label="Upload an image">
+
+                    <input type="file"
+                           id="imageFileInput"
+                           accept="image/*"
+                           style="display:none;"
+                           aria-label="Upload an image (secondary)">
 
                 </div>
 
@@ -1534,21 +1633,56 @@
                     </button>
 
                 </div>
-                <div class="panel-bottom-action">
+                    <div class="panel-bottom-action">
 
-                    <button type="button"
-                            class="view-all-effects-btn"
-                            id="viewAllCatalogBtn">
+                        <!-- Quality Enhancers -->
+                        <div class="er-quality-toggles">
 
-                        <span aria-hidden="true">
-                            ⊞
-                        </span>
+                            <button type="button"
+                                    class="er-quality-toggle-btn active"
+                                    id="autoHdBtn"
+                                    title="Toggle AI Auto-HD Enhancement"
+                                    aria-label="Auto HD Enhancement">
 
-                        View All Effects (10)
+                                <span>✨</span> Auto-HD
 
-                    </button>
+                            </button>
 
-                </div>
+                            <button type="button"
+                                    class="er-quality-toggle-btn active"
+                                    id="denoiseBtn"
+                                    title="Toggle Noise Reduction"
+                                    aria-label="Noise Reduction">
+
+                                <span>🔇</span> Denoise
+
+                            </button>
+
+                            <button type="button"
+                                    class="er-quality-toggle-btn active"
+                                    id="studioLightBtn"
+                                    title="Toggle Studio Vignette Light"
+                                    aria-label="Studio Light">
+
+                                <span>💡</span> Studio Light
+
+                            </button>
+
+                        </div>
+
+                        <button type="button"
+                                class="view-all-effects-btn"
+                                id="viewAllCatalogBtn">
+
+                            <span aria-hidden="true">
+                                ⊞
+                            </span>
+
+                            View All Effects (10)
+
+                        </button>
+
+                    </div>
 
             </aside>
 

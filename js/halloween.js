@@ -387,6 +387,7 @@ function initWebZoneERStudio() {
             studioMode = "camera";
 
             modeCameraBtn.classList.add("active");
+            modeCameraBtn.style.display = "";
             modeUploadBtn.classList.remove("active");
 
             if (uploadDropzone) {
@@ -398,6 +399,10 @@ function initWebZoneERStudio() {
             }
 
             canvas.style.display = "none";
+
+            if (mediaStream) {
+                startCamera();
+            }
         });
 
         modeUploadBtn.addEventListener("click", () => {
@@ -405,6 +410,7 @@ function initWebZoneERStudio() {
 
             modeUploadBtn.classList.add("active");
             modeCameraBtn.classList.remove("active");
+            modeCameraBtn.style.display = "";
 
             if (uploadDropzone) {
                 uploadDropzone.style.display = "block";
