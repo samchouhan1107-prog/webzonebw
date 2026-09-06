@@ -365,9 +365,19 @@ function resolveHtmlPageFromRoute(requestPath) {
         return explicitRoutes[routeName];
     }
 
+    /*
+     * SECURITY:
+     * Reject any resolved path that escapes the project directory.
+     * This blocks traversal attempts such as /..%2f..%2fserver.js.
+     */
+    const isInsideProject = candidatePath => {
+        const relative = path.relative(__dirname, candidatePath);
+        return Boolean(relative) && !relative.startsWith("..") && !path.isAbsolute(relative);
+    };
+
     if (path.extname(normalizedPath)) {
         const pagePath = path.join(__dirname, normalizedPath.replace(/^\//, ""));
-        if (fs.existsSync(pagePath) && fs.statSync(pagePath).isFile()) {
+        if (isInsideProject(pagePath) && fs.existsSync(pagePath) && fs.statSync(pagePath).isFile()) {
             return pagePath;
         }
     }
@@ -375,11 +385,79 @@ function resolveHtmlPageFromRoute(requestPath) {
     const extensionlessPath =
         path.join(__dirname, `${normalizedPath.replace(/^\//, "")}.html`);
 
-    if (fs.existsSync(extensionlessPath) && fs.statSync(extensionlessPath).isFile()) {
+    if (isInsideProject(extensionlessPath) && fs.existsSync(extensionlessPath) && fs.statSync(extensionlessPath).isFile()) {
         return extensionlessPath;
     }
 
     return null;
+}
+
+/*
+ * Shared helpers: send an HTML page with a graceful 404 fallback,
+ * and build the static-serving options used by all namespaces.
+ */
+function sendHtmlPage(res, filePath, notFoundMessage, logPrefix) {
+
+    res.sendFile(filePath, (error) => {
+
+        if (!error) {
+            return;
+        }
+
+        console.error(
+            `[${logPrefix}] Unable to load ${filePath}:`,
+            error.message
+        );
+
+        if (!res.headersSent) {
+
+            res.status(404).send(notFoundMessage);
+
+        }
+
+    });
+
+}
+
+function staticOptions() {
+
+    return {
+
+        extensions: ["html", "htm"],
+
+        index: "index.html",
+
+        fallthrough: true,
+
+        redirect: true,
+
+        etag: true,
+
+        lastModified: true,
+
+        maxAge: IS_PRODUCTION ? "1d" : 0,
+
+        setHeaders: (res, filePath) => {
+
+            /*
+             * Do not aggressively cache HTML in development.
+             */
+            if (
+                !IS_PRODUCTION &&
+                (
+                    filePath.endsWith(".html") ||
+                    filePath.endsWith(".htm")
+                )
+            ) {
+
+                res.setHeader("Cache-Control", "no-cache");
+
+            }
+
+        }
+
+    };
+
 }
 
 /* ============================================================
@@ -400,35 +478,11 @@ app.get(
     ],
     (req, res) => {
 
-        const erIndex =
-            path.join(
-                __dirname,
-                "er",
-                "index.html"
-            );
-
-        res.sendFile(
-            erIndex,
-            (error) => {
-
-                if (!error) {
-                    return;
-                }
-
-                console.error(
-                    "[ER] Unable to load er/index.html:",
-                    error.message
-                );
-
-                if (!res.headersSent) {
-
-                    res.status(404).send(
-                        "WEBZONE ER Studio is unavailable."
-                    );
-
-                }
-
-            }
+        sendHtmlPage(
+            res,
+            path.join(__dirname, "er", "index.html"),
+            "WEBZONE ER Studio is unavailable.",
+            "ER"
         );
 
     }
@@ -456,34 +510,11 @@ app.get(
     ],
     (req, res) => {
 
-        const soundboxPage =
-            path.join(
-                __dirname,
-                "soundbox.html"
-            );
-
-        res.sendFile(
-            soundboxPage,
-            (error) => {
-
-                if (!error) {
-                    return;
-                }
-
-                console.error(
-                    "[SOUNDBOX] Unable to load soundbox.html:",
-                    error.message
-                );
-
-                if (!res.headersSent) {
-
-                    res.status(404).send(
-                        "WEBZONEBW Sound Box is unavailable."
-                    );
-
-                }
-
-            }
+        sendHtmlPage(
+            res,
+            path.join(__dirname, "soundbox.html"),
+            "WEBZONEBW Sound Box is unavailable.",
+            "SOUNDBOX"
         );
 
     }
@@ -506,36 +537,11 @@ app.get(
     ],
     (req, res) => {
 
-        const erIndex =
-            path.join(
-                __dirname,
-                "er",
-                "index.html"
-            );
-
-        res.sendFile(
-            erIndex,
-            (error) => {
-
-                if (!error) {
-                    return;
-                }
-
-                console.error(
-                    "[WEBZONEBW-ER] Unable to load " +
-                    "er/index.html:",
-                    error.message
-                );
-
-                if (!res.headersSent) {
-
-                    res.status(404).send(
-                        "WEBZONEBW-ER Studio is unavailable."
-                    );
-
-                }
-
-            }
+        sendHtmlPage(
+            res,
+            path.join(__dirname, "er", "index.html"),
+            "WEBZONEBW-ER Studio is unavailable.",
+            "WEBZONEBW-ER"
         );
 
     }
@@ -564,54 +570,8 @@ app.get(
 app.use(
     "/er",
     express.static(
-        path.join(
-            __dirname,
-            "er"
-        ),
-        {
-
-            extensions: [
-                "html",
-                "htm"
-            ],
-
-            index: "index.html",
-
-            fallthrough: true,
-
-            redirect: true,
-
-            etag: true,
-
-            lastModified: true,
-
-            maxAge: IS_PRODUCTION
-                ? "1d"
-                : 0,
-
-            setHeaders: (res, filePath) => {
-
-                /*
-                 * Do not aggressively cache HTML.
-                 */
-                if (
-                    !IS_PRODUCTION &&
-                    (
-                        filePath.endsWith(".html") ||
-                        filePath.endsWith(".htm")
-                    )
-                ) {
-
-                    res.setHeader(
-                        "Cache-Control",
-                        "no-cache"
-                    );
-
-                }
-
-            }
-
-        }
+        path.join(__dirname, "er"),
+        staticOptions()
     )
 );
 
@@ -625,51 +585,8 @@ app.use(
 app.use(
     "/halloween",
     express.static(
-        path.join(
-            __dirname,
-            "halloween"
-        ),
-        {
-
-            extensions: [
-                "html",
-                "htm"
-            ],
-
-            index: "index.html",
-
-            fallthrough: true,
-
-            redirect: true,
-
-            etag: true,
-
-            lastModified: true,
-
-            maxAge: IS_PRODUCTION
-                ? "1d"
-                : 0,
-
-            setHeaders: (res, filePath) => {
-
-                if (
-                    !IS_PRODUCTION &&
-                    (
-                        filePath.endsWith(".html") ||
-                        filePath.endsWith(".htm")
-                    )
-                ) {
-
-                    res.setHeader(
-                        "Cache-Control",
-                        "no-cache"
-                    );
-
-                }
-
-            }
-
-        }
+        path.join(__dirname, "halloween"),
+        staticOptions()
     )
 );
 
