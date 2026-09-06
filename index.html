@@ -89,6 +89,29 @@
         content="ca-pub-4823379856566931"
     >
 
+    <!-- =====================================================
+         GOOGLE CONSENT MODE v2 — defaults (must precede gtag
+         and adsbygoogle so consent state is set before either
+         script initialises)
+         ===================================================== -->
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
+
+    <!-- AdSense loads AFTER consent defaults -->
     <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
@@ -247,27 +270,8 @@
     </script>
 
     <!-- =====================================================
-         GOOGLE CONSENT MODE v2 — defaults (must precede gtag)
-         ===================================================== -->
-
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag("consent", "default", {
-            analytics_storage:   "denied",
-            ad_storage:         "denied",
-            ad_user_data:       "denied",
-            ad_personalization: "denied",
-            wait_for_update:    500
-        });
-    </script>
-
-    <!-- =====================================================
          GOOGLE ANALYTICS — GA4
+         (Consent Mode v2 defaults already set above)
          ===================================================== -->
 
     <script
