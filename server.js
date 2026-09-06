@@ -31,6 +31,8 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
+import https from "https";
+import http from "http";
 import { fileURLToPath } from "url";
 
 /* ============================================================
@@ -887,8 +889,54 @@ process.on(
 );
 
 /* ============================================================
-   SERVER START
+   SERVER START — HTTP + HTTPS
    ============================================================ */
+
+/*
+ * Secure Context Requirement
+ *
+ * Modern browsers require HTTPS (or localhost) for camera /
+ * microphone access. We start both HTTP and HTTPS so local
+ * development works on any network device.
+ */
+
+const HTTPS_PORT = Number(process.env.HTTPS_PORT) || 3443;
+const pfxPath = path.join(__dirname, "certs", "cert.pfx");
+
+let httpsServer = null;
+
+if (fs.existsSync(pfxPath)) {
+    try {
+        httpsServer = https.createServer(
+            {
+                pfx: fs.readFileSync(pfxPath),
+                passphrase: "webzonebw"
+            },
+            app
+        );
+
+        httpsServer.listen(HTTPS_PORT, HOST, () => {
+            console.log("");
+            console.log("================================================");
+            console.log(" HTTPS Secure Context (camera/mic supported)");
+            console.log(` Local      : https://localhost:${HTTPS_PORT}`);
+            console.log(` ER Studio  : https://localhost:${HTTPS_PORT}/er/`);
+            console.log("================================================");
+        });
+
+        httpsServer.on("error", (error) => {
+            console.error("[WEBZONEBW] HTTPS server error:", error.code);
+        });
+
+    } catch (error) {
+        console.error("[WEBZONEBW] HTTPS startup failed:", error.message);
+    }
+} else {
+    console.log("");
+    console.log("[WEBZONEBW] No HTTPS certificate found at certs/cert.pfx");
+    console.log("[WEBZONEBW] Camera requires HTTPS or localhost access.");
+    console.log(`[WEBZONEBW] Run: https://localhost:${HTTPS_PORT}/er/ (after generating certs)`);
+}
 
 const server =
     app.listen(
@@ -931,7 +979,11 @@ const server =
             );
 
             console.log(
-                ` Port       : ${PORT}`
+                ` HTTP  Port : ${PORT}`
+            );
+
+            console.log(
+                ` HTTPS Port : ${HTTPS_PORT}`
             );
 
             console.log(
@@ -943,19 +995,7 @@ const server =
             );
 
             console.log(
-                ` ER Studio  : http://localhost:${PORT}/er/ (alias: /halloween/)`
-            );
-
-            console.log(
                 ` Health     : http://localhost:${PORT}/api/health`
-            );
-
-            console.log(
-                ` API Status : http://localhost:${PORT}/api/status`
-            );
-
-            console.log(
-                ` Web Status : http://localhost:${PORT}/status`
             );
 
             console.log(
@@ -1046,19 +1086,25 @@ const shutdown = (signal) => {
         if (error) {
 
             console.error(
-                "[WEBZONEBW] Shutdown error:",
+                "[WEBZONEBW] HTTP shutdown error:",
                 error
             );
 
-            process.exit(1);
-
         }
 
-        console.log(
-            "[WEBZONEBW] Server closed successfully."
-        );
-
-        process.exit(0);
+        if (httpsServer) {
+            httpsServer.close(() => {
+                console.log(
+                    "[WEBZONEBW] Server closed successfully."
+                );
+                process.exit(0);
+            });
+        } else {
+            console.log(
+                "[WEBZONEBW] Server closed successfully."
+            );
+            process.exit(0);
+        }
 
     });
 

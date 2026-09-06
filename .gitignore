@@ -4,3 +4,6 @@
 .github\instructions\codacy.instructions.md
 
 node_modules/
+
+# HTTPS dev certificates (never commit)
+certs/

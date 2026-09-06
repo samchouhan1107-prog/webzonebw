@@ -3378,6 +3378,43 @@ function initWebZoneERStudio() {
 
         isCameraStarting = true;
 
+        /*
+         * SECURE CONTEXT CHECK
+         * Camera / microphone require HTTPS or localhost.
+         * If the user opened via plain HTTP (e.g. http://192.168.x.x:3000),
+         * show a clear upgrade message instead of a silent error.
+         */
+        if (
+            !window.isSecureContext &&
+            location.hostname !== "localhost" &&
+            location.hostname !== "127.0.0.1" &&
+            location.hostname !== "::1"
+        ) {
+            isCameraStarting = false;
+
+            const permModal = document.getElementById("permissionAlertModal");
+            if (permModal) {
+                const titleEl = permModal.querySelector(".perm-title, h3, h2");
+                const descEl = permModal.querySelector(".perm-desc, p");
+                if (titleEl) titleEl.textContent = "🔒 HTTPS Required";
+                if (descEl) descEl.textContent =
+                    "Your browser blocks camera access on plain HTTP. " +
+                    "Open this page via https://" + location.host + "/er/ " +
+                    "or use localhost for local development.";
+                permModal.style.display = "flex";
+            } else {
+                alert(
+                    "🔒 HTTPS Required for Camera\n\n" +
+                    "Your browser blocks camera/microphone access on plain HTTP.\n\n" +
+                    "✔ Open via: https://" + location.host + "/er/\n" +
+                    "✔ Or use: https://localhost:3443/er/ (for local dev)\n\n" +
+                    "This is a browser security requirement — not a site bug."
+                );
+            }
+
+            return;
+        }
+
         studioMode =
             "camera";
 
