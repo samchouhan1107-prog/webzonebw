@@ -247,6 +247,26 @@
     </script>
 
     <!-- =====================================================
+         GOOGLE CONSENT MODE v2 — defaults (must precede gtag)
+         ===================================================== -->
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
+
+    <!-- =====================================================
          GOOGLE ANALYTICS — GA4
          ===================================================== -->
 
@@ -256,12 +276,6 @@
     </script>
 
     <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
         gtag("js", new Date());
         gtag("config", "G-ZFZ54Z2997");
     </script>
@@ -532,6 +546,44 @@
 
                         <span>
                             Privacy Policy
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="cookie-policy.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🍪
+                        </span>
+
+                        <span>
+                            Cookie Policy
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="privacy-center.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🎛️
+                        </span>
+
+                        <span>
+                            Privacy Center
                         </span>
 
                     </a>
@@ -1113,6 +1165,14 @@
 
                     <a href="privacy.html">
                         Privacy Policy
+                    </a>
+
+                    <a href="cookie-policy.html">
+                        Cookie Policy
+                    </a>
+
+                    <a href="privacy-center.html">
+                        Privacy Center
                     </a>
 
                     <a href="terms.html">

@@ -51,6 +51,19 @@
         rel="stylesheet"
         href="/css/responsive.css">
 
+    <!-- Google Consent Mode v2 — defaults -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
+
     <!-- =====================================================
          OPEN GRAPH
          ===================================================== -->
@@ -226,6 +239,34 @@
                     <a href="/contact.html">
                         <span aria-hidden="true">📬</span>
                         Contact Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/privacy.html">
+                        <span aria-hidden="true">🔒</span>
+                        Privacy Policy
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/cookie-policy.html">
+                        <span aria-hidden="true">🍪</span>
+                        Cookie Policy
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/privacy-center.html">
+                        <span aria-hidden="true">🎛️</span>
+                        Privacy Center
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/terms.html">
+                        <span aria-hidden="true">📋</span>
+                        Terms of Service
                     </a>
                 </li>
 
@@ -484,6 +525,8 @@
      PAGE SCRIPTS
      ===================================================== -->
 
+<script defer src="/js/cookie-utils.js"></script>
+<script defer src="/js/cookie-consent.js"></script>
 <script>
 
     /* Timestamp */

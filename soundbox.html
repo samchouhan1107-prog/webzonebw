@@ -20,13 +20,24 @@
     <link rel="preconnect"
           href="https://www.googletagmanager.com">
 
+    <!-- Google Consent Mode v2 — defaults -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-ZFZ54Z2997');
+        gtag('js', new Date());
+        gtag('config', 'G-ZFZ54Z2997');
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
      crossorigin="anonymous">
@@ -347,6 +358,18 @@
                     </a>
                 </li>
                 <li>
+                    <a href="cookie-policy.html">
+                        <span class="nav-icon" aria-hidden="true">🍪</span>
+                        Cookie Policy
+                    </a>
+                </li>
+                <li>
+                    <a href="privacy-center.html">
+                        <span class="nav-icon" aria-hidden="true">🎛️</span>
+                        Privacy Center
+                    </a>
+                </li>
+                <li>
                     <a href="terms.html">
                         <span class="nav-icon" aria-hidden="true">📋</span>
                         Terms of Service
@@ -659,6 +682,8 @@
                     <a href="about.html">About Us</a>
                     <a href="contact.html">Contact Us</a>
                     <a href="privacy.html">Privacy Policy</a>
+                    <a href="cookie-policy.html">Cookie Policy</a>
+                    <a href="privacy-center.html">Privacy Center</a>
                     <a href="terms.html">Terms of Service</a>
                     <a href="disclaimer.html">Disclaimer</a>
                     <a href="#" id="webzonebw-cookie-settings">Cookie Settings</a>

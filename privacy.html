@@ -141,12 +141,8 @@
     </script>
 
     <!-- =====================================================
-         GOOGLE ANALYTICS — GA4
+         GOOGLE CONSENT MODE v2 — defaults (must precede gtag)
          ===================================================== -->
-
-    <script async
-            src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
-    </script>
 
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -155,8 +151,25 @@
             dataLayer.push(arguments);
         }
 
-        gtag('js', new Date());
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
 
+    <!-- =====================================================
+         GOOGLE ANALYTICS — GA4
+         ===================================================== -->
+
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
+    </script>
+
+    <script>
+        gtag('js', new Date());
         gtag('config', 'G-ZFZ54Z2997');
     </script>
 
@@ -390,6 +403,40 @@
                         </span>
 
                         Privacy Policy
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="cookie-policy.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🍪
+                        </span>
+
+                        Cookie Policy
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="privacy-center.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🎛️
+                        </span>
+
+                        Privacy Center
 
                     </a>
 
@@ -1597,6 +1644,18 @@
                        aria-current="page">
 
                         Privacy Policy
+
+                    </a>
+
+                    <a href="cookie-policy.html">
+
+                        Cookie Policy
+
+                    </a>
+
+                    <a href="privacy-center.html">
+
+                        Privacy Center
 
                     </a>
 

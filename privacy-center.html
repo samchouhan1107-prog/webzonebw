@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         WEBZONEBW — PRIVACY CENTER
+         Production HTML5 • SEO • Structured Data • AdSense
+         ===================================================== -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#030712">
+
+    <!-- =====================================================
+         SEO
+         ===================================================== -->
+
+    <title>Privacy Center | WebZoneBW — Cookie &amp; Data Controls</title>
+
+    <meta name="description"
+          content="Privacy Center for WebZoneBW. Manage your cookie preferences, view consent status, and control how your data is used across analytics, advertising, and essential services.">
+
+    <meta name="author"
+          content="Sameer Chouhan">
+
+    <meta name="robots"
+          content="noindex, nofollow">
+
+    <link rel="icon"
+          type="image/png"
+          href="assets/favicon/favicon.png">
+
+    <!-- =====================================================
+         MAIN STYLESHEET
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="css/style.css?v=2.3.0">
+
+    <!-- RESPONSIVE LAYOUT -->
+    <link
+        rel="stylesheet"
+        href="css/responsive.css?v=2.3.0">
+
+    <!-- =====================================================
+         PRIVACY CENTER STYLES
+         ===================================================== -->
+
+    <style>
+        /* ---------------------------------------------------
+           PRIVACY CENTER — INLINE STYLES
+           --------------------------------------------------- */
+
+        .pc-hero {
+            text-align: center;
+            padding: 48px 24px 32px;
+            background: linear-gradient(180deg, rgba(56,189,248,0.06) 0%, transparent 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(56,189,248,0.1);
+            margin-bottom: 32px;
+        }
+
+        .pc-hero-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .pc-hero h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin: 0 0 8px;
+        }
+
+        .pc-hero p {
+            font-size: 14px;
+            color: #94a3b8;
+            margin: 0;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Status bar */
+        .pc-status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .pc-status-label {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .pc-status-value {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            color: #64748b;
+        }
+
+        .pc-status-value.pc-status-accepted {
+            background: rgba(34,197,94,0.1);
+            color: #22c55e;
+        }
+
+        .pc-status-value.pc-status-declined {
+            background: rgba(239,68,68,0.1);
+            color: #ef4444;
+        }
+
+        .pc-status-value.pc-status-custom {
+            background: rgba(56,189,248,0.1);
+            color: #38bdf8;
+        }
+
+        .pc-status-value.pc-status-none {
+            background: rgba(255,255,255,0.05);
+            color: #64748b;
+        }
+
+        /* Category cards */
+        .pc-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .pc-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 20px 24px;
+            transition: border-color 0.2s ease;
+        }
+
+        .pc-card:hover {
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .pc-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .pc-card-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pc-card-icon {
+            font-size: 20px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.04);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .pc-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin: 0;
+        }
+
+        .pc-card-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        .pc-badge-required {
+            background: rgba(34,197,94,0.1);
+            color: #22c55e;
+        }
+
+        .pc-badge-optional {
+            background: rgba(251,191,36,0.1);
+            color: #fbbf24;
+        }
+
+        .pc-card-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #94a3b8;
+            margin: 0 0 12px;
+            padding-left: 46px;
+        }
+
+        .pc-card-cookies {
+            padding-left: 46px;
+        }
+
+        .pc-card-cookies summary {
+            font-size: 12px;
+            color: #64748b;
+            cursor: pointer;
+            user-select: none;
+            padding: 4px 0;
+            transition: color 0.2s;
+        }
+
+        .pc-card-cookies summary:hover {
+            color: #94a3b8;
+        }
+
+        .pc-card-cookies table {
+            width: 100%;
+            margin-top: 8px;
+            font-size: 12px;
+            border-collapse: collapse;
+        }
+
+        .pc-card-cookies th {
+            text-align: left;
+            color: #64748b;
+            font-weight: 600;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .pc-card-cookies td {
+            padding: 6px 8px;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .pc-card-cookies code {
+            font-size: 11px;
+            background: rgba(56,189,248,0.08);
+            color: #38bdf8;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Toggle switch (matches cookie-consent.js styles) */
+        .pc-toggle {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .pc-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .pc-toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            transition: all 0.25s ease;
+        }
+
+        .pc-toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 2px;
+            bottom: 2px;
+            background: #64748b;
+            border-radius: 50%;
+            transition: all 0.25s ease;
+        }
+
+        .pc-toggle input:checked + .pc-toggle-slider {
+            background: rgba(56,189,248,0.2);
+            border-color: rgba(56,189,248,0.4);
+        }
+
+        .pc-toggle input:checked + .pc-toggle-slider::before {
+            transform: translateX(20px);
+            background: #38bdf8;
+        }
+
+        .pc-toggle input:disabled + .pc-toggle-slider {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .pc-toggle input:focus-visible + .pc-toggle-slider {
+            outline: 2px solid #38bdf8;
+            outline-offset: 2px;
+        }
+
+        /* Action bar */
+        .pc-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 24px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .pc-btn {
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .pc-btn:focus-visible {
+            outline: 2px solid #38bdf8;
+            outline-offset: 2px;
+        }
+
+        .pc-btn-secondary {
+            background: rgba(255,255,255,0.04);
+            color: #94a3b8;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .pc-btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+            color: #cbd5e1;
+        }
+
+        .pc-btn-primary {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #030712;
+            font-weight: 700;
+            box-shadow: 0 2px 12px rgba(56,189,248,0.25);
+        }
+
+        .pc-btn-primary:hover {
+            background: linear-gradient(135deg, #7dd3fc, #38bdf8);
+            box-shadow: 0 4px 20px rgba(56,189,248,0.35);
+            transform: translateY(-1px);
+        }
+
+        .pc-btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .pc-btn-danger {
+            background: rgba(239,68,68,0.08);
+            color: #ef4444;
+            border-color: rgba(239,68,68,0.2);
+        }
+
+        .pc-btn-danger:hover {
+            background: rgba(239,68,68,0.14);
+            color: #f87171;
+        }
+
+        /* Saved confirmation */
+        .pc-saved {
+            text-align: center;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #22c55e;
+            background: rgba(34,197,94,0.08);
+            border: 1px solid rgba(34,197,94,0.15);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: pcFadeIn 0.3s ease;
+        }
+
+        @keyframes pcFadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Info section */
+        .pc-info {
+            padding: 20px 24px;
+            background: rgba(56,189,248,0.04);
+            border: 1px solid rgba(56,189,248,0.08);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .pc-info p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .pc-info a {
+            color: #38bdf8;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        /* ---------------------------------------------------
+           LIGHT MODE
+           --------------------------------------------------- */
+
+        body.light-mode .pc-hero {
+            background: linear-gradient(180deg, rgba(2,132,199,0.04) 0%, transparent 100%);
+            border-color: rgba(0,0,0,0.06);
+        }
+
+        body.light-mode .pc-hero h1 { color: #0f172a; }
+        body.light-mode .pc-hero p { color: #64748b; }
+
+        body.light-mode .pc-status-bar {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+
+        body.light-mode .pc-status-label { color: #64748b; }
+        body.light-mode .pc-status-value { background: #f1f5f9; color: #64748b; }
+
+        body.light-mode .pc-card {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+
+        body.light-mode .pc-card:hover { border-color: #cbd5e1; }
+        body.light-mode .pc-card-icon { background: #e2e8f0; }
+        body.light-mode .pc-card-title { color: #0f172a; }
+        body.light-mode .pc-card-desc { color: #64748b; }
+        body.light-mode .pc-card-cookies th { color: #475569; border-color: #e2e8f0; }
+        body.light-mode .pc-card-cookies td { color: #475569; border-color: #f1f5f9; }
+        body.light-mode .pc-card-cookies code { background: rgba(2,132,199,0.08); color: #0284c7; }
+        body.light-mode .pc-card-cookies summary { color: #64748b; }
+
+        body.light-mode .pc-toggle-slider {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        body.light-mode .pc-toggle-slider::before { background: #94a3b8; }
+
+        body.light-mode .pc-toggle input:checked + .pc-toggle-slider {
+            background: rgba(2,132,199,0.15);
+            border-color: rgba(2,132,199,0.35);
+        }
+
+        body.light-mode .pc-toggle input:checked + .pc-toggle-slider::before {
+            background: #0284c7;
+        }
+
+        body.light-mode .pc-btn-secondary { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+        body.light-mode .pc-btn-secondary:hover { background: #e2e8f0; color: #334155; }
+        body.light-mode .pc-btn-primary { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; box-shadow: 0 2px 12px rgba(2,132,199,0.25); }
+        body.light-mode .pc-btn-primary:hover { background: linear-gradient(135deg, #0369a1, #075985); }
+        body.light-mode .pc-btn-danger { background: rgba(239,68,68,0.06); color: #dc2626; border-color: rgba(239,68,68,0.15); }
+        body.light-mode .pc-btn-danger:hover { background: rgba(239,68,68,0.1); color: #b91c1c; }
+        body.light-mode .pc-info { background: rgba(2,132,199,0.03); border-color: rgba(2,132,199,0.1); }
+        body.light-mode .pc-info p { color: #475569; }
+        body.light-mode .pc-info a { color: #0284c7; }
+
+        /* ---------------------------------------------------
+           MOBILE
+           --------------------------------------------------- */
+
+        @media (max-width: 640px) {
+            .pc-hero { padding: 32px 16px 24px; }
+            .pc-hero h1 { font-size: 20px; }
+            .pc-card { padding: 16px; }
+            .pc-card-desc { padding-left: 0; margin-top: 8px; }
+            .pc-card-cookies { padding-left: 0; }
+            .pc-actions { flex-direction: column; }
+            .pc-btn { width: 100%; text-align: center; }
+        }
+    </style>
+
+    <!-- =====================================================
+         GOOGLE CONSENT MODE v2 — defaults (must precede gtag)
+         ===================================================== -->
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
+    <div class="mobile-nav-bar">
+
+        <button
+            type="button"
+            class="hamburger-btn"
+            id="sidebarToggleBtn"
+            aria-label="Toggle Sidebar Navigation"
+            aria-controls="mainSidebar"
+            aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+        <div class="mobile-brand-title">
+            <span class="gradient-text">WEBZONEBW</span>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STANDARDIZED SIDEBAR
+         ===================================================== -->
+
+    <aside
+        class="sidebar"
+        id="mainSidebar">
+
+        <div class="logo">
+
+            <a
+                href="index.html"
+                aria-label="WebZoneBW Home"
+                class="brand-logo-link">
+
+                <img
+                    src="assets/logo.png"
+                    alt="WebZoneBW Logo"
+                    class="brand-logo-img">
+
+                <div class="brand-name-group">
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        SYSTEMS · SUPPORT · INFRASTRUCTURE
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Main Navigation">
+
+            <ul>
+
+                <li>
+                    <a href="index.html">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="er/index.html">
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        WebZoneBW-ER Studio
+                    </a>
+                </li>
+
+                <li>
+                    <a href="projects.html">
+                        <span class="nav-icon" aria-hidden="true">💼</span>
+                        Projects
+                    </a>
+                </li>
+
+                <li>
+                    <a href="resume.html">
+                        <span class="nav-icon" aria-hidden="true">📄</span>
+                        Resume
+                    </a>
+                </li>
+
+                <li>
+                    <a href="blog.html">
+                        <span class="nav-icon" aria-hidden="true">📝</span>
+                        Blog
+                    </a>
+                </li>
+
+                <li>
+                    <a href="soundbox.html">
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        Sound Box
+                    </a>
+                </li>
+
+                <li>
+                    <a href="about.html">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
+                        About Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="contact.html">
+                        <span class="nav-icon" aria-hidden="true">✉️</span>
+                        Contact Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="privacy.html">
+                        <span class="nav-icon" aria-hidden="true">🔒</span>
+                        Privacy Policy
+                    </a>
+                </li>
+
+                <li>
+                    <a href="cookie-policy.html">
+                        <span class="nav-icon" aria-hidden="true">🍪</span>
+                        Cookie Policy
+                    </a>
+                </li>
+
+                <li>
+                    <a href="privacy-center.html"
+                       class="active"
+                       aria-current="page">
+                        <span class="nav-icon" aria-hidden="true">🎛️</span>
+                        Privacy Center
+                    </a>
+                </li>
+
+                <li>
+                    <a href="terms.html">
+                        <span class="nav-icon" aria-hidden="true">📋</span>
+                        Terms of Service
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+
+        <div class="sidebar-theme-toggle-row">
+
+            <div class="theme-label-group">
+
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+
+                <span id="themeModeText">Dark Mode</span>
+
+            </div>
+
+            <label class="switch-toggle" for="themeToggleSwitch">
+
+                <input
+                    type="checkbox"
+                    id="themeToggleSwitch"
+                    checked
+                    aria-label="Toggle Dark Mode">
+
+                <span class="toggle-slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="sidebar-user-card">
+
+            <div class="user-avatar-wrap">
+
+                <span class="user-avatar-icon">👨‍💻</span>
+
+                <span
+                    class="user-online-dot"
+                    title="Online"
+                    aria-label="Online">
+                </span>
+
+            </div>
+
+            <div class="user-info">
+
+                <strong>Sameer Chouhan</strong>
+
+                <span>Developer &amp; Creator</span>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content legal-page">
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <div class="pc-hero" role="banner">
+            <span class="pc-hero-icon" aria-hidden="true">🎛️</span>
+            <h1>Privacy Center</h1>
+            <p>
+                Control how your data is used. Toggle cookie
+                categories on or off, view consent status, and
+                manage your preferences — all in one place.
+            </p>
+        </div>
+
+
+        <!-- =================================================
+             CONSENT STATUS BAR
+             ================================================= -->
+
+        <div class="pc-status-bar" id="pc-status-bar"
+             aria-label="Current consent status">
+
+            <span class="pc-status-label">Consent Status</span>
+            <span class="pc-status-value pc-status-none"
+                  id="pc-status-value">
+                Loading…
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             SAVED CONFIRMATION (hidden by default)
+             ================================================= -->
+
+        <div class="pc-saved" id="pc-saved"
+             role="alert" aria-live="polite" hidden>
+            ✅ Preferences saved successfully.
+        </div>
+
+
+        <!-- =================================================
+             CATEGORY CARDS
+             ================================================= -->
+
+        <div class="pc-categories" id="pc-categories">
+
+            <!-- NECESSARY -->
+            <div class="pc-card">
+                <div class="pc-card-header">
+                    <div class="pc-card-title-group">
+                        <div class="pc-card-icon">🔒</div>
+                        <h2 class="pc-card-title">Necessary</h2>
+                    </div>
+                    <span class="pc-card-badge pc-badge-required">Always Active</span>
+                </div>
+                <p class="pc-card-desc">
+                    Core cookies required for the website to function.
+                    These enable theme preferences, cookie consent
+                    state, and security. They cannot be disabled.
+                </p>
+                <div class="pc-card-cookies">
+                    <details>
+                        <summary>View cookies (4)</summary>
+                        <table>
+                            <thead>
+                                <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>webzonebw_consent_status</code></td><td>Consent choice</td><td>365 days</td></tr>
+                                <tr><td><code>webzonebw_consent_categories</code></td><td>Category preferences</td><td>365 days</td></tr>
+                                <tr><td><code>webzonebw_consent_version</code></td><td>Policy version</td><td>365 days</td></tr>
+                                <tr><td><code>webzonebw_theme_mode</code></td><td>Theme preference</td><td>365 days</td></tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+            </div>
+
+            <!-- ANALYTICS -->
+            <div class="pc-card">
+                <div class="pc-card-header">
+                    <div class="pc-card-title-group">
+                        <div class="pc-card-icon">📊</div>
+                        <h2 class="pc-card-title">Analytics</h2>
+                    </div>
+                    <span class="pc-card-badge pc-badge-optional">Optional</span>
+                </div>
+                <p class="pc-card-desc">
+                    Help us understand how visitors interact with
+                    the site. Data is anonymous and used to improve
+                    content and performance.
+                </p>
+                <div class="pc-card-cookies">
+                    <details>
+                        <summary>View cookies (3)</summary>
+                        <table>
+                            <thead>
+                                <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>_ga</code></td><td>Distinguishes unique users</td><td>2 years</td></tr>
+                                <tr><td><code>_ga_&lt;id&gt;</code></td><td>Maintains session state</td><td>2 years</td></tr>
+                                <tr><td><code>_gid</code></td><td>Distinguishes users</td><td>24 hours</td></tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+            </div>
+
+            <!-- ADVERTISING -->
+            <div class="pc-card">
+                <div class="pc-card-header">
+                    <div class="pc-card-title-group">
+                        <div class="pc-card-icon">📢</div>
+                        <h2 class="pc-card-title">Advertising</h2>
+                    </div>
+                    <span class="pc-card-badge pc-badge-optional">Optional</span>
+                </div>
+                <p class="pc-card-desc">
+                    Used to deliver relevant ads through Google
+                    AdSense and measure campaign effectiveness.
+                    Disabling these shows non-personalized ads.
+                </p>
+                <div class="pc-card-cookies">
+                    <details>
+                        <summary>View cookies (4)</summary>
+                        <table>
+                            <thead>
+                                <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>NID</code></td><td>Stores preferences &amp; language</td><td>6 months</td></tr>
+                                <tr><td><code>IDE</code></td><td>Targeted advertising</td><td>13 months</td></tr>
+                                <tr><td><code>test_cookie</code></td><td>Browser cookie support check</td><td>15 minutes</td></tr>
+                                <tr><td><code>DSID</code></td><td>Non-personalized ad linking</td><td>2 weeks</td></tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+            </div>
+
+            <!-- SOCIAL / THIRD-PARTY -->
+            <div class="pc-card">
+                <div class="pc-card-header">
+                    <div class="pc-card-title-group">
+                        <div class="pc-card-icon">🔗</div>
+                        <h2 class="pc-card-title">Social / Third-Party</h2>
+                    </div>
+                    <span class="pc-card-badge pc-badge-optional">Optional</span>
+                </div>
+                <p class="pc-card-desc">
+                    Embedded content from third-party platforms
+                    (YouTube, SoundCloud, social share buttons)
+                    may set their own cookies when loaded.
+                </p>
+                <div class="pc-card-cookies">
+                    <details>
+                        <summary>View third-party policies</summary>
+                        <table>
+                            <thead>
+                                <tr><th>Provider</th><th>Service</th><th>Policy</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Google</td>
+                                    <td>YouTube embeds</td>
+                                    <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy</a></td>
+                                </tr>
+                                <tr>
+                                    <td>SoundCloud</td>
+                                    <td>Audio embeds</td>
+                                    <td><a href="https://soundcloud.com/pages/privacy" target="_blank" rel="noopener">Privacy</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTION BAR
+             ================================================= -->
+
+        <div class="pc-actions" id="pc-actions">
+
+            <button
+                class="pc-btn pc-btn-secondary"
+                id="pc-decline-all"
+                aria-label="Decline all optional cookies">
+                Decline All
+            </button>
+
+            <button
+                class="pc-btn pc-btn-primary"
+                id="pc-save"
+                aria-label="Save current preferences">
+                Save Preferences
+            </button>
+
+            <button
+                class="pc-btn pc-btn-danger"
+                id="pc-revoke"
+                aria-label="Revoke all consent and clear data">
+                Revoke All Consent
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             INFO
+             ================================================= -->
+
+        <div class="pc-info">
+            <p>
+                Your preferences are stored locally on your device
+                and never sent to our servers. You can change them
+                at any time by revisiting this page or clicking
+                <strong>"Cookie Settings"</strong> in the footer.
+                For full details, read our
+                <a href="cookie-policy.html">Cookie Policy</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+            </p>
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="site-footer">
+
+            <div class="footer-content">
+
+                <p>
+                    © 2026
+                    <strong>WEBZONEBW</strong>.
+                    All rights reserved.
+                </p>
+
+                <nav
+                    class="footer-links"
+                    aria-label="Footer Navigation">
+
+                    <span class="footer-section-label">
+                        Company / Legal
+                    </span>
+
+                    <a href="about.html">
+                        About Us
+                    </a>
+
+                    <a href="contact.html">
+                        Contact Us
+                    </a>
+
+                    <a href="privacy.html">
+                        Privacy Policy
+                    </a>
+
+                    <a href="cookie-policy.html">
+                        Cookie Policy
+                    </a>
+
+                    <a href="terms.html">
+                        Terms of Service
+                    </a>
+
+                    <a href="disclaimer.html">
+                        Disclaimer
+                    </a>
+
+                    <a href="privacy-center.html"
+                       aria-current="page">
+                        Privacy Center
+                    </a>
+
+                    <a
+                        href="#"
+                        id="webzonebw-cookie-settings">
+                        Cookie Settings
+                    </a>
+
+                </nav>
+
+            </div>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     SITE JAVASCRIPT
+     ===================================================== -->
+
+<script defer src="js/script.js?v=2.3.0"></script>
+<script defer src="js/cookie-utils.js?v=2.3.0"></script>
+<script defer src="js/cookie-consent.js?v=2.3.0"></script>
+
+<!-- =====================================================
+     PRIVACY CENTER — CONTROLLER
+     ===================================================== -->
+
+<script>
+(function () {
+    "use strict";
+
+    var CK = window.WebZoneCookie;
+
+    /* ---------------------------------------------------
+       HELPERS
+       --------------------------------------------------- */
+
+    function cookieGet(key) {
+        if (CK) return CK.getNS("consent", key);
+        var m = document.cookie.match(
+            new RegExp("(^| )webzonebw_consent_" + key + "=([^;]+)")
+        );
+        return m ? decodeURIComponent(m[2]) : null;
+    }
+
+    function cookieSet(key, value) {
+        if (CK) {
+            CK.setNS("consent", key, value, { days: 365 });
+        } else {
+            var d = new Date();
+            d.setTime(d.getTime() + 365 * 864e5);
+            document.cookie =
+                "webzonebw_consent_" + key + "=" +
+                encodeURIComponent(value) +
+                ";expires=" + d.toUTCString() +
+                ";path=/;SameSite=Lax";
+        }
+    }
+
+    function cookieRemove(key) {
+        if (CK) {
+            CK.removeNS("consent", key);
+        } else {
+            document.cookie =
+                "webzonebw_consent_" + key +
+                "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        }
+    }
+
+    function getCategories() {
+        var raw = cookieGet("categories");
+        if (!raw) return null;
+        try { return JSON.parse(raw); } catch (e) { return null; }
+    }
+
+    function getStatus() {
+        return cookieGet("status");
+    }
+
+    function updateStatusUI() {
+        var el = document.getElementById("pc-status-value");
+        if (!el) return;
+        var status = getStatus();
+        el.className = "pc-status-value";
+
+        if (!status) {
+            el.textContent = "No consent recorded";
+            el.classList.add("pc-status-none");
+        } else if (status === "accepted") {
+            el.textContent = "All cookies accepted";
+            el.classList.add("pc-status-accepted");
+        } else if (status === "declined") {
+            el.textContent = "All optional cookies declined";
+            el.classList.add("pc-status-declined");
+        } else {
+            el.textContent = "Custom preferences (" + status + ")";
+            el.classList.add("pc-status-custom");
+        }
+    }
+
+    /* ---------------------------------------------------
+       TOGGLES
+       --------------------------------------------------- */
+
+    var toggleIds = {
+        analytics:   "pc-toggle-analytics",
+        advertising: "pc-toggle-advertising"
+    };
+
+    function loadToggles() {
+        var cats = getCategories();
+        if (!cats) {
+            cats = { necessary: true, analytics: false, advertising: false };
+        }
+        for (var key in toggleIds) {
+            if (!toggleIds.hasOwnProperty(key)) continue;
+            var el = document.getElementById(toggleIds[key]);
+            if (el) el.checked = cats[key] === true;
+        }
+    }
+
+    function readToggles() {
+        var cats = { necessary: true };
+        for (var key in toggleIds) {
+            if (!toggleIds.hasOwnProperty(key)) continue;
+            var el = document.getElementById(toggleIds[key]);
+            cats[key] = el ? el.checked : false;
+        }
+        return cats;
+    }
+
+    /* ---------------------------------------------------
+       GOOGLE CONSENT MODE
+       --------------------------------------------------- */
+
+    function updateConsentMode(cats) {
+        if (typeof window.gtag !== "function") return;
+        window.gtag("consent", "update", {
+            analytics_storage:   cats.analytics   ? "granted" : "denied",
+            ad_storage:         cats.advertising ? "granted" : "denied",
+            ad_user_data:       cats.advertising ? "granted" : "denied",
+            ad_personalization: cats.advertising ? "granted" : "denied"
+        });
+    }
+
+    /* ---------------------------------------------------
+       ACTIONS
+       --------------------------------------------------- */
+
+    function fireEvent(status, cats) {
+        try {
+            window.dispatchEvent(
+                new CustomEvent("webzonebw:cookie-consent", {
+                    detail: {
+                        status:     status,
+                        categories: cats,
+                        timestamp:  Date.now()
+                    }
+                })
+            );
+        } catch (e) { /* silent */ }
+    }
+
+    function showSaved() {
+        var el = document.getElementById("pc-saved");
+        if (el) {
+            el.hidden = false;
+            el.textContent = "✅ Preferences saved successfully.";
+            setTimeout(function () { el.hidden = true; }, 3000);
+        }
+    }
+
+    function save() {
+        var cats = readToggles();
+        var hasAny = cats.analytics || cats.advertising;
+        var status = hasAny ? "custom" : "declined";
+
+        cookieSet("categories", JSON.stringify(cats));
+        cookieSet("status", status);
+        cookieSet("version", "2");
+
+        updateConsentMode(cats);
+        updateStatusUI();
+        showSaved();
+        fireEvent(status, cats);
+    }
+
+    function declineAll() {
+        var cats = { necessary: true, analytics: false, advertising: false };
+
+        for (var key in toggleIds) {
+            if (!toggleIds.hasOwnProperty(key)) continue;
+            var el = document.getElementById(toggleIds[key]);
+            if (el) el.checked = false;
+        }
+
+        cookieSet("categories", JSON.stringify(cats));
+        cookieSet("status", "declined");
+        cookieSet("version", "2");
+
+        updateConsentMode(cats);
+        updateStatusUI();
+        showSaved();
+        fireEvent("declined", cats);
+    }
+
+    function revokeAll() {
+        cookieRemove("categories");
+        cookieRemove("status");
+        cookieRemove("version");
+
+        for (var key in toggleIds) {
+            if (!toggleIds.hasOwnProperty(key)) continue;
+            var el = document.getElementById(toggleIds[key]);
+            if (el) el.checked = false;
+        }
+
+        /* Reset consent mode to denied */
+        if (typeof window.gtag === "function") {
+            window.gtag("consent", "update", {
+                analytics_storage:   "denied",
+                ad_storage:         "denied",
+                ad_user_data:       "denied",
+                ad_personalization: "denied"
+            });
+        }
+
+        updateStatusUI();
+
+        var el = document.getElementById("pc-saved");
+        if (el) {
+            el.hidden = false;
+            el.textContent = "🗑️ All consent revoked. Preferences cleared.";
+            setTimeout(function () { el.hidden = true; }, 3000);
+        }
+
+        fireEvent("revoked", { necessary: true, analytics: false, advertising: false });
+    }
+
+    /* ---------------------------------------------------
+       INIT
+       --------------------------------------------------- */
+
+    function init() {
+        loadToggles();
+        updateStatusUI();
+
+        var btnSave = document.getElementById("pc-save");
+        var btnDecline = document.getElementById("pc-decline-all");
+        var btnRevoke = document.getElementById("pc-revoke");
+
+        if (btnSave)    btnSave.addEventListener("click", save);
+        if (btnDecline) btnDecline.addEventListener("click", declineAll);
+        if (btnRevoke)  btnRevoke.addEventListener("click", revokeAll);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+        init();
+    }
+})();
+</script>
+
+</body>
+
+</html>
