@@ -129,7 +129,9 @@
 
     <url>
         <loc>https://webzonebw.in/articles/hardware-troubleshooting/</loc>
-        <lastmod>2026-09-15</lastmod>
+        <lastmod>2026-09-07</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 
 </urlset>
