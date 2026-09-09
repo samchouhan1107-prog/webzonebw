@@ -706,6 +706,14 @@ app.get(
                 "404.html"
             );
 
+        if (!fs.existsSync(errorPage)) {
+
+            return res
+                .status(404)
+                .send("WEBZONEBW - Page not found.");
+
+        }
+
         res.status(404).sendFile(
             errorPage,
             (error) => {
@@ -722,7 +730,7 @@ app.get(
                 if (!res.headersSent) {
 
                     res.status(404).send(
-                        "WEBZONEBW � Page not found."
+                        "WEBZONEBW - Page not found."
                     );
 
                 }
@@ -1005,13 +1013,27 @@ app.use(
         }
 
         /*
-         * Browser requests receive a simple
-         * server error response.
+         * Browser requests receive the styled
+         * 500 error page when available.
          */
+        const errorPage =
+            path.join(
+                __dirname,
+                "500.html"
+            );
+
+        if (fs.existsSync(errorPage)) {
+
+            return res
+                .status(statusCode)
+                .sendFile(errorPage);
+
+        }
+
         return res
             .status(statusCode)
             .send(
-                "WEBZONEBW � Internal Server Error"
+                "WEBZONEBW - Internal Server Error"
             );
 
     }

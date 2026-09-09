@@ -132,12 +132,37 @@
 
 
     <!-- ========================================================
-         HARDWARE TROUBLESHOOTING ARTICLE
+         TECHNICAL ARTICLES
          ======================================================== -->
 
+    <!-- Hardware Troubleshooting -->
     <url>
         <loc>https://webzonebw.in/articles/hardware-troubleshooting/</loc>
-        <lastmod>2026-09-07</lastmod>
+        <lastmod>2026-09-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Network Infrastructure Fundamentals -->
+    <url>
+        <loc>https://webzonebw.in/articles/network-infrastructure-fundamentals/</loc>
+        <lastmod>2026-09-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Systems Integration Guide -->
+    <url>
+        <loc>https://webzonebw.in/articles/systems-integration-guide/</loc>
+        <lastmod>2026-09-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Cybersecurity & Incident Response -->
+    <url>
+        <loc>https://webzonebw.in/articles/cybersecurity-incident-response/</loc>
+        <lastmod>2026-09-08</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>

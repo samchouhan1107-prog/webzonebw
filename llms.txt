@@ -36,18 +36,51 @@ The site combines professional technology interests with educational articles, t
 - Technology Projects
 - Troubleshooting Guides
 
-## Featured Technical Article
+## Featured Technical Articles
 
-### Troubleshooting Hardware Issues: A Comprehensive Guide
+### 1. Troubleshooting Hardware Issues: A Comprehensive Guide
 
 URL:
-https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html
+https://webzonebw.in/articles/hardware-troubleshooting/
 
 Published:
 August 14, 2026
 
 Summary:
 A practical guide to identifying, isolating, testing, and resolving common computer hardware problems, from basic inspections to systematic troubleshooting.
+
+### 2. Enterprise Network Infrastructure & Subnetting: The Practical IT Guide
+
+URL:
+https://webzonebw.in/articles/network-infrastructure-fundamentals/
+
+Published:
+August 25, 2026
+
+Summary:
+A comprehensive engineering guide covering IPv4 subnetting formulas, CIDR notation, VLAN broadcast domain segmentation (802.1Q), DHCP DORA handshakes, and diagnostic packet tools.
+
+### 3. Systems Integration & Hybrid Administration: Windows & Linux Enterprise Workflows
+
+URL:
+https://webzonebw.in/articles/systems-integration-guide/
+
+Published:
+August 30, 2026
+
+Summary:
+An architectural roadmap covering Active Directory hybrid synchronization with Microsoft Entra ID, cross-platform PowerShell 7 automation scripts, centralized event auditing, and REST API service orchestration.
+
+### 4. Cybersecurity & Incident Response: Practical Threat Mitigation for IT Support
+
+URL:
+https://webzonebw.in/articles/cybersecurity-incident-response/
+
+Published:
+September 2, 2026
+
+Summary:
+Enterprise security fundamentals covering Zero Trust tenets, administrative credential tiering (PAWs & LAPS), immutable 3-2-1 backup protection against ransomware, and a 4-phase incident response protocol.
 
 Key concepts:
 - Systematic hardware troubleshooting
