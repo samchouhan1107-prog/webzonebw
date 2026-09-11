@@ -476,3 +476,38 @@ The project is built around a simple principle:
 New features, experiments, technical projects, interactive experiences, and seasonal experiences may be introduced over time.
 
 Public-facing features are released only when they are ready for visitors, while experimental features may remain in private development until they are stable enough for public use.
+
+---
+
+# 📝 Development Notes
+
+## Recent File Additions
+
+| File | Description |
+|------|-------------|
+| `audio-manifest.json` | Machine-readable audio track metadata for the Sound Box system |
+| `js/soundbox-audio-map.js` | JavaScript audio path references and track lookup utilities |
+| `js/halloween-ui-polish.js` | Visual enhancement layer for the Halloween camera interface |
+
+## Implementation Details
+
+### Sound Box Audio System
+
+* `audio-manifest.json` provides structured metadata for all tracks and phases
+* `js/soundbox-audio-map.js` exports `getAudioPath()`, `getTrackInfo()`, and `getPhaseTracks()` utilities
+* Currently uses local MP3 file: `assets/audio/The Beatles - Come Together.mp3`
+* The six-phase atmospheric audio files listed in the Sound Box section are planned for future development
+
+### Halloween UI Polish Layer
+
+* `js/halloween-ui-polish.js` adds entrance animations for lens bubbles
+* Includes glow pulse effect for the active filter pill
+* Smooth scroll behavior for the lens carousel track
+* Loads after `halloween.js` in `er/index.html` as documented in the Loading Order section
+* Preserves all existing camera functionality and responsive behavior
+
+### ER Studio Lens System
+
+* Lens bubble click handlers support shift+click for multi-select
+* `toggleFilter()` function manages up to 3 simultaneous active filters
+* Premium lens frame filters include: Portrait Bokeh, Glamour Glow, Dramatic Light, Teal & Orange, Classic B&W, Pastel Dream, Vintage Film

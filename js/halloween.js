@@ -115,6 +115,7 @@ function initWebZoneERStudio() {
 
     // Filters & Effects State
     let currentFilter = "cartoon";
+    let activeFilters = [];
     let activeMagazine = "none";
     let showFaceHud = false;
 
@@ -763,6 +764,71 @@ function initWebZoneERStudio() {
             target: "scene",
             desc: "Vibrant synthwave neon magenta & cyan wash"
         },
+
+        // ✨ PREMIUM PORTRAIT LENSES
+        {
+            id: "bokeh",
+            name: "Portrait Bokeh",
+            icon: "📷",
+            category: "face",
+            target: "face",
+            desc: "Professional DSLR bokeh with creamy background blur"
+        },
+
+        {
+            id: "glamour",
+            name: "Glamour Glow",
+            icon: "💄",
+            category: "face",
+            target: "face",
+            desc: "Soft glamour lighting with skin smoothing and warm tones"
+        },
+
+        {
+            id: "dramatic",
+            name: "Dramatic Light",
+            icon: "🎭",
+            category: "face",
+            target: "face",
+            desc: "High-contrast chiaroscuro with deep shadows and highlights"
+        },
+
+        // 🎬 CINEMATIC PREMIUM SCENE SHADERS
+        {
+            id: "tealorange",
+            name: "Teal & Orange",
+            icon: "🌅",
+            category: "scene",
+            target: "scene",
+            desc: "Hollywood blockbuster teal & orange color grade"
+        },
+
+        {
+            id: "bwclassic",
+            name: "Classic B&W",
+            icon: "🎞️",
+            category: "scene",
+            target: "scene",
+            desc: "Timeless black & white with film grain and vignette"
+        },
+
+        {
+            id: "pastel",
+            name: "Pastel Dream",
+            icon: "🌸",
+            category: "scene",
+            target: "scene",
+            desc: "Soft pastel color wash with dreamy atmospheric haze"
+        },
+
+        {
+            id: "vintagefilm",
+            name: "Vintage Film",
+            icon: "📽️",
+            category: "scene",
+            target: "scene",
+            desc: "70s retro film look with warm color shift and grain"
+        },
     ];
 
     /*
@@ -969,8 +1035,12 @@ function initWebZoneERStudio() {
 
             btn.addEventListener(
                 "click",
-                () => {
-                    selectFilter(config.id);
+                (e) => {
+                    if (e.shiftKey) {
+                        toggleFilter(config.id);
+                    } else {
+                        selectFilter(config.id);
+                    }
                 }
             );
 
@@ -1425,6 +1495,26 @@ function initWebZoneERStudio() {
         }
 
         setHighlightStep(7);
+    }
+
+    // Multi-filter toggle (shift+click to add/remove filters simultaneously)
+    function toggleFilter(filterName) {
+        const idx = activeFilters.indexOf(filterName);
+        if (idx === -1) {
+            // If max 3 filters reached, remove oldest
+            if (activeFilters.length >= 3) {
+                activeFilters.shift();
+            }
+            activeFilters.push(filterName);
+            showSwipeToast("➕", `Layer: ${filterName}`);
+        } else {
+            activeFilters.splice(idx, 1);
+            showSwipeToast("➖", `Removed: ${filterName}`);
+        }
+        // If no active filters, fall back to currentFilter
+        if (activeFilters.length === 0) {
+            applyArtThemeShader(ctx, canvas.width, canvas.height, currentFilter, performance.now() * 0.001);
+        }
     }
 
     function slideNext() {
@@ -4195,7 +4285,14 @@ function initWebZoneERStudio() {
                 drawAIBackgroundDepth(ctx, w, h);
             }
 
-            applyArtThemeShader(ctx, w, h, currentFilter, time);
+            // Apply all active filters (multi-filter support)
+            if (activeFilters.length > 0) {
+                activeFilters.forEach(f => {
+                    applyArtThemeShader(ctx, w, h, f, time);
+                });
+            } else {
+                applyArtThemeShader(ctx, w, h, currentFilter, time);
+            }
 
             if (isStudioLightEnabled) {
                 applyStudioVignette(ctx, w, h);

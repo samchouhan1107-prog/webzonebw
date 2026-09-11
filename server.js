@@ -133,14 +133,6 @@ app.use((req, res, next) => {
         "camera=(self), microphone=(self)"
     );
 
-    /*
-     * Legacy header retained for older environments.
-     */
-    res.setHeader(
-        "Feature-Policy",
-        "camera 'self'; microphone 'self'"
-    );
-
     next();
 });
 

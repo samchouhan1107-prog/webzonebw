@@ -1,0 +1,85 @@
+{
+  "name": "WEBZONEBW Sound Box",
+  "version": "1.0",
+  "description": "Six-phase atmospheric audio structure for WebZoneBW experiences",
+  "phases": [
+    {
+      "phaseNum": 1,
+      "id": "phase-1",
+      "name": "Phase 1: Beatlemania Dawn (1963–1964)",
+      "shortName": "Beatlemania Dawn",
+      "era": "1963–1964",
+      "icon": "🌅",
+      "badge": "Dawn Era"
+    },
+    {
+      "phaseNum": 2,
+      "id": "phase-2",
+      "name": "Phase 2: Stereo Groove (1965)",
+      "shortName": "Stereo Groove",
+      "era": "1965",
+      "icon": "🎧",
+      "badge": "Stereo Era"
+    },
+    {
+      "phaseNum": 3,
+      "id": "phase-3",
+      "name": "Phase 3: Psychedelic Orbit (1966–1967)",
+      "shortName": "Psychedelic Orbit",
+      "era": "1966–1967",
+      "icon": "🌀",
+      "badge": "Psychedelic"
+    },
+    {
+      "phaseNum": 4,
+      "id": "phase-4",
+      "name": "Phase 4: Studio Mosaic (1968)",
+      "shortName": "Studio Mosaic",
+      "era": "1968",
+      "icon": "🎛️",
+      "badge": "Studio"
+    },
+    {
+      "phaseNum": 5,
+      "id": "phase-5",
+      "name": "Phase 5: Roots & Return (1968–1969)",
+      "shortName": "Roots & Return",
+      "era": "1968–1969",
+      "icon": "🎵",
+      "badge": "Classic Rock"
+    },
+    {
+      "phaseNum": 6,
+      "id": "phase-6",
+      "name": "Phase 6: Final Horizon (1969–1970)",
+      "shortName": "Final Horizon",
+      "era": "1969–1970",
+      "icon": "🌌",
+      "badge": "Horizon"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "p5-track-18",
+      "num": 18,
+      "phaseNum": 5,
+      "title": "Come Together",
+      "artist": "The Beatles",
+      "album": "Abbey Road",
+      "year": 1969,
+      "duration": "4:19",
+      "scale": "D minor",
+      "chords": ["Dm", "A", "G", "D"],
+      "vocalLead": "John Lennon",
+      "filePath": "assets/audio/The Beatles - Come Together.mp3",
+      "type": "MP3",
+      "description": "The local audio recording in the WEBZONEBW Soundbox."
+    }
+  ],
+  "audioDirectory": "assets/audio/",
+  "files": {
+    "local": [
+      "The Beatles - Come Together.mp3"
+    ]
+  }
+}
