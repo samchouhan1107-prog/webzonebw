@@ -829,6 +829,52 @@ function initWebZoneERStudio() {
             target: "scene",
             desc: "70s retro film look with warm color shift and grain"
         },
+
+        // 🖼️ PREMIUM LENS FRAMES (new)
+        {
+            id: "frame-gold",
+            name: "Gold Frame",
+            icon: "🖼️",
+            category: "frame",
+            target: "frame",
+            desc: "Elegant golden ornate border frame"
+        },
+
+        {
+            id: "frame-neon",
+            name: "Neon Frame",
+            icon: "💜",
+            category: "frame",
+            target: "frame",
+            desc: "Glowing neon purple border frame"
+        },
+
+        {
+            id: "frame-filmstrip",
+            name: "Film Strip",
+            icon: "🎞️",
+            category: "frame",
+            target: "frame",
+            desc: "Classic 35mm film strip border"
+        },
+
+        {
+            id: "frame-polaroid",
+            name: "Polaroid",
+            icon: "📸",
+            category: "frame",
+            target: "frame",
+            desc: "Retro polaroid instant photo frame"
+        },
+
+        {
+            id: "frame-cyber",
+            name: "Cyber HUD",
+            icon: "🔷",
+            category: "frame",
+            target: "frame",
+            desc: "Futuristic cyber HUD overlay frame"
+        },
     ];
 
     /*
@@ -4717,6 +4763,89 @@ function initWebZoneERStudio() {
     }
 
     // ==========================================================
+    // PREMIUM LENS FRAMES
+    // ==========================================================
+
+    function drawPremiumFrame(ctx, w, h, time, style) {
+        ctx.save();
+        const border = Math.max(12, Math.min(w, h) * 0.04);
+
+        switch (style) {
+            case "gold":
+                ctx.strokeStyle = "#d4a017";
+                ctx.lineWidth = border;
+                ctx.shadowColor = "#fbbf24";
+                ctx.shadowBlur = 18;
+                ctx.strokeRect(border / 2, border / 2, w - border, h - border);
+                ctx.lineWidth = border * 0.3;
+                ctx.shadowBlur = 8;
+                ctx.strokeRect(border * 1.4, border * 1.4, w - border * 2.8, h - border * 2.8);
+                break;
+
+            case "neon":
+                const pulse = 0.6 + Math.sin(time * 3) * 0.4;
+                ctx.strokeStyle = `rgba(168, 85, 247, ${pulse})`;
+                ctx.lineWidth = border * 0.7;
+                ctx.shadowColor = "#a855f7";
+                ctx.shadowBlur = 30;
+                ctx.strokeRect(border / 2, border / 2, w - border, h - border);
+                ctx.shadowBlur = 15;
+                ctx.strokeRect(border / 2, border / 2, w - border, h - border);
+                break;
+
+            case "filmstrip":
+                const sprocketW = border * 0.6;
+                const sprocketH = border * 0.35;
+                ctx.fillStyle = "#1a1a1a";
+                ctx.fillRect(0, 0, w, border);
+                ctx.fillRect(0, h - border, w, border);
+                const spacing = sprocketW * 2.5;
+                for (let x = spacing / 2; x < w; x += spacing) {
+                    ctx.fillStyle = "#f5f5f5";
+                    ctx.fillRect(x - sprocketW / 2, (border - sprocketH) / 2, sprocketW, sprocketH);
+                    ctx.fillRect(x - sprocketW / 2, h - border + (border - sprocketH) / 2, sprocketW, sprocketH);
+                }
+                ctx.fillStyle = "#e5e5e5";
+                ctx.font = `${Math.max(10, border * 0.45)}px 'Courier New', monospace`;
+                ctx.textAlign = "right";
+                ctx.fillText("WEBZONEBW  35mm", w - border, border * 0.7);
+                break;
+
+            case "polaroid":
+                const frameW = border * 1.8;
+                const bottomH = border * 2.8;
+                ctx.fillStyle = "#f5f5f0";
+                ctx.shadowColor = "rgba(0,0,0,0.35)";
+                ctx.shadowBlur = 20;
+                ctx.fillRect(frameW / 2, frameW / 2, w - frameW, h - frameW / 2 - bottomH / 2);
+                ctx.shadowBlur = 0;
+                break;
+
+            case "cyber":
+                const edge = border * 0.5;
+                ctx.strokeStyle = "#06b6d4";
+                ctx.lineWidth = 3;
+                ctx.shadowColor = "#06b6d4";
+                ctx.shadowBlur = 12;
+                const len = border * 2;
+                ctx.beginPath(); ctx.moveTo(edge, edge + len); ctx.lineTo(edge, edge); ctx.lineTo(edge + len, edge); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(w - edge - len, edge); ctx.lineTo(w - edge, edge); ctx.lineTo(w - edge, edge + len); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(edge, h - edge - len); ctx.lineTo(edge, h - edge); ctx.lineTo(edge + len, h - edge); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(w - edge - len, h - edge); ctx.lineTo(w - edge, h - edge); ctx.lineTo(w - edge, h - edge - len); ctx.stroke();
+                ctx.fillStyle = "#06b6d4";
+                ctx.font = `${Math.max(10, border * 0.4)}px monospace`;
+                ctx.textAlign = "left";
+                const hudAlpha = 0.5 + Math.sin(time * 2) * 0.3;
+                ctx.fillStyle = `rgba(6, 182, 212, ${hudAlpha})`;
+                ctx.fillText(`◈ REC ${new Date().toISOString().slice(11, 19)}`, edge + 8, edge + len + 14);
+                break;
+        }
+
+        ctx.restore();
+    }
+
+}
+    // ==========================================================
     // LIGHTWEIGHT AI-STYLE BACKGROUND DEPTH
     // ==========================================================
     function drawAIBackgroundDepth(ctx, w, h) {
@@ -5007,6 +5136,36 @@ function initWebZoneERStudio() {
             case "dollar-rain":
 
                 drawDollarRainEffect(ctx, w, h, time);
+
+                break;
+
+            case "frame-gold":
+
+                drawPremiumFrame(ctx, w, h, time, "gold");
+
+                break;
+
+            case "frame-neon":
+
+                drawPremiumFrame(ctx, w, h, time, "neon");
+
+                break;
+
+            case "frame-filmstrip":
+
+                drawPremiumFrame(ctx, w, h, time, "filmstrip");
+
+                break;
+
+            case "frame-polaroid":
+
+                drawPremiumFrame(ctx, w, h, time, "polaroid");
+
+                break;
+
+            case "frame-cyber":
+
+                drawPremiumFrame(ctx, w, h, time, "cyber");
 
                 break;
 
@@ -7351,6 +7510,88 @@ function initWebZoneERStudio() {
 
         ctx.restore();
 
+    }
+
+    // ==========================================================
+    // PREMIUM LENS FRAMES
+    // ==========================================================
+
+    function drawPremiumFrame(ctx, w, h, time, style) {
+        ctx.save();
+        const border = Math.max(12, Math.min(w, h) * 0.04);
+
+        switch (style) {
+            case "gold":
+                ctx.strokeStyle = "#d4a017";
+                ctx.lineWidth = border;
+                ctx.shadowColor = "#fbbf24";
+                ctx.shadowBlur = 18;
+                ctx.strokeRect(border / 2, border / 2, w - border, h - border);
+                ctx.lineWidth = border * 0.3;
+                ctx.shadowBlur = 8;
+                ctx.strokeRect(border * 1.4, border * 1.4, w - border * 2.8, h - border * 2.8);
+                break;
+
+            case "neon":
+                const pulse = 0.6 + Math.sin(time * 3) * 0.4;
+                ctx.strokeStyle = `rgba(168, 85, 247, ${pulse})`;
+                ctx.lineWidth = border * 0.7;
+                ctx.shadowColor = "#a855f7";
+                ctx.shadowBlur = 30;
+                ctx.strokeRect(border / 2, border / 2, w - border, h - border);
+                ctx.shadowBlur = 15;
+                ctx.strokeRect(border / 2, border / 2, w - border, h - border);
+                break;
+
+            case "filmstrip":
+                const sprocketW = border * 0.6;
+                const sprocketH = border * 0.35;
+                ctx.fillStyle = "#1a1a1a";
+                ctx.fillRect(0, 0, w, border);
+                ctx.fillRect(0, h - border, w, border);
+                const spacing = sprocketW * 2.5;
+                for (let x = spacing / 2; x < w; x += spacing) {
+                    ctx.fillStyle = "#f5f5f5";
+                    ctx.fillRect(x - sprocketW / 2, (border - sprocketH) / 2, sprocketW, sprocketH);
+                    ctx.fillRect(x - sprocketW / 2, h - border + (border - sprocketH) / 2, sprocketW, sprocketH);
+                }
+                ctx.fillStyle = "#e5e5e5";
+                ctx.font = `${Math.max(10, border * 0.45)}px 'Courier New', monospace`;
+                ctx.textAlign = "right";
+                ctx.fillText("WEBZONEBW  35mm", w - border, border * 0.7);
+                break;
+
+            case "polaroid":
+                const frameW = border * 1.8;
+                const bottomH = border * 2.8;
+                ctx.fillStyle = "#f5f5f0";
+                ctx.shadowColor = "rgba(0,0,0,0.35)";
+                ctx.shadowBlur = 20;
+                ctx.fillRect(frameW / 2, frameW / 2, w - frameW, h - frameW / 2 - bottomH / 2);
+                ctx.shadowBlur = 0;
+                break;
+
+            case "cyber":
+                const edge = border * 0.5;
+                ctx.strokeStyle = "#06b6d4";
+                ctx.lineWidth = 3;
+                ctx.shadowColor = "#06b6d4";
+                ctx.shadowBlur = 12;
+                const len = border * 2;
+                ctx.beginPath(); ctx.moveTo(edge, edge + len); ctx.lineTo(edge, edge); ctx.lineTo(edge + len, edge); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(w - edge - len, edge); ctx.lineTo(w - edge, edge); ctx.lineTo(w - edge, edge + len); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(edge, h - edge - len); ctx.lineTo(edge, h - edge); ctx.lineTo(edge + len, h - edge); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(w - edge - len, h - edge); ctx.lineTo(w - edge, h - edge); ctx.lineTo(w - edge, h - edge - len); ctx.stroke();
+                ctx.fillStyle = "#06b6d4";
+                ctx.font = `${Math.max(10, border * 0.4)}px monospace`;
+                ctx.textAlign = "left";
+                const hudAlpha = 0.5 + Math.sin(time * 2) * 0.3;
+                ctx.fillStyle = `rgba(6, 182, 212, ${hudAlpha})`;
+                ctx.fillText(`◈ REC ${new Date().toISOString().slice(11, 19)}`, edge + 8, edge + len + 14);
+                break;
+        }
+
+        ctx.restore();
     }
 
 }
