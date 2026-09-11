@@ -440,8 +440,7 @@ function resolveHtmlPageFromRoute(requestPath) {
         "/music": path.join(__dirname, "soundbox.html"),
         "/er": path.join(__dirname, "er", "index.html"),
         "/er/": path.join(__dirname, "er", "index.html"),
-        "/halloween": path.join(__dirname, "halloween", "index.html"),
-        "/halloween/": path.join(__dirname, "halloween", "index.html"),
+
         "/privacy-policy": path.join(__dirname, "privacy.html"),
         "/terms-of-service": path.join(__dirname, "terms.html"),
         "/cookie-policy": path.join(__dirname, "cookie-policy.html"),
