@@ -52,7 +52,10 @@ function extractInternalHrefs(html) {
         if (/^(https?:\/\/|mailto:|javascript:|data:)/.test(target)) { continue; }
         if (target === "" || target === "#" || target.startsWith("#")) { continue; }
 
-        results.push(target);
+        const cleanTarget = target.split("?")[0].split("#")[0];
+        if (cleanTarget) {
+            results.push(cleanTarget);
+        }
     }
 
     return results;
