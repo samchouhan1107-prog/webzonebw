@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STUDIO+ Checkout | WEBZONEBW</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/er-studio.css">
+    <style>
+        .checkout-container { max-width: 500px; margin: 40px auto; padding: 30px; border: 1px solid #38bdf8; border-radius: 12px; background: #030712; }
+        .payment-option { margin: 20px 0; padding: 15px; border: 1px solid #1e293b; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .payment-option:hover { border-color: #38bdf8; }
+        .qr-placeholder { background: #fff; padding: 10px; width: 150px; height: 150px; margin: 10px auto; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1 style="text-align:center;">STUDIO+</h1>
+        <p style="text-align:center;">$2.99 / month</p>
+        
+        <h3>Choose payment method</h3>
+        
+        <div id="cashfree-payment-section" class="payment-option">
+            <strong>CASHFREE PAYMENTS</strong>
+            <p>Secure payment via UPI, Cards, Netbanking</p>
+            <button id="cf-pay-btn" class="btn" style="width:100%">Pay with Cashfree</button>
+        </div>
+
+        <div id="status-message" style="margin-top:20px; text-align:center;"></div>
+    </div>
+
+    <!-- Cashfree SDK -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+    <script>
+        const cashfree = Cashfree({ mode: "sandbox" });
+
+        document.getElementById("cf-pay-btn").addEventListener("click", async () => {
+            document.getElementById("status-message").innerHTML = "Initializing payment...";
+            
+            // 1. Request Order Session ID from your server
+            // 2. Load payment session
+            // 3. Handle webhook callback on server to unlock entitlement
+            alert("Production integration: Fetch order token from server, call cashfree.checkout({paymentSessionId: ...})");
+        });
+    </script>
+
+</body>
+</html>

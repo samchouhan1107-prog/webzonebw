@@ -180,17 +180,68 @@ app.use("/api", (req, res, next) => {
     next();
 });
 
-// Health API
-app.get("/api/health", (req, res) => {
-    res.status(200).json({
-        success: true,
-        status: "online",
-        project: PROJECT_NAME,
-        version: SERVER_VERSION,
-        environment: NODE_ENV,
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString()
-    });
+// --- Cashfree API Configuration ---
+const CASHFREE_CLIENT_ID = process.env.CASHFREE_CLIENT_ID;
+const CASHFREE_CLIENT_SECRET = process.env.CASHFREE_CLIENT_SECRET;
+const CASHFREE_MODE = process.env.CASHFREE_MODE || "sandbox";
+const CASHFREE_BASE_URL = CASHFREE_MODE === "production" 
+    ? "https://api.cashfree.com/pg" 
+    : "https://sandbox.cashfree.com/pg";
+
+// Mock database for entitlement demo
+const entitlements = new Map();
+
+/* ============================================================
+ * CASHFREE PAYMENT ENDPOINTS
+ * ============================================================ */
+
+app.post("/api/create-order", async (req, res) => {
+    try {
+        const { planId } = req.body;
+        // In production: Validate user session here!
+        const orderData = {
+            order_amount: 299,
+            order_currency: "INR",
+            customer_details: {
+                customer_id: "demo_user_123",
+                customer_email: "user@example.com",
+                customer_phone: "9999999999"
+            }
+        };
+
+        const response = await fetch(`${CASHFREE_BASE_URL}/orders`, {
+            method: "POST",
+            headers: {
+                "x-client-id": CASHFREE_CLIENT_ID,
+                "x-client-secret": CASHFREE_CLIENT_SECRET,
+                "x-api-version": "2022-09-01",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(orderData)
+        });
+
+        const data = await response.json();
+        res.json({ success: true, payment_session_id: data.payment_session_id });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Payment init failed" });
+    }
+});
+
+app.post("/api/cashfree/webhook", (req, res) => {
+    const signature = req.headers["x-webhook-signature"];
+    // In production: Validate signature using CASHFREE_CLIENT_SECRET
+    const { order, payment } = req.body.data;
+    
+    if (payment.payment_status === "SUCCESS") {
+        entitlements.set(order.customer_details.customer_id, {
+            status: "ACTIVE",
+            plan: "STUDIO_PLUS",
+            verifiedAt: new Date().toISOString()
+        });
+        console.log(`[WEBZONEBW] Entitlement granted for: ${order.customer_details.customer_id}`);
+    }
+    
+    res.status(200).send("OK");
 });
 
 // Status API
