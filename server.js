@@ -1,30 +1,30 @@
 /* ============================================================
-   WEBZONEBW � WEB SERVER
-   WEBZONE ER � STATIC SITE ENGINE
-   ------------------------------------------------------------
-   Version: 2.2
-   Port:    3000
-   Runtime: Node.js + Express
-   ------------------------------------------------------------
-   STANDARD PAGE STRUCTURE
+ — WEBZONEBW — WEB SERVER
+ — WEBZONE ER — STATIC SITE ENGINE
+ — ------------------------------------------------------------
+ — Version: 2.2
+ — Port: — — 3000
+ — Runtime: Node.js + Express
+ — ------------------------------------------------------------
+ — STANDARD PAGE STRUCTURE
 
-   /
-   /index.html
+ — /
+ — /index.html
 
-   /er/
-   /er/index.html
+ — /er/
+ — /er/index.html
 
-   ------------------------------------------------------------
-   IMPORTANT
-   ------------------------------------------------------------
-   This server intentionally does NOT manipulate camera streams.
+ — ------------------------------------------------------------
+ — IMPORTANT
+ — ------------------------------------------------------------
+ — This server intentionally does NOT manipulate camera streams.
 
-   Camera / microphone access remains entirely browser-side
-   through the WEBZONEBW-ER JavaScript engine.
+ — Camera / microphone access remains entirely browser-side
+ — through the WEBZONEBW-ER JavaScript engine.
 
-   This keeps the camera experience independent from the
-   Express static-file server.
-   ============================================================ */
+ — This keeps the camera experience independent from the
+ — Express static-file server.
+ — ============================================================ */
 
 "use strict";
 
@@ -38,15 +38,15 @@ import compression from "compression";
 import helmet from "helmet";
 
 /* ============================================================
-   PATH CONFIGURATION
-   ============================================================ */
+ — PATH CONFIGURATION
+ — ============================================================ */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /* ============================================================
-   APPLICATION CONFIGURATION
-   ============================================================ */
+ — APPLICATION CONFIGURATION
+ — ============================================================ */
 
 const app = express();
 
@@ -57,50 +57,50 @@ const SERVER_VERSION = "2.2.0";
 const PROJECT_NAME = "WEBZONEBW";
 
 const NODE_ENV =
-    process.env.NODE_ENV || "development";
+ — — process.env.NODE_ENV || "development";
 
 const IS_PRODUCTION =
-    NODE_ENV === "production";
+ — — NODE_ENV === "production";
 
 /* ============================================================
-   BASIC APPLICATION SETTINGS
-   ============================================================ */
+ — BASIC APPLICATION SETTINGS
+ — ============================================================ */
 
 app.disable("x-powered-by");
 
 /* ============================================================
-   COMPRESSION
-   ------------------------------------------------------------
-   Gzip / Brotli compression for all responses.
-   Reduces payload sizes significantly.
-   ============================================================ */
+ — COMPRESSION
+ — ------------------------------------------------------------
+ — Gzip / Brotli compression for all responses.
+ — Reduces payload sizes significantly.
+ — ============================================================ */
 
 app.use(
-    compression({
-        level: 6,
-        threshold: 1024,
-        filter: (req, res) => {
-            if (req.headers["x-no-compression"]) {
-                return false;
-            }
-            return compression.filter(req, res);
-        }
-    })
+ — — compression({
+ — — — — level: 6,
+ — — — — threshold: 1024,
+ — — — — filter: (req, res) => {
+ — — — — — — if (req.headers["x-no-compression"]) {
+ — — — — — — — — return false;
+ — — — — — — }
+ — — — — — — return compression.filter(req, res);
+ — — — — }
+ — — })
 );
 
 /* ============================================================
-   SECURITY HEADERS — HELMET
-   ------------------------------------------------------------
-   Sets various HTTP security headers automatically.
-   CSP is relaxed for external assets (AdSense, GA4, etc.)
-   ============================================================ */
+ — SECURITY HEADERS — HELMET
+ — ------------------------------------------------------------
+ — Sets various HTTP security headers automatically.
+ — CSP is relaxed for external assets (AdSense, GA4, etc.)
+ — ============================================================ */
 
 app.use(
-    helmet({
-        contentSecurityPolicy: false,
-        crossOriginEmbedderPolicy: false,
-        crossOriginResourcePolicy: false
-    })
+ — — helmet({
+ — — — — contentSecurityPolicy: false,
+ — — — — crossOriginEmbedderPolicy: false,
+ — — — — crossOriginResourcePolicy: false
+ — — })
 );
 
 /*
@@ -109,384 +109,384 @@ app.use(
  * keeping local development predictable.
  */
 if (process.env.TRUST_PROXY === "true") {
-    app.set("trust proxy", 1);
+ — — app.set("trust proxy", 1);
 }
 
 /* ============================================================
-   MEDIA / CAMERA PERMISSIONS
-   ------------------------------------------------------------
-   Camera is allowed for this origin.
+ — MEDIA / CAMERA PERMISSIONS
+ — ------------------------------------------------------------
+ — Camera is allowed for this origin.
 
-   Microphone is also allowed for this origin because the
-   WEBZONEBW-ER interface contains optional microphone /
-   audio-reactive functionality.
+ — Microphone is also allowed for this origin because the
+ — WEBZONEBW-ER interface contains optional microphone /
+ — audio-reactive functionality.
 
-   NOTE:
-   This does NOT grant permission automatically.
-   The browser still requires user consent.
-   ============================================================ */
-
-app.use((req, res, next) => {
-
-    res.setHeader(
-        "Permissions-Policy",
-        "camera=(self), microphone=(self)"
-    );
-
-    /*
-     * Legacy header retained for older environments.
-     */
-    res.setHeader(
-        "Feature-Policy",
-        "camera 'self'; microphone 'self'"
-    );
-
-    next();
-});
-
-/* ============================================================
-   BASIC SECURITY HEADERS
-   ------------------------------------------------------------
-   These are deliberately conservative.
-
-   We do NOT add restrictive COOP / COEP / CSP policies here
-   because the ER experience may load external libraries,
-   images, camera resources and other browser assets.
-   ============================================================ */
+ — NOTE:
+ — This does NOT grant permission automatically.
+ — The browser still requires user consent.
+ — ============================================================ */
 
 app.use((req, res, next) => {
 
-    res.setHeader(
-        "X-Content-Type-Options",
-        "nosniff"
-    );
+ — — res.setHeader(
+ — — — — "Permissions-Policy",
+ — — — — "camera=(self), microphone=(self)"
+ — — );
 
-    res.setHeader(
-        "Referrer-Policy",
-        "strict-origin-when-cross-origin"
-    );
+ — — /*
+ — — * Legacy header retained for older environments.
+ — — */
+ — — res.setHeader(
+ — — — — "Feature-Policy",
+ — — — — "camera 'self'; microphone 'self'"
+ — — );
 
-    res.setHeader(
-        "X-Frame-Options",
-        "SAMEORIGIN"
-    );
-
-    next();
+ — — next();
 });
 
 /* ============================================================
-   REQUEST PARSERS
-   ------------------------------------------------------------ */
+ — BASIC SECURITY HEADERS
+ — ------------------------------------------------------------
+ — These are deliberately conservative.
+
+ — We do NOT add restrictive COOP / COEP / CSP policies here
+ — because the ER experience may load external libraries,
+ — images, camera resources and other browser assets.
+ — ============================================================ */
+
+app.use((req, res, next) => {
+
+ — — res.setHeader(
+ — — — — "X-Content-Type-Options",
+ — — — — "nosniff"
+ — — );
+
+ — — res.setHeader(
+ — — — — "Referrer-Policy",
+ — — — — "strict-origin-when-cross-origin"
+ — — );
+
+ — — res.setHeader(
+ — — — — "X-Frame-Options",
+ — — — — "SAMEORIGIN"
+ — — );
+
+ — — next();
+});
+
+/* ============================================================
+ — REQUEST PARSERS
+ — ------------------------------------------------------------ */
 
 app.use(
-    express.json({
-        limit: "25mb"
-    })
+ — — express.json({
+ — — — — limit: "25mb"
+ — — })
 );
 
 app.use(
-    express.urlencoded({
-        extended: true,
-        limit: "25mb"
-    })
+ — — express.urlencoded({
+ — — — — extended: true,
+ — — — — limit: "25mb"
+ — — })
 );
 
 /* ============================================================
-   REQUEST LOGGER
-   ------------------------------------------------------------ */
+ — REQUEST LOGGER
+ — ------------------------------------------------------------ */
 
 app.use((req, res, next) => {
 
-    const started = Date.now();
+ — — const started = Date.now();
 
-    res.on("finish", () => {
+ — — res.on("finish", () => {
 
-        const duration =
-            Date.now() - started;
+ — — — — const duration =
+ — — — — — — Date.now() - started;
 
-        console.log(
-            `[WEBZONEBW] ${req.method} ${req.originalUrl} ` +
-            `${res.statusCode} ${duration}ms`
-        );
+ — — — — console.log(
+ — — — — — — `[WEBZONEBW] ${req.method} ${req.originalUrl} ` +
+ — — — — — — `${res.statusCode} ${duration}ms`
+ — — — — );
 
-    });
+ — — });
 
-    next();
+ — — next();
 });
 
 /* ============================================================
-   SIMPLE RATE LIMITER
-   ------------------------------------------------------------
-   In-memory rate limiter for API endpoints.
-   Limits each IP to 60 requests per minute.
-   ============================================================ */
+ — SIMPLE RATE LIMITER
+ — ------------------------------------------------------------
+ — In-memory rate limiter for API endpoints.
+ — Limits each IP to 60 requests per minute.
+ — ============================================================ */
 
 const apiRequestCounts = new Map();
 
 function rateLimiter(req, res, next) {
 
-    const ip = req.ip || req.connection.remoteAddress;
-    const now = Date.now();
-    const windowMs = 60 * 1000;
-    const maxRequests = 60;
+ — — const ip = req.ip || req.connection.remoteAddress;
+ — — const now = Date.now();
+ — — const windowMs = 60 * 1000;
+ — — const maxRequests = 60;
 
-    if (!apiRequestCounts.has(ip)) {
-        apiRequestCounts.set(ip, []);
-    }
+ — — if (!apiRequestCounts.has(ip)) {
+ — — — — apiRequestCounts.set(ip, []);
+ — — }
 
-    const timestamps = apiRequestCounts.get(ip);
+ — — const timestamps = apiRequestCounts.get(ip);
 
-    /* Remove expired entries. */
-    while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
-        timestamps.shift();
-    }
+ — — /* Remove expired entries. */
+ — — while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
+ — — — — timestamps.shift();
+ — — }
 
-    if (timestamps.length >= maxRequests) {
-        return res.status(429).json({
-            success: false,
-            error: "Too many requests. Please try again later.",
-            retryAfter: Math.ceil(windowMs / 1000)
-        });
-    }
+ — — if (timestamps.length >= maxRequests) {
+ — — — — return res.status(429).json({
+ — — — — — — success: false,
+ — — — — — — error: "Too many requests. Please try again later.",
+ — — — — — — retryAfter: Math.ceil(windowMs / 1000)
+ — — — — });
+ — — }
 
-    timestamps.push(now);
-    next();
+ — — timestamps.push(now);
+ — — next();
 }
 
 /* Clean up stale IPs every 5 minutes. */
 setInterval(() => {
-    const now = Date.now();
-    const windowMs = 60 * 1000;
-    for (const [ip, timestamps] of apiRequestCounts) {
-        while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
-            timestamps.shift();
-        }
-        if (timestamps.length === 0) {
-            apiRequestCounts.delete(ip);
-        }
-    }
+ — — const now = Date.now();
+ — — const windowMs = 60 * 1000;
+ — — for (const [ip, timestamps] of apiRequestCounts) {
+ — — — — while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
+ — — — — — — timestamps.shift();
+ — — — — }
+ — — — — if (timestamps.length === 0) {
+ — — — — — — apiRequestCounts.delete(ip);
+ — — — — }
+ — — }
 }, 5 * 60 * 1000).unref();
 
 /* Apply rate limiter to all API routes. */
 app.use("/api", rateLimiter);
 
 /* ============================================================
-   HEALTH API
-   ============================================================ */
+ — HEALTH API
+ — ============================================================ */
 
 app.get("/api/health", (req, res) => {
 
-    res.status(200).json({
+ — — res.status(200).json({
 
-        success: true,
+ — — — — success: true,
 
-        status: "online",
+ — — — — status: "online",
 
-        project: PROJECT_NAME,
+ — — — — project: PROJECT_NAME,
 
-        version: SERVER_VERSION,
+ — — — — version: SERVER_VERSION,
 
-        environment: NODE_ENV,
+ — — — — environment: NODE_ENV,
 
-        uptime: process.uptime(),
+ — — — — uptime: process.uptime(),
 
-        timestamp: new Date().toISOString()
+ — — — — timestamp: new Date().toISOString()
 
-    });
+ — — });
 
 });
 
 /* ============================================================
-   SERVER STATUS API
-   ============================================================ */
+ — SERVER STATUS API
+ — ============================================================ */
 
 app.get("/api/status", (req, res) => {
 
-    const memory =
-        process.memoryUsage();
+ — — const memory =
+ — — — — process.memoryUsage();
 
-    res.status(200).json({
+ — — res.status(200).json({
 
-        success: true,
+ — — — — success: true,
 
-        server: PROJECT_NAME,
+ — — — — server: PROJECT_NAME,
 
-        version: SERVER_VERSION,
+ — — — — version: SERVER_VERSION,
 
-        environment: NODE_ENV,
+ — — — — environment: NODE_ENV,
 
-        port: PORT,
+ — — — — port: PORT,
 
-        host: HOST,
+ — — — — host: HOST,
 
-        node: process.version,
+ — — — — node: process.version,
 
-        platform: process.platform,
+ — — — — platform: process.platform,
 
-        architecture: process.arch,
+ — — — — architecture: process.arch,
 
-        pid: process.pid,
+ — — — — pid: process.pid,
 
-        uptime: Math.floor(
-            process.uptime()
-        ),
+ — — — — uptime: Math.floor(
+ — — — — — — process.uptime()
+ — — — — ),
 
-        memory: {
+ — — — — memory: {
 
-            rss: memory.rss,
+ — — — — — — rss: memory.rss,
 
-            heapUsed: memory.heapUsed,
+ — — — — — — heapUsed: memory.heapUsed,
 
-            heapTotal: memory.heapTotal,
+ — — — — — — heapTotal: memory.heapTotal,
 
-            external: memory.external
+ — — — — — — external: memory.external
 
-        },
+ — — — — },
 
-        timestamp:
-            new Date().toISOString()
+ — — — — timestamp:
+ — — — — — — new Date().toISOString()
 
-    });
+ — — });
 
 });
 
 /* ============================================================
-   ROOT STATIC FILE ENGINE
-   ------------------------------------------------------------
-   Handles:
+ — ROOT STATIC FILE ENGINE
+ — ------------------------------------------------------------
+ — Handles:
 
-   HTML
-   CSS
-   JavaScript
-   Images
-   Fonts
-   Audio
-   Video
-   Other assets
+ — HTML
+ — CSS
+ — JavaScript
+ — Images
+ — Fonts
+ — Audio
+ — Video
+ — Other assets
 
-   ------------------------------------------------------------
-   DEVELOPMENT
-   ------------------------------------------------------------
-   Files are not aggressively cached.
+ — ------------------------------------------------------------
+ — DEVELOPMENT
+ — ------------------------------------------------------------
+ — Files are not aggressively cached.
 
-   ------------------------------------------------------------
-   PRODUCTION
-   ------------------------------------------------------------
-   Static resources receive a modest cache period.
-   ============================================================ */
+ — ------------------------------------------------------------
+ — PRODUCTION
+ — ------------------------------------------------------------
+ — Static resources receive a modest cache period.
+ — ============================================================ */
 
 app.use(
-    express.static(__dirname, {
+ — — express.static(__dirname, {
 
-        extensions: [
-            "html",
-            "htm"
-        ],
+ — — — — extensions: [
+ — — — — — — "html",
+ — — — — — — "htm"
+ — — — — ],
 
-        index: "index.html",
+ — — — — index: "index.html",
 
-        fallthrough: true,
+ — — — — fallthrough: true,
 
-        redirect: true,
+ — — — — redirect: true,
 
-        etag: true,
+ — — — — etag: true,
 
-        lastModified: true,
+ — — — — lastModified: true,
 
-        maxAge: IS_PRODUCTION
-            ? "1d"
-            : 0,
+ — — — — maxAge: IS_PRODUCTION
+ — — — — — — ? "1d"
+ — — — — — — : 0,
 
-        setHeaders: (res, filePath) => {
+ — — — — setHeaders: (res, filePath) => {
 
-            /*
-             * Prevent stale HTML during development.
-             */
-            if (
-                !IS_PRODUCTION &&
-                (
-                    filePath.endsWith(".html") ||
-                    filePath.endsWith(".htm")
-                )
-            ) {
+ — — — — — — /*
+ — — — — — — * Prevent stale HTML during development.
+ — — — — — — */
+ — — — — — — if (
+ — — — — — — — — !IS_PRODUCTION &&
+ — — — — — — — — (
+ — — — — — — — — — — filePath.endsWith(".html") ||
+ — — — — — — — — — — filePath.endsWith(".htm")
+ — — — — — — — — )
+ — — — — — — ) {
 
-                res.setHeader(
-                    "Cache-Control",
-                    "no-cache"
-                );
+ — — — — — — — — res.setHeader(
+ — — — — — — — — — — "Cache-Control",
+ — — — — — — — — — — "no-cache"
+ — — — — — — — — );
 
-            }
+ — — — — — — }
 
-        }
+ — — — — }
 
-    })
+ — — })
 );
 
 function resolveHtmlPageFromRoute(requestPath) {
 
-    const trimmedPath =
-        (requestPath || "/")
-            .trim()
-            .replace(/\\/g, "/");
+ — — const trimmedPath =
+ — — — — (requestPath || "/")
+ — — — — — — .trim()
+ — — — — — — .replace(/\\/g, "/");
 
-    if (!trimmedPath || trimmedPath === "/") {
-        return path.join(__dirname, "index.html");
-    }
+ — — if (!trimmedPath || trimmedPath === "/") {
+ — — — — return path.join(__dirname, "index.html");
+ — — }
 
-    const normalizedPath =
-        trimmedPath.startsWith("/")
-            ? trimmedPath
-            : `/${trimmedPath}`;
+ — — const normalizedPath =
+ — — — — trimmedPath.startsWith("/")
+ — — — — — — ? trimmedPath
+ — — — — — — : `/${trimmedPath}`;
 
-    const routeName =
-        normalizedPath
-            .replace(/\/+$/, "")
-            .toLowerCase();
+ — — const routeName =
+ — — — — normalizedPath
+ — — — — — — .replace(/\/+$/, "")
+ — — — — — — .toLowerCase();
 
-    const explicitRoutes = {
-        "/soundbox": path.join(__dirname, "soundbox.html"),
-        "/music": path.join(__dirname, "soundbox.html"),
-        "/er": path.join(__dirname, "er", "index.html"),
-        "/er/": path.join(__dirname, "er", "index.html"),
-        "/halloween": path.join(__dirname, "halloween", "index.html"),
-        "/halloween/": path.join(__dirname, "halloween", "index.html"),
-        "/privacy-policy": path.join(__dirname, "privacy.html"),
-        "/terms-of-service": path.join(__dirname, "terms.html"),
-        "/cookie-policy": path.join(__dirname, "cookie-policy.html"),
-        "/privacy-center": path.join(__dirname, "privacy-center.html"),
-        "/about-us": path.join(__dirname, "about.html"),
-        "/contact-us": path.join(__dirname, "contact.html")
-    };
+ — — const explicitRoutes = {
+ — — — — "/soundbox": path.join(__dirname, "soundbox.html"),
+ — — — — "/music": path.join(__dirname, "soundbox.html"),
+ — — — — "/er": path.join(__dirname, "er", "index.html"),
+ — — — — "/er/": path.join(__dirname, "er", "index.html"),
+ — — — — "/halloween": path.join(__dirname, "halloween", "index.html"),
+ — — — — "/halloween/": path.join(__dirname, "halloween", "index.html"),
+ — — — — "/privacy-policy": path.join(__dirname, "privacy.html"),
+ — — — — "/terms-of-service": path.join(__dirname, "terms.html"),
+ — — — — "/cookie-policy": path.join(__dirname, "cookie-policy.html"),
+ — — — — "/privacy-center": path.join(__dirname, "privacy-center.html"),
+ — — — — "/about-us": path.join(__dirname, "about.html"),
+ — — — — "/contact-us": path.join(__dirname, "contact.html")
+ — — };
 
-    if (explicitRoutes[routeName]) {
-        return explicitRoutes[routeName];
-    }
+ — — if (explicitRoutes[routeName]) {
+ — — — — return explicitRoutes[routeName];
+ — — }
 
-    /*
-     * SECURITY:
-     * Reject any resolved path that escapes the project directory.
-     * This blocks traversal attempts such as /..%2f..%2fserver.js.
-     */
-    const isInsideProject = candidatePath => {
-        const relative = path.relative(__dirname, candidatePath);
-        return Boolean(relative) && !relative.startsWith("..") && !path.isAbsolute(relative);
-    };
+ — — /*
+ — — * SECURITY:
+ — — * Reject any resolved path that escapes the project directory.
+ — — * This blocks traversal attempts such as /..%2f..%2fserver.js.
+ — — */
+ — — const isInsideProject = candidatePath => {
+ — — — — const relative = path.relative(__dirname, candidatePath);
+ — — — — return Boolean(relative) && !relative.startsWith("..") && !path.isAbsolute(relative);
+ — — };
 
-    if (path.extname(normalizedPath)) {
-        const pagePath = path.join(__dirname, normalizedPath.replace(/^\//, ""));
-        if (isInsideProject(pagePath) && fs.existsSync(pagePath) && fs.statSync(pagePath).isFile()) {
-            return pagePath;
-        }
-    }
+ — — if (path.extname(normalizedPath)) {
+ — — — — const pagePath = path.join(__dirname, normalizedPath.replace(/^\//, ""));
+ — — — — if (isInsideProject(pagePath) && fs.existsSync(pagePath) && fs.statSync(pagePath).isFile()) {
+ — — — — — — return pagePath;
+ — — — — }
+ — — }
 
-    const extensionlessPath =
-        path.join(__dirname, `${normalizedPath.replace(/^\//, "")}.html`);
+ — — const extensionlessPath =
+ — — — — path.join(__dirname, `${normalizedPath.replace(/^\//, "")}.html`);
 
-    if (isInsideProject(extensionlessPath) && fs.existsSync(extensionlessPath) && fs.statSync(extensionlessPath).isFile()) {
-        return extensionlessPath;
-    }
+ — — if (isInsideProject(extensionlessPath) && fs.existsSync(extensionlessPath) && fs.statSync(extensionlessPath).isFile()) {
+ — — — — return extensionlessPath;
+ — — }
 
-    return null;
+ — — return null;
 }
 
 /*
@@ -495,587 +495,587 @@ function resolveHtmlPageFromRoute(requestPath) {
  */
 function sendHtmlPage(res, filePath, notFoundMessage, logPrefix) {
 
-    res.sendFile(filePath, (error) => {
+ — — res.sendFile(filePath, (error) => {
 
-        if (!error) {
-            return;
-        }
+ — — — — if (!error) {
+ — — — — — — return;
+ — — — — }
 
-        console.error(
-            `[${logPrefix}] Unable to load ${filePath}:`,
-            error.message
-        );
+ — — — — console.error(
+ — — — — — — `[${logPrefix}] Unable to load ${filePath}:`,
+ — — — — — — error.message
+ — — — — );
 
-        if (!res.headersSent) {
+ — — — — if (!res.headersSent) {
 
-            res.status(404).send(notFoundMessage);
+ — — — — — — res.status(404).send(notFoundMessage);
 
-        }
+ — — — — }
 
-    });
+ — — });
 
 }
 
 function staticOptions() {
 
-    return {
+ — — return {
 
-        extensions: ["html", "htm"],
+ — — — — extensions: ["html", "htm"],
 
-        index: "index.html",
+ — — — — index: "index.html",
 
-        fallthrough: true,
+ — — — — fallthrough: true,
 
-        redirect: true,
+ — — — — redirect: true,
 
-        etag: true,
+ — — — — etag: true,
 
-        lastModified: true,
+ — — — — lastModified: true,
 
-        maxAge: IS_PRODUCTION ? "1d" : 0,
+ — — — — maxAge: IS_PRODUCTION ? "1d" : 0,
 
-        setHeaders: (res, filePath) => {
+ — — — — setHeaders: (res, filePath) => {
 
-            /*
-             * Do not aggressively cache HTML in development.
-             */
-            if (
-                !IS_PRODUCTION &&
-                (
-                    filePath.endsWith(".html") ||
-                    filePath.endsWith(".htm")
-                )
-            ) {
+ — — — — — — /*
+ — — — — — — * Do not aggressively cache HTML in development.
+ — — — — — — */
+ — — — — — — if (
+ — — — — — — — — !IS_PRODUCTION &&
+ — — — — — — — — (
+ — — — — — — — — — — filePath.endsWith(".html") ||
+ — — — — — — — — — — filePath.endsWith(".htm")
+ — — — — — — — — )
+ — — — — — — ) {
 
-                res.setHeader("Cache-Control", "no-cache");
+ — — — — — — — — res.setHeader("Cache-Control", "no-cache");
 
-            }
+ — — — — — — }
 
-        }
+ — — — — }
 
-    };
+ — — };
 
 }
 
 /* ============================================================
-   WEBZONE ER STUDIO
-   ------------------------------------------------------------
-   /er
-   /er/
+ — WEBZONE ER STUDIO
+ — ------------------------------------------------------------
+ — /er
+ — /er/
 
-   Resolve to:
+ — Resolve to:
 
-   /er/index.html
-   ============================================================ */
+ — /er/index.html
+ — ============================================================ */
 
 app.get(
-    [
-        "/er",
-        "/er/"
-    ],
-    (req, res) => {
+ — — [
+ — — — — "/er",
+ — — — — "/er/"
+ — — ],
+ — — (req, res) => {
 
-        sendHtmlPage(
-            res,
-            path.join(__dirname, "er", "index.html"),
-            "WEBZONE ER Studio is unavailable.",
-            "ER"
-        );
+ — — — — sendHtmlPage(
+ — — — — — — res,
+ — — — — — — path.join(__dirname, "er", "index.html"),
+ — — — — — — "WEBZONE ER Studio is unavailable.",
+ — — — — — — "ER"
+ — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   SOUND BOX ROUTES
-   ------------------------------------------------------------
-   /soundbox
-   /soundbox/
-   /music
-   /music/
+ — SOUND BOX ROUTES
+ — ------------------------------------------------------------
+ — /soundbox
+ — /soundbox/
+ — /music
+ — /music/
 
-   Resolve to:
+ — Resolve to:
 
-   /soundbox.html
-   ============================================================ */
+ — /soundbox.html
+ — ============================================================ */
 
 app.get(
-    [
-        "/soundbox",
-        "/soundbox/",
-        "/music",
-        "/music/"
-    ],
-    (req, res) => {
+ — — [
+ — — — — "/soundbox",
+ — — — — "/soundbox/",
+ — — — — "/music",
+ — — — — "/music/"
+ — — ],
+ — — (req, res) => {
 
-        sendHtmlPage(
-            res,
-            path.join(__dirname, "soundbox.html"),
-            "WEBZONEBW Sound Box is unavailable.",
-            "SOUNDBOX"
-        );
+ — — — — sendHtmlPage(
+ — — — — — — res,
+ — — — — — — path.join(__dirname, "soundbox.html"),
+ — — — — — — "WEBZONEBW Sound Box is unavailable.",
+ — — — — — — "SOUNDBOX"
+ — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   WEBZONEBW-ER ROUTE ALIAS (SEASONAL FILTER PACK)
-   ------------------------------------------------------------
-   /halloween and /halloween/ are personal-reference aliases
-   for the WEBZONEBW-ER studio. The seasonal (October) filter
-   pack will live inside WEBZONEBW-ER, not as a separate site.
+ — WEBZONEBW-ER ROUTE ALIAS (SEASONAL FILTER PACK)
+ — ------------------------------------------------------------
+ — /halloween and /halloween/ are personal-reference aliases
+ — for the WEBZONEBW-ER studio. The seasonal (October) filter
+ — pack will live inside WEBZONEBW-ER, not as a separate site.
 
-   Resolves to the ER studio page.
-   ============================================================ */
+ — Resolves to the ER studio page.
+ — ============================================================ */
 
 app.get(
-    [
-        "/halloween",
-        "/halloween/"
-    ],
-    (req, res) => {
+ — — [
+ — — — — "/halloween",
+ — — — — "/halloween/"
+ — — ],
+ — — (req, res) => {
 
-        sendHtmlPage(
-            res,
-            path.join(__dirname, "er", "index.html"),
-            "WEBZONEBW-ER Studio is unavailable.",
-            "WEBZONEBW-ER"
-        );
+ — — — — sendHtmlPage(
+ — — — — — — res,
+ — — — — — — path.join(__dirname, "er", "index.html"),
+ — — — — — — "WEBZONEBW-ER Studio is unavailable.",
+ — — — — — — "WEBZONEBW-ER"
+ — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   ER STATIC ASSETS
-   ------------------------------------------------------------
-   Everything inside:
+ — ER STATIC ASSETS
+ — ------------------------------------------------------------
+ — Everything inside:
 
-   /er/
+ — /er/
 
-   remains available under:
+ — remains available under:
 
-   /er/...
+ — /er/...
 
-   Examples:
+ — Examples:
 
-   /er/index.html
-   /er/style.css
-   /er/script.js
-   /er/assets/...
-   /er/images/...
-   ============================================================ */
+ — /er/index.html
+ — /er/style.css
+ — /er/script.js
+ — /er/assets/...
+ — /er/images/...
+ — ============================================================ */
 
 app.use(
-    "/er",
-    express.static(
-        path.join(__dirname, "er"),
-        staticOptions()
-    )
+ — — "/er",
+ — — express.static(
+ — — — — path.join(__dirname, "er"),
+ — — — — staticOptions()
+ — — )
 );
 
 /* ============================================================
-   WEBZONEBW-ER STATIC ASSETS (SEASONAL FILTER PACK)
-   ------------------------------------------------------------
-   The /halloween namespace keeps serving the seasonal filter
-   assets (js/halloween.js) used by the WEBZONEBW-ER studio.
-   ============================================================ */
+ — WEBZONEBW-ER STATIC ASSETS (SEASONAL FILTER PACK)
+ — ------------------------------------------------------------
+ — The /halloween namespace keeps serving the seasonal filter
+ — assets (js/halloween.js) used by the WEBZONEBW-ER studio.
+ — ============================================================ */
 
 app.use(
-    "/halloween",
-    express.static(
-        path.join(__dirname, "halloween"),
-        staticOptions()
-    )
+ — — "/halloween",
+ — — express.static(
+ — — — — path.join(__dirname, "halloween"),
+ — — — — staticOptions()
+ — — )
 );
 
 /* ============================================================
-   MAINTENANCE / 404 CENTER
-   ============================================================ */
+ — MAINTENANCE / 404 CENTER
+ — ============================================================ */
 
 app.get(
-    [
-        "/404",
-        "/404.html",
-        "/maintenance",
-        "/maintenance.html"
-    ],
-    (req, res) => {
+ — — [
+ — — — — "/404",
+ — — — — "/404.html",
+ — — — — "/maintenance",
+ — — — — "/maintenance.html"
+ — — ],
+ — — (req, res) => {
 
-        const errorPage =
-            path.join(
-                __dirname,
-                "404.html"
-            );
+ — — — — const errorPage =
+ — — — — — — path.join(
+ — — — — — — — — __dirname,
+ — — — — — — — — "404.html"
+ — — — — — — );
 
-        if (!fs.existsSync(errorPage)) {
+ — — — — if (!fs.existsSync(errorPage)) {
 
-            return res
-                .status(404)
-                .send("WEBZONEBW - Page not found.");
+ — — — — — — return res
+ — — — — — — — — .status(404)
+ — — — — — — — — .send("WEBZONEBW - Page not found.");
 
-        }
+ — — — — }
 
-        res.status(404).sendFile(
-            errorPage,
-            (error) => {
+ — — — — res.status(404).sendFile(
+ — — — — — — errorPage,
+ — — — — — — (error) => {
 
-                if (!error) {
-                    return;
-                }
+ — — — — — — — — if (!error) {
+ — — — — — — — — — — return;
+ — — — — — — — — }
 
-                console.error(
-                    "[404] Unable to load 404 page:",
-                    error.message
-                );
+ — — — — — — — — console.error(
+ — — — — — — — — — — "[404] Unable to load 404 page:",
+ — — — — — — — — — — error.message
+ — — — — — — — — );
 
-                if (!res.headersSent) {
+ — — — — — — — — if (!res.headersSent) {
 
-                    res.status(404).send(
-                        "WEBZONEBW - Page not found."
-                    );
+ — — — — — — — — — — res.status(404).send(
+ — — — — — — — — — — — — "WEBZONEBW - Page not found."
+ — — — — — — — — — — );
 
-                }
+ — — — — — — — — }
 
-            }
-        );
+ — — — — — — }
+ — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   RSS FEED
-   ------------------------------------------------------------
-   /feed.xml
-   /rss.xml
-   /feed
-   /rss
-   ============================================================ */
+ — RSS FEED
+ — ------------------------------------------------------------
+ — /feed.xml
+ — /rss.xml
+ — /feed
+ — /rss
+ — ============================================================ */
 
 app.get(
-    [
-        "/feed.xml",
-        "/rss.xml",
-        "/feed",
-        "/rss"
-    ],
-    (req, res) => {
+ — — [
+ — — — — "/feed.xml",
+ — — — — "/rss.xml",
+ — — — — "/feed",
+ — — — — "/rss"
+ — — ],
+ — — (req, res) => {
 
-        const feedPath = path.join(__dirname, "feed.xml");
+ — — — — const feedPath = path.join(__dirname, "feed.xml");
 
-        if (fs.existsSync(feedPath)) {
+ — — — — if (fs.existsSync(feedPath)) {
 
-            res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
-            res.sendFile(feedPath);
+ — — — — — — res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
+ — — — — — — res.sendFile(feedPath);
 
-        } else {
+ — — — — } else {
 
-            res.status(404).json({
-                success: false,
-                error: "RSS feed not found"
-            });
+ — — — — — — res.status(404).json({
+ — — — — — — — — success: false,
+ — — — — — — — — error: "RSS feed not found"
+ — — — — — — });
 
-        }
+ — — — — }
 
-    }
+ — — }
 );
 
 /* ============================================================
-   500 ERROR PAGE
-   ------------------------------------------------------------
-   /500
-   /500.html
-   /error
-   ============================================================ */
+ — 500 ERROR PAGE
+ — ------------------------------------------------------------
+ — /500
+ — /500.html
+ — /error
+ — ============================================================ */
 
 app.get(
-    [
-        "/500",
-        "/500.html",
-        "/error"
-    ],
-    (req, res) => {
+ — — [
+ — — — — "/500",
+ — — — — "/500.html",
+ — — — — "/error"
+ — — ],
+ — — (req, res) => {
 
-        const errorPage = path.join(__dirname, "500.html");
+ — — — — const errorPage = path.join(__dirname, "500.html");
 
-        if (fs.existsSync(errorPage)) {
+ — — — — if (fs.existsSync(errorPage)) {
 
-            res.status(500).sendFile(errorPage);
+ — — — — — — res.status(500).sendFile(errorPage);
 
-        } else {
+ — — — — } else {
 
-            res.status(500).send("WEBZONEBW - Internal Server Error");
+ — — — — — — res.status(500).send("WEBZONEBW - Internal Server Error");
 
-        }
+ — — — — }
 
-    }
+ — — }
 );
 
 /* ============================================================
-   SERVER STATUS PAGE
-   ------------------------------------------------------------
-   /status
+ — SERVER STATUS PAGE
+ — ------------------------------------------------------------
+ — /status
 
-   This intentionally returns a small human-readable status
-   page rather than being confused with /api/status.
-   ============================================================ */
+ — This intentionally returns a small human-readable status
+ — page rather than being confused with /api/status.
+ — ============================================================ */
 
 app.get(
-    "/status",
-    (req, res) => {
+ — — "/status",
+ — — (req, res) => {
 
-        res.status(200).send(`<!DOCTYPE html>
+ — — — — res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <title>WEBZONEBW Server Status</title>
+ — — <meta charset="UTF-8">
+ — — <meta name="viewport"
+ — — — — — content="width=device-width, initial-scale=1.0">
+ — — <title>WEBZONEBW Server Status</title>
 </head>
 <body>
-    <main>
-        <h1>WEBZONEBW Server Online</h1>
-        <p>Version: ${SERVER_VERSION}</p>
-        <p>Environment: ${NODE_ENV}</p>
-        <p>Node.js: ${process.version}</p>
-        <p>Uptime: ${Math.floor(process.uptime())} seconds</p>
-    </main>
+ — — <main>
+ — — — — <h1>WEBZONEBW Server Online</h1>
+ — — — — <p>Version: ${SERVER_VERSION}</p>
+ — — — — <p>Environment: ${NODE_ENV}</p>
+ — — — — <p>Node.js: ${process.version}</p>
+ — — — — <p>Uptime: ${Math.floor(process.uptime())} seconds</p>
+ — — </main>
 </body>
 </html>`);
 
-    }
+ — — }
 );
 
 /* ============================================================
-   API 404 HANDLER
-   ============================================================ */
+ — API 404 HANDLER
+ — ============================================================ */
 
 app.use(
-    "/api",
-    (req, res) => {
+ — — "/api",
+ — — (req, res) => {
 
-        res.status(404).json({
+ — — — — res.status(404).json({
 
-            success: false,
+ — — — — — — success: false,
 
-            error: "API endpoint not found",
+ — — — — — — error: "API endpoint not found",
 
-            path: req.originalUrl,
+ — — — — — — path: req.originalUrl,
 
-            method: req.method,
+ — — — — — — method: req.method,
 
-            timestamp:
-                new Date().toISOString()
+ — — — — — — timestamp:
+ — — — — — — — — new Date().toISOString()
 
-        });
+ — — — — });
 
-    }
+ — — }
 );
 
 /* ============================================================
-   CLIENT-SIDE ROUTING FALLBACK
-   ------------------------------------------------------------
-   IMPORTANT:
+ — CLIENT-SIDE ROUTING FALLBACK
+ — ------------------------------------------------------------
+ — IMPORTANT:
 
-   Missing assets are NEVER redirected to index.html.
+ — Missing assets are NEVER redirected to index.html.
 
-   This prevents errors such as:
+ — This prevents errors such as:
 
-   /er/missing.js
-   /assets/missing.png
-   /css/missing.css
+ — /er/missing.js
+ — /assets/missing.png
+ — /css/missing.css
 
-   from silently receiving the main homepage.
-   ============================================================ */
+ — from silently receiving the main homepage.
+ — ============================================================ */
 
 app.use(
-    (req, res, next) => {
+ — — (req, res, next) => {
 
-        if (
-            req.method !== "GET" &&
-            req.method !== "HEAD"
-        ) {
+ — — — — if (
+ — — — — — — req.method !== "GET" &&
+ — — — — — — req.method !== "HEAD"
+ — — — — ) {
 
-            return next();
+ — — — — — — return next();
 
-        }
+ — — — — }
 
-        const requestPath =
-            req.path || "/";
+ — — — — const requestPath =
+ — — — — — — req.path || "/";
 
-        /*
-         * Never route these namespaces to the homepage.
-         */
-        if (
-            requestPath.startsWith("/api/") ||
-            requestPath.startsWith("/assets/") ||
-            requestPath.startsWith("/css/") ||
-            requestPath.startsWith("/js/") ||
-            requestPath.startsWith("/audio/") ||
-            requestPath.startsWith("/video/") ||
-            requestPath.startsWith("/images/") ||
-            requestPath.startsWith("/fonts/") ||
-            requestPath.startsWith("/er/") ||
-            requestPath.startsWith("/halloween/") ||
-            path.extname(requestPath)
-        ) {
+ — — — — /*
+ — — — — * Never route these namespaces to the homepage.
+ — — — — */
+ — — — — if (
+ — — — — — — requestPath.startsWith("/api/") ||
+ — — — — — — requestPath.startsWith("/assets/") ||
+ — — — — — — requestPath.startsWith("/css/") ||
+ — — — — — — requestPath.startsWith("/js/") ||
+ — — — — — — requestPath.startsWith("/audio/") ||
+ — — — — — — requestPath.startsWith("/video/") ||
+ — — — — — — requestPath.startsWith("/images/") ||
+ — — — — — — requestPath.startsWith("/fonts/") ||
+ — — — — — — requestPath.startsWith("/er/") ||
+ — — — — — — requestPath.startsWith("/halloween/") ||
+ — — — — — — path.extname(requestPath)
+ — — — — ) {
 
-            return res
-                .status(404)
-                .send("Not Found");
+ — — — — — — return res
+ — — — — — — — — .status(404)
+ — — — — — — — — .send("Not Found");
 
-        }
+ — — — — }
 
-        const resolvedPage =
-            resolveHtmlPageFromRoute(requestPath);
+ — — — — const resolvedPage =
+ — — — — — — resolveHtmlPageFromRoute(requestPath);
 
-        if (resolvedPage) {
-            return res.sendFile(
-                resolvedPage,
-                (error) => {
+ — — — — if (resolvedPage) {
+ — — — — — — return res.sendFile(
+ — — — — — — — — resolvedPage,
+ — — — — — — — — (error) => {
 
-                    if (error) {
-                        next(error);
-                    }
+ — — — — — — — — — — if (error) {
+ — — — — — — — — — — — — next(error);
+ — — — — — — — — — — }
 
-                }
-            );
-        }
+ — — — — — — — — }
+ — — — — — — );
+ — — — — }
 
-        /*
-         * Root-level client-side application fallback.
-         *
-         * Existing HTML pages remain handled normally by
-         * express.static() before this point.
-         */
-        const indexFile =
-            path.join(
-                __dirname,
-                "index.html"
-            );
+ — — — — /*
+ — — — — * Root-level client-side application fallback.
+ — — — — *
+ — — — — * Existing HTML pages remain handled normally by
+ — — — — * express.static() before this point.
+ — — — — */
+ — — — — const indexFile =
+ — — — — — — path.join(
+ — — — — — — — — __dirname,
+ — — — — — — — — "index.html"
+ — — — — — — );
 
-        return res.sendFile(
-            indexFile,
-            (error) => {
+ — — — — return res.sendFile(
+ — — — — — — indexFile,
+ — — — — — — (error) => {
 
-                if (error) {
-                    next(error);
-                }
+ — — — — — — — — if (error) {
+ — — — — — — — — — — next(error);
+ — — — — — — — — }
 
-            }
-        );
+ — — — — — — }
+ — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   GLOBAL ERROR HANDLER
-   ============================================================ */
+ — GLOBAL ERROR HANDLER
+ — ============================================================ */
 
 app.use(
-    (error, req, res, next) => {
+ — — (error, req, res, next) => {
 
-        console.error(
-            "[WEBZONEBW ERROR]",
-            error
-        );
+ — — — — console.error(
+ — — — — — — "[WEBZONEBW ERROR]",
+ — — — — — — error
+ — — — — );
 
-        if (res.headersSent) {
-            return next(error);
-        }
+ — — — — if (res.headersSent) {
+ — — — — — — return next(error);
+ — — — — }
 
-        const statusCode =
-            error.status ||
-            error.statusCode ||
-            500;
+ — — — — const statusCode =
+ — — — — — — error.status ||
+ — — — — — — error.statusCode ||
+ — — — — — — 500;
 
-        /*
-         * API requests receive JSON.
-         */
-        if (
-            req.originalUrl.startsWith("/api")
-        ) {
+ — — — — /*
+ — — — — * API requests receive JSON.
+ — — — — */
+ — — — — if (
+ — — — — — — req.originalUrl.startsWith("/api")
+ — — — — ) {
 
-            return res
-                .status(statusCode)
-                .json({
+ — — — — — — return res
+ — — — — — — — — .status(statusCode)
+ — — — — — — — — .json({
 
-                    success: false,
+ — — — — — — — — — — success: false,
 
-                    error:
-                        IS_PRODUCTION
-                            ? "Internal server error"
-                            : error.message,
+ — — — — — — — — — — error:
+ — — — — — — — — — — — — IS_PRODUCTION
+ — — — — — — — — — — — — — — ? "Internal server error"
+ — — — — — — — — — — — — — — : error.message,
 
-                    timestamp:
-                        new Date().toISOString()
+ — — — — — — — — — — timestamp:
+ — — — — — — — — — — — — new Date().toISOString()
 
-                });
+ — — — — — — — — });
 
-        }
+ — — — — }
 
-        /*
-         * Browser requests receive the styled
-         * 500 error page when available.
-         */
-        const errorPage =
-            path.join(
-                __dirname,
-                "500.html"
-            );
+ — — — — /*
+ — — — — * Browser requests receive the styled
+ — — — — * 500 error page when available.
+ — — — — */
+ — — — — const errorPage =
+ — — — — — — path.join(
+ — — — — — — — — __dirname,
+ — — — — — — — — "500.html"
+ — — — — — — );
 
-        if (fs.existsSync(errorPage)) {
+ — — — — if (fs.existsSync(errorPage)) {
 
-            return res
-                .status(statusCode)
-                .sendFile(errorPage);
+ — — — — — — return res
+ — — — — — — — — .status(statusCode)
+ — — — — — — — — .sendFile(errorPage);
 
-        }
+ — — — — }
 
-        return res
-            .status(statusCode)
-            .send(
-                "WEBZONEBW - Internal Server Error"
-            );
+ — — — — return res
+ — — — — — — .status(statusCode)
+ — — — — — — .send(
+ — — — — — — — — "WEBZONEBW - Internal Server Error"
+ — — — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   PROCESS ERROR HANDLING
-   ------------------------------------------------------------
-   These handlers log unexpected errors.
+ — PROCESS ERROR HANDLING
+ — ------------------------------------------------------------
+ — These handlers log unexpected errors.
 
-   They intentionally do not attempt to restart the server
-   automatically because silent restarts can make debugging
-   camera / browser issues much harder.
-   ============================================================ */
+ — They intentionally do not attempt to restart the server
+ — automatically because silent restarts can make debugging
+ — camera / browser issues much harder.
+ — ============================================================ */
 
 process.on(
-    "uncaughtException",
-    (error) => {
+ — — "uncaughtException",
+ — — (error) => {
 
-        console.error(
-            "[FATAL] Uncaught Exception:",
-            error
-        );
+ — — — — console.error(
+ — — — — — — "[FATAL] Uncaught Exception:",
+ — — — — — — error
+ — — — — );
 
-    }
+ — — }
 );
 
 process.on(
-    "unhandledRejection",
-    (reason) => {
+ — — "unhandledRejection",
+ — — (reason) => {
 
-        console.error(
-            "[FATAL] Unhandled Promise Rejection:",
-            reason
-        );
+ — — — — console.error(
+ — — — — — — "[FATAL] Unhandled Promise Rejection:",
+ — — — — — — reason
+ — — — — );
 
-    }
+ — — }
 );
 
 /* ============================================================
-   SERVER START — HTTP + HTTPS
-   ============================================================ */
+ — SERVER START — HTTP + HTTPS
+ — ============================================================ */
 
 /*
  * Secure Context Requirement
@@ -1091,237 +1091,237 @@ const pfxPath = path.join(__dirname, "certs", "cert.pfx");
 let httpsServer = null;
 
 if (fs.existsSync(pfxPath)) {
-    try {
-        httpsServer = https.createServer(
-            {
-                pfx: fs.readFileSync(pfxPath),
-                passphrase: "webzonebw"
-            },
-            app
-        );
+ — — try {
+ — — — — httpsServer = https.createServer(
+ — — — — — — {
+ — — — — — — — — pfx: fs.readFileSync(pfxPath),
+ — — — — — — — — passphrase: "webzonebw"
+ — — — — — — },
+ — — — — — — app
+ — — — — );
 
-        httpsServer.listen(HTTPS_PORT, HOST, () => {
-            console.log("");
-            console.log("================================================");
-            console.log(" HTTPS Secure Context (camera/mic supported)");
-            console.log(` Local      : https://localhost:${HTTPS_PORT}`);
-            console.log(` ER Studio  : https://localhost:${HTTPS_PORT}/er/`);
-            console.log("================================================");
-        });
+ — — — — httpsServer.listen(HTTPS_PORT, HOST, () => {
+ — — — — — — console.log("");
+ — — — — — — console.log("================================================");
+ — — — — — — console.log(" HTTPS Secure Context (camera/mic supported)");
+ — — — — — — console.log(` Local — — — : https://localhost:${HTTPS_PORT}`);
+ — — — — — — console.log(` ER Studio — : https://localhost:${HTTPS_PORT}/er/`);
+ — — — — — — console.log("================================================");
+ — — — — });
 
-        httpsServer.on("error", (error) => {
-            console.error("[WEBZONEBW] HTTPS server error:", error.code);
-        });
+ — — — — httpsServer.on("error", (error) => {
+ — — — — — — console.error("[WEBZONEBW] HTTPS server error:", error.code);
+ — — — — });
 
-    } catch (error) {
-        console.error("[WEBZONEBW] HTTPS startup failed:", error.message);
-    }
+ — — } catch (error) {
+ — — — — console.error("[WEBZONEBW] HTTPS startup failed:", error.message);
+ — — }
 } else {
-    console.log("");
-    console.log("[WEBZONEBW] No HTTPS certificate found at certs/cert.pfx");
-    console.log("[WEBZONEBW] Camera requires HTTPS or localhost access.");
-    console.log(`[WEBZONEBW] Run: https://localhost:${HTTPS_PORT}/er/ (after generating certs)`);
+ — — console.log("");
+ — — console.log("[WEBZONEBW] No HTTPS certificate found at certs/cert.pfx");
+ — — console.log("[WEBZONEBW] Camera requires HTTPS or localhost access.");
+ — — console.log(`[WEBZONEBW] Run: https://localhost:${HTTPS_PORT}/er/ (after generating certs)`);
 }
 
 const server =
-    app.listen(
-        PORT,
-        HOST,
-        () => {
+ — — app.listen(
+ — — — — PORT,
+ — — — — HOST,
+ — — — — () => {
 
-            console.log("");
+ — — — — — — console.log("");
 
-            console.log(
-                "================================================"
-            );
+ — — — — — — console.log(
+ — — — — — — — — "================================================"
+ — — — — — — );
 
-            console.log(
-                " WEBZONEBW SERVER"
-            );
+ — — — — — — console.log(
+ — — — — — — — — " WEBZONEBW SERVER"
+ — — — — — — );
 
-            console.log(
-                "================================================"
-            );
+ — — — — — — console.log(
+ — — — — — — — — "================================================"
+ — — — — — — );
 
-            console.log(
-                ` Project    : ${PROJECT_NAME}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Project — — : ${PROJECT_NAME}`
+ — — — — — — );
 
-            console.log(
-                ` Version    : ${SERVER_VERSION}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Version — — : ${SERVER_VERSION}`
+ — — — — — — );
 
-            console.log(
-                ` Node.js    : ${process.version}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Node.js — — : ${process.version}`
+ — — — — — — );
 
-            console.log(
-                ` Environment: ${NODE_ENV}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Environment: ${NODE_ENV}`
+ — — — — — — );
 
-            console.log(
-                ` Host       : ${HOST}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Host — — — : ${HOST}`
+ — — — — — — );
 
-            console.log(
-                ` HTTP  Port : ${PORT}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` HTTP — Port : ${PORT}`
+ — — — — — — );
 
-            console.log(
-                ` HTTPS Port : ${HTTPS_PORT}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` HTTPS Port : ${HTTPS_PORT}`
+ — — — — — — );
 
-            console.log(
-                ` Local      : http://localhost:${PORT}`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Local — — — : http://localhost:${PORT}`
+ — — — — — — );
 
-            console.log(
-                ` ER Studio  : http://localhost:${PORT}/er/`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` ER Studio — : http://localhost:${PORT}/er/`
+ — — — — — — );
 
-            console.log(
-                ` Health     : http://localhost:${PORT}/api/health`
-            );
+ — — — — — — console.log(
+ — — — — — — — — ` Health — — : http://localhost:${PORT}/api/health`
+ — — — — — — );
 
-            console.log(
-                "================================================"
-            );
+ — — — — — — console.log(
+ — — — — — — — — "================================================"
+ — — — — — — );
 
-            console.log("");
+ — — — — — — console.log("");
 
-        }
-    );
+ — — — — }
+ — — );
 
 /* ============================================================
-   SERVER ERROR HANDLING
-   ------------------------------------------------------------
-   Handles startup errors such as:
+ — SERVER ERROR HANDLING
+ — ------------------------------------------------------------
+ — Handles startup errors such as:
 
-   EADDRINUSE
-   EACCES
-   ============================================================ */
+ — EADDRINUSE
+ — EACCES
+ — ============================================================ */
 
 server.on(
-    "error",
-    (error) => {
+ — — "error",
+ — — (error) => {
 
-        console.error(
-            "[WEBZONEBW SERVER ERROR]",
-            error
-        );
+ — — — — console.error(
+ — — — — — — "[WEBZONEBW SERVER ERROR]",
+ — — — — — — error
+ — — — — );
 
-        if (
-            error.code ===
-            "EADDRINUSE"
-        ) {
+ — — — — if (
+ — — — — — — error.code ===
+ — — — — — — "EADDRINUSE"
+ — — — — ) {
 
-            console.error(
-                `[WEBZONEBW] Port ${PORT} is already in use.`
-            );
+ — — — — — — console.error(
+ — — — — — — — — `[WEBZONEBW] Port ${PORT} is already in use.`
+ — — — — — — );
 
-            console.error(
-                "[WEBZONEBW] Stop the existing server " +
-                "or choose another PORT."
-            );
+ — — — — — — console.error(
+ — — — — — — — — "[WEBZONEBW] Stop the existing server " +
+ — — — — — — — — "or choose another PORT."
+ — — — — — — );
 
-        }
+ — — — — }
 
-        if (
-            error.code ===
-            "EACCES"
-        ) {
+ — — — — if (
+ — — — — — — error.code ===
+ — — — — — — "EACCES"
+ — — — — ) {
 
-            console.error(
-                `[WEBZONEBW] Permission denied for port ${PORT}.`
-            );
+ — — — — — — console.error(
+ — — — — — — — — `[WEBZONEBW] Permission denied for port ${PORT}.`
+ — — — — — — );
 
-        }
+ — — — — }
 
-        process.exit(1);
+ — — — — process.exit(1);
 
-    }
+ — — }
 );
 
 /* ============================================================
-   GRACEFUL SHUTDOWN
-   ============================================================ */
+ — GRACEFUL SHUTDOWN
+ — ============================================================ */
 
 let shuttingDown = false;
 
 const shutdown = (signal) => {
 
-    if (shuttingDown) {
-        return;
-    }
+ — — if (shuttingDown) {
+ — — — — return;
+ — — }
 
-    shuttingDown = true;
+ — — shuttingDown = true;
 
-    console.log(
-        `\n[WEBZONEBW] ${signal} received. ` +
-        `Shutting down...`
-    );
+ — — console.log(
+ — — — — `\n[WEBZONEBW] ${signal} received. ` +
+ — — — — `Shutting down...`
+ — — );
 
-    /*
-     * Stop accepting new connections.
-     *
-     * Existing requests are allowed to finish.
-     */
-    server.close((error) => {
+ — — /*
+ — — * Stop accepting new connections.
+ — — *
+ — — * Existing requests are allowed to finish.
+ — — */
+ — — server.close((error) => {
 
-        if (error) {
+ — — — — if (error) {
 
-            console.error(
-                "[WEBZONEBW] HTTP shutdown error:",
-                error
-            );
+ — — — — — — console.error(
+ — — — — — — — — "[WEBZONEBW] HTTP shutdown error:",
+ — — — — — — — — error
+ — — — — — — );
 
-        }
+ — — — — }
 
-        if (httpsServer) {
-            httpsServer.close(() => {
-                console.log(
-                    "[WEBZONEBW] Server closed successfully."
-                );
-                process.exit(0);
-            });
-        } else {
-            console.log(
-                "[WEBZONEBW] Server closed successfully."
-            );
-            process.exit(0);
-        }
+ — — — — if (httpsServer) {
+ — — — — — — httpsServer.close(() => {
+ — — — — — — — — console.log(
+ — — — — — — — — — — "[WEBZONEBW] Server closed successfully."
+ — — — — — — — — );
+ — — — — — — — — process.exit(0);
+ — — — — — — });
+ — — — — } else {
+ — — — — — — console.log(
+ — — — — — — — — "[WEBZONEBW] Server closed successfully."
+ — — — — — — );
+ — — — — — — process.exit(0);
+ — — — — }
 
-    });
+ — — });
 
-    /*
-     * Safety timeout.
-     */
-    setTimeout(() => {
+ — — /*
+ — — * Safety timeout.
+ — — */
+ — — setTimeout(() => {
 
-        console.error(
-            "[WEBZONEBW] Forced shutdown after timeout."
-        );
+ — — — — console.error(
+ — — — — — — "[WEBZONEBW] Forced shutdown after timeout."
+ — — — — );
 
-        process.exit(1);
+ — — — — process.exit(1);
 
-    }, 10000).unref();
+ — — }, 10000).unref();
 
 };
 
 /* ============================================================
-   SHUTDOWN SIGNALS
-   ============================================================ */
+ — SHUTDOWN SIGNALS
+ — ============================================================ */
 
 process.on(
-    "SIGINT",
-    () => shutdown("SIGINT")
+ — — "SIGINT",
+ — — () => shutdown("SIGINT")
 );
 
 process.on(
-    "SIGTERM",
-    () => shutdown("SIGTERM")
+ — — "SIGTERM",
+ — — () => shutdown("SIGTERM")
 );
 
 /* ============================================================
-   END OF WEBZONEBW SERVER
-   ============================================================ */
+ — END OF WEBZONEBW SERVER
+ — ============================================================ */
