@@ -141,3 +141,6 @@
 [WEBZONEBW] GET /api/order-email 503 1ms
 [WEBZONEBW] POST /api/license/activate 404 0ms
 [WEBZONEBW] POST /api/paypal/webhook 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 19ms
+[WEBZONEBW] GET /api/health 200 2ms
+[WEBZONEBW] POST /api/license/verify 200 2ms
