@@ -1,0 +1,43 @@
+# Render.com configuration for WebZoneBW ER Studio
+# Save this as render.yaml in your repository root
+
+services:
+  - type: web
+    name: webzonebw-er-studio
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: TRUST_PROXY
+        value: true
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: PAYPAL_MODE
+        value: live
+      - key: PAYPAL_CURRENCY
+        value: USD
+      - key: PAYPAL_WEBHOOK_ID
+        sync: false
+      - key: ORDER_EMAIL
+        sync: false
+      - key: ADMIN_KEY
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://webzonebw.in,https://www.webzonebw.in
+    regions:
+      - oregon
+    healthCheck:
+      path: /api/health
+      interval: 10
+      timeout: 5
+      method: GET
+      statusCode: 200
+    envVarScope: RUN_TIME

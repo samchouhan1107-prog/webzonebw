@@ -18,7 +18,7 @@
   "use strict";
 
   var STORAGE_KEY = "wzb_er_license_v1";
-  var API_BASE = ""; // same origin (server.js)
+  var API_BASE = window.location.origin; // auto-detect current origin
   var listeners = [];
 
   var state = {
