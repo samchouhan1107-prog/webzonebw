@@ -24,10 +24,15 @@
   var state = {
     licenseKey: null,
     email: null,
-    status: "none", // none | verifying | active | inactive | unreachable
+    status: "none", // none | verifying | active | inactive | unreachable | promo_access
     verifying: false,
     plan: "er-studio-premium",
     amount: 499,
+    promoKey: null,
+    promoFeatures: [],
+    promoExpires: null,
+    hasPromoAccess: false,
+    promoActive: false,
   };
 
   function readStored() {
@@ -69,6 +74,28 @@
     emit();
   }
 
+  function setPromoAccess(promoKey, features, expires) {
+    state.promoKey = promoKey;
+    state.promoFeatures = features || [];
+    state.promoExpires = expires;
+    state.hasPromoAccess = true;
+    state.promoActive = true;
+    emit();
+  }
+
+  function clearPromoAccess() {
+    state.promoKey = null;
+    state.promoFeatures = [];
+    state.promoExpires = null;
+    state.hasPromoAccess = false;
+    state.promoActive = false;
+    emit();
+  }
+
+  function checkPromoFeature(featureId) {
+    return state.hasPromoAccess && state.promoFeatures.includes(featureId);
+  }
+
   /* --------------------------------------------------------
    * PERSISTENT LICENSE VERIFICATION
    * Runs on every load with the stored license key.
@@ -90,7 +117,10 @@
     return fetch(API_BASE + "/api/license/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ licenseKey: stored.licenseKey }),
+      body: JSON.stringify({ 
+        licenseKey: stored.licenseKey,
+        promoKey: state.promoKey // Include promotional key if available
+      }),
       timeout: 5000
     })
       .then(function (res) {
@@ -102,14 +132,34 @@
       .then(function (data) {
         state.verifying = false;
 
-        if (data && data.success && data.valid && data.status === "ACTIVE") {
-          state.status = "active";
-          state.email = data.email || state.email;
+        if (data && data.success && data.valid) {
+          if (data.hasPromoAccess) {
+            // Handle promotional access
+            state.status = "promo_access";
+            state.plan = "halloween-promo";
+            state.email = undefined;
+            setPromoAccess(data.promoAccess ? data.promoAccess.promoKey : null, 
+                         data.promoAccess ? data.promoAccess.features : null,
+                         data.promoAccess ? data.promoAccess.expires : null);
+          } else if (data.hasPaidLicense) {
+            // Handle paid license
+            state.status = "active";
+            state.email = data.email || state.email;
+            state.plan = data.plan;
+            clearPromoAccess();
+          } else {
+            // No access
+            state.status = "inactive";
+            state.email = null;
+            clearPromoAccess();
+          }
           emit();
           return true;
         }
 
         state.status = "inactive";
+        state.email = null;
+        clearPromoAccess();
         emit();
         return false;
       })
@@ -121,6 +171,7 @@
          * Premium stays locked (fail-closed, never fail-open).
          */
         state.status = "unreachable";
+        clearPromoAccess();
         emit();
         return false;
       });
@@ -310,6 +361,12 @@
           return { ok: res.ok, data: data };
         });
       })
+      .catch(function (error) {
+        console.error('PayPal order creation failed:', error);
+        proc.style.display = "none";
+        showToast("❌", "Payment service unavailable. Please try again later.");
+        return { ok: false, data: { error: "PAYMENT_SERVICE_UNAVAILABLE" } };
+      })
       .then(function (result) {
         if (!result.ok || !result.data || !result.data.success) {
           var reason =
@@ -464,7 +521,7 @@
   /* Public API */
   window.WEBZONEBW_LICENSE = {
     hasActiveLicense: function () {
-      return state.status === "active";
+      return state.status === "active" || state.status === "promo_access";
     },
     isVerifying: function () {
       return state.verifying;
@@ -475,7 +532,16 @@
     getLicenseKey: function () {
       return state.status === "active" ? state.licenseKey : null;
     },
+    hasPromoAccess: function () {
+      return state.hasPromoAccess;
+    },
+    getPromoFeatures: function () {
+      return state.promoFeatures;
+    },
+    isPromoFeatureAvailable: checkPromoFeature,
     openCheckout: openCheckout,
+    activatePromo: activatePromo,
+    getHalloweenStatus: getHalloweenStatus,
     logout: logout,
     onStateChange: function (fn) {
       if (typeof fn === "function") listeners.push(fn);
@@ -483,10 +549,68 @@
     verify: verifyStoredLicense,
   };
 
+  /* Promotional activation methods */
+  function activatePromo(promoKey) {
+    return fetch(API_BASE + "/api/halloween/validate-promo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ promoKey: promoKey }),
+      timeout: 5000
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          throw new Error('Promo validation failed');
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && data.valid) {
+          setPromoAccess(data.promo.name, data.promo.allowedFeatures, data.promo.expires);
+          return true;
+        } else {
+          clearPromoAccess();
+          return false;
+        }
+      })
+      .catch(function (error) {
+        console.error("[WEBZONEBW ER] Promo activation error:", error);
+        clearPromoAccess();
+        return false;
+      });
+  }
+
+  function getHalloweenStatus() {
+    return fetch(API_BASE + "/api/halloween/status", {
+      timeout: 5000
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          throw new Error('Failed to get Halloween status');
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        state.promoActive = data.promoActive;
+        return data;
+      })
+      .catch(function (error) {
+        console.error("[WEBZONEBW ER] Halloween status error:", error);
+        state.promoActive = false;
+        return null;
+      });
+  }
+
   /* Persistent verification on every load (logout/login survival) */
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", verifyStoredLicense);
+    document.addEventListener("DOMContentLoaded", function() {
+      // Get Halloween status first, then verify license
+      getHalloweenStatus().then(function() {
+        verifyStoredLicense();
+      });
+    });
   } else {
-    verifyStoredLicense();
+    getHalloweenStatus().then(function() {
+      verifyStoredLicense();
+    });
   }
 })();

@@ -238,6 +238,71 @@ const ER_PREMIUM_AMOUNT_USD = 5.99;
  * No fallback: if unset, /api/order-email returns ORDER_EMAIL_NOT_CONFIGURED. */
 const ORDER_EMAIL = process.env.ORDER_EMAIL || null;
 
+/* ============================================================
+ * HALLOWEEN PROMOTIONAL TEMPORARY ACCESS SYSTEM
+ * ============================================================ */
+
+// Halloween promotional access configuration
+const HALLOWEEN_PROMO_CONFIG = {
+    // Halloween promotion period (server-side time)
+    promoStart: new Date('2026-10-01T00:00:00.000Z'), // October 1, 2026
+    promoEnd: new Date('2026-11-07T23:59:59.999Z'),   // November 7, 2026 (Halloween season)
+    
+    // Promotional keys (server-side only - never expose to frontend)
+    promoKeys: {
+        'HALLOWEEN2026': {
+            name: 'Halloween 2026 Free Access',
+            allowedFeatures: ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion'],
+            description: 'Free Halloween Premium Access',
+            active: true
+        },
+        'PUMPKIN2026': {
+            name: 'Pumpkin Patch Experience',
+            allowedFeatures: ['pumpkin-pose', 'witch-ritual'],
+            description: 'Pumpkin-themed Halloween effects',
+            active: true
+        }
+    }
+};
+
+// Check if current server time is within Halloween promotion period
+function isHalloweenPromoActive() {
+    const now = new Date();
+    return now >= HALLOWEEN_PROMO_CONFIG.promoStart && 
+           now <= HALLOWEEN_PROMO_CONFIG.promoEnd;
+}
+
+// Validate promotional key and return access rights
+function validatePromoKey(promoKey) {
+    if (!isHalloweenPromoActive()) {
+        return { valid: false, reason: 'Promotion not active' };
+    }
+    
+    const promo = HALLOWEEN_PROMO_CONFIG.promoKeys[promoKey];
+    if (!promo || !promo.active) {
+        return { valid: false, reason: 'Invalid promotional key' };
+    }
+    
+    return { 
+        valid: true, 
+        promo: promo,
+        expires: HALLOWEEN_PROMO_CONFIG.promoEnd 
+    };
+}
+
+// Check if a specific feature is available via promotional access
+function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
+    if (!isHalloweenPromoActive()) return false;
+    
+    for (const promoKey of userPromoKeys) {
+        const validation = validatePromoKey(promoKey);
+        if (validation.valid && validation.promo.allowedFeatures.includes(featureId)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // --- ER Studio Premium License Configuration ---
 const ER_PREMIUM_PLAN = "er-studio-premium";
 const ER_PREMIUM_AMOUNT = 499; // ₹499 - one-time ER Studio license
@@ -673,8 +738,26 @@ app.post("/api/license/manual-activate", (req, res) => {
  * ------------------------------------------------------------ */
 app.post("/api/license/activate", (req, res) => {
     try {
-        const { orderId, email } = req.body || {};
+        const { orderId, email, promoKey } = req.body || {};
 
+        // First check for promotional access (Halloween promotion takes priority)
+        if (promoKey) {
+            const promoValidation = validatePromoKey(promoKey);
+            if (promoValidation.valid) {
+                return res.json({
+                    success: true,
+                    licenseKey: null,
+                    status: "PROMO_ACCESS",
+                    plan: "halloween-promo",
+                    email: undefined,
+                    hasPromoAccess: true,
+                    promoFeatures: promoValidation.promo.allowedFeatures,
+                    promoExpires: promoValidation.expires.toISOString()
+                });
+            }
+        }
+
+        // If no promo access, proceed with normal license activation
         if (!orderId) {
             return res.status(400).json({ success: false, error: "ORDER_ID_REQUIRED" });
         }
@@ -704,7 +787,9 @@ app.post("/api/license/activate", (req, res) => {
             licenseKey: storedOrder.licenseKey,
             status: license ? license.status : "ACTIVE",
             plan: ER_PREMIUM_PLAN,
-            email: storedOrder.email
+            email: storedOrder.email,
+            hasPromoAccess: false,
+            promoActive: isHalloweenPromoActive()
         });
     } catch (error) {
         console.error("[WEBZONEBW] License activation failed:", error);
@@ -716,27 +801,172 @@ app.post("/api/license/activate", (req, res) => {
  * LICENSE VERIFICATION - persistent re-check on every session
  * ------------------------------------------------------------ */
 app.post("/api/license/verify", (req, res) => {
-    const { licenseKey } = req.body || {};
+    const { licenseKey, promoKey } = req.body || {};
 
-    if (!licenseKey) {
-        return res.status(400).json({ success: false, valid: false, error: "LICENSE_KEY_REQUIRED" });
+    // Check for valid paid license first
+    let license = null;
+    let validLicense = false;
+    
+    if (licenseKey) {
+        license = licenseStore.licenses.get(String(licenseKey).trim().toUpperCase());
+        if (license && license.status === "ACTIVE") {
+            validLicense = true;
+        }
     }
 
-    const license = licenseStore.licenses.get(String(licenseKey).trim().toUpperCase());
-
-    if (!license || license.status !== "ACTIVE") {
-        return res.json({ success: true, valid: false, status: license ? license.status : "NOT_FOUND" });
+    // Check for promotional access if no valid paid license
+    let promoAccess = null;
+    let validPromo = false;
+    
+    if (!validLicense && promoKey) {
+        const promoValidation = validatePromoKey(promoKey);
+        if (promoValidation.valid) {
+            validPromo = true;
+            promoAccess = {
+                promoKey: promoKey,
+                features: promoValidation.promo.allowedFeatures,
+                expires: promoValidation.expires.toISOString()
+            };
+        }
     }
 
-    license.lastVerifiedAt = new Date().toISOString();
+    // If no license and no promo, return not found
+    if (!validLicense && !validPromo) {
+        return res.json({ 
+            success: true, 
+            valid: false, 
+            status: "NOT_FOUND",
+            hasPromoAccess: false,
+            promoActive: isHalloweenPromoActive()
+        });
+    }
+
+    // Update last verified time for paid licenses
+    if (validLicense && license) {
+        license.lastVerifiedAt = new Date().toISOString();
+        saveLicenseStore();
+    }
+
+    res.json({
+        success: true,
+        valid: validLicense || validPromo,
+        status: validLicense ? license.status : "PROMO_ACCESS",
+        plan: validLicense ? license.plan : "halloween-promo",
+        email: validLicense ? license.email : undefined,
+        hasPaidLicense: validLicense,
+        hasPromoAccess: validPromo,
+        promoAccess: promoAccess,
+        promoActive: isHalloweenPromoActive()
+    });
+});
+
+/* ============================================================
+ * HALLOWEEN PROMOTIONAL ACCESS ENDPOINTS
+ * ============================================================ */
+
+// Validate promotional key (client can check if they have access)
+app.post("/api/halloween/validate-promo", (req, res) => {
+    try {
+        const { promoKey } = req.body || {};
+
+        if (!promoKey) {
+            return res.status(400).json({ 
+                success: false, 
+                valid: false, 
+                error: "PROMO_KEY_REQUIRED",
+                promoActive: isHalloweenPromoActive(),
+                promoStart: HALLOWEEN_PROMO_CONFIG.promoStart.toISOString(),
+                promoEnd: HALLOWEEN_PROMO_CONFIG.promoEnd.toISOString()
+            });
+        }
+
+        const validation = validatePromoKey(promoKey);
+
+        if (!validation.valid) {
+            return res.status(400).json({ 
+                success: false, 
+                valid: false, 
+                error: validation.reason,
+                promoActive: isHalloweenPromoActive(),
+                promoStart: HALLOWEEN_PROMO_CONFIG.promoStart.toISOString(),
+                promoEnd: HALLOWEEN_PROMO_CONFIG.promoEnd.toISOString()
+            });
+        }
+
+        res.json({
+            success: true,
+            valid: true,
+            promo: {
+                name: validation.promo.name,
+                description: validation.promo.description,
+                allowedFeatures: validation.promo.allowedFeatures,
+                expires: validation.expires.toISOString()
+            },
+            promoActive: isHalloweenPromoActive(),
+            promoStart: HALLOWEEN_PROMO_CONFIG.promoStart.toISOString(),
+            promoEnd: HALLOWEEN_PROMO_CONFIG.promoEnd.toISOString()
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW] Halloween promo validation error:", error);
+        res.status(500).json({ success: false, error: "PROMO_VALIDATION_FAILED" });
+    }
+});
+
+// Get current Halloween promotion status
+app.get("/api/halloween/status", (req, res) => {
+    res.json({
+        success: true,
+        promoActive: isHalloweenPromoActive(),
+        promoStart: HALLOWEEN_PROMO_CONFIG.promoStart.toISOString(),
+        promoEnd: HALLOWEEN_PROMO_CONFIG.promoEnd.toISOString(),
+        currentTime: new Date().toISOString(),
+        features: Object.values(HALLOWEEN_PROMO_CONFIG.promoKeys).flatMap(p => p.allowedFeatures)
+    });
+});
+
+// Admin endpoint to activate promotional access (server-side only)
+app.post("/api/halloween/activate-promo", (req, res) => {
+    const adminKey = req.headers["x-admin-key"];
+
+    if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ success: false, error: "UNAUTHORIZED" });
+    }
+
+    const { promoKey, userEmail } = req.body || {};
+
+    if (!promoKey || !userEmail) {
+        return res.status(400).json({ success: false, error: "PROMO_AND_EMAIL_REQUIRED" });
+    }
+
+    const validation = validatePromoKey(promoKey);
+    if (!validation.valid) {
+        return res.status(400).json({ success: false, error: "INVALID_PROMO_KEY" });
+    }
+
+    // Create a temporary promotional entry (separate from paid licenses)
+    const promoEntry = {
+        id: `PROMO-${promoKey}-${Date.now()}`,
+        promoKey: promoKey,
+        userEmail: userEmail,
+        activatedAt: new Date().toISOString(),
+        expiresAt: HALLOWEEN_PROMO_CONFIG.promoEnd.toISOString(),
+        features: validation.promo.allowedFeatures,
+        status: "ACTIVE"
+    };
+
+    // Store promotional access (in production, use a proper database)
+    if (!licenseStore.promotional) {
+        licenseStore.promotional = new Map();
+    }
+    licenseStore.promotional.set(promoEntry.id, promoEntry);
     saveLicenseStore();
 
     res.json({
         success: true,
-        valid: true,
-        status: license.status,
-        plan: license.plan,
-        email: license.email
+        promoId: promoEntry.id,
+        message: "Halloween promotional access activated",
+        expiresAt: promoEntry.expiresAt,
+        features: promoEntry.features
     });
 });
 

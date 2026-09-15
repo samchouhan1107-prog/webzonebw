@@ -5,7 +5,7 @@ services:
   - type: web
     name: webzonebw-er-studio
     env: node
-    buildCommand: npm install
+    buildCommand: npm ci && npm run build
     startCommand: node server.js
     envVars:
       - key: NODE_ENV
@@ -14,6 +14,8 @@ services:
         value: 10000
       - key: TRUST_PROXY
         value: true
+      - key: HOST
+        value: 0.0.0.0
       - key: PAYPAL_CLIENT_ID
         sync: false
       - key: PAYPAL_CLIENT_SECRET
@@ -41,3 +43,7 @@ services:
       method: GET
       statusCode: 200
     envVarScope: RUN_TIME
+    instanceCount: 1
+    cpuCount: 1
+    memoryLimit: 1024
+    diskSize: 1024

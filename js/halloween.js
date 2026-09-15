@@ -1083,9 +1083,10 @@ function initWebZoneERStudio() {
 
   function isUserPremium() {
     /*
-     * Premium is granted ONLY by a verified WebZoneBW ER Studio
-     * license (₹499 purchase verified server-side).
-     * No localStorage shortcut can unlock premium lenses.
+     * Premium access can come from:
+     * 1. A verified WebZoneBW ER Studio license (₹499 purchase verified server-side)
+     * 2. Halloween promotional access (server-validated temporary access)
+     * No localStorage shortcuts can unlock premium lenses.
      */
     if (
       window.WEBZONEBW_LICENSE &&
@@ -1097,6 +1098,26 @@ function initWebZoneERStudio() {
     return false;
   }
 
+  function isFeatureAvailable(featureId) {
+    /*
+     * Check if a feature is available through:
+     * 1. Paid license
+     * 2. Promotional access (Halloween promotion)
+     */
+    if (
+      window.WEBZONEBW_LICENSE &&
+      typeof window.WEBZONEBW_LICENSE.isPromoFeatureAvailable === "function"
+    ) {
+      // Check promotional access first
+      if (window.WEBZONEBW_LICENSE.isPromoFeatureAvailable(featureId)) {
+        return true;
+      }
+    }
+
+    // Fall back to regular premium check
+    return isUserPremium();
+  }
+
   function selectFilter(filterName, direction = "none") {
     const config = allFilterConfigs.find((c) => c.id === filterName) || {
       id: filterName,
@@ -1105,14 +1126,21 @@ function initWebZoneERStudio() {
       category: "scene",
     };
 
-    if (config.isPremium && !isUserPremium()) {
-      showSwipeToast("🔒", "Premium License Required!");
+    // Check if feature is available (paid license OR promotional access)
+    if (config.isPremium && !isFeatureAvailable(filterName)) {
+      if (window.WEBZONEBW_LICENSE && window.WEBZONEBW_LICENSE.hasPromoAccess()) {
+        // User has promo access but this specific feature isn't included
+        showSwipeToast("🎃", "Feature not in Halloween pack");
+      } else {
+        // User doesn't have any access - show checkout
+        showSwipeToast("🔒", "Premium License Required!");
 
-      if (
-        window.WEBZONEBW_LICENSE &&
-        typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
-      ) {
-        window.WEBZONEBW_LICENSE.openCheckout();
+        if (
+          window.WEBZONEBW_LICENSE &&
+          typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
+        ) {
+          window.WEBZONEBW_LICENSE.openCheckout();
+        }
       }
 
       return;
@@ -5681,3 +5709,63 @@ function initWebZoneERStudio() {
     ctx.restore();
   }
 }
+
+  // Halloween Promotional Access UI Management
+  function updatePromoAccessUI() {
+    const halloweenPromoStatus = document.getElementById("halloweenPromoStatus");
+    const promoAccessIndicator = document.getElementById("promoAccessIndicator");
+    const erLicenseChip = document.getElementById("erLicenseChip");
+    const erLicenseChipIcon = document.getElementById("erLicenseChipIcon");
+    const erLicenseChipText = document.getElementById("erLicenseChipText");
+    const erLicenseChipBtn = document.getElementById("erLicenseChipBtn");
+
+    if (!window.WEBZONEBW_LICENSE) return;
+
+    const hasPromoAccess = window.WEBZONEBW_LICENSE.hasPromoAccess();
+    const hasPaidLicense = window.WEBZONEBW_LICENSE.hasActiveLicense();
+    const promoActive = window.WEBZONEBW_LICENSE.getStatus() === "promo_access";
+
+    if (hasPromoAccess || promoActive) {
+      // Show promotional access
+      if (halloweenPromoStatus) {
+        halloweenPromoStatus.style.display = "block";
+      }
+      
+      if (promoAccessIndicator) {
+        promoAccessIndicator.textContent = "🎃 Halloween Access Active";
+      }
+      
+      if (erLicenseChip) {
+        erLicenseChip.classList.add("promo-active");
+        erLicenseChipIcon.textContent = "🎃";
+        erLicenseChipText.textContent = "Halloween Premium Access";
+        erLicenseChipBtn.textContent = "Enjoy!";
+        erLicenseChipBtn.style.background = "linear-gradient(135deg, #ff6b35, #7b2ff7)";
+      }
+    } else {
+      // Hide promotional access
+      if (halloweenPromoStatus) {
+        halloweenPromoStatus.style.display = "none";
+      }
+      
+      if (erLicenseChip) {
+        erLicenseChip.classList.remove("promo-active");
+        erLicenseChipIcon.textContent = "🔒";
+        erLicenseChipText.textContent = hasPaidLicense ? "Premium Active" : "Free — Premium Locked";
+        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "₹499 Upgrade";
+        erLicenseChipBtn.style.background = "";
+      }
+    }
+  }
+
+  // Listen for license state changes
+  if (window.WEBZONEBW_LICENSE) {
+    window.WEBZONEBW_LICENSE.onStateChange(updatePromoAccessUI);
+  }
+
+  // Initialize UI when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", updatePromoAccessUI);
+  } else {
+    updatePromoAccessUI();
+  }

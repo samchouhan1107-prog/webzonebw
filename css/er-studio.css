@@ -254,12 +254,172 @@ body.er-studio-body {
 
 
 /* -----------------------------------------------------
-   7. EFFECTS PANEL
+   7. EFFECTS PANEL & VISUAL CONSISTENCY
    ----------------------------------------------------- */
 
 .er-studio-body .er-effects-panel {
     min-width: 0;
     max-width: 100%;
+}
+
+/* Enhanced Halloween Visual System */
+.er-studio-body .halloween-seasonal {
+    --halloween-orange: #ff6b35;
+    --halloween-purple: #7b2ff7;
+    --halloween-dark: #1a1a2e;
+    --halloween-accent: #f7931e;
+}
+
+/* Premium Effect Cards - Enhanced Halloween Styling */
+.er-studio-body .effect-card[data-premium="true"] {
+    position: relative;
+    overflow: hidden;
+}
+
+.er-studio-body .effect-card[data-premium="true"]::before {
+    content: "🎃";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    z-index: 2;
+}
+
+.er-studio-body .effect-card[data-premium="true"] .premium-tag {
+    background: linear-gradient(135deg, var(--halloween-orange), var(--halloween-purple));
+    color: white;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+/* Halloween Promotional Access Indicators */
+.er-studio-body .promo-access-indicator {
+    background: linear-gradient(135deg, #ff6b35, #7b2ff7);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.er-studio-body .promo-access-indicator::before {
+    content: "🎃";
+}
+
+/* Enhanced Lens Bubble Consistency */
+.er-studio-body .er-lens-bubble {
+    transition: all 0.2s ease;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.er-studio-body .er-lens-bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+    border-color: rgba(255, 107, 53, 0.3);
+}
+
+.er-studio-body .er-lens-bubble.active {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(123, 47, 247, 0.2));
+    border-color: var(--halloween-orange);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+/* Premium Lens Bubble Styling */
+.er-studio-body .er-lens-bubble.premium {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(123, 47, 247, 0.1));
+    border: 2px solid var(--halloween-orange);
+}
+
+.er-studio-body .er-lens-bubble.premium::after {
+    content: "💎";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--halloween-orange);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Halloween Category Pills Enhanced */
+.er-studio-body .cat-pill {
+    transition: all 0.2s ease;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.er-studio-body .cat-pill:hover {
+    background: rgba(255, 107, 53, 0.1);
+    border-color: var(--halloween-orange);
+    transform: translateY(-1px);
+}
+
+.er-studio-body .cat-pill.active {
+    background: linear-gradient(135deg, var(--halloween-orange), var(--halloween-purple));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+/* Enhanced License Chip for Halloween */
+.er-studio-body .er-license-chip {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.er-studio-body .er-license-chip.promo-active {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(123, 47, 247, 0.2));
+    border-color: var(--halloween-orange);
+    color: white;
+}
+
+.er-studio-body .er-license-chip.promo-active .er-license-chip-icon {
+    color: var(--halloween-accent);
+}
+
+.er-studio-body .er-license-chip-btn {
+    background: linear-gradient(135deg, var(--halloween-orange), var(--halloween-purple));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.er-studio-body .er-license-chip-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
 }
 
 
