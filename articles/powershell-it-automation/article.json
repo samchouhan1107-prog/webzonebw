@@ -1,0 +1,11 @@
+{
+    "title": "PowerShell IT Automation: Practical Scripts for Everyday Administration",
+    "description": "A practical guide to PowerShell scripting for IT administrators covering user management, service monitoring, automated reporting, and Active Directory tasks with production-ready examples.",
+    "date": "2026-09-05",
+    "category": "IT Automation & Scripting",
+    "tags": ["powershell", "automation", "windows", "active-directory", "scripting", "it-support"],
+    "readTime": "10 min read",
+    "slug": "powershell-it-automation",
+    "featured": true,
+    "author": "Sameer Chouhan"
+}

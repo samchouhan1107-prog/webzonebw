@@ -342,8 +342,14 @@
     </script>
 
 
-<script src="https://5gvci.com/act/files/tag.min.js?z=11642202" data-cfasync="false" async></script>
-<script>(function(s){s.dataset.zone='11804293',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<!-- =====================================================
+         MONETIZATION / AD PLACEMENT
+         ===================================================== -->
+    <div id="nativeAdSlot" class="er-native-ad-slot">
+        <!-- Temporary Ad Tag Integration -->
+        <script src="https://5gvci.com/act/files/tag.min.js?z=11642202" data-cfasync="false" async></script>
+    </div>
+
 </head>
 
 
@@ -1853,11 +1859,13 @@
 
 
 <!-- =====================================================
-     EXISTING WEBZONEBW SCRIPTS
+     STUDIO UI OVERLAYS (MODALS/DRAWERS/SLABS)
+     ===================================================== -->
 
-     IMPORTANT:
-     These remain in place because the existing project
-     depends on them.
+<div id="erStudioOverlayContainer" class="er-overlay-container" style="display:none;"></div>
+
+<!-- =====================================================
+     EXISTING WEBZONEBW SCRIPTS
      ===================================================== -->
 
 <script defer src="../js/script.js?v=2.2.0"></script>
@@ -1870,11 +1878,11 @@
 
 
 <!-- =====================================================
-     ER STUDIO CONTROLLERS (theme, launch UI, camera
-     stability guard, ready marker)
+     ER STUDIO CONTROLLERS & DATA PIPELINE
      ===================================================== -->
 
 <script defer src="../js/er-studio.js?v=2.2.0"></script>
+<script defer src="../js/er-studio-pipeline.js?v=2.2.0"></script>
 
 </body>
 
