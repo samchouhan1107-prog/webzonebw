@@ -32,9 +32,7 @@ const helmet = require("helmet");
  * PATH CONFIGURATION
  * ============================================================ */
 
-// Fix for ESM compatibility in CommonJS - use __filename directly
-const __filename = fileURLToPath ? fileURLToPath(import.meta.url) : __filename;
-const __dirname = path.dirname(__filename);
+// In CommonJS, __filename and __dirname are already available
 
 /* ============================================================
  * APPLICATION CONFIGURATION
