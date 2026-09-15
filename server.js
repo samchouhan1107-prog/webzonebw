@@ -1,6 +1,6 @@
 /* ============================================================
- * WEBZONEBW — WEB SERVER
- * WEBZONE ER — STATIC SITE ENGINE
+ * WEBZONEBW - WEB SERVER
+ * WEBZONE ER - STATIC SITE ENGINE
  * ------------------------------------------------------------
  * Version: 2.3.0
  * Port: 3000
@@ -15,15 +15,9 @@
 
 "use strict";
 
-const dotenv = require("dotenv");
+require("dotenv").config();
 
-// Load environment variables from .env before anything reads process.env
-const dotenvResult = dotenv.config();
-if (!dotenvResult.error) {
-    console.log(
-        `[env] Loaded environment variables from ${dotenvResult.parsed ? Object.keys(dotenvResult.parsed).length : 0} key(s) in .env`,
-    );
-}
+console.log(`[env] Environment: ${process.env.NODE_ENV || 'development'}`);
 
 const express = require("express");
 const fs = require("fs");
@@ -38,7 +32,8 @@ const helmet = require("helmet");
  * PATH CONFIGURATION
  * ============================================================ */
 
-const __filename = fileURLToPath(import.meta.url);
+// Fix for ESM compatibility in CommonJS - use __filename directly
+const __filename = fileURLToPath ? fileURLToPath(import.meta.url) : __filename;
 const __dirname = path.dirname(__filename);
 
 /* ============================================================
@@ -63,27 +58,23 @@ const IS_PRODUCTION = NODE_ENV === "production";
 app.disable("x-powered-by");
 
 // Brotli/Gzip Compression
-app.use(
-    compression({
-        level: 6,
-        threshold: 1024,
-        filter: (req, res) => {
-            if (req.headers["x-no-compression"]) {
-                return false;
-            }
-            return compression.filter(req, res);
-        }
-    })
-);
+app.use(compression({
+  level: 6,
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers["x-no-compression"]) {
+      return false;
+    }
+    return compression.filter(req, res);
+  }
+}));
 
 // Helmet Configuration (relaxed for Google Analytics, AdSense, etc.)
-app.use(
-    helmet({
-        contentSecurityPolicy: false,
-        crossOriginEmbedderPolicy: false,
-        crossOriginResourcePolicy: false
-    })
-);
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: false
+}));
 
 if (process.env.TRUST_PROXY === "true") {
     app.set("trust proxy", 1);
@@ -112,19 +103,19 @@ app.use((req, res, next) => {
 
 /*
  * Raw-body capture: webhook signature verification MUST run against
- * the exact bytes PayPal signed — re-serializing the parsed object
+ * the exact bytes PayPal signed - re-serializing the parsed object
  * does not byte-match and would reject valid webhooks.
  */
 app.use(express.json({
-    limit: "25mb",
-    verify: (req, res, buf) => {
-        req.rawBody = buf;
-    }
+  limit: "25mb",
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
 }));
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
 /* ============================================================
- * CORS — required when the static frontend is served from a
+ * CORS - required when the static frontend is served from a
  * different origin (e.g. GitHub Pages) than this API server.
  * Configure ALLOWED_ORIGINS as a comma-separated list.
  * Same-origin requests are always allowed.
@@ -232,7 +223,7 @@ app.use("/api", (req, res, next) => {
     next();
 });
 
-// --- PayPal API Configuration (PayPal ONLY — no other gateway) ---
+// --- PayPal API Configuration (PayPal ONLY - no other gateway) ---
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 const PAYPAL_MODE = process.env.PAYPAL_MODE || "sandbox";
@@ -244,18 +235,18 @@ const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID;
 /* PayPal does not settle INR; ₹499 is charged as the USD equivalent. */
 const ER_PREMIUM_AMOUNT_USD = 5.99;
 
-/* Direct / manual order channel — buyers without PayPal can email us.
+/* Direct / manual order channel - buyers without PayPal can email us.
  * Configured ONLY server-side via ORDER_EMAIL in the environment.
  * No fallback: if unset, /api/order-email returns ORDER_EMAIL_NOT_CONFIGURED. */
 const ORDER_EMAIL = process.env.ORDER_EMAIL || null;
 
 // --- ER Studio Premium License Configuration ---
 const ER_PREMIUM_PLAN = "er-studio-premium";
-const ER_PREMIUM_AMOUNT = 499; // ₹499 — one-time ER Studio license
+const ER_PREMIUM_AMOUNT = 499; // ₹499 - one-time ER Studio license
 const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
 /*
- * License store — persisted to disk so licenses survive
+ * License store - persisted to disk so licenses survive
  * server restarts. In production this should be a real DB.
  */
 const licenseStore = {
@@ -299,7 +290,7 @@ function generateLicenseKey() {
 }
 
 /* ============================================================
- * PAYPAL HELPERS — OAuth token + order creation + capture
+ * PAYPAL HELPERS - OAuth token + order creation + capture
  * ============================================================ */
 
 async function getPayPalToken() {
@@ -336,12 +327,12 @@ async function paypalRequest(accessToken, method, resourcePath, body) {
 }
 
 /* ============================================================
- * PAYPAL PAYMENT ENDPOINTS — ER STUDIO PREMIUM LICENSE (₹499)
+ * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE (₹499)
  * PayPal ONLY. Fail-closed without credentials.
  * ============================================================ */
 
 /*
- * Client-facing order creation — matches the er-license.js flow:
+ * Client-facing order creation - matches the er-license.js flow:
  * returns the PayPal order id + the public client id so the PayPal
  * JS SDK Buttons can be rendered. No secrets are exposed here.
  */
@@ -561,7 +552,7 @@ app.post("/api/paypal/capture", async (req, res) => {
             console.warn("[WEBZONEBW] PayPal capture not completed:", captureStatus, data && data.message);
             return res.status(402).json({
                 success: false,
-                error: "PAYMENT_NOT_VERIFIED — PayPal has not confirmed this payment. Premium stays locked."
+                error: "PAYMENT_NOT_VERIFIED - PayPal has not confirmed this payment. Premium stays locked."
             });
         }
 
@@ -587,7 +578,7 @@ app.post("/api/paypal/capture", async (req, res) => {
 });
 
 /*
- * PayPal webhook (backup channel — capture endpoint is primary).
+ * PayPal webhook (backup channel - capture endpoint is primary).
  * If a webhook secret is configured, requests must be verifiable;
  * otherwise the endpoint refuses to act (fail-closed).
  */
@@ -639,7 +630,7 @@ app.post("/api/paypal/webhook", async (req, res) => {
 });
 
 /* ------------------------------------------------------------
- * MANUAL ORDER SUPPORT — licenses for email orders issued by the
+ * MANUAL ORDER SUPPORT - licenses for email orders issued by the
  * owner after confirming payment (UPI/bank transfer etc. via the
  * configured ORDER_EMAIL address). Guarded by an admin key, never public.
  * ------------------------------------------------------------ */
@@ -704,7 +695,7 @@ app.post("/api/license/activate", (req, res) => {
         if (storedOrder.status !== "PAID" || !storedOrder.licenseKey) {
             return res.status(402).json({
                 success: false,
-                error: "PAYMENT_NOT_VERIFIED — PayPal has not confirmed this payment. Premium stays locked."
+                error: "PAYMENT_NOT_VERIFIED - PayPal has not confirmed this payment. Premium stays locked."
             });
         }
 
@@ -724,7 +715,7 @@ app.post("/api/license/activate", (req, res) => {
 });
 
 /* ------------------------------------------------------------
- * LICENSE VERIFICATION — persistent re-check on every session
+ * LICENSE VERIFICATION - persistent re-check on every session
  * ------------------------------------------------------------ */
 app.post("/api/license/verify", (req, res) => {
     const { licenseKey } = req.body || {};
@@ -1015,7 +1006,7 @@ process.on("unhandledRejection", (reason) => {
 });
 
 /* ============================================================
- * SERVER START — HTTP & HTTPS SECURE CONTEXT
+ * SERVER START - HTTP & HTTPS SECURE CONTEXT
  * ============================================================ */
 
 const HTTPS_PORT = Number(process.env.HTTPS_PORT) || 3443;
