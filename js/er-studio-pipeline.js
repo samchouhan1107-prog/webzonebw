@@ -136,13 +136,48 @@
 
     articles: [
       {
+        id: "webzonebw-studio-overview",
+        title:
+          "WebZoneBW Studio: Lenses, Feature Packs, Updates & the Creative Experience",
+        slug: "webzonebw-studio-lenses-creative-experience",
+        excerpt:
+          "The complete guide to WebZoneBW Studio — lenses, Feature Packs, updates, mobile and desktop experience, hardware care and ownership benefits.",
+        url: "https://webzonebw.in/articles/webzonebw-studio-lenses-creative-experience/",
+        thumbnail: "../assets/logo.png",
+        category: "Studio Guide",
+        contentType: "ARTICLE",
+        lensId: null,
+        featurePackId: null,
+        publishedAt: "2026-10-27",
+        updatedAt: "2026-10-27",
+        status: "published",
+        visibility: "public",
+        isPremium: false,
+        isOwnedContent: false,
+        featured: true,
+        /* Future topic pipeline — each topic connects to the relevant
+           Lens / Feature Pack through existing metadata. */
+        futureTopics: [
+          { id: "whats-new-studio", title: "What's New in WebZoneBW Studio", lensId: null, featurePackId: null },
+          { id: "feature-packs-explained", title: "How WebZoneBW Lens Feature Packs Work", lensId: null, featurePackId: null },
+          { id: "behind-a-lens", title: "Behind the Creation of a WebZoneBW Lens", lensId: "neon-cyber-lens", featurePackId: "neon-cyber-pack" },
+          { id: "new-premium-effects", title: "New Premium Effects & Creative Updates", lensId: "phantom-spectral-lens", featurePackId: "phantom-spectral-pack" },
+          { id: "best-camera-filters", title: "Best Ways to Use WebZoneBW Camera Filters", lensId: "volcanic-ember-lens", featurePackId: "volcanic-ember-pack" },
+          { id: "halloween-studio-releases", title: "Halloween Studio: New Experiences & Releases", lensId: "pumpkin-patch-lens", featurePackId: "pumpkin-patch-pack" },
+          { id: "sounds-tunes-effects", title: "WebZoneBW Sounds, Tunes & Visual Effects", lensId: "neon-cyber-lens", featurePackId: "neon-cyber-pack" },
+          { id: "lens-setup-hardware-care", title: "Lens Setup, Camera Tips & Hardware Care", lensId: null, featurePackId: null },
+          { id: "studio-troubleshooting", title: "WebZoneBW Studio Troubleshooting Guide", lensId: null, featurePackId: null },
+          { id: "upcoming-lenses", title: "Upcoming Lenses, Features & Experiments", lensId: null, featurePackId: null },
+        ],
+      },
+      {
         id: "neon-cyber-getting-started",
         title: "Getting Started with Neon Cyber Lens",
         slug: "getting-started-neon-cyber-lens",
         excerpt:
           "Learn how to configure your camera lighting and calibrate facial mesh tracking for optimal cyberpunk shader performance.",
         content:
-          "Welcome to the Neon Cyber Feature Pack! To get the most vibrant neon particle and grid response, ensure your face is evenly lit with balanced ambient lighting. Use the WebZoneBW Studio camera tilt controls to position the cybernetic HUD overlays...",
+          "Welcome to the Neon Cyber Feature Pack! To achieve the most vibrant neon particle and grid response, ensure your face is evenly lit with balanced ambient lighting. Utilize the WebZoneBW Studio camera tilt controls to precisely position the cybernetic HUD overlays. Calibrate your facial mesh tracking in a well-lit environment to maximize shader responsiveness.",
         thumbnail: "../assets/logo.png",
         category: "Tutorial",
         contentType: "ARTICLE",
@@ -163,7 +198,7 @@
         excerpt:
           "Discover tips and tricks for creating cinematic fiery portraits using the Volcanic Ember Lens.",
         content:
-          "Volcanic embers react in real-time to camera motion. Try gentle panning to watch the particle drift synchronize with your frame rate...",
+          "Volcanic embers react in real-time to your camera motion. For best results, try gentle, fluid panning to watch the particle drift synchronize perfectly with your frame rate and facial expressions. This effect is optimized for high-contrast environments.",
         thumbnail: "../assets/logo.png",
         category: "Getting Started",
         contentType: "TUTORIAL",
@@ -184,7 +219,7 @@
         excerpt:
           "Advanced guide to chromatic aberration and ghostly veil shaders in WebZoneBW-ER Studio.",
         content:
-          "Unlock eerie spectral dimensions with chromatic glitch filters. Perfect for atmospheric Halloween storytelling and cinematic reels.",
+          "Unlock eerie spectral dimensions with these high-performance chromatic glitch filters. Perfect for atmospheric Halloween storytelling, cinematic reels, and immersive digital photography. Follow our guide to fine-tune your tracking settings for the best glitch synchronization.",
         thumbnail: "../assets/logo.png",
         category: "Studio Updates",
         contentType: "ARTICLE",
@@ -201,6 +236,18 @@
     ],
 
     news: [
+      {
+        id: "news-104",
+        title: "New Guide: Lenses, Feature Packs & the Creative Experience",
+        excerpt:
+          "A complete WebZoneBW Studio overview — how lenses, Feature Packs, updates and ownership benefits fit together.",
+        category: "NEW",
+        url: "https://webzonebw.in/articles/webzonebw-studio-lenses-creative-experience/",
+        lensId: null,
+        featurePackId: null,
+        status: "NEW",
+        date: "2026-10-27",
+      },
       {
         id: "news-101",
         title: "Neon Cyber Lens v1.2 Update Released",
@@ -614,11 +661,14 @@
         // Build News & Updates
         var newsHtml = window.WEBZONEBW_STUDIO_REGISTRY.news
           .map(function (n) {
+            var titleHtml = n.url
+              ? `<a href="${n.url}" target="_blank" rel="noopener"><h5>${n.title}</h5></a>`
+              : `<h5>${n.title}</h5>`;
             return `
                         <div class="er-news-item">
                             <span class="er-badge-pill ${n.status.toLowerCase()}">${n.status}</span>
                             <div>
-                                <h5>${n.title}</h5>
+                                ${titleHtml}
                                 <p>${n.excerpt}</p>
                                 <small>${n.date}</small>
                             </div>
