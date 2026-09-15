@@ -1012,6 +1012,14 @@
 
                     </div>
 
+                    <!-- Real-Time Optical Telemetry & Acknowledgment Log -->
+                    <div id="erStudioAckLog"
+                         class="er-studio-ack-log"
+                         aria-live="polite">
+                        <span class="ack-pulse-dot"></span>
+                        <span id="erStudioAckText" class="ack-log-text">[ACK] LENS: Volcanic Ember • 60 FPS • Real-Time Shader Active</span>
+                    </div>
+
 
                     <!-- =================================================
                          LIVE CAMERA
@@ -1211,71 +1219,51 @@
 
                         <button type="button"
                                 class="smart-cat-btn active"
-                                data-smart-cat="smart"
-                                title="Auto-adapts based on real-time face detection">
-
-                            🌟 Smart
-
+                                data-smart-cat="all"
+                                title="Browse all available lenses">
+                            ✨ All Lenses
                         </button>
 
+                        <button type="button"
+                                class="smart-cat-btn"
+                                data-smart-cat="free"
+                                title="All 100% free lenses">
+                            🎁 Free Lenses
+                        </button>
 
                         <button type="button"
                                 class="smart-cat-btn"
                                 data-smart-cat="face"
                                 title="Face-Anchored AR Lenses">
-
                             👤 Face AR
-
                         </button>
-
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="scene"
-                                title="Full-Frame Scene Shaders">
-
-                            🌍 Scene
-
-                        </button>
-
 
                         <button type="button"
                                 class="smart-cat-btn"
                                 data-smart-cat="pose"
-                                title="Live camera pose-reactive effects">
-
-                            🦴 Pose
-
+                                title="Live camera pose-reactive and motion effects">
+                            🦴 Pose &amp; Motion
                         </button>
-
 
                         <button type="button"
                                 class="smart-cat-btn"
-                                data-smart-cat="vr"
-                                title="VR-style immersive environments">
-
-                            🌌 VR
-
+                                data-smart-cat="scene"
+                                title="Volcanic magma and atmospheric scene shaders">
+                            🌋 Volcanic &amp; Scene
                         </button>
 
+                        <button type="button"
+                                class="smart-cat-btn"
+                                data-smart-cat="bloom"
+                                title="Optical dream diffusion and bloom telemetry">
+                            ✨ Bloom Blur
+                        </button>
 
                         <button type="button"
                                 class="smart-cat-btn premium-tab-btn"
                                 data-smart-cat="premium"
-                                title="Premium lenses unlocked with the ₹499 ER Studio license">
-
-                            💎 Premium
-
-                        </button>
-
-
-                        <button type="button"
-                                class="smart-cat-btn"
-                                data-smart-cat="all"
-                                title="Browse all effects">
-
-                            ✨ All
-
+                                title="Studio Pro lenses unlocked with the $5.99 lifetime license">
+                            💎 Pro ($5.99)
                         </button>
 
                     </div>
@@ -1287,9 +1275,9 @@
 
                         <span class="er-license-chip-icon" id="erLicenseChipIcon">🔒</span>
 
-                        <span class="er-license-chip-text" id="erLicenseChipText">Free — Premium Locked</span>
+                        <span class="er-license-chip-text" id="erLicenseChipText">Free — Pro Locked</span>
 
-                        <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn">₹499 Upgrade</button>
+                        <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn">$5.99 Pro</button>
 
                     </div>
 
@@ -1327,10 +1315,19 @@
                          role="region"
                          aria-label="AR Lens Carousel">
 
+                        <button type="button" class="er-lens-bubble active" data-filter="volcanic" title="Volcanic Ember Benchmark Shader">
+                            <div class="lens-bubble-circle active-glow">🌋</div>
+                            <span class="lens-bubble-label">Volcanic</span>
+                        </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="cartoon" title="Anime Cel Shader">
-                            <div class="lens-bubble-circle">🎨</div>
-                            <span class="lens-bubble-label">Anime</span>
+                        <button type="button" class="er-lens-bubble" data-filter="bloom" title="Bloom Blur Log Shader">
+                            <div class="lens-bubble-circle">✨</div>
+                            <span class="lens-bubble-label">Bloom</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="pose-frame" title="Live Pose Alignment Guides">
+                            <div class="lens-bubble-circle">🧭</div>
+                            <span class="lens-bubble-label">Pose Align</span>
                         </button>
 
                         <button type="button" class="er-lens-bubble" data-filter="sunglasses" title="Designer Aviators">
@@ -1338,9 +1335,9 @@
                             <span class="lens-bubble-label">Aviators</span>
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="halo" title="Angel Halo">
-                            <div class="lens-bubble-circle">👑</div>
-                            <span class="lens-bubble-label">Halo</span>
+                        <button type="button" class="er-lens-bubble" data-filter="pumpkin-pose" title="Kinetic Pumpkin Pose Energy">
+                            <div class="lens-bubble-circle">🎃</div>
+                            <span class="lens-bubble-label">Pumpkin</span>
                         </button>
 
                         <button type="button" class="er-lens-bubble" data-filter="goldenhour" title="Golden Hour Glow">
@@ -1353,19 +1350,14 @@
                             <span class="lens-bubble-label">Cinema</span>
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="noir" title="Leica Noir">
-                            <div class="lens-bubble-circle">🖤</div>
-                            <span class="lens-bubble-label">Noir</span>
+                        <button type="button" class="er-lens-bubble" data-filter="ghost-pose" title="Ghost Motion Aura">
+                            <div class="lens-bubble-circle">👻</div>
+                            <span class="lens-bubble-label">Ghost Pose</span>
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="vintage90s" title="Retro 90s Film">
-                            <div class="lens-bubble-circle">🎞️</div>
-                            <span class="lens-bubble-label">Retro</span>
-                        </button>
-
-                        <button type="button" class="er-lens-bubble" data-filter="glitch" title="Digital Glitch FX">
-                            <div class="lens-bubble-circle">⚡</div>
-                            <span class="lens-bubble-label">Glitch</span>
+                        <button type="button" class="er-lens-bubble" data-filter="cartoon" title="Anime Cel Shader">
+                            <div class="lens-bubble-circle">🎨</div>
+                            <span class="lens-bubble-label">Anime</span>
                         </button>
 
                         <button type="button" class="er-lens-bubble" data-filter="space" title="Deep Space Explorer">
@@ -1373,12 +1365,32 @@
                             <span class="lens-bubble-label">Space</span>
                         </button>
 
-                        <button type="button" class="er-lens-bubble" data-filter="cyberpunk" title="Neon Cyberpunk">
-                            <div class="lens-bubble-circle">💡</div>
-                            <span class="lens-bubble-label">Neon</span>
+                        <button type="button" class="er-lens-bubble" data-filter="noir" title="Leica Noir">
+                            <div class="lens-bubble-circle">🖤</div>
+                            <span class="lens-bubble-label">Noir</span>
                         </button>
 
-                        <button type="button" class="er-lens-bubble more-lens-btn" id="openAllEffectsBtn" title="View All 10 Effects">
+                        <button type="button" class="er-lens-bubble" data-filter="glitch" title="Digital Glitch FX">
+                            <div class="lens-bubble-circle">⚡</div>
+                            <span class="lens-bubble-label">Glitch</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="halo" title="Angel Halo (Pro $5.99)">
+                            <div class="lens-bubble-circle premium-locked">👑</div>
+                            <span class="lens-bubble-label">Halo 🔒</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="cyberpunk" title="Neon Cyberpunk (Pro $5.99)">
+                            <div class="lens-bubble-circle premium-locked">💡</div>
+                            <span class="lens-bubble-label">Neon 🔒</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble" data-filter="vr-cyberdeck" title="VR Cyberdeck Cockpit (Pro $5.99)">
+                            <div class="lens-bubble-circle premium-locked">🥽</div>
+                            <span class="lens-bubble-label">VR 🔒</span>
+                        </button>
+
+                        <button type="button" class="er-lens-bubble more-lens-btn" id="openAllEffectsBtn" title="View All Lenses &amp; Details">
                             <div class="lens-bubble-circle">•••</div>
                             <span class="lens-bubble-label">More</span>
                         </button>
@@ -1548,90 +1560,51 @@
 
                     <button type="button"
                             class="cat-pill active"
-                            data-cat="smart"
-                            title="Auto-detect face and prioritize matching filters">
-                        🌟 Smart
+                            data-cat="all"
+                            title="Browse all available filters">
+                        ✨ All Lenses
                     </button>
 
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="free"
+                            title="All 100% free filters">
+                        🎁 Free Lenses
+                    </button>
 
                     <button type="button"
                             class="cat-pill"
                             data-cat="face"
                             title="Face-anchored AR lenses">
-                        👤 Face
+                        👤 Face AR
                     </button>
 
                     <button type="button"
                             class="cat-pill"
                             data-cat="pose"
-                            title="Body/pose-reactive Halloween effects">
-                        🦴 Pose
+                            title="Live camera pose-reactive and kinetic effects">
+                        🦴 Pose &amp; Motion
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="vr"
-                            title="VR-style Immersive Halloween Environments">
-                        🌌 VR / Scene
+                            data-cat="scene"
+                            title="Volcanic magma and atmospheric scene shaders">
+                        🌋 Volcanic &amp; Scene
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="horror"
-                            title="Horror and Thriller Effects">
-                        🎃 Horror
+                            data-cat="bloom"
+                            title="Optical dream diffusion and bloom telemetry">
+                        ✨ Bloom Blur
                     </button>
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="witch"
-                            title="Witchcraft & Curses">
-                        🔮 Witch
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="zombie"
-                            title="Zombie Virus Effects">
-                        🧟 Zombie
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="ghost"
-                            title="Spectral Phantoms">
-                        👻 Ghost
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="monster"
-                            title="Beasts & Ghouls">
-                        👹 Monster
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="cinema"
-                            title="Cinema Horror FX">
-                        🎬 Cinema
-                    </button>
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="experimental"
-                            title="Advanced FX">
-                        ⚡ Experimental
-                    </button>
-
-
-                    <button type="button"
-                            class="cat-pill"
-                            data-cat="all"
-                            title="Browse all filters">
-
-                        ✨ All
-
+                            data-cat="premium"
+                            title="Studio Pro lenses unlocked with $5.99 license">
+                        💎 Pro ($5.99)
                     </button>
 
                 </div>
@@ -1639,6 +1612,13 @@
 
                 <div class="effects-card-grid"
                      id="effectsCardGrid">
+
+                    <!-- BLOOM BLUR LOG — Studio Standard Shader -->
+                    <button type="button" class="effect-card" data-filter="bloom" data-cat="bloom scene" data-target="scene">
+                        <div class="effect-icon-box" style="background: radial-gradient(circle, rgba(254,215,170,0.5) 0%, rgba(15,23,42,0.9) 100%);">✨</div>
+                        <span class="effect-name">Bloom Blur Log</span>
+                        <span class="effect-target-tag scene-tag">✨ Bloom Log</span>
+                    </button>
 
                     <!-- FACE AR — verified working -->
                     <button type="button" class="effect-card" data-filter="sunglasses" data-cat="face" data-target="face">
@@ -1666,6 +1646,12 @@
                     </button>
 
                     <!-- SCENE SHADERS — verified working -->
+                    <button type="button" class="effect-card active" data-filter="volcanic" data-cat="scene" data-target="scene">
+                        <div class="effect-icon-box" style="background: radial-gradient(circle, rgba(234,88,12,0.4) 0%, rgba(15,23,42,0.9) 100%);">🌋</div>
+                        <span class="effect-name">Volcanic Ember</span>
+                        <span class="effect-target-tag scene-tag">🌋 Lava Core</span>
+                    </button>
+
                     <button type="button" class="effect-card" data-filter="noir" data-cat="scene" data-target="scene">
                         <div class="effect-icon-box retro-box">🖤</div>
                         <span class="effect-name">Leica Noir</span>

@@ -67,21 +67,23 @@ app.use(compression({
   }
 }));
 
-// Helmet Configuration (relaxed for Google Analytics, AdSense, etc.)
+// Helmet Configuration (relaxed for Google Analytics, AdSense, etc. and configured for AI Studio iframe preview)
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
-  crossOriginResourcePolicy: false
+  crossOriginResourcePolicy: false,
+  crossOriginOpenerPolicy: false,
+  frameguard: false
 }));
 
 if (process.env.TRUST_PROXY === "true") {
     app.set("trust proxy", 1);
 }
 
-// Media & Camera Permissions-Policy Headers
+// Media & Camera Permissions-Policy Headers (enables camera and microphone in AI Studio preview iframe)
 app.use((req, res, next) => {
-    res.setHeader("Permissions-Policy", "camera=(self), microphone=(self)");
-    res.setHeader("Feature-Policy", "camera 'self'; microphone 'self'");
+    res.setHeader("Permissions-Policy", "camera=*, microphone=*");
+    res.setHeader("Feature-Policy", "camera *; microphone *");
     next();
 });
 
@@ -89,9 +91,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-    res.setHeader("X-Frame-Options", "SAMEORIGIN");
     res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-    res.setHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()");
     next();
 });
 
@@ -230,7 +230,7 @@ const PAYPAL_BASE_URL = PAYPAL_MODE === "production"
     : "https://api-m.sandbox.paypal.com";
 const PAYPAL_CURRENCY = process.env.PAYPAL_CURRENCY || "USD";
 const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID;
-/* PayPal does not settle INR; ₹499 is charged as the USD equivalent. */
+/* Standard ER Studio Pro flat pricing: $5.99 USD one-time lifetime. */
 const ER_PREMIUM_AMOUNT_USD = 5.99;
 
 /* Direct / manual order channel - buyers without PayPal can email us.
@@ -305,7 +305,7 @@ function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
 
 // --- ER Studio Premium License Configuration ---
 const ER_PREMIUM_PLAN = "er-studio-premium";
-const ER_PREMIUM_AMOUNT = 499; // ₹499 - one-time ER Studio license
+const ER_PREMIUM_AMOUNT = 5.99; // $5.99 USD - one-time ER Studio Pro license
 const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
 /*
@@ -390,7 +390,7 @@ async function paypalRequest(accessToken, method, resourcePath, body) {
 }
 
 /* ============================================================
- * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE (₹499)
+ * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PRO LICENSE ($5.99)
  * PayPal ONLY. Fail-closed without credentials.
  * ============================================================ */
 
