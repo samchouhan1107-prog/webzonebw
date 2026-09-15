@@ -15,25 +15,24 @@
 
 "use strict";
 
-import { config as dotenvConfig } from "dotenv";
+const dotenv = require("dotenv");
 
 // Load environment variables from .env before anything reads process.env
-const dotenvResult = dotenvConfig();
+const dotenvResult = dotenv.config();
 if (!dotenvResult.error) {
     console.log(
         `[env] Loaded environment variables from ${dotenvResult.parsed ? Object.keys(dotenvResult.parsed).length : 0} key(s) in .env`,
     );
 }
 
-import express from "express";
-import fs from "fs";
-import path from "path";
-import https from "https";
-import http from "http";
-import { fileURLToPath } from "url";
-import crypto from "crypto";
-import compression from "compression";
-import helmet from "helmet";
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
+const http = require("http");
+const crypto = require("crypto");
+const compression = require("compression");
+const helmet = require("helmet");
 
 /* ============================================================
  * PATH CONFIGURATION

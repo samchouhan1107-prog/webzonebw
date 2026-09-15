@@ -2,7 +2,6 @@
   "name": "webzonebw-in",
   "version": "1.0.0",
   "description": "WEBZONEBW.in — Technology, AI, Innovation and Interactive Web Experiences",
-  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
