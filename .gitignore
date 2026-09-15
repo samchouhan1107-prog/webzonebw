@@ -7,3 +7,8 @@ node_modules/
 
 # HTTPS dev certificates (never commit)
 certs/
+
+# ER Studio license persistence (never commit customer/license data)
+data/
+# Real environment config (never commit secrets)
+.env

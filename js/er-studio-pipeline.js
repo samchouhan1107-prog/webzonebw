@@ -1,7 +1,7 @@
 /* =====================================================
    WEBZONEBW-ER STUDIO EXTENDED DATA & PIPELINE
    Feature Packs, Lenses, Articles, News, Sounds,
-   Hardware Care, Remote Assistance & Cashfree Flow.
+   Hardware Care, Remote Assistance & PayPal checkout flow.
    ===================================================== */
 
 (function () {
@@ -332,135 +332,68 @@
     ],
   };
 
-  /* Server-Side Entitlement & Ownership Authority */
+  /* Server-Side Entitlement & Ownership Authority
+   *
+   * Premium ownership is granted ONLY through a verified
+   * WebZoneBW ER Studio license (₹499 purchase). The old
+   * localStorage "owned lenses" path could unlock premium
+   * content without payment and is now license-gated.
+   */
   window.WEBZONEBW_ENTITLEMENT_MANAGER = {
-    getOwnedLensIds: function () {
-      try {
-        var stored = localStorage.getItem("webzonebw_owned_lenses");
-        if (stored) {
-          var parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch (e) {}
-      // Default free lenses owned automatically
-      return ["volcanic-ember-lens", "pumpkin-patch-lens"];
-    },
-
     isLensOwned: function (lensId) {
       var lens = window.WEBZONEBW_STUDIO_REGISTRY.lenses.find(function (l) {
         return l.id === lensId;
       });
       if (lens && !lens.isPremium) return true;
-      var owned = this.getOwnedLensIds();
-      return owned.includes(lensId);
-    },
 
-    grantLensOwnership: function (lensId) {
-      try {
-        var owned = this.getOwnedLensIds();
-        if (!owned.includes(lensId)) {
-          owned.push(lensId);
-          localStorage.setItem("webzonebw_owned_lenses", JSON.stringify(owned));
-        }
-        // Trigger UI refresh
-        if (
-          window.WEBZONEBW_STUDIO_UI &&
-          typeof window.WEBZONEBW_STUDIO_UI.refresh === "function"
-        ) {
-          window.WEBZONEBW_STUDIO_UI.refresh();
-        }
-      } catch (e) {}
+      // Premium lenses require an active verified license
+      if (
+        window.WEBZONEBW_LICENSE &&
+        typeof window.WEBZONEBW_LICENSE.hasActiveLicense === "function"
+      ) {
+        return window.WEBZONEBW_LICENSE.hasActiveLicense();
+      }
+
+      return false;
     },
   };
 
-  /* Cashfree Simulated Secure Payment Flow & Verification */
+  /* Real PayPal Secure Payment Flow & Verification
+   *
+   * The previous implementation simulated a payment with a
+   * setTimeout and granted ownership locally — that was a fake
+   * payment and has been removed. All purchases now go through
+   * WEBZONEBW_LICENSE (real PayPal checkout + server-side
+   * payment verification + license activation).
+   */
   window.WEBZONEBW_PAYMENT_GATEWAY = {
-    initiateCashfreeCheckout: function (
+    initiatePayPalCheckout: function (
       lensId,
       featurePackId,
       onSuccess,
       onError,
     ) {
-      var lens = window.WEBZONEBW_STUDIO_REGISTRY.lenses.find(function (l) {
-        return l.id === lensId;
-      });
-      if (!lens) {
-        if (typeof onError === "function") onError("Lens not found");
-        return;
-      }
+      if (
+        window.WEBZONEBW_LICENSE &&
+        typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
+      ) {
+        window.WEBZONEBW_LICENSE.openCheckout();
 
-      var modalHtml = `
-                <div class="er-modal-backdrop" id="cashfreeModal">
-                    <div class="er-modal-card">
-                        <div class="er-modal-header">
-                            <h3>🔐 Cashfree Secure Checkout</h3>
-                            <button class="er-modal-close" id="cfCloseBtn">&times;</button>
-                        </div>
-                        <div class="er-modal-body">
-                            <div class="cf-summary-box">
-                                <strong>Item:</strong> ${lens.name}<br>
-                                <strong>Feature Pack:</strong> Connected & Included<br>
-                                <strong>Amount:</strong> ₹499.00 (Secure UPI / Card / NetBanking)
-                            </div>
-                            <p class="cf-secure-note"><span style="color:#22c55e;">🔒 256-bit SSL Secured</span> — Server-side entitlement authority will be instantly activated upon verification.</p>
-                            <div class="cf-payment-methods">
-                                <button class="btn btn-primary cf-method-btn" data-method="upi">Pay via Google Pay / PhonePe / Paytm (UPI)</button>
-                                <button class="btn btn-secondary cf-method-btn" data-method="card">Pay via Credit / Debit Card</button>
-                            </div>
-                            <div id="cfProcessingState" style="display:none; text-align:center; padding:20px;">
-                                <div class="er-spinner"></div>
-                                <p style="margin-top:10px; color:#38bdf8;">Connecting to Cashfree Secure Gateway...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-      var container = document.getElementById("erStudioOverlayContainer");
-      if (container) {
-        container.innerHTML = modalHtml;
-        container.style.display = "block";
-
-        document
-          .getElementById("cfCloseBtn")
-          .addEventListener("click", function () {
-            container.style.display = "none";
-            container.innerHTML = "";
-          });
-
-        var methodBtns = container.querySelectorAll(".cf-method-btn");
-        methodBtns.forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            var proc = document.getElementById("cfProcessingState");
-            var methods = container.querySelector(".cf-payment-methods");
-            if (methods) methods.style.display = "none";
-            if (proc) proc.style.display = "block";
-
-            // Simulate secure server-side verification & payment gateway callback
-            setTimeout(function () {
-              window.WEBZONEBW_ENTITLEMENT_MANAGER.grantLensOwnership(lensId);
-              container.style.display = "none";
-              container.innerHTML = "";
-
-              // Show success toast
-              if (
-                window.WEBZONEBW_STUDIO_UI &&
-                typeof window.WEBZONEBW_STUDIO_UI.showToast === "function"
-              ) {
-                window.WEBZONEBW_STUDIO_UI.showToast(
-                  "🎉 Payment Verified! Lens & Feature Pack Activated.",
-                );
+        if (typeof onSuccess === "function") {
+          if (
+            window.WEBZONEBW_LICENSE &&
+            typeof window.WEBZONEBW_LICENSE.onStateChange === "function"
+          ) {
+            var handler = function () {
+              if (window.WEBZONEBW_LICENSE.hasActiveLicense()) {
+                onSuccess({ lensId: lensId, featurePackId: featurePackId, status: "LICENSE_ACTIVE" });
               }
-              if (typeof onSuccess === "function") {
-                onSuccess({
-                  lensId: lensId,
-                  featurePackId: featurePackId,
-                  status: "SUCCESS",
-                });
-              }
-            }, 1800);
-          });
-        });
+            };
+            window.WEBZONEBW_LICENSE.onStateChange(handler);
+          }
+        }
+      } else if (typeof onError === "function") {
+        onError("LICENSE_MODULE_UNAVAILABLE");
       }
     },
   };
@@ -598,7 +531,7 @@
         if (buyBtn) {
           buyBtn.addEventListener("click", function () {
             container.style.display = "none";
-            window.WEBZONEBW_PAYMENT_GATEWAY.initiateCashfreeCheckout(
+            window.WEBZONEBW_PAYMENT_GATEWAY.initiatePayPalCheckout(
               lensId,
               pack ? pack.id : null,
               function () {
@@ -695,7 +628,7 @@
                     </section>
                 `;
 
-        mainContainer.appendChild(hubDiv);
+        mainContainer.insertBefore(hubDiv, mainContainer.querySelector("footer.site-footer"));
 
         // Bind click events
         hubDiv.querySelectorAll(".view-pack-btn").forEach(function (btn) {

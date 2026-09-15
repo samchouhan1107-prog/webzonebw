@@ -1,46 +1,143 @@
-
+◇ injected env (7) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[env] Loaded environment variables from 8 key(s) in .env
 ================================================
- WEBZONEBW SERVER
+ WEBZONEBW SERVER RUNNING
 ================================================
- Project    : WEBZONEBW
- Version    : 2.2.0
- Node.js    : v24.18.0
+ Project: WEBZONEBW
+ Version: 2.3.0
+ Node.js: v24.18.0
  Environment: production
- Host       : 0.0.0.0
- Port       : 3000
- Local      : http://localhost:3000
- ER Studio  : http://localhost:3000/er/
- Halloween  : http://localhost:3000/halloween/
- Health     : http://localhost:3000/api/health
- API Status : http://localhost:3000/api/status
- Web Status : http://localhost:3000/status
+ HTTP Port: 3000
+ HTTP URL: http://localhost:3000
+ ER Studio: http://localhost:3000/er/
+ Health Endpoint: http://localhost:3000/api/health
 ================================================
-
-[WEBZONEBW] GET /er/ 200 41ms
-[WEBZONEBW] GET /css/style.css 200 4ms
-[WEBZONEBW] GET /assets/logo.png 200 6ms
-[WEBZONEBW] GET /js/beatles-playlists.js 200 5ms
-[WEBZONEBW] GET /js/script.js 200 13ms
-[WEBZONEBW] GET /js/halloween.js 200 3ms
-[WEBZONEBW] GET /er/assets/audio/The%20Beatles%20-%20Come%20Together.mp3 404 18ms
-[WEBZONEBW] GET /er/ 200 6ms
-[WEBZONEBW] GET /css/style.css 200 20ms
-[WEBZONEBW] GET /assets/logo.png 200 6ms
-[WEBZONEBW] GET /js/beatles-playlists.js 200 4ms
-[WEBZONEBW] GET /js/script.js 200 4ms
-[WEBZONEBW] GET /js/halloween.js 200 2ms
-[WEBZONEBW] GET /er/assets/audio/The%20Beatles%20-%20Come%20Together.mp3 404 4ms
-[WEBZONEBW] GET /assets/favicon.ico.ico 200 2ms
-[WEBZONEBW] GET /assets/favicon/favicon.png 200 4ms
-[WEBZONEBW] GET /er/ 200 8ms
-[WEBZONEBW] GET /css/style.css 200 9ms
-[WEBZONEBW] GET /assets/logo.png 200 19ms
-[WEBZONEBW] GET /js/beatles-playlists.js 200 10ms
-[WEBZONEBW] GET /js/script.js 200 4ms
-[WEBZONEBW] GET /js/halloween.js 200 5ms
-[WEBZONEBW] GET /er/assets/audio/The%20Beatles%20-%20Come%20Together.mp3 404 1ms
-[WEBZONEBW] GET /assets/favicon.ico.ico 200 5ms
-[WEBZONEBW] GET /assets/favicon/favicon.png 200 6ms
-[WEBZONEBW] GET /api/health 200 23ms
-[WEBZONEBW] GET / 200 6ms
-[WEBZONEBW] GET /er/ 200 13ms
+[WEBZONEBW] GET /api/health 200 20ms
+[WEBZONEBW] GET /api/health 200 2ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 0ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 1ms
+[WEBZONEBW] GET /api/health 200 109ms
+[WEBZONEBW] GET /api/paypal/client-id 503 3ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/license/activate 404 2ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] POST /api/manual-order 404 24ms
+[WEBZONEBW] GET /api/health 200 6ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 4ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 2ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 2ms
+[WEBZONEBW] GET /api/health 200 3ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 4ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 0ms
+[WEBZONEBW] POST /api/license/activate 404 0ms
+[WEBZONEBW] POST /api/paypal/webhook 503 3ms
+[WEBZONEBW] GET /api/health 200 0ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 0ms
+[WEBZONEBW] POST /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/paypal/create-order 503 0ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 0ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 2ms
+[WEBZONEBW] GET /api/health 200 8ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 0ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 0ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 3ms
+[WEBZONEBW] GET /api/health 200 6ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 3ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 0ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/activate 404 0ms
+[WEBZONEBW] POST /api/paypal/webhook 503 3ms
+[WEBZONEBW] GET /api/health 200 10ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/license/verify 200 3ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 4ms
+[WEBZONEBW] GET /api/health 200 2ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 2ms
+[WEBZONEBW] POST /api/license/activate 404 0ms
+[WEBZONEBW] POST /api/paypal/webhook 503 2ms
+[WEBZONEBW] GET /api/health 200 1ms
+[WEBZONEBW] GET /api/health 200 7ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 0ms
+[WEBZONEBW] POST /api/license/activate 404 2ms
+[WEBZONEBW] POST /api/paypal/webhook 503 2ms
+[WEBZONEBW] GET /api/health 200 8ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/license/verify 200 0ms
+[WEBZONEBW] POST /api/paypal/create-order 503 2ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 1ms
+[WEBZONEBW] GET /api/health 200 8ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 0ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 4ms
+[WEBZONEBW] GET /api/health 200 10ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 4ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 1ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 3ms
+[WEBZONEBW] GET /api/health 200 8ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/paypal/create-order 503 0ms
+[WEBZONEBW] GET /api/paypal/client-id 503 1ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 2ms
+[WEBZONEBW] GET /api/health 200 1ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/paypal/create-order 503 2ms
+[WEBZONEBW] GET /api/paypal/client-id 503 0ms
+[WEBZONEBW] GET /api/order-email 503 3ms
+[WEBZONEBW] POST /api/license/activate 404 1ms
+[WEBZONEBW] POST /api/paypal/webhook 503 2ms
+[WEBZONEBW] GET /api/health 200 6ms
+[WEBZONEBW] OPTIONS /api/license/verify 200 2ms
+[WEBZONEBW] POST /api/license/verify 200 1ms
+[WEBZONEBW] POST /api/paypal/create-order 503 0ms
+[WEBZONEBW] GET /api/paypal/client-id 503 2ms
+[WEBZONEBW] GET /api/order-email 503 1ms
+[WEBZONEBW] POST /api/license/activate 404 0ms
+[WEBZONEBW] POST /api/paypal/webhook 503 1ms

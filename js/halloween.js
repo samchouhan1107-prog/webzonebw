@@ -244,6 +244,71 @@ function initWebZoneERStudio() {
     });
   }
 
+  // =========================================================
+  // POSE / MOTION TRACKING STATE
+  // Drives POSE EFFECTS: real-time body movement energy and a
+  // coarse motion heatmap measured from the live camera feed
+  // using frame differencing on the small analysis canvas.
+  // =========================================================
+
+  let motionEnergy = 0; // smoothed 0..1 body movement energy
+  let motionGrid = []; // 6x4 coarse motion heat cells
+  let prevAnalysisFrame = null;
+  let lastMotionUpdate = 0;
+
+  for (let gi = 0; gi < 24; gi++) {
+    motionGrid.push(0);
+  }
+
+  function updateMotionTracking() {
+    if (!analysisCtx || isDemoMode || video.readyState < 2) {
+      return;
+    }
+
+    try {
+      analysisCtx.drawImage(video, 0, 0, 48, 36);
+
+      const frame = analysisCtx.getImageData(0, 0, 48, 36).data;
+
+      if (prevAnalysisFrame) {
+        let total = 0;
+
+        for (let i = 0; i < 24; i++) {
+          motionGrid[i] = 0;
+        }
+
+        for (let y = 0; y < 36; y += 1) {
+          for (let x = 0; x < 48; x += 1) {
+            const px = (y * 48 + x) * 4;
+
+            const diff =
+              Math.abs(frame[px] - prevAnalysisFrame[px]) +
+              Math.abs(frame[px + 1] - prevAnalysisFrame[px + 1]) +
+              Math.abs(frame[px + 2] - prevAnalysisFrame[px + 2]);
+
+            if (diff > 42) {
+              total += diff;
+
+              const cell =
+                Math.min(5, Math.floor(x / 8)) + Math.min(3, Math.floor(y / 9)) * 6;
+
+              motionGrid[cell] += 1;
+            }
+          }
+        }
+
+        const raw = Math.min(1, total / (48 * 36 * 10));
+
+        // Smooth so effects feel alive but do not flicker
+        motionEnergy = motionEnergy * 0.72 + raw * 0.28;
+      }
+
+      prevAnalysisFrame = frame.slice(0);
+    } catch (e) {
+      /* frame not ready */
+    }
+  }
+
   // Check Native Browser FaceDetector API
   if (typeof window !== "undefined" && "FaceDetector" in window) {
     try {
@@ -637,14 +702,93 @@ function initWebZoneERStudio() {
       desc: "Starlight nebula cosmic aura with drifting stardust",
     },
 
+    // 🦴 POSE EFFECTS — live camera pose/motion reactive
     {
-      id: "cyberpunk",
-      name: "Neon Cyber",
-      icon: "💡",
+      id: "ghost-pose",
+      name: "Ghost Pose",
+      icon: "👻",
+      category: "pose",
+      target: "pose",
+      desc: "Spectral aura that flares with your real-time body movement",
+    },
+
+    {
+      id: "pose-frame",
+      name: "Pose Align",
+      icon: "🧭",
+      category: "pose",
+      target: "pose",
+      desc: "Live pose/frame alignment guides with face anchor and level meter",
+    },
+
+    {
+      id: "pumpkin-pose",
+      name: "Pumpkin Pose",
+      icon: "🎃",
+      category: "pose",
+      target: "pose",
+      desc: "Halloween jack-o-lantern energy that bursts on body movement",
+    },
+
+    {
+      id: "witch-ritual",
+      name: "Witch Ritual",
+      icon: "🪄",
       isPremium: true,
-      category: "scene",
+      category: "pose",
+      target: "pose",
+      desc: "Halloween magic circle that charges with your pose energy",
+    },
+
+    // 🌌 VR EFFECTS — immersive environments over live camera
+    {
+      id: "vr-nebula",
+      name: "VR Nebula",
+      icon: "🪐",
+      category: "vr",
       target: "scene",
-      desc: "Vibrant synthwave neon magenta & cyan wash",
+      desc: "Immersive VR nebula environment with parallax starfield",
+    },
+
+    {
+      id: "haunted-forest",
+      name: "Haunted Forest",
+      icon: "🌲",
+      isPremium: true,
+      category: "vr",
+      target: "scene",
+      desc: "Immersive foggy Halloween forest environment with floating spirits",
+    },
+
+    {
+      id: "vr-cyberdeck",
+      name: "VR Cyberdeck",
+      icon: "🖥️",
+      isPremium: true,
+      category: "vr",
+      target: "scene",
+      desc: "Full VR headset HUD environment with live telemetry grid",
+    },
+
+    {
+      id: "vr-mansion",
+      name: "VR Haunted Manor",
+      icon: "🏚️",
+      isPremium: true,
+      category: "vr",
+      target: "scene",
+      desc: "Halloween VR haunted manor environment with drifting phantoms",
+    },
+
+    // 🎃 HORROR
+    {
+      id: "neon-horror",
+      name: "Neon Horror",
+      icon: "💀",
+      isPremium: true,
+      category: "horror",
+      target: "face",
+      desc: "Combined face transformation and haunting neon scene",
     },
   ];
 
@@ -687,6 +831,22 @@ function initWebZoneERStudio() {
 
     if (activeSmartCategory === "halloween") {
       return allFilterConfigs.filter((f) => f.category === "halloween");
+    }
+
+    if (activeSmartCategory === "premium") {
+      return allFilterConfigs.filter((f) => f.isPremium);
+    }
+
+    // Any other pill (pose, vr, horror, witch, zombie, ghost,
+    // monster, cinema, experimental) maps directly to a category.
+    if (activeSmartCategory !== "smart" && activeSmartCategory !== "all") {
+      const byCat = allFilterConfigs.filter(
+        (f) => f.category === activeSmartCategory,
+      );
+
+      if (byCat.length > 0) {
+        return byCat;
+      }
     }
 
     if (activeSmartCategory === "all") {
@@ -748,7 +908,9 @@ function initWebZoneERStudio() {
 
       btn.dataset.filter = config.id;
 
-      btn.title = `${config.name} (${config.category.toUpperCase()})`;
+      btn.title = `${config.name} (${config.category.toUpperCase()}${
+        config.isPremium && !isUserPremium() ? " • Premium 🔒" : ""
+      })`;
 
       const circle = document.createElement("div");
 
@@ -757,6 +919,10 @@ function initWebZoneERStudio() {
       }`;
 
       circle.textContent = config.icon;
+
+      if (config.isPremium && !isUserPremium()) {
+        circle.classList.add("premium-locked");
+      }
 
       const label = document.createElement("span");
 
@@ -916,7 +1082,19 @@ function initWebZoneERStudio() {
   }
 
   function isUserPremium() {
-    return localStorage.getItem("studio_plus_activated") === "true";
+    /*
+     * Premium is granted ONLY by a verified WebZoneBW ER Studio
+     * license (₹499 purchase verified server-side).
+     * No localStorage shortcut can unlock premium lenses.
+     */
+    if (
+      window.WEBZONEBW_LICENSE &&
+      typeof window.WEBZONEBW_LICENSE.hasActiveLicense === "function"
+    ) {
+      return window.WEBZONEBW_LICENSE.hasActiveLicense();
+    }
+
+    return false;
   }
 
   function selectFilter(filterName, direction = "none") {
@@ -928,11 +1106,15 @@ function initWebZoneERStudio() {
     };
 
     if (config.isPremium && !isUserPremium()) {
-      showSwipeToast("🔒", "Subscription Required!");
-      alert("This is a STUDIO+ Premium Lens. Viewing Feature Pack to unlock!");
-      if (window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.openFeaturePackModal === "function") {
-          window.WEBZONEBW_STUDIO_UI.openFeaturePackModal("neon-cyber-lens");
+      showSwipeToast("🔒", "Premium License Required!");
+
+      if (
+        window.WEBZONEBW_LICENSE &&
+        typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
+      ) {
+        window.WEBZONEBW_LICENSE.openCheckout();
       }
+
       return;
     }
 
@@ -2700,6 +2882,215 @@ function initWebZoneERStudio() {
   }
 
   // ==========================================================
+  // VIDEO RECORDING (MediaRecorder on the live effects canvas)
+  // Records exactly what the pipeline renders — camera +
+  // applied pose/VR/filter overlay — as a .webm download.
+  // Premium feature: requires a verified ER Studio license.
+  // ==========================================================
+
+  const recordVideoBtn = document.getElementById("recordVideoBtn");
+  const recordVideoIcon = document.getElementById("recordVideoIcon");
+  const recordVideoText = document.getElementById("recordVideoText");
+
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let isRecording = false;
+  let recordingStream = null;
+
+  function stopVideoRecording() {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.stop();
+    }
+  }
+
+  function toggleVideoRecording() {
+    if (isRecording) {
+      stopVideoRecording();
+      return;
+    }
+
+    if (!isUserPremium()) {
+      showSwipeToast("🔒", "Video Recording is Premium!");
+
+      if (
+        window.WEBZONEBW_LICENSE &&
+        typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
+      ) {
+        window.WEBZONEBW_LICENSE.openCheckout();
+      } else {
+        alert(
+          "⏺ Video recording is a Premium feature.\n\nUnlock it with the WebZoneBW ER Studio Premium license (₹499).",
+        );
+      }
+
+      return;
+    }
+
+    if (!canvas || typeof canvas.captureStream !== "function") {
+      showSwipeToast("⚠️", "Video recording not supported here");
+      return;
+    }
+
+    if (!mediaStream && !isDemoMode && studioMode !== "upload") {
+      startCamera();
+      return;
+    }
+
+    try {
+      recordedChunks = [];
+
+      recordingStream = canvas.captureStream(30);
+
+      const mimeType = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
+        ? "video/webm;codecs=vp9"
+        : "video/webm";
+
+      mediaRecorder = new MediaRecorder(recordingStream, {
+        mimeType: mimeType,
+        videoBitsPerSecond: 4200000,
+      });
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        isRecording = false;
+
+        if (recordVideoBtn) {
+          recordVideoBtn.classList.remove("recording");
+        }
+
+        if (recordVideoIcon) recordVideoIcon.textContent = "⏺";
+
+        if (recordVideoText) recordVideoText.textContent = "Record Video";
+
+        if (recordingStream) {
+          recordingStream.getTracks().forEach((t) => t.stop());
+
+          recordingStream = null;
+        }
+
+        const blob = new Blob(recordedChunks, { type: "video/webm" });
+
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+
+        a.href = url;
+
+        a.download = `webzonebw-er-${currentFilter}-${Date.now()}.webm`;
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        a.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+        showSwipeToast("✅", "Video saved with effects!");
+      };
+
+      mediaRecorder.start(250);
+
+      isRecording = true;
+
+      if (recordVideoBtn) recordVideoBtn.classList.add("recording");
+
+      if (recordVideoIcon) recordVideoIcon.textContent = "⏹";
+
+      if (recordVideoText) recordVideoText.textContent = "Stop Recording";
+
+      showSwipeToast("⏺", "Recording video with effects...");
+    } catch (err) {
+      console.warn("[WEBZONE ER] Video recording failed:", err);
+
+      showSwipeToast("⚠️", "Could not start recording");
+    }
+  }
+
+  if (recordVideoBtn) {
+    recordVideoBtn.addEventListener("click", toggleVideoRecording);
+  }
+
+  // Stop recording if the camera feed stops
+  const originalStopCameraFeed = stopCameraFeed;
+
+  stopCameraFeed = function () {
+    if (isRecording) {
+      stopVideoRecording();
+    }
+
+    originalStopCameraFeed();
+  };
+
+  // ==========================================================
+  // LICENSE STATUS CHIP (Premium state UI)
+  // ==========================================================
+
+  const licenseChip = document.getElementById("erLicenseChip");
+  const licenseChipIcon = document.getElementById("erLicenseChipIcon");
+  const licenseChipText = document.getElementById("erLicenseChipText");
+  const licenseChipBtn = document.getElementById("erLicenseChipBtn");
+
+  function updateLicenseChip() {
+    const premium = isUserPremium();
+
+    const pending =
+      window.WEBZONEBW_LICENSE &&
+      typeof window.WEBZONEBW_LICENSE.isVerifying === "function" &&
+      window.WEBZONEBW_LICENSE.isVerifying();
+
+    if (licenseChip) {
+      licenseChip.classList.toggle("licensed", premium);
+      licenseChip.classList.toggle("verifying", !!pending && !premium);
+    }
+
+    if (licenseChipIcon) {
+      licenseChipIcon.textContent = premium ? "💎" : pending ? "⏳" : "🔒";
+    }
+
+    if (licenseChipText) {
+      licenseChipText.textContent = premium
+        ? "Premium License Active"
+        : pending
+          ? "Verifying license..."
+          : "Free — Premium Locked";
+    }
+
+    if (licenseChipBtn) {
+      licenseChipBtn.textContent = premium ? "✓ Licensed" : "₹499 Upgrade";
+      licenseChipBtn.disabled = premium;
+    }
+  }
+
+  if (licenseChipBtn) {
+    licenseChipBtn.addEventListener("click", () => {
+      if (isUserPremium()) return;
+
+      if (
+        window.WEBZONEBW_LICENSE &&
+        typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
+      ) {
+        window.WEBZONEBW_LICENSE.openCheckout();
+      }
+    });
+  }
+
+  if (
+    window.WEBZONEBW_LICENSE &&
+    typeof window.WEBZONEBW_LICENSE.onStateChange === "function"
+  ) {
+    window.WEBZONEBW_LICENSE.onStateChange(updateLicenseChip);
+  }
+
+  updateLicenseChip();
+  setTimeout(updateLicenseChip, 2500);
+
+  // ==========================================================
   // AUDIO
   // ==========================================================
 
@@ -2877,6 +3268,13 @@ function initWebZoneERStudio() {
       ) {
         erPerf.lastFaceUpdate = time * 1000;
         updateFaceTracking();
+      }
+
+      // Pose / motion energy for POSE EFFECTS — throttled,
+      // decoupled from the paint loop like face detection.
+      if (time * 1000 - lastMotionUpdate > 110) {
+        lastMotionUpdate = time * 1000;
+        updateMotionTracking();
       }
 
       // Base live feed
@@ -3372,6 +3770,54 @@ function initWebZoneERStudio() {
 
       case "space":
         drawSpaceExplorer(ctx, w, h, time);
+
+        break;
+
+      // ==================================================
+      // POSE EFFECTS — live camera body/pose reactive
+      // ==================================================
+
+      case "ghost-pose":
+        drawGhostPoseAura(ctx, w, h, time);
+
+        break;
+
+      case "pose-frame":
+        drawPoseFrameAlign(ctx, w, h, time);
+
+        break;
+
+      case "pumpkin-pose":
+        drawPumpkinPose(ctx, w, h, time);
+
+        break;
+
+      case "witch-ritual":
+        drawWitchRitualPose(ctx, w, h, time);
+
+        break;
+
+      // ==================================================
+      // VR EFFECTS — immersive environments on live camera
+      // ==================================================
+
+      case "vr-nebula":
+        drawVRNebula(ctx, w, h, time);
+
+        break;
+
+      case "haunted-forest":
+        drawHauntedForestVR(ctx, w, h, time);
+
+        break;
+
+      case "vr-cyberdeck":
+        drawVRCyberdeck(ctx, w, h, time);
+
+        break;
+
+      case "vr-mansion":
+        drawVRHauntedMansion(ctx, w, h, time);
 
         break;
 
@@ -4422,6 +4868,815 @@ function initWebZoneERStudio() {
     ctx.fillText("🚀 ORBIT: 408 KM | O2: 98.4%", cx - h * 0.22, cy - h * 0.3);
 
     ctx.fillText("RAD: NORMAL | GRAV: 0.00G", cx - h * 0.22, cy - h * 0.3 + 14);
+
+    ctx.restore();
+  }
+
+  // ==========================================================
+  // POSE EFFECTS ENGINE
+  // Real-time body-motion reactive overlays anchored to the
+  // live camera pose/motion tracking (motionEnergy + faceBox).
+  // ==========================================================
+
+  function drawGhostPoseAura(ctx, w, h, time) {
+    ctx.save();
+
+    const cx = faceBox.x * w;
+
+    const cy = faceBox.y * h + faceBox.h * h * 0.85;
+
+    const pulse = 0.35 + motionEnergy * 1.6 + Math.sin(time * 2.4) * 0.08;
+
+    // Full-body spectral aura that flares with movement
+    const aura = ctx.createRadialGradient(
+      cx,
+      cy,
+      10,
+      cx,
+      cy,
+      Math.max(w, h) * (0.28 + motionEnergy * 0.22),
+    );
+
+    aura.addColorStop(0, `rgba(167,243,208,${Math.min(0.55, 0.18 * pulse)})`);
+
+    aura.addColorStop(0.5, `rgba(59,130,246,${Math.min(0.4, 0.12 * pulse)})`);
+
+    aura.addColorStop(1, "transparent");
+
+    ctx.fillStyle = aura;
+
+    ctx.fillRect(0, 0, w, h);
+
+    // Motion-reactive wisps: one per active motion cell
+    ctx.shadowColor = "#a7f3d0";
+
+    ctx.shadowBlur = 14;
+
+    for (let i = 0; i < 24; i++) {
+      if (motionGrid[i] < 3) continue;
+
+      const wx = ((i % 6) + 0.5) * (w / 6);
+
+      const wy = (Math.floor(i / 6) + 0.5) * (h / 4);
+
+      const ws = 8 + motionGrid[i] * 1.2 + Math.sin(time * 5 + i) * 3;
+
+      ctx.globalAlpha = Math.min(0.75, 0.16 + motionGrid[i] / 60);
+
+      ctx.fillStyle = "#e0f2fe";
+
+      ctx.beginPath();
+
+      ctx.arc(wx, wy - Math.sin(time * 3 + i) * 8, ws, 0, Math.PI * 2);
+
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = "rgba(224,242,254,0.9)";
+
+    ctx.font = "11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+      `👻 POSE ENERGY ${(motionEnergy * 100).toFixed(0)}%`,
+      16,
+      h - 20,
+    );
+
+    ctx.restore();
+  }
+
+  function drawPoseFrameAlign(ctx, w, h, time) {
+    ctx.save();
+
+    // Frame alignment guides: rule of thirds
+    ctx.strokeStyle = "rgba(56,189,248,0.35)";
+
+    ctx.lineWidth = 1;
+
+    for (let i = 1; i < 3; i++) {
+      ctx.beginPath();
+
+      ctx.moveTo((w * i) / 3, 0);
+
+      ctx.lineTo((w * i) / 3, h);
+
+      ctx.moveTo(0, (h * i) / 3);
+
+      ctx.lineTo(w, (h * i) / 3);
+
+      ctx.stroke();
+    }
+
+    // Pose alignment target: head anchor zone
+    const cx = faceBox.x * w;
+
+    const cy = faceBox.y * h;
+
+    const rx = (faceBox.w * w) / 2;
+
+    const ry = (faceBox.h * h) / 2;
+
+    const centered =
+      Math.abs(faceBox.x - 0.5) < 0.09 &&
+      Math.abs(faceBox.y - 0.42) < 0.12 &&
+      isFaceDetected;
+
+    const zoneColor = centered ? "rgba(74,222,128,0.9)" : "rgba(250,204,21,0.9)";
+
+    ctx.strokeStyle = zoneColor;
+
+    ctx.lineWidth = 2.5;
+
+    ctx.setLineDash([10, 8]);
+
+    ctx.lineDashOffset = -time * 30;
+
+    ctx.strokeRect(cx - rx * 1.5, cy - ry * 1.35, rx * 3, ry * 3.2);
+
+    ctx.setLineDash([]);
+
+    // Corner brackets tracking the head
+    ctx.lineWidth = 3.5;
+
+    const corners = [
+      [-1, -1],
+      [1, -1],
+      [-1, 1],
+      [1, 1],
+    ];
+
+    corners.forEach(([sx, sy]) => {
+      const px = cx + sx * rx * 1.45;
+
+      const py = cy + sy * ry * 1.5;
+
+      ctx.beginPath();
+
+      ctx.moveTo(px, py + sy * -18);
+
+      ctx.lineTo(px, py);
+
+      ctx.lineTo(px + sx * -18, py);
+
+      ctx.stroke();
+    });
+
+    // Level meter + status
+    ctx.fillStyle = "rgba(3,7,18,0.72)";
+
+    ctx.fillRect(14, h - 46, Math.max(150, w * 0.3), 30);
+
+    ctx.strokeStyle = "rgba(56,189,248,0.5)";
+
+    ctx.lineWidth = 1;
+
+    ctx.strokeRect(14, h - 46, Math.max(150, w * 0.3), 30);
+
+    ctx.fillStyle = zoneColor;
+
+    ctx.font = "bold 11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+      centered ? "✅ POSE ALIGNED — HOLD FRAME" : "🧭 ALIGN HEAD IN GUIDE ZONE",
+      22,
+      h - 33,
+    );
+
+    ctx.fillStyle = `rgba(56,189,248,${0.5 + Math.sin(time * 4) * 0.3})`;
+
+    ctx.fillText(`FRAME ${(motionEnergy * 100).toFixed(0)}% MOTION`, 22, h - 21);
+
+    ctx.restore();
+  }
+
+  function drawPumpkinPose(ctx, w, h, time) {
+    ctx.save();
+
+    // Halloween pumpkin energy ring around the body
+    const cx = faceBox.x * w;
+
+    const cy = faceBox.y * h + faceBox.h * h;
+
+    const ringR = Math.max(w, h) * (0.3 + motionEnergy * 0.18);
+
+    ctx.shadowColor = "#f97316";
+
+    ctx.shadowBlur = 22;
+
+    ctx.strokeStyle = `rgba(249,115,22,${0.35 + motionEnergy * 0.5})`;
+
+    ctx.lineWidth = 5 + motionEnergy * 6;
+
+    ctx.beginPath();
+
+    ctx.ellipse(cx, cy, ringR, ringR * 0.35, 0, 0, Math.PI * 2);
+
+    ctx.stroke();
+
+    // Motion-sparked embers / leaves
+    for (let i = 0; i < 24; i++) {
+      if (motionGrid[i] < 2) continue;
+
+      const lx = ((i % 6) + 0.5) * (w / 6) + Math.sin(time * 4 + i) * 10;
+
+      const ly = (Math.floor(i / 6) + 0.5) * (h / 4) - ((time * 60 + i * 40) % 70);
+
+      ctx.globalAlpha = Math.min(0.9, 0.25 + motionGrid[i] / 45);
+
+      ctx.font = `${12 + motionGrid[i]}px sans-serif`;
+
+      ctx.textAlign = "center";
+
+      ctx.fillText(i % 3 === 0 ? "🎃" : i % 3 === 1 ? "🍃" : "✨", lx, ly);
+    }
+
+    ctx.globalAlpha = 1;
+
+    // Jack-o-lantern glow on the face
+    const glow = ctx.createRadialGradient(
+      faceBox.x * w,
+      faceBox.y * h,
+      0,
+      faceBox.x * w,
+      faceBox.y * h,
+      Math.max(w, h) * 0.24,
+    );
+
+    glow.addColorStop(0, "rgba(249,115,22,0.22)");
+
+    glow.addColorStop(1, "transparent");
+
+    ctx.fillStyle = glow;
+
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.restore();
+  }
+
+  function drawWitchRitualPose(ctx, w, h, time) {
+    ctx.save();
+
+    const cx = faceBox.x * w;
+
+    const cy = faceBox.y * h + faceBox.h * h * 1.1;
+
+    const charge = Math.min(1, 0.25 + motionEnergy * 1.8);
+
+    const R = Math.max(w, h) * 0.26;
+
+    // Ritual circle charges with pose energy
+    ctx.translate(cx, cy);
+
+    ctx.rotate(time * (0.4 + charge * 1.4));
+
+    ctx.shadowColor = "#a855f7";
+
+    ctx.shadowBlur = 24 * charge;
+
+    ctx.strokeStyle = `rgba(192,132,252,${0.3 + charge * 0.55})`;
+
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+
+    ctx.ellipse(0, 0, R, R * 0.32, 0, 0, Math.PI * 2);
+
+    ctx.stroke();
+
+    // Inner pentagram
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    for (let i = 0; i <= 5; i++) {
+      const a = (i * ((2 * Math.PI) / 5)) % (Math.PI * 2);
+
+      const px = Math.cos(a) * R * 0.85;
+
+      const py = Math.sin(a) * R * 0.27;
+
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+
+    ctx.stroke();
+
+    ctx.rotate(-time * (0.4 + charge * 1.4));
+
+    // Rune sparks rising with motion
+    const runes = ["✦", "☾", "✧", "☠"];
+
+    for (let i = 0; i < 10; i++) {
+      const t = (time * (0.5 + charge) + i * 0.1) % 1;
+
+      const ang = i * 0.63 + time;
+
+      const sx = cx + Math.cos(ang) * R * (1 - t * 0.3);
+
+      const sy = cy - t * h * 0.35;
+
+      ctx.globalAlpha = (1 - t) * charge;
+
+      ctx.fillStyle = "#e9d5ff";
+
+      ctx.font = "14px sans-serif";
+
+      ctx.textAlign = "center";
+
+      ctx.fillText(runes[i % runes.length], sx, sy);
+    }
+
+    ctx.globalAlpha = 1;
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    ctx.fillStyle = "rgba(233,213,255,0.85)";
+
+    ctx.font = "11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+      `🪄 RITUAL CHARGE ${(charge * 100).toFixed(0)}%`,
+      16,
+      h - 20,
+    );
+
+    ctx.restore();
+  }
+
+  // ==========================================================
+  // VR EFFECTS ENGINE
+  // Immersive environments rendered over the live camera feed
+  // with parallax layers reacting to face position (head-coupled
+  // parallax = basic VR presence without a headset).
+  // ==========================================================
+
+  function drawVRNebula(ctx, w, h, time) {
+    ctx.save();
+
+    // Head-coupled parallax offset (VR presence cue)
+    const px = (faceBox.x - 0.5) * w * 0.12;
+
+    const py = (faceBox.y - 0.42) * h * 0.12;
+
+    const neb = ctx.createRadialGradient(
+      w * 0.5 + px,
+      h * 0.45 + py,
+      20,
+      w * 0.5 + px,
+      h * 0.45 + py,
+      Math.max(w, h) * 0.75,
+    );
+
+    neb.addColorStop(0, "rgba(147,51,234,0.30)");
+
+    neb.addColorStop(0.45, "rgba(59,130,246,0.20)");
+
+    neb.addColorStop(1, "rgba(3,7,18,0.55)");
+
+    ctx.fillStyle = neb;
+
+    ctx.fillRect(0, 0, w, h);
+
+    // Parallax starfield layers
+    for (let layer = 0; layer < 3; layer++) {
+      const depth = 0.02 + layer * 0.05;
+
+      for (let i = 0; i < 22; i++) {
+        const sx =
+          ((i * 149.3 + layer * 57 + time * (8 + layer * 14)) % (w + 40) - 20) -
+          px * (layer + 1);
+
+        const sy =
+          ((i * 211.7 + layer * 131) % (h + 20)) - 10 +
+          py * (layer + 1) +
+          Math.sin(time + i) * 3;
+
+        ctx.globalAlpha = 0.3 + layer * 0.25;
+
+        ctx.fillStyle = layer === 2 ? "#e0e7ff" : "#a5b4fc";
+
+        ctx.beginPath();
+
+        ctx.arc(sx, sy, 1 + (i % 3) * 0.7, 0, Math.PI * 2);
+
+        ctx.fill();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+
+    // VR HUD frame
+    ctx.strokeStyle = "rgba(167,139,250,0.65)";
+
+    ctx.lineWidth = 3;
+
+    const m = 14;
+
+    ctx.beginPath();
+
+    ctx.roundRect(m, m, w - m * 2, h - m * 2, 26);
+
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(196,181,253,0.9)";
+
+    ctx.font = "bold 11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText("🌌 VR NEBULA — HEAD PARALLAX ACTIVE", m + 16, m + 24);
+
+    ctx.restore();
+  }
+
+  function drawHauntedForestVR(ctx, w, h, time) {
+    ctx.save();
+
+    const px = (faceBox.x - 0.5) * w * 0.1;
+
+    const py = (faceBox.y - 0.42) * h * 0.1;
+
+    // Night fog base
+    const fog = ctx.createLinearGradient(0, h * 0.25, 0, h);
+
+    fog.addColorStop(0, "rgba(15,23,42,0.45)");
+
+    fog.addColorStop(1, "rgba(2,6,23,0.82)");
+
+    ctx.fillStyle = fog;
+
+    ctx.fillRect(0, 0, w, h);
+
+    // Parallax dead trees (3 depth layers)
+    for (let layer = 0; layer < 3; layer++) {
+      const depth = 1 + layer;
+
+      ctx.strokeStyle = `rgba(${20 + layer * 12}, ${16 + layer * 10}, ${30 + layer * 14}, ${0.55 + layer * 0.15})`;
+
+      for (let t = 0; t < 5; t++) {
+        const baseX =
+          ((t * w) / 5 + w * 0.1 - px * depth + time * (layer * 4)) % (w + 160) -
+          80;
+
+        const treeH = h * (0.28 + layer * 0.14 + (t % 2) * 0.06);
+
+        const sway = Math.sin(time * 1.2 + t * 2 + layer) * 6;
+
+        ctx.lineWidth = 3 + layer * 2.5;
+
+        ctx.beginPath();
+
+        ctx.moveTo(baseX, h);
+
+        ctx.quadraticCurveTo(baseX + sway, h - treeH * 0.6, baseX + sway * 1.6, h - treeH);
+
+        // Branches
+        for (let b = 1; b <= 2; b++) {
+          const by = h - treeH * (0.45 + b * 0.22);
+
+          ctx.moveTo(baseX + sway * b * 0.4, by);
+
+          ctx.lineTo(baseX + (b % 2 === 0 ? 1 : -1) * (26 + layer * 10), by - 14);
+        }
+
+        ctx.stroke();
+      }
+    }
+
+    // Floating spirits (Halloween ghosts)
+    ghosts.forEach((g, i) => {
+      g.x += g.speedX * 0.0012;
+
+      g.y += g.speedY * 0.0012;
+
+      if (g.x < 0.05 || g.x > 0.95) g.speedX *= -1;
+
+      if (g.y < 0.1 || g.y > 0.9) g.speedY *= -1;
+
+      const gx = g.x * w - px * 2;
+
+      const gy = g.y * h - py * 2 + Math.sin(time * 2 + g.wobble) * 12;
+
+      ctx.globalAlpha = g.alpha * (0.6 + 0.4 * Math.sin(time * 3 + i));
+
+      ctx.fillStyle = "#cbd5e1";
+
+      ctx.beginPath();
+
+      ctx.arc(gx, gy, g.size * 0.4, Math.PI, 0);
+
+      ctx.lineTo(gx + g.size * 0.4, gy + g.size * 0.45);
+
+      for (let s = 0; s < 3; s++) {
+        ctx.lineTo(
+          gx + g.size * 0.4 - (s + 0.5) * (g.size * 0.26),
+          gy + g.size * 0.45 - (s % 2 === 0 ? 8 : 0),
+        );
+      }
+
+      ctx.closePath();
+
+      ctx.fill();
+
+      ctx.fillStyle = "#0f172a";
+
+      ctx.beginPath();
+
+      ctx.arc(gx - 6, gy - 4, 2.4, 0, Math.PI * 2);
+
+      ctx.arc(gx + 6, gy - 4, 2.4, 0, Math.PI * 2);
+
+      ctx.fill();
+    });
+
+    ctx.globalAlpha = 1;
+
+    // Ground fog band
+    const band = ctx.createLinearGradient(0, h * 0.7, 0, h);
+
+    band.addColorStop(0, "transparent");
+
+    band.addColorStop(1, "rgba(148,163,184,0.20)");
+
+    ctx.fillStyle = band;
+
+    ctx.fillRect(0, h * 0.7, w, h * 0.3);
+
+    // Moon
+    ctx.shadowColor = "#e2e8f0";
+
+    ctx.shadowBlur = 30;
+
+    ctx.fillStyle = "rgba(226,232,240,0.85)";
+
+    ctx.beginPath();
+
+    ctx.arc(w * 0.82 - px * 3, h * 0.16 - py * 3, 30, 0, Math.PI * 2);
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = "rgba(203,213,225,0.9)";
+
+    ctx.font = "bold 11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText("🌲 VR HAUNTED FOREST — SPIRITS DETECTED", 16, h - 20);
+
+    ctx.restore();
+  }
+
+  function drawVRCyberdeck(ctx, w, h, time) {
+    ctx.save();
+
+    const px = (faceBox.x - 0.5) * w * 0.14;
+
+    const py = (faceBox.y - 0.42) * h * 0.14;
+
+    // Perspective floor grid (parallax offset)
+    ctx.strokeStyle = "rgba(34,211,238,0.35)";
+
+    ctx.lineWidth = 1;
+
+    const horizon = h * 0.62;
+
+    for (let i = 0; i <= 10; i++) {
+      const t = i / 10;
+
+      const y = horizon + (h - horizon) * t * t;
+
+      ctx.globalAlpha = 0.2 + t * 0.5;
+
+      ctx.beginPath();
+
+      ctx.moveTo(0, y + py * t);
+
+      ctx.lineTo(w, y + py * t);
+
+      ctx.stroke();
+    }
+
+    for (let i = -8; i <= 8; i++) {
+      ctx.globalAlpha = 0.4;
+
+      ctx.beginPath();
+
+      ctx.moveTo(w / 2 + i * 18 - px, horizon);
+
+      ctx.lineTo(w / 2 + i * w * 0.18 - px * 3, h);
+
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+
+    // Holographic side panels
+    const panelW = w * 0.2;
+
+    const panelGrad = ctx.createLinearGradient(0, h * 0.2, 0, horizon);
+
+    panelGrad.addColorStop(0, "rgba(34,211,238,0.16)");
+
+    panelGrad.addColorStop(1, "rgba(34,211,238,0.02)");
+
+    ctx.fillStyle = panelGrad;
+
+    ctx.strokeStyle = "rgba(34,211,238,0.5)";
+
+    [w * 0.04 - px, w * 0.76 - px].forEach((panelX) => {
+      ctx.fillRect(panelX, h * 0.2 + py, panelW, horizon - h * 0.22);
+
+      ctx.strokeRect(panelX, h * 0.2 + py, panelW, horizon - h * 0.22);
+
+      ctx.fillStyle = "rgba(103,232,249,0.9)";
+
+      ctx.font = "10px monospace";
+
+      ctx.textAlign = "left";
+
+      for (let l = 0; l < 5; l++) {
+        ctx.fillText(
+          `SYS[${l}] ${(Math.sin(time * 2 + l) * 40 + 55).toFixed(1)}%`,
+          panelX + 8,
+          h * 0.24 + py + l * 16,
+        );
+      }
+
+      ctx.fillStyle = panelGrad;
+    });
+
+    // Reticle on face
+    const cx = faceBox.x * w;
+
+    const cy = faceBox.y * h;
+
+    ctx.strokeStyle = `rgba(34,211,238,${0.5 + Math.sin(time * 5) * 0.3})`;
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.arc(cx, cy, faceBox.w * w * 0.75, 0, Math.PI * 2);
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.moveTo(cx - 12, cy);
+
+    ctx.lineTo(cx + 12, cy);
+
+    ctx.moveTo(cx, cy - 12);
+
+    ctx.lineTo(cx, cy + 12);
+
+    ctx.stroke();
+
+    ctx.fillStyle = "#22d3ee";
+
+    ctx.font = "bold 11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText("🖥️ VR CYBERDECK — NEURAL LINK STABLE", 16, h - 20);
+
+    ctx.restore();
+  }
+
+  function drawVRHauntedMansion(ctx, w, h, time) {
+    ctx.save();
+
+    const px = (faceBox.x - 0.5) * w * 0.1;
+
+    const py = (faceBox.y - 0.42) * h * 0.1;
+
+    // Stormy sky
+    const sky = ctx.createLinearGradient(0, 0, 0, h);
+
+    sky.addColorStop(0, "rgba(30,27,75,0.65)");
+
+    sky.addColorStop(0.6, "rgba(67,26,60,0.45)");
+
+    sky.addColorStop(1, "rgba(2,6,23,0.8)");
+
+    ctx.fillStyle = sky;
+
+    ctx.fillRect(0, 0, w, h);
+
+    // Lightning flashes
+    const flash = Math.sin(time * 1.3) > 0.994 || Math.sin(time * 2.7) > 0.997;
+
+    if (flash) {
+      ctx.fillStyle = "rgba(226,232,240,0.35)";
+
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    // Mansion silhouette with parallax
+    const mx = w * 0.5 - px * 2.5;
+
+    const my = h * 0.62 - py * 2.5;
+
+    const mw = w * 0.44;
+
+    ctx.fillStyle = "rgba(2,6,23,0.92)";
+
+    ctx.fillRect(mx - mw / 2, my - h * 0.2, mw, h * 0.38);
+
+    // Towers
+    [
+      [mx - mw * 0.42, h * 0.24],
+      [mx + mw * 0.3, h * 0.28],
+    ].forEach(([tx, th], idx) => {
+      ctx.fillRect(tx, my - th, mw * 0.12, th + 10);
+
+      ctx.beginPath();
+
+      ctx.moveTo(tx - 6, my - th);
+
+      ctx.lineTo(tx + mw * 0.06, my - th - 34);
+
+      ctx.lineTo(tx + mw * 0.12 + 6, my - th);
+
+      ctx.closePath();
+
+      ctx.fill();
+    });
+
+    // Glowing windows
+    ctx.shadowColor = "#f59e0b";
+
+    ctx.shadowBlur = 16;
+
+    for (let i = 0; i < 5; i++) {
+      const lit = Math.sin(time * 3 + i * 2) > -0.3;
+
+      ctx.fillStyle = lit ? "rgba(245,158,11,0.9)" : "rgba(120,53,15,0.6)";
+
+      ctx.fillRect(
+        mx - mw * 0.36 + i * mw * 0.16,
+        my - h * 0.12,
+        12,
+        18,
+      );
+    }
+
+    ctx.shadowBlur = 0;
+
+    // Swarming bats with parallax
+    bats.forEach((b, i) => {
+      b.x += (b.speedX * 0.0011) % 1;
+
+      b.y += b.speedY * 0.0009;
+
+      if (b.x > 1.05) b.x = -0.05;
+
+      if (b.x < -0.05) b.x = 1.05;
+
+      if (b.y < 0.02 || b.y > 0.7) b.speedY *= -1;
+
+      const bx = b.x * w - px * (2 + (i % 3));
+
+      const by = b.y * h - py * 2 + Math.sin(time * 4 + b.wingPhase) * 10;
+
+      const wing = Math.sin(time * 14 + b.wingPhase) * 0.5;
+
+      ctx.fillStyle = "rgba(10,10,20,0.95)";
+
+      ctx.beginPath();
+
+      ctx.moveTo(bx, by);
+
+      ctx.lineTo(bx - b.size * 0.6, by - b.size * (0.3 + wing * 0.3));
+
+      ctx.lineTo(bx - b.size * 0.2, by + 2);
+
+      ctx.lineTo(bx + b.size * 0.2, by + 2);
+
+      ctx.lineTo(bx + b.size * 0.6, by - b.size * (0.3 - wing * 0.3));
+
+      ctx.closePath();
+
+      ctx.fill();
+    });
+
+    ctx.fillStyle = "rgba(254,215,170,0.9)";
+
+    ctx.font = "bold 11px monospace";
+
+    ctx.textAlign = "left";
+
+    ctx.fillText("🏚️ VR HAUNTED MANOR — HALLOWEEN ENVIRONMENT", 16, h - 20);
 
     ctx.restore();
   }

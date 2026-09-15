@@ -106,7 +106,7 @@ This single-page experience features a unified interface for camera interaction,
 * **Lens Discovery**: Interactive discovery of free and premium lenses.
 * **Feature Packs**: Connected packages containing effects, tunes, and content.
 * **Secure Entitlement**: Server-side verified premium access (no local-storage-only reliance).
-* **Payment Flow**: Integrated secure Cashfree UPI/Card payment flow.
+* **Payment Flow**: PayPal secure checkout (~$5.99 USD, INR not supported) plus manual email ordering.
 * **Content Pipeline**: Dynamic loading of articles, news, updates, hardware care, and assistance guides.
 * **Responsive Design**: Polished experience across mobile, tablet, and desktop.
 

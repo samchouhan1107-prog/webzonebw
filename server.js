@@ -15,12 +15,23 @@
 
 "use strict";
 
+import { config as dotenvConfig } from "dotenv";
+
+// Load environment variables from .env before anything reads process.env
+const dotenvResult = dotenvConfig();
+if (!dotenvResult.error) {
+    console.log(
+        `[env] Loaded environment variables from ${dotenvResult.parsed ? Object.keys(dotenvResult.parsed).length : 0} key(s) in .env`,
+    );
+}
+
 import express from "express";
 import fs from "fs";
 import path from "path";
 import https from "https";
 import http from "http";
 import { fileURLToPath } from "url";
+import crypto from "crypto";
 import compression from "compression";
 import helmet from "helmet";
 
@@ -100,8 +111,48 @@ app.use((req, res, next) => {
  * REQUEST PARSERS
  * ============================================================ */
 
-app.use(express.json({ limit: "25mb" }));
+/*
+ * Raw-body capture: webhook signature verification MUST run against
+ * the exact bytes PayPal signed — re-serializing the parsed object
+ * does not byte-match and would reject valid webhooks.
+ */
+app.use(express.json({
+    limit: "25mb",
+    verify: (req, res, buf) => {
+        req.rawBody = buf;
+    }
+}));
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
+
+/* ============================================================
+ * CORS — required when the static frontend is served from a
+ * different origin (e.g. GitHub Pages) than this API server.
+ * Configure ALLOWED_ORIGINS as a comma-separated list.
+ * Same-origin requests are always allowed.
+ * ============================================================ */
+
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+
+    if (origin && ALLOWED_ORIGINS.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Vary", "Origin");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        res.setHeader("Access-Control-Max-Age", "86400");
+    }
+
+    if (req.method === "OPTIONS" && origin && ALLOWED_ORIGINS.includes(origin)) {
+        return res.sendStatus(204);
+    }
+
+    next();
+});
 
 /* ============================================================
  * REQUEST LOGGER
@@ -182,68 +233,535 @@ app.use("/api", (req, res, next) => {
     next();
 });
 
-// --- Cashfree API Configuration ---
-const CASHFREE_CLIENT_ID = process.env.CASHFREE_CLIENT_ID;
-const CASHFREE_CLIENT_SECRET = process.env.CASHFREE_CLIENT_SECRET;
-const CASHFREE_MODE = process.env.CASHFREE_MODE || "sandbox";
-const CASHFREE_BASE_URL = CASHFREE_MODE === "production" 
-    ? "https://api.cashfree.com/pg" 
-    : "https://sandbox.cashfree.com/pg";
+// --- PayPal API Configuration (PayPal ONLY — no other gateway) ---
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
+const PAYPAL_MODE = process.env.PAYPAL_MODE || "sandbox";
+const PAYPAL_BASE_URL = PAYPAL_MODE === "production"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
+const PAYPAL_CURRENCY = process.env.PAYPAL_CURRENCY || "USD";
+const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID;
+/* PayPal does not settle INR; ₹499 is charged as the USD equivalent. */
+const ER_PREMIUM_AMOUNT_USD = 5.99;
 
-// Mock database for entitlement demo
-const entitlements = new Map();
+/* Direct / manual order channel — buyers without PayPal can email us.
+ * Configured ONLY server-side via ORDER_EMAIL in the environment.
+ * No fallback: if unset, /api/order-email returns ORDER_EMAIL_NOT_CONFIGURED. */
+const ORDER_EMAIL = process.env.ORDER_EMAIL || null;
+
+// --- ER Studio Premium License Configuration ---
+const ER_PREMIUM_PLAN = "er-studio-premium";
+const ER_PREMIUM_AMOUNT = 499; // ₹499 — one-time ER Studio license
+const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
+
+/*
+ * License store — persisted to disk so licenses survive
+ * server restarts. In production this should be a real DB.
+ */
+const licenseStore = {
+    orders: new Map(),      // orderId -> { orderId, email, plan, amount, status, createdAt }
+    licenses: new Map()     // licenseKey -> { licenseKey, email, orderId, status, issuedAt, lastVerifiedAt }
+};
+
+function loadLicenseStore() {
+    try {
+        if (fs.existsSync(ER_LICENSE_STORE)) {
+            const raw = JSON.parse(fs.readFileSync(ER_LICENSE_STORE, "utf-8"));
+            (raw.orders || []).forEach((o) => licenseStore.orders.set(o.orderId, o));
+            (raw.licenses || []).forEach((l) => licenseStore.licenses.set(l.licenseKey, l));
+        }
+    } catch (error) {
+        console.error("[WEBZONEBW LICENSE] Failed to load license store:", error.message);
+    }
+}
+
+function saveLicenseStore() {
+    try {
+        fs.mkdirSync(path.dirname(ER_LICENSE_STORE), { recursive: true });
+        fs.writeFileSync(
+            ER_LICENSE_STORE,
+            JSON.stringify({
+                orders: [...licenseStore.orders.values()],
+                licenses: [...licenseStore.licenses.values()]
+            }, null, 2),
+            "utf-8"
+        );
+    } catch (error) {
+        console.error("[WEBZONEBW LICENSE] Failed to save license store:", error.message);
+    }
+}
+
+loadLicenseStore();
+
+function generateLicenseKey() {
+    const block = () => crypto.randomBytes(2).toString("hex").toUpperCase();
+    return `WZB-ER-${block()}-${block()}-${block()}`;
+}
 
 /* ============================================================
- * CASHFREE PAYMENT ENDPOINTS
+ * PAYPAL HELPERS — OAuth token + order creation + capture
  * ============================================================ */
 
-app.post("/api/create-order", async (req, res) => {
+async function getPayPalToken() {
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) return null;
     try {
-        const { planId } = req.body;
-        // In production: Validate user session here!
-        const orderData = {
-            order_amount: 299,
-            order_currency: "INR",
-            customer_details: {
-                customer_id: "demo_user_123",
-                customer_email: "user@example.com",
-                customer_phone: "9999999999"
-            }
-        };
-
-        const response = await fetch(`${CASHFREE_BASE_URL}/orders`, {
+        const response = await fetch(`${PAYPAL_BASE_URL}/v1/oauth2/token`, {
             method: "POST",
             headers: {
-                "x-client-id": CASHFREE_CLIENT_ID,
-                "x-client-secret": CASHFREE_CLIENT_SECRET,
-                "x-api-version": "2022-09-01",
-                "Content-Type": "application/json"
+                "Authorization": "Basic " + Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64"),
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: JSON.stringify(orderData)
+            body: "grant_type=client_credentials"
+        });
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data.access_token || null;
+    } catch (e) {
+        console.error("[WEBZONEBW PAYPAL] Token error:", e.message);
+        return null;
+    }
+}
+
+async function paypalRequest(accessToken, method, resourcePath, body) {
+    const response = await fetch(`${PAYPAL_BASE_URL}${resourcePath}`, {
+        method,
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: body ? JSON.stringify(body) : undefined
+    });
+    const data = await response.json().catch(() => ({}));
+    return { ok: response.ok, status: response.status, data };
+}
+
+/* ============================================================
+ * PAYPAL PAYMENT ENDPOINTS — ER STUDIO PREMIUM LICENSE (₹499)
+ * PayPal ONLY. Fail-closed without credentials.
+ * ============================================================ */
+
+/*
+ * Client-facing order creation — matches the er-license.js flow:
+ * returns the PayPal order id + the public client id so the PayPal
+ * JS SDK Buttons can be rendered. No secrets are exposed here.
+ */
+app.post("/api/paypal/create-order", async (req, res) => {
+    try {
+        const { planId, customerEmail } = req.body || {};
+
+        if (planId && planId !== ER_PREMIUM_PLAN) {
+            return res.status(400).json({ success: false, error: "UNKNOWN_PLAN" });
+        }
+
+        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+            return res.status(503).json({ success: false, error: "PAYMENT_NOT_CONFIGURED" });
+        }
+
+        const email = String(customerEmail || "").trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({ success: false, error: "INVALID_CUSTOMER_DETAILS" });
+        }
+
+        const accessToken = await getPayPalToken();
+        if (!accessToken) {
+            return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
+        }
+
+        const { ok, status, data } = await paypalRequest(accessToken, "POST", "/v2/checkout/orders", {
+            intent: "CAPTURE",
+            purchase_units: [{
+                description: "WebZoneBW ER Studio Premium License",
+                custom_id: email,
+                amount: {
+                    currency_code: PAYPAL_CURRENCY,
+                    value: ER_PREMIUM_AMOUNT_USD.toFixed(2)
+                }
+            }]
         });
 
-        const data = await response.json();
-        res.json({ success: true, payment_session_id: data.payment_session_id });
+        if (!ok || !data.id) {
+            console.error("[WEBZONEBW] PayPal order creation failed:", status, data);
+            return res.status(502).json({ success: false, error: "GATEWAY_ORDER_FAILED" });
+        }
+
+        licenseStore.orders.set(data.id, {
+            orderId: data.id,
+            email: email,
+            plan: ER_PREMIUM_PLAN,
+            amount: ER_PREMIUM_AMOUNT,
+            amountUsd: ER_PREMIUM_AMOUNT_USD,
+            currency: PAYPAL_CURRENCY,
+            status: "CREATED",
+            createdAt: new Date().toISOString()
+        });
+        saveLicenseStore();
+
+        res.json({
+            success: true,
+            orderId: data.id,
+            clientId: PAYPAL_CLIENT_ID,
+            amount: ER_PREMIUM_AMOUNT,
+            amountUsd: ER_PREMIUM_AMOUNT_USD,
+            currency: PAYPAL_CURRENCY,
+            mode: PAYPAL_MODE
+        });
     } catch (error) {
+        console.error("[WEBZONEBW] Payment init failed:", error);
         res.status(500).json({ success: false, error: "Payment init failed" });
     }
 });
 
-app.post("/api/cashfree/webhook", (req, res) => {
-    const signature = req.headers["x-webhook-signature"];
-    // In production: Validate signature using CASHFREE_CLIENT_SECRET
-    const { order, payment } = req.body.data;
-    
-    if (payment.payment_status === "SUCCESS") {
-        entitlements.set(order.customer_details.customer_id, {
-            status: "ACTIVE",
-            plan: "STUDIO_PLUS",
-            verifiedAt: new Date().toISOString()
-        });
-        console.log(`[WEBZONEBW] Entitlement granted for: ${order.customer_details.customer_id}`);
+/* Public client id for the PayPal JS SDK (safe to expose) */
+app.get("/api/paypal/client-id", (req, res) => {
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+        return res.status(503).json({ success: false, error: "PAYMENT_NOT_CONFIGURED" });
     }
-    
-    res.status(200).send("OK");
+    res.json({
+        success: true,
+        clientId: PAYPAL_CLIENT_ID,
+        mode: PAYPAL_MODE,
+        currency: PAYPAL_CURRENCY,
+        amount: ER_PREMIUM_AMOUNT_USD
+    });
+});
+
+/* Public contact channel for manual orders (no secrets exposed) */
+app.get("/api/order-email", (req, res) => {
+    if (!ORDER_EMAIL) {
+        return res.status(503).json({ success: false, error: "ORDER_EMAIL_NOT_CONFIGURED" });
+    }
+    res.json({ success: true, email: ORDER_EMAIL, plan: ER_PREMIUM_PLAN, amount: ER_PREMIUM_AMOUNT });
+});
+
+function issueLicenseForOrder(storedOrder) {
+    if (storedOrder.licenseKey) return storedOrder.licenseKey;
+
+    const licenseKey = generateLicenseKey();
+
+    licenseStore.licenses.set(licenseKey, {
+        licenseKey: licenseKey,
+        email: storedOrder.email,
+        orderId: storedOrder.orderId,
+        plan: ER_PREMIUM_PLAN,
+        amount: storedOrder.amount,
+        status: "ACTIVE",
+        issuedAt: new Date().toISOString(),
+        lastVerifiedAt: null
+    });
+
+    storedOrder.licenseKey = licenseKey;
+    console.log(`[WEBZONEBW] License ${licenseKey} issued for ${storedOrder.email} (order ${storedOrder.orderId})`);
+    saveLicenseStore();
+    return licenseKey;
+}
+
+app.post("/api/create-order", async (req, res) => {
+    try {
+        const { planId, customerEmail } = req.body || {};
+
+        if (planId && planId !== ER_PREMIUM_PLAN) {
+            return res.status(400).json({ success: false, error: "UNKNOWN_PLAN" });
+        }
+
+        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+            /*
+             * NO fake payments: without PayPal credentials we refuse
+             * to start checkout and the client keeps premium locked.
+             */
+            return res.status(503).json({
+                success: false,
+                error: "PAYMENT_NOT_CONFIGURED"
+            });
+        }
+
+        const email = String(customerEmail || "").trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({ success: false, error: "INVALID_CUSTOMER_DETAILS" });
+        }
+
+        const accessToken = await getPayPalToken();
+        if (!accessToken) {
+            return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
+        }
+
+        const { ok, status, data } = await paypalRequest(accessToken, "POST", "/v2/checkout/orders", {
+            intent: "CAPTURE",
+            purchase_units: [{
+                description: "WebZoneBW ER Studio Premium License",
+                custom_id: email,
+                amount: {
+                    currency_code: PAYPAL_CURRENCY,
+                    value: ER_PREMIUM_AMOUNT_USD.toFixed(2)
+                }
+            }]
+        });
+
+        if (!ok || !data.id) {
+            console.error("[WEBZONEBW] PayPal order creation failed:", status, data);
+            return res.status(502).json({ success: false, error: "GATEWAY_ORDER_FAILED" });
+        }
+
+        licenseStore.orders.set(data.id, {
+            orderId: data.id,
+            email: email,
+            plan: ER_PREMIUM_PLAN,
+            amount: ER_PREMIUM_AMOUNT,
+            amountUsd: ER_PREMIUM_AMOUNT_USD,
+            currency: PAYPAL_CURRENCY,
+            status: "CREATED",
+            createdAt: new Date().toISOString()
+        });
+        saveLicenseStore();
+
+        res.json({
+            success: true,
+            order_id: data.id,
+            amount: ER_PREMIUM_AMOUNT,
+            amountUsd: ER_PREMIUM_AMOUNT_USD,
+            currency: PAYPAL_CURRENCY,
+            mode: PAYPAL_MODE
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW] Payment init failed:", error);
+        res.status(500).json({ success: false, error: "Payment init failed" });
+    }
+});
+
+/*
+ * Server-side CAPTURE: called by the client after PayPal approval.
+ * The license is issued ONLY when PayPal confirms a COMPLETED capture.
+ */
+app.post("/api/paypal/capture", async (req, res) => {
+    try {
+        const { orderId, email } = req.body || {};
+
+        if (!orderId) {
+            return res.status(400).json({ success: false, error: "ORDER_ID_REQUIRED" });
+        }
+
+        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+            return res.status(503).json({ success: false, error: "PAYMENT_NOT_CONFIGURED" });
+        }
+
+        const accessToken = await getPayPalToken();
+        if (!accessToken) {
+            return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
+        }
+
+        const { ok, data } = await paypalRequest(
+            accessToken, "POST",
+            `/v2/checkout/orders/${encodeURIComponent(String(orderId))}/capture`,
+            {}
+        );
+
+        const captureStatus = data && data.status;
+        const storedOrder = licenseStore.orders.get(String(orderId));
+
+        if (!ok || captureStatus !== "COMPLETED" || !storedOrder) {
+            console.warn("[WEBZONEBW] PayPal capture not completed:", captureStatus, data && data.message);
+            return res.status(402).json({
+                success: false,
+                error: "PAYMENT_NOT_VERIFIED — PayPal has not confirmed this payment. Premium stays locked."
+            });
+        }
+
+        if (email && storedOrder.email && String(email).toLowerCase() !== storedOrder.email.toLowerCase()) {
+            return res.status(403).json({ success: false, error: "EMAIL_MISMATCH" });
+        }
+
+        storedOrder.status = "PAID";
+        storedOrder.paidAt = new Date().toISOString();
+        const licenseKey = issueLicenseForOrder(storedOrder);
+
+        res.json({
+            success: true,
+            licenseKey: licenseKey,
+            status: "ACTIVE",
+            plan: ER_PREMIUM_PLAN,
+            email: storedOrder.email
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW] PayPal capture failed:", error);
+        res.status(500).json({ success: false, error: "CAPTURE_FAILED" });
+    }
+});
+
+/*
+ * PayPal webhook (backup channel — capture endpoint is primary).
+ * If a webhook secret is configured, requests must be verifiable;
+ * otherwise the endpoint refuses to act (fail-closed).
+ */
+app.post("/api/paypal/webhook", async (req, res) => {
+    if (!PAYPAL_WEBHOOK_ID) {
+        console.warn("[WEBZONEBW] PayPal webhook rejected: PAYPAL_WEBHOOK_ID not configured");
+        return res.status(503).send("WEBHOOK_NOT_CONFIGURED");
+    }
+
+    try {
+        const accessToken = await getPayPalToken();
+        if (!accessToken) return res.status(503).send("WEBHOOK_NOT_CONFIGURED");
+
+        const { ok, data } = await paypalRequest(accessToken, "POST", "/v1/notifications/verify-webhook-signature", {
+            auth_algo: req.headers["paypal-auth-algo"],
+            cert_url: req.headers["paypal-cert-url"],
+            transmission_id: req.headers["paypal-transmission-id"],
+            transmission_sig: req.headers["paypal-transmission-sig"],
+            transmission_time: req.headers["paypal-transmission-time"],
+            webhook_id: PAYPAL_WEBHOOK_ID,
+            webhook_event: req.body
+        });
+
+        if (!ok || !data || data.verification_status !== "SUCCESS") {
+            console.warn("[WEBZONEBW] PayPal webhook verification failed");
+            return res.status(401).send("INVALID_SIGNATURE");
+        }
+
+        const event = req.body || {};
+        if (event.event_type === "CHECKOUT.ORDER.COMPLETED" || event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+            const resource = event.resource || {};
+            const orderId = resource.supplementary_data && resource.supplementary_data.related_ids
+                ? resource.supplementary_data.related_ids.order_id
+                : resource.id;
+
+            const storedOrder = orderId && licenseStore.orders.get(String(orderId));
+            if (storedOrder && storedOrder.status !== "PAID") {
+                storedOrder.status = "PAID";
+                storedOrder.paidAt = new Date().toISOString();
+                issueLicenseForOrder(storedOrder);
+            }
+        }
+
+        res.status(200).send("OK");
+    } catch (error) {
+        console.error("[WEBZONEBW] PayPal webhook error:", error.message);
+        res.status(500).send("WEBHOOK_ERROR");
+    }
+});
+
+/* ------------------------------------------------------------
+ * MANUAL ORDER SUPPORT — licenses for email orders issued by the
+ * owner after confirming payment (UPI/bank transfer etc. via the
+ * configured ORDER_EMAIL address). Guarded by an admin key, never public.
+ * ------------------------------------------------------------ */
+app.post("/api/license/manual-activate", (req, res) => {
+    const adminKey = req.headers["x-admin-key"];
+
+    if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ success: false, error: "UNAUTHORIZED" });
+    }
+
+    const { email, orderId } = req.body || {};
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || ""))) {
+        return res.status(400).json({ success: false, error: "INVALID_EMAIL" });
+    }
+
+    const id = String(orderId || `WZB-MANUAL-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`);
+
+    const storedOrder = licenseStore.orders.get(id) || {
+        orderId: id,
+        email: String(email).trim(),
+        plan: ER_PREMIUM_PLAN,
+        amount: ER_PREMIUM_AMOUNT,
+        status: "PAID",
+        manual: true,
+        createdAt: new Date().toISOString()
+    };
+
+    storedOrder.status = "PAID";
+    storedOrder.paidAt = storedOrder.paidAt || new Date().toISOString();
+    licenseStore.orders.set(id, storedOrder);
+
+    const licenseKey = issueLicenseForOrder(storedOrder);
+
+    res.json({ success: true, licenseKey: licenseKey, email: storedOrder.email, orderId: id });
+});
+
+/* ------------------------------------------------------------
+ * LICENSE ACTIVATION
+ * Called by the client after PayPal capture (which issues the
+ * license server-side). Never issues a license for unpaid orders.
+ * ------------------------------------------------------------ */
+app.post("/api/license/activate", (req, res) => {
+    try {
+        const { orderId, email } = req.body || {};
+
+        if (!orderId) {
+            return res.status(400).json({ success: false, error: "ORDER_ID_REQUIRED" });
+        }
+
+        const storedOrder = licenseStore.orders.get(String(orderId));
+
+        if (!storedOrder) {
+            return res.status(404).json({ success: false, error: "ORDER_NOT_FOUND" });
+        }
+
+        if (email && storedOrder.email && String(email).toLowerCase() !== storedOrder.email.toLowerCase()) {
+            return res.status(403).json({ success: false, error: "EMAIL_MISMATCH" });
+        }
+
+        /* Fail-closed: unpaid orders NEVER get a license. */
+        if (storedOrder.status !== "PAID" || !storedOrder.licenseKey) {
+            return res.status(402).json({
+                success: false,
+                error: "PAYMENT_NOT_VERIFIED — PayPal has not confirmed this payment. Premium stays locked."
+            });
+        }
+
+        const license = licenseStore.licenses.get(storedOrder.licenseKey);
+
+        res.json({
+            success: true,
+            licenseKey: storedOrder.licenseKey,
+            status: license ? license.status : "ACTIVE",
+            plan: ER_PREMIUM_PLAN,
+            email: storedOrder.email
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW] License activation failed:", error);
+        res.status(500).json({ success: false, error: "ACTIVATION_FAILED" });
+    }
+});
+
+/* ------------------------------------------------------------
+ * LICENSE VERIFICATION — persistent re-check on every session
+ * ------------------------------------------------------------ */
+app.post("/api/license/verify", (req, res) => {
+    const { licenseKey } = req.body || {};
+
+    if (!licenseKey) {
+        return res.status(400).json({ success: false, valid: false, error: "LICENSE_KEY_REQUIRED" });
+    }
+
+    const license = licenseStore.licenses.get(String(licenseKey).trim().toUpperCase());
+
+    if (!license || license.status !== "ACTIVE") {
+        return res.json({ success: true, valid: false, status: license ? license.status : "NOT_FOUND" });
+    }
+
+    license.lastVerifiedAt = new Date().toISOString();
+    saveLicenseStore();
+
+    res.json({
+        success: true,
+        valid: true,
+        status: license.status,
+        plan: license.plan,
+        email: license.email
+    });
+});
+
+// Health check (used by deployment platforms + readiness tests)
+app.get("/api/health", (req, res) => {
+    res.status(200).json({
+        success: true,
+        status: "ok",
+        server: PROJECT_NAME,
+        version: SERVER_VERSION,
+        environment: NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Status API

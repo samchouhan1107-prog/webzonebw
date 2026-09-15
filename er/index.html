@@ -193,6 +193,7 @@
         window.WEBZONEBW_ER_CONFIG = {
 
             version: "1.2",
+            halloweenExperience: true,
 
             experience: "WEBZONEBW-ER",
 
@@ -347,7 +348,6 @@
          ===================================================== -->
     <div id="nativeAdSlot" class="er-native-ad-slot">
         <!-- Temporary Ad Tag Integration -->
-        <script src="https://5gvci.com/act/files/tag.min.js?z=11642202" data-cfasync="false" async></script>
     </div>
 
 </head>
@@ -1241,12 +1241,55 @@
 
                         <button type="button"
                                 class="smart-cat-btn"
+                                data-smart-cat="pose"
+                                title="Live camera pose-reactive effects">
+
+                            🦴 Pose
+
+                        </button>
+
+
+                        <button type="button"
+                                class="smart-cat-btn"
+                                data-smart-cat="vr"
+                                title="VR-style immersive environments">
+
+                            🌌 VR
+
+                        </button>
+
+
+                        <button type="button"
+                                class="smart-cat-btn premium-tab-btn"
+                                data-smart-cat="premium"
+                                title="Premium lenses unlocked with the ₹499 ER Studio license">
+
+                            💎 Premium
+
+                        </button>
+
+
+                        <button type="button"
+                                class="smart-cat-btn"
                                 data-smart-cat="all"
-                                title="Browse all 10 effects">
+                                title="Browse all effects">
 
                             ✨ All
 
                         </button>
+
+                    </div>
+
+                    <div class="er-license-chip"
+                         id="erLicenseChip"
+                         role="status"
+                         aria-live="polite">
+
+                        <span class="er-license-chip-icon" id="erLicenseChipIcon">🔒</span>
+
+                        <span class="er-license-chip-text" id="erLicenseChipText">Free — Premium Locked</span>
+
+                        <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn">₹499 Upgrade</button>
 
                     </div>
 
@@ -1401,6 +1444,23 @@
                     </button>
 
 
+                    <button type="button"
+                            class="er-action-pill-btn er-record-btn"
+                            id="recordVideoBtn"
+                            title="Record Video with Live Effects (Premium)"
+                            aria-label="Record Video with Live Effects">
+
+                        <span aria-hidden="true" id="recordVideoIcon">
+                            ⏺
+                        </span>
+
+                        <span id="recordVideoText">
+                            Record Video
+                        </span>
+
+                    </button>
+
+
                     <input type="file"
                            id="fileInput"
                            accept="image/*"
@@ -1480,9 +1540,7 @@
                             class="cat-pill active"
                             data-cat="smart"
                             title="Auto-detect face and prioritize matching filters">
-
                         🌟 Smart
-
                     </button>
 
 
@@ -1490,19 +1548,70 @@
                             class="cat-pill"
                             data-cat="face"
                             title="Face-anchored AR lenses">
-
-                        👤 Face AR
-
+                        👤 Face
                     </button>
-
 
                     <button type="button"
                             class="cat-pill"
-                            data-cat="scene"
-                            title="Atmospheric &amp; full stage scene shaders">
+                            data-cat="pose"
+                            title="Body/pose-reactive Halloween effects">
+                        🦴 Pose
+                    </button>
 
-                        🌍 Scene
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="vr"
+                            title="VR-style Immersive Halloween Environments">
+                        🌌 VR / Scene
+                    </button>
 
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="horror"
+                            title="Horror and Thriller Effects">
+                        🎃 Horror
+                    </button>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="witch"
+                            title="Witchcraft & Curses">
+                        🔮 Witch
+                    </button>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="zombie"
+                            title="Zombie Virus Effects">
+                        🧟 Zombie
+                    </button>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="ghost"
+                            title="Spectral Phantoms">
+                        👻 Ghost
+                    </button>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="monster"
+                            title="Beasts & Ghouls">
+                        👹 Monster
+                    </button>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="cinema"
+                            title="Cinema Horror FX">
+                        🎬 Cinema
+                    </button>
+
+                    <button type="button"
+                            class="cat-pill"
+                            data-cat="experimental"
+                            title="Advanced FX">
+                        ⚡ Experimental
                     </button>
 
 
@@ -1583,6 +1692,56 @@
                         <span class="effect-target-tag scene-tag">🌍 Scene</span>
                     </button>
 
+                    <!-- POSE EFFECTS — live camera pose/motion reactive -->
+                    <button type="button" class="effect-card" data-filter="ghost-pose" data-cat="pose" data-target="pose">
+                        <div class="effect-icon-box holo-box">👻</div>
+                        <span class="effect-name">Ghost Pose</span>
+                        <span class="effect-target-tag pose-tag">🦴 Pose</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="pose-frame" data-cat="pose" data-target="pose">
+                        <div class="effect-icon-box glass-box">🧭</div>
+                        <span class="effect-name">Pose Align</span>
+                        <span class="effect-target-tag pose-tag">🦴 Pose</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="pumpkin-pose" data-cat="pose" data-target="pose">
+                        <div class="effect-icon-box retro-box">🎃</div>
+                        <span class="effect-name">Pumpkin Pose</span>
+                        <span class="effect-target-tag pose-tag">🦴 Pose</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="witch-ritual" data-cat="pose" data-target="pose" data-premium="true">
+                        <div class="effect-icon-box neon-box">🪄</div>
+                        <span class="effect-name">Witch Ritual</span>
+                        <span class="effect-target-tag pose-tag premium-tag">💎 Premium</span>
+                    </button>
+
+                    <!-- VR EFFECTS — immersive environments over live camera -->
+                    <button type="button" class="effect-card" data-filter="vr-nebula" data-cat="vr" data-target="scene">
+                        <div class="effect-icon-box holo-box">🪐</div>
+                        <span class="effect-name">VR Nebula</span>
+                        <span class="effect-target-tag scene-tag vr-tag">🌌 VR</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="haunted-forest" data-cat="vr" data-target="scene" data-premium="true">
+                        <div class="effect-icon-box retro-box">🌲</div>
+                        <span class="effect-name">Haunted Forest</span>
+                        <span class="effect-target-tag scene-tag vr-tag premium-tag">💎 VR</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="vr-cyberdeck" data-cat="vr" data-target="scene" data-premium="true">
+                        <div class="effect-icon-box neon-box">🖥️</div>
+                        <span class="effect-name">VR Cyberdeck</span>
+                        <span class="effect-target-tag scene-tag vr-tag premium-tag">💎 VR</span>
+                    </button>
+
+                    <button type="button" class="effect-card" data-filter="vr-mansion" data-cat="vr" data-target="scene" data-premium="true">
+                        <div class="effect-icon-box horror-box">🏚️</div>
+                        <span class="effect-name">VR Haunted Manor</span>
+                        <span class="effect-target-tag scene-tag vr-tag premium-tag">💎 VR</span>
+                    </button>
+
                 </div>
 
                 <div class="panel-bottom-action">
@@ -1595,7 +1754,7 @@
                             ⊞
                         </span>
 
-                        View All Effects (10)
+                        View All Effects (14)
 
                     </button>
 
@@ -1873,7 +2032,9 @@
 <script defer src="../js/cookie-utils.js?v=2.2.0"></script>
 <script defer src="../js/cookie-consent.js?v=2.2.0"></script>
 
-<script defer src="../js/halloween.js?v=2.2.0"></script>
+<script defer src="../js/er-license.js?v=1.0.0"></script>
+
+<script defer src="../js/halloween.js?v=2.3.0"></script>
 
 
 
@@ -1881,8 +2042,8 @@
      ER STUDIO CONTROLLERS & DATA PIPELINE
      ===================================================== -->
 
-<script defer src="../js/er-studio.js?v=2.2.0"></script>
-<script defer src="../js/er-studio-pipeline.js?v=2.2.0"></script>
+<script defer src="../js/er-studio.js?v=2.3.0"></script>
+<script defer src="../js/er-studio-pipeline.js?v=2.3.0"></script>
 
 </body>
 
