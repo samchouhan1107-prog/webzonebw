@@ -18,7 +18,7 @@
   "use strict";
 
   var STORAGE_KEY = "wzb_er_license_v1";
-  var API_BASE = window.location.origin; // auto-detect current origin
+  var API_BASE = window.location.origin || 'https://webzonebw-er-studio.onrender.com'; // auto-detect current origin with fallback
   var listeners = [];
 
   var state = {
@@ -91,8 +91,12 @@
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ licenseKey: stored.licenseKey }),
+      timeout: 5000
     })
       .then(function (res) {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
         return res.json();
       })
       .then(function (data) {
@@ -109,7 +113,8 @@
         emit();
         return false;
       })
-      .catch(function () {
+      .catch(function (error) {
+        console.error('License verification failed:', error);
         state.verifying = false;
         /*
          * Server unreachable → license CANNOT be confirmed.

@@ -5,7 +5,7 @@ services:
   - type: web
     name: webzonebw-er-studio
     env: node
-    buildCommand: npm install
+    buildCommand: npm ci
     startCommand: node server.js
     envVars:
       - key: NODE_ENV
@@ -36,8 +36,8 @@ services:
       - oregon
     healthCheck:
       path: /api/health
-      interval: 10
-      timeout: 5
+      interval: 30
+      timeout: 10
       method: GET
       statusCode: 200
     envVarScope: RUN_TIME
