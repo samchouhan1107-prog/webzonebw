@@ -12,3 +12,6 @@ certs/
 data/
 # Real environment config (never commit secrets)
 .env
+.env.render
+.env*.local
+*.env
