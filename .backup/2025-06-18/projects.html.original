@@ -2,40 +2,39 @@
 <html lang="en">
 
 <head>
+
     <!-- =====================================================
-         WEBZONEBW — RESUME PAGE
-         Professional Resume • IT Support • Systems • Networking
+         WEBZONEBW — PROJECTS
+         Production HTML5 • SEO • Accessibility • Schema
+         Technology Portfolio • Systems Integration
          ===================================================== -->
 
     <meta charset="UTF-8">
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
-    <script>
-        gtag('js', new Date());
-        gtag('config', 'G-ZFZ54Z2997');
-    </script>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
+    <meta name="theme-color"
+          content="#030712">
 
     <!-- =====================================================
          SEO
          ===================================================== -->
 
-    <title>Resume | Sameer Chouhan | IT Support &amp; Systems</title>
+    <title>
+        Projects | Web Development, IT &amp; AI Projects | WEBZONEBW
+    </title>
 
     <meta name="description"
-          content="Professional resume of Sameer Chouhan covering IT Support, systems integration, networking, Microsoft technologies, troubleshooting, web development and technical projects.">
+          content="Explore WEBZONEBW projects covering web development, IT support, systems integration, networking, AI-assisted development, automation, advertising technology, analytics and practical technology experimentation.">
 
     <meta name="keywords"
-          content="Sameer Chouhan resume, IT Support resume, Systems Integration, IT Help Desk, Networking, Microsoft 365, Web Development, Technical Support">
+          content="WEBZONEBW projects, Sameer Chouhan projects, WEBZONE-STUDIO, web development, IT support, systems integration, networking, AI projects, automation, advertising technology, analytics">
 
     <meta name="author"
           content="Sameer Chouhan">
 
     <meta name="robots"
-          content="index, follow">
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
 
     <!-- =====================================================
@@ -43,7 +42,7 @@
          ===================================================== -->
 
     <link rel="canonical"
-          href="https://webzonebw.in/resume.html">
+          href="https://webzonebw.in/projects.html">
 
 
     <!-- =====================================================
@@ -84,42 +83,50 @@
          ===================================================== -->
 
     <meta property="og:type"
-          content="profile">
+          content="website">
 
     <meta property="og:title"
-          content="Resume | Sameer Chouhan">
+          content="Projects | WEBZONEBW">
 
     <meta property="og:description"
-          content="IT Support, systems integration, networking and web development professional profile.">
+          content="Explore WEBZONEBW technical projects covering web development, IT, networking, systems integration, AI, automation and digital technology.">
 
     <meta property="og:url"
-          content="https://webzonebw.in/resume.html">
+          content="https://webzonebw.in/projects.html">
 
     <meta property="og:site_name"
-          content="WebZoneBW">
+          content="WEBZONEBW">
 
     <meta property="og:image"
           content="https://webzonebw.in/assets/logo.png">
 
     <meta property="og:image:alt"
-          content="WEBZONEBW technology portfolio">
+          content="WEBZONEBW technology projects">
 
 
     <!-- =====================================================
-         TWITTER / SOCIAL CARD
+         TWITTER / SOCIAL PREVIEW
          ===================================================== -->
 
     <meta name="twitter:card"
           content="summary_large_image">
 
     <meta name="twitter:title"
-          content="Resume | Sameer Chouhan | IT Support & Systems">
+          content="Projects | WEBZONEBW">
 
     <meta name="twitter:description"
-          content="IT Support, systems integration, networking and web development professional profile.">
+          content="Technical projects, web development, IT solutions, AI experiments, automation and systems integration work.">
 
     <meta name="twitter:image"
           content="https://webzonebw.in/assets/logo.png">
+
+
+    <!-- =====================================================
+         SITE VERIFICATION
+         ===================================================== -->
+
+    <meta name="a1e90531e4f8ed3276007daf16c1b8cee45e9f43"
+          content="a1e90531e4f8ed3276007daf16c1b8cee45e9f43">
 
 
     <!-- =====================================================
@@ -137,27 +144,90 @@
 
 
     <!-- =====================================================
-         STRUCTURED DATA
+         ORGANIZATION SCHEMA
          ===================================================== -->
 
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "ProfilePage",
-        "name": "Sameer Chouhan — Professional Resume",
-        "url": "https://webzonebw.in/resume.html",
-        "description": "Professional resume and technical profile of Sameer Chouhan.",
-        "isPartOf": {
-            "@type": "WebSite",
-            "name": "WebZoneBW",
-            "url": "https://webzonebw.in/"
+        "@type": "Organization",
+        "@id": "https://webzonebw.in/#organization",
+        "name": "WEBZONEBW",
+        "url": "https://webzonebw.in/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://webzonebw.in/assets/logo.png"
         },
-        "mainEntity": {
-            "@type": "Person",
-            "name": "Sameer Chouhan",
-            "url": "https://webzonebw.in/"
-        }
+        "description": "WEBZONEBW is a technology-focused digital portfolio and project platform covering IT support, networking, systems integration, cybersecurity, web development, artificial intelligence, automation and practical technology projects."
     }
+    </script>
+
+
+    <!-- =====================================================
+         WEBSITE SCHEMA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://webzonebw.in/#website",
+        "url": "https://webzonebw.in/",
+        "name": "WEBZONEBW",
+        "description": "Technology portfolio, digital workspace and practical technology project hub.",
+        "publisher": {
+            "@id": "https://webzonebw.in/#organization"
+        },
+        "inLanguage": "en"
+    }
+    </script>
+
+
+    <!-- =====================================================
+         COLLECTION PAGE SCHEMA
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": "https://webzonebw.in/projects.html#webpage",
+        "url": "https://webzonebw.in/projects.html",
+        "name": "WEBZONEBW Projects",
+        "headline": "Technical Projects & Digital Work",
+        "description": "Technical projects and development work by Sameer Chouhan across web development, IT, networking, systems integration, AI, automation and digital technology.",
+        "isPartOf": {
+            "@id": "https://webzonebw.in/#website"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Technology Projects"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Sameer Chouhan"
+        },
+        "inLanguage": "en"
+    }
+    </script>
+
+
+    <!-- =====================================================
+         GOOGLE ANALYTICS — GA4
+         (Consent Mode v2 defaults already set above)
+         ===================================================== -->
+
+    <script async
+            src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997">
+    </script>
+
+    <script>
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZFZ54Z2997', {
+            page_title: 'Projects | WEBZONEBW',
+            page_location: window.location.href
+        });
     </script>
 
 
@@ -179,7 +249,7 @@
             type="button"
             class="hamburger-btn"
             id="sidebarToggleBtn"
-            aria-label="Open navigation menu"
+            aria-label="Toggle Sidebar Navigation"
             aria-controls="mainSidebar"
             aria-expanded="false">
 
@@ -191,9 +261,11 @@
 
 
         <div class="mobile-brand-title">
+
             <span class="gradient-text">
                 WEBZONEBW
             </span>
+
         </div>
 
 
@@ -201,7 +273,7 @@
 
 
     <!-- =====================================================
-         SIDEBAR
+         STANDARDIZED SIDEBAR
          ===================================================== -->
 
     <aside
@@ -217,12 +289,12 @@
 
             <a
                 href="index.html"
-                aria-label="WebZoneBW Home"
+                aria-label="WEBZONEBW Home"
                 class="brand-logo-link">
 
                 <img
                     src="assets/logo.png"
-                    alt="WebZoneBW Logo"
+                    alt="WEBZONEBW Logo"
                     class="brand-logo-img">
 
                 <div class="brand-name-group">
@@ -259,7 +331,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             🏠
+
                         </span>
 
                         Dashboard
@@ -276,7 +350,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             🔮
+
                         </span>
 
                         WebZoneBW-ER Studio
@@ -288,12 +364,17 @@
 
                 <li>
 
-                    <a href="projects.html">
+                    <a
+                        href="projects.html"
+                        class="active"
+                        aria-current="page">
 
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             💼
+
                         </span>
 
                         Projects
@@ -305,15 +386,14 @@
 
                 <li>
 
-                    <a
-                        href="resume.html"
-                        class="active"
-                        aria-current="page">
+                    <a href="resume.html">
 
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             📄
+
                         </span>
 
                         Resume
@@ -330,7 +410,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             📝
+
                         </span>
 
                         Blog
@@ -347,7 +429,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             🎵
+
                         </span>
 
                         Sound Box
@@ -364,7 +448,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             👤
+
                         </span>
 
                         About Us
@@ -381,7 +467,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             ✉️
+
                         </span>
 
                         Contact Us
@@ -398,7 +486,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             🔒
+
                         </span>
 
                         Privacy Policy
@@ -415,7 +505,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             🍪
+
                         </span>
 
                         Cookie Policy
@@ -432,7 +524,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             🎛️
+
                         </span>
 
                         Privacy Center
@@ -449,7 +543,9 @@
                         <span
                             class="nav-icon"
                             aria-hidden="true">
+
                             📋
+
                         </span>
 
                         Terms of Service
@@ -464,7 +560,7 @@
 
 
         <!-- =================================================
-             THEME SWITCH
+             DARK MODE TOGGLE
              ================================================= -->
 
         <div class="sidebar-theme-toggle-row">
@@ -474,7 +570,9 @@
                 <span
                     id="themeModeIcon"
                     aria-hidden="true">
+
                     🌙
+
                 </span>
 
                 <span id="themeModeText">
@@ -492,7 +590,7 @@
                     type="checkbox"
                     id="themeToggleSwitch"
                     checked
-                    aria-label="Toggle dark mode">
+                    aria-label="Toggle Dark Mode">
 
                 <span class="toggle-slider"></span>
 
@@ -509,9 +607,7 @@
 
             <div class="user-avatar-wrap">
 
-                <span
-                    class="user-avatar-icon"
-                    aria-hidden="true">
+                <span class="user-avatar-icon">
                     👨‍💻
                 </span>
 
@@ -556,12 +652,11 @@
             <div class="header-left">
 
                 <h1>
-                    Professional Resume
+                    Projects &amp; Systems Integration
                 </h1>
 
                 <p class="header-subtitle">
-                    Technical Qualifications, Systems Architecture
-                    &amp; Engineering Profile
+                    Technology, development, experimentation and practical solutions.
                 </p>
 
             </div>
@@ -572,8 +667,8 @@
                 <a
                     href="er/index.html"
                     class="header-icon-btn"
-                    title="Launch ER Studio"
-                    aria-label="Launch ER Studio">
+                    title="WEBZONEBW ER Studio"
+                    aria-label="WEBZONEBW ER Studio">
 
                     🔮
 
@@ -588,177 +683,317 @@
 
 
         <!-- =================================================
-             PROFESSIONAL HERO
+             INTRODUCTION
              ================================================= -->
 
         <section
             class="hero"
-            aria-labelledby="profile-title">
+            aria-labelledby="projects-title">
 
-            <h2 id="profile-title">
-                Sameer Chouhan
+            <h2 id="projects-title">
+                Technical Projects &amp; Digital Work
             </h2>
 
             <h3>
-                IT Support • Systems Integration • Networking
-                • Web Development
+                Web Development • IT Support • Systems Integration
+                • AI • Automation • Digital Solutions
             </h3>
 
             <p>
-                Technical professional focused on IT support,
-                troubleshooting, systems integration, networking,
-                digital tools and practical web development.
+                WEBZONEBW is a practical technology workspace for
+                building, testing, documenting and presenting
+                technology projects.
             </p>
 
             <p>
-                My background combines hands-on technical support
-                with continuous development of web-based projects
-                and technology solutions.
+                This portfolio brings together web applications,
+                development experiments, IT-focused solutions,
+                automation concepts, advertising technology,
+                analytics work and ongoing technical learning.
             </p>
 
-
-            <!-- =================================================
-                 RESUME ACTIONS
-                 ================================================= -->
-
-            <div class="resume-buttons">
-
-                <a
-                    href="assets/resume/Sameer_Chouhan.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn"
-                    aria-label="View Sameer Chouhan resume PDF">
-
-                    <span aria-hidden="true">
-                        📄
-                    </span>
-
-                    View Resume
-
-                </a>
-
-
-                <a
-                    href="assets/resume/Sameer_Chouhan.pdf"
-                    download
-                    class="btn"
-                    aria-label="Download Sameer Chouhan resume PDF">
-
-                    <span aria-hidden="true">
-                        ⬇️
-                    </span>
-
-                    Download PDF
-
-                </a>
-
-
-                <a
-                    href="contact.html"
-                    class="btn"
-                    aria-label="Contact Sameer Chouhan">
-
-                    <span aria-hidden="true">
-                        ✉️
-                    </span>
-
-                    Contact
-
-                </a>
-
-            </div>
+            <p>
+                Projects may evolve over time as technologies are
+                tested, improved, integrated and moved from concept
+                toward practical implementation.
+            </p>
 
         </section>
 
 
+        <!-- =================================================
+             FEATURED PROJECT — WEBZONE-STUDIO
+             ================================================= -->
+
+        <section
+            class="featured-card"
+            aria-labelledby="studio-title">
+
+            <h2 id="studio-title">
+                ⭐ Featured Project
+            </h2>
+
+            <h3>
+                WEBZONE-STUDIO
+            </h3>
+
+            <p>
+                WEBZONE-STUDIO is a centralized technical workspace and systems
+                management environment engineered for diagnostics, process execution,
+                and structured environment management.
+            </p>
+
+            <p>
+                The platform integrates terminal command interfaces, modular environment
+                controls, real-time logging, and systems monitoring tools designed for
+                efficient technical troubleshooting and infrastructure workflows.
+            </p>
+
+            <p>
+                Built with a focus on reliability, modularity, and operational clarity,
+                the workspace provides a structured foundation for system configuration,
+                integration testing, and technical documentation.
+            </p>
+
+            <p>
+                <strong>Focus:</strong>
+                Systems Integration • Technical Architecture • Diagnostic Tools
+                • Environment Configuration • Infrastructure Operations • Terminal Utilities
+            </p>
+
+            <a
+                href="https://github.com/samchouhan1107-prog/WEBZONE-STUDIO"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn"
+                aria-label="View WEBZONE-STUDIO on GitHub">
+
+                <span aria-hidden="true">
+                    💻
+                </span>
+
+                View on GitHub
+
+            </a>
+
+        </section>
 
 
         <!-- =================================================
-             PROFESSIONAL SUMMARY
+             WEBZONEBW ER STUDIO
+             ================================================= -->
+
+        <section
+            class="featured-card"
+            aria-labelledby="er-title">
+
+            <h2 id="er-title">
+
+                <span aria-hidden="true">
+                    🔮
+                </span>
+
+                WEBZONEBW ER Studio
+
+            </h2>
+
+            <h3>
+                Signature Promotional Theme • Cartoon Anime Art
+                • Auto-HD Enhancer • Trending Magazine Covers
+            </h3>
+
+            <p>
+                A browser-based Extended Reality experience featuring
+                WEBZONEBW promotional branding, real-time cartoon
+                cel-shading, automatic image enhancement, magazine-style
+                visual compositions and biometric face-recognition
+                experimentation.
+            </p>
+
+            <p>
+                <strong>Focus:</strong>
+                HTML5 Canvas • Promotional Shaders • Cartoon
+                Cel-Shading • Auto-HD Enhancement • Magazine
+                Compositing • Computer Vision
+            </p>
+
+            <a
+                href="er/index.html"
+                class="btn camera-btn-primary"
+                aria-label="Launch WEBZONEBW ER Studio">
+
+                <span aria-hidden="true">
+                    🔮
+                </span>
+
+                Launch WEBZONEBW ER Studio
+
+            </a>
+
+        </section>
+
+
+        <!-- =================================================
+             WEBZONEBW PLATFORM
+             ================================================= -->
+
+        <section
+            class="featured-card"
+            aria-labelledby="webzone-project-title">
+
+            <h2 id="webzone-project-title">
+
+                <span aria-hidden="true">
+                    🌐
+                </span>
+
+                WebZoneBW.in
+
+            </h2>
+
+            <p>
+                WebZoneBW.in is the central digital portfolio and
+                technology workspace connecting professional
+                information, projects, technical resources,
+                web development experiments and technology-focused
+                content.
+            </p>
+
+            <p>
+                The platform is being developed as an evolving
+                digital environment rather than a static portfolio.
+                Its pages, projects and supporting resources are
+                continuously improved as new work is completed.
+            </p>
+
+            <p>
+                <strong>Focus:</strong>
+                HTML • CSS • JavaScript • SEO • Web Publishing
+                • Responsive Design • Digital Portfolio
+            </p>
+
+            <a
+                href="index.html"
+                class="btn"
+                aria-label="Return to WEBZONEBW dashboard">
+
+                <span aria-hidden="true">
+                    🏠
+                </span>
+
+                Explore WEBZONEBW
+
+            </a>
+
+        </section>
+
+
+        <!-- =================================================
+             BLOGGER / CONTENT PLATFORM
+             ================================================= -->
+
+        <section
+            class="featured-card"
+            aria-labelledby="blog-project-title">
+
+            <h2 id="blog-project-title">
+
+                <span aria-hidden="true">
+                    📝
+                </span>
+
+                WebZoneBW1107
+
+            </h2>
+
+            <p>
+                WebZoneBW1107 is the Blogger-based publishing platform
+                used for technical articles, web development information,
+                IT Support resources, career guidance and practical
+                technology learning content.
+            </p>
+
+            <p>
+                The platform complements WebZoneBW.in by providing
+                a dedicated publishing environment for longer-form
+                content and technical resources.
+            </p>
+
+            <a
+                href="https://webzonebw1107.blogspot.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn"
+                aria-label="Visit WebZoneBW1107 Blogger website">
+
+                <span aria-hidden="true">
+                    🌐
+                </span>
+
+                Visit Blogger
+
+            </a>
+
+        </section>
+
+
+        <!-- =================================================
+             PROJECT AREAS
              ================================================= -->
 
         <section
             class="quick-info"
-            aria-labelledby="summary-title">
+            aria-labelledby="project-areas-title">
 
-            <h2 id="summary-title">
-                👨‍💻 Professional Summary
-            </h2>
+            <h2 id="project-areas-title">
 
-            <p>
-                IT Support professional with practical experience in
-                technical troubleshooting, user support, systems
-                integration and technology operations.
-            </p>
+                <span aria-hidden="true">
+                    🧩
+                </span>
 
-            <p>
-                Comfortable working across hardware, software,
-                operating systems, networking environments and
-                technology platforms while maintaining a practical,
-                service-oriented approach to problem solving.
-            </p>
+                Project Areas
 
-            <p>
-                Alongside IT operations, I develop web-based projects
-                and technical tools to strengthen my understanding
-                of modern software, automation and digital platforms.
-            </p>
-
-        </section>
-
-
-        <!-- =================================================
-             CORE COMPETENCIES
-             ================================================= -->
-
-        <section
-            class="projects"
-            aria-labelledby="competencies-title">
-
-            <h2 id="competencies-title">
-                🧩 Core Competencies
             </h2>
 
             <ul>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    L1 / L1.5 IT Support &amp; Service Restoration
+                    <span aria-hidden="true">🖥️</span>
+                    IT Support &amp; Technical Administration
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    Hardware &amp; Software Troubleshooting
+                    <span aria-hidden="true">🌐</span>
+                    Networking &amp; Infrastructure
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    User Support &amp; Technical Issue Resolution
+                    <span aria-hidden="true">⚙️</span>
+                    Systems Integration &amp; Diagnostic Tools
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    Systems Integration &amp; Technical Operations
+                    <span aria-hidden="true">🔧</span>
+                    Hardware &amp; Operating System Support
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    Networking &amp; Infrastructure Support
+                    <span aria-hidden="true">☁️</span>
+                    Microsoft 365 &amp; Active Directory
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    Microsoft Technology Environments
+                    <span aria-hidden="true">📊</span>
+                    Systems Analytics &amp; Reporting
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
-                    Web Development &amp; Digital Platforms
+                    <span aria-hidden="true">🔐</span>
+                    Security &amp; Endpoint Protection
                 </li>
 
                 <li>
-                    <span aria-hidden="true">✔</span>
+                    <span aria-hidden="true">📚</span>
                     Technical Documentation &amp; Continuous Learning
                 </li>
 
@@ -768,237 +1003,63 @@
 
 
         <!-- =================================================
-             TECHNICAL SKILLS
-             ================================================= -->
-
-        <section
-            class="quick-info"
-            aria-labelledby="skills-title">
-
-            <h2 id="skills-title">
-                🛠️ Technical Skills
-            </h2>
-
-            <ul>
-
-                <li>
-                    <span aria-hidden="true">🖥️</span>
-                    Windows 10 / 11
-                </li>
-
-                <li>
-                    <span aria-hidden="true">☁️</span>
-                    Microsoft 365
-                </li>
-
-                <li>
-                    <span aria-hidden="true">👤</span>
-                    Active Directory
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🌐</span>
-                    Networking Fundamentals
-                </li>
-
-                <li>
-                    <span aria-hidden="true">💻</span>
-                    HTML, CSS &amp; JavaScript
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🟢</span>
-                    Node.js &amp; Web Application Concepts
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🔧</span>
-                    Hardware &amp; Software Troubleshooting
-                </li>
-
-                <li>
-                    <span aria-hidden="true">📊</span>
-                    Web Analytics &amp; Tracking Concepts
-                </li>
-
-            </ul>
-
-        </section>
-
-
-        <!-- =================================================
-             INFRASTRUCTURE & SECURITY
+             TECHNOLOGY & SKILLS
              ================================================= -->
 
         <section
             class="projects"
-            aria-labelledby="infrastructure-title">
+            aria-labelledby="technology-title">
 
-            <h2 id="infrastructure-title">
-                🌐 Infrastructure &amp; Technical Environment
+            <h2 id="technology-title">
+
+                <span aria-hidden="true">
+                    🛠️
+                </span>
+
+                Technologies &amp; Technical Areas
+
             </h2>
 
             <ul>
 
                 <li>
-                    <span aria-hidden="true">🔌</span>
-                    Network Devices &amp; Connectivity
-                </li>
-
-                <li>
                     <span aria-hidden="true">🖥️</span>
-                    Desktop &amp; Endpoint Support
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🗄️</span>
-                    Servers, Storage &amp; Infrastructure Concepts
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🔐</span>
-                    Security &amp; Endpoint Protection Concepts
+                    Microsoft Windows 10 / 11 &amp; Linux Environments
                 </li>
 
                 <li>
                     <span aria-hidden="true">☁️</span>
-                    Cloud Platform Concepts
+                    Microsoft 365, Exchange &amp; Active Directory
+                </li>
+
+                <li>
+                    <span aria-hidden="true">🌐</span>
+                    Networking Fundamentals (TCP/IP, DNS, DHCP, Subnetting)
                 </li>
 
                 <li>
                     <span aria-hidden="true">⚙️</span>
-                    System Deployment &amp; Troubleshooting
-                </li>
-
-            </ul>
-
-        </section>
-
-
-        <!-- =================================================
-             WEB & DEVELOPMENT
-             ================================================= -->
-
-        <section
-            class="featured-card"
-            aria-labelledby="development-title">
-
-            <h2 id="development-title">
-                💻 Web &amp; Development Work
-            </h2>
-
-            <p>
-                My technical development work extends beyond
-                traditional IT support into practical web applications
-                and digital platforms.
-            </p>
-
-            <ul>
-
-                <li>
-                    WebZoneBW.in digital portfolio and workspace
-                </li>
-
-                <li>
-                    WEBZONE-STUDIO development environment
-                </li>
-
-                <li>
-                    WebZoneBW1107 technical publishing platform
-                </li>
-
-                <li>
-                    Marketing and advertising technology experiments
-                </li>
-
-                <li>
-                    Analytics, tracking and web integration work
-                </li>
-
-            </ul>
-
-
-            <a
-                href="projects.html"
-                class="btn"
-                aria-label="View technical projects">
-
-                <span aria-hidden="true">
-                    💼
-                </span>
-
-                View Projects
-
-            </a>
-
-        </section>
-
-
-        <!-- =================================================
-             EDUCATION & TRAINING
-             ================================================= -->
-
-        <section
-            class="quick-info"
-            aria-labelledby="education-title">
-
-            <h2 id="education-title">
-                🎓 Education &amp; Technical Training
-            </h2>
-
-            <p>
-                My technical education includes formal training in
-                network and Internet security together with practical
-                experience across IT support, systems and technology
-                environments.
-            </p>
-
-            <p>
-                I continue to expand my knowledge through hands-on
-                projects, technical research, web development and
-                practical experimentation.
-            </p>
-
-        </section>
-
-
-        <!-- =================================================
-             PROFESSIONAL DEVELOPMENT
-             ================================================= -->
-
-        <section
-            class="projects"
-            aria-labelledby="development-focus-title">
-
-            <h2 id="development-focus-title">
-                📚 Professional Development
-            </h2>
-
-            <ul>
-
-                <li>
-                    <span aria-hidden="true">🚀</span>
-                    Continuous technical learning
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🤖</span>
-                    AI-assisted development and automation
-                </li>
-
-                <li>
-                    <span aria-hidden="true">🌐</span>
-                    Modern web technologies
-                </li>
-
-                <li>
-                    <span aria-hidden="true">📊</span>
-                    Analytics and digital platform development
+                    Systems Integration &amp; Diagnostic Utilities
                 </li>
 
                 <li>
                     <span aria-hidden="true">🔧</span>
-                    Practical troubleshooting and systems work
+                    Hardware Troubleshooting &amp; Endpoint Configuration
+                </li>
+
+                <li>
+                    <span aria-hidden="true">⚡</span>
+                    Command Line, Terminal Utilities &amp; Scripting
+                </li>
+
+                <li>
+                    <span aria-hidden="true">🛡️</span>
+                    Network &amp; Endpoint Security Fundamentals
+                </li>
+
+                <li>
+                    <span aria-hidden="true">📊</span>
+                    Technical Reporting &amp; Service Management
                 </li>
 
             </ul>
@@ -1007,102 +1068,79 @@
 
 
         <!-- =================================================
-             FULL RESUME DOCUMENT
+             CURRENT DEVELOPMENT
              ================================================= -->
 
         <section
             class="featured-card"
-            aria-labelledby="resume-document-title">
+            aria-labelledby="current-work-title">
 
-            <h2 id="resume-document-title">
-                📄 Full Resume
+            <h2 id="current-work-title">
+
+                <span aria-hidden="true">
+                    🚧
+                </span>
+
+                Current Development
+
             </h2>
 
             <p>
-                The complete professional resume contains detailed
-                employment history, education, technical experience
-                and additional career information.
+                WEBZONEBW projects are continuously evolving. Current
+                development focuses on improving the website ecosystem,
+                expanding technical documentation, developing practical
+                web tools and experimenting with new application concepts.
             </p>
 
             <p>
-                Open the PDF for the complete version or download a
-                copy for your records.
+                Some projects are production-oriented, while others
+                remain experimental or are being developed as technical
+                learning exercises.
             </p>
 
-
-            <div class="resume-buttons">
-
-                <a
-                    href="assets/resume/Sameer_Chouhan.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn"
-                    aria-label="Open full resume PDF">
-
-                    <span aria-hidden="true">
-                        📄
-                    </span>
-
-                    Open Full Resume
-
-                </a>
-
-
-                <a
-                    href="assets/resume/Sameer_Chouhan.pdf"
-                    download
-                    class="btn"
-                    aria-label="Download full resume PDF">
-
-                    <span aria-hidden="true">
-                        ⬇️
-                    </span>
-
-                    Download PDF
-
-                </a>
-
-            </div>
+            <p>
+                The portfolio will continue to be updated as projects
+                move from concept to prototype and from prototype
+                toward usable digital solutions.
+            </p>
 
         </section>
 
 
         <!-- =================================================
-             CAREER OPPORTUNITIES
+             PROFESSIONAL CONNECTION
              ================================================= -->
 
         <section
             class="quick-info"
-            aria-labelledby="opportunities-title">
+            aria-labelledby="professional-title">
 
-            <h2 id="opportunities-title">
-                🤝 Professional Opportunities
+            <h2 id="professional-title">
+
+                <span aria-hidden="true">
+                    👨‍💻
+                </span>
+
+                Interested in the Work?
+
             </h2>
 
             <p>
-                I am interested in opportunities involving IT Support,
-                Help Desk, Systems Support, Systems Integration,
-                Networking, technical operations and related
-                technology roles.
+                For professional opportunities, technical discussions,
+                collaboration or project-related enquiries, visit the
+                contact page.
             </p>
-
-            <p>
-                I am also open to technical projects and opportunities
-                where web development, automation or digital technology
-                can complement IT operations.
-            </p>
-
 
             <a
                 href="contact.html"
                 class="btn"
-                aria-label="Contact Sameer Chouhan about professional opportunities">
+                aria-label="Go to WEBZONEBW contact page">
 
                 <span aria-hidden="true">
                     ✉️
                 </span>
 
-                Get in Touch
+                Contact Me
 
             </a>
 
