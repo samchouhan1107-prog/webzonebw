@@ -368,21 +368,85 @@
           </p>
         </section>
 
-        <section style="margin-top: 30px">
+        <section class="article-actions">
           <a href="../../blog.html" class="btn">
             <span aria-hidden="true">📖</span>
             <span>Browse All Articles</span>
           </a>
-          <a href="https://webzonebw.in/er/" class="btn">
+          <a href="https://webzonebw.in/er/" class="btn btn-primary">
             <span aria-hidden="true">🔮</span>
             <span>Open WebZoneBW-ER Studio</span>
           </a>
         </section>
+
+        <div class="article-navigation">
+          <a href="../../blog.html" class="article-link">
+            ← Back to Blog
+          </a>
+        </div>
       </main>
     </div>
 
     <!-- Sidebar Backdrop -->
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- JavaScript for Navigation and Theme -->
+    <script>
+        // Sidebar Toggle Functionality
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const mainSidebar = document.getElementById('mainSidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const body = document.body;
+
+        function toggleSidebar() {
+            const isExpanded = sidebarToggleBtn.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                // Close sidebar
+                sidebarToggleBtn.setAttribute('aria-expanded', 'false');
+                body.classList.remove('sidebar-open');
+            } else {
+                // Open sidebar
+                sidebarToggleBtn.setAttribute('aria-expanded', 'true');
+                body.classList.add('sidebar-open');
+            }
+        }
+
+        sidebarToggleBtn.addEventListener('click', toggleSidebar);
+        sidebarBackdrop.addEventListener('click', toggleSidebar);
+
+        // Theme Toggle Functionality
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        
+        // Check for saved theme preference or default to dark
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggleBtn.setAttribute('aria-pressed', currentTheme === 'light');
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggleBtn.setAttribute('aria-pressed', newTheme === 'light');
+            
+            // Add transition class for smooth animation
+            document.body.classList.add('theme-transitioning');
+            setTimeout(() => {
+                document.body.classList.remove('theme-transitioning');
+            }, 300);
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+
+        // Close sidebar on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && body.classList.contains('sidebar-open')) {
+                toggleSidebar();
+            }
+        });
+    </script>
 
   </body>
 </html>
