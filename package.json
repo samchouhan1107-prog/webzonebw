@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "npm install",
+    "build": "npm ci",
     "lint": "echo 'No lint errors'"
   },
   "keywords": [

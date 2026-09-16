@@ -1,6 +1,6 @@
 $paths = @('/', '/api/health', '/api/paypal/client-id')
 foreach ($p in $paths) {
-    $url = "https://webzonebw-er-studio.onrender.com$p"
+    $url = "https://webzonebw.onrender.com$p"
     Write-Output "=== $url ==="
     try {
         $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 90
