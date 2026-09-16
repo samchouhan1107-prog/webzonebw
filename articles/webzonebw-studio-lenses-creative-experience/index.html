@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Google tag (gtag.js) -->
@@ -72,10 +72,11 @@
 
   <body>
 
-    <!-- =====================================================
-         MOBILE NAVIGATION
-         ===================================================== -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
+<div class="container">
+
+    <!-- Mobile Navigation -->
     <div class="mobile-nav-bar">
 
         <button
@@ -112,290 +113,318 @@
         id="mainSidebar"
         aria-label="Website sidebar">
 
-        <!-- Brand -->
-
         <div class="logo">
-
-            <a
-                href="../../"
-                class="brand-logo-link">
-
-                <img
-                    src="../../assets/logo.png"
-                    alt="WEBZONEBW Logo"
-                    class="brand-logo-img">
-
-                <div class="brand-text">
-                    <h1 class="brand-name">
-                        WEBZONEBW
-                    </h1>
-                    <p class="brand-tagline">
-                        Technology Portfolio & Digital Workspace
-                    </p>
+            <a href="../../index.html" aria-label="WEBZONEBW Home" class="brand-logo-link">
+                <img src="../../assets/logo.png" alt="WEBZONEBW Logo" class="brand-logo-img">
+                <div class="brand-name-group">
+                    <span class="brand-title">WEBZONEBW</span>
+                    <span class="brand-sub">IT SUPPORT • SYSTEMS • LAB</span>
                 </div>
-
             </a>
-
         </div>
 
-        <!-- Navigation -->
-
-        <nav class="sidebar-nav">
-
+        <nav class="sidebar-nav" aria-label="Sidebar navigation links">
             <ul>
                 <li>
-                    <a href="../../" class="nav-link">
-                        <span aria-hidden="true">🏠</span>
+                    <a href="../../index.html">
+                        <span class="nav-icon" aria-hidden="true">🏠</span>
                         <span>Home</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../../about.html" class="nav-link">
-                        <span aria-hidden="true">👤</span>
+                    <a href="../../about.html">
+                        <span class="nav-icon" aria-hidden="true">👤</span>
                         <span>About</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../../projects.html" class="nav-link">
-                        <span aria-hidden="true">💼</span>
+                    <a href="../../projects.html">
+                        <span class="nav-icon" aria-hidden="true">💼</span>
                         <span>Projects</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../../resume.html" class="nav-link">
-                        <span aria-hidden="true">📄</span>
+                    <a href="../../resume.html">
+                        <span class="nav-icon" aria-hidden="true">📄</span>
                         <span>Resume</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../../blog.html" class="nav-link">
-                        <span aria-hidden="true">📝</span>
+                    <a href="../../blog.html">
+                        <span class="nav-icon" aria-hidden="true">📝</span>
                         <span>Blog</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../../contact.html" class="nav-link">
-                        <span aria-hidden="true">📧</span>
+                    <a href="../../contact.html">
+                        <span class="nav-icon" aria-hidden="true">📧</span>
                         <span>Contact</span>
                     </a>
                 </li>
+                <li>
+                    <a href="../../soundbox.html">
+                        <span class="nav-icon" aria-hidden="true">🎵</span>
+                        <span>Sound Box</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../../er/">
+                        <span class="nav-icon" aria-hidden="true">🔮</span>
+                        <span>ER Studio</span>
+                    </a>
+                </li>
             </ul>
-
         </nav>
 
-        <!-- Theme Toggle -->
-
         <div class="sidebar-theme-toggle-row">
-
-            <button
-                type="button"
-                class="theme-toggle-btn"
-                id="themeToggleBtn"
-                aria-label="Toggle theme"
-                aria-pressed="false">
-
-                <span class="theme-toggle-icon" aria-hidden="true">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="5"/>
-                        <line x1="12" y1="1" x2="12" y2="3"/>
-                        <line x1="12" y1="21" x2="12" y2="23"/>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                        <line x1="1" y1="12" x2="3" y2="12"/>
-                        <line x1="21" y1="12" x2="23" y2="12"/>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                </span>
-
-                <span class="theme-toggle-text">Theme</span>
-
-            </button>
-
+            <div class="theme-label-group">
+                <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                <span id="themeModeText">Dark Mode</span>
+            </div>
+            <label class="switch-toggle" for="themeToggleSwitch">
+                <input type="checkbox" id="themeToggleSwitch" aria-label="Toggle dark or light theme">
+                <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
         </div>
 
-        <!-- Footer -->
-
-        <div class="sidebar-footer">
-
-            <p class="footer-text">
-                © 2026 WEBZONEBW
-            </p>
-
+        <div class="sidebar-user-card">
+            <div class="user-avatar-wrap">
+                <span class="user-avatar-icon" aria-hidden="true">👨‍💻</span>
+                <span class="user-online-dot" title="Online" aria-label="Online"></span>
+            </div>
+            <div class="user-info">
+                <strong>Sameer Chouhan</strong>
+                <span>IT Specialist &amp; Creator</span>
+            </div>
         </div>
-
     </aside>
 
     <!-- Main Content Area -->
+    <main class="main-content" id="main-content">
 
-    <div class="container">
-
-        <main class="main-content">
-            
-            <div class="article-header">
-                <h1>
-                    WebZoneBW Studio: Lenses, Feature Packs, Updates &amp; the Creative
-                    Experience
-                </h1>
-                <p class="article-meta">
-                    <span>📅 October 27, 2026</span>
-                    <span>📖 5 min read</span>
-                    <span>🏷️ WebZoneBW Studio, AR, Creative Tools</span>
+        <!-- Top Header Breadcrumb -->
+        <header class="top-header">
+            <div class="header-left">
+                <nav aria-label="Breadcrumb" style="font-size: 0.85rem; margin-bottom: 8px; color: var(--text-muted);">
+                    <a href="../../index.html" style="color: var(--brand-cyan); text-decoration: none;">Home</a> /
+                    <a href="../../blog.html" style="color: var(--brand-cyan); text-decoration: none;">Blog</a> /
+                    <span style="color: var(--text-secondary);">WebZoneBW Studio Guide</span>
+                </nav>
+                <h1>WebZoneBW Studio: Lenses, Feature Packs, Updates &amp; the Creative Experience</h1>
+                <p class="header-subtitle">
+                    AR Experience • Creative Tools • Halloween Studio • Lens Management
                 </p>
             </div>
-        <p>
-          WebZoneBW Studio is the creative side of this site — a browser-based
-          extended reality experience where the camera becomes a canvas. This
-          article explains how the whole system fits together: how lenses work,
-          what Feature Packs unlock, how updates reach you, and why purchasing a
-          lens connects you to more than just a single filter.
-        </p>
+        </header>
 
-        <section>
-          <h2>1. Start in the Live Studio</h2>
-          <p>
-            Everything begins in the
-            <a href="https://webzonebw.in/er/">WebZoneBW-ER Halloween Studio</a
-            >. After granting camera permission, you get a live preview with a
-            lens carousel, Smart category filters, an HD shutter, and Test Mode
-            for trying effects without a camera. Lenses are grouped into Face AR
-            (tracking-anchored overlays like Aviators, Angel Halo and Anime Cel)
-            and Scene shaders (full-frame looks like Leica Noir, 35mm Film,
-            Glitch FX and Neon Cyber). Swipe or use the arrows to move between
-            them — one tap applies a look, no timeline or editing skills
-            required.
-          </p>
+        <!-- Article Container -->
+        <article itemscope itemtype="https://schema.org/TechArticle" style="max-width: 900px; margin: 0 auto; padding: 20px 0;">
+
+            <!-- Meta Banner -->
+            <section class="featured-card" style="margin-bottom: 30px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted);">
+                    <div>
+                        <span>✍️ Author: <strong>Sameer Chouhan</strong></span> ·
+                        <span>📅 Published: <time datetime="2026-10-27">October 27, 2026</time></span> ·
+                        <span>⏱️ Read Time: 5 min</span>
+                    </div>
+                    <div>
+                        <span style="background: rgba(139, 92, 246, 0.15); color: var(--brand-purple); padding: 4px 10px; border-radius: 9999px; font-weight: 600;">
+                            WebZoneBW Studio
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Introduction -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>1. Overview: The Creative Experience</h2>
+                <p>
+                    WebZoneBW Studio is the creative side of this site — a browser-based
+                    extended reality experience where the camera becomes a canvas. This
+                    article explains how the whole system fits together: how lenses work,
+                    what Feature Packs unlock, how updates reach you, and why purchasing a
+                    lens connects you to more than just a single filter.
+                </p>
+            </section>
+
+            <!-- Section 1 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>2. Start in the Live Studio</h2>
+                <p>
+                    Everything begins in the
+                    <a href="https://webzonebw.in/er/">WebZoneBW-ER Halloween Studio</a>. After granting camera permission, you get a live preview with a
+                    lens carousel, Smart category filters, an HD shutter, and Test Mode
+                    for trying effects without a camera. Lenses are grouped into Face AR
+                    (tracking-anchored overlays like Aviators, Angel Halo and Anime Cel)
+                    and Scene shaders (full-frame looks like Leica Noir, 35mm Film,
+                    Glitch FX and Neon Cyber). Swipe or use the arrows to move between
+                    them — one tap applies a look, no timeline or editing skills
+                    required.
+                </p>
+            </section>
+
+            <!-- Section 2 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>3. Free and Premium Lenses</h2>
+                <p>
+                    Free lenses — such as the Volcanic Ember Lens and the Pumpkin Patch
+                    Lens — are owned automatically and ready the moment you open the
+                    Studio. Premium lenses are marked clearly in the Lens Discovery
+                    section with a Premium badge and a locked state. Opening an unowned
+                    premium lens shows what you get before asking for anything: the
+                    effect list, the connected Feature Pack, and the price. The checkout
+                    flow runs through a secure PayPal gateway (card, PayPal balance or
+                    UPI-backed methods), and entitlements are verified server-side — a browser flag
+                    alone never unlocks paid content.
+                </p>
+            </section>
+
+            <!-- Section 3 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>4. What Feature Packs Unlock</h2>
+                <p>
+                    A Feature Pack is the bundle wrapped around each lens, not just a
+                    filter file. For example, the Neon Cyber Feature Pack includes the
+                    Neon Cyber Lens, synthwave audio-reactive tunes, cyberpunk HUD
+                    overlay assets, and setup guides. The Phantom Spectral Feature Pack
+                    pairs its ghostly shaders with chromatic glitch tools and a spectral
+                    soundscape. Each pack lists its included effects, sounds and reading
+                    material in one modal, so you always know exactly what ownership
+                    covers.
+                </p>
+            </section>
+
+            <!-- Section 4 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>5. Creative Updates and New Effects</h2>
+                <p>
+                    The Studio keeps a live news pipeline inside the Lens News &amp;
+                    Updates section: lens version releases, new effect announcements and
+                    scheduled maintenance notices, each tagged and dated. Sound Box
+                    tunes and lens soundscapes are treated as first-class assets, so an
+                    update can add audio alongside visuals. When a new premium effect
+                    arrives, existing owners of the connected pack see it as owned
+                    content — no repurchase.
+                </p>
+            </section>
+
+            <!-- Section 5 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>6. Mobile and Desktop Experience</h2>
+                <p>
+                    On desktop, the Studio uses a balanced two-column layout: the camera
+                    stays the primary visual, with the effects panel alongside it. On
+                    mobile, the same functionality reflows into a single column with a
+                    large camera preview, horizontally swipeable effect trays and
+                    thumb-friendly shutter controls. The camera engine deliberately
+                    prevents duplicate streams and resumes cleanly after tab switches,
+                    so switching devices mid-session behaves the same either way.
+                </p>
+            </section>
+
+            <!-- Section 6 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>7. Hardware Care and Support</h2>
+                <p>
+                    Each pack includes practical hardware care guidance — microfiber
+                    cleaning for camera glass, stable mounting for GPU-heavy shaders,
+                    and ambient lighting recommendations for clean face tracking. Lens
+                    owners can request scoped setup assistance through the Studio,
+                    connecting the creative product to the same support standards as the
+                    <a href="https://webzonebw.in/articles/hardware-troubleshooting/">hardware troubleshooting guides</a>
+                    on this site.
+                </p>
+            </section>
+
+            <!-- Section 7 -->
+            <section class="quick-info" style="margin-bottom: 30px;">
+                <h2>8. Lens Ownership Benefits</h2>
+                <p>
+                    Purchasing a premium lens is not a one-off download. Ownership links
+                    you to the lens's future updates, the pack's growing asset list,
+                    owner-only articles and tutorials, and priority setup assistance.
+                    The entitlement system is designed so that when a lens ships a v1.2,
+                    v1.3 or a brand-new effect, owners receive it in place — the Studio
+                    you bought into keeps improving.
+                </p>
+                <p>
+                    Ready to try it? Open the
+                    <a href="https://webzonebw.in/er/">Live Halloween Studio</a>, start
+                    with a free lens, and explore the Feature Packs when something
+                    catches your eye.
+                </p>
+            </section>
+
+        </article>
+
+        <!-- Article Actions -->
+        <section class="article-actions" style="max-width: 900px; margin: 0 auto; padding: 30px 0;">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                <a href="../../blog.html" class="btn">
+                    <span aria-hidden="true">📖</span>
+                    <span>Browse All Articles</span>
+                </a>
+                <a href="https://webzonebw.in/er/" class="btn btn-primary">
+                    <span aria-hidden="true">🔮</span>
+                    <span>Open WebZoneBW-ER Studio</span>
+                </a>
+            </div>
         </section>
 
-        <section>
-          <h2>2. Free lenses and premium lenses</h2>
-          <p>
-            Free lenses — such as the Volcanic Ember Lens and the Pumpkin Patch
-            Lens — are owned automatically and ready the moment you open the
-            Studio. Premium lenses are marked clearly in the Lens Discovery
-            section with a Premium badge and a locked state. Opening an unowned
-            premium lens shows what you get before asking for anything: the
-            effect list, the connected Feature Pack, and the price. The checkout
-            flow runs through a secure PayPal gateway (card, PayPal balance or
-            UPI-backed methods), and entitlements are verified server-side — a browser flag
-            alone never unlocks paid content.
-          </p>
-        </section>
-
-        <section>
-          <h2>3. What Feature Packs unlock</h2>
-          <p>
-            A Feature Pack is the bundle wrapped around each lens, not just a
-            filter file. For example, the Neon Cyber Feature Pack includes the
-            Neon Cyber Lens, synthwave audio-reactive tunes, cyberpunk HUD
-            overlay assets, and setup guides. The Phantom Spectral Feature Pack
-            pairs its ghostly shaders with chromatic glitch tools and a spectral
-            soundscape. Each pack lists its included effects, sounds and reading
-            material in one modal, so you always know exactly what ownership
-            covers.
-          </p>
-        </section>
-
-        <section>
-          <h2>4. New effects, sounds and creative updates</h2>
-          <p>
-            The Studio keeps a live news pipeline inside the Lens News &amp;
-            Updates section: lens version releases, new effect announcements and
-            scheduled maintenance notices, each tagged and dated. Sound Box
-            tunes and lens soundscapes are treated as first-class assets, so an
-            update can add audio alongside visuals. When a new premium effect
-            arrives, existing owners of the connected pack see it as owned
-            content — no repurchase.
-          </p>
-        </section>
-
-        <section>
-          <h2>5. Lens-related blog and news updates</h2>
-          <p>
-            Written guides live in this blog and are linked directly from the
-            lenses they describe. The
-            <a href="https://webzonebw.in/er/">Studio</a> surfaces relevant
-            articles inside each Feature Pack modal, and every article carries
-            lens and pack metadata so future posts slot into the right place
-            automatically. This piece is the overview; deeper tutorials on
-            individual lenses follow it.
-          </p>
-        </section>
-
-        <section>
-          <h2>6. Mobile and desktop Studio experience</h2>
-          <p>
-            On desktop, the Studio uses a balanced two-column layout: the camera
-            stays the primary visual, with the effects panel alongside it. On
-            mobile, the same functionality reflows into a single column with a
-            large camera preview, horizontally swipeable effect trays and
-            thumb-friendly shutter controls. The camera engine deliberately
-            prevents duplicate streams and resumes cleanly after tab switches,
-            so switching devices mid-session behaves the same either way.
-          </p>
-        </section>
-
-        <section>
-          <h2>7. Supported assistance and hardware care</h2>
-          <p>
-            Each pack includes practical hardware care guidance — microfiber
-            cleaning for camera glass, stable mounting for GPU-heavy shaders,
-            and ambient lighting recommendations for clean face tracking. Lens
-            owners can request scoped setup assistance through the Studio,
-            connecting the creative product to the same support standards as the
-            <a href="https://webzonebw.in/articles/hardware-troubleshooting/"
-              >hardware troubleshooting guides</a
-            >
-            on this site.
-          </p>
-        </section>
-
-        <section>
-          <h2>8. What lens ownership connects you to</h2>
-          <p>
-            Purchasing a premium lens is not a one-off download. Ownership links
-            you to the lens's future updates, the pack's growing asset list,
-            owner-only articles and tutorials, and priority setup assistance.
-            The entitlement system is designed so that when a lens ships a v1.2,
-            v1.3 or a brand-new effect, owners receive it in place — the Studio
-            you bought into keeps improving.
-          </p>
-          <p>
-            Ready to try it? Open the
-            <a href="https://webzonebw.in/er/">Live Halloween Studio</a>, start
-            with a free lens, and explore the Feature Packs when something
-            catches your eye.
-          </p>
-        </section>
-
-        <section class="article-actions">
-          <a href="../../blog.html" class="btn">
-            <span aria-hidden="true">📖</span>
-            <span>Browse All Articles</span>
-          </a>
-          <a href="https://webzonebw.in/er/" class="btn btn-primary">
-            <span aria-hidden="true">🔮</span>
-            <span>Open WebZoneBW-ER Studio</span>
-          </a>
-        </section>
-
-        <div class="article-navigation">
-          <a href="../../blog.html" class="article-link">
-            ← Back to Blog
-          </a>
-        </div>
-      </main>
-    </div>
+    </main>
 
     <!-- Sidebar Backdrop -->
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-    <!-- JavaScript for Navigation and Theme -->
+    <!-- JavaScript -->
+    <script defer src="../../js/script.js?v=2.3.0"></script>
+    <script defer src="../../js/cookie-utils.js?v=2.3.0"></script>
+    <script defer src="../../js/cookie-consent.js?v=2.3.0"></script>
+
     <script>
+        // Theme Toggle Functionality
+        const themeToggleSwitch = document.getElementById('themeToggleSwitch');
+        const themeModeIcon = document.getElementById('themeModeIcon');
+        const themeModeText = document.getElementById('themeModeText');
+
+        // Check for saved theme preference or default to dark
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggleSwitch.checked = currentTheme === 'light';
+        updateThemeToggleUI(currentTheme);
+
+        function updateThemeToggleUI(theme) {
+            if (theme === 'light') {
+                themeModeIcon.textContent = '☀️';
+                themeModeText.textContent = 'Light Mode';
+            } else {
+                themeModeIcon.textContent = '🌙';
+                themeModeText.textContent = 'Dark Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggleSwitch.checked = newTheme === 'light';
+            updateThemeToggleUI(newTheme);
+            
+            // Add transition class for smooth animation
+            document.body.classList.add('theme-transitioning');
+            setTimeout(() => {
+                document.body.classList.remove('theme-transitioning');
+            }, 300);
+        }
+
+        themeToggleSwitch.addEventListener('change', toggleTheme);
+
         // Sidebar Toggle Functionality
         const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
         const mainSidebar = document.getElementById('mainSidebar');
-        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
         const body = document.body;
 
         function toggleSidebar() {
@@ -413,32 +442,6 @@
         }
 
         sidebarToggleBtn.addEventListener('click', toggleSidebar);
-        sidebarBackdrop.addEventListener('click', toggleSidebar);
-
-        // Theme Toggle Functionality
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-        
-        // Check for saved theme preference or default to dark
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeToggleBtn.setAttribute('aria-pressed', currentTheme === 'light');
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeToggleBtn.setAttribute('aria-pressed', newTheme === 'light');
-            
-            // Add transition class for smooth animation
-            document.body.classList.add('theme-transitioning');
-            setTimeout(() => {
-                document.body.classList.remove('theme-transitioning');
-            }, 300);
-        }
-
-        themeToggleBtn.addEventListener('click', toggleTheme);
 
         // Close sidebar on escape key
         document.addEventListener('keydown', (e) => {
@@ -446,7 +449,26 @@
                 toggleSidebar();
             }
         });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
+
+    <!-- Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+</div>
 
   </body>
 </html>
