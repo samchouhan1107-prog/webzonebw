@@ -1146,6 +1146,22 @@ app.get("/status", (req, res) => {
 </html>`);
 });
 
+// Explicit homepage route — production-safe root entry
+app.get("/", (req, res, next) => {
+    const indexFile = path.join(__dirname, "index.html");
+
+    if (!fs.existsSync(indexFile)) {
+        return next(new Error("WEBZONEBW index.html not found"));
+    }
+
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.sendFile(indexFile, (error) => {
+        if (error) {
+            next(error);
+        }
+    });
+});
+
 // Client-Side Routing Fallback (Prevents silent loading on missing resources)
 app.use((req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") {
