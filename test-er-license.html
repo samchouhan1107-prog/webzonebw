@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER License Test</title>
+</head>
+<body>
+    <h1>ER License Test</h1>
+    <p>Checking if fetchJSON is defined...</p>
+    <div id="result"></div>
+    
+    <script src="js/er-license.js"></script>
+    <script>
+        // Test if the license object is properly loaded
+        if (window.WEBZONEBW_LICENSE) {
+            document.getElementById('result').innerHTML = '<p style="color: green;">✅ WEBZONEBW_LICENSE object loaded successfully!</p>';
+            console.log('WEBZONEBW_LICENSE:', window.WEBZONEBW_LICENSE);
+        } else {
+            document.getElementById('result').innerHTML = '<p style="color: red;">❌ WEBZONEBW_LICENSE object not found!</p>';
+        }
+        
+        // Test if fetchJSON is defined
+        if (typeof fetchJSON === 'function') {
+            document.getElementById('result').innerHTML += '<p style="color: green;">✅ fetchJSON function is defined!</p>';
+        } else {
+            document.getElementById('result').innerHTML += '<p style="color: red;">❌ fetchJSON function is not defined!</p>';
+        }
+        
+        // Test getHalloweenStatus function
+        if (window.WEBZONEBW_LICENSE && typeof window.WEBZONEBW_LICENSE.getHalloweenStatus === 'function') {
+            document.getElementById('result').innerHTML += '<p style="color: green;">✅ getHalloweenStatus function is defined!</p>';
+            
+            // Test the function
+            window.WEBZONEBW_LICENSE.getHalloweenStatus().then(function(data) {
+                document.getElementById('result').innerHTML += '<p style="color: blue;">📊 Halloween status: ' + JSON.stringify(data) + '</p>';
+            }).catch(function(error) {
+                document.getElementById('result').innerHTML += '<p style="color: orange;">⚠️ Halloween status error: ' + error.message + '</p>';
+            });
+        } else {
+            document.getElementById('result').innerHTML += '<p style="color: red;">❌ getHalloweenStatus function is not defined!</p>';
+        }
+    </script>
+</body>
+</html>
