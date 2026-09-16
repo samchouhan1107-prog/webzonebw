@@ -450,57 +450,6 @@
             line-height: 1.5;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .halloween-content-wrapper {
-                padding: 1.5rem;
-            }
-
-            .halloween-brand-section {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-
-            .halloween-brand-info h1 {
-                font-size: 1.5rem;
-            }
-
-            .halloween-badge-section {
-                justify-content: center;
-            }
-
-            .halloween-feature-nav {
-                position: static;
-                justify-content: center;
-                margin-top: 1rem;
-            }
-
-            .halloween-hero-title {
-                font-size: 2rem;
-            }
-
-            .halloween-hero-subtitle {
-                font-size: 1rem;
-            }
-
-            .halloween-hero-meta {
-                gap: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .halloween-hero-title {
-                font-size: 1.5rem;
-            }
-
-            .halloween-hero-meta {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
-            }
-        }
-
         /* Halloween Feature Actions */
         .halloween-feature-actions {
             position: relative;
@@ -592,6 +541,57 @@
         .halloween-action-icon {
             font-size: 1.2rem;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .halloween-content-wrapper {
+                padding: 1.5rem;
+            }
+
+            .halloween-brand-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .halloween-brand-info h1 {
+                font-size: 1.5rem;
+            }
+
+            .halloween-badge-section {
+                justify-content: center;
+            }
+
+            .halloween-feature-nav {
+                position: static;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+
+            .halloween-hero-title {
+                font-size: 2rem;
+            }
+
+            .halloween-hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .halloween-hero-meta {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .halloween-hero-title {
+                font-size: 1.5rem;
+            }
+
+            .halloween-hero-meta {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        }
     </style>
 
     <!-- Structured Data -->
@@ -603,7 +603,7 @@
         "headline": "WebZoneBW Studio: Lenses, Feature Packs, Updates & the Creative Experience",
         "description": "A complete guide to WebZoneBW Studio — lenses, Feature Packs, updates, the mobile and desktop experience, supported assistance and lens ownership benefits.",
         "url": "https://webzonebw.in/articles/webzonebw-studio-lenses-creative-experience/",
-        "datePublished": "2026-10-27",
+        "datePublished": "2024-10-27",
         "articleSection": "WebZoneBW Studio",
         "keywords": "WebZoneBW Studio, AR lenses, Feature Packs, Halloween Studio, camera filters",
         "author": {
@@ -621,135 +621,52 @@
 
   <body>
 
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
-<div class="container">
-
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav-bar">
-
-        <button
-            type="button"
-            class="hamburger-btn"
-            id="sidebarToggleBtn"
-            aria-label="Toggle sidebar navigation"
-            aria-controls="mainSidebar"
-            aria-expanded="false">
-
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-
-        </button>
-
-
-        <div class="mobile-brand-title">
-            <span class="gradient-text">
-                WEBZONEBW
-            </span>
-        </div>
-
+    <!-- Halloween Feature Presentation Header -->
+    <header class="halloween-feature-header">
+        <div class="halloween-bg-pattern"></div>
         
-    </div>
-
-
-    <!-- =====================================================
-         STANDARDIZED SIDEBAR
-         ===================================================== -->
-
-    <aside
-        class="sidebar"
-        id="mainSidebar"
-        aria-label="Website sidebar">
-
-        <div class="logo">
-            <a href="../../index.html" aria-label="WEBZONEBW Home" class="brand-logo-link">
-                <img src="../../assets/logo.png" alt="WEBZONEBW Logo" class="brand-logo-img">
-                <div class="brand-name-group">
-                    <span class="brand-title">WEBZONEBW</span>
-                    <span class="brand-sub">IT SUPPORT • SYSTEMS • LAB</span>
+        <div class="halloween-content-wrapper">
+            <div class="halloween-brand-section">
+                <div class="halloween-logo-container">
+                    <img src="../../assets/logo.png" alt="WEBZONEBW Logo" class="halloween-logo">
+                    <div class="halloween-glow-effect"></div>
                 </div>
+                <div class="halloween-brand-info">
+                    <h1 class="halloween-main-title">WEBZONEBW</h1>
+                    <p class="halloween-subtitle">Professional Technology Portfolio</p>
+                </div>
+            </div>
+            
+            <div class="halloween-badge-section">
+                <div class="halloween-main-badge">
+                    <span class="halloween-badge-icon">🎃</span>
+                    <span class="halloween-badge-text">Halloween 2024: Studio Awakening</span>
+                </div>
+                <div class="halloween-timing-badge">
+                    <span class="halloween-timing-icon">⏰</span>
+                    <span class="halloween-timing-text">Coming October 2024</span>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="halloween-feature-nav">
+            <a href="../../index.html" class="halloween-nav-link">
+                <span class="halloween-nav-icon">🏠</span>
+                <span>Home</span>
             </a>
-        </div>
-
-        <nav class="sidebar-nav" aria-label="Sidebar navigation links">
-            <ul>
-                <li>
-                    <a href="../../index.html">
-                        <span class="nav-icon" aria-hidden="true">🏠</span>
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../about.html">
-                        <span class="nav-icon" aria-hidden="true">👤</span>
-                        <span>About</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../projects.html">
-                        <span class="nav-icon" aria-hidden="true">💼</span>
-                        <span>Projects</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../resume.html">
-                        <span class="nav-icon" aria-hidden="true">📄</span>
-                        <span>Resume</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../blog.html">
-                        <span class="nav-icon" aria-hidden="true">📝</span>
-                        <span>Blog</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../contact.html">
-                        <span class="nav-icon" aria-hidden="true">📧</span>
-                        <span>Contact</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../soundbox.html">
-                        <span class="nav-icon" aria-hidden="true">🎵</span>
-                        <span>Sound Box</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../er/">
-                        <span class="nav-icon" aria-hidden="true">🔮</span>
-                        <span>ER Studio</span>
-                    </a>
-                </li>
-            </ul>
+            <a href="../../blog.html" class="halloween-nav-link">
+                <span class="halloween-nav-icon">📝</span>
+                <span>Blog</span>
+            </a>
+            <a href="../../er/" class="halloween-nav-link halloween-nav-primary">
+                <span class="halloween-nav-icon">🔮</span>
+                <span>Open Studio</span>
+            </a>
         </nav>
-
-        <div class="sidebar-theme-toggle-row">
-            <div class="theme-label-group">
-                <span id="themeModeIcon" aria-hidden="true">🌙</span>
-                <span id="themeModeText">Dark Mode</span>
-            </div>
-            <label class="switch-toggle" for="themeToggleSwitch">
-                <input type="checkbox" id="themeToggleSwitch" aria-label="Toggle dark or light theme">
-                <span class="toggle-slider" aria-hidden="true"></span>
-            </label>
-        </div>
-
-        <div class="sidebar-user-card">
-            <div class="user-avatar-wrap">
-                <span class="user-avatar-icon" aria-hidden="true">👨‍💻</span>
-                <span class="user-online-dot" title="Online"></span>
-            </div>
-            <div class="user-info">
-                <strong>Sameer Chouhan</strong>
-                <span>IT Specialist &amp; Creator</span>
-            </div>
-        </div>
-    </aside>
+    </header>
 
     <!-- Main Content Area -->
-    <main class="main-content" id="main-content">
+    <main class="halloween-feature-content" id="main-content">
 
         <!-- Halloween Hero Section -->
         <header class="halloween-hero-section">
@@ -784,115 +701,110 @@
             </div>
         </header>
 
-        <!-- Article Container -->
-        <article itemscope itemtype="https://schema.org/TechArticle" style="max-width: 900px; margin: 0 auto; padding: 20px 0;">
-
-            <!-- Halloween Meta Banner -->
-            <section class="halloween-meta-banner">
-                <div class="halloween-banner-bg"></div>
-                <div class="halloween-banner-content">
-                    <div class="halloween-banner-tags">
-                        <div class="halloween-author-tag">
-                            <span class="halloween-tag-icon">✍️</span>
-                            <span class="halloween-tag-text">Sameer Chouhan</span>
-                        </div>
-                        <div class="halloween-date-tag">
-                            <span class="halloween-tag-icon">📅</span>
-                            <span class="halloween-tag-text">Published October 27, 2024</span>
-                        </div>
-                        <div class="halloween-readtime-tag">
-                            <span class="halloween-tag-icon">⏱️</span>
-                            <span class="halloween-tag-text">5 min read</span>
-                        </div>
+        <!-- Halloween Meta Banner -->
+        <section class="halloween-meta-banner">
+            <div class="halloween-banner-bg"></div>
+            <div class="halloween-banner-content">
+                <div class="halloween-banner-tags">
+                    <div class="halloween-author-tag">
+                        <span class="halloween-tag-icon">✍️</span>
+                        <span class="halloween-tag-text">Sameer Chouhan</span>
                     </div>
-                    <div class="halloween-category-badge">
-                        <span class="halloween-category-icon">🎃</span>
-                        <span class="halloween-category-text">WebZoneBW Studio Halloween 2024</span>
+                    <div class="halloween-date-tag">
+                        <span class="halloween-tag-icon">📅</span>
+                        <span class="halloween-tag-text">Published October 27, 2024</span>
+                    </div>
+                    <div class="halloween-readtime-tag">
+                        <span class="halloween-tag-icon">⏱️</span>
+                        <span class="halloween-tag-text">5 min read</span>
                     </div>
                 </div>
-            </section>
+                <div class="halloween-category-badge">
+                    <span class="halloween-category-icon">🎃</span>
+                    <span class="halloween-category-text">WebZoneBW Studio Halloween 2024</span>
+                </div>
+            </div>
+        </section>
 
-            <!-- Halloween Introduction -->
-            <section class="halloween-section">
-                <h2>1. The Awakening: Creative Experience Unleashed</h2>
-                <p>
-                    Welcome to the Halloween 2024 awakening of WebZoneBW Studio — where the camera becomes a supernatural canvas for creative expression. This special Halloween collection transforms your browser into an extended reality playground, blending cutting-edge AR technology with seasonal magic. Discover how our mystical lenses work, unlock exclusive Feature Packs, and experience the future of creative technology while embracing the Halloween spirit.
-                </p>
-            </section>
+        <!-- Halloween Introduction -->
+        <section class="halloween-section">
+            <h2>1. The Awakening: Creative Experience Unleashed</h2>
+            <p>
+                Welcome to the Halloween 2024 awakening of WebZoneBW Studio — where the camera becomes a supernatural canvas for creative expression. This special Halloween collection transforms your browser into an extended reality playground, blending cutting-edge AR technology with seasonal magic. Discover how our mystical lenses work, unlock exclusive Feature Packs, and experience the future of creative technology while embracing the Halloween spirit.
+            </p>
+        </section>
 
-            <!-- Halloween Section 2 -->
-            <section class="halloween-section">
-                <h2>2. Enter the Halloween Studio Portal</h2>
-                <p>
-                    Your journey begins in the <a href="https://webzonebw.in/er/">WebZoneBW-ER Halloween Studio</a> — a mystical realm where camera permission unlocks supernatural possibilities. Step into a live preview realm featuring an enchanted lens carousel, Smart category filters, an HD shutter, and Test Mode for trying effects without commitment. Lenses are grouped into mystical categories: Face AR (tracking-anchored overlays like Aviator Wings, Angel Halo, and Anime Cel Shaders) and Scene shaders (full-frame mystical looks like Leica Noir, 35mm Film Glitch, and Neon Cyber). A single tap transforms your reality — no complex rituals or editing skills required.
-                </p>
-            </section>
+        <!-- Halloween Section 2 -->
+        <section class="halloween-section">
+            <h2>2. Enter the Halloween Studio Portal</h2>
+            <p>
+                Your journey begins in the <a href="https://webzonebw.in/er/">WebZoneBW-ER Halloween Studio</a> — a mystical realm where camera permission unlocks supernatural possibilities. Step into a live preview realm featuring an enchanted lens carousel, Smart category filters, an HD shutter, and Test Mode for trying effects without commitment. Lenses are grouped into mystical categories: Face AR (tracking-anchored overlays like Aviator Wings, Angel Halo, and Anime Cel Shaders) and Scene shaders (full-frame mystical looks like Leica Noir, 35mm Film Glitch, and Neon Cyber). A single tap transforms your reality — no complex rituals or editing skills required.
+            </p>
+        </section>
 
-            <!-- Halloween Section 3 -->
-            <section class="halloween-section">
-                <h2>3. Free & Premium Mystic Lenses</h2>
-                <p>
-                    Free lenses — such as the Volcanic Ember Lens and Pumpkin Patch Lens — are automatically awakened and ready the moment you enter the Studio. Premium lenses bear the mystical Premium badge and locked state, revealing their secrets only to those who seek them. Opening an unowned premium lens unveils the complete experience: the effect list, connected Feature Pack, and the sacred price. The checkout flows through a secure PayPal gateway (card, PayPal balance, or UPI-backed methods), with entitlements verified by ancient server-side magic — no browser spell alone can unlock these sacred contents.
-                </p>
-            </section>
+        <!-- Halloween Section 3 -->
+        <section class="halloween-section">
+            <h2>3. Free & Premium Mystic Lenses</h2>
+            <p>
+                Free lenses — such as the Volcanic Ember Lens and Pumpkin Patch Lens — are automatically awakened and ready the moment you enter the Studio. Premium lenses bear the mystical Premium badge and locked state, revealing their secrets only to those who seek them. Opening an unowned premium lens unveils the complete experience: the effect list, connected Feature Pack, and the sacred price. The checkout flows through a secure PayPal gateway (card, PayPal balance, or UPI-backed methods), with entitlements verified by ancient server-side magic — no browser spell alone can unlock these sacred contents.
+            </p>
+        </section>
 
-            <!-- Halloween Section 4 -->
-            <section class="halloween-section">
-                <h2>4. The Power of Feature Packs</h2>
-                <p>
-                    Each Feature Pack is a mystical bundle containing more than just a lens — it's a complete supernatural experience. The Neon Cyber Feature Pack channels the Neon Cyber Lens, synthwave audio-reactive incantations, cyberpunk HUD overlay artifacts, and mystical setup guides. The Phantom Spectral Feature Pair binds ghostly shaders with chromatic glitch tools and a spectral soundscape. Each pack reveals its complete collection of effects, sounds, and mystical knowledge in one sacred modal, ensuring you understand the full scope of your supernatural investment.
-                </p>
-            </section>
+        <!-- Halloween Section 4 -->
+        <section class="halloween-section">
+            <h2>4. The Power of Feature Packs</h2>
+            <p>
+                Each Feature Pack is a mystical bundle containing more than just a lens — it's a complete supernatural experience. The Neon Cyber Feature Pack channels the Neon Cyber Lens, synthwave audio-reactive incantations, cyberpunk HUD overlay artifacts, and mystical setup guides. The Phantom Spectral Feature Pair binds ghostly shaders with chromatic glitch tools and a spectral soundscape. Each pack reveals its complete collection of effects, sounds, and mystical knowledge in one sacred modal, ensuring you understand the full scope of your supernatural investment.
+            </p>
+        </section>
 
-            <!-- Halloween Section 5 -->
-            <section class="halloween-section">
-                <h2>5. Living Updates & New Effects</h2>
-                <p>
-                    The Studio maintains a mystical news pipeline within the Lens News & Updates section: lens version releases, new effect announcements, and scheduled maintenance notices, each tagged and dated with mystical precision. Sound Box tunes and lens soundscapes are treated as first-class mystical assets, allowing updates to bring audio alongside visual transformations. When a new premium effect arrives, existing owners of connected packs receive it as part of their sacred collection — no additional purchase required.
-                </p>
-            </section>
+        <!-- Halloween Section 5 -->
+        <section class="halloween-section">
+            <h2>5. Living Updates & New Effects</h2>
+            <p>
+                The Studio maintains a mystical news pipeline within the Lens News & Updates section: lens version releases, new effect announcements, and scheduled maintenance notices, each tagged and dated with mystical precision. Sound Box tunes and lens soundscapes are treated as first-class mystical assets, allowing updates to bring audio alongside visual transformations. When a new premium effect arrives, existing owners of connected packs receive it as part of their sacred collection — no additional purchase required.
+            </p>
+        </section>
 
-            <!-- Halloween Eye Care Section -->
-            <section class="halloween-eye-care">
-                <h3>👁️ Safe & Responsible Usage Guide</h3>
-                <ul>
-                    <li><strong>Eye Protection:</strong> Take regular breaks during extended lens use. Follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds.</li>
-                    <li><strong>Lighting Conditions:</strong> Use in well-lit environments to reduce eye strain. Avoid using lenses in complete darkness or extremely bright conditions.</li>
-                    <li><strong>Screen Time Management:</strong> Limit continuous lens sessions to 30-45 minutes at a time. Your eyes need rest from digital screens.</li>
-                    <li><strong>Camera Exposure:</strong> Be mindful of camera flash and bright lights. Some effects may increase screen brightness — adjust accordingly.</li>
-                    <li><strong>Comfort First:</strong> If you experience eye discomfort, headache, or dizziness, stop using lenses immediately and consult an eye care professional.</li>
-                    <li><strong>Children & Sensitive Users:</strong> Use with caution for children or users with light sensitivity. Parental guidance recommended for younger users.</li>
-                </ul>
-            </section>
+        <!-- Halloween Eye Care Section -->
+        <section class="halloween-eye-care">
+            <h3>👁️ Safe & Responsible Usage Guide</h3>
+            <ul>
+                <li><strong>Eye Protection:</strong> Take regular breaks during extended lens use. Follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds.</li>
+                <li><strong>Lighting Conditions:</strong> Use in well-lit environments to reduce eye strain. Avoid using lenses in complete darkness or extremely bright conditions.</li>
+                <li><strong>Screen Time Management:</strong> Limit continuous lens sessions to 30-45 minutes at a time. Your eyes need rest from digital screens.</li>
+                <li><strong>Camera Exposure:</strong> Be mindful of camera flash and bright lights. Some effects may increase screen brightness — adjust accordingly.</li>
+                <li><strong>Comfort First:</strong> If you experience eye discomfort, headache, or dizziness, stop using lenses immediately and consult an eye care professional.</li>
+                <li><strong>Children & Sensitive Users:</strong> Use with caution for children or users with light sensitivity. Parental guidance recommended for younger users.</li>
+            </ul>
+        </section>
 
-            <!-- Halloween Section 6 -->
-            <section class="halloween-section">
-                <h2>6. Cross-Platform Mystical Experience</h2>
-                <p>
-                    On desktop, the Studio balances power and beauty: the camera remains your primary mystical viewport, with the effects panel as your spellbook. On mobile, the same magic reflows into a single column with a large camera preview, horizontally swipeable effect trays, and thumb-friendly shutter controls. The mystical camera engine prevents duplicate streams and ensures clean resurrection after tab switches, so your supernatural journey continues seamlessly across devices.
-                </p>
-            </section>
+        <!-- Halloween Section 6 -->
+        <section class="halloween-section">
+            <h2>6. Cross-Platform Mystical Experience</h2>
+            <p>
+                On desktop, the Studio balances power and beauty: the camera remains your primary mystical viewport, with the effects panel as your spellbook. On mobile, the same magic reflows into a single column with a large camera preview, horizontally swipeable effect trays, and thumb-friendly shutter controls. The mystical camera engine prevents duplicate streams and ensures clean resurrection after tab switches, so your supernatural journey continues seamlessly across devices.
+            </p>
+        </section>
 
-            <!-- Halloween Section 7 -->
-            <section class="halloween-section">
-                <h2>7. Mystical Hardware Care & Support</h2>
-                <p>
-                    Each pack includes practical mystical hardware care guidance — microfiber cleaning rituals for camera glass, stable mounting incantations for GPU-heavy shaders, and ambient lighting recommendations for clear face tracking. Lens owners can request mystical setup assistance through the Studio, connecting the creative experience to the same support standards as the <a href="https://webzonebw.in/articles/hardware-troubleshooting/">hardware troubleshooting guides</a> on this site.
-                </p>
-            </section>
+        <!-- Halloween Section 7 -->
+        <section class="halloween-section">
+            <h2>7. Mystical Hardware Care & Support</h2>
+            <p>
+                Each pack includes practical mystical hardware care guidance — microfiber cleaning rituals for camera glass, stable mounting incantations for GPU-heavy shaders, and ambient lighting recommendations for clear face tracking. Lens owners can request mystical setup assistance through the Studio, connecting the creative experience to the same support standards as the <a href="https://webzonebw.in/articles/hardware-troubleshooting/">hardware troubleshooting guides</a> on this site.
+            </p>
+        </section>
 
-            <!-- Halloween Section 8 -->
-            <section class="halloween-section">
-                <h2>8. The Eternal Lens Bond</h2>
-                <p>
-                    Purchasing a premium lens creates an eternal mystical bond — it's not merely a download. Ownership connects you to the lens's future evolutions, the pack's growing mystical arsenal, owner-only mystical articles and tutorials, and priority setup assistance. The entitlement system ensures that when a lens evolves to v1.2, v1.3, or gains new mystical powers, existing owners receive these upgrades automatically — the Studio you joined continues its supernatural evolution.
-                </p>
-                <p>
-                    Ready to begin your mystical journey? Open the <a href="https://webzonebw.in/er">Live Halloween Studio</a>, start with a free lens, and explore the Feature Packs when mystical inspiration strikes.
-                </p>
-            </section>
-
-        </article>
+        <!-- Halloween Section 8 -->
+        <section class="halloween-section">
+            <h2>8. The Eternal Lens Bond</h2>
+            <p>
+                Purchasing a premium lens creates an eternal mystical bond — it's not merely a download. Ownership connects you to the lens's future evolutions, the pack's growing mystical arsenal, owner-only mystical articles and tutorials, and priority setup assistance. The entitlement system ensures that when a lens evolves to v1.2, v1.3, or gains new mystical powers, existing owners receive these upgrades automatically — the Studio you joined continues its supernatural evolution.
+            </p>
+            <p>
+                Ready to begin your mystical journey? Open the <a href="https://webzonebw.in/er">Live Halloween Studio</a>, start with a free lens, and explore the Feature Packs when mystical inspiration strikes.
+            </p>
+        </section>
 
         <!-- Halloween Feature Actions -->
         <section class="halloween-feature-actions">
@@ -916,9 +828,6 @@
         </section>
 
     </main>
-
-    <!-- Sidebar Backdrop -->
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
     <!-- JavaScript -->
     <script defer src="../../js/script.js?v=2.3.0"></script>
@@ -1082,11 +991,6 @@
         `;
         document.head.appendChild(style);
     </script>
-
-    <!-- Sidebar Backdrop -->
-    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-
-</div>
 
   </body>
 </html>

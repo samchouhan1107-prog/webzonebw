@@ -1,49 +1,76 @@
 # Render.com configuration for WebZoneBW ER Studio
-# Save this as render.yaml in your repository root
+# Optimized for production deployment with PayPal integration
 
 services:
   - type: web
     name: webzonebw-er-studio
     env: node
-    buildCommand: npm ci && npm run build
-    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
-      - key: TRUST_PROXY
-        value: true
+        value: 3000  # Matches server.js default port
       - key: HOST
         value: 0.0.0.0
-      - key: PAYPAL_CLIENT_ID
-        sync: false
-      - key: PAYPAL_CLIENT_SECRET
-        sync: false
+      - key: TRUST_PROXY
+        value: true
       - key: PAYPAL_MODE
         value: live
       - key: PAYPAL_CURRENCY
         value: USD
+      - key: ALLOWED_ORIGINS
+        value: https://webzonebw.in,https://www.webzonebw.in
+      # PayPal credentials (to be set in Render dashboard)
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
       - key: PAYPAL_WEBHOOK_ID
         sync: false
+      # Admin and security keys
       - key: ORDER_EMAIL
         sync: false
       - key: ADMIN_KEY
         sync: false
       - key: SESSION_SECRET
         sync: false
-      - key: ALLOWED_ORIGINS
-        value: https://webzonebw.in,https://www.webzonebw.in
+    # Build and start commands
+    buildCommand: npm ci
+    startCommand: node server.js
+    # Port configuration (matches server.js default)
+    port: 3000
+    # Runtime configuration
     regions:
       - oregon
+    # Health check configuration
     healthCheck:
       path: /api/health
       interval: 30
       timeout: 10
       method: GET
       statusCode: 200
+    # Resource allocation
     envVarScope: RUN_TIME
     instanceCount: 1
     cpuCount: 1
     memoryLimit: 1024
     diskSize: 1024
+    # Service configuration
+    serviceGroup: webzonebw-er-studio
+    # Auto-healing
+    autoHealing: true
+    # Logs configuration
+    logsDestination: "rsyslog"
+    # Deployment settings
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    # Branch protection
+    branch: restore-webzonebw-20260914-layout
+    # Health check grace period
+    healthCheckGracePeriod: 120
+    # Restart policy
+    restartPolicy: on-failure
+    # Max restart attempts
+    maxRestarts: 5
+    # Deployment timeout
+    deploymentTimeout: 600
