@@ -1,7 +1,7 @@
 /* ============================================================
  * WEBZONEBW ER STUDIO — PREMIUM LICENSE MANAGER
  * ------------------------------------------------------------
- * Real ₹499 (USD equivalent) purchase → PayPal checkout →
+ * Real $5.99 USD purchase → PayPal checkout →
  * server-side capture + verification → license activation →
  * persistent re-verification on every session.
  *
@@ -29,7 +29,7 @@
    * Configure via: <meta name="wzb-api-base" content="https://...">
    * or the WZB_API_BASE constant below.
    */
-  var WZB_API_BASE = "https://webzonebw-er-studio.onrender.com";
+  var WZB_API_BASE = "https://webzonebw.onrender.com";
   var API_BASE = (function () {
     try {
       var meta = document.querySelector('meta[name="wzb-api-base"]');
@@ -75,7 +75,7 @@
     status: "none", // none | verifying | active | inactive | unreachable | promo_access
     verifying: false,
     plan: "er-studio-premium",
-    amount: 499,
+    amount: 5.99,
     promoKey: null,
     promoFeatures: [],
     promoExpires: null,
@@ -180,7 +180,7 @@
             state.status = "promo_access";
             state.plan = "halloween-promo";
             state.email = undefined;
-            setPromoAccess(data.promoAccess ? data.promoAccess.promoKey : null, 
+            setPromoAccess(data.promoAccess ? data.promoAccess.promoKey : null,
                          data.promoAccess ? data.promoAccess.features : null,
                          data.promoAccess ? data.promoAccess.expires : null);
           } else if (data.hasPaidLicense) {
@@ -228,8 +228,7 @@
    * Flow: create PayPal order on our server → render PayPal Buttons
    * → server CAPTURES the payment (server-side capture is the source
    * of truth) → license key issued → client activates + verifies it.
-   * PayPal does not support INR, so the order is placed in USD
-   * (default $5.99 ≈ ₹499) server-side.
+   * The order is placed in USD ($5.99) server-side.
    */
   /*
    * The manual-order mailbox is owned by the payment receiving account.
@@ -275,10 +274,10 @@
   }
 
   function mailtoOrderLink(orderInfo) {
-    var subject = "WebZoneBW ER Studio Premium — Order Request (₹499)";
+    var subject = "WebZoneBW ER Studio Premium — Order Request ($5.99 USD)";
     var body =
       "Hello WebZoneBW,\n\n" +
-      "I want to purchase the WebZoneBW ER Studio Premium license (₹499, one-time).\n\n" +
+      "I want to purchase the WebZoneBW ER Studio Premium license ($5.99 USD, one-time).\n\n" +
       "Name: \n" +
       "Email (license will be bound to this): " + (orderInfo.email || "") + "\n" +
       "Phone: " + (orderInfo.phone || "") + "\n\n" +
@@ -307,39 +306,120 @@
     modal.className = "er-modal-backdrop";
 
     modal.innerHTML =
-      '<div class="er-modal-card">' +
+      '<div class="er-modal-card premium-checkout">' +
       '<div class="er-modal-header">' +
       "<div>" +
-      '<span class="er-badge-category">💎 Premium</span>' +
+      '<span class="er-badge-category">💎 PREMIUM UPGRADE</span>' +
       "<h3>WebZoneBW ER Studio Premium</h3>" +
       "</div>" +
       '<button class="er-modal-close" id="licCloseBtn">&times;</button>' +
       "</div>" +
+
       '<div class="er-modal-body">' +
-      '<div class="cf-summary-box">' +
-      "<strong>Unlocks:</strong> All Premium Pose Effects, VR Environments, " +
-      "Halloween Premium Effects &amp; Video Recording<br>" +
-      "<strong>Amount:</strong> ₹499.00 (≈ $5.99 USD) — one-time ER Studio license" +
-      "</div>" +
-      '<p class="cf-secure-note">🔒 Payment is processed by <strong>PayPal</strong> ' +
-      "(PayPal balance / Card). Your premium license is issued and verified " +
-      "server-side only after the payment is captured by PayPal.</p>" +
-      '<label for="licEmail">Email (license is bound to this)</label>' +
-      '<input type="email" id="licEmail" placeholder="you@example.com" ' +
-      'autocomplete="email" required>' +
-      "</div>" +
-      '<div id="paypalButtons" style="margin-top:14px;"></div>' +
-      '<button class="btn" id="licMailBtn" style="width:100%; margin-top:10px;">' +
-      "✉️ Order via Email instead</button>" +
-      '<div id="licError" class="er-license-error" style="display:none;"></div>' +
-      '<div id="licProcessing" style="display:none; text-align:center; padding:18px;">' +
-      '<div class="er-spinner"></div>' +
-      '<p id="licProcessingMsg" style="margin-top:10px; color:#38bdf8;">Opening secure PayPal checkout...</p>' +
-      "</div>" +
-      '<p class="er-license-foot">License verification is persistent: it is re-checked ' +
-      "with the WebZoneBW license server on every visit after logout/login.</p>" +
-      "</div>" +
-      "</div>";
+
+      // Product Summary Section
+      '<div class="product-summary">' +
+      '<div class="product-header">' +
+      '<div class="product-icon">🎃</div>' +
+      '<div class="product-info">' +
+      '<h4>ER Studio Premium License</h4>' +
+      '<p class="product-subtitle">Unlock All Halloween & Creative Effects</p>' +
+      '</div>' +
+      '</div>' +
+
+      '<div class="product-features">' +
+      '<div class="feature-item">' +
+      '<span class="feature-icon">🦴</span>' +
+      '<span class="feature-text">Premium Pose Effects & VR Environments</span>' +
+      '</div>' +
+      '<div class="feature-item">' +
+      '<span class="feature-icon">👻</span>' +
+      '<span class="feature-text">Exclusive Halloween Transformations</span>' +
+      '</div>' +
+      '<div class="feature-item">' +
+      '<span class="feature-icon">🎬</span>' +
+      '<span class="feature-text">Advanced Cinematic Effects</span>' +
+      '</div>' +
+      '<div class="feature-item">' +
+      '<span class="feature-icon">📹</span>' +
+      '<span class="feature-text">Video Recording & Export</span>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      // Pricing Section
+      '<div class="pricing-section">' +
+      '<div class="price-info">' +
+      '<div class="price-main">$5.99</div>' +
+      '<div class="price-sub">One-time purchase · USD</div>' +
+      '</div>' +
+      '<div class="price-security">' +
+      '<span class="security-badge">🔒 Secure Payment</span>' +
+      '<span class="security-badge">✅ Instant Delivery</span>' +
+      '</div>' +
+      '</div>' +
+      
+      // Email Input Section
+      '<div class="email-section">' +
+      '<label for="licEmail" class="email-label">Email Address for License</label>' +
+      '<input type="email" id="licEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required>' +
+      '<p class="email-help">Your license will be permanently bound to this email address</p>' +
+      '</div>' +
+      
+      // Processing States
+      '<div id="licProcessing" class="processing-state" style="display:none;">' +
+      '<div class="processing-content">' +
+      '<div class="er-spinner large"></div>' +
+      '<div class="processing-text">Processing your request...</div>' +
+      '<div class="processing-subtext">Connecting to secure payment gateway</div>' +
+      '</div>' +
+      '</div>' +
+      
+      '<div id="licSuccess" class="success-state" style="display:none;">' +
+      '<div class="success-content">' +
+      '<div class="success-icon">✅</div>' +
+      '<div class="success-text">Payment Successful!</div>' +
+      '<div class="success-subtext">Your premium license is being activated...</div>' +
+      '</div>' +
+      '</div>' +
+      
+      '<div id="licError" class="error-state" style="display:none;">' +
+      '<div class="error-content">' +
+      '<div class="error-icon">❌</div>' +
+      '<div class="error-text">Payment Failed</div>' +
+      '<div class="error-subtext" id="errorDetails">Please try again or use alternative payment</div>' +
+      '</div>' +
+      '</div>' +
+      
+      '</div>' +
+      
+      // Action Buttons
+      '<div class="modal-actions">' +
+      '<div id="paypalButtons" class="payment-section"></div>' +
+      
+      '<div class="alternative-payment">' +
+      '<button class="btn btn-secondary" id="licMailBtn">' +
+      '<span class="btn-icon">✉️</span>' +
+      '<span class="btn-text">Order via Email</span>' +
+      '</button>' +
+      '</div>' +
+      
+      '<div class="trust-badges">' +
+      '<span class="trust-badge">PayPal</span>' +
+      '<span class="trust-badge">Secure</span>' +
+      '<span class="trust-badge">Instant</span>' +
+      '</div>' +
+      
+      '</div>' +
+      
+      '<div class="modal-footer">' +
+      '<p class="license-terms">' +
+      'By completing this purchase, you agree to our <a href="../terms.html">Terms of Service</a> and <a href="../privacy.html">Privacy Policy</a>. ' +
+      'Your license is non-refundable and grants lifetime access to premium features.' +
+      '</p>' +
+      '</div>' +
+      
+      '</div>';
 
     document.body.appendChild(modal);
 
@@ -384,13 +464,12 @@
     var email = (modal.querySelector("#licEmail").value || "").trim();
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      proc.style.display = "none";
       showError("Please enter a valid email address first (your license is bound to it).");
       return;
     }
 
-    proc.style.display = "block";
-    procMsg.textContent = "Preparing secure PayPal checkout...";
+    // Show processing state
+    showProcessingState("Preparing secure PayPal checkout...");
 
     resolveAPIBase().then(function () {
     return fetchJSON(API_BASE + "/api/paypal/create-order", {
@@ -408,8 +487,7 @@
       })
       .catch(function (error) {
         console.error('PayPal order creation failed:', error);
-        proc.style.display = "none";
-        showToast("❌", "Payment service unavailable. Please try again later.");
+        showError("Payment service unavailable. Please try again later.");
         return { ok: false, data: { error: "PAYMENT_SERVICE_UNAVAILABLE" } };
       })
       .then(function (result) {
@@ -431,7 +509,8 @@
 
         // STEP 2: render real PayPal Buttons against the created order.
         return loadPayPalSdk(result.data.clientId).then(function () {
-          proc.style.display = "none";
+          hideProcessingState();
+          showPaymentState();
           var orderId = result.data.orderId;
 
           window.paypal
@@ -441,9 +520,7 @@
                 return orderId;
               },
               onApprove: function (data) {
-                proc.style.display = "block";
-                procMsg.textContent =
-                  "Payment approved! Verifying with the license server...";
+                showProcessingState("Payment approved! Activating your license...");
 
                 // STEP 3: our server CAPTURES the payment via PayPal API
                 // (source of truth) and only then issues a license key.
@@ -464,15 +541,16 @@
                       );
                     }
 
-                    procMsg.textContent =
-                      "Payment captured! Activating your license...";
-                    return activateLicense(
-                      orderId,
-                      email,
-                      procMsg,
-                      showError,
-                      close,
-                    );
+                    showProcessingState("License activation complete!");
+                    setTimeout(function() {
+                      activateLicense(
+                        orderId,
+                        email,
+                        null,
+                        null,
+                        close,
+                      );
+                    }, 1500);
                   })
                   .catch(function (err) {
                     showError(
@@ -482,13 +560,17 @@
                   });
               },
               onCancel: function () {
+                hideProcessingState();
+                showPaymentState();
                 showError(
-                  "Payment was cancelled. Nothing was charged or unlocked.",
+                  "Payment was cancelled. No charges were made.",
                 );
               },
-              onError: function () {
+              onError: function (err) {
+                hideProcessingState();
+                showPaymentState();
                 showError(
-                  "PayPal reported an error. Nothing was charged or unlocked.",
+                  "Payment error: " + (err.message || "Please try again"),
                 );
               },
             })
@@ -496,9 +578,57 @@
         });
       })
       .catch(function (err) {
-        showError(err.message || "Checkout failed. Nothing was unlocked.");
+        hideProcessingState();
+        showError(err.message || "Checkout failed. Please try again.");
       });
-    });
+
+    // Enhanced state management functions
+    function showProcessingState(message) {
+      var processing = document.getElementById("licProcessing");
+      var payment = document.getElementById("paypalButtons");
+      var error = document.getElementById("licError");
+      var success = document.getElementById("licSuccess");
+      
+      if (processing) {
+        processing.style.display = "block";
+        processing.querySelector(".processing-text").textContent = message;
+      }
+      if (payment) payment.style.display = "none";
+      if (error) error.style.display = "none";
+      if (success) success.style.display = "none";
+    }
+
+    function hideProcessingState() {
+      var processing = document.getElementById("licProcessing");
+      if (processing) processing.style.display = "none";
+    }
+
+    function showPaymentState() {
+      var processing = document.getElementById("licProcessing");
+      var payment = document.getElementById("paypalButtons");
+      var error = document.getElementById("licError");
+      var success = document.getElementById("licSuccess");
+      
+      if (processing) processing.style.display = "none";
+      if (payment) payment.style.display = "block";
+      if (error) error.style.display = "none";
+      if (success) success.style.display = "none";
+    }
+
+    function showError(message) {
+      var processing = document.getElementById("licProcessing");
+      var payment = document.getElementById("paypalButtons");
+      var error = document.getElementById("licError");
+      var success = document.getElementById("licSuccess");
+      
+      if (processing) processing.style.display = "none";
+      if (payment) payment.style.display = "none";
+      if (success) success.style.display = "none";
+      if (error) {
+        error.style.display = "block";
+        error.querySelector(".error-subtext").textContent = message;
+      }
+    }
   }
 
   function activateLicense(orderId, email, procMsg, showError, close) {

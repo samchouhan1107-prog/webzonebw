@@ -117,6 +117,10 @@ function initWebZoneERStudio() {
   let isDemoMode = false;
   let isCameraStarting = false;
 
+  // Quality Scaling State (10-100 scale)
+  let qualityScale = 75; // Default quality
+  let lastQualityChange = 0;
+
   // ==========================================================
   // MOBILE / TABLET PERFORMANCE GUARD
   // Keep the live camera smooth by separating the browser
@@ -134,6 +138,87 @@ function initWebZoneERStudio() {
     enhancementInterval: 8,
     running: false,
   };
+
+  // ==========================================================
+  // QUALITY SCALING SYSTEM (10-100 scale)
+  // Dynamically adjusts rendering quality based on scale
+  // ==========================================================
+  function getQualitySettings() {
+    const scale = qualityScale;
+    
+    // Base performance settings affected by quality scale
+    const qualityMultiplier = scale / 100;
+    
+    return {
+      // Resolution scaling
+      canvasWidth: Math.floor(640 * qualityMultiplier),
+      canvasHeight: Math.floor(480 * qualityMultiplier),
+      
+      // Effect processing intensity
+      effectIntensity: Math.floor(20 + (scale * 0.8)), // 20-100
+      blurRadius: Math.max(1, Math.floor((100 - scale) * 0.1)), // 1-10
+      sharpenAmount: Math.floor(scale * 0.05), // 0-5
+      
+      // Performance optimization
+      processingInterval: Math.max(1, Math.floor(10 - (scale * 0.09))), // 1-10 frames
+      enhancementFrequency: Math.max(1, Math.floor(15 - (scale * 0.14))), // 1-15 frames
+      
+      // Memory optimization
+      maxCacheSize: Math.floor(50 + (scale * 0.5)), // 50-100 items
+      cleanupThreshold: Math.floor(100 + (scale * 2)), // 100-300 frames
+      
+      // Device-specific adjustments
+      mobileMultiplier: isERMobile() ? 0.7 : 1,
+      tabletMultiplier: isERTablet() ? 0.85 : 1,
+    };
+  }
+
+  function setQualityScale(newScale) {
+    // Clamp scale between 10-100
+    qualityScale = Math.max(10, Math.min(100, parseInt(newScale) || 75));
+    lastQualityChange = Date.now();
+    
+    // Apply quality changes immediately
+    applyQualitySettings();
+    
+    console.log(`[WEBZONEBW] Quality scale set to ${qualityScale}%`);
+  }
+
+  function applyQualitySettings() {
+    const settings = getQualitySettings();
+    
+    // Update canvas resolution if camera is active
+    if (mediaStream && video) {
+      const canvas = document.getElementById("cameraCanvas");
+      if (canvas) {
+        canvas.width = settings.canvasWidth;
+        canvas.height = settings.canvasHeight;
+      }
+    }
+    
+    // Update performance intervals
+    erPerf.enhancementInterval = settings.enhancementFrequency;
+    
+    // Trigger UI update
+    updateQualityUI();
+  }
+
+  function updateQualityUI() {
+    // Update quality scale display if it exists
+    const qualityDisplay = document.getElementById("qualityScaleDisplay");
+    if (qualityDisplay) {
+      qualityDisplay.textContent = `${qualityScale}%`;
+    }
+    
+    // Update performance indicators
+    const perfIndicator = document.getElementById("performanceIndicator");
+    if (perfIndicator) {
+      const settings = getQualitySettings();
+      const performanceLevel = qualityScale > 80 ? "High" : qualityScale > 50 ? "Medium" : "Low";
+      perfIndicator.textContent = `Performance: ${performanceLevel}`;
+      perfIndicator.className = `performance-${performanceLevel.toLowerCase()}`;
+    }
+  }
 
   function isERMobile() {
     return window.matchMedia && window.matchMedia("(max-width: 700px)").matches;
@@ -780,7 +865,241 @@ function initWebZoneERStudio() {
       desc: "Halloween VR haunted manor environment with drifting phantoms",
     },
 
-    // 🎃 HORROR
+    // 👻 GHOST EFFECTS — Spectral transformations
+    {
+      id: "ghost-aura",
+      name: "Ghost Aura",
+      icon: "👻",
+      category: "ghost",
+      target: "face",
+      desc: "Translucent spectral aura with ethereal glow",
+    },
+    {
+      id: "spirit-possess",
+      name: "Spirit Possession",
+      icon: "👻",
+      category: "ghost",
+      target: "face",
+      desc: "Possessed ghost face with glowing eyes",
+    },
+    {
+      id: "phantom-veil",
+      name: "Phantom Veil",
+      icon: "👻",
+      category: "ghost",
+      target: "face",
+      desc: "Mysterious phantom mist around face",
+    },
+
+    // 👹 MONSTER EFFECTS — Creature transformations
+    {
+      id: "monster-fangs",
+      name: "Monster Fangs",
+      icon: "👹",
+      category: "monster",
+      target: "face",
+      desc: "Sharp monster fangs and beastly features",
+    },
+    {
+      id: "beast-roar",
+      name: "Beast Roar",
+      icon: "👹",
+      category: "monster",
+      target: "face",
+      desc: "Ferocious beast face with angry expression",
+    },
+    {
+      id: "creature-horns",
+      name: "Creature Horns",
+      icon: "👹",
+      category: "monster",
+      target: "face",
+      desc: "Dark creature horns and demonic features",
+    },
+
+    // 🧟 ZOMBIE EFFECTS — Undead transformations
+    {
+      id: "zombie-virus",
+      name: "Zombie Virus",
+      icon: "🧟",
+      category: "zombie",
+      target: "face",
+      desc: "Zombie virus infection with rotting skin",
+    },
+    {
+      id: "undead-plague",
+      name: "Undead Plague",
+      icon: "🧟",
+      category: "zombie",
+      target: "face",
+      desc: "Undead plague victim with decaying features",
+    },
+    {
+      id: "walking-dead",
+      name: "Walking Dead",
+      icon: "🧟",
+      category: "zombie",
+      target: "face",
+      desc: "Zombie apocalypse survivor look",
+    },
+
+    // 🔮 WITCH EFFECTS — Magical transformations
+    {
+      id: "witch-curse",
+      name: "Witch Curse",
+      icon: "🔮",
+      category: "witch",
+      target: "face",
+      desc: "Dark witch curse with glowing eyes",
+    },
+    {
+      id: "spell-caster",
+      name: "Spell Caster",
+      icon: "🔮",
+      category: "witch",
+      target: "face",
+      desc: "Powerful witch casting dark magic",
+    },
+    {
+      id: "potion-master",
+      name: "Potion Master",
+      icon: "🔮",
+      category: "witch",
+      target: "face",
+      desc: "Witch brewing mysterious potions",
+    },
+
+    // 🎃 PUMPKIN EFFECTS — Halloween jack-o-lantern
+    {
+      id: "pumpkin-face",
+      name: "Pumpkin Face",
+      icon: "🎃",
+      category: "pumpkin",
+      target: "face",
+      desc: "Classic jack-o-lantern pumpkin face",
+    },
+    {
+      id: "carved-pumpkin",
+      name: "Carved Pumpkin",
+      icon: "🎃",
+      category: "pumpkin",
+      target: "face",
+      desc: "Intricately carved pumpkin features",
+    },
+    {
+      id: "pumpkin-king",
+      name: "Pumpkin King",
+      icon: "🎃",
+      category: "pumpkin",
+      target: "face",
+      desc: "Regal pumpkin king with crown",
+    },
+
+    // 💀 SKULL EFFECTS — Death and bone transformations
+    {
+      id: "skull-face",
+      name: "Skull Face",
+      icon: "💀",
+      category: "skull",
+      target: "face",
+      desc: "Human skull transformation",
+    },
+    {
+      id: "death-mask",
+      name: "Death Mask",
+      icon: "💀",
+      category: "skull",
+      target: "face",
+      desc: "Ancient death mask with bone details",
+    },
+    {
+      id: "reaper-essence",
+      name: "Reaper Essence",
+      icon: "💀",
+      category: "skull",
+      target: "face",
+      desc: "Grim reaper spectral essence",
+    },
+
+    // 😈 DEVIL EFFECTS — Demonic transformations
+    {
+      id: "devil-horns",
+      name: "Devil Horns",
+      icon: "😈",
+      category: "devil",
+      target: "face",
+      desc: "Sharp devil horns and red eyes",
+    },
+    {
+      id: "demon-possession",
+      name: "Demon Possession",
+      icon: "😈",
+      category: "devil",
+      target: "face",
+      desc: "Full demon possession transformation",
+    },
+    {
+      id: "hellfire-eyes",
+      name: "Hellfire Eyes",
+      icon: "😈",
+      category: "devil",
+      target: "face",
+      desc: "Burning hellfire eyes and dark aura",
+    },
+
+    // 🎬 CINEMA EFFECTS — Professional horror cinematography
+    {
+      id: "horror-movie",
+      name: "Horror Movie",
+      icon: "🎬",
+      category: "cinema",
+      target: "scene",
+      desc: "Classic horror movie color grading",
+    },
+    {
+      id: "slasher-flick",
+      name: "Slasher Flick",
+      icon: "🎬",
+      category: "cinema",
+      target: "scene",
+      desc: "80s slasher film visual style",
+    },
+    {
+      id: "psychological-horror",
+      name: "Psychological Horror",
+      icon: "🎬",
+      category: "cinema",
+      target: "scene",
+      desc: "Dark psychological thriller atmosphere",
+    },
+
+    // ⚡ EXPERIMENTAL EFFECTS — Advanced visual effects
+    {
+      id: "quantum-horror",
+      name: "Quantum Horror",
+      icon: "⚡",
+      category: "experimental",
+      target: "scene",
+      desc: "Reality-bending quantum horror effects",
+    },
+    {
+      id: "dimensional-rip",
+      name: "Dimensional Rip",
+      icon: "⚡",
+      category: "experimental",
+      target: "scene",
+      desc: "Tear in reality with visual distortion",
+    },
+    {
+      id: "void-exposure",
+      name: "Void Exposure",
+      icon: "⚡",
+      category: "experimental",
+      target: "scene",
+      desc: "Cosmic void exposure with energy bursts",
+    },
+
+    // 🎃 HORROR FACE EFFECTS — Premium horror transformations
     {
       id: "neon-horror",
       name: "Neon Horror",
@@ -789,6 +1108,24 @@ function initWebZoneERStudio() {
       category: "horror",
       target: "face",
       desc: "Combined face transformation and haunting neon scene",
+    },
+    {
+      id: "vampire-curse",
+      name: "Vampire Curse",
+      icon: "🧛",
+      isPremium: true,
+      category: "horror",
+      target: "face",
+      desc: "Vampire transformation with fangs and pale skin",
+    },
+    {
+      id: "werewolf-transformation",
+      name: "Werewolf Transformation",
+      icon: "🐺",
+      isPremium: true,
+      category: "horror",
+      target: "face",
+      desc: "Werewolf transformation during full moon",
     },
   ];
 
@@ -1084,7 +1421,7 @@ function initWebZoneERStudio() {
   function isUserPremium() {
     /*
      * Premium access can come from:
-     * 1. A verified WebZoneBW ER Studio license (₹499 purchase verified server-side)
+     * 1. A verified WebZoneBW ER Studio license ($5.99 USD purchase verified server-side)
      * 2. Halloween promotional access (server-validated temporary access)
      * No localStorage shortcuts can unlock premium lenses.
      */
@@ -2947,7 +3284,7 @@ function initWebZoneERStudio() {
         window.WEBZONEBW_LICENSE.openCheckout();
       } else {
         alert(
-          "⏺ Video recording is a Premium feature.\n\nUnlock it with the WebZoneBW ER Studio Premium license (₹499).",
+          "⏺ Video recording is a Premium feature.\n\nUnlock it with the WebZoneBW ER Studio Premium license ($5.99 USD).",
         );
       }
 
@@ -3090,7 +3427,7 @@ function initWebZoneERStudio() {
     }
 
     if (licenseChipBtn) {
-      licenseChipBtn.textContent = premium ? "✓ Licensed" : "₹499 Upgrade";
+      licenseChipBtn.textContent = premium ? "✓ Licensed" : "$5.99 Upgrade";
       licenseChipBtn.disabled = premium;
     }
   }
@@ -5730,11 +6067,11 @@ function initWebZoneERStudio() {
       if (halloweenPromoStatus) {
         halloweenPromoStatus.style.display = "block";
       }
-      
+
       if (promoAccessIndicator) {
         promoAccessIndicator.textContent = "🎃 Halloween Access Active";
       }
-      
+
       if (erLicenseChip) {
         erLicenseChip.classList.add("promo-active");
         erLicenseChipIcon.textContent = "🎃";
@@ -5747,12 +6084,12 @@ function initWebZoneERStudio() {
       if (halloweenPromoStatus) {
         halloweenPromoStatus.style.display = "none";
       }
-      
+
       if (erLicenseChip) {
         erLicenseChip.classList.remove("promo-active");
         erLicenseChipIcon.textContent = "🔒";
         erLicenseChipText.textContent = hasPaidLicense ? "Premium Active" : "Free — Premium Locked";
-        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "₹499 Upgrade";
+        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "$5.99 Upgrade";
         erLicenseChipBtn.style.background = "";
       }
     }

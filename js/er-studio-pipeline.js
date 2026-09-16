@@ -335,7 +335,7 @@
   /* Server-Side Entitlement & Ownership Authority
    *
    * Premium ownership is granted ONLY through a verified
-   * WebZoneBW ER Studio license (₹499 purchase). The old
+   * WebZoneBW ER Studio license ($5.99 USD purchase). The old
    * localStorage "owned lenses" path could unlock premium
    * content without payment and is now license-gated.
    */
@@ -489,7 +489,7 @@
                                     <div class="er-ownership-badge ${isOwned ? "owned" : "locked"}">
                                         ${isOwned ? "✅ OWNED & ACTIVE" : "🔒 LOCKED PREMIUM"}
                                     </div>
-                                    ${!isOwned ? `<button class="btn btn-primary" id="buyLensBtn" style="width:100%; margin-top:15px;">Purchase Lens (₹499)</button>` : `<button class="btn btn-secondary" id="activateLensBtn" style="width:100%; margin-top:15px;">Launch in Live Studio</button>`}
+                                    ${!isOwned ? `<button class="btn btn-primary" id="buyLensBtn" style="width:100%; margin-top:15px;">Purchase Lens ($5.99)</button>` : `<button class="btn btn-secondary" id="activateLensBtn" style="width:100%; margin-top:15px;">Launch in Live Studio</button>`}
                                 </div>
                             </div>
 
@@ -583,7 +583,7 @@
                             <h4>${lens.name}</h4>
                             <p>${lens.description}</p>
                             <div class="er-hub-card-footer">
-                                <span class="er-owner-status ${owned ? "text-success" : "text-warning"}">${owned ? "✅ Owned" : "🔒 Locked (₹499)"}</span>
+                                <span class="er-owner-status ${owned ? "text-success" : "text-warning"}">${owned ? "✅ Owned" : "🔒 Locked ($5.99)"}</span>
                                 <button class="btn btn-sm btn-primary view-pack-btn" data-lens-id="${lens.id}">View Feature Pack</button>
                             </div>
                         </div>

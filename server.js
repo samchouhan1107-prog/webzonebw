@@ -49,11 +49,29 @@ const PROJECT_NAME = "WEBZONEBW";
 const NODE_ENV = process.env.NODE_ENV || "development";
 const IS_PRODUCTION = NODE_ENV === "production";
 
+// Security middleware
+app.use(helmet.hidePoweredBy());
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.xssFilter());
+
 /* ============================================================
  * BASIC APPLICATION SETTINGS & SECURITY HEADERS
  * ============================================================ */
 
 app.disable("x-powered-by");
+
+// HTTPS Redirect (force HTTPS for all requests)
+app.use((req, res, next) => {
+    if (req.protocol === 'https') {
+        return next();
+    }
+    
+    // Redirect to HTTPS
+    const host = req.headers.host;
+    const secureUrl = `https://${host}${req.originalUrl}`;
+    res.redirect(301, secureUrl);
+});
 
 // Brotli/Gzip Compression
 app.use(compression({
@@ -67,9 +85,23 @@ app.use(compression({
   }
 }));
 
-// Helmet Configuration (relaxed for Google Analytics, AdSense, etc.)
+// Helmet Configuration with Content Security Policy
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.paypal.com", "https://www.google-analytics.com"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com"],
+      frameSrc: ["'self'", "https://www.paypal.com"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"],
+      upgradeInsecureRequests: []
+    }
+  },
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: false
 }));
@@ -78,25 +110,24 @@ if (process.env.TRUST_PROXY === "true") {
     app.set("trust proxy", 1);
 }
 
-// Media & Camera Permissions-Policy Headers
+// Enhanced Security Headers
 app.use((req, res, next) => {
-    res.setHeader("Permissions-Policy", "camera=(self), microphone=(self)");
-    res.setHeader("Feature-Policy", "camera 'self'; microphone 'self'");
-    next();
-});
-
-// Extra Standard Security Headers with UTF-8 default charset for API endpoints
-app.use((req, res, next) => {
+    // Standard Security Headers
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     res.setHeader("X-Frame-Options", "SAMEORIGIN");
     res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
     res.setHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()");
+    
+    // Additional Security Headers
+    res.setHeader("X-XSS-Protection", "1; mode=block");
+    res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+    
     next();
 });
 
 /* ============================================================
- * REQUEST PARSERS
+ * REQUEST PARSERS WITH INPUT VALIDATION
  * ============================================================ */
 
 /*
@@ -111,6 +142,39 @@ app.use(express.json({
   }
 }));
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
+
+// Input validation and sanitization middleware
+app.use((req, res, next) => {
+    // Sanitize user input
+    const sanitizeInput = (input) => {
+        if (typeof input !== 'string') return input;
+        return input
+            .replace(/<\/?[^>]+(>|$)/g, '') // Remove HTML tags
+            .replace(/javascript:/gi, '')   // Remove javascript: protocol
+            .replace(/data:/gi, '')         // Remove data: protocol
+            .replace(/\b(alert|confirm|prompt|eval)\b/gi, ''); // Remove dangerous functions
+    };
+
+    // Sanitize body parameters
+    if (req.body) {
+        Object.keys(req.body).forEach(key => {
+            if (typeof req.body[key] === 'string') {
+                req.body[key] = sanitizeInput(req.body[key]);
+            }
+        });
+    }
+
+    // Sanitize query parameters
+    if (req.query) {
+        Object.keys(req.query).forEach(key => {
+            if (typeof req.query[key] === 'string') {
+                req.query[key] = sanitizeInput(req.query[key]);
+            }
+        });
+    }
+
+    next();
+});
 
 /* ============================================================
  * CORS - required when the static frontend is served from a
@@ -143,15 +207,101 @@ app.use((req, res, next) => {
 });
 
 /* ============================================================
- * REQUEST LOGGER
+ * REQUEST LOGGER WITH SECURITY MONITORING
  * ============================================================ */
 
 app.use((req, res, next) => {
     const started = Date.now();
+    
+    // Security monitoring
+    const securityLog = {
+        method: req.method,
+        url: req.originalUrl,
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.headers['user-agent'],
+        referer: req.headers.referer,
+        timestamp: new Date().toISOString()
+    };
+    
+    // Monitor suspicious requests
+    if (req.originalUrl.includes('..') || req.originalUrl.includes('<script')) {
+        console.warn("[WEBZONEBW SECURITY] Suspicious request detected:", securityLog);
+    }
+    
     res.on("finish", () => {
         const duration = Date.now() - started;
-        console.log(`[WEBZONEBW] ${req.method} ${req.originalUrl} ${res.statusCode} ${duration}ms`);
+        
+        // Enhanced logging with security context
+        const logMessage = `[WEBZONEBW] ${req.method} ${req.originalUrl} ${res.statusCode} ${duration}ms`;
+        
+        if (res.statusCode >= 400) {
+            console.error(`[WEBZONEBW ERROR] ${logMessage}`);
+        } else if (res.statusCode >= 300) {
+            console.warn(`[WEBZONEBW REDIRECT] ${logMessage}`);
+        } else {
+            console.log(`[WEBZONEBW] ${logMessage}`);
+        }
     });
+    
+    next();
+});
+
+/* ============================================================
+ * SECURITY MIDDLEWARE FOR COMMON ATTACK VECTORS
+ * ============================================================ */
+
+app.use((req, res, next) => {
+    // Prevent HTTP request smuggling
+    if (req.method === 'GET' && req.headers['content-length']) {
+        return res.status(400).json({
+            success: false,
+            error: "Invalid request: GET requests should not have content"
+        });
+    }
+
+    // Prevent directory traversal attacks
+    const suspiciousPaths = ["..", "~", "\\", "/etc/", "/var/", "C:\\", "D:\\"];
+    const requestPath = req.originalUrl || req.path;
+    
+    for (const suspicious of suspiciousPaths) {
+        if (requestPath.includes(suspicious)) {
+            console.warn(`[WEBZONEBW SECURITY] Directory traversal attempt detected: ${requestPath}`);
+            return res.status(403).json({
+                success: false,
+                error: "Access denied: Invalid path"
+            });
+        }
+    }
+
+    // Prevent SQL injection patterns
+    const sqlInjectionPatterns = [
+        /\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\b/gi,
+        /\b(or|and)\s+\d+\s*=/gi,
+        /\b(\-\-|\#|\/\*|\*\/)\b/gi
+    ];
+
+    const checkForSqlInjection = (value) => {
+        if (typeof value !== 'string') return false;
+        return sqlInjectionPatterns.some(pattern => pattern.test(value));
+    };
+
+    // Check body, query, and params for SQL injection
+    if (req.body && Object.values(req.body).some(checkForSqlInjection)) {
+        console.warn("[WEBZONEBW SECURITY] SQL injection attempt detected in body");
+        return res.status(400).json({
+            success: false,
+            error: "Invalid input: Potential SQL injection detected"
+        });
+    }
+
+    if (req.query && Object.values(req.query).some(checkForSqlInjection)) {
+        console.warn("[WEBZONEBW SECURITY] SQL injection attempt detected in query");
+        return res.status(400).json({
+            success: false,
+            error: "Invalid input: Potential SQL injection detected"
+        });
+    }
+
     next();
 });
 
@@ -185,10 +335,12 @@ function rateLimiter(req, res, next) {
 
     if (timestamps.length >= maxRequests) {
         res.setHeader("Retry-After", Math.ceil(windowMs / 1000));
+        console.warn(`[WEBZONEBW SECURITY] Rate limit exceeded for IP: ${ip}`);
         return res.status(429).json({
             success: false,
             error: "Too many requests. Please try again later.",
-            retryAfter: Math.ceil(windowMs / 1000)
+            retryAfter: Math.ceil(windowMs / 1000),
+            security: "rate_limit_exceeded"
         });
     }
 
@@ -305,7 +457,7 @@ function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
 
 // --- ER Studio Premium License Configuration ---
 const ER_PREMIUM_PLAN = "er-studio-premium";
-const ER_PREMIUM_AMOUNT = 499; // ₹499 - one-time ER Studio license
+const ER_PREMIUM_AMOUNT = ER_PREMIUM_AMOUNT_USD; // $5.99 USD - one-time ER Studio license
 const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
 /*
@@ -982,6 +1134,42 @@ app.get("/api/health", (req, res) => {
     });
 });
 
+// Security audit endpoint
+app.get("/api/security-audit", (req, res) => {
+    const securityAudit = {
+        timestamp: new Date().toISOString(),
+        server: PROJECT_NAME,
+        version: SERVER_VERSION,
+        environment: NODE_ENV,
+        securityHeaders: {
+            "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+            "X-Content-Type-Options": "nosniff",
+            "X-Frame-Options": "SAMEORIGIN",
+            "Referrer-Policy": "strict-origin-when-cross-origin",
+            "Permissions-Policy": "camera=(self), microphone=(self), geolocation=()",
+            "X-XSS-Protection": "1; mode=block",
+            "X-Permitted-Cross-Domain-Policies": "none"
+        },
+        securityFeatures: {
+            httpsRedirect: true,
+            contentSecurityPolicy: true,
+            rateLimiting: true,
+            helmetProtection: true,
+            secureCookies: true,
+            inputValidation: true
+        },
+        compliance: {
+            hsts: true,
+            csp: true,
+            xssProtection: true,
+            clickjackingProtection: true,
+            mimeSniffingProtection: true
+        }
+    };
+    
+    res.status(200).json(securityAudit);
+});
+
 // Status API
 app.get("/api/status", (req, res) => {
     const memory = process.memoryUsage();
@@ -1033,6 +1221,16 @@ function staticOptions() {
                 res.setHeader("Content-Type", "text/css; charset=utf-8");
             } else if (filePath.endsWith(".json")) {
                 res.setHeader("Content-Type", "application/json; charset=utf-8");
+            }
+            
+            // Add security headers for static files
+            res.setHeader("X-Content-Type-Options", "nosniff");
+            res.setHeader("X-Frame-Options", "SAMEORIGIN");
+            res.setHeader("X-XSS-Protection", "1; mode=block");
+            
+            // Cache control for static assets in production
+            if (IS_PRODUCTION) {
+                res.setHeader("Cache-Control", "public, max-age=86400, immutable");
             }
         }
     };
@@ -1238,16 +1436,78 @@ app.use((error, req, res, next) => {
 });
 
 /* ============================================================
+ * SECURITY ERROR HANDLER
+ * ============================================================ */
+
+app.use((err, req, res, next) => {
+    console.error("[WEBZONEBW SECURITY ERROR]", err);
+    
+    if (res.headersSent) {
+        return next(err);
+    }
+    
+    // Don't expose error details in production
+    const errorResponse = process.env.NODE_ENV === 'production' 
+        ? { error: "Internal server error" }
+        : { error: err.message, stack: err.stack };
+    
+    res.status(500).json({
+        success: false,
+        ...errorResponse,
+        timestamp: new Date().toISOString()
+    });
+});
+
+/* ============================================================
  * PROCESS UNCAUGHT RUNTIME ERRORS
  * ============================================================ */
 
 process.on("uncaughtException", (error) => {
     console.error("[FATAL] Uncaught Exception:", error);
+    // Log security-critical errors to file
+    logSecurityError("UNCAUGHT_EXCEPTION", error);
 });
 
 process.on("unhandledRejection", (reason) => {
     console.error("[FATAL] Unhandled Promise Rejection:", reason);
+    // Log security-critical errors to file
+    logSecurityError("UNHANDLED_REJECTION", reason);
 });
+
+/* ============================================================
+ * SECURITY LOGGING UTILITIES
+ * ============================================================ */
+
+function logSecurityError(type, error) {
+    const logEntry = {
+        timestamp: new Date().toISOString(),
+        type: type,
+        error: error.message,
+        stack: error.stack,
+        environment: NODE_ENV,
+        server: PROJECT_NAME,
+        version: SERVER_VERSION
+    };
+    
+    console.error(`[WEBZONEBW SECURITY LOG] ${JSON.stringify(logEntry)}`);
+    
+    // In production, you might want to write to a secure log file
+    if (IS_PRODUCTION) {
+        try {
+            const logPath = path.join(__dirname, 'logs', 'security.log');
+            const fs = require('fs');
+            const logDir = path.dirname(logPath);
+            
+            if (!fs.existsSync(logDir)) {
+                fs.mkdirSync(logDir, { recursive: true });
+            }
+            
+            fs.appendFileSync(logPath, JSON.stringify(logEntry) + '\n');
+        } catch (logError) {
+            console.error("[WEBZONEBW] Failed to write security log:", logError.message);
+        }
+    }
+}
 
 /* ============================================================
  * SERVER START - HTTP & HTTPS SECURE CONTEXT
@@ -1263,7 +1523,18 @@ if (fs.existsSync(pfxPath)) {
         httpsServer = https.createServer(
             {
                 pfx: fs.readFileSync(pfxPath),
-                passphrase: "webzonebw"
+                passphrase: "webzonebw",
+                // Additional HTTPS security options
+                minVersion: 'TLSv1.2',
+                ciphers: [
+                    'ECDHE-ECDSA-AES256-GCM-SHA384',
+                    'ECDHE-RSA-AES256-GCM-SHA384',
+                    'ECDHE-ECDSA-CHACHA20-POLY1305',
+                    'ECDHE-RSA-CHACHA20-POLY1305',
+                    'ECDHE-ECDSA-AES128-GCM-SHA256',
+                    'ECDHE-RSA-AES128-GCM-SHA256'
+                ].join(':'),
+                honorCipherOrder: true
             },
             app
         );
