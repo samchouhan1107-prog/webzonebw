@@ -18,8 +18,56 @@
   "use strict";
 
   var STORAGE_KEY = "wzb_er_license_v1";
-  var API_BASE = window.location.origin || 'https://webzonebw-er-studio.onrender.com'; // auto-detect current origin with fallback
+
+  /*
+   * API BASE SELECTION
+   * The static site (webzonebw.in) is hosted on GitHub Pages, which
+   * cannot run the Express API. When the page is served from a static
+   * host (no /api/health available at this origin), fall back to the
+   * dedicated API deployment. The fallback is verified at runtime:
+   * if the API is unreachable, premium stays LOCKED (fail-closed).
+   * Configure via: <meta name="wzb-api-base" content="https://...">
+   * or the WZB_API_BASE constant below.
+   */
+  var WZB_API_BASE = "https://webzonebw-er-studio.onrender.com";
+  var API_BASE = (function () {
+    try {
+      var meta = document.querySelector('meta[name="wzb-api-base"]');
+      if (meta && meta.content) return meta.content.replace(/\/+$/, "");
+    } catch (e) {}
+    return window.location.origin || WZB_API_BASE;
+  })();
   var listeners = [];
+
+  /*
+   * RUNTIME API FAILOVER
+   * If the current origin cannot serve the API (e.g. static hosting on
+   * GitHub Pages), fall back to the dedicated API deployment once per
+   * session. Verified with /api/health — if neither origin responds,
+   * premium stays LOCKED (fail-closed).
+   */
+  var runtimeAPIBase = null;
+  function resolveAPIBase() {
+    if (runtimeAPIBase) return Promise.resolve(runtimeAPIBase);
+    // Probe current origin first; fall back to the dedicated deployment.
+    return fetchJSON(window.location.origin + "/api/health")
+      .then(function () {
+        runtimeAPIBase = window.location.origin;
+        return runtimeAPIBase;
+      })
+      .catch(function () {
+        return fetchJSON(WZB_API_BASE + "/api/health")
+          .then(function () {
+            runtimeAPIBase = WZB_API_BASE;
+            API_BASE = WZB_API_BASE;
+            return runtimeAPIBase;
+          })
+          .catch(function () {
+            // Neither available — fail closed, premium stays locked.
+            return Promise.reject(new Error("API unreachable"));
+          });
+      });
+  }
 
   var state = {
     licenseKey: null,
@@ -114,21 +162,15 @@
     state.verifying = true;
     setStatus("verifying");
 
-    return fetch(API_BASE + "/api/license/verify", {
+    return resolveAPIBase().then(function () {
+    return fetchJSON(API_BASE + "/api/license/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         licenseKey: stored.licenseKey,
         promoKey: state.promoKey // Include promotional key if available
-      }),
-      timeout: 5000
-    })
-      .then(function (res) {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
       })
+    })
       .then(function (data) {
         state.verifying = false;
 
@@ -175,6 +217,7 @@
         emit();
         return false;
       });
+    });
   }
 
   /* --------------------------------------------------------
@@ -195,17 +238,18 @@
    */
   var orderEmailCache = null;
 
-  function getOrderEmail() {
+    function getOrderEmail() {
     if (orderEmailCache) return Promise.resolve(orderEmailCache);
-    return fetch(API_BASE + "/api/order-email")
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data && data.success && data.email) {
-          orderEmailCache = data.email;
-          return orderEmailCache;
-        }
-        throw new Error("ORDER_EMAIL_UNAVAILABLE");
-      });
+    return resolveAPIBase().then(function () {
+      return fetchJSON(API_BASE + "/api/order-email")
+        .then(function (data) {
+          if (data && data.success && data.email) {
+            orderEmailCache = data.email;
+            return orderEmailCache;
+          }
+          throw new Error("ORDER_EMAIL_UNAVAILABLE");
+        });
+    });
   }
 
   function loadPayPalSdk(clientId) {
@@ -348,7 +392,8 @@
     proc.style.display = "block";
     procMsg.textContent = "Preparing secure PayPal checkout...";
 
-    fetch(API_BASE + "/api/paypal/create-order", {
+    resolveAPIBase().then(function () {
+    return fetchJSON(API_BASE + "/api/paypal/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -402,7 +447,7 @@
 
                 // STEP 3: our server CAPTURES the payment via PayPal API
                 // (source of truth) and only then issues a license key.
-                return fetch(API_BASE + "/api/paypal/capture", {
+                return fetchJSON(API_BASE + "/api/paypal/capture", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
@@ -410,9 +455,6 @@
                     email: email,
                   }),
                 })
-                  .then(function (res) {
-                    return res.json();
-                  })
                   .then(function (cap) {
                     if (!cap || !cap.success || cap.status !== "COMPLETED") {
                       throw new Error(
@@ -456,17 +498,15 @@
       .catch(function (err) {
         showError(err.message || "Checkout failed. Nothing was unlocked.");
       });
+    });
   }
 
   function activateLicense(orderId, email, procMsg, showError, close) {
-    return fetch(API_BASE + "/api/license/activate", {
+    return fetchJSON(API_BASE + "/api/license/activate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderId: orderId, email: email }),
     })
-      .then(function (res) {
-        return res.json();
-      })
       .then(function (data) {
         if (!data || !data.success || !data.licenseKey) {
           throw new Error(
@@ -551,18 +591,12 @@
 
   /* Promotional activation methods */
   function activatePromo(promoKey) {
-    return fetch(API_BASE + "/api/halloween/validate-promo", {
+    return resolveAPIBase().then(function () {
+    return fetchJSON(API_BASE + "/api/halloween/validate-promo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ promoKey: promoKey }),
-      timeout: 5000
+      body: JSON.stringify({ promoKey: promoKey })
     })
-      .then(function (res) {
-        if (!res.ok) {
-          throw new Error('Promo validation failed');
-        }
-        return res.json();
-      })
       .then(function (data) {
         if (data && data.valid) {
           setPromoAccess(data.promo.name, data.promo.allowedFeatures, data.promo.expires);
@@ -577,17 +611,13 @@
         clearPromoAccess();
         return false;
       });
+    });
   }
 
   function getHalloweenStatus() {
-    return fetch(API_BASE + "/api/halloween/status", {
-      timeout: 5000
-    })
-      .then(function (res) {
-        if (!res.ok) {
-          throw new Error('Failed to get Halloween status');
-        }
-        return res.json();
+    return resolveAPIBase()
+      .then(function () {
+        return fetchJSON(API_BASE + "/api/halloween/status");
       })
       .then(function (data) {
         state.promoActive = data.promoActive;
