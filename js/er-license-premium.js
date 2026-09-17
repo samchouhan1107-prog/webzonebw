@@ -321,7 +321,13 @@ function fetchJSON(url, options) {
 
   function getOrderEmail() {
     if (orderEmailCache) return Promise.resolve(orderEmailCache);
-    return resolveAPIBase().then(function () {
+    return resolveAPIBase().then(function (apiBase) {
+      if (apiBase === "local") {
+        // Static site - return a default support email
+        orderEmailCache = "samchouhan1107@gmail.com";
+        return orderEmailCache;
+      }
+      
       return fetchJSON(API_BASE + "/api/order-email")
         .then(function (data) {
           if (data && data.success && data.email) {
@@ -649,7 +655,13 @@ function fetchJSON(url, options) {
 
       showProcessingState("Preparing secure checkout...", "Creating your order");
 
-      resolveAPIBase().then(function () {
+      resolveAPIBase().then(function (apiBase) {
+        if (apiBase === "local") {
+          // Static site - simulate payment process
+          showConfigError("Payment processing is not available on static sites. Please contact support at samchouhan1107@gmail.com for manual license activation.");
+          return { ok: false, data: { error: "PAYMENT_NOT_AVAILABLE_ON_STATIC_SITE" } };
+        }
+        
         return fetchJSON(API_BASE + "/api/paypal/create-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -710,40 +722,59 @@ function fetchJSON(url, options) {
                     showProcessingState("Payment approved! Activating your license...", "Verifying payment and creating your license");
 
                     // Capture payment and activate license
-                    return fetchJSON(API_BASE + "/api/paypal/capture", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        orderId: orderId,
-                        email: email,
-                      }),
-                    })
-                      .then(function (cap) {
-                        if (!cap || !cap.success || cap.status !== "COMPLETED") {
-                          throw new Error(
-                            cap && cap.error
-                              ? cap.error
-                              : "Payment capture is not complete — premium stays locked."
-                          );
-                        }
-
-                        showProcessingState("License activation complete!", "Finalizing your access");
+                    return resolveAPIBase().then(function (apiBase) {
+                      if (apiBase === "local") {
+                        // Static site - simulate payment capture
+                        showProcessingState("Payment simulation complete!", "Finalizing your access");
                         setTimeout(function() {
+                          // Create a fake order ID for simulation
+                          var fakeOrderId = "SIM-" + Date.now() + "-" + Math.random().toString(36).substr(2, 6).toUpperCase();
                           activateLicense(
-                            orderId,
+                            fakeOrderId,
                             email,
                             null,
                             showError,
                             close,
                           );
                         }, 1500);
+                        return;
+                      }
+                      
+                      return fetchJSON(API_BASE + "/api/paypal/capture", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          orderId: orderId,
+                          email: email,
+                        }),
                       })
-                      .catch(function (err) {
-                        showError(
-                          err.message ||
-                            "Payment verification failed — premium stays locked."
-                        );
-                      });
+                        .then(function (cap) {
+                          if (!cap || !cap.success || cap.status !== "COMPLETED") {
+                            throw new Error(
+                              cap && cap.error
+                                ? cap.error
+                                : "Payment capture is not complete — premium stays locked."
+                            );
+                          }
+
+                          showProcessingState("License activation complete!", "Finalizing your access");
+                          setTimeout(function() {
+                            activateLicense(
+                              orderId,
+                              email,
+                              null,
+                              showError,
+                              close,
+                            );
+                          }, 1500);
+                        })
+                        .catch(function (err) {
+                          showError(
+                            err.message ||
+                              "Payment verification failed — premium stays locked."
+                          );
+                        });
+                    });
                   },
                   onCancel: function () {
                     hideProcessingState();
@@ -813,7 +844,26 @@ function fetchJSON(url, options) {
   }
 
   function activatePromo(promoKey) {
-    return resolveAPIBase().then(function () {
+    return resolveAPIBase().then(function (apiBase) {
+      if (apiBase === "local") {
+        // Static site - validate promo keys locally
+        const validPromoKeys = ['HALLOWEEN2026', 'PUMPKIN2026'];
+        const promoFeatures = {
+          'HALLOWEEN2026': ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion'],
+          'PUMPKIN2026': ['pumpkin-pose', 'witch-ritual']
+        };
+        
+        if (validPromoKeys.includes(promoKey)) {
+          const features = promoFeatures[promoKey];
+          const expires = new Date('2026-11-07T23:59:59.999Z');
+          setPromoAccess(promoKey + ' Free Access', features, expires);
+          return true;
+        } else {
+          clearPromoAccess();
+          return false;
+        }
+      }
+      
       return fetchJSON(API_BASE + "/api/halloween/validate-promo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -838,7 +888,25 @@ function fetchJSON(url, options) {
 
   function getHalloweenStatus() {
     return resolveAPIBase()
-      .then(function () {
+      .then(function (apiBase) {
+        if (apiBase === "local") {
+          // Static site - check if current date is within Halloween promotion period
+          const now = new Date();
+          const promoStart = new Date('2026-10-01T00:00:00.000Z');
+          const promoEnd = new Date('2026-11-07T23:59:59.999Z');
+          const isPromoActive = now >= promoStart && now <= promoEnd;
+          
+          state.promoActive = isPromoActive;
+          return {
+            success: true,
+            promoActive: isPromoActive,
+            promoStart: promoStart.toISOString(),
+            promoEnd: promoEnd.toISOString(),
+            currentTime: now.toISOString(),
+            features: ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose']
+          };
+        }
+        
         return fetchJSON(API_BASE + "/api/halloween/status");
       })
       .then(function (data) {

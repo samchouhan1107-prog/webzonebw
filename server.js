@@ -62,8 +62,13 @@ app.use(helmet.xssFilter());
 app.disable("x-powered-by");
 
 // HTTPS Redirect (force HTTPS for all requests)
+// Proxy-aware: honors X-Forwarded-Proto behind Render, skips local HTTP.
 app.use((req, res, next) => {
-    if (req.protocol === 'https') {
+    const proto = (req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+    const isSecure = proto === 'https' || req.secure;
+    const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(req.headers.host || '');
+
+    if (isSecure || (isLocal && process.env.NODE_ENV !== 'production') || process.env.DISABLE_HTTPS_REDIRECT === 'true') {
         return next();
     }
     
@@ -90,10 +95,10 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.paypal.com", "https://www.google-analytics.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.paypal.com", "https://www.google-analytics.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com"],
+      connectSrc: ["'self'", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com"],
       frameSrc: ["'self'", "https://www.paypal.com"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
@@ -118,11 +123,11 @@ app.use((req, res, next) => {
     res.setHeader("X-Frame-Options", "SAMEORIGIN");
     res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
     res.setHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()");
-    
+
     // Additional Security Headers
     res.setHeader("X-XSS-Protection", "1; mode=block");
     res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
-    
+
     next();
 });
 
@@ -212,7 +217,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
     const started = Date.now();
-    
+
     // Security monitoring
     const securityLog = {
         method: req.method,
@@ -222,18 +227,18 @@ app.use((req, res, next) => {
         referer: req.headers.referer,
         timestamp: new Date().toISOString()
     };
-    
+
     // Monitor suspicious requests
     if (req.originalUrl.includes('..') || req.originalUrl.includes('<script')) {
         console.warn("[WEBZONEBW SECURITY] Suspicious request detected:", securityLog);
     }
-    
+
     res.on("finish", () => {
         const duration = Date.now() - started;
-        
+
         // Enhanced logging with security context
         const logMessage = `[WEBZONEBW] ${req.method} ${req.originalUrl} ${res.statusCode} ${duration}ms`;
-        
+
         if (res.statusCode >= 400) {
             console.error(`[WEBZONEBW ERROR] ${logMessage}`);
         } else if (res.statusCode >= 300) {
@@ -242,7 +247,7 @@ app.use((req, res, next) => {
             console.log(`[WEBZONEBW] ${logMessage}`);
         }
     });
-    
+
     next();
 });
 
@@ -262,7 +267,7 @@ app.use((req, res, next) => {
     // Prevent directory traversal attacks
     const suspiciousPaths = ["..", "~", "\\", "/etc/", "/var/", "C:\\", "D:\\"];
     const requestPath = req.originalUrl || req.path;
-    
+
     for (const suspicious of suspiciousPaths) {
         if (requestPath.includes(suspicious)) {
             console.warn(`[WEBZONEBW SECURITY] Directory traversal attempt detected: ${requestPath}`);
@@ -399,7 +404,7 @@ const HALLOWEEN_PROMO_CONFIG = {
     // Halloween promotion period (server-side time)
     promoStart: new Date('2026-10-01T00:00:00.000Z'), // October 1, 2026
     promoEnd: new Date('2026-11-07T23:59:59.999Z'),   // November 7, 2026 (Halloween season)
-    
+
     // Promotional keys (server-side only - never expose to frontend)
     promoKeys: {
         'HALLOWEEN2026': {
@@ -420,7 +425,7 @@ const HALLOWEEN_PROMO_CONFIG = {
 // Check if current server time is within Halloween promotion period
 function isHalloweenPromoActive() {
     const now = new Date();
-    return now >= HALLOWEEN_PROMO_CONFIG.promoStart && 
+    return now >= HALLOWEEN_PROMO_CONFIG.promoStart &&
            now <= HALLOWEEN_PROMO_CONFIG.promoEnd;
 }
 
@@ -429,23 +434,23 @@ function validatePromoKey(promoKey) {
     if (!isHalloweenPromoActive()) {
         return { valid: false, reason: 'Promotion not active' };
     }
-    
+
     const promo = HALLOWEEN_PROMO_CONFIG.promoKeys[promoKey];
     if (!promo || !promo.active) {
         return { valid: false, reason: 'Invalid promotional key' };
     }
-    
-    return { 
-        valid: true, 
+
+    return {
+        valid: true,
         promo: promo,
-        expires: HALLOWEEN_PROMO_CONFIG.promoEnd 
+        expires: HALLOWEEN_PROMO_CONFIG.promoEnd
     };
 }
 
 // Check if a specific feature is available via promotional access
 function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
     if (!isHalloweenPromoActive()) return false;
-    
+
     for (const promoKey of userPromoKeys) {
         const validation = validatePromoKey(promoKey);
         if (validation.valid && validation.promo.allowedFeatures.includes(featureId)) {
@@ -958,7 +963,7 @@ app.post("/api/license/verify", (req, res) => {
     // Check for valid paid license first
     let license = null;
     let validLicense = false;
-    
+
     if (licenseKey) {
         license = licenseStore.licenses.get(String(licenseKey).trim().toUpperCase());
         if (license && license.status === "ACTIVE") {
@@ -969,7 +974,7 @@ app.post("/api/license/verify", (req, res) => {
     // Check for promotional access if no valid paid license
     let promoAccess = null;
     let validPromo = false;
-    
+
     if (!validLicense && promoKey) {
         const promoValidation = validatePromoKey(promoKey);
         if (promoValidation.valid) {
@@ -984,9 +989,9 @@ app.post("/api/license/verify", (req, res) => {
 
     // If no license and no promo, return not found
     if (!validLicense && !validPromo) {
-        return res.json({ 
-            success: true, 
-            valid: false, 
+        return res.json({
+            success: true,
+            valid: false,
             status: "NOT_FOUND",
             hasPromoAccess: false,
             promoActive: isHalloweenPromoActive()
@@ -1022,9 +1027,9 @@ app.post("/api/halloween/validate-promo", (req, res) => {
         const { promoKey } = req.body || {};
 
         if (!promoKey) {
-            return res.status(400).json({ 
-                success: false, 
-                valid: false, 
+            return res.status(400).json({
+                success: false,
+                valid: false,
                 error: "PROMO_KEY_REQUIRED",
                 promoActive: isHalloweenPromoActive(),
                 promoStart: HALLOWEEN_PROMO_CONFIG.promoStart.toISOString(),
@@ -1035,9 +1040,9 @@ app.post("/api/halloween/validate-promo", (req, res) => {
         const validation = validatePromoKey(promoKey);
 
         if (!validation.valid) {
-            return res.status(400).json({ 
-                success: false, 
-                valid: false, 
+            return res.status(400).json({
+                success: false,
+                valid: false,
                 error: validation.reason,
                 promoActive: isHalloweenPromoActive(),
                 promoStart: HALLOWEEN_PROMO_CONFIG.promoStart.toISOString(),
@@ -1166,7 +1171,7 @@ app.get("/api/security-audit", (req, res) => {
             mimeSniffingProtection: true
         }
     };
-    
+
     res.status(200).json(securityAudit);
 });
 
@@ -1222,12 +1227,12 @@ function staticOptions() {
             } else if (filePath.endsWith(".json")) {
                 res.setHeader("Content-Type", "application/json; charset=utf-8");
             }
-            
+
             // Add security headers for static files
             res.setHeader("X-Content-Type-Options", "nosniff");
             res.setHeader("X-Frame-Options", "SAMEORIGIN");
             res.setHeader("X-XSS-Protection", "1; mode=block");
-            
+
             // Cache control for static assets in production
             if (IS_PRODUCTION) {
                 res.setHeader("Cache-Control", "public, max-age=86400, immutable");
@@ -1360,6 +1365,23 @@ app.get("/", (req, res, next) => {
     });
 });
 
+// MOneZONE analytics dashboard — served by Node (no PHP runtime on Render).
+// The .php file is kept for reference/local PHP hosting only.
+const monezoneDashboard = path.join(__dirname, "analytics.html");
+const serveMonezone = (req, res, next) => {
+    if (!fs.existsSync(monezoneDashboard)) {
+        return next(new Error("MOneZONE dashboard not found"));
+    }
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    return res.sendFile(monezoneDashboard, (error) => {
+        if (error) next(error);
+    });
+};
+app.get("/MOneZONE.php", serveMonezone);
+app.get("/monezone.php", serveMonezone);
+app.get("/monezone", serveMonezone);
+
 // Client-Side Routing Fallback (Prevents silent loading on missing resources)
 app.use((req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") {
@@ -1381,6 +1403,10 @@ app.use((req, res, next) => {
         requestPath.startsWith("/halloween/") ||
         path.extname(requestPath)
     ) {
+        // API routes defined later must remain reachable — never 404 them here.
+        if (requestPath.startsWith("/api/")) {
+            return next();
+        }
         return res.status(404).send("Not Found");
     }
 
@@ -1401,6 +1427,104 @@ app.use((req, res, next) => {
             next(error);
         }
     });
+});
+
+/* ------------------------------------------------------------
+ * ANALYTICS ENDPOINT - performance and user behavior tracking
+ * ------------------------------------------------------------ */
+app.post("/api/analytics", (req, res) => {
+    try {
+        const analyticsData = req.body || {};
+        const analyticsFile = path.join(__dirname, "data", "analytics.json");
+        
+        // Load existing analytics data
+        let analytics = {
+            page_views: 0,
+            unique_visitors: 0,
+            performance_metrics: [],
+            user_agents: {},
+            ip_addresses: {},
+            timestamps: []
+        };
+        
+        if (fs.existsSync(analyticsFile)) {
+            const existingData = fs.readFileSync(analyticsFile, 'utf8');
+            analytics = JSON.parse(existingData);
+        }
+        
+        // Update analytics data
+        analytics.page_views++;
+        analytics.unique_visitors = Object.keys(analytics.ip_addresses).length;
+        
+        // Add performance metrics
+        if (analyticsData.loadTime) {
+            analytics.performance_metrics.push({
+                loadTime: analyticsData.loadTime,
+                memoryUsage: analyticsData.memoryUsage || 0,
+                timestamp: analyticsData.timestamp || new Date().toISOString(),
+                userAgent: analyticsData.userAgent || '',
+                screenResolution: analyticsData.screenResolution || '',
+                viewportSize: analyticsData.viewportSize || ''
+            });
+        }
+        
+        // Update user agents
+        if (analyticsData.userAgent) {
+            analytics.user_agents[analyticsData.userAgent] = (analytics.user_agents[analyticsData.userAgent] || 0) + 1;
+        }
+        
+        // Update IP addresses (in production, consider anonymization)
+        const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+        analytics.ip_addresses[clientIP] = (analytics.ip_addresses[clientIP] || 0) + 1;
+        
+        // Add timestamp
+        analytics.timestamps.push(new Date().toISOString());
+        
+        // Keep only last 1000 timestamps to prevent file bloat
+        if (analytics.timestamps.length > 1000) {
+            analytics.timestamps = analytics.timestamps.slice(-1000);
+        }
+        
+        // Save analytics data
+        if (!fs.existsSync(path.dirname(analyticsFile))) {
+            fs.mkdirSync(path.dirname(analyticsFile), { recursive: true });
+        }
+        
+        fs.writeFileSync(analyticsFile, JSON.stringify(analytics, null, 2));
+        
+        console.log("[WEBZONEBW] Analytics data saved:", analytics.page_views, "page views");
+        res.json({ success: true, timestamp: new Date().toISOString() });
+        
+    } catch (error) {
+        console.error("[WEBZONEBW] Analytics error:", error.message);
+        res.status(500).json({ success: false, error: "Analytics failed" });
+    }
+});
+
+/* ------------------------------------------------------------
+ * ANALYTICS DATA ENDPOINT - retrieve analytics data
+ * ------------------------------------------------------------ */
+app.get("/api/analytics", (req, res) => {
+    try {
+        const analyticsFile = path.join(__dirname, "data", "analytics.json");
+        
+        if (fs.existsSync(analyticsFile)) {
+            const analyticsData = fs.readFileSync(analyticsFile, 'utf8');
+            res.json(JSON.parse(analyticsData));
+        } else {
+            res.json({
+                page_views: 0,
+                unique_visitors: 0,
+                performance_metrics: [],
+                user_agents: {},
+                ip_addresses: {},
+                timestamps: []
+            });
+        }
+    } catch (error) {
+        console.error("[WEBZONEBW] Analytics retrieval error:", error.message);
+        res.status(500).json({ success: false, error: "Analytics retrieval failed" });
+    }
 });
 
 /* ============================================================

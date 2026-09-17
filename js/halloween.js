@@ -6106,3 +6106,205 @@ function initWebZoneERStudio() {
   } else {
     updatePromoAccessUI();
   }
+
+  // ==========================================================
+  // LENS FILTER CAROUSEL EVENT LISTENERS
+  // ==========================================================
+
+  // Lens bubble click handlers
+  snapLensBubbles.forEach(bubble => {
+    bubble.addEventListener('click', function() {
+      const filter = this.dataset.filter;
+      if (filter) {
+        currentFilter = filter;
+        updateLensUI();
+        showCanvasToast(getFilterDisplayName(filter), `${filter} filter activated`);
+        
+        // Start render loop if not already running
+        if (!erPerf.running) {
+          startRenderLoop();
+        }
+      }
+    });
+  });
+
+  // Lens carousel navigation
+  const lensArrowLeft = document.getElementById("lensArrowLeft");
+  const lensArrowRight = document.getElementById("lensArrowRight");
+  
+  if (lensArrowLeft) {
+    lensArrowLeft.addEventListener('click', function() {
+      scrollLensCarousel(-1);
+    });
+  }
+  
+  if (lensArrowRight) {
+    lensArrowRight.addEventListener('click', function() {
+      scrollLensCarousel(1);
+    });
+  }
+
+  // Scroll lens carousel
+  function scrollLensCarousel(direction) {
+    const track = document.getElementById("snapLensTrack");
+    if (!track) return;
+    
+    const scrollAmount = 200; // pixels to scroll
+    track.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  // Update lens UI to show active filter
+  function updateLensUI() {
+    snapLensBubbles.forEach(bubble => {
+      const filter = bubble.dataset.filter;
+      if (filter === currentFilter) {
+        bubble.classList.add('active');
+      } else {
+        bubble.classList.remove('active');
+      }
+    });
+  }
+
+  // Get display name for filter
+  function getFilterDisplayName(filter) {
+    const names = {
+      'cartoon': '🎨 Anime Cel',
+      'sunglasses': '🕶️ Designer Aviators',
+      'halo': '👑 Angel Halo',
+      'goldenhour': '🌟 Golden Hour',
+      'cinematic': '🎬 35mm Film',
+      'noir': '🖤 Leica Noir',
+      'vintage90s': '🎞️ Retro 90s',
+      'glitch': '⚡ Digital Glitch',
+      'space': '🚀 Deep Space',
+      'cyberpunk': '💡 Neon Cyberpunk',
+      'popart': '🎭 Pop Art',
+      'studiohd': '📷 Studio HD',
+      'ai-background': '🤖 AI Background',
+      'ghost-pose': '👻 Ghost Aura',
+      'pose-frame': '📸 Pose Frame',
+      'pumpkin-pose': '🎃 Pumpkin Pose',
+      'witch-ritual': '🧙 Witch Ritual',
+      'vr-nebula': '🌌 VR Nebula',
+      'haunted-forest': '🌲 Haunted Forest',
+      'vr-cyberdeck': '🖥️ VR Cyberdeck',
+      'vr-mansion': '🏚️ VR Mansion',
+      'dollar-rain': '💎 Dollar Rain',
+      'celebrity-spotlight': '⭐ Celebrity Spotlight'
+    };
+    return names[filter] || filter;
+  }
+
+  // Show canvas toast notification
+  function showCanvasToast(icon, text) {
+    const toast = document.getElementById("canvasSwipeToast");
+    if (toast) {
+      const iconEl = toast.querySelector("#canvasSwipeIcon");
+      const textEl = toast.querySelector("#canvasSwipeText");
+      
+      if (iconEl) iconEl.textContent = icon;
+      if (textEl) textEl.textContent = text;
+      
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+      }, 2000);
+    }
+  }
+
+  // Initialize lens UI
+  updateLensUI();
+
+  // ==========================================================
+  // SMART CATEGORY FILTERING
+  // ==========================================================
+
+  const smartCategoryPills = document.querySelectorAll(".smart-cat-btn");
+  
+  smartCategoryPills.forEach(pill => {
+    pill.addEventListener('click', function() {
+      // Remove active class from all pills
+      smartCategoryPills.forEach(p => p.classList.remove('active'));
+      
+      // Add active class to clicked pill
+      this.classList.add('active');
+      
+      // Get selected category
+      const category = this.dataset.smartCat;
+      activeSmartCategory = category;
+      
+      // Filter lens bubbles based on category
+      filterLensByCategory(category);
+      
+      // Update status text
+      updateSmartStatus(category);
+    });
+  });
+
+  // Filter lens bubbles by category
+  function filterLensByCategory(category) {
+    const track = document.getElementById("snapLensTrack");
+    if (!track) return;
+    
+    const bubbles = track.querySelectorAll(".er-lens-bubble");
+    
+    bubbles.forEach(bubble => {
+      const filter = bubble.dataset.filter;
+      
+      // Show/hide based on category
+      let shouldShow = true;
+      
+      if (category === 'smart') {
+        shouldShow = ['cartoon', 'goldenhour', 'cinematic', 'studiohd', 'ai-background'];
+      } else if (category === 'face') {
+        shouldShow = ['sunglasses', 'halo', 'kawaii', 'cyberwarrior', 'noir', 'icefrost'];
+      } else if (category === 'scene') {
+        shouldShow = ['vintage90s', 'popart', 'cyberpunk', 'cinematic', 'glitch', 'space'];
+      } else if (category === 'pose') {
+        shouldShow = ['ghost-pose', 'pose-frame', 'pumpkin-pose', 'witch-ritual'];
+      } else if (category === 'vr') {
+        shouldShow = ['vr-nebula', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion'];
+      } else if (category === 'premium') {
+        shouldShow = ['vr-nebula', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'dollar-rain', 'celebrity-spotlight'];
+      } else if (category === 'all') {
+        shouldShow = true;
+      }
+      
+      bubble.style.display = shouldShow ? 'block' : 'none';
+    });
+  }
+
+  // Update smart status text
+  function updateSmartStatus(category) {
+    const statusIcon = document.getElementById("smartStatusIcon");
+    const statusText = document.getElementById("smartStatusText");
+    const inventoryBadge = document.getElementById("smartInventoryBadge");
+    
+    if (!statusIcon || !statusText || !inventoryBadge) return;
+    
+    const statusMap = {
+      'smart': { icon: '✨', text: 'Smart Adaptive: Ready', badge: '🌟 9 Smart Lenses' },
+      'face': { icon: '👤', text: 'Face AR Mode: Active', badge: '👤 6 Face AR Lenses' },
+      'scene': { icon: '🌍', text: 'Scene Mode: Active', badge: '🌍 6 Scene Lenses' },
+      'pose': { icon: '🦴', text: 'Pose Mode: Active', badge: '🦴 4 Pose Lenses' },
+      'vr': { icon: '🌌', text: 'VR Mode: Active', badge: '🌌 4 VR Environments' },
+      'premium': { icon: '💎', text: 'Premium Mode: Locked', badge: '💎 6 Premium Lenses' },
+      'all': { icon: '✨', text: 'All Effects: Active', badge: '✨ 25 Total Lenses' }
+    };
+    
+    const status = statusMap[category] || statusMap['smart'];
+    statusIcon.textContent = status.icon;
+    statusText.textContent = status.text;
+    inventoryBadge.textContent = status.badge;
+  }
+
+  // Initialize with smart category
+  updateSmartStatus('smart');
+
+  // ==========================================================
