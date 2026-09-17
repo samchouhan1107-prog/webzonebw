@@ -1365,22 +1365,7 @@ app.get("/", (req, res, next) => {
     });
 });
 
-// MOneZONE analytics dashboard — served by Node (no PHP runtime on Render).
-// The .php file is kept for reference/local PHP hosting only.
-const monezoneDashboard = path.join(__dirname, "analytics.html");
-const serveMonezone = (req, res, next) => {
-    if (!fs.existsSync(monezoneDashboard)) {
-        return next(new Error("MOneZONE dashboard not found"));
-    }
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("X-Robots-Tag", "noindex, nofollow");
-    return res.sendFile(monezoneDashboard, (error) => {
-        if (error) next(error);
-    });
-};
-app.get("/MOneZONE.php", serveMonezone);
-app.get("/monezone.php", serveMonezone);
-app.get("/monezone", serveMonezone);
+
 
 // Client-Side Routing Fallback (Prevents silent loading on missing resources)
 app.use((req, res, next) => {
@@ -1429,103 +1414,7 @@ app.use((req, res, next) => {
     });
 });
 
-/* ------------------------------------------------------------
- * ANALYTICS ENDPOINT - performance and user behavior tracking
- * ------------------------------------------------------------ */
-app.post("/api/analytics", (req, res) => {
-    try {
-        const analyticsData = req.body || {};
-        const analyticsFile = path.join(__dirname, "data", "analytics.json");
-        
-        // Load existing analytics data
-        let analytics = {
-            page_views: 0,
-            unique_visitors: 0,
-            performance_metrics: [],
-            user_agents: {},
-            ip_addresses: {},
-            timestamps: []
-        };
-        
-        if (fs.existsSync(analyticsFile)) {
-            const existingData = fs.readFileSync(analyticsFile, 'utf8');
-            analytics = JSON.parse(existingData);
-        }
-        
-        // Update analytics data
-        analytics.page_views++;
-        analytics.unique_visitors = Object.keys(analytics.ip_addresses).length;
-        
-        // Add performance metrics
-        if (analyticsData.loadTime) {
-            analytics.performance_metrics.push({
-                loadTime: analyticsData.loadTime,
-                memoryUsage: analyticsData.memoryUsage || 0,
-                timestamp: analyticsData.timestamp || new Date().toISOString(),
-                userAgent: analyticsData.userAgent || '',
-                screenResolution: analyticsData.screenResolution || '',
-                viewportSize: analyticsData.viewportSize || ''
-            });
-        }
-        
-        // Update user agents
-        if (analyticsData.userAgent) {
-            analytics.user_agents[analyticsData.userAgent] = (analytics.user_agents[analyticsData.userAgent] || 0) + 1;
-        }
-        
-        // Update IP addresses (in production, consider anonymization)
-        const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
-        analytics.ip_addresses[clientIP] = (analytics.ip_addresses[clientIP] || 0) + 1;
-        
-        // Add timestamp
-        analytics.timestamps.push(new Date().toISOString());
-        
-        // Keep only last 1000 timestamps to prevent file bloat
-        if (analytics.timestamps.length > 1000) {
-            analytics.timestamps = analytics.timestamps.slice(-1000);
-        }
-        
-        // Save analytics data
-        if (!fs.existsSync(path.dirname(analyticsFile))) {
-            fs.mkdirSync(path.dirname(analyticsFile), { recursive: true });
-        }
-        
-        fs.writeFileSync(analyticsFile, JSON.stringify(analytics, null, 2));
-        
-        console.log("[WEBZONEBW] Analytics data saved:", analytics.page_views, "page views");
-        res.json({ success: true, timestamp: new Date().toISOString() });
-        
-    } catch (error) {
-        console.error("[WEBZONEBW] Analytics error:", error.message);
-        res.status(500).json({ success: false, error: "Analytics failed" });
-    }
-});
 
-/* ------------------------------------------------------------
- * ANALYTICS DATA ENDPOINT - retrieve analytics data
- * ------------------------------------------------------------ */
-app.get("/api/analytics", (req, res) => {
-    try {
-        const analyticsFile = path.join(__dirname, "data", "analytics.json");
-        
-        if (fs.existsSync(analyticsFile)) {
-            const analyticsData = fs.readFileSync(analyticsFile, 'utf8');
-            res.json(JSON.parse(analyticsData));
-        } else {
-            res.json({
-                page_views: 0,
-                unique_visitors: 0,
-                performance_metrics: [],
-                user_agents: {},
-                ip_addresses: {},
-                timestamps: []
-            });
-        }
-    } catch (error) {
-        console.error("[WEBZONEBW] Analytics retrieval error:", error.message);
-        res.status(500).json({ success: false, error: "Analytics retrieval failed" });
-    }
-});
 
 /* ============================================================
  * GLOBAL ERROR HANDLER

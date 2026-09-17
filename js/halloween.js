@@ -6308,3 +6308,523 @@ function initWebZoneERStudio() {
   updateSmartStatus('smart');
 
   // ==========================================================
+  // MISSING FILTER FUNCTIONS
+  // ==========================================================
+
+  function drawCartoonCelShader(ctx, w, h, time) {
+    // Simple cartoon effect with edge detection and cel shading
+    ctx.save();
+    
+    // Create edge detection effect
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    // Simple edge detection (simplified for performance)
+    for (let i = 0; i < data.length; i += 4) {
+      const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      const celThreshold = 128;
+      
+      if (brightness > celThreshold) {
+        data[i] = Math.min(255, data[i] * 1.2);     // R
+        data[i + 1] = Math.min(255, data[i + 1] * 1.1); // G
+        data[i + 2] = Math.min(255, data[i + 2] * 0.9); // B
+      } else {
+        data[i] = data[i] * 0.8;     // R
+        data[i + 1] = data[i + 1] * 0.8; // G
+        data[i + 2] = data[i + 2] * 0.8; // B
+      }
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Add cartoon outline effect
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(5, 5, w - 10, h - 10);
+    
+    ctx.restore();
+  }
+
+  function drawStudioPortraitHD(ctx, w, h, time) {
+    ctx.save();
+    
+    // Apply HD enhancement and studio lighting
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    // Enhance contrast and saturation
+    for (let i = 0; i < data.length; i += 4) {
+      // Increase contrast
+      data[i] = Math.min(255, Math.max(0, (data[i] - 128) * 1.3 + 128));
+      data[i + 1] = Math.min(255, Math.max(0, (data[i + 1] - 128) * 1.3 + 128));
+      data[i + 2] = Math.min(255, Math.max(0, (data[i + 2] - 128) * 1.3 + 128));
+      
+      // Increase saturation
+      const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      data[i] = Math.min(255, gray + (data[i] - gray) * 1.2);
+      data[i + 1] = Math.min(255, gray + (data[i + 1] - gray) * 1.2);
+      data[i + 2] = Math.min(255, gray + (data[i + 2] - gray) * 1.2);
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Add vignette effect
+    const vignette = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.8);
+    vignette.addColorStop(0, 'rgba(0,0,0,0)');
+    vignette.addColorStop(0.7, 'rgba(0,0,0,0.1)');
+    vignette.addColorStop(1, 'rgba(0,0,0,0.4)');
+    
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  function drawPopArtMatrix(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create pop art effect with halftone dots
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    // Convert to high contrast
+    for (let i = 0; i < data.length; i += 4) {
+      const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      const threshold = 128;
+      const value = brightness > threshold ? 255 : 0;
+      
+      data[i] = value;     // R
+      data[i + 1] = value; // G
+      data[i + 2] = value; // B
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Add colorful halftone dots overlay
+    const dotSize = 8;
+    ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+    
+    for (let x = 0; x < w; x += dotSize * 2) {
+      for (let y = 0; y < h; y += dotSize * 2) {
+        const brightness = Math.random();
+        if (brightness > 0.5) {
+          ctx.beginPath();
+          ctx.arc(x + dotSize/2, y + dotSize/2, dotSize/2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    
+    ctx.restore();
+  }
+
+  function drawCyberpunkNeon(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create neon cyberpunk effect
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    // Enhance neon colors
+    for (let i = 0; i < data.length; i += 4) {
+      // Increase blues and purples
+      data[i] = Math.min(255, data[i] * 0.8);     // R
+      data[i + 1] = Math.min(255, data[i + 1] * 0.9); // G
+      data[i + 2] = Math.min(255, data[i + 2] * 1.4); // B
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Add neon glow overlay
+    const glowGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.6);
+    glowGradient.addColorStop(0, 'rgba(138, 43, 226, 0.3)');
+    glowGradient.addColorStop(0.5, 'rgba(0, 191, 255, 0.2)');
+    glowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.1)');
+    
+    ctx.fillStyle = glowGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Add scan lines
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+    ctx.lineWidth = 1;
+    
+    for (let y = 0; y < h; y += 4) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+    
+    ctx.restore();
+  }
+
+  function drawCinematic35mm(ctx, w, h, time) {
+    ctx.save();
+    
+    // Apply cinematic color grading
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    for (let i = 0; i < data.length; i += 4) {
+      // Reduce saturation slightly
+      const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      data[i] = gray + (data[i] - gray) * 0.8;     // R
+      data[i + 1] = gray + (data[i + 1] - gray) * 0.8; // G
+      data[i + 2] = gray + (data[i + 2] - gray) * 0.8; // B
+      
+      // Add warm tint
+      data[i] = Math.min(255, data[i] * 1.05);     // R
+      data[i + 2] = Math.min(255, data[i + 2] * 0.95); // B
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Add film grain
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    const grainSize = 2;
+    
+    for (let x = 0; x < w; x += grainSize * 3) {
+      for (let y = 0; y < h; y += grainSize * 3) {
+        if (Math.random() > 0.7) {
+          ctx.fillRect(x + Math.random() * grainSize, y + Math.random() * grainSize, grainSize, grainSize);
+        }
+      }
+    }
+    
+    // Add vignette
+    const vignette = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.8);
+    vignette.addColorStop(0, 'rgba(0,0,0,0)');
+    vignette.addColorStop(0.8, 'rgba(0,0,0,0.2)');
+    vignette.addColorStop(1, 'rgba(0,0,0,0.5)');
+    
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  function drawDigitalGlitch(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create glitch effect
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const data = imageData.data;
+    
+    // Random color channel shifting
+    for (let i = 0; i < data.length; i += 4) {
+      if (Math.random() > 0.95) {
+        // Glitch: shift color channels
+        const temp = data[i];
+        data[i] = data[i + 1];
+        data[i + 1] = data[i + 2];
+        data[i + 2] = temp;
+      }
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Add scan lines
+    ctx.strokeStyle = 'rgba(255, 0, 0, 0.1)';
+    ctx.lineWidth = 1;
+    
+    for (let y = 0; y < h; y += 3) {
+      if (Math.random() > 0.8) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+    }
+    
+    // Add static noise
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+    const noiseSize = 3;
+    
+    for (let x = 0; x < w; x += noiseSize * 4) {
+      for (let y = 0; y < h; y += noiseSize * 4) {
+        if (Math.random() > 0.9) {
+          ctx.fillRect(x + Math.random() * noiseSize, y + Math.random() * noiseSize, noiseSize, noiseSize);
+        }
+      }
+    }
+    
+    ctx.restore();
+  }
+
+  function drawSpaceExplorer(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create space atmosphere
+    const spaceGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h) * 0.8);
+    spaceGradient.addColorStop(0, 'rgba(25, 25, 112, 0.3)');
+    spaceGradient.addColorStop(0.5, 'rgba(0, 0, 139, 0.2)');
+    spaceGradient.addColorStop(1, 'rgba(0, 0, 0, 0.4)');
+    
+    ctx.fillStyle = spaceGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Add stars
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    
+    for (let i = 0; i < 50; i++) {
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const size = Math.random() * 2 + 0.5;
+      const twinkle = Math.sin(time * 3 + i) * 0.5 + 0.5;
+      
+      ctx.globalAlpha = twinkle;
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.globalAlpha = 1;
+    
+    // Add nebula effect
+    const nebula = ctx.createRadialGradient(
+      w * 0.3, h * 0.3, 0,
+      w * 0.3, h * 0.3, w * 0.4
+    );
+    nebula.addColorStop(0, 'rgba(138, 43, 226, 0.2)');
+    nebula.addColorStop(0.5, 'rgba(30, 144, 255, 0.1)');
+    nebula.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = nebula;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  function drawGhostPoseAura(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create ghostly aura around face
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Animated ghost aura
+    for (let i = 0; i < 3; i++) {
+      const auraRadius = radius + Math.sin(time * 2 + i) * 20;
+      const alpha = 0.1 - i * 0.03;
+      
+      const aura = ctx.createRadialGradient(cx, cy, 0, cx, cy, auraRadius);
+      aura.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+      aura.addColorStop(0.5, `rgba(200, 200, 255, ${alpha * 0.5})`);
+      aura.addColorStop(1, 'transparent');
+      
+      ctx.fillStyle = aura;
+      ctx.fillRect(0, 0, w, h);
+    }
+    
+    // Add floating particles
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    
+    for (let i = 0; i < 15; i++) {
+      const angle = (time * 0.5 + i * Math.PI * 2 / 15) % (Math.PI * 2);
+      const distance = 50 + Math.sin(time * 3 + i) * 30;
+      const x = cx + Math.cos(angle) * distance;
+      const y = cy + Math.sin(angle) * distance;
+      const size = 2 + Math.sin(time * 4 + i) * 1;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.restore();
+  }
+
+  function drawPoseFrameAlign(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create pose alignment frame
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const frameW = faceBox.w * w * 0.8;
+    const frameH = faceBox.h * h * 0.8;
+    
+    // Animated frame
+    ctx.strokeStyle = `rgba(0, 255, 255, ${0.5 + Math.sin(time * 3) * 0.3})`;
+    ctx.lineWidth = 3;
+    ctx.setLineDash([10, 5]);
+    ctx.lineDashOffset = time * 50;
+    
+    ctx.strokeRect(cx - frameW/2, cy - frameH/2, frameW, frameH);
+    
+    // Corner guides
+    const cornerSize = 20;
+    ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+    
+    // Top-left corner
+    ctx.fillRect(cx - frameW/2 - cornerSize/2, cy - frameH/2 - cornerSize/2, cornerSize/2, cornerSize/2);
+    
+    // Top-right corner
+    ctx.fillRect(cx + frameW/2 - cornerSize/2, cy - frameH/2 - cornerSize/2, cornerSize/2, cornerSize/2);
+    
+    // Bottom-left corner
+    ctx.fillRect(cx - frameW/2 - cornerSize/2, cy + frameH/2 - cornerSize/2, cornerSize/2, cornerSize/2);
+    
+    // Bottom-right corner
+    ctx.fillRect(cx + frameW/2 - cornerSize/2, cy + frameH/2 - cornerSize/2, cornerSize/2, cornerSize/2);
+    
+    ctx.restore();
+  }
+
+  function drawPumpkinPose(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create pumpkin-themed pose effect
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    
+    // Pumpkin glow
+    const pumpkinGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.5);
+    pumpkinGlow.addColorStop(0, 'rgba(255, 140, 0, 0.3)');
+    pumpkinGlow.addColorStop(0.5, 'rgba(255, 69, 0, 0.2)');
+    pumpkinGlow.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = pumpkinGlow;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Floating pumpkin particles
+    ctx.fillStyle = 'rgba(255, 140, 0, 0.8)';
+    
+    for (let i = 0; i < 8; i++) {
+      const angle = (time * 0.3 + i * Math.PI * 2 / 8) % (Math.PI * 2);
+      const distance = 80 + Math.sin(time * 2 + i) * 40;
+      const x = cx + Math.cos(angle) * distance;
+      const y = cy + Math.sin(angle) * distance;
+      const size = 15 + Math.sin(time * 4 + i) * 5;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.restore();
+  }
+
+  function drawWitchRitualPose(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create witch ritual circle
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Ritual circle
+    ctx.strokeStyle = 'rgba(128, 0, 128, 0.6)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([15, 10]);
+    ctx.lineDashOffset = time * 30;
+    
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    // Mystic symbols
+    ctx.fillStyle = 'rgba(128, 0, 128, 0.8)';
+    ctx.font = '20px Arial';
+    
+    for (let i = 0; i < 6; i++) {
+      const angle = (time * 0.2 + i * Math.PI * 2 / 6) % (Math.PI * 2);
+      const x = cx + Math.cos(angle) * radius;
+      const y = cy + Math.sin(angle) * radius;
+      
+      ctx.fillText('✦', x - 10, y + 7);
+    }
+    
+    // Center symbol
+    ctx.fillText('🔮', cx - 12, cy + 8);
+    
+    ctx.restore();
+  }
+
+  function drawVRNebula(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create VR nebula environment
+    const nebulaGradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w, h));
+    nebulaGradient.addColorStop(0, 'rgba(138, 43, 226, 0.4)');
+    nebulaGradient.addColorStop(0.3, 'rgba(30, 144, 255, 0.3)');
+    nebulaGradient.addColorStop(0.6, 'rgba(0, 191, 255, 0.2)');
+    nebulaGradient.addColorStop(1, 'rgba(0, 0, 0, 0.6)');
+    
+    ctx.fillStyle = nebulaGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Add stars
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    
+    for (let i = 0; i < 100; i++) {
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const size = Math.random() * 1.5 + 0.5;
+      const twinkle = Math.sin(time * 2 + i * 0.1) * 0.5 + 0.5;
+      
+      ctx.globalAlpha = twinkle;
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.globalAlpha = 1;
+    
+    // Add nebula clouds
+    for (let i = 0; i < 5; i++) {
+      const cloudX = (Math.sin(time * 0.1 + i) * 0.3 + 0.5) * w;
+      const cloudY = (Math.cos(time * 0.15 + i) * 0.3 + 0.5) * h;
+      const cloudRadius = Math.random() * 100 + 50;
+      
+      const cloud = ctx.createRadialGradient(cloudX, cloudY, 0, cloudX, cloudY, cloudRadius);
+      cloud.addColorStop(0, 'rgba(138, 43, 226, 0.2)');
+      cloud.addColorStop(0.5, 'rgba(30, 144, 255, 0.1)');
+      cloud.addColorStop(1, 'transparent');
+      
+      ctx.fillStyle = cloud;
+      ctx.fillRect(0, 0, w, h);
+    }
+    
+    ctx.restore();
+  }
+
+  function drawHauntedForestVR(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create haunted forest atmosphere
+    const forestGradient = ctx.createLinearGradient(0, 0, 0, h);
+    forestGradient.addColorStop(0, 'rgba(0, 20, 0, 0.6)');
+    forestGradient.addColorStop(0.5, 'rgba(0, 40, 0, 0.4)');
+    forestGradient.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
+    
+    ctx.fillStyle = forestGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Add fog/mist
+    ctx.fillStyle = 'rgba(200, 200, 200, 0.1)';
+    
+    for (let i = 0; i < 3; i++) {
+      const fogY = (Math.sin(time * 0.5 + i) * 0.3 + 0.5) * h;
+      const fogHeight = 100 + Math.sin(time * 2 + i) * 50;
+      
+      ctx.fillRect(0, fogY - fogHeight/2, w, fogHeight);
+    }
+    
+    // Add floating particles (spores/ash)
+    ctx.fillStyle = 'rgba(100, 50, 0, 0.6)';
+    
+    for (let i = 0; i < 30; i++) {
+      const x = Math.random() * w;
+      const y = (time * 20 + i * 50) % h;
+      const size = Math.random() * 3 + 1;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.restore();
+  }
+
+  // ==========================================================
