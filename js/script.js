@@ -222,6 +222,9 @@ document.addEventListener(
             initActiveNavigation
         );
 
+        // Initialize CTA tracking
+        addCTATracking();
+
         window.dispatchEvent(
             new CustomEvent(
                 "webzone-ready",
@@ -235,6 +238,53 @@ document.addEventListener(
         );
     }
 );
+
+/* ==========================================================
+    CTA TRACKING
+========================================================= */
+
+function trackCTA(action, label) {
+    if (typeof gtag === 'function') {
+        gtag('event', action, {
+            event_category: 'CTA',
+            event_label: label,
+            value: 1
+        });
+    }
+}
+
+function addCTATracking() {
+    // Track primary CTA clicks
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const text = this.textContent.trim();
+            trackCTA('click', `Primary CTA - ${text}`);
+        });
+    });
+
+    // Track secondary CTA clicks
+    document.querySelectorAll('.btn-secondary').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const text = this.textContent.trim();
+            trackCTA('click', `Secondary CTA - ${text}`);
+        });
+    });
+
+    // Track WhatsApp CTA clicks
+    document.querySelectorAll('a[href^="https://wa.me/"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            trackCTA('click', 'WhatsApp Contact');
+        });
+    });
+
+    // Track resume downloads
+    document.querySelectorAll('a[href$="Sameer_Chouhan.pdf"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const action = this.getAttribute('download') ? 'Download' : 'View';
+            trackCTA('click', `Resume ${action}`);
+        });
+    });
+}
 
 
 /* ==========================================================
