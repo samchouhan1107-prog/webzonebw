@@ -249,19 +249,7 @@ body.light-mode {
    LIGHT MODE — Comprehensive Section Overrides
    Ensures every section reads clearly on the light canvas
    ========================================================== */
-body.light-mode .user-avatar-wrap {
-    background: #e0e0e0;
-    border-color: #c0c0c0;
-}
-body.light-mode .user-online-dot {
-    border-color: #ffffff;
-}
-body.light-mode .user-info strong {
-    color: var(--text-heading);
-}
-body.light-mode .user-info span {
-    color: var(--accent);
-}
+
 body.light-mode .toggle-slider {
     background-color: #c0c0c0;
 }
@@ -674,63 +662,7 @@ body.light-mode .sidebar-nav ul li a.active {
     transform: translateX(20px);
 }
 
-/* User Card */
-.sidebar-user-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    margin-top: auto;
-}
 
-.user-avatar-wrap {
-    position: relative;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #1e293b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    border: 1px solid var(--border-color-light);
-}
-
-.user-online-dot {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
-    background: #22c55e;
-    border: 2px solid #090d1a;
-    border-radius: 50%;
-    box-shadow: 0 0 6px #22c55e;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.user-info strong {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #f8fafc;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.user-info span {
-    font-size: 11px;
-    color: #a855f7;
-    font-weight: 600;
-}
 
 
 /* ==========================================================
@@ -4731,55 +4663,7 @@ body.light-mode .cam-floating-badge {
     transform: translateX(20px);
 }
 
-.sidebar-user-card {
-    background: #0f152b;
-    border: 1px solid #202b48;
-    border-radius: 14px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
 
-.user-avatar-wrap {
-    position: relative;
-    width: 38px;
-    height: 38px;
-    background: #1e293b;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.user-online-dot {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
-    background-color: #22c55e;
-    border: 2px solid #0f152b;
-    border-radius: 50%;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.3;
-}
-
-.user-info strong {
-    font-size: 13px;
-    color: #f8fafc;
-}
-
-.user-info span {
-    font-size: 11px;
-    color: #94a3b8;
-}
 
 /* ER Main Stage Content Area */
 .er-main-content {
