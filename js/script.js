@@ -26,6 +26,15 @@
 const WEBZONE_CONFIG = Object.freeze({
 
     version: "2.1",
+    
+    // Mobile Performance Configuration
+    mobile: {
+        touchTargetMin: 44,
+        fontScale: 1,
+        reduceAnimations: false,
+        dataSaver: false,
+        slowConnection: false
+    },
 
     selectors: {
 
@@ -77,6 +86,56 @@ const WEBZONE_CONFIG = Object.freeze({
 /* ==========================================================
    INTERNAL STATE
 ========================================================== */
+
+/* ==========================================================
+    MOBILE PERFORMANCE DETECTION
+========================================================= */
+
+function detectMobilePerformance() {
+    // Detect touch devices
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // Detect mobile devices
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Detect connection quality
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+    const isDataSaver = connection && connection.saveData;
+    
+    // Detect reduced motion preference
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    return {
+        isTouchDevice,
+        isMobile,
+        isSlowConnection,
+        isDataSaver,
+        prefersReducedMotion
+    };
+}
+
+const mobilePerformance = detectMobilePerformance();
+
+// Apply mobile performance optimizations
+if (mobilePerformance.isMobile) {
+    document.documentElement.classList.add('mobile-device');
+    
+    if (mobilePerformance.isSlowConnection) {
+        document.documentElement.classList.add('slow-2g');
+        WEBZONE_CONFIG.mobile.slowConnection = true;
+    }
+    
+    if (mobilePerformance.isDataSaver) {
+        document.documentElement.classList.add('data-saver');
+        WEBZONE_CONFIG.mobile.dataSaver = true;
+    }
+    
+    if (mobilePerformance.prefersReducedMotion) {
+        document.documentElement.classList.add('reduced-motion');
+        WEBZONE_CONFIG.mobile.reduceAnimations = true;
+    }
+}
 
 const WebZoneState = {
 
@@ -289,8 +348,15 @@ function initSkillBars() {
     WebZoneState.skillsInitialized =
         true;
 
+    // Check for mobile performance settings
+    const shouldSkipAnimations = 
+        WebZoneState.reducedMotion || 
+        WEBZONE_CONFIG.mobile.reduceAnimations ||
+        WEBZONE_CONFIG.mobile.slowConnection ||
+        WEBZONE_CONFIG.mobile.dataSaver;
+
     if (
-        WebZoneState.reducedMotion
+        shouldSkipAnimations
     ) {
 
         skills.forEach(

@@ -12,13 +12,22 @@
     <meta charset="UTF-8">
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
     >
 
     <meta
         name="theme-color"
         content="#030712"
     >
+    
+    <!-- Mobile Performance Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="WEBZONEBW">
+    <meta name="application-name" content="WEBZONEBW">
+    <meta name="msapplication-TileColor" content="#030712">
+    <meta name="msapplication-config" content="/browserconfig.xml">
 
     <!-- =====================================================
          BASIC DOCUMENT INFORMATION
@@ -32,6 +41,12 @@
         name="description"
         content="WEBZONEBW is Sameer Chouhan's technology portfolio and digital workspace covering IT support, networking, systems integration, cybersecurity, web development, AI, technical projects and practical technology work."
     >
+    
+    <!-- Mobile SEO Meta Tags -->
+    <meta name="keywords" content="IT support, networking, cybersecurity, web development, AI, systems integration, technology portfolio, digital workspace">
+    <meta name="author" content="Sameer Chouhan">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://webzonebw.in/">
 
     <meta
         name="author"
@@ -356,6 +371,8 @@
                     src="assets/logo.png"
                     alt="WEBZONEBW Logo"
                     class="brand-logo-img"
+                    loading="lazy"
+                    decoding="async"
                 >
 
                 <div class="brand-name-group">
@@ -1129,6 +1146,26 @@
 <script defer src="js/beatles-playlists.js?v=2.3.0"></script>
 <script defer src="js/cookie-utils.js?v=2.3.0"></script>
 <script defer src="js/cookie-consent.js?v=2.3.0"></script>
+
+<!-- Mobile Performance Optimization -->
+<script>
+    // Optimize for mobile devices
+    if ('connection' in navigator) {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection && connection.saveData) {
+            // User has data saver enabled
+            document.documentElement.classList.add('data-saver');
+        }
+    }
+    
+    // Optimize for slow networks
+    if ('connection' in navigator) {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
+            document.documentElement.classList.add('slow-2g');
+        }
+    }
+</script>
 
 <!-- =====================================================
      SERVICE WORKER REGISTRATION
