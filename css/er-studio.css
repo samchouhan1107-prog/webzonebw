@@ -138,6 +138,30 @@ body.er-studio-body {
     overscroll-behavior: contain;
 }
 
+/* Mobile sidebar override for ER studio */
+@media (max-width: 860px) {
+    .er-studio-body .er-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: min(82vw, 300px);
+        max-width: 86vw;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
+        z-index: 1301;
+        transform: translateX(-110%);
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.32s ease;
+        box-shadow: 0 0 45px rgba(0, 0, 0, 0.75);
+    }
+    
+    .er-studio-body .er-sidebar.open,
+    body.sidebar-open .er-studio-body .er-sidebar {
+        transform: translateX(0);
+        box-shadow: 0 0 45px rgba(0, 0, 0, 0.75);
+    }
+}
+
 .er-studio-body .er-main-content {
     min-width: 0;
     width: 100%;

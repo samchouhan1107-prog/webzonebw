@@ -2243,6 +2243,39 @@ function initWebZoneERStudio() {
     sidebarToggleBtn.addEventListener("click", toggleSidebar);
   }
 
+  // ER Studio specific sidebar toggle handling
+  const erSidebarToggleBtn = document.getElementById("sidebarToggleBtn");
+  const erMainSidebar = document.getElementById("mainSidebar");
+  
+  if (erSidebarToggleBtn && erMainSidebar && erMainSidebar.classList.contains("er-sidebar")) {
+    // Ensure ER studio sidebar has proper mobile behavior
+    function erToggleSidebar() {
+      if (erMainSidebar.classList.contains("open")) {
+        erMainSidebar.classList.remove("open");
+        erMainSidebar.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("sidebar-open");
+        document.body.classList.remove("webzone-scroll-lock");
+        document.body.style.position = "";
+        if (erSidebarToggleBtn) {
+          erSidebarToggleBtn.classList.remove("is-active");
+          erSidebarToggleBtn.setAttribute("aria-expanded", "false");
+        }
+      } else {
+        erMainSidebar.classList.add("open");
+        erMainSidebar.setAttribute("aria-hidden", "false");
+        document.body.classList.add("sidebar-open");
+        document.body.classList.add("webzone-scroll-lock");
+        document.body.style.position = "relative";
+        if (erSidebarToggleBtn) {
+          erSidebarToggleBtn.classList.add("is-active");
+          erSidebarToggleBtn.setAttribute("aria-expanded", "true");
+        }
+      }
+    }
+    
+    erSidebarToggleBtn.addEventListener("click", erToggleSidebar);
+  }
+
   /* Close sidebar when a nav link is tapped */
   if (mainSidebar) {
     mainSidebar.querySelectorAll("a").forEach(function (link) {
