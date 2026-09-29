@@ -146,6 +146,12 @@ function initWebZoneERStudio() {
                 if (label) {
                   label.textContent = 'Use';
                 }
+              } else {
+                button.classList.remove('unlocked');
+                const label = button.querySelector('.lens-bubble-label');
+                if (label) {
+                  label.textContent = 'Unlock';
+                }
               }
             });
           }
@@ -156,6 +162,11 @@ function initWebZoneERStudio() {
 
   // Initialize FaceFilter UI updates
   setInterval(updateFaceFilterUI, 30000); // Check every 30 seconds
+
+  // Auto-refresh UI after payment
+  window.addEventListener('load', function() {
+    setTimeout(updateFaceFilterUI, 1000); // Initial refresh
+  });
 
   // ==========================================================
   // MOBILE / TABLET PERFORMANCE GUARD
@@ -1509,17 +1520,63 @@ function initWebZoneERStudio() {
     return isUserPremium();
   }
 
+  // Initialize user session
+  async function initializeUserSession() {
+    try {
+      // Check if we already have a session
+      const response = await fetch("/api/session");
+      if (response.ok) {
+        const session = await response.json();
+        if (session.success) {
+          return session;
+        }
+      }
+      
+      // Create new session
+      const userEmail = "demo@example.com"; // Default demo user
+      const loginResponse = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail })
+      });
+      
+      if (loginResponse.ok) {
+        const session = await loginResponse.json();
+        return session;
+      }
+    } catch (error) {
+      console.error("[WEBZONEBW] Session initialization failed:", error);
+      return null;
+    }
+  }
+
   async function checkFaceFilterAccess(filterId) {
     try {
-      // Check if we have a user identifier (email from license system or input)
+      // Initialize session if needed
+      let session = null;
+      try {
+        const sessionResponse = await fetch("/api/session");
+        if (sessionResponse.ok) {
+          session = await sessionResponse.json();
+        }
+      } catch (e) {
+        // Session check failed, will create new one
+      }
+      
+      if (!session) {
+        session = await initializeUserSession();
+      }
+      
+      let userId = null;
       let userEmail = null;
       
-      if (window.WEBZONEBW_LICENSE && window.WEBZONEBW_LICENSE.getStatus) {
-        const status = window.WEBZONEBW_LICENSE.getStatus();
-        if (status === "active" && window.WEBZONEBW_LICENSE.getLicenseKey) {
-          // For now, use a default email - in production this should come from user authentication
-          userEmail = "user@example.com"; // This should be replaced with actual user email
-        }
+      if (session && session.success) {
+        userId = session.userId;
+        userEmail = session.userEmail;
+      } else {
+        // Fallback for demo
+        userId = "demo-user";
+        userEmail = "demo@example.com";
       }
 
       const response = await fetch("/api/facefilter/verify", {
@@ -1527,6 +1584,7 @@ function initWebZoneERStudio() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           filterId: filterId, 
+          userId: userId,
           userEmail: userEmail 
         })
       });
@@ -1888,11 +1946,20 @@ function initWebZoneERStudio() {
             purchaseBtn.disabled = true;
 
             try {
+              // Initialize session first
+              let session = await initializeUserSession();
+              if (!session || !session.success) {
+                throw new Error("Failed to create user session");
+              }
+
               // Create purchase order
               const response = await fetch(`/api/facefilter/${filterId}/purchase`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userEmail: email })
+                body: JSON.stringify({ 
+                  userId: session.userId,
+                  userEmail: email 
+                })
               });
 
               const purchaseData = await response.json();
@@ -1900,6 +1967,14 @@ function initWebZoneERStudio() {
               if (!purchaseData.success) {
                 throw new Error(purchaseData.error || "Failed to create purchase");
               }
+
+              // Store purchase ID for later verification
+              window.currentFaceFilterPurchase = {
+                purchaseId: purchaseData.purchaseId,
+                filterId: filterId,
+                userEmail: email,
+                userId: session.userId
+              };
 
               // Redirect to PayPal checkout
               window.WEBZONEBW_LICENSE.openCheckout();
@@ -3891,6 +3966,391 @@ function initWebZoneERStudio() {
   }
 
   // ==========================================================
+  // GHOST EFFECT IMPLEMENTATIONS
+  // ==========================================================
+
+  function drawGhostAura(ctx, w, h, time) {
+    ctx.save();
+    
+    // Create translucent spectral aura around face
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Ethereal ghost aura with multiple layers
+    for (let i = 0; i < 4; i++) {
+      const auraRadius = radius + Math.sin(time * 1.5 + i) * 15;
+      const alpha = 0.08 - i * 0.015;
+      
+      const aura = ctx.createRadialGradient(cx, cy, 0, cx, cy, auraRadius);
+      aura.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+      aura.addColorStop(0.3, `rgba(200, 200, 255, ${alpha * 0.7})`);
+      aura.addColorStop(0.6, `rgba(150, 150, 255, ${alpha * 0.4})`);
+      aura.addColorStop(1, 'transparent');
+      
+      ctx.fillStyle = aura;
+      ctx.fillRect(0, 0, w, h);
+    }
+    
+    // Floating spectral particles
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    
+    for (let i = 0; i < 20; i++) {
+      const angle = (time * 0.8 + i * Math.PI * 2 / 20) % (Math.PI * 2);
+      const distance = radius * 0.6 + Math.sin(time * 2 + i) * radius * 0.3;
+      const x = cx + Math.cos(angle) * distance;
+      const y = cy + Math.sin(angle) * distance;
+      const size = 2 + Math.sin(time * 3 + i) * 1.5;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Ghostly wisps
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 1;
+    
+    for (let i = 0; i < 8; i++) {
+      const startX = cx + (Math.random() - 0.5) * radius;
+      const startY = cy + (Math.random() - 0.5) * radius;
+      const endX = startX + Math.sin(time + i) * 30;
+      const endY = startY + Math.cos(time + i) * 30;
+      
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+    }
+    
+    ctx.restore();
+  }
+
+  function drawSpiritPossession(ctx, w, h, time) {
+    ctx.save();
+    
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.35;
+    
+    // Dark possession aura
+    const possessionGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    possessionGradient.addColorStop(0, 'rgba(128, 0, 128, 0.4)');
+    possessionGradient.addColorStop(0.5, 'rgba(75, 0, 130, 0.3)');
+    possessionGradient.addColorStop(0.8, 'rgba(25, 25, 112, 0.2)');
+    possessionGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = possessionGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Glowing possessed eyes effect
+    const eyeY = cy - radius * 0.1;
+    const eyeSpacing = radius * 0.3;
+    
+    // Left eye
+    const leftEyeGlow = ctx.createRadialGradient(cx - eyeSpacing, eyeY, 0, cx - eyeSpacing, eyeY, radius * 0.15);
+    leftEyeGlow.addColorStop(0, 'rgba(255, 0, 0, 0.9)');
+    leftEyeGlow.addColorStop(0.5, 'rgba(255, 0, 0, 0.6)');
+    leftEyeGlow.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = leftEyeGlow;
+    ctx.beginPath();
+    ctx.arc(cx - eyeSpacing, eyeY, radius * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Right eye
+    const rightEyeGlow = ctx.createRadialGradient(cx + eyeSpacing, eyeY, 0, cx + eyeSpacing, eyeY, radius * 0.15);
+    rightEyeGlow.addColorStop(0, 'rgba(255, 0, 0, 0.9)');
+    rightEyeGlow.addColorStop(0.5, 'rgba(255, 0, 0, 0.6)');
+    rightEyeGlow.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = rightEyeGlow;
+    ctx.beginPath();
+    ctx.arc(cx + eyeSpacing, eyeY, radius * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Dark energy tendrils
+    ctx.strokeStyle = 'rgba(128, 0, 128, 0.6)';
+    ctx.lineWidth = 2;
+    
+    for (let i = 0; i < 6; i++) {
+      const angle = (time * 0.5 + i * Math.PI * 2 / 6) % (Math.PI * 2);
+      const startX = cx + Math.cos(angle) * radius * 0.3;
+      const startY = cy + Math.sin(angle) * radius * 0.3;
+      const endX = cx + Math.cos(angle) * radius * 0.8;
+      const endY = cy + Math.sin(angle) * radius * 0.8;
+      
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+    }
+    
+    // Pulsing dark energy
+    const pulseAlpha = 0.2 + Math.sin(time * 2) * 0.1;
+    const pulseGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.6);
+    pulseGradient.addColorStop(0, `rgba(128, 0, 128, ${pulseAlpha})`);
+    pulseGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = pulseGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  function drawPhantomVeil(ctx, w, h, time) {
+    ctx.save();
+    
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Mysterious phantom mist layers
+    for (let layer = 0; layer < 3; layer++) {
+      const mistOffset = time * 0.3 + layer * 2;
+      const mistAlpha = 0.1 - layer * 0.02;
+      
+      ctx.fillStyle = `rgba(200, 200, 255, ${mistAlpha})`;
+      
+      // Create flowing mist effect
+      for (let i = 0; i < 5; i++) {
+        const mistX = cx + Math.sin(mistOffset + i * 1.2) * radius * 0.6;
+        const mistY = cy + Math.cos(mistOffset + i * 0.8) * radius * 0.4;
+        const mistSize = radius * 0.3 + Math.sin(mistOffset + i) * radius * 0.1;
+        
+        const mistGradient = ctx.createRadialGradient(mistX, mistY, 0, mistX, mistY, mistSize);
+        mistGradient.addColorStop(0, `rgba(200, 200, 255, ${mistAlpha})`);
+        mistGradient.addColorStop(0.5, `rgba(150, 150, 255, ${mistAlpha * 0.5})`);
+        mistGradient.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = mistGradient;
+        ctx.fillRect(0, 0, w, h);
+      }
+    }
+    
+    // Phantom sparks
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    
+    for (let i = 0; i < 15; i++) {
+      const sparkX = cx + (Math.sin(time * 2 + i) * 0.7 + Math.random() * 0.6 - 0.3) * radius;
+      const sparkY = cy + (Math.cos(time * 1.5 + i) * 0.7 + Math.random() * 0.6 - 0.3) * radius;
+      const sparkSize = 1 + Math.sin(time * 4 + i) * 1;
+      
+      ctx.beginPath();
+      ctx.arc(sparkX, sparkY, sparkSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Ethereal veil edges
+    ctx.strokeStyle = 'rgba(200, 200, 255, 0.4)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 5]);
+    ctx.lineDashOffset = time * 20;
+    
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    ctx.restore();
+  }
+
+  // ==========================================================
+  // ZOMBIE EFFECT IMPLEMENTATIONS
+  // ==========================================================
+
+  function drawZombieVirus(ctx, w, h, time) {
+    ctx.save();
+    
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Sickly green virus infection aura
+    const virusGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    virusGradient.addColorStop(0, 'rgba(0, 255, 0, 0.25)');
+    virusGradient.addColorStop(0.3, 'rgba(50, 205, 50, 0.2)');
+    virusGradient.addColorStop(0.6, 'rgba(34, 139, 34, 0.15)');
+    virusGradient.addColorStop(0.8, 'rgba(0, 100, 0, 0.1)');
+    virusGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = virusGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Rotting skin patches
+    ctx.fillStyle = 'rgba(139, 69, 19, 0.6)';
+    
+    for (let i = 0; i < 8; i++) {
+      const patchX = cx + (Math.sin(time * 0.5 + i) * 0.6 + Math.random() * 0.4 - 0.2) * radius;
+      const patchY = cy + (Math.cos(time * 0.3 + i) * 0.6 + Math.random() * 0.4 - 0.2) * radius;
+      const patchSize = 15 + Math.sin(time + i) * 5;
+      
+      ctx.beginPath();
+      ctx.arc(patchX, patchY, patchSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Virus particles
+    ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
+    
+    for (let i = 0; i < 25; i++) {
+      const angle = (time * 1.2 + i * Math.PI * 2 / 25) % (Math.PI * 2);
+      const distance = radius * 0.5 + Math.sin(time * 2 + i) * radius * 0.3;
+      const x = cx + Math.cos(angle) * distance;
+      const y = cy + Math.sin(angle) * distance;
+      const size = 2 + Math.sin(time * 3 + i) * 1;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Pulsing infection
+    const pulseAlpha = 0.15 + Math.sin(time * 1.8) * 0.08;
+    const pulseGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.7);
+    pulseGradient.addColorStop(0, `rgba(0, 255, 0, ${pulseAlpha})`);
+    pulseGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = pulseGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  function drawUndeadPlague(ctx, w, h, time) {
+    ctx.save();
+    
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Dark plague atmosphere
+    const plagueGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    plagueGradient.addColorStop(0, 'rgba(139, 0, 0, 0.3)');
+    plagueGradient.addColorStop(0.4, 'rgba(75, 0, 130, 0.25)');
+    plagueGradient.addColorStop(0.7, 'rgba(25, 25, 112, 0.2)');
+    plagueGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = plagueGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Decaying skin texture
+    ctx.fillStyle = 'rgba(105, 105, 105, 0.7)';
+    
+    for (let i = 0; i < 12; i++) {
+      const decayX = cx + (Math.sin(time * 0.4 + i) * 0.7 + Math.random() * 0.3 - 0.15) * radius;
+      const decayY = cy + (Math.cos(time * 0.6 + i) * 0.7 + Math.random() * 0.3 - 0.15) * radius;
+      const decaySize = 20 + Math.sin(time + i) * 8;
+      
+      ctx.beginPath();
+      ctx.arc(decayX, decayY, decaySize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Plague mist
+    ctx.fillStyle = 'rgba(128, 128, 128, 0.4)';
+    
+    for (let i = 0; i < 10; i++) {
+      const mistX = cx + Math.sin(time * 0.8 + i * 1.5) * radius * 0.8;
+      const mistY = cy + Math.cos(time * 0.6 + i * 1.2) * radius * 0.6;
+      const mistSize = 30 + Math.sin(time * 2 + i) * 15;
+      
+      const mistGradient = ctx.createRadialGradient(mistX, mistY, 0, mistX, mistY, mistSize);
+      mistGradient.addColorStop(0, 'rgba(128, 128, 128, 0.4)');
+      mistGradient.addColorStop(0.5, 'rgba(105, 105, 105, 0.2)');
+      mistGradient.addColorStop(1, 'transparent');
+      
+      ctx.fillStyle = mistGradient;
+      ctx.fillRect(0, 0, w, h);
+    }
+    
+    // Dark energy swirls
+    ctx.strokeStyle = 'rgba(75, 0, 130, 0.6)';
+    ctx.lineWidth = 2;
+    
+    for (let i = 0; i < 5; i++) {
+      const swirlAngle = time * 0.5 + i * Math.PI * 2 / 5;
+      const swirlRadius = radius * 0.6 + Math.sin(time + i) * radius * 0.2;
+      const swirlX = cx + Math.cos(swirlAngle) * swirlRadius;
+      const swirlY = cy + Math.sin(swirlAngle) * swirlRadius;
+      
+      ctx.beginPath();
+      ctx.arc(swirlX, swirlY, 15, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    
+    ctx.restore();
+  }
+
+  function drawWalkingDead(ctx, w, h, look) {
+    ctx.save();
+    
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const radius = Math.max(w, h) * 0.4;
+    
+    // Apocalyptic survivor aura
+    const survivorGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    survivorGradient.addColorStop(0, 'rgba(139, 90, 43, 0.25)');
+    survivorGradient.addColorStop(0.4, 'rgba(160, 82, 45, 0.2)');
+    survivorGradient.addColorStop(0.7, 'rgba(101, 67, 33, 0.15)');
+    survivorGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = survivorGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Worn survivor texture
+    ctx.fillStyle = 'rgba(101, 67, 33, 0.6)';
+    
+    for (let i = 0; i < 10; i++) {
+      const textureX = cx + (Math.sin(time * 0.3 + i) * 0.8 + Math.random() * 0.2 - 0.1) * radius;
+      const textureY = cy + (Math.cos(time * 0.4 + i) * 0.8 + Math.random() * 0.2 - 0.1) * radius;
+      const textureSize = 25 + Math.sin(time + i) * 10;
+      
+      ctx.beginPath();
+      ctx.arc(textureX, textureY, textureSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Dust particles (apocalyptic atmosphere)
+    ctx.fillStyle = 'rgba(139, 90, 43, 0.7)';
+    
+    for (let i = 0; i < 30; i++) {
+      const dustX = cx + (Math.random() - 0.5) * radius * 1.5;
+      const dustY = cy + (Math.random() - 0.5) * radius * 1.5;
+      const dustSize = 1 + Math.random() * 3;
+      
+      ctx.beginPath();
+      ctx.arc(dustX, dustY, dustSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Survival gear highlights
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.6)';
+    
+    for (let i = 0; i < 6; i++) {
+      const gearAngle = (time * 0.2 + i * Math.PI * 2 / 6) % (Math.PI * 2);
+      const gearX = cx + Math.cos(gearAngle) * radius * 0.7;
+      const gearY = cy + Math.sin(gearAngle) * radius * 0.7;
+      const gearSize = 4 + Math.sin(time * 2 + i) * 2;
+      
+      ctx.beginPath();
+      ctx.arc(gearX, gearY, gearSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Post-apocalyptic haze
+    const hazeAlpha = 0.1 + Math.sin(time * 0.5) * 0.05;
+    const hazeGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.8);
+    hazeGradient.addColorStop(0, `rgba(139, 90, 43, ${hazeAlpha})`);
+    hazeGradient.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = hazeGradient;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  // ==========================================================
   // MOTHER CARE EFFECTS
   // ==========================================================
 
@@ -4522,6 +4982,21 @@ function initWebZoneERStudio() {
 
         break;
 
+      case "ghost-aura":
+        drawGhostAura(ctx, w, h, time);
+
+        break;
+
+      case "spirit-possess":
+        drawSpiritPossession(ctx, w, h, time);
+
+        break;
+
+      case "phantom-veil":
+        drawPhantomVeil(ctx, w, h, time);
+
+        break;
+
       case "pose-frame":
         drawPoseFrameAlign(ctx, w, h, time);
 
@@ -4534,6 +5009,25 @@ function initWebZoneERStudio() {
 
       case "witch-ritual":
         drawWitchRitualPose(ctx, w, h, time);
+
+        break;
+
+      // ==================================================
+      // ZOMBIE EFFECTS — Undead transformations
+      // ==================================================
+
+      case "zombie-virus":
+        drawZombieVirus(ctx, w, h, time);
+
+        break;
+
+      case "undead-plague":
+        drawUndeadPlague(ctx, w, h, time);
+
+        break;
+
+      case "walking-dead":
+        drawWalkingDead(ctx, w, h, time);
 
         break;
 
@@ -6560,6 +7054,9 @@ function initWebZoneERStudio() {
       'studiohd': '📷 Studio HD',
       'ai-background': '🤖 AI Background',
       'ghost-pose': '👻 Ghost Aura',
+      'ghost-aura': '👻 Ghost Aura',
+      'spirit-possess': '👻 Spirit Possession',
+      'phantom-veil': '👻 Phantom Veil',
       'pose-frame': '📸 Pose Frame',
       'pumpkin-pose': '🎃 Pumpkin Pose',
       'witch-ritual': '🧙 Witch Ritual',
@@ -6567,6 +7064,9 @@ function initWebZoneERStudio() {
       'haunted-forest': '🌲 Haunted Forest',
       'vr-cyberdeck': '🖥️ VR Cyberdeck',
       'vr-mansion': '🏚️ VR Mansion',
+      'zombie-virus': '🧟 Zombie Virus',
+      'undead-plague': '🧟 Undead Plague',
+      'walking-dead': '🧟 Walking Dead',
       'dollar-rain': '💎 Dollar Rain',
       'celebrity-spotlight': '⭐ Celebrity Spotlight',
       'mother_care': '👶 Mother Care'
@@ -6643,9 +7143,11 @@ function initWebZoneERStudio() {
       } else if (category === 'scene') {
         shouldShow = ['vintage90s', 'popart', 'cyberpunk', 'cinematic', 'glitch', 'space'];
       } else if (category === 'pose') {
-        shouldShow = ['ghost-pose', 'pose-frame', 'pumpkin-pose', 'witch-ritual'];
+        shouldShow = ['ghost-pose', 'ghost-aura', 'spirit-possess', 'phantom-veil', 'pose-frame', 'pumpkin-pose', 'witch-ritual'];
       } else if (category === 'vr') {
         shouldShow = ['vr-nebula', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion'];
+      } else if (category === 'zombie') {
+        shouldShow = ['zombie-virus', 'undead-plague', 'walking-dead'];
       } else if (category === 'premium') {
         shouldShow = ['vr-nebula', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'dollar-rain', 'celebrity-spotlight'];
       } else if (category === 'all') {
@@ -6668,10 +7170,11 @@ function initWebZoneERStudio() {
       'smart': { icon: '✨', text: 'Smart Adaptive: Ready', badge: '🌟 9 Smart Lenses' },
       'face': { icon: '👤', text: 'Face AR Mode: Active', badge: '👤 7 Face AR Lenses' },
       'scene': { icon: '🌍', text: 'Scene Mode: Active', badge: '🌍 6 Scene Lenses' },
-      'pose': { icon: '🦴', text: 'Pose Mode: Active', badge: '🦴 4 Pose Lenses' },
+      'pose': { icon: '🦴', text: 'Pose Mode: Active', badge: '🦴 7 Pose Lenses' },
       'vr': { icon: '🌌', text: 'VR Mode: Active', badge: '🌌 4 VR Environments' },
+      'zombie': { icon: '🧟', text: 'Zombie Mode: Active', badge: '🧟 3 Zombie Lenses' },
       'premium': { icon: '💎', text: 'Premium Mode: Locked', badge: '💎 6 Premium Lenses' },
-      'all': { icon: '✨', text: 'All Effects: Active', badge: '✨ 26 Total Lenses' }
+      'all': { icon: '✨', text: 'All Effects: Active', badge: '✨ 29 Total Lenses' }
     };
     
     const status = statusMap[category] || statusMap['smart'];

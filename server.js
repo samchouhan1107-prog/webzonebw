@@ -311,6 +311,39 @@ app.use((req, res, next) => {
 });
 
 /* ============================================================
+ * SIMPLE USER SESSION SYSTEM
+ * ============================================================ */
+
+// Simple in-memory user session store
+const userSessions = new Map();
+
+// Create user session (called on login or first access)
+function createUserSession(userEmail) {
+    const sessionId = `SESSION-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+    const session = {
+        sessionId: sessionId,
+        userEmail: userEmail,
+        userId: userEmail.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + "-" + Date.now(),
+        createdAt: new Date().toISOString(),
+        lastActivity: new Date().toISOString()
+    };
+    
+    userSessions.set(sessionId, session);
+    return session;
+}
+
+// Get user session from request
+function getUserSession(req) {
+    const sessionId = req.headers["x-session-id"] || req.cookies?.session_id;
+    if (sessionId && userSessions.has(sessionId)) {
+        const session = userSessions.get(sessionId);
+        session.lastActivity = new Date().toISOString();
+        return session;
+    }
+    return null;
+}
+
+/* ============================================================
  * SIMPLE IN-MEMORY RATE LIMITER FOR API ROUTES
  * ============================================================ */
 
@@ -368,6 +401,76 @@ setInterval(() => {
 }, 5 * 60 * 1000).unref();
 
 app.use("/api", rateLimiter);
+
+/* ============================================================
+ * USER AUTHENTICATION ENDPOINTS
+ * ============================================================ */
+
+// Simple user login (creates session)
+app.post("/api/login", (req, res) => {
+    try {
+        const { email } = req.body || {};
+        
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({
+                success: false,
+                error: "INVALID_EMAIL",
+                message: "Please provide a valid email address."
+            });
+        }
+
+        // Create or get existing session
+        let session = null;
+        for (const [sessionId, sess] of userSessions) {
+            if (sess.userEmail === email) {
+                session = sess;
+                session.lastActivity = new Date().toISOString();
+                break;
+            }
+        }
+        
+        if (!session) {
+            session = createUserSession(email);
+        }
+
+        res.json({
+            success: true,
+            sessionId: session.sessionId,
+            userId: session.userId,
+            userEmail: session.userEmail,
+            message: "Session created successfully"
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW] Login error:", error);
+        res.status(500).json({ success: false, error: "LOGIN_FAILED" });
+    }
+});
+
+// Get current user session
+app.get("/api/session", (req, res) => {
+    try {
+        const session = getUserSession(req);
+        if (!session) {
+            return res.status(401).json({
+                success: false,
+                error: "NO_SESSION",
+                message: "No active session found."
+            });
+        }
+
+        res.json({
+            success: true,
+            sessionId: session.sessionId,
+            userId: session.userId,
+            userEmail: session.userEmail,
+            createdAt: session.createdAt,
+            lastActivity: session.lastActivity
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW] Session check error:", error);
+        res.status(500).json({ success: false, error: "SESSION_CHECK_FAILED" });
+    }
+});
 
 /* ============================================================
  * API ENDPOINTS (Ensures explicit application/json charset=utf-8)
@@ -1009,47 +1112,74 @@ app.post("/api/facefilter/webhook", async (req, res) => {
         const event = req.body || {};
         if (event.event_type === "CHECKOUT.ORDER.COMPLETED" || event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
             const resource = event.resource || {};
-            const orderId = resource.supplementary_data && resource.supplementary_data.related_ids
-                ? resource.supplementary_data.related_ids.order_id
-                : resource.id;
+            const paypalOrderId = resource.id;
+            const paypalCaptureId = resource.purchase_units && resource.purchase_units[0] && resource.purchase_units[0].payments && resource.purchase_units[0].captures && resource.purchase_units[0].captures[0] ? resource.purchase_units[0].captures[0].id : null;
+            
+            // Amount verification
+            const paypalAmount = resource.purchase_units && resource.purchase_units[0] && resource.purchase_units[0].amount ? resource.purchase_units[0].amount.value : null;
+            const paypalCurrency = resource.purchase_units && resource.purchase_units[0] && resource.purchase_units[0].amount ? resource.purchase_units[0].amount.currency_code : null;
 
-            // Find the associated FaceFilter purchase
-            const storedOrder = orderId && licenseStore.orders.get(String(orderId));
-            if (storedOrder && storedOrder.status !== "PAID" && storedOrder.purchaseId?.startsWith("FF-PURCHASE-")) {
-                
-                // Verify this is a FaceFilter purchase
-                const offer = getFaceFilterOffer(storedOrder.filterId);
-                if (offer) {
-                    // Create 24-hour entitlement
-                    const entitlementId = generateEntitlementId();
-                    const purchasedAt = new Date().toISOString();
-                    const expiresAt = new Date(Date.now() + (offer.duration * 60 * 60 * 1000)).toISOString();
-
-                    const entitlement = {
-                        entitlementId: entitlementId,
-                        userId: storedOrder.userId,
-                        userEmail: storedOrder.userEmail,
-                        filterId: storedOrder.filterId,
-                        orderId: storedOrder.purchaseId,
-                        purchasedAt: purchasedAt,
-                        expiresAt: expiresAt,
-                        status: "ACTIVE",
-                        offerName: offer.name,
-                        price: offer.price,
-                        currency: offer.currency
-                    };
-
-                    licenseStore.faceFilterEntitlements.set(entitlementId, entitlement);
-                    
-                    // Mark purchase as completed
-                    storedOrder.status = "PAID";
-                    storedOrder.paidAt = purchasedAt;
-                    licenseStore.orders.set(storedOrder.purchaseId, storedOrder);
-                    
-                    saveLicenseStore();
-
-                    console.log(`[WEBZONEBW FACEFILTER] 24-hour entitlement created: ${entitlementId} for ${storedOrder.filterId}`);
+            // Find the associated FaceFilter purchase by searching for orders with matching custom_id or purchaseId
+            let storedOrder = null;
+            for (const [orderId, order] of licenseStore.orders) {
+                if (order.status !== "PAID" && (order.purchaseId?.startsWith("FF-PURCHASE-") || order.custom_id === paypalOrderId)) {
+                    storedOrder = order;
+                    break;
                 }
+            }
+
+            if (storedOrder && storedOrder.filterId) {
+                // Verify amount and currency match
+                const offer = getFaceFilterOffer(storedOrder.filterId);
+                if (offer && paypalAmount && paypalCurrency) {
+                    // Convert INR to USD for comparison if needed (₹499 = ~$5.99)
+                    const expectedAmount = offer.currency === "INR" ? (offer.price / 83.5).toFixed(2) : offer.price.toFixed(2);
+                    
+                    if (paypalAmount !== expectedAmount || paypalCurrency !== offer.currency) {
+                        console.warn(`[WEBZONEBW FACEFILTER] Amount verification failed: expected ${offer.currency}${expectedAmount}, got ${paypalCurrency}${paypalAmount}`);
+                        return res.status(400).send("AMOUNT_VERIFICATION_FAILED");
+                    }
+                }
+
+                // Check if already processed (idempotency)
+                if (storedOrder.status === "PAID") {
+                    console.log(`[WEBZONEBW FACEFILTER] Order already processed: ${storedOrder.purchaseId}`);
+                    return res.status(200).send("OK");
+                }
+
+                // Create 24-hour entitlement
+                const entitlementId = generateEntitlementId();
+                const purchasedAt = new Date().toISOString();
+                const expiresAt = new Date(Date.now() + (offer.duration * 60 * 60 * 1000)).toISOString();
+
+                const entitlement = {
+                    entitlementId: entitlementId,
+                    userId: storedOrder.userId || "anonymous",
+                    userEmail: storedOrder.userEmail,
+                    filterId: storedOrder.filterId,
+                    orderId: storedOrder.purchaseId,
+                    paypalOrderId: paypalOrderId,
+                    paypalCaptureId: paypalCaptureId,
+                    purchasedAt: purchasedAt,
+                    expiresAt: expiresAt,
+                    status: "ACTIVE",
+                    offerName: offer.name,
+                    price: offer.price,
+                    currency: offer.currency
+                };
+
+                licenseStore.faceFilterEntitlements.set(entitlementId, entitlement);
+                
+                // Mark purchase as completed
+                storedOrder.status = "PAID";
+                storedOrder.paidAt = purchasedAt;
+                storedOrder.paypalOrderId = paypalOrderId;
+                storedOrder.paypalCaptureId = paypalCaptureId;
+                licenseStore.orders.set(storedOrder.purchaseId, storedOrder);
+                
+                saveLicenseStore();
+
+                console.log(`[WEBZONEBW FACEFILTER] 24-hour entitlement created: ${entitlementId} for ${storedOrder.filterId} (${storedOrder.userEmail})`);
             }
         }
 
@@ -1124,6 +1254,66 @@ app.post("/api/license/verify", (req, res) => {
 });
 
 /* ------------------------------------------------------------
+ * FACEFILTER ACCESS REFRESH - Called after payment to update UI
+ * ------------------------------------------------------------ */
+app.post("/api/facefilter/refresh", (req, res) => {
+    try {
+        const { userId, userEmail } = req.body || {};
+        
+        // Validate user session if userId not provided
+        let finalUserId = userId;
+        let finalUserEmail = userEmail;
+        if (!userId && !userEmail) {
+            const session = getUserSession(req);
+            if (session) {
+                finalUserId = session.userId;
+                finalUserEmail = session.userEmail;
+            }
+        }
+        
+        const now = new Date().toISOString();
+        const userEntitlements = [];
+        
+        // Find all active entitlements for this user
+        for (const [entitlementId, entitlement] of licenseStore.faceFilterEntitlements) {
+            if (entitlement.status === "ACTIVE" && 
+                now < entitlement.expiresAt &&
+                ((finalUserId && entitlement.userId === finalUserId) || (finalUserEmail && entitlement.userEmail === finalUserEmail))) {
+                
+                // Check if expired and mark accordingly
+                let status = "ACTIVE";
+                if (now >= entitlement.expiresAt) {
+                    status = "EXPIRED";
+                    entitlement.status = "EXPIRED";
+                    saveLicenseStore();
+                }
+                
+                userEntitlements.push({
+                    entitlementId: entitlementId,
+                    filterId: entitlement.filterId,
+                    status: status,
+                    purchasedAt: entitlement.purchasedAt,
+                    expiresAt: entitlement.expiresAt,
+                    isActive: status === "ACTIVE",
+                    timeRemaining: status === "ACTIVE" ? 
+                        Math.max(0, new Date(entitlement.expiresAt) - new Date(now)) : 0
+                });
+            }
+        }
+
+        res.json({
+            success: true,
+            entitlements: userEntitlements,
+            totalActive: userEntitlements.filter(e => e.isActive).length,
+            timestamp: now
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW FACEFILTER] Refresh error:", error);
+        res.status(500).json({ success: false, error: "REFRESH_FAILED" });
+    }
+});
+
+/* ------------------------------------------------------------
  * FACEFILTER ACCESS VERIFICATION
  * ------------------------------------------------------------ */
 app.post("/api/facefilter/verify", (req, res) => {
@@ -1138,6 +1328,17 @@ app.post("/api/facefilter/verify", (req, res) => {
             });
         }
 
+        // Validate user session if userId not provided
+        let finalUserId = userId;
+        let finalUserEmail = userEmail;
+        if (!userId && !userEmail) {
+            const session = getUserSession(req);
+            if (session) {
+                finalUserId = session.userId;
+                finalUserEmail = session.userEmail;
+            }
+        }
+
         const now = new Date().toISOString();
         let activeEntitlement = null;
         
@@ -1146,7 +1347,7 @@ app.post("/api/facefilter/verify", (req, res) => {
             if (entitlement.filterId === filterId && 
                 entitlement.status === "ACTIVE" && 
                 now < entitlement.expiresAt &&
-                ((userId && entitlement.userId === userId) || (userEmail && entitlement.userEmail === userEmail))) {
+                ((finalUserId && entitlement.userId === finalUserId) || (finalUserEmail && entitlement.userEmail === finalUserEmail))) {
                 activeEntitlement = {
                     entitlementId: entitlementId,
                     filterId: entitlement.filterId,
@@ -1158,6 +1359,24 @@ app.post("/api/facefilter/verify", (req, res) => {
                 };
                 break;
             }
+        }
+
+        // Check for free filters (Mother Care should always be accessible)
+        const freeFilters = ['mother_care'];
+        if (freeFilters.includes(filterId)) {
+            return res.json({
+                success: true,
+                filterId: filterId,
+                hasAccess: true,
+                entitlement: {
+                    filterId: filterId,
+                    status: "FREE",
+                    offerName: "Mother Care",
+                    message: "This filter is always free to use."
+                },
+                accessStatus: "FREE",
+                message: "This filter is always free to use."
+            });
         }
 
         res.json({
@@ -1337,6 +1556,16 @@ app.post("/api/facefilter/:filterId/purchase", (req, res) => {
             });
         }
 
+        // Validate user session
+        const session = getUserSession(req);
+        if (!session) {
+            return res.status(401).json({
+                success: false,
+                error: "UNAUTHORIZED",
+                message: "Valid session required for purchase."
+            });
+        }
+
         // Validate filter exists
         const offer = getFaceFilterOffer(filterId);
         if (!offer) {
@@ -1350,19 +1579,23 @@ app.post("/api/facefilter/:filterId/purchase", (req, res) => {
         // Generate unique purchase ID
         const purchaseId = `FF-PURCHASE-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
         
-        // Create purchase record
+        // Create purchase record with PayPal order fields
         const purchase = {
             purchaseId: purchaseId,
             filterId: filterId,
-            userId: userId || "anonymous",
-            userEmail: userEmail,
+            userId: session.userId,
+            userEmail: session.userEmail,
             offerName: offer.name,
             price: offer.price,
             currency: offer.currency,
             status: "CREATED",
             createdAt: new Date().toISOString(),
             filterPurchasedAt: null,
-            filterExpiresAt: null
+            filterExpiresAt: null,
+            // PayPal fields that will be populated during webhook processing
+            paypalOrderId: null,
+            paypalCaptureId: null,
+            custom_id: purchaseId // For PayPal order identification
         };
 
         licenseStore.orders.set(purchaseId, purchase);
@@ -1376,7 +1609,8 @@ app.post("/api/facefilter/:filterId/purchase", (req, res) => {
                 name: offer.name,
                 price: offer.price,
                 currency: offer.currency,
-                duration: offer.duration
+                duration: offer.duration,
+                refundPolicy: "24-hour promotional access. Once purchased and activated, this offer is non-refundable, subject to applicable law and mandatory consumer protections."
             },
             nextSteps: "Complete payment to activate 24-hour access"
         });
