@@ -32,6 +32,10 @@ I enjoy building practical technology solutions, exploring modern tools and plat
 * Audio-enabled Web Experiences
 * WEBZONEBW-ER Extended Reality Studio (with Integrated Halloween Studio+)
 * Seasonal Experimental Experiences
+* Premium Content Licensing System
+* Secure PayPal Checkout Integration
+* Advanced Filter & Effect System
+* Mobile-Optimized Camera Experience
 
 ---
 
@@ -53,41 +57,79 @@ The current public WebZoneBW deployment includes the main professional portfolio
 WebZoneBW/
 
 │
-├── index.html
-├── about.html
-├── projects.html
-├── resume.html
-├── blog.html
-├── contact.html
-├── privacy.html
-├── terms.html
-├── disclaimer.html
-├── master.html
-├── CNAME
-├── robots.txt
-├── sitemap.xml
+├── 📄 Core Pages
+│   ├── index.html (Main Dashboard)
+│   ├── about.html (Professional Profile)
+│   ├── projects.html (Featured Work)
+│   ├── resume.html (Resume & CV)
+│   ├── blog.html (Technical Blog)
+│   ├── contact.html (Contact Information)
+│   ├── privacy.html (Privacy Policy)
+│   ├── privacy-center.html (Privacy Center)
+│   ├── terms.html (Terms of Service)
+│   ├── disclaimer.html (Legal Disclaimer)
+│   ├── master.html (Master Template)
+│   ├── soundbox.html (Audio Experience)
+│   ├── 500.html (Error Page)
+│   └── test-checkout.html (Testing)
 │
-├── er/
-│   └── index.html (Consolidated Halloween Studio experience)
+├── 🎃 WEBZONEBW-ER Studio
+│   └── er/
+│       └── index.html (Halloween Studio + Extended Reality)
 │
-├── css/
-│   ├── style.css
-│   ├── responsive.css
-│   └── er-studio.css
+├── 📝 Technical Articles
+│   ├── articles/
+│   │   ├── identity-and-access-management/
+│   │   ├── webzonebw-studio-lenses-creative-experience/
+│   │   ├── hardware-troubleshooting/
+│   │   ├── network-infrastructure-fundamentals/
+│   │   ├── systems-integration-guide/
+│   │   ├── cybersecurity-incident-response/
+│   │   └── powershell-it-automation/
 │
-├── js/
-│   ├── er-studio-pipeline.js (Content/Entitlement Engine)
-│   ├── er-studio.js
-│   ├── halloween.js
-│   └── ...
+├── 🎨 Styling & Assets
+│   ├── css/
+│   │   ├── style.css (Main Styles)
+│   │   ├── responsive.css (Mobile Optimization)
+│   │   ├── er-studio.css (Studio Interface)
+│   │   └── er-premium-checkout.css (Premium Checkout)
+│   ├── assets/
+│   │   ├── logo.png (Brand Identity)
+│   │   ├── favicon/ (Favicon Collection)
+│   │   ├── resume/ (Resume Documents)
+│   │   └── audio/ (Audio Assets)
 │
-├── assets/
-│   ├── logo.png
-│   ├── favicon/
-│   ├── resume/
-│   └── audio/
+├── ⚡ JavaScript & Functionality
+│   ├── js/
+│   │   ├── er-license-premium.js (Premium Licensing System)
+│   │   ├── er-studio.js (Studio Controller)
+│   │   ├── halloween.js (Halloween Effects)
+│   │   ├── script.js (Core Application)
+│   │   ├── webzonebw-player.js (Audio Player)
+│   │   └── ...
 │
-└── README.md
+├── 🔧 Configuration & Deployment
+│   ├── package.json (Node.js Dependencies)
+│   ├── package-lock.json (Dependency Lock)
+│   ├── pnpm-lock.yaml (PNPM Lock)
+│   ├── bun.lock (Bun Runtime)
+│   ├── Dockerfile (Container Deployment)
+│   ├── render.yaml (Cloud Deployment)
+│   ├── CNAME (Custom Domain)
+│   ├── robots.txt (Search Engine Rules)
+│   └── sitemap.xml (SEO Sitemap)
+│
+└── 📊 Additional Resources
+    ├── data/ (Data Storage)
+    ├── schema/ (JSON Schema)
+    ├── scripts/ (Deployment Scripts)
+    ├── seo/ (SEO Templates)
+    ├── root/ (Root Configuration)
+    ├── .env (Environment Variables)
+    ├── llms.txt (LLM Configuration)
+    ├── metadata.json (Site Metadata)
+    ├── feed.xml (RSS Feed)
+    └── README.md (Documentation)
 ```
 
 ---
@@ -106,9 +148,19 @@ This single-page experience features a unified interface for camera interaction,
 * **Lens Discovery**: Interactive discovery of free and premium lenses.
 * **Feature Packs**: Connected packages containing effects, tunes, and content.
 * **Secure Entitlement**: Server-side verified premium access (no local-storage-only reliance).
-* **Payment Flow**: PayPal secure checkout (~$5.99 USD, INR not supported) plus manual email ordering.
+* **Enhanced Payment Flow**: PayPal secure checkout ($5.99 USD) with improved user experience and error handling.
+* **Premium Halloween Filters**: Witch Ritual, Haunted Forest, Ghost Aura, Pumpkin Pose with 24-hour access.
 * **Content Pipeline**: Dynamic loading of articles, news, updates, hardware care, and assistance guides.
 * **Responsive Design**: Polished experience across mobile, tablet, and desktop.
+* **Demo Mode**: Fallback functionality for testing and development environments.
+
+### Technical Features
+
+* **Advanced Camera Integration**: Real-time video processing with filter effects
+* **Premium Licensing System**: Secure PayPal integration with server-side verification
+* **Mobile-Optimized**: Touch-friendly interface with performance optimizations
+* **Accessibility Support**: ARIA labels and keyboard navigation
+* **Theme Integration**: Seamless dark/light mode support
 
 ---
 
@@ -119,6 +171,15 @@ WebZoneBW is continuously evolving. The project is built around a simple princip
 > **Build it. Test it. Improve it. Share it.**
 
 The transition to a unified Studio+ experience ensures that premium content, updates, and maintenance resources can be delivered effectively through the active content pipeline, providing long-term support for active users.
+
+### Recent Improvements
+
+* **Enhanced Checkout Flow**: Improved PayPal integration with better error handling and user feedback
+* **Mobile Optimization**: Better responsive design and touch interactions
+* **Premium Filter System**: Advanced Halloween effects with proper licensing
+* **Demo Mode Support**: Fallback functionality for testing environments
+* **Performance Optimizations**: Better camera handling and reduced memory usage
+* **User Experience**: Improved navigation and visual feedback
 
 ---
 

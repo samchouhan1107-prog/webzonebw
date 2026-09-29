@@ -30,7 +30,7 @@
 
     <url>
         <loc>https://webzonebw.in/</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -38,7 +38,7 @@
 
     <url>
         <loc>https://webzonebw.in/about.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -46,7 +46,7 @@
 
     <url>
         <loc>https://webzonebw.in/contact.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -54,7 +54,7 @@
 
     <url>
         <loc>https://webzonebw.in/projects.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -62,7 +62,7 @@
 
     <url>
         <loc>https://webzonebw.in/resume.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -70,7 +70,7 @@
 
     <url>
         <loc>https://webzonebw.in/blog.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -78,7 +78,7 @@
 
     <url>
         <loc>https://webzonebw.in/soundbox.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -90,7 +90,14 @@
 
     <url>
         <loc>https://webzonebw.in/privacy.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
+    </url>
+
+    <!-- Privacy Center -->
+
+    <url>
+        <loc>https://webzonebw.in/privacy-center.html</loc>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -106,7 +113,7 @@
 
     <url>
         <loc>https://webzonebw.in/terms.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -114,7 +121,7 @@
 
     <url>
         <loc>https://webzonebw.in/disclaimer.html</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
     </url>
 
 
@@ -127,7 +134,9 @@
 
     <url>
         <loc>https://webzonebw.in/er/</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
     </url>
 
 
@@ -138,7 +147,7 @@
     <!-- Identity & Access Management -->
     <url>
         <loc>https://webzonebw.in/articles/identity-and-access-management/</loc>
-        <lastmod>2025-06-18</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -146,7 +155,7 @@
     <!-- WebZoneBW Studio Guide -->
     <url>
         <loc>https://webzonebw.in/articles/webzonebw-studio-lenses-creative-experience/</loc>
-        <lastmod>2025-06-18</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -154,7 +163,7 @@
     <!-- Hardware Troubleshooting -->
     <url>
         <loc>https://webzonebw.in/articles/hardware-troubleshooting/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -162,7 +171,7 @@
     <!-- Network Infrastructure Fundamentals -->
     <url>
         <loc>https://webzonebw.in/articles/network-infrastructure-fundamentals/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -170,7 +179,7 @@
     <!-- Systems Integration Guide -->
     <url>
         <loc>https://webzonebw.in/articles/systems-integration-guide/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -178,7 +187,7 @@
     <!-- Cybersecurity & Incident Response -->
     <url>
         <loc>https://webzonebw.in/articles/cybersecurity-incident-response/</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -186,7 +195,7 @@
     <!-- PowerShell IT Automation -->
     <url>
         <loc>https://webzonebw.in/articles/powershell-it-automation/</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -198,7 +207,7 @@
 
     <url>
         <loc>https://webzonebw.in/feed.xml</loc>
-        <lastmod>2026-12-17</lastmod>
+        <lastmod>2026-12-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>

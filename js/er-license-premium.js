@@ -537,29 +537,32 @@ function fetchJSON(url, options) {
       var manualCompleteBtn = modal.querySelector("#manualCompleteBtn");
       if (manualCompleteBtn) {
         manualCompleteBtn.addEventListener("click", function () {
-          // Simulate successful payment in demo mode
-          showProcessingState("Processing demo payment...", "Activating your license...");
-          
-          setTimeout(function() {
-            // Generate a fake license key for demo
-            var fakeLicenseKey = "WZB-ER-" + Math.random().toString(36).substr(2, 6).toUpperCase() + "-" + 
-                                  Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
-                                  Math.random().toString(36).substr(2, 6).toUpperCase();
-            
-            state.licenseKey = fakeLicenseKey;
-            state.email = email;
-            state.status = "active";
-            persist();
-            
-            showSuccessState("Payment Successful!", "Your premium license is now active.");
+          // In production, this should NOT create fake licenses
+          // Only allow demo mode in development environments
+          if (resolveAPIBase() === "local") {
+            showProcessingState("Demo mode payment...", "Activating your license...");
             
             setTimeout(function() {
-              close();
-              if (typeof window.updateFaceFilterUI === 'function') {
-                window.updateFaceFilterUI();
-              }
-            }, 2000);
-          }, 1500);
+              // Generate demo license key (only for local/demo environments)
+              var demoLicenseKey = "WZB-ER-DEMO-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+              
+              state.licenseKey = demoLicenseKey;
+              state.email = email;
+              state.status = "active";
+              persist();
+              
+              showSuccessState("Demo Payment Complete!", "Your demo license is now active.");
+              
+              setTimeout(function() {
+                close();
+                if (typeof window.updateFaceFilterUI === 'function') {
+                  window.updateFaceFilterUI();
+                }
+              }, 2000);
+            }, 1500);
+          } else {
+            showError("Demo mode not available in production. Please complete the PayPal payment.");
+          }
         });
       }
 
@@ -638,11 +641,18 @@ function fetchJSON(url, options) {
       '<div class="co-payment-security">' +
       '<div class="security-icon">🔒</div>' +
       '<div class="security-text">' +
-      '<strong>Secure Payment</strong>' +
+      '<strong>Secure PayPal Payment</strong>' +
       '<p>Your payment is protected by PayPal Buyer Protection</p>' +
       '</div>' +
       '</div>' +
-      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your $5.99 payment securely.</p>' +
+      '<div class="paypal-info-box">' +
+      '<div class="paypal-payment-details">' +
+      '<div class="paypal-amount">$5.99 USD</div>' +
+      '<div class="paypal-description">ER Studio Premium License</div>' +
+      '<div class="paypal-link-display">🔗 Payment will be processed through PayPal</div>' +
+      '</div>' +
+      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your secure $5.99 payment.</p>' +
+      '</div>' +
       '<div id="paymentButtons" class="payment-section"></div>' +
       '</div>' +
 
@@ -922,150 +932,37 @@ function fetchJSON(url, options) {
         return;
       }
 
-      showProcessingState("Preparing secure PayPal checkout...", "Connecting to PayPal gateway");
+      showProcessingState("Redirecting to secure PayPal checkout...", "Please complete your payment");
 
+      // Use the specific PayPal payment link as required
+      const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/GEEZDGBAL6B64";
+      
+      // Store purchase information for server-side verification
+      const purchaseData = {
+        filterId: "premium-er-studio", // Generic identifier for ER Studio premium
+        userEmail: email,
+        amount: 5.99,
+        currency: "USD",
+        purchaseId: "WZB-ER-" + Date.now() + "-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+        timestamp: new Date().toISOString()
+      };
+      
+      // Store in window for server verification later
+      window.currentERStudioPurchase = purchaseData;
+
+      // For production, redirect to PayPal
       resolveAPIBase().then(function (apiBase) {
         if (apiBase === "local") {
+          // Static/demo mode - show manual container
           hideStates();
           paypalManualContainer.style.display = "block";
           return;
         }
 
-        return fetchJSON(API_BASE + "/api/paypal/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            planId: state.plan,
-            customerEmail: email,
-            amount: state.amount,
-            currency: "USD"
-          }),
-        })
-          .then(function (result) {
-            if (!result || !result.success || !result.orderId) {
-              var reason = (result && result.error) || "PAYMENT_NOT_CONFIGURED";
-              if (reason === "PAYMENT_NOT_CONFIGURED" || reason === "GATEWAY_AUTH_FAILED") {
-                hideStates();
-                paypalManualContainer.style.display = "block";
-                return;
-              }
-              showError("Could not initialize PayPal: " + reason);
-              return;
-            }
-
-            var orderId = result.orderId;
-            var clientId = result.clientId || state.paypalClientId || "sb";
-            state.paypalClientId = clientId;
-
-            return loadPaymentProvider("paypal", clientId).then(function () {
-              hideStates();
-              paymentButtons.style.display = "block";
-
-              if (!window.paypal || !window.paypal.Buttons) {
-                showError("PayPal Buttons SDK could not be initialized.");
-                return;
-              }
-
-              paymentButtons.innerHTML = "";
-              window.paypal
-                .Buttons({
-                  style: {
-                    layout: "vertical",
-                    color: "gold",
-                    shape: "pill",
-                    height: 50,
-                    label: "pay",
-                    tagline: false
-                  },
-                  createOrder: function () {
-                    return orderId;
-                  },
-                  onApprove: function (data) {
-                    showProcessingState("Payment approved!", "Verifying transaction and activating license...");
-
-                    return fetchJSON(API_BASE + "/api/paypal/capture", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        orderId: orderId,
-                        email: email,
-                      }),
-                    })
-                      .then(function (cap) {
-                        if (!cap || !cap.success || cap.status !== "COMPLETED") {
-                          throw new Error((cap && cap.error) || "Payment capture not confirmed.");
-                        }
-
-                        // Check if this is a FaceFilter purchase (has custom order ID prefix)
-                        if (orderId && orderId.startsWith("FF-PURCHASE-")) {
-                          // FaceFilter purchase - 24-hour access will be handled by webhook
-                          return new Promise(function(resolve) {
-                            // Wait for webhook to process and create entitlement
-                            setTimeout(function() {
-                              showProcessingState("Payment confirmed!", "Activating your 24-hour access...");
-
-                              // Check if purchase was completed and refresh FaceFilter state
-                              setTimeout(function() {
-                                // Use the stored purchase information
-                                const purchaseInfo = window.currentFaceFilterPurchase;
-                                if (purchaseInfo) {
-                                  return fetch("/api/facefilter/refresh", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({
-                                      userEmail: purchaseInfo.userEmail,
-                                      userId: purchaseInfo.userId
-                                    })
-                                  })
-                                  .then(response => response.json())
-                                  .then(data => {
-                                    if (data.success && data.entitlements.length > 0) {
-                                      // Trigger FaceFilter UI update
-                                      if (typeof window.updateFaceFilterUI === "function") {
-                                        window.updateFaceFilterUI();
-                                      }
-                                    }
-                                  })
-                                  .catch(error => {
-                                    console.warn("[WEBZONEBW] FaceFilter refresh failed:", error);
-                                  });
-                                }
-
-                                hideStates();
-                                successBox.style.display = "block";
-                                successBox.querySelector(".success-text").textContent = "Payment successful!";
-                                successBox.querySelector(".success-subtext").textContent = "Your 24-hour access has been activated.";
-                                setTimeout(close, 2000);
-                                resolve();
-                              }, 3000); // Increased time for webhook processing
-                            }, 2000);
-                          });
-                        } else {
-                          // Regular ER Studio license purchase
-                          return activateLicense(orderId, email, null, showError, close);
-                        }
-                      })
-                      .catch(function (err) {
-                        showError(err.message || "Payment verification failed.");
-                      });
-                  },
-                  onCancel: function () {
-                    hideStates();
-                    showError("PayPal payment was cancelled. No charges were made.");
-                  },
-                  onError: function (err) {
-                    hideStates();
-                    showError("PayPal error: " + (err.message || "Please try again."));
-                  }
-                })
-                .render("#paymentButtons");
-            });
-          })
-          .catch(function (error) {
-            console.warn("PayPal initialization notice:", error);
-            hideStates();
-            paypalManualContainer.style.display = "block";
-          });
+        // Production mode - redirect to PayPal
+        setTimeout(function() {
+          window.location.href = paypalPaymentUrl;
+        }, 1000);
       });
     }
 
@@ -1094,9 +991,9 @@ function fetchJSON(url, options) {
       state.email = email;
       
       // Show processing state
-      showProcessingState("Preparing your order...", "Initializing secure checkout");
+      showProcessingState("Processing your order...", "Redirecting to PayPal secure checkout");
       
-      // PayPal checkout only
+      // PayPal checkout with specific payment link
       setTimeout(function() {
         startPayPalCheckout();
       }, 1000);
