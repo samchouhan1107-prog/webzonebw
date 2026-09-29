@@ -1550,6 +1550,189 @@ function initWebZoneERStudio() {
     }
   }
 
+  // Direct PayPal checkout for FaceFilter purchases
+  async function launchFaceFilterPayPalCheckout(filterId, purchaseId) {
+    try {
+      // Get PayPal client ID
+      const clientResponse = await fetch("/api/paypal/client-id");
+      if (!clientResponse.ok) {
+        throw new Error("PayPal client ID not available");
+      }
+      
+      const clientData = await clientResponse.json();
+      const clientId = clientData.clientId;
+      
+      // Load PayPal SDK
+      if (!window.paypal) {
+        const script = document.createElement('script');
+        script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${clientData.currency}`;
+        script.async = true;
+        script.onload = () => initializeFaceFilterPayPal(clientId, filterId, purchaseId);
+        document.head.appendChild(script);
+      } else {
+        initializeFaceFilterPayPal(clientId, filterId, purchaseId);
+      }
+    } catch (error) {
+      console.error("[WEBZONEBW] PayPal checkout initialization failed:", error);
+      showSwipeToast("❌", "Failed to initialize PayPal checkout");
+    }
+  }
+
+  // Initialize PayPal buttons for FaceFilter purchase
+  function initializeFaceFilterPayPal(clientId, filterId, purchaseId) {
+    if (!window.paypal || !window.paypal.Buttons) {
+      console.error("[WEBZONEBW] PayPal SDK not loaded");
+      showSwipeToast("❌", "PayPal checkout unavailable");
+      return;
+    }
+
+    // Create PayPal buttons
+    const paypalContainer = document.createElement('div');
+    paypalContainer.id = 'facefilter-paypal-container';
+    paypalContainer.style.position = 'fixed';
+    paypalContainer.style.top = '0';
+    paypalContainer.style.left = '0';
+    paypalContainer.style.width = '100%';
+    paypalContainer.style.height = '100%';
+    paypalContainer.style.backgroundColor = 'rgba(0,0,0,0.8)';
+    paypalContainer.style.zIndex = '9999';
+    paypalContainer.style.display = 'flex';
+    paypalContainer.style.alignItems = 'center';
+    paypalContainer.style.justifyContent = 'center';
+    
+    paypalContainer.innerHTML = `
+      <div style="background: white; border-radius: 12px; padding: 24px; max-width: 500px; width: 90%;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px 0;">Complete Your Purchase</h3>
+          <p style="color: #6b7280; margin: 0;">24-hour access to ${getFilterDisplayName(filterId)}</p>
+        </div>
+        <div id="paypal-buttons-container"></div>
+        <div style="text-align: center; margin-top: 16px;">
+          <button id="cancel-paypal-btn" style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Cancel</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(paypalContainer);
+    
+    // Cancel button handler
+    paypalContainer.querySelector('#cancel-paypal-btn').addEventListener('click', () => {
+      paypalContainer.remove();
+      showSwipeToast("❌", "Payment cancelled");
+    });
+    
+    // Create PayPal buttons
+    window.paypal.Buttons({
+      style: {
+        layout: 'vertical',
+        color: 'gold',
+        shape: 'pill',
+        height: 50,
+        label: 'pay',
+        tagline: false
+      },
+      
+      createOrder: function() {
+        console.log(`[WEBZONEBW] Creating PayPal order for FaceFilter purchase: ${purchaseId}`);
+        return purchaseId; // Use the FaceFilter purchase ID
+      },
+      
+      onApprove: function(data) {
+        console.log(`[WEBZONEBW] PayPal approved: ${data.orderID}`);
+        
+        // Show processing state
+        paypalContainer.querySelector('#paypal-buttons-container').innerHTML = `
+          <div style="text-align: center; padding: 20px;">
+            <div style="width: 50px; height: 50px; border: 3px solid #3b82f6; border-top: 3px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+            <p style="margin: 0; color: #6b7280;">Processing payment...</p>
+          </div>
+        `;
+        
+        // Capture the payment
+        fetch("/api/paypal/capture", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: data.orderID,
+            email: window.currentFaceFilterPurchase?.userEmail || "user@example.com"
+          })
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success && result.status === "COMPLETED") {
+            // Payment successful - wait for webhook to process
+            paypalContainer.querySelector('#paypal-buttons-container').innerHTML = `
+              <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+                <p style="margin: 0; color: #10b981; font-weight: 600;">Payment Successful!</p>
+                <p style="margin: 8px 0 0 0; color: #6b7280; font-size: 14px;">Activating your 24-hour access...</p>
+              </div>
+            `;
+            
+            // Wait for webhook to process and refresh FaceFilter state
+            setTimeout(() => {
+              refreshFaceFilterAccess();
+              paypalContainer.remove();
+              showSwipeToast("✅", "24-hour access activated!");
+            }, 3000);
+          } else {
+            throw new Error(result.error || "Payment verification failed");
+          }
+        })
+        .catch(error => {
+          console.error("[WEBZONEBW] Payment capture failed:", error);
+          paypalContainer.querySelector('#paypal-buttons-container').innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+              <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
+              <p style="margin: 0; color: #ef4444; font-weight: 600;">Payment Failed</p>
+              <p style="margin: 8px 0 0 0; color: #6b7280; font-size: 14px;">${error.message}</p>
+            </div>
+          `;
+        });
+      },
+      
+      onCancel: function() {
+        console.log("[WEBZONEBW] PayPal payment cancelled");
+        paypalContainer.remove();
+        showSwipeToast("❌", "Payment cancelled");
+      },
+      
+      onError: function(err) {
+        console.error("[WEBZONEBW] PayPal error:", err);
+        paypalContainer.remove();
+        showSwipeToast("❌", "Payment error occurred");
+      }
+      
+    }).render('#paypal-buttons-container');
+  }
+
+  // Refresh FaceFilter access after payment
+  async function refreshFaceFilterAccess() {
+    try {
+      const purchaseInfo = window.currentFaceFilterPurchase;
+      if (purchaseInfo) {
+        const response = await fetch("/api/facefilter/refresh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            userEmail: purchaseInfo.userEmail,
+            userId: purchaseInfo.userId
+          })
+        });
+        
+        const data = await response.json();
+        if (data.success && data.entitlements.length > 0) {
+          // Trigger FaceFilter UI update
+          if (typeof window.updateFaceFilterUI === "function") {
+            window.updateFaceFilterUI();
+          }
+        }
+      }
+    } catch (error) {
+      console.warn("[WEBZONEBW] FaceFilter refresh failed:", error);
+    }
+  }
+
   async function checkFaceFilterAccess(filterId) {
     try {
       // Initialize session if needed
@@ -1805,7 +1988,7 @@ function initWebZoneERStudio() {
 
           const offer = offerData.offer;
           
-          // Create modal
+          // Create streamlined modal for direct purchase
           const modal = document.createElement("div");
           modal.id = "facefilterOfferModal";
           modal.className = "er-modal-backdrop";
@@ -1841,8 +2024,8 @@ function initWebZoneERStudio() {
                       <span style="font-weight: 600;">24 hours</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span>Access:</span>
-                      <span style="color: #10b981; font-weight: 600;">Full filter access</span>
+                      <span>Payment:</span>
+                      <span style="color: #3b82f6; font-weight: 600;">PayPal Secure Checkout</span>
                     </div>
                   </div>
                 </div>
@@ -1854,21 +2037,11 @@ function initWebZoneERStudio() {
                   </p>
                 </div>
                 
-                <div class="email-validation-section">
-                  <div class="email-input-group">
-                    <label for="offerEmail" class="email-label">Email Address for Access</label>
-                    <div class="email-input-wrapper">
-                      <input type="email" id="offerEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required aria-describedby="email-help">
-                    </div>
-                    <p id="email-help" class="email-help">Your 24-hour access will be linked to this email</p>
-                  </div>
-                </div>
-                
                 <div id="offerProcessing" class="processing-state" style="display: none;">
                   <div class="processing-content">
                     <div class="er-spinner large"></div>
                     <div class="processing-text">Processing your request...</div>
-                    <div class="processing-subtext">Creating your 24-hour access</div>
+                    <div class="processing-subtext">Redirecting to PayPal checkout</div>
                   </div>
                 </div>
                 
@@ -1890,7 +2063,7 @@ function initWebZoneERStudio() {
               </div>
               <div class="modal-actions">
                 <button type="button" class="btn btn-secondary" id="offerCancelBtn">Cancel</button>
-                <button type="button" class="btn btn-primary" id="offerPurchaseBtn">Unlock for ₹${offer.price}</button>
+                <button type="button" class="btn btn-primary" id="offerPurchaseBtn">Purchase with PayPal</button>
               </div>
             </div>
           `;
@@ -1909,36 +2082,14 @@ function initWebZoneERStudio() {
             if (e.target === modal) close();
           });
 
-          const emailInput = modal.querySelector("#offerEmail");
           const purchaseBtn = modal.querySelector("#offerPurchaseBtn");
           const processing = modal.querySelector("#offerProcessing");
           const success = modal.querySelector("#offerSuccess");
           const error = modal.querySelector("#offerError");
           const errorDetails = modal.querySelector("#offerErrorDetails");
 
-          // Validate email
-          function validateEmail() {
-            const email = emailInput.value.trim();
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-              emailInput.classList.add("error");
-              return false;
-            } else {
-              emailInput.classList.remove("error");
-              return true;
-            }
-          }
-
-          emailInput.addEventListener("input", validateEmail);
-
-          // Purchase handler
+          // Direct purchase handler - no email input required
           purchaseBtn.addEventListener("click", async () => {
-            if (!validateEmail()) {
-              emailInput.focus();
-              return;
-            }
-
-            const email = emailInput.value.trim();
-            
             // Show processing
             processing.style.display = "block";
             error.style.display = "none";
@@ -1958,7 +2109,7 @@ function initWebZoneERStudio() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
                   userId: session.userId,
-                  userEmail: email 
+                  userEmail: session.userEmail // Use session email
                 })
               });
 
@@ -1972,12 +2123,19 @@ function initWebZoneERStudio() {
               window.currentFaceFilterPurchase = {
                 purchaseId: purchaseData.purchaseId,
                 filterId: filterId,
-                userEmail: email,
+                userEmail: session.userEmail,
                 userId: session.userId
               };
 
-              // Redirect to PayPal checkout
-              window.WEBZONEBW_LICENSE.openCheckout();
+              console.log(`[WEBZONEBW] Created purchase ${purchaseData.purchaseId}, launching PayPal checkout...`);
+              
+              // Close modal and launch PayPal checkout immediately
+              close();
+              
+              // Launch FaceFilter PayPal checkout directly
+              setTimeout(() => {
+                launchFaceFilterPayPalCheckout(filterId, purchaseData.purchaseId);
+              }, 500);
               
             } catch (error) {
               console.error("[WEBZONEBW FACEFILTER] Purchase creation failed:", error);
@@ -1987,11 +2145,6 @@ function initWebZoneERStudio() {
               purchaseBtn.disabled = false;
             }
           });
-
-          // Set initial focus
-          setTimeout(() => {
-            if (emailInput && !emailInput.value) emailInput.focus();
-          }, 100);
         })
         .catch(error => {
           console.error("[WEBZONEBW FACEFILTER] Offer retrieval failed:", error);

@@ -5,7 +5,7 @@
  * proper validation, and comprehensive error handling.
  *
  * Features:
- * - Real ₹499 one-time purchase via Cashfree/PayPal
+ * - Real $5.99 USD one-time purchase via PayPal (UPI for India)
  * - Email validation with clear inline messages
  * - Complete purchase state machine
  * - Proper error handling for all failure scenarios
@@ -560,7 +560,7 @@ function fetchJSON(url, options) {
       '<h3>ER Studio Premium — Lifetime</h3>' +
       '<p>All VR scenes, 3D pose tracking & premium filters</p>' +
       '</div>' +
-      '<div class="co-order-price">₹499<span>/ $5.99</span></div>' +
+      '<div class="co-order-price">$5.99<span>USD</span></div>' +
       '</div>' +
       '</div>' +
 
@@ -599,7 +599,7 @@ function fetchJSON(url, options) {
       '<input type="radio" name="coMethod" value="upi" checked>' +
       '<div class="co-option-main">' +
       '<strong>UPI — Direct Bank Transfer</strong>' +
-      '<span>GPay, PhonePe, Paytm • ₹499 to 8198091036@ybl</span>' +
+      '<span>GPay, PhonePe, Paytm • UPI to 8198091036@ybl</span>' +
       '</div>' +
       '</label>' +
       '<label class="co-option" id="coOptPaypal">' +
@@ -619,7 +619,7 @@ function fetchJSON(url, options) {
 
       '<div class="co-method-detail active" id="coDetailUpi">' +
       '<div class="upi-info-card">' +
-      '<div style="font-weight:600; color:var(--text-heading);">Send ₹499 directly to:</div>' +
+      '<div style="font-weight:600; color:var(--text-heading);">Pay $5.99 (UPI in local currency) directly to:</div>' +
       '<div class="upi-row">' +
       '<span class="upi-id-badge" id="upiIdText">8198091036@ybl</span>' +
       '<button type="button" class="btn-copy-upi" id="btnCopyUpi">📋 Copy</button>' +
@@ -656,7 +656,7 @@ function fetchJSON(url, options) {
       '</div>' +
       '</div>' +
       '<div class="co-step-body">' +
-      '<div class="co-total-row"><span>Order total</span><strong>₹499 / $5.99</strong></div>' +
+      '<div class="co-total-row"><span>Order total</span><strong>$5.99 USD</strong></div>' +
       '<button type="button" class="btn-place-order" id="coPlaceOrder">Place your order</button>' +
       '<p class="co-note" id="coPlaceNote">Your license key is sent instantly after payment is confirmed.</p>' +
       '</div>' +
@@ -744,7 +744,7 @@ function fetchJSON(url, options) {
     var chosenMethod = "upi"; // "upi" | "paypal" | "key"
 
     var methodLabels = {
-      upi: "UPI — Direct Bank Transfer (₹499)",
+      upi: "UPI — Direct Bank Transfer ($5.99)",
       paypal: "PayPal / Card ($5.99)",
       key: "License Key / Promo Code",
     };
@@ -811,7 +811,7 @@ function fetchJSON(url, options) {
       var email = emailInput.value.trim();
       var validation = validateEmail(email);
       var errorElement = modal.querySelector("#email-error");
-      
+
       if (!validation.valid) {
         emailInput.classList.add("error");
         errorElement.textContent = validation.message;
@@ -898,10 +898,10 @@ function fetchJSON(url, options) {
         return;
       }
       getOrderEmail().then(function (orderEmail) {
-        var subject = "WebZoneBW ER Studio Premium — Order Request (₹499)";
+        var subject = "WebZoneBW ER Studio Premium — Order Request ($5.99 USD)";
         var body =
           "Hello WebZoneBW,\n\n" +
-          "I want to purchase the WebZoneBW ER Studio Premium license (₹499, one-time).\n\n" +
+          "I want to purchase the WebZoneBW ER Studio Premium license ($5.99 USD, one-time).\n\n" +
           "Email (license will be bound to this): " + email + "\n\n" +
           "Please send me the UPI payment details and activate my license.\n\n" +
           "Thank you.";
@@ -1090,7 +1090,7 @@ function fetchJSON(url, options) {
       if (chosenMethod === "upi") {
         // Direct UPI / bank transfer — confirm via WhatsApp
         var msg =
-          "Hello WebZoneBW! I have paid ₹499 for ER Studio Premium License (one-time).\n\n" +
+          "Hello WebZoneBW! I have paid $5.99 (equivalent in INR via UPI) for ER Studio Premium License (one-time).\n\n" +
           "My Email: " + email + "\n\n" +
           "Payment sent via UPI to 8198091036@ybl. Sending payment screenshot next — please send my license activation key.";
         window.open(
@@ -1173,7 +1173,7 @@ function fetchJSON(url, options) {
           'HALLOWEEN2026': ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion'],
           'PUMPKIN2026': ['pumpkin-pose', 'witch-ritual']
         };
-        
+
         if (validPromoKeys.includes(promoKey)) {
           const features = promoFeatures[promoKey];
           const expires = new Date('2026-11-07T23:59:59.999Z');
@@ -1184,7 +1184,7 @@ function fetchJSON(url, options) {
           return false;
         }
       }
-      
+
       return fetchJSON(API_BASE + "/api/halloween/validate-promo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1216,7 +1216,7 @@ function fetchJSON(url, options) {
           const promoStart = new Date('2026-10-01T00:00:00.000Z');
           const promoEnd = new Date('2026-11-07T23:59:59.999Z');
           const isPromoActive = now >= promoStart && now <= promoEnd;
-          
+
           state.promoActive = isPromoActive;
           return {
             success: true,
@@ -1227,7 +1227,7 @@ function fetchJSON(url, options) {
             features: ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose']
           };
         }
-        
+
         return fetchJSON(API_BASE + "/api/halloween/status");
       })
       .then(function (data) {
@@ -1257,12 +1257,12 @@ function fetchJSON(url, options) {
       chipIcon.textContent = isLicensed ? "💎" : (state.verifying ? "⏳" : "🔒");
     }
     if (chipText) {
-      chipText.textContent = isLicensed 
+      chipText.textContent = isLicensed
         ? (state.status === "active" ? "Premium License Active" : "Halloween Access Active")
         : (state.verifying ? "Verifying license..." : "Free — Premium Locked");
     }
     if (chipBtn) {
-      chipBtn.textContent = isLicensed ? "✓ Licensed" : "₹499 Upgrade";
+      chipBtn.textContent = isLicensed ? "✓ Licensed" : "$5.99 Upgrade";
       chipBtn.disabled = isLicensed;
     }
   }

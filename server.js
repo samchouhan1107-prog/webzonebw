@@ -1541,8 +1541,8 @@ app.get("/api/facefilter/:filterId/offer", (req, res) => {
     }
 });
 
-// Create FaceFilter purchase order
-app.post("/api/facefilter/:filterId/purchase", (req, res) => {
+// Create FaceFilter purchase order with PayPal integration
+app.post("/api/facefilter/:filterId/purchase", async (req, res) => {
     try {
         const { filterId } = req.params;
         const { userId, userEmail } = req.body || {};
@@ -1576,10 +1576,57 @@ app.post("/api/facefilter/:filterId/purchase", (req, res) => {
             });
         }
 
+        // Check if user already has active access to this filter
+        const existingEntitlement = Array.from(licenseStore.faceFilterEntitlements.values())
+            .find(e => e.filterId === filterId && 
+                       e.userId === session.userId && 
+                       e.status === "ACTIVE" && 
+                       new Date(e.expiresAt) > new Date());
+        
+        if (existingEntitlement) {
+            return res.status(409).json({
+                success: false,
+                error: "ACTIVE_ENTITLEMENT_EXISTS",
+                message: "You already have active access to this filter."
+            });
+        }
+
         // Generate unique purchase ID
         const purchaseId = `FF-PURCHASE-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
         
-        // Create purchase record with PayPal order fields
+        // Create PayPal order directly
+        if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+            return res.status(503).json({
+                success: false,
+                error: "PAYMENT_NOT_CONFIGURED",
+                message: "PayPal payment is not configured."
+            });
+        }
+
+        const accessToken = await getPayPalToken();
+        if (!accessToken) {
+            return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
+        }
+
+        // Create PayPal order for FaceFilter purchase
+        const { ok, status, data } = await paypalRequest(accessToken, "POST", "/v2/checkout/orders", {
+            intent: "CAPTURE",
+            purchase_units: [{
+                description: `24-hour access to ${offer.name}`,
+                custom_id: purchaseId,
+                amount: {
+                    currency_code: offer.currency,
+                    value: offer.price.toString()
+                }
+            }]
+        });
+
+        if (!ok || !data.id) {
+            console.error("[WEBZONEBW] PayPal order creation failed:", status, data);
+            return res.status(502).json({ success: false, error: "GATEWAY_ORDER_FAILED" });
+        }
+
+        // Create purchase record
         const purchase = {
             purchaseId: purchaseId,
             filterId: filterId,
@@ -1592,18 +1639,21 @@ app.post("/api/facefilter/:filterId/purchase", (req, res) => {
             createdAt: new Date().toISOString(),
             filterPurchasedAt: null,
             filterExpiresAt: null,
-            // PayPal fields that will be populated during webhook processing
-            paypalOrderId: null,
+            // PayPal order details
+            paypalOrderId: data.id,
             paypalCaptureId: null,
-            custom_id: purchaseId // For PayPal order identification
+            custom_id: purchaseId
         };
 
         licenseStore.orders.set(purchaseId, purchase);
         saveLicenseStore();
 
+        console.log(`[WEBZONEBW] FaceFilter purchase created: ${purchaseId} with PayPal order ${data.id}`);
+
         res.json({
             success: true,
             purchaseId: purchaseId,
+            paypalOrderId: data.id,
             filterId: filterId,
             offer: {
                 name: offer.name,
