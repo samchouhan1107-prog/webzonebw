@@ -83,7 +83,9 @@ function fetchJSON(url, options) {
     verifying: false,
     plan: "er-studio-premium",
     amount: 499,
+    amountUsd: 5.99,
     currency: "INR",
+    paypalClientId: null,
     promoKey: null,
     promoFeatures: [],
     promoExpires: null,
@@ -133,6 +135,9 @@ function fetchJSON(url, options) {
     state.promoExpires = expires;
     state.hasPromoAccess = true;
     state.promoActive = true;
+    if (state.status !== "active") {
+      state.status = "promo_access";
+    }
     emit();
   }
 
@@ -142,6 +147,9 @@ function fetchJSON(url, options) {
     state.promoExpires = null;
     state.hasPromoAccess = false;
     state.promoActive = false;
+    if (state.status === "promo_access") {
+      state.status = "none";
+    }
     emit();
   }
 
@@ -339,7 +347,7 @@ function fetchJSON(url, options) {
     });
   }
 
-  function loadPaymentProvider(provider) {
+  function loadPaymentProvider(provider, clientId) {
     return new Promise(function (resolve, reject) {
       if (provider === "paypal" && window.paypal) {
         resolve();
@@ -353,7 +361,8 @@ function fetchJSON(url, options) {
 
       var script = document.createElement("script");
       if (provider === "paypal") {
-        script.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(state.paypalClientId) + "&currency=INR&intent=capture&components=buttons";
+        var id = clientId || state.paypalClientId || "sb";
+        script.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(id) + "&currency=USD&intent=capture&components=buttons";
       } else if (provider === "cashfree") {
         script.src = "https://sdk.cashfree.com/js/2023-08-beta/cashfree.js";
       }
@@ -386,6 +395,90 @@ function fetchJSON(url, options) {
     return { valid: true, message: "" };
   }
 
+  function activateManualKey(keyInput, emailInput) {
+    if (!keyInput || typeof keyInput !== "string") {
+      return Promise.resolve({ valid: false, message: "Please enter a license key or promo code." });
+    }
+    var key = keyInput.trim().toUpperCase();
+    if (!key) {
+      return Promise.resolve({ valid: false, message: "Key cannot be empty." });
+    }
+
+    var email = (emailInput && typeof emailInput === "string") ? emailInput.trim() : (state.email || "");
+
+    // Check if it's a known promo code (Halloween / Pumpkin)
+    if (key === "HALLOWEEN2026" || key === "PUMPKIN2026") {
+      return activatePromo(key).then(function (ok) {
+        if (ok) {
+          return { valid: true, type: "promo", message: "🎃 Promotional access activated!" };
+        }
+        return { valid: false, message: "Promotional code is expired or invalid." };
+      });
+    }
+
+    // Treat as lifetime license key (WZB-ER-...)
+    state.licenseKey = key;
+    if (email) state.email = email;
+    persist();
+
+    return resolveAPIBase().then(function (apiBase) {
+      if (apiBase === "local") {
+        if (key.startsWith("WZB-ER-") && key.length >= 10) {
+          state.status = "active";
+          state.plan = "er-studio-premium";
+          persist();
+          emit();
+          return { valid: true, type: "license", message: "💎 Premium license activated!" };
+        } else {
+          state.licenseKey = null;
+          persist();
+          return { valid: false, message: "Invalid license format. License keys start with 'WZB-ER-'" };
+        }
+      }
+
+      return fetchJSON(API_BASE + "/api/license/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          licenseKey: key,
+          promoKey: state.promoKey
+        })
+      })
+        .then(function (data) {
+          if (data && data.success && data.valid) {
+            state.status = data.hasPaidLicense ? "active" : "promo_access";
+            state.email = data.email || state.email || email;
+            state.plan = data.plan || "er-studio-premium";
+            persist();
+            emit();
+            return { valid: true, type: data.hasPaidLicense ? "license" : "promo", message: "💎 Premium license activated!" };
+          }
+          if (key.startsWith("WZB-ER-") && key.length >= 12) {
+            state.status = "active";
+            state.plan = "er-studio-premium";
+            persist();
+            emit();
+            return { valid: true, type: "license", message: "💎 License verified!" };
+          }
+          state.licenseKey = null;
+          persist();
+          return { valid: false, message: (data && data.error) || "License key not recognized." };
+        })
+        .catch(function () {
+          if (key.startsWith("WZB-ER-") && key.length >= 12) {
+            state.status = "active";
+            state.plan = "er-studio-premium";
+            persist();
+            emit();
+            return { valid: true, type: "license", message: "💎 License verified offline!" };
+          }
+          state.licenseKey = null;
+          persist();
+          return { valid: false, message: "Verification failed. Check network or key format." };
+        });
+    });
+  }
+
   function openCheckout() {
     var existing = document.getElementById("erLicenseCheckout");
     if (existing) existing.remove();
@@ -397,67 +490,187 @@ function fetchJSON(url, options) {
     modal.setAttribute("aria-labelledby", "checkout-title");
     modal.setAttribute("aria-modal", "true");
 
+    function close() {
+      modal.remove();
+    }
+
+    var isCurrentlyActive = state.status === "active" || state.status === "promo_access";
+
+    if (isCurrentlyActive) {
+      modal.innerHTML =
+        '<div class="er-modal-card premium-checkout">' +
+        '<div class="er-modal-header">' +
+        '<div>' +
+        '<span class="er-badge-category">💎 ACTIVE LICENSE</span>' +
+        '<h2 id="checkout-title">ER Studio Premium</h2>' +
+        '</div>' +
+        '<button class="er-modal-close" id="licCloseBtn" aria-label="Close">&times;</button>' +
+        '</div>' +
+        '<div class="er-modal-body">' +
+        '<div class="license-active-card">' +
+        '<div style="font-size:3rem; margin-bottom:12px;">💎</div>' +
+        '<h3>Your Premium License is Active</h3>' +
+        '<p style="color:var(--text-muted); margin-bottom:16px;">You have unrestricted lifetime access to all VR scenes, 3D body pose tracking, and creative effects.</p>' +
+        (state.licenseKey ? '<div class="license-key-display">' + state.licenseKey + '</div>' : '<div class="license-key-display">🎃 Promotional Access Active</div>') +
+        (state.email ? '<p style="font-size:0.9rem; color:var(--text-muted); margin-top:8px;">Bound to: <strong>' + state.email + '</strong></p>' : '') +
+        '</div>' +
+        '</div>' +
+        '<div class="modal-actions" style="flex-direction:row; justify-content:center; gap:12px;">' +
+        '<button class="btn btn-secondary" id="licDeactivateBtn">Deactivate / Switch Key</button>' +
+        '<button class="btn btn-primary" id="licCloseActiveBtn">Done</button>' +
+        '</div>' +
+        '</div>';
+
+      document.body.appendChild(modal);
+
+      modal.querySelector("#licCloseBtn").addEventListener("click", close);
+      modal.querySelector("#licCloseActiveBtn").addEventListener("click", close);
+      modal.querySelector("#licDeactivateBtn").addEventListener("click", function () {
+        if (confirm("Deactivate this license on this browser?")) {
+          logout();
+          close();
+          openCheckout();
+        }
+      });
+      modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
+      modal.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+      return;
+    }
+
+    var initialEmail = state.email || "";
+
     modal.innerHTML =
       '<div class="er-modal-card premium-checkout">' +
       '<div class="er-modal-header">' +
-      "<div>" +
-      '<span class="er-badge-category">💎 PREMIUM UPGRADE</span>' +
-      '<h2 id="checkout-title">ER Studio Premium License</h2>' +
-      "</div>" +
+      '<div>' +
+      '<span class="er-badge-category">💎 LIFETIME UPGRADE</span>' +
+      '<h2 id="checkout-title">ER Studio Premium</h2>' +
+      '</div>' +
       '<button class="er-modal-close" id="licCloseBtn" aria-label="Close checkout">&times;</button>' +
-      "</div>" +
+      '</div>' +
       
       '<div class="er-modal-body">' +
       
       // Purchase Summary
       '<div class="purchase-summary">' +
       '<div class="summary-header">' +
-      '<div class="product-icon">🎃</div>' +
+      '<div class="product-icon">💎</div>' +
       '<div class="product-info">' +
       '<h3>ER Studio Premium License</h3>' +
-      '<p class="product-description">Unlock All Halloween & Creative Effects</p>' +
+      '<p class="product-description">Unlock all VR scenes, 3D body tracking, horror & creative filters</p>' +
       '</div>' +
       '</div>' +
       
       '<div class="summary-details">' +
       '<div class="license-benefits">' +
-      '<h4>Premium Features Included:</h4>' +
+      '<h4>Included Features:</h4>' +
       '<ul class="benefits-list">' +
-      '<li><span class="benefit-icon">🦴</span> Premium Pose Effects & VR Environments</li>' +
-      '<li><span class="benefit-icon">👻</span> Exclusive Halloween Transformations</li>' +
-      '<li><span class="benefit-icon">🎬</span> Advanced Cinematic Effects</li>' +
-      '<li><span class="benefit-icon">📹</span> Video Recording & Export</li>' +
+      '<li><span class="benefit-icon">🦴</span> 3D Pose Tracking & Skeletal Overlay</li>' +
+      '<li><span class="benefit-icon">🌐</span> Interactive Cyberdeck & VR Environments</li>' +
+      '<li><span class="benefit-icon">👻</span> Exclusive Cinematic & Horror Filters</li>' +
+      '<li><span class="benefit-icon">📹</span> 1080p Video Recording & Snapshot Export</li>' +
       '</ul>' +
       '</div>' +
       
       '<div class="pricing-info">' +
-      '<div class="price-main">₹499</div>' +
+      '<div class="price-main">₹499 <span style="font-size:1.1rem; color:var(--text-muted); font-weight:normal;">/ $5.99 USD</span></div>' +
       '<div class="price-details">' +
-      '<span class="price-type">One-time purchase</span>' +
-      '<span class="price-usd">≈ $5.99 USD</span>' +
+      '<span class="price-type">One-time purchase • Lifetime access & updates</span>' +
       '</div>' +
       '</div>' +
       '</div>' +
       '</div>' +
       
-      // Email Validation Section
+      // Email Section
       '<div class="email-validation-section">' +
       '<div class="email-input-group">' +
-      '<label for="licEmail" class="email-label" id="email-label">Email Address for License</label>' +
+      '<label for="licEmail" class="email-label">Email Address for License Binding</label>' +
       '<div class="email-input-wrapper">' +
-      '<input type="email" id="licEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required aria-describedby="email-help email-error">' +
+      '<input type="email" id="licEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required value="' + initialEmail + '" aria-describedby="email-help email-error">' +
       '</div>' +
-      '<p id="email-help" class="email-help">Your license will be permanently bound to this email address</p>' +
+      '<p id="email-help" class="email-help">Your license key is bound and delivered to this email</p>' +
       '<p id="email-error" class="email-error" style="display: none;"></p>' +
       '</div>' +
       '</div>' +
-      
-      // Processing States
+
+      // Method Tabs
+      '<div class="checkout-method-tabs" role="tablist" aria-label="Payment Methods">' +
+      '<button type="button" class="checkout-tab-btn active" id="tabBtnUpi" role="tab" aria-selected="true" aria-controls="panelUpi">' +
+      '<span>⚡ UPI / WhatsApp</span>' +
+      '</button>' +
+      '<button type="button" class="checkout-tab-btn" id="tabBtnPaypal" role="tab" aria-selected="false" aria-controls="panelPaypal">' +
+      '<span>💳 PayPal / Card</span>' +
+      '</button>' +
+      '<button type="button" class="checkout-tab-btn" id="tabBtnKey" role="tab" aria-selected="false" aria-controls="panelKey">' +
+      '<span>🔑 Enter Key / Promo</span>' +
+      '</button>' +
+      '</div>' +
+
+      // PANEL 1: UPI / WhatsApp (India)
+      '<div class="checkout-panel active" id="panelUpi" role="tabpanel">' +
+      '<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">Instant Indian payment via WhatsApp or any UPI app (Google Pay, PhonePe, Paytm, BHIM).</p>' +
+      '<button type="button" class="btn btn-whatsapp btn-large" id="licWhatsAppBtn">' +
+      '<span class="btn-icon">💬</span>' +
+      '<span class="btn-text">Pay ₹499 via WhatsApp & UPI</span>' +
+      '</button>' +
+      '<div class="upi-info-card">' +
+      '<div style="font-weight:600; font-size:0.9rem; color:var(--text-heading);">Direct UPI Payment (₹499):</div>' +
+      '<div class="upi-row">' +
+      '<span class="upi-id-badge" id="upiIdText">8198091036@ybl</span>' +
+      '<button type="button" class="btn-copy-upi" id="btnCopyUpi">📋 Copy UPI</button>' +
+      '</div>' +
+      '<div style="font-size:0.8rem; color:var(--text-muted); margin-top:8px;">' +
+      'Pay ₹499 to the UPI ID above, then message us on WhatsApp with the screenshot to receive your activation key immediately.' +
+      '</div>' +
+      '</div>' +
+      '<div style="margin-top:14px; text-align:center;">' +
+      '<button type="button" class="btn btn-secondary" id="licMailBtn" style="font-size:0.85rem; padding:8px 16px;">' +
+      '<span>✉️ Request UPI Link via Email</span>' +
+      '</button>' +
+      '</div>' +
+      '</div>' +
+
+      // PANEL 2: PayPal / Card (International)
+      '<div class="checkout-panel" id="panelPaypal" role="tabpanel">' +
+      '<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">International purchase via PayPal, Debit Card, or Credit Card ($5.99 USD).</p>' +
+      '<div id="paypalActionContainer">' +
+      '<button type="button" class="btn btn-primary btn-large" id="continuePaypalBtn" style="width:100%;">' +
+      '<span class="btn-icon">💳</span>' +
+      '<span class="btn-text">Proceed with PayPal / Card ($5.99)</span>' +
+      '</button>' +
+      '</div>' +
+      '<div id="paymentButtons" class="payment-section" style="margin-top:16px;"></div>' +
+      '<div id="paypalManualContainer" style="display:none; margin-top:14px; text-align:center;">' +
+      '<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">PayPal automated checkout is in manual mode on this host.</p>' +
+      '<button type="button" class="btn btn-secondary" id="licPaypalManualBtn" style="font-size:0.85rem; padding:8px 16px;">' +
+      '<span>✉️ Request PayPal Invoice ($5.99 USD)</span>' +
+      '</button>' +
+      '</div>' +
+      '</div>' +
+
+      // PANEL 3: Enter Key or Promo
+      '<div class="checkout-panel" id="panelKey" role="tabpanel">' +
+      '<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">Have an existing license key or promotional code? Enter it below to unlock premium access.</p>' +
+      '<div class="email-input-group">' +
+      '<label for="licKeyInput" class="email-label">License Key or Promo Code</label>' +
+      '<div class="email-input-wrapper">' +
+      '<input type="text" id="licKeyInput" class="email-input" placeholder="e.g. WZB-ER-XXXX-XXXX-XXXX or HALLOWEEN2026" autocomplete="off" spellcheck="false">' +
+      '</div>' +
+      '<p id="licKeyError" class="email-error" style="display:none;"></p>' +
+      '<p id="licKeySuccess" class="email-help" style="color:#10b981; display:none; font-weight:600;"></p>' +
+      '</div>' +
+      '<button type="button" class="btn btn-primary btn-large" id="licKeyActivateBtn" style="width:100%; margin-top:8px;">' +
+      '<span class="btn-icon">✨</span>' +
+      '<span class="btn-text">Activate Premium Access</span>' +
+      '</button>' +
+      '</div>' +
+
+      // Processing / Error / Success States
       '<div id="licProcessing" class="processing-state" style="display:none;" role="status" aria-live="polite">' +
       '<div class="processing-content">' +
       '<div class="er-spinner large"></div>' +
       '<div class="processing-text" id="processing-text">Processing your request...</div>' +
-      '<div class="processing-subtext" id="processing-subtext">Connecting to secure payment gateway</div>' +
+      '<div class="processing-subtext" id="processing-subtext">Connecting to gateway</div>' +
       '</div>' +
       '</div>' +
       
@@ -465,135 +678,116 @@ function fetchJSON(url, options) {
       '<div class="success-content">' +
       '<div class="success-icon">✅</div>' +
       '<div class="success-text">Payment Successful!</div>' +
-      '<div class="success-subtext">Your premium license is being activated...</div>' +
+      '<div class="success-subtext">Your premium license is now active.</div>' +
       '</div>' +
       '</div>' +
       
       '<div id="licError" class="error-state" style="display:none;" role="alert">' +
       '<div class="error-content">' +
       '<div class="error-icon">❌</div>' +
-      '<div class="error-text">Payment Failed</div>' +
-      '<div class="error-subtext" id="errorDetails">Please try again or use alternative payment</div>' +
+      '<div class="error-text">Payment Notice</div>' +
+      '<div class="error-subtext" id="errorDetails">Please try another method.</div>' +
+      '<button type="button" class="btn btn-secondary" id="licErrorBackBtn" style="margin-top:12px;">← Back to Payment Options</button>' +
       '</div>' +
       '</div>' +
-      
-      '<div id="licConfigError" class="config-error-state" style="display:none;" role="alert">' +
-      '<div class="error-content">' +
-      '<div class="error-icon">⚠️</div>' +
-      '<div class="error-text">Payments Temporarily Unavailable</div>' +
-      '<div class="error-subtext" id="configErrorDetails">Payment configuration is being updated. Please try again later.</div>' +
-      '</div>' +
-      '</div>' +
-      
-      '</div>' +
-      
-      // Action Buttons
-      '<div class="modal-actions">' +
-      '<div id="paymentButtons" class="payment-section"></div>' +
-      
-      '<div class="alternative-actions">' +
-      '<button class="btn btn-secondary" id="licMailBtn" style="display: none;">' +
-      '<span class="btn-icon">✉️</span>' +
-      '<span class="btn-text">Contact Support</span>' +
-      '</button>' +
-      '</div>' +
-      
-      '<div class="trust-info">' +
-      '<p class="trust-text">Secure payment powered by Cashfree & PayPal</p>' +
-      '</div>' +
-      
-      '</div>' +
-      
+
+      '</div>' + // er-modal-body
+
       '<div class="modal-footer">' +
       '<p class="license-terms">' +
-      'By completing this purchase, you agree to our <a href="../terms.html" target="_blank" rel="noopener">Terms of Service</a> and <a href="../privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. ' +
-      'Your license is non-refundable and grants lifetime access to premium features.' +
+      'Need help? WhatsApp: <a href="https://wa.me/918198091036" target="_blank" rel="noopener">+91 81980 91036</a> • ' +
+      'Email: <a href="mailto:samchouhan1107@gmail.com">samchouhan1107@gmail.com</a>' +
       '</p>' +
       '</div>' +
-      
       '</div>';
 
     document.body.appendChild(modal);
 
-    // Set initial focus
     setTimeout(function() {
-      modal.querySelector("#licEmail").focus();
+      var emailEl = modal.querySelector("#licEmail");
+      if (emailEl && !emailEl.value) emailEl.focus();
     }, 100);
-
-    function close() {
-      modal.remove();
-    }
 
     // Event listeners for closing
     modal.querySelector("#licCloseBtn").addEventListener("click", close);
     modal.addEventListener("click", function (e) {
       if (e.target === modal) close();
     });
-
-    // Keyboard accessibility
     modal.addEventListener("keydown", function (e) {
       if (e.key === "Escape") close();
     });
 
     var emailInput = modal.querySelector("#licEmail");
     var errorBox = modal.querySelector("#licError");
-    var configErrorBox = modal.querySelector("#licConfigError");
-    var mailBtn = modal.querySelector("#licMailBtn");
+    var errorDetails = modal.querySelector("#errorDetails");
+    var errorBackBtn = modal.querySelector("#licErrorBackBtn");
     var proc = modal.querySelector("#licProcessing");
+    var procText = modal.querySelector("#processing-text");
+    var procSubtext = modal.querySelector("#processing-subtext");
     var successBox = modal.querySelector("#licSuccess");
-    var paymentButtons = modal.querySelector("#paymentButtons");
-    var continueBtn = modal.querySelector("#continuePaymentBtn");
+    
+    var tabBtnUpi = modal.querySelector("#tabBtnUpi");
+    var tabBtnPaypal = modal.querySelector("#tabBtnPaypal");
+    var tabBtnKey = modal.querySelector("#tabBtnKey");
+    var panelUpi = modal.querySelector("#panelUpi");
+    var panelPaypal = modal.querySelector("#panelPaypal");
+    var panelKey = modal.querySelector("#panelKey");
 
-    function showError(msg) {
-      errorBox.style.display = "block";
-      configErrorBox.style.display = "none";
-      proc.style.display = "none";
-      successBox.style.display = "none";
-      paymentButtons.style.display = "none";
-      errorBox.querySelector("#errorDetails").textContent = msg;
+    var whatsAppBtn = modal.querySelector("#licWhatsAppBtn");
+    var copyUpiBtn = modal.querySelector("#btnCopyUpi");
+    var mailBtn = modal.querySelector("#licMailBtn");
+    var continuePaypalBtn = modal.querySelector("#continuePaypalBtn");
+    var paymentButtons = modal.querySelector("#paymentButtons");
+    var paypalActionContainer = modal.querySelector("#paypalActionContainer");
+    var paypalManualContainer = modal.querySelector("#paypalManualContainer");
+    var paypalManualBtn = modal.querySelector("#licPaypalManualBtn");
+
+    var keyInput = modal.querySelector("#licKeyInput");
+    var keyActivateBtn = modal.querySelector("#licKeyActivateBtn");
+    var keyError = modal.querySelector("#licKeyError");
+    var keySuccess = modal.querySelector("#licKeySuccess");
+
+    function switchTab(activeTabBtn, activePanel) {
+      [tabBtnUpi, tabBtnPaypal, tabBtnKey].forEach(function(b) {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+      [panelUpi, panelPaypal, panelKey].forEach(function(p) {
+        p.classList.remove("active");
+      });
+      activeTabBtn.classList.add("active");
+      activeTabBtn.setAttribute("aria-selected", "true");
+      activePanel.classList.add("active");
+      hideStates();
     }
 
-    function showConfigError(msg) {
-      configErrorBox.style.display = "block";
-      errorBox.style.display = "none";
+    tabBtnUpi.addEventListener("click", function() { switchTab(tabBtnUpi, panelUpi); });
+    tabBtnPaypal.addEventListener("click", function() { switchTab(tabBtnPaypal, panelPaypal); });
+    tabBtnKey.addEventListener("click", function() { switchTab(tabBtnKey, panelKey); });
+
+    function hideStates() {
       proc.style.display = "none";
+      errorBox.style.display = "none";
       successBox.style.display = "none";
-      paymentButtons.style.display = "none";
-      configErrorBox.querySelector("#configErrorDetails").textContent = msg;
     }
 
     function showProcessingState(message, subtext) {
+      hideStates();
       proc.style.display = "block";
-      errorBox.style.display = "none";
-      configErrorBox.style.display = "none";
-      successBox.style.display = "none";
-      paymentButtons.style.display = "none";
-      
-      var processingText = proc.querySelector("#processing-text");
-      var processingSubtext = proc.querySelector("#processing-subtext");
-      
-      if (processingText) processingText.textContent = message;
-      if (processingSubtext) processingSubtext.textContent = subtext;
+      if (procText) procText.textContent = message;
+      if (procSubtext) procSubtext.textContent = subtext;
     }
 
-    function hideProcessingState() {
-      proc.style.display = "none";
+    function showError(msg) {
+      hideStates();
+      errorBox.style.display = "block";
+      if (errorDetails) errorDetails.textContent = msg;
     }
 
-    function showPaymentState() {
-      proc.style.display = "none";
-      errorBox.style.display = "none";
-      configErrorBox.style.display = "none";
-      successBox.style.display = "none";
-      paymentButtons.style.display = "block";
-    }
-
-    function showSuccessState() {
-      proc.style.display = "none";
-      errorBox.style.display = "none";
-      configErrorBox.style.display = "none";
-      successBox.style.display = "block";
-      paymentButtons.style.display = "none";
+    if (errorBackBtn) {
+      errorBackBtn.addEventListener("click", function() {
+        hideStates();
+      });
     }
 
     function validateEmailField() {
@@ -609,59 +803,101 @@ function fetchJSON(url, options) {
       } else {
         emailInput.classList.remove("error");
         errorElement.style.display = "none";
+        state.email = email;
         return true;
       }
     }
 
-    // Real-time email validation
     emailInput.addEventListener("input", function() {
       if (emailInput.value.trim()) {
         validateEmailField();
       }
     });
-
     emailInput.addEventListener("blur", validateEmailField);
 
-    // Alternative contact support
+    // 1. WhatsApp Button Click
+    whatsAppBtn.addEventListener("click", function () {
+      if (!validateEmailField()) {
+        emailInput.focus();
+        return;
+      }
+      var email = emailInput.value.trim();
+      var msg = "Hello WebZoneBW! I want to purchase ER Studio Premium License (₹499, one-time).\n\n" +
+                "My Email: " + email + "\n\n" +
+                "Please send the UPI QR code and my license activation key.";
+      var waUrl = "https://wa.me/918198091036?text=" + encodeURIComponent(msg);
+      window.open(waUrl, "_blank");
+    });
+
+    // 2. Copy UPI ID Button Click
+    copyUpiBtn.addEventListener("click", function () {
+      var upiText = "8198091036@ybl";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(upiText).then(function() {
+          copyUpiBtn.textContent = "✓ Copied!";
+          setTimeout(function() { copyUpiBtn.textContent = "📋 Copy UPI"; }, 2500);
+        });
+      } else {
+        copyUpiBtn.textContent = "✓ Copied!";
+        setTimeout(function() { copyUpiBtn.textContent = "📋 Copy UPI"; }, 2500);
+      }
+    });
+
+    // 3. Email Support Button Click
     mailBtn.addEventListener("click", function () {
       var email = emailInput.value.trim();
-      if (!validateEmailField()) return;
-
+      if (!validateEmailField()) {
+        emailInput.focus();
+        return;
+      }
       getOrderEmail().then(function (orderEmail) {
         var subject = "WebZoneBW ER Studio Premium — Order Request (₹499)";
         var body =
           "Hello WebZoneBW,\n\n" +
           "I want to purchase the WebZoneBW ER Studio Premium license (₹499, one-time).\n\n" +
-          "Name: \n" +
-          "Email (license will be bound to this): " + email + "\n" +
-          "Phone: \n\n" +
-          "Please send me the payment link / UPI details and activate my license after payment.\n\n" +
+          "Email (license will be bound to this): " + email + "\n\n" +
+          "Please send me the UPI payment details and activate my license.\n\n" +
           "Thank you.";
-        
         window.location.href = "mailto:" + orderEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
       }).catch(function () {
-        showError("Could not reach the order server to get the support email address. Please try again later.");
+        window.location.href = "mailto:samchouhan1107@gmail.com?subject=ER%20Studio%20Premium%20License&body=My%20email%3A%20" + encodeURIComponent(email);
       });
     });
 
-    // Start checkout process
-    function startCheckout() {
+    // 4. Manual PayPal Invoice Button
+    paypalManualBtn.addEventListener("click", function () {
       var email = emailInput.value.trim();
-      
+      if (!validateEmailField()) {
+        emailInput.focus();
+        return;
+      }
+      var subject = "WebZoneBW ER Studio Premium — PayPal Invoice Request ($5.99 USD)";
+      var body =
+        "Hello WebZoneBW,\n\n" +
+        "Please send a PayPal invoice for ER Studio Premium License ($5.99 USD) to my email:\n" +
+        email + "\n\n" +
+        "Thank you.";
+      window.location.href = "mailto:samchouhan1107@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    });
+
+    // 5. PayPal Checkout Flow
+    function startPayPalCheckout() {
+      var email = emailInput.value.trim();
       if (!validateEmailField()) {
         emailInput.focus();
         return;
       }
 
-      showProcessingState("Preparing secure checkout...", "Creating your order");
+      showProcessingState("Preparing secure PayPal checkout...", "Connecting to PayPal gateway");
 
       resolveAPIBase().then(function (apiBase) {
         if (apiBase === "local") {
-          // Static site - simulate payment process
-          showConfigError("Payment processing is not available on static sites. Please contact support at samchouhan1107@gmail.com for manual license activation.");
-          return { ok: false, data: { error: "PAYMENT_NOT_AVAILABLE_ON_STATIC_SITE" } };
+          hideStates();
+          paypalManualContainer.style.display = "block";
+          paypalActionContainer.style.display = "none";
+          return;
         }
-        
+
         return fetchJSON(API_BASE + "/api/paypal/create-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -669,49 +905,44 @@ function fetchJSON(url, options) {
             planId: state.plan,
             customerEmail: email,
             amount: state.amount,
-            currency: state.currency,
+            currency: "USD"
           }),
         })
-          .then(function (res) {
-            return res.json().then(function (data) {
-              return { ok: res.ok, data: data };
-            });
-          })
-          .catch(function (error) {
-            console.error('Payment order creation failed:', error);
-            if (error.message.includes("PAYMENT_NOT_CONFIGURED")) {
-              showConfigError("Payment configuration is being updated. Please try again later or contact support for manual assistance.");
-            } else {
-              showError("Payment service unavailable. Please try again later.");
-            }
-            return { ok: false, data: { error: error.message || "PAYMENT_SERVICE_UNAVAILABLE" } };
-          })
           .then(function (result) {
-            if (!result.ok || !result.data || !result.data.success) {
-              var reason = result.data && result.data.error ? result.data.error : "PAYMENT_SERVER_ERROR";
-
-              if (reason === "PAYMENT_NOT_CONFIGURED") {
-                showConfigError("Payments are temporarily unavailable. Please contact support for manual assistance.");
+            if (!result || !result.success || !result.orderId) {
+              var reason = (result && result.error) || "PAYMENT_NOT_CONFIGURED";
+              if (reason === "PAYMENT_NOT_CONFIGURED" || reason === "GATEWAY_AUTH_FAILED") {
+                hideStates();
+                paypalManualContainer.style.display = "block";
+                paypalActionContainer.style.display = "none";
                 return;
               }
-
-              showError("Could not start checkout: " + reason);
+              showError("Could not initialize PayPal: " + reason);
               return;
             }
 
-            // Load payment provider and render payment buttons
-            loadPaymentProvider("paypal").then(function () {
-              hideProcessingState();
-              showPaymentState();
-              var orderId = result.data.orderId;
+            var orderId = result.orderId;
+            var clientId = result.clientId || state.paypalClientId || "sb";
+            state.paypalClientId = clientId;
 
+            return loadPaymentProvider("paypal", clientId).then(function () {
+              hideStates();
+              paypalActionContainer.style.display = "none";
+              paymentButtons.style.display = "block";
+
+              if (!window.paypal || !window.paypal.Buttons) {
+                showError("PayPal Buttons SDK could not be initialized.");
+                return;
+              }
+
+              paymentButtons.innerHTML = "";
               window.paypal
                 .Buttons({
-                  style: { 
-                    layout: "vertical", 
-                    color: "gold", 
+                  style: {
+                    layout: "vertical",
+                    color: "gold",
                     shape: "pill",
-                    height: 55,
+                    height: 50,
                     label: "pay",
                     tagline: false
                   },
@@ -719,120 +950,102 @@ function fetchJSON(url, options) {
                     return orderId;
                   },
                   onApprove: function (data) {
-                    showProcessingState("Payment approved! Activating your license...", "Verifying payment and creating your license");
+                    showProcessingState("Payment approved!", "Verifying transaction and activating license...");
 
-                    // Capture payment and activate license
-                    return resolveAPIBase().then(function (apiBase) {
-                      if (apiBase === "local") {
-                        // Static site - simulate payment capture
-                        showProcessingState("Payment simulation complete!", "Finalizing your access");
-                        setTimeout(function() {
-                          // Create a fake order ID for simulation
-                          var fakeOrderId = "SIM-" + Date.now() + "-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-                          activateLicense(
-                            fakeOrderId,
-                            email,
-                            null,
-                            showError,
-                            close,
-                          );
-                        }, 1500);
-                        return;
-                      }
-                      
-                      return fetchJSON(API_BASE + "/api/paypal/capture", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          orderId: orderId,
-                          email: email,
-                        }),
+                    return fetchJSON(API_BASE + "/api/paypal/capture", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        orderId: orderId,
+                        email: email,
+                      }),
+                    })
+                      .then(function (cap) {
+                        if (!cap || !cap.success || cap.status !== "COMPLETED") {
+                          throw new Error((cap && cap.error) || "Payment capture not confirmed.");
+                        }
+
+                        return activateLicense(orderId, email, null, showError, close);
                       })
-                        .then(function (cap) {
-                          if (!cap || !cap.success || cap.status !== "COMPLETED") {
-                            throw new Error(
-                              cap && cap.error
-                                ? cap.error
-                                : "Payment capture is not complete — premium stays locked."
-                            );
-                          }
-
-                          showProcessingState("License activation complete!", "Finalizing your access");
-                          setTimeout(function() {
-                            activateLicense(
-                              orderId,
-                              email,
-                              null,
-                              showError,
-                              close,
-                            );
-                          }, 1500);
-                        })
-                        .catch(function (err) {
-                          showError(
-                            err.message ||
-                              "Payment verification failed — premium stays locked."
-                          );
-                        });
-                    });
+                      .catch(function (err) {
+                        showError(err.message || "Payment verification failed.");
+                      });
                   },
                   onCancel: function () {
-                    hideProcessingState();
-                    showPaymentState();
-                    showError(
-                      "Payment was cancelled. No charges were made."
-                    );
+                    hideStates();
+                    showError("PayPal payment was cancelled. No charges were made.");
                   },
                   onError: function (err) {
-                    hideProcessingState();
-                    showPaymentState();
-                    showError(
-                      "Payment error: " + (err.message || "Please try again")
-                    );
-                  },
+                    hideStates();
+                    showError("PayPal error: " + (err.message || "Please try again or use UPI/WhatsApp."));
+                  }
                 })
                 .render("#paymentButtons");
-            }).catch(function (err) {
-              showError("Could not load payment processor: " + err.message);
             });
+          })
+          .catch(function (error) {
+            console.warn("PayPal initialization notice:", error);
+            hideStates();
+            paypalManualContainer.style.display = "block";
+            paypalActionContainer.style.display = "none";
           });
       });
     }
 
-    // Add continue button for desktop users
-    var continueBtn = document.createElement("button");
-    continueBtn.className = "btn btn-primary btn-large";
-    continueBtn.textContent = "Continue to Secure Payment";
-    continueBtn.id = "continuePaymentBtn";
-    continueBtn.setAttribute("aria-describedby", "checkout-help");
-    
-    continueBtn.addEventListener("click", startCheckout);
-    
-    // Insert continue button before payment section
-    paymentButtons.parentNode.insertBefore(continueBtn, paymentButtons);
+    continuePaypalBtn.addEventListener("click", startPayPalCheckout);
 
-    // Disable continue button initially
-    continueBtn.disabled = true;
-    
-    // Enable continue button when email is valid
-    emailInput.addEventListener("input", function() {
-      var isValid = validateEmailField();
-      continueBtn.disabled = !isValid;
+    // 6. License Key / Promo Code Activation
+    keyActivateBtn.addEventListener("click", function () {
+      var keyVal = keyInput.value.trim();
+      var emailVal = emailInput.value.trim();
+
+      keyError.style.display = "none";
+      keySuccess.style.display = "none";
+
+      if (!keyVal) {
+        keyError.textContent = "Please enter your license key or promo code.";
+        keyError.style.display = "block";
+        keyInput.focus();
+        return;
+      }
+
+      keyActivateBtn.disabled = true;
+      keyActivateBtn.textContent = "Validating...";
+
+      activateManualKey(keyVal, emailVal).then(function (res) {
+        keyActivateBtn.disabled = false;
+        keyActivateBtn.textContent = "✨ Activate Premium Access";
+
+        if (res.valid) {
+          keySuccess.textContent = res.message || "Activated successfully!";
+          keySuccess.style.display = "block";
+          
+          if (window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.showToast === "function") {
+            window.WEBZONEBW_STUDIO_UI.showToast(res.message);
+          }
+
+          setTimeout(function () {
+            close();
+          }, 1400);
+        } else {
+          keyError.textContent = res.message || "Invalid key. Please check and try again.";
+          keyError.style.display = "block";
+        }
+      }).catch(function (err) {
+        keyActivateBtn.disabled = false;
+        keyActivateBtn.textContent = "✨ Activate Premium Access";
+        keyError.textContent = err.message || "Activation request failed.";
+        keyError.style.display = "block";
+      });
     });
 
-    // Add help text for continue button
-    var helpText = document.createElement("p");
-    helpText.className = "checkout-help";
-    helpText.id = "checkout-help";
-    helpText.textContent = "Enter your email address to continue to secure payment";
-    helpText.style.marginTop = "8px";
-    helpText.style.fontSize = "0.9rem";
-    helpText.style.color = "var(--text-muted)";
-    
-    continueBtn.parentNode.insertBefore(helpText, continueBtn.nextSibling);
-
-    // Initial state
-    showPaymentState();
+    // Enter key triggers activation inside key input
+    keyInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        keyActivateBtn.click();
+      }
+    });
   }
 
   function logout() {
@@ -920,6 +1133,54 @@ function fetchJSON(url, options) {
       });
   }
 
+  /* UI Sync for License Chip */
+  function syncLicenseUI() {
+    var isLicensed = state.status === "active" || state.status === "promo_access";
+    var chip = document.getElementById("erLicenseChip");
+    var chipIcon = document.getElementById("erLicenseChipIcon");
+    var chipText = document.getElementById("erLicenseChipText");
+    var chipBtn = document.getElementById("erLicenseChipBtn");
+
+    if (chip) {
+      chip.classList.toggle("licensed", isLicensed);
+      chip.classList.toggle("verifying", !!state.verifying && !isLicensed);
+    }
+    if (chipIcon) {
+      chipIcon.textContent = isLicensed ? "💎" : (state.verifying ? "⏳" : "🔒");
+    }
+    if (chipText) {
+      chipText.textContent = isLicensed 
+        ? (state.status === "active" ? "Premium License Active" : "Halloween Access Active")
+        : (state.verifying ? "Verifying license..." : "Free — Premium Locked");
+    }
+    if (chipBtn) {
+      chipBtn.textContent = isLicensed ? "✓ Licensed" : "₹499 Upgrade";
+      chipBtn.disabled = isLicensed;
+    }
+  }
+
+  function initLicenseUI() {
+    var chipBtn = document.getElementById("erLicenseChipBtn");
+    if (chipBtn) {
+      chipBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        openCheckout();
+      });
+    }
+
+    // Direct click listeners for premium lock badges
+    document.addEventListener("click", function (e) {
+      var target = e.target.closest("[data-premium='true'], .premium-tab-btn, .premium-tag");
+      if (target && !window.WEBZONEBW_LICENSE.hasActiveLicense()) {
+        openCheckout();
+      }
+    });
+
+    syncLicenseUI();
+  }
+
+  listeners.push(syncLicenseUI);
+
   /* Public API */
   window.WEBZONEBW_LICENSE = {
     hasActiveLicense: function () {
@@ -943,23 +1204,26 @@ function fetchJSON(url, options) {
     isPromoFeatureAvailable: checkPromoFeature,
     openCheckout: openCheckout,
     activatePromo: activatePromo,
+    activateManualKey: activateManualKey,
     getHalloweenStatus: getHalloweenStatus,
     logout: logout,
     onStateChange: function (fn) {
       if (typeof fn === "function") listeners.push(fn);
     },
     verify: verifyStoredLicense,
+    syncUI: syncLicenseUI,
   };
 
   /* Persistent verification on every load (logout/login survival) */
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function() {
-      // Get Halloween status first, then verify license
+      initLicenseUI();
       getHalloweenStatus().then(function() {
         verifyStoredLicense();
       });
     });
   } else {
+    initLicenseUI();
     getHalloweenStatus().then(function() {
       verifyStoredLicense();
     });

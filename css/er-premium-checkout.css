@@ -536,6 +536,148 @@
   margin: 8px 0 0 0;
 }
 
+/* Tabs for Checkout Methods */
+.checkout-method-tabs {
+  display: flex;
+  background: var(--surface-hover, #262626);
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color, #374151);
+}
+
+.checkout-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted, #9ca3af);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.checkout-tab-btn:hover {
+  color: var(--text-heading, #f9fafb);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.checkout-tab-btn.active {
+  background: var(--brand-cyan, #06b6d4);
+  color: #0b0f19;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.35);
+}
+
+.checkout-panel {
+  display: none;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.checkout-panel.active {
+  display: block;
+}
+
+/* WhatsApp Button */
+.btn-whatsapp {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  width: 100%;
+}
+
+.btn-whatsapp:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1fa851, #0e6b5e);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
+  color: #ffffff;
+}
+
+/* UPI details box */
+.upi-info-card {
+  background: rgba(6, 182, 212, 0.07);
+  border: 1px dashed var(--brand-cyan, #06b6d4);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 14px;
+  text-align: left;
+}
+
+.upi-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  gap: 8px;
+}
+
+.upi-id-badge {
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.4);
+  color: #38bdf8;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  word-break: break-all;
+}
+
+.btn-copy-upi {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background: var(--surface-hover, #374151);
+  color: var(--text-heading, #f9fafb);
+  border: 1px solid var(--border-color, #4b5563);
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-copy-upi:hover {
+  background: var(--brand-cyan, #06b6d4);
+  color: #000;
+}
+
+/* License Active View */
+.license-active-card {
+  text-align: center;
+  padding: 24px 16px;
+}
+
+.license-key-display {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin: 12px 0;
+  user-select: all;
+}
+
+/* Key input row */
+.key-action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.key-action-row .btn {
+  flex-shrink: 0;
+}
+
+
 /* Responsive Design */
 @media (max-width: 640px) {
   .er-modal-card {

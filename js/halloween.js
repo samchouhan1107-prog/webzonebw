@@ -3427,15 +3427,13 @@ function initWebZoneERStudio() {
     }
 
     if (licenseChipBtn) {
-      licenseChipBtn.textContent = premium ? "✓ Licensed" : "$5.99 Upgrade";
-      licenseChipBtn.disabled = premium;
+      licenseChipBtn.textContent = premium ? "✓ Licensed" : "₹499 Upgrade";
+      licenseChipBtn.disabled = false;
     }
   }
 
   if (licenseChipBtn) {
     licenseChipBtn.addEventListener("click", () => {
-      if (isUserPremium()) return;
-
       if (
         window.WEBZONEBW_LICENSE &&
         typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
@@ -6089,7 +6087,7 @@ function initWebZoneERStudio() {
         erLicenseChip.classList.remove("promo-active");
         erLicenseChipIcon.textContent = "🔒";
         erLicenseChipText.textContent = hasPaidLicense ? "Premium Active" : "Free — Premium Locked";
-        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "$5.99 Upgrade";
+        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "₹499 Upgrade";
         erLicenseChipBtn.style.background = "";
       }
     }
