@@ -122,6 +122,42 @@ function initWebZoneERStudio() {
   let lastQualityChange = 0;
 
   // ==========================================================
+  // FACEFILTER ACCESS STATUS UPDATES
+  // ==========================================================
+
+  function updateFaceFilterUI() {
+    // Update UI elements to show 24-hour access status
+    const filterButtons = document.querySelectorAll('.er-lens-bubble');
+    
+    filterButtons.forEach(button => {
+      const filterId = button.dataset.filter;
+      if (filterId) {
+        const config = allFilterConfigs.find(f => f.id === filterId);
+        if (config && config.isPremium) {
+          // Check if this is a 24-hour filter
+          const is24HourFilter = ['halo', 'witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose'].includes(filterId);
+          
+          if (is24HourFilter) {
+            // Update button to show 24-hour access status
+            checkFaceFilterAccess(filterId).then(hasAccess => {
+              if (hasAccess) {
+                button.classList.add('unlocked');
+                const label = button.querySelector('.lens-bubble-label');
+                if (label) {
+                  label.textContent = 'Use';
+                }
+              }
+            });
+          }
+        }
+      }
+    });
+  }
+
+  // Initialize FaceFilter UI updates
+  setInterval(updateFaceFilterUI, 30000); // Check every 30 seconds
+
+  // ==========================================================
   // MOBILE / TABLET PERFORMANCE GUARD
   // Keep the live camera smooth by separating the browser
   // camera resolution from the effect-processing resolution.
@@ -1126,8 +1162,19 @@ function initWebZoneERStudio() {
       category: "horror",
       target: "face",
       desc: "Werewolf transformation during full moon",
-    },
-  ];
+      },
+
+      // 👶 MOTHER CARE FREE FILTERS
+      {
+        id: "mother_care",
+        name: "Mother Care",
+        icon: "👶",
+        category: "face",
+        target: "forehead",
+        desc: "Polished maternal care effect around forehead/upper-face",
+        isPremium: false,
+      },
+    ];
 
   /*
    * IMPORTANT:
@@ -1435,12 +1482,19 @@ function initWebZoneERStudio() {
     return false;
   }
 
-  function isFeatureAvailable(featureId) {
+  async function isFeatureAvailable(featureId) {
     /*
      * Check if a feature is available through:
      * 1. Paid license
      * 2. Promotional access (Halloween promotion)
+     * 3. 24-hour FaceFilter entitlement
      */
+    // Check 24-hour entitlement first
+    const has24HourAccess = await checkFaceFilterAccess(featureId);
+    if (has24HourAccess) {
+      return true;
+    }
+
     if (
       window.WEBZONEBW_LICENSE &&
       typeof window.WEBZONEBW_LICENSE.isPromoFeatureAvailable === "function"
@@ -1455,7 +1509,37 @@ function initWebZoneERStudio() {
     return isUserPremium();
   }
 
-  function selectFilter(filterName, direction = "none") {
+  async function checkFaceFilterAccess(filterId) {
+    try {
+      // Check if we have a user identifier (email from license system or input)
+      let userEmail = null;
+      
+      if (window.WEBZONEBW_LICENSE && window.WEBZONEBW_LICENSE.getStatus) {
+        const status = window.WEBZONEBW_LICENSE.getStatus();
+        if (status === "active" && window.WEBZONEBW_LICENSE.getLicenseKey) {
+          // For now, use a default email - in production this should come from user authentication
+          userEmail = "user@example.com"; // This should be replaced with actual user email
+        }
+      }
+
+      const response = await fetch("/api/facefilter/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          filterId: filterId, 
+          userEmail: userEmail 
+        })
+      });
+
+      const data = await response.json();
+      return data.success && data.hasAccess;
+    } catch (error) {
+      console.error("[WEBZONEBW FACEFILTER] Access check failed:", error);
+      return false;
+    }
+  }
+
+  async function selectFilter(filterName, direction = "none") {
     const config = allFilterConfigs.find((c) => c.id === filterName) || {
       id: filterName,
       name: filterName.toUpperCase(),
@@ -1465,7 +1549,14 @@ function initWebZoneERStudio() {
 
     // Check if feature is available (paid license OR promotional access)
     if (config.isPremium && !isFeatureAvailable(filterName)) {
-      if (window.WEBZONEBW_LICENSE && window.WEBZONEBW_LICENSE.hasPromoAccess()) {
+      // Check if this is a 24-hour offer filter
+      const is24HourFilter = ['halo', 'witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose'].includes(filterName);
+      
+      if (is24HourFilter) {
+        // Show 24-hour offer modal
+        await show24HourOfferModal(filterName, config);
+        return;
+      } else if (window.WEBZONEBW_LICENSE && window.WEBZONEBW_LICENSE.hasPromoAccess()) {
         // User has promo access but this specific feature isn't included
         showSwipeToast("🎃", "Feature not in Halloween pack");
       } else {
@@ -1635,6 +1726,203 @@ function initWebZoneERStudio() {
           drawerArrowIcon.textContent = "▼";
         }
       }
+    });
+  }
+
+  // ==========================================================
+  // 24-HOUR OFFER MODAL
+  // ==========================================================
+
+  async function show24HourOfferModal(filterId, filterConfig) {
+    return new Promise((resolve) => {
+      // Get offer information
+      fetch(`/api/facefilter/${filterId}/offer`)
+        .then(response => response.json())
+        .then(offerData => {
+          if (!offerData.success) {
+            showSwipeToast("❌", "Offer information unavailable");
+            resolve();
+            return;
+          }
+
+          const offer = offerData.offer;
+          
+          // Create modal
+          const modal = document.createElement("div");
+          modal.id = "facefilterOfferModal";
+          modal.className = "er-modal-backdrop";
+          modal.setAttribute("role", "dialog");
+          modal.setAttribute("aria-labelledby", "offer-title");
+          modal.setAttribute("aria-modal", "true");
+
+          modal.innerHTML = `
+            <div class="er-modal-card">
+              <div class="er-modal-header">
+                <div>
+                  <span class="er-badge-category">🎁 24-HOUR OFFER</span>
+                  <h2 id="offer-title">${filterConfig.name}</h2>
+                </div>
+                <button class="er-modal-close" id="offerCloseBtn" aria-label="Close offer">&times;</button>
+              </div>
+              <div class="er-modal-body">
+                <div style="text-align: center; margin-bottom: 24px;">
+                  <div style="font-size: 4rem; margin-bottom: 16px;">${filterConfig.icon}</div>
+                  <h3 style="margin: 0 0 8px 0;">24-Hour Access</h3>
+                  <p style="color: var(--text-muted); margin: 0;">Temporary access to ${filterConfig.name}</p>
+                </div>
+                
+                <div style="background: var(--surface-hover, #f9fafb); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                  <h4 style="margin: 0 0 16px 0;">Offer Details</h4>
+                  <div style="display: grid; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span>Price:</span>
+                      <span style="font-weight: 600; font-size: 1.2rem;">₹${offer.price}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span>Duration:</span>
+                      <span style="font-weight: 600;">24 hours</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span>Access:</span>
+                      <span style="color: #10b981; font-weight: 600;">Full filter access</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                  <h4 style="color: #ef4444; margin: 0 0 8px 0;">Important</h4>
+                  <p style="color: #991b1b; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+                    ${offerData.refundPolicy}
+                  </p>
+                </div>
+                
+                <div class="email-validation-section">
+                  <div class="email-input-group">
+                    <label for="offerEmail" class="email-label">Email Address for Access</label>
+                    <div class="email-input-wrapper">
+                      <input type="email" id="offerEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required aria-describedby="email-help">
+                    </div>
+                    <p id="email-help" class="email-help">Your 24-hour access will be linked to this email</p>
+                  </div>
+                </div>
+                
+                <div id="offerProcessing" class="processing-state" style="display: none;">
+                  <div class="processing-content">
+                    <div class="er-spinner large"></div>
+                    <div class="processing-text">Processing your request...</div>
+                    <div class="processing-subtext">Creating your 24-hour access</div>
+                  </div>
+                </div>
+                
+                <div id="offerSuccess" class="success-state" style="display: none;">
+                  <div class="success-content">
+                    <div class="success-icon">✅</div>
+                    <div class="success-text">Payment Successful!</div>
+                    <div class="success-subtext">Your 24-hour access has been activated.</div>
+                  </div>
+                </div>
+                
+                <div id="offerError" class="error-state" style="display: none;">
+                  <div class="error-content">
+                    <div class="error-icon">❌</div>
+                    <div class="error-text">Payment Failed</div>
+                    <div class="error-subtext" id="offerErrorDetails">Please try again.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="offerCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-primary" id="offerPurchaseBtn">Unlock for ₹${offer.price}</button>
+              </div>
+            </div>
+          `;
+
+          document.body.appendChild(modal);
+
+          // Event listeners
+          const close = () => {
+            modal.remove();
+            resolve();
+          };
+
+          modal.querySelector("#offerCloseBtn").addEventListener("click", close);
+          modal.querySelector("#offerCancelBtn").addEventListener("click", close);
+          modal.addEventListener("click", (e) => {
+            if (e.target === modal) close();
+          });
+
+          const emailInput = modal.querySelector("#offerEmail");
+          const purchaseBtn = modal.querySelector("#offerPurchaseBtn");
+          const processing = modal.querySelector("#offerProcessing");
+          const success = modal.querySelector("#offerSuccess");
+          const error = modal.querySelector("#offerError");
+          const errorDetails = modal.querySelector("#offerErrorDetails");
+
+          // Validate email
+          function validateEmail() {
+            const email = emailInput.value.trim();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              emailInput.classList.add("error");
+              return false;
+            } else {
+              emailInput.classList.remove("error");
+              return true;
+            }
+          }
+
+          emailInput.addEventListener("input", validateEmail);
+
+          // Purchase handler
+          purchaseBtn.addEventListener("click", async () => {
+            if (!validateEmail()) {
+              emailInput.focus();
+              return;
+            }
+
+            const email = emailInput.value.trim();
+            
+            // Show processing
+            processing.style.display = "block";
+            error.style.display = "none";
+            success.style.display = "none";
+            purchaseBtn.disabled = true;
+
+            try {
+              // Create purchase order
+              const response = await fetch(`/api/facefilter/${filterId}/purchase`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userEmail: email })
+              });
+
+              const purchaseData = await response.json();
+
+              if (!purchaseData.success) {
+                throw new Error(purchaseData.error || "Failed to create purchase");
+              }
+
+              // Redirect to PayPal checkout
+              window.WEBZONEBW_LICENSE.openCheckout();
+              
+            } catch (error) {
+              console.error("[WEBZONEBW FACEFILTER] Purchase creation failed:", error);
+              errorDetails.textContent = "Failed to create purchase. Please try again.";
+              error.style.display = "block";
+              processing.style.display = "none";
+              purchaseBtn.disabled = false;
+            }
+          });
+
+          // Set initial focus
+          setTimeout(() => {
+            if (emailInput && !emailInput.value) emailInput.focus();
+          }, 100);
+        })
+        .catch(error => {
+          console.error("[WEBZONEBW FACEFILTER] Offer retrieval failed:", error);
+          showSwipeToast("❌", "Unable to load offer information");
+          resolve();
+        });
     });
   }
 
@@ -3603,6 +3891,90 @@ function initWebZoneERStudio() {
   }
 
   // ==========================================================
+  // MOTHER CARE EFFECTS
+  // ==========================================================
+
+  function drawMotherCare(ctx, w, h, time) {
+    ctx.save();
+    
+    // Forehead/upper-face positioning for maternal care effect
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h - (faceBox.h * h * 0.2); // Shift upward for forehead focus
+    const radius = Math.max(w, h) * 0.35;
+    
+    // Polish version - delicate maternal aura
+    // Quiet → delicate → warm → protective → alive
+    const polishGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+    polishGlow.addColorStop(0, 'rgba(255, 228, 196, 0.25)'); // Warm peach
+    polishGlow.addColorStop(0.3, 'rgba(255, 218, 185, 0.18)'); // Soft peach
+    polishGlow.addColorStop(0.6, 'rgba(255, 192, 203, 0.12)'); // Light pink
+    polishGlow.addColorStop(0.8, 'rgba(221, 160, 221, 0.08)'); // Thistle
+    polishGlow.addColorStop(1, 'rgba(176, 196, 222, 0.04)'); // Light steel blue
+    
+    ctx.fillStyle = polishGlow;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Delicate floating particles representing maternal warmth
+    ctx.fillStyle = 'rgba(255, 228, 196, 0.6)';
+    
+    for (let i = 0; i < 12; i++) {
+      const angle = (time * 0.3 + i * Math.PI * 2 / 12) % (Math.PI * 2);
+      const distance = radius * 0.7 + Math.sin(time * 2 + i) * radius * 0.2;
+      const x = cx + Math.cos(angle) * distance;
+      const y = cy + Math.sin(angle) * distance;
+      const size = 3 + Math.sin(time * 3 + i) * 1.5;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Subtle protective aura rings
+    ctx.strokeStyle = 'rgba(255, 218, 185, 0.3)';
+    ctx.lineWidth = 1;
+    
+    for (let i = 1; i <= 3; i++) {
+      const ringRadius = radius * (0.5 + i * 0.3);
+      const alpha = 0.3 - i * 0.08;
+      ctx.globalAlpha = alpha;
+      
+      ctx.beginPath();
+      ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    
+    ctx.globalAlpha = 1;
+    
+    // Soft warm light rays emanating from forehead area
+    ctx.strokeStyle = 'rgba(255, 228, 196, 0.2)';
+    ctx.lineWidth = 2;
+    
+    for (let i = 0; i < 6; i++) {
+      const angle = (i * Math.PI * 2 / 6) + time * 0.1;
+      const startX = cx + Math.cos(angle) * radius * 0.3;
+      const startY = cy + Math.sin(angle) * radius * 0.3;
+      const endX = cx + Math.cos(angle) * radius * 0.8;
+      const endY = cy + Math.sin(angle) * radius * 0.8;
+      
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+    }
+    
+    // Gentle pulsing effect to show "alive" quality
+    const pulseAlpha = 0.1 + Math.sin(time * 1.5) * 0.05;
+    const pulseGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.6);
+    pulseGlow.addColorStop(0, `rgba(255, 228, 196, ${pulseAlpha})`);
+    pulseGlow.addColorStop(1, 'transparent');
+    
+    ctx.fillStyle = pulseGlow;
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.restore();
+  }
+
+  // ==========================================================
   // MAIN RENDER PIPELINE
   // ==========================================================
 
@@ -4086,6 +4458,11 @@ function initWebZoneERStudio() {
 
       case "icefrost":
         drawDiamondIceFrost(ctx, w, h, time);
+
+        break;
+
+      case "mother_care":
+        drawMotherCare(ctx, w, h, time);
 
         break;
 
@@ -6191,7 +6568,8 @@ function initWebZoneERStudio() {
       'vr-cyberdeck': '🖥️ VR Cyberdeck',
       'vr-mansion': '🏚️ VR Mansion',
       'dollar-rain': '💎 Dollar Rain',
-      'celebrity-spotlight': '⭐ Celebrity Spotlight'
+      'celebrity-spotlight': '⭐ Celebrity Spotlight',
+      'mother_care': '👶 Mother Care'
     };
     return names[filter] || filter;
   }
@@ -6261,7 +6639,7 @@ function initWebZoneERStudio() {
       if (category === 'smart') {
         shouldShow = ['cartoon', 'goldenhour', 'cinematic', 'studiohd', 'ai-background'];
       } else if (category === 'face') {
-        shouldShow = ['sunglasses', 'halo', 'kawaii', 'cyberwarrior', 'noir', 'icefrost'];
+        shouldShow = ['sunglasses', 'halo', 'kawaii', 'cyberwarrior', 'noir', 'icefrost', 'mother_care'];
       } else if (category === 'scene') {
         shouldShow = ['vintage90s', 'popart', 'cyberpunk', 'cinematic', 'glitch', 'space'];
       } else if (category === 'pose') {
@@ -6288,12 +6666,12 @@ function initWebZoneERStudio() {
     
     const statusMap = {
       'smart': { icon: '✨', text: 'Smart Adaptive: Ready', badge: '🌟 9 Smart Lenses' },
-      'face': { icon: '👤', text: 'Face AR Mode: Active', badge: '👤 6 Face AR Lenses' },
+      'face': { icon: '👤', text: 'Face AR Mode: Active', badge: '👤 7 Face AR Lenses' },
       'scene': { icon: '🌍', text: 'Scene Mode: Active', badge: '🌍 6 Scene Lenses' },
       'pose': { icon: '🦴', text: 'Pose Mode: Active', badge: '🦴 4 Pose Lenses' },
       'vr': { icon: '🌌', text: 'VR Mode: Active', badge: '🌌 4 VR Environments' },
       'premium': { icon: '💎', text: 'Premium Mode: Locked', badge: '💎 6 Premium Lenses' },
-      'all': { icon: '✨', text: 'All Effects: Active', badge: '✨ 25 Total Lenses' }
+      'all': { icon: '✨', text: 'All Effects: Active', badge: '✨ 26 Total Lenses' }
     };
     
     const status = statusMap[category] || statusMap['smart'];

@@ -465,13 +465,35 @@ const ER_PREMIUM_PLAN = "er-studio-premium";
 const ER_PREMIUM_AMOUNT = ER_PREMIUM_AMOUNT_USD; // $5.99 USD - one-time ER Studio license
 const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
+// --- FaceFilter 24-Hour Offer Configuration ---
+const FACEFILTER_CONFIG = {
+    offers: {
+        'halo': { name: 'Angel Halo', price: 99, currency: 'INR', duration: 24 },           // ₹99 for 24 hours
+        'witch-ritual': { name: 'Witch Ritual', price: 149, currency: 'INR', duration: 24 }, // ₹149 for 24 hours
+        'haunted-forest': { name: 'Haunted Forest', price: 199, currency: 'INR', duration: 24 }, // ₹199 for 24 hours
+        'vr-cyberdeck': { name: 'VR Cyberdeck', price: 299, currency: 'INR', duration: 24 },  // ₹299 for 24 hours
+        'vr-mansion': { name: 'VR Haunted Manor', price: 399, currency: 'INR', duration: 24 }, // ₹399 for 24 hours
+        'pumpkin-pose': { name: 'Pumpkin Pose', price: 99, currency: 'INR', duration: 24 }     // ₹99 for 24 hours
+    }
+};
+
+function getFaceFilterOffer(filterId) {
+    return FACEFILTER_CONFIG.offers[filterId];
+}
+
+function generateEntitlementId() {
+    const block = () => crypto.randomBytes(2).toString("hex").toUpperCase();
+    return `FF-ENT-${block()}-${block()}-${block()}`;
+}
+
 /*
  * License store - persisted to disk so licenses survive
  * server restarts. In production this should be a real DB.
  */
 const licenseStore = {
     orders: new Map(),      // orderId -> { orderId, email, plan, amount, status, createdAt }
-    licenses: new Map()     // licenseKey -> { licenseKey, email, orderId, status, issuedAt, lastVerifiedAt }
+    licenses: new Map(),    // licenseKey -> { licenseKey, email, orderId, status, issuedAt, lastVerifiedAt }
+    faceFilterEntitlements: new Map()  // entitlementId -> { entitlementId, userId, filterId, orderId, purchasedAt, expiresAt, status }
 };
 
 function loadLicenseStore() {
@@ -480,6 +502,7 @@ function loadLicenseStore() {
             const raw = JSON.parse(fs.readFileSync(ER_LICENSE_STORE, "utf-8"));
             (raw.orders || []).forEach((o) => licenseStore.orders.set(o.orderId, o));
             (raw.licenses || []).forEach((l) => licenseStore.licenses.set(l.licenseKey, l));
+            (raw.faceFilterEntitlements || []).forEach((e) => licenseStore.faceFilterEntitlements.set(e.entitlementId, e));
         }
     } catch (error) {
         console.error("[WEBZONEBW LICENSE] Failed to load license store:", error.message);
@@ -493,7 +516,8 @@ function saveLicenseStore() {
             ER_LICENSE_STORE,
             JSON.stringify({
                 orders: [...licenseStore.orders.values()],
-                licenses: [...licenseStore.licenses.values()]
+                licenses: [...licenseStore.licenses.values()],
+                faceFilterEntitlements: [...licenseStore.faceFilterEntitlements.values()]
             }, null, 2),
             "utf-8"
         );
@@ -955,6 +979,88 @@ app.post("/api/license/activate", (req, res) => {
 });
 
 /* ------------------------------------------------------------
+ * FACEFILTER PAYMENT WEBHOOK - Create 24-hour entitlements
+ * ------------------------------------------------------------ */
+app.post("/api/facefilter/webhook", async (req, res) => {
+    if (!PAYPAL_WEBHOOK_ID) {
+        console.warn("[WEBZONEBW FACEFILTER] Webhook rejected: PAYPAL_WEBHOOK_ID not configured");
+        return res.status(503).send("WEBHOOK_NOT_CONFIGURED");
+    }
+
+    try {
+        const accessToken = await getPayPalToken();
+        if (!accessToken) return res.status(503).send("WEBHOOK_NOT_CONFIGURED");
+
+        const { ok, data } = await paypalRequest(accessToken, "POST", "/v1/notifications/verify-webhook-signature", {
+            auth_algo: req.headers["paypal-auth-algo"],
+            cert_url: req.headers["paypal-cert-url"],
+            transmission_id: req.headers["paypal-transmission-id"],
+            transmission_sig: req.headers["paypal-transmission-sig"],
+            transmission_time: req.headers["paypal-transmission-time"],
+            webhook_id: PAYPAL_WEBHOOK_ID,
+            webhook_event: req.body
+        });
+
+        if (!ok || !data || data.verification_status !== "SUCCESS") {
+            console.warn("[WEBZONEBW FACEFILTER] PayPal webhook verification failed");
+            return res.status(401).send("INVALID_SIGNATURE");
+        }
+
+        const event = req.body || {};
+        if (event.event_type === "CHECKOUT.ORDER.COMPLETED" || event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+            const resource = event.resource || {};
+            const orderId = resource.supplementary_data && resource.supplementary_data.related_ids
+                ? resource.supplementary_data.related_ids.order_id
+                : resource.id;
+
+            // Find the associated FaceFilter purchase
+            const storedOrder = orderId && licenseStore.orders.get(String(orderId));
+            if (storedOrder && storedOrder.status !== "PAID" && storedOrder.purchaseId?.startsWith("FF-PURCHASE-")) {
+                
+                // Verify this is a FaceFilter purchase
+                const offer = getFaceFilterOffer(storedOrder.filterId);
+                if (offer) {
+                    // Create 24-hour entitlement
+                    const entitlementId = generateEntitlementId();
+                    const purchasedAt = new Date().toISOString();
+                    const expiresAt = new Date(Date.now() + (offer.duration * 60 * 60 * 1000)).toISOString();
+
+                    const entitlement = {
+                        entitlementId: entitlementId,
+                        userId: storedOrder.userId,
+                        userEmail: storedOrder.userEmail,
+                        filterId: storedOrder.filterId,
+                        orderId: storedOrder.purchaseId,
+                        purchasedAt: purchasedAt,
+                        expiresAt: expiresAt,
+                        status: "ACTIVE",
+                        offerName: offer.name,
+                        price: offer.price,
+                        currency: offer.currency
+                    };
+
+                    licenseStore.faceFilterEntitlements.set(entitlementId, entitlement);
+                    
+                    // Mark purchase as completed
+                    storedOrder.status = "PAID";
+                    storedOrder.paidAt = purchasedAt;
+                    licenseStore.orders.set(storedOrder.purchaseId, storedOrder);
+                    
+                    saveLicenseStore();
+
+                    console.log(`[WEBZONEBW FACEFILTER] 24-hour entitlement created: ${entitlementId} for ${storedOrder.filterId}`);
+                }
+            }
+        }
+
+        res.status(200).send("OK");
+    } catch (error) {
+        console.error("[WEBZONEBW FACEFILTER] Webhook error:", error.message);
+        res.status(500).send("WEBHOOK_ERROR");
+    }
+});
+
+/* ------------------------------------------------------------
  * LICENSE VERIFICATION - persistent re-check on every session
  * ------------------------------------------------------------ */
 app.post("/api/license/verify", (req, res) => {
@@ -1015,6 +1121,59 @@ app.post("/api/license/verify", (req, res) => {
         promoAccess: promoAccess,
         promoActive: isHalloweenPromoActive()
     });
+});
+
+/* ------------------------------------------------------------
+ * FACEFILTER ACCESS VERIFICATION
+ * ------------------------------------------------------------ */
+app.post("/api/facefilter/verify", (req, res) => {
+    try {
+        const { filterId, userId, userEmail } = req.body || {};
+        
+        if (!filterId) {
+            return res.status(400).json({
+                success: false,
+                error: "FILTER_ID_REQUIRED",
+                message: "filterId is required for access verification."
+            });
+        }
+
+        const now = new Date().toISOString();
+        let activeEntitlement = null;
+        
+        // Find active entitlement for this filter
+        for (const [entitlementId, entitlement] of licenseStore.faceFilterEntitlements) {
+            if (entitlement.filterId === filterId && 
+                entitlement.status === "ACTIVE" && 
+                now < entitlement.expiresAt &&
+                ((userId && entitlement.userId === userId) || (userEmail && entitlement.userEmail === userEmail))) {
+                activeEntitlement = {
+                    entitlementId: entitlementId,
+                    filterId: entitlement.filterId,
+                    status: entitlement.status,
+                    purchasedAt: entitlement.purchasedAt,
+                    expiresAt: entitlement.expiresAt,
+                    offerName: entitlement.offerName,
+                    timeRemaining: Math.max(0, new Date(entitlement.expiresAt) - new Date(now))
+                };
+                break;
+            }
+        }
+
+        res.json({
+            success: true,
+            filterId: filterId,
+            hasAccess: !!activeEntitlement,
+            entitlement: activeEntitlement,
+            accessStatus: activeEntitlement ? "ACTIVE" : "LOCKED",
+            message: activeEntitlement ? 
+                `Access to ${activeEntitlement.offerName} is active until ${new Date(activeEntitlement.expiresAt).toLocaleString()}` :
+                "This filter requires purchase for access."
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW FACEFILTER] Access verification error:", error);
+        res.status(500).json({ success: false, error: "ACCESS_VERIFICATION_FAILED" });
+    }
 });
 
 /* ============================================================
@@ -1125,6 +1284,141 @@ app.post("/api/halloween/activate-promo", (req, res) => {
         expiresAt: promoEntry.expiresAt,
         features: promoEntry.features
     });
+});
+
+/* ============================================================
+ * FACEFILTER 24-HOUR OFFER ENDPOINTS
+ * ============================================================ */
+
+// Get FaceFilter offer information
+app.get("/api/facefilter/:filterId/offer", (req, res) => {
+    try {
+        const { filterId } = req.params;
+        const offer = getFaceFilterOffer(filterId);
+        
+        if (!offer) {
+            return res.status(404).json({
+                success: false,
+                error: "FILTER_NOT_FOUND",
+                message: "The requested FaceFilter is not available for purchase."
+            });
+        }
+
+        res.json({
+            success: true,
+            filterId: filterId,
+            offer: {
+                name: offer.name,
+                price: offer.price,
+                currency: offer.currency,
+                duration: offer.duration,
+                description: `24-hour access to ${offer.name}. Once purchased and activated, this offer is non-refundable, subject to applicable law.`
+            },
+            refundPolicy: "24-hour promotional access. Once purchased and activated, this offer is non-refundable, subject to applicable law and mandatory consumer protections."
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW FACEFILTER] Offer retrieval error:", error);
+        res.status(500).json({ success: false, error: "OFFER_RETRIEVAL_FAILED" });
+    }
+});
+
+// Create FaceFilter purchase order
+app.post("/api/facefilter/:filterId/purchase", (req, res) => {
+    try {
+        const { filterId } = req.params;
+        const { userId, userEmail } = req.body || {};
+        
+        // Validate input
+        if (!filterId || !userEmail) {
+            return res.status(400).json({
+                success: false,
+                error: "MISSING_REQUIRED_FIELDS",
+                message: "filterId and userEmail are required."
+            });
+        }
+
+        // Validate filter exists
+        const offer = getFaceFilterOffer(filterId);
+        if (!offer) {
+            return res.status(404).json({
+                success: false,
+                error: "FILTER_NOT_FOUND",
+                message: "The requested FaceFilter is not available for purchase."
+            });
+        }
+
+        // Generate unique purchase ID
+        const purchaseId = `FF-PURCHASE-${Date.now()}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+        
+        // Create purchase record
+        const purchase = {
+            purchaseId: purchaseId,
+            filterId: filterId,
+            userId: userId || "anonymous",
+            userEmail: userEmail,
+            offerName: offer.name,
+            price: offer.price,
+            currency: offer.currency,
+            status: "CREATED",
+            createdAt: new Date().toISOString(),
+            filterPurchasedAt: null,
+            filterExpiresAt: null
+        };
+
+        licenseStore.orders.set(purchaseId, purchase);
+        saveLicenseStore();
+
+        res.json({
+            success: true,
+            purchaseId: purchaseId,
+            filterId: filterId,
+            offer: {
+                name: offer.name,
+                price: offer.price,
+                currency: offer.currency,
+                duration: offer.duration
+            },
+            nextSteps: "Complete payment to activate 24-hour access"
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW FACEFILTER] Purchase creation error:", error);
+        res.status(500).json({ success: false, error: "PURCHASE_CREATION_FAILED" });
+    }
+});
+
+// Get user's current FaceFilter entitlements
+app.get("/api/facefilter/entitlements", (req, res) => {
+    try {
+        const { userId, userEmail } = req.query;
+        
+        const userEntitlements = [];
+        const now = new Date().toISOString();
+        
+        for (const [entitlementId, entitlement] of licenseStore.faceFilterEntitlements) {
+            if ((userId && entitlement.userId === userId) || (userEmail && entitlement.userEmail === userEmail)) {
+                const isActive = entitlement.status === "ACTIVE" && now < entitlement.expiresAt;
+                userEntitlements.push({
+                    entitlementId: entitlementId,
+                    filterId: entitlement.filterId,
+                    status: entitlement.status,
+                    purchasedAt: entitlement.purchasedAt,
+                    expiresAt: entitlement.expiresAt,
+                    isActive: isActive,
+                    timeRemaining: isActive ? 
+                        Math.max(0, new Date(entitlement.expiresAt) - new Date(now)) : 0
+                });
+            }
+        }
+
+        res.json({
+            success: true,
+            entitlements: userEntitlements,
+            totalActive: userEntitlements.filter(e => e.isActive).length
+        });
+    } catch (error) {
+        console.error("[WEBZONEBW FACEFILTER] Entitlements retrieval error:", error);
+        res.status(500).json({ success: false, error: "ENTITLEMENTS_RETRIEVAL_FAILED" });
+    }
 });
 
 // Health check (used by deployment platforms + readiness tests)

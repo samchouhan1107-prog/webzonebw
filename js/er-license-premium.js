@@ -539,131 +539,128 @@ function fetchJSON(url, options) {
 
     var initialEmail = state.email || "";
 
+    /* ---- AMAZON-STYLE 3-STEP CHECKOUT ---- */
     modal.innerHTML =
       '<div class="er-modal-card premium-checkout">' +
       '<div class="er-modal-header">' +
       '<div>' +
       '<span class="er-badge-category">💎 LIFETIME UPGRADE</span>' +
-      '<h2 id="checkout-title">ER Studio Premium</h2>' +
+      '<h2 id="checkout-title">Checkout</h2>' +
       '</div>' +
       '<button class="er-modal-close" id="licCloseBtn" aria-label="Close checkout">&times;</button>' +
       '</div>' +
-      
+
       '<div class="er-modal-body">' +
-      
-      // Purchase Summary
-      '<div class="purchase-summary">' +
-      '<div class="summary-header">' +
-      '<div class="product-icon">💎</div>' +
-      '<div class="product-info">' +
-      '<h3>ER Studio Premium License</h3>' +
-      '<p class="product-description">Unlock all VR scenes, 3D body tracking, horror & creative filters</p>' +
+
+      // Order summary
+      '<div class="co-order-box">' +
+      '<div class="co-order-row">' +
+      '<div class="product-icon small">💎</div>' +
+      '<div class="co-order-info">' +
+      '<h3>ER Studio Premium — Lifetime</h3>' +
+      '<p>All VR scenes, 3D pose tracking & premium filters</p>' +
+      '</div>' +
+      '<div class="co-order-price">₹499<span>/ $5.99</span></div>' +
       '</div>' +
       '</div>' +
-      
-      '<div class="summary-details">' +
-      '<div class="license-benefits">' +
-      '<h4>Included Features:</h4>' +
-      '<ul class="benefits-list">' +
-      '<li><span class="benefit-icon">🦴</span> 3D Pose Tracking & Skeletal Overlay</li>' +
-      '<li><span class="benefit-icon">🌐</span> Interactive Cyberdeck & VR Environments</li>' +
-      '<li><span class="benefit-icon">👻</span> Exclusive Cinematic & Horror Filters</li>' +
-      '<li><span class="benefit-icon">📹</span> 1080p Video Recording & Snapshot Export</li>' +
-      '</ul>' +
+
+      // STEP 1 — Email
+      '<section class="co-step active" id="coStep1">' +
+      '<div class="co-step-head">' +
+      '<span class="co-step-num">1</span>' +
+      '<div class="co-step-title">' +
+      '<h4>Email address</h4>' +
+      '<p class="co-step-summary" id="coStep1Summary"></p>' +
       '</div>' +
-      
-      '<div class="pricing-info">' +
-      '<div class="price-main">₹499 <span style="font-size:1.1rem; color:var(--text-muted); font-weight:normal;">/ $5.99 USD</span></div>' +
-      '<div class="price-details">' +
-      '<span class="price-type">One-time purchase • Lifetime access & updates</span>' +
+      '<button type="button" class="co-change" id="coEdit1" style="display:none;">Change</button>' +
       '</div>' +
-      '</div>' +
-      '</div>' +
-      '</div>' +
-      
-      // Email Section
-      '<div class="email-validation-section">' +
+      '<div class="co-step-body">' +
       '<div class="email-input-group">' +
-      '<label for="licEmail" class="email-label">Email Address for License Binding</label>' +
-      '<div class="email-input-wrapper">' +
       '<input type="email" id="licEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required value="' + initialEmail + '" aria-describedby="email-help email-error">' +
-      '</div>' +
-      '<p id="email-help" class="email-help">Your license key is bound and delivered to this email</p>' +
+      '<p id="email-help" class="email-help">Your license key is delivered to this email</p>' +
       '<p id="email-error" class="email-error" style="display: none;"></p>' +
       '</div>' +
+      '<button type="button" class="btn btn-primary co-continue" id="coEmailContinue">Continue</button>' +
       '</div>' +
+      '</section>' +
 
-      // Method Tabs
-      '<div class="checkout-method-tabs" role="tablist" aria-label="Payment Methods">' +
-      '<button type="button" class="checkout-tab-btn active" id="tabBtnUpi" role="tab" aria-selected="true" aria-controls="panelUpi">' +
-      '<span>⚡ UPI / WhatsApp</span>' +
-      '</button>' +
-      '<button type="button" class="checkout-tab-btn" id="tabBtnPaypal" role="tab" aria-selected="false" aria-controls="panelPaypal">' +
-      '<span>💳 PayPal / Card</span>' +
-      '</button>' +
-      '<button type="button" class="checkout-tab-btn" id="tabBtnKey" role="tab" aria-selected="false" aria-controls="panelKey">' +
-      '<span>🔑 Enter Key / Promo</span>' +
-      '</button>' +
+      // STEP 2 — Payment method
+      '<section class="co-step" id="coStep2">' +
+      '<div class="co-step-head">' +
+      '<span class="co-step-num">2</span>' +
+      '<div class="co-step-title">' +
+      '<h4>Payment method</h4>' +
+      '<p class="co-step-summary" id="coStep2Summary"></p>' +
       '</div>' +
+      '<button type="button" class="co-change" id="coEdit2" style="display:none;">Change</button>' +
+      '</div>' +
+      '<div class="co-step-body">' +
+      '<label class="co-option selected" id="coOptUpi">' +
+      '<input type="radio" name="coMethod" value="upi" checked>' +
+      '<div class="co-option-main">' +
+      '<strong>UPI — Direct Bank Transfer</strong>' +
+      '<span>GPay, PhonePe, Paytm • ₹499 to 8198091036@ybl</span>' +
+      '</div>' +
+      '</label>' +
+      '<label class="co-option" id="coOptPaypal">' +
+      '<input type="radio" name="coMethod" value="paypal">' +
+      '<div class="co-option-main">' +
+      '<strong>PayPal / Card (International)</strong>' +
+      '<span>Secure card payment • $5.99 USD</span>' +
+      '</div>' +
+      '</label>' +
+      '<label class="co-option" id="coOptKey">' +
+      '<input type="radio" name="coMethod" value="key">' +
+      '<div class="co-option-main">' +
+      '<strong>License Key / Promo Code</strong>' +
+      '<span>Already have a key? Redeem it here</span>' +
+      '</div>' +
+      '</label>' +
 
-      // PANEL 1: UPI / WhatsApp (India)
-      '<div class="checkout-panel active" id="panelUpi" role="tabpanel">' +
-      '<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">Instant Indian payment via WhatsApp or any UPI app (Google Pay, PhonePe, Paytm, BHIM).</p>' +
-      '<button type="button" class="btn btn-whatsapp btn-large" id="licWhatsAppBtn">' +
-      '<span class="btn-icon">💬</span>' +
-      '<span class="btn-text">Pay ₹499 via WhatsApp & UPI</span>' +
-      '</button>' +
+      '<div class="co-method-detail active" id="coDetailUpi">' +
       '<div class="upi-info-card">' +
-      '<div style="font-weight:600; font-size:0.9rem; color:var(--text-heading);">Direct UPI Payment (₹499):</div>' +
+      '<div style="font-weight:600; color:var(--text-heading);">Send ₹499 directly to:</div>' +
       '<div class="upi-row">' +
       '<span class="upi-id-badge" id="upiIdText">8198091036@ybl</span>' +
-      '<button type="button" class="btn-copy-upi" id="btnCopyUpi">📋 Copy UPI</button>' +
+      '<button type="button" class="btn-copy-upi" id="btnCopyUpi">📋 Copy</button>' +
       '</div>' +
-      '<div style="font-size:0.8rem; color:var(--text-muted); margin-top:8px;">' +
-      'Pay ₹499 to the UPI ID above, then message us on WhatsApp with the screenshot to receive your activation key immediately.' +
+      '<div style="margin-top:8px; font-size:0.8rem;">Funds go straight to the bank account — no middleman. After paying, tap "Place your order" to send your payment confirmation on WhatsApp.</div>' +
       '</div>' +
+      '<button type="button" class="btn btn-secondary" id="licMailBtn" style="font-size:0.85rem; padding:8px 16px; margin-top:10px;">✉️ Request UPI Link via Email</button>' +
       '</div>' +
-      '<div style="margin-top:14px; text-align:center;">' +
-      '<button type="button" class="btn btn-secondary" id="licMailBtn" style="font-size:0.85rem; padding:8px 16px;">' +
-      '<span>✉️ Request UPI Link via Email</span>' +
-      '</button>' +
+
+      '<div class="co-method-detail" id="coDetailPaypal">' +
+      '<p style="font-size:0.85rem; color:var(--text-muted);">You will be redirected to PayPal to pay $5.99 securely.</p>' +
+      '<div id="paymentButtons" class="payment-section"></div>' +
+      '<div id="paypalManualContainer" style="display:none; margin-top:12px;">' +
+      '<button type="button" class="btn btn-secondary" id="licPaypalManualBtn" style="font-size:0.85rem; padding:8px 16px;">✉️ Request PayPal Invoice ($5.99 USD)</button>' +
       '</div>' +
       '</div>' +
 
-      // PANEL 2: PayPal / Card (International)
-      '<div class="checkout-panel" id="panelPaypal" role="tabpanel">' +
-      '<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">International purchase via PayPal, Debit Card, or Credit Card ($5.99 USD).</p>' +
-      '<div id="paypalActionContainer">' +
-      '<button type="button" class="btn btn-primary btn-large" id="continuePaypalBtn" style="width:100%;">' +
-      '<span class="btn-icon">💳</span>' +
-      '<span class="btn-text">Proceed with PayPal / Card ($5.99)</span>' +
-      '</button>' +
-      '</div>' +
-      '<div id="paymentButtons" class="payment-section" style="margin-top:16px;"></div>' +
-      '<div id="paypalManualContainer" style="display:none; margin-top:14px; text-align:center;">' +
-      '<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">PayPal automated checkout is in manual mode on this host.</p>' +
-      '<button type="button" class="btn btn-secondary" id="licPaypalManualBtn" style="font-size:0.85rem; padding:8px 16px;">' +
-      '<span>✉️ Request PayPal Invoice ($5.99 USD)</span>' +
-      '</button>' +
-      '</div>' +
-      '</div>' +
-
-      // PANEL 3: Enter Key or Promo
-      '<div class="checkout-panel" id="panelKey" role="tabpanel">' +
-      '<p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:12px;">Have an existing license key or promotional code? Enter it below to unlock premium access.</p>' +
-      '<div class="email-input-group">' +
-      '<label for="licKeyInput" class="email-label">License Key or Promo Code</label>' +
-      '<div class="email-input-wrapper">' +
-      '<input type="text" id="licKeyInput" class="email-input" placeholder="e.g. WZB-ER-XXXX-XXXX-XXXX or HALLOWEEN2026" autocomplete="off" spellcheck="false">' +
-      '</div>' +
+      '<div class="co-method-detail" id="coDetailKey">' +
+      '<input type="text" id="licKeyInput" class="email-input" placeholder="e.g. WZB-ER-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">' +
       '<p id="licKeyError" class="email-error" style="display:none;"></p>' +
-      '<p id="licKeySuccess" class="email-help" style="color:#10b981; display:none; font-weight:600;"></p>' +
       '</div>' +
-      '<button type="button" class="btn btn-primary btn-large" id="licKeyActivateBtn" style="width:100%; margin-top:8px;">' +
-      '<span class="btn-icon">✨</span>' +
-      '<span class="btn-text">Activate Premium Access</span>' +
-      '</button>' +
+
+      '<button type="button" class="btn btn-primary co-continue" id="coMethodContinue">Use this payment method</button>' +
       '</div>' +
+      '</section>' +
+
+      // STEP 3 — Review & place order
+      '<section class="co-step" id="coStep3">' +
+      '<div class="co-step-head">' +
+      '<span class="co-step-num">3</span>' +
+      '<div class="co-step-title">' +
+      '<h4>Review order</h4>' +
+      '<p class="co-step-summary" id="coStep3Summary"></p>' +
+      '</div>' +
+      '</div>' +
+      '<div class="co-step-body">' +
+      '<div class="co-total-row"><span>Order total</span><strong>₹499 / $5.99</strong></div>' +
+      '<button type="button" class="btn-place-order" id="coPlaceOrder">Place your order</button>' +
+      '<p class="co-note" id="coPlaceNote">Your license key is sent instantly after payment is confirmed.</p>' +
+      '</div>' +
+      '</section>' +
 
       // Processing / Error / Success States
       '<div id="licProcessing" class="processing-state" style="display:none;" role="status" aria-live="polite">' +
@@ -673,21 +670,21 @@ function fetchJSON(url, options) {
       '<div class="processing-subtext" id="processing-subtext">Connecting to gateway</div>' +
       '</div>' +
       '</div>' +
-      
+
       '<div id="licSuccess" class="success-state" style="display:none;" role="status" aria-live="polite">' +
       '<div class="success-content">' +
       '<div class="success-icon">✅</div>' +
-      '<div class="success-text">Payment Successful!</div>' +
-      '<div class="success-subtext">Your premium license is now active.</div>' +
+      '<div class="success-text" id="successText">Payment Successful!</div>' +
+      '<div class="success-subtext" id="successSubtext">Your premium license is now active.</div>' +
       '</div>' +
       '</div>' +
-      
+
       '<div id="licError" class="error-state" style="display:none;" role="alert">' +
       '<div class="error-content">' +
       '<div class="error-icon">❌</div>' +
-      '<div class="error-text">Payment Notice</div>' +
+      '<div class="error-text">Order Notice</div>' +
       '<div class="error-subtext" id="errorDetails">Please try another method.</div>' +
-      '<button type="button" class="btn btn-secondary" id="licErrorBackBtn" style="margin-top:12px;">← Back to Payment Options</button>' +
+      '<button type="button" class="btn btn-secondary" id="licErrorBackBtn" style="margin-top:12px;">← Back</button>' +
       '</div>' +
       '</div>' +
 
@@ -965,7 +962,27 @@ function fetchJSON(url, options) {
                           throw new Error((cap && cap.error) || "Payment capture not confirmed.");
                         }
 
-                        return activateLicense(orderId, email, null, showError, close);
+                        // Check if this is a FaceFilter purchase (has custom order ID prefix)
+                        if (orderId && orderId.startsWith("FF-PURCHASE-")) {
+                          // FaceFilter purchase - 24-hour access will be handled by webhook
+                          return new Promise(function(resolve) {
+                            // Wait for webhook to process and create entitlement
+                            setTimeout(function() {
+                              showProcessingState("Payment confirmed!", "Activating your 24-hour access...");
+                              setTimeout(function() {
+                                hideStates();
+                                successBox.style.display = "block";
+                                successBox.querySelector(".success-text").textContent = "Payment successful!";
+                                successBox.querySelector(".success-subtext").textContent = "Your 24-hour access has been activated.";
+                                setTimeout(close, 2000);
+                                resolve();
+                              }, 1500);
+                            }, 2000); // Allow time for webhook processing
+                          });
+                        } else {
+                          // Regular ER Studio license purchase
+                          return activateLicense(orderId, email, null, showError, close);
+                        }
                       })
                       .catch(function (err) {
                         showError(err.message || "Payment verification failed.");
