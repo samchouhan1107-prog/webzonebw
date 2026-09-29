@@ -1162,6 +1162,263 @@
   cursor: not-allowed;
 }
 
+/* Help Section Styles */
+.co-help-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--surface-light, #f8fafc);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.er-theme-dark .co-help-section {
+  background: var(--surface-light, #2d2d2d);
+  border-color: var(--border-color, #374151);
+}
+
+.co-help-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted, #6b7280);
+  margin-bottom: 8px;
+}
+
+.er-theme-dark .co-help-text {
+  color: var(--text-muted, #9ca3af);
+}
+
+.co-help-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.co-help-whatsapp,
+.co-help-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: var(--text, #374151);
+  transition: all 0.2s ease;
+}
+
+.er-theme-dark .co-help-whatsapp,
+.er-theme-dark .co-help-email {
+  background: var(--surface, #1a1a1a);
+  border-color: var(--border-color, #374151);
+  color: var(--text, #f9fafb);
+}
+
+.co-help-whatsapp:hover,
+.co-help-email:hover {
+  background: var(--surface-hover, #f3f4f6);
+  border-color: var(--brand-primary, #3b82f6);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.er-theme-dark .co-help-whatsapp:hover,
+.er-theme-dark .co-help-email:hover {
+  background: var(--surface-hover, #2d2d2d);
+}
+
+.co-help-whatsapp:hover {
+  border-color: #25d366;
+}
+
+.co-help-email:hover {
+  border-color: #3b82f6;
+}
+
+/* Step Navigation Improvements */
+.co-step {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+}
+
+.co-step.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.co-step.completed {
+  opacity: 0.6;
+}
+
+.co-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border-color, #e5e7eb);
+  color: var(--text-muted, #6b7280);
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.co-step.active .co-step-num {
+  background: var(--brand-primary, #3b82f6);
+  color: white;
+}
+
+.co-step.completed .co-step-num {
+  background: var(--success, #10b981);
+  color: white;
+}
+
+.co-step-title h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-heading, #111827);
+  margin: 0 0 4px 0;
+}
+
+.er-theme-dark .co-step-title h4 {
+  color: var(--text-heading, #f9fafb);
+}
+
+.co-step-summary {
+  font-size: 0.85rem;
+  color: var(--text-muted, #6b7280);
+  margin: 0;
+}
+
+.er-theme-dark .co-step-summary {
+  color: var(--text-muted, #9ca3af);
+}
+
+.co-change {
+  background: none;
+  border: 1px solid var(--border-color, #e5e7eb);
+  color: var(--text-muted, #6b7280);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.er-theme-dark .co-change {
+  border-color: var(--border-color, #374151);
+  color: var(--text-muted, #9ca3af);
+}
+
+.co-change:hover {
+  background: var(--surface, #ffffff);
+  border-color: var(--brand-primary, #3b82f6);
+  color: var(--brand-primary, #3b82f6);
+}
+
+.er-theme-dark .co-change:hover {
+  background: var(--surface, #1a1a1a);
+}
+
+/* Payment Security Section */
+.co-payment-security {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--success-light, #ecfdf5);
+  border-radius: 8px;
+  border: 1px solid var(--success, #10b981);
+  margin-bottom: 12px;
+}
+
+.er-theme-dark .co-payment-security {
+  background: var(--success-dark, #064e3b);
+  border-color: var(--success, #10b981);
+}
+
+.security-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.security-text strong {
+  color: var(--success, #059669);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.er-theme-dark .security-text strong {
+  color: var(--success, #34d399);
+}
+
+.security-text p {
+  color: var(--text-muted, #6b7280);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.er-theme-dark .security-text p {
+  color: var(--text-muted, #9ca3af);
+}
+
+/* Order Review Section */
+.co-order-review {
+  background: var(--surface-light, #f8fafc);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.er-theme-dark .co-order-review {
+  background: var(--surface-light, #2d2d2d);
+  border-color: var(--border-color, #374151);
+}
+
+.co-order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+}
+
+.co-item-info strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-heading, #111827);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.er-theme-dark .co-item-info strong {
+  color: var(--text-heading, #f9fafb);
+}
+
+.co-item-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted, #6b7280);
+  margin: 0;
+}
+
+.er-theme-dark .co-item-info p {
+  color: var(--text-muted, #9ca3af);
+}
+
+.co-item-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary, #3b82f6);
+  white-space: nowrap;
+}
+
+.er-theme-dark .co-item-price {
+  color: var(--brand-primary, #60a5fa);
+}
+
 .co-note {
   margin: 10px 0 0;
   font-size: 0.82rem;

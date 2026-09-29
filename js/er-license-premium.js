@@ -570,14 +570,14 @@ function fetchJSON(url, options) {
       '<span class="co-step-num">1</span>' +
       '<div class="co-step-title">' +
       '<h4>Email address</h4>' +
-      '<p class="co-step-summary" id="coStep1Summary"></p>' +
+      '<p class="co-step-summary" id="coStep1Summary">you@example.com</p>' +
       '</div>' +
       '<button type="button" class="co-change" id="coEdit1" style="display:none;">Change</button>' +
       '</div>' +
       '<div class="co-step-body">' +
       '<div class="email-input-group">' +
       '<input type="email" id="licEmail" class="email-input" placeholder="you@example.com" autocomplete="email" required value="' + initialEmail + '" aria-describedby="email-help email-error">' +
-      '<p id="email-help" class="email-help">Your license key is delivered to this email</p>' +
+      '<p id="email-help" class="email-help">Your license key will be delivered to this email address</p>' +
       '<p id="email-error" class="email-error" style="display: none;"></p>' +
       '</div>' +
       '<button type="button" class="btn btn-primary co-continue" id="coEmailContinue">Continue</button>' +
@@ -590,7 +590,7 @@ function fetchJSON(url, options) {
       '<span class="co-step-num">2</span>' +
       '<div class="co-step-title">' +
       '<h4>Payment method</h4>' +
-      '<p class="co-step-summary" id="coStep2Summary"></p>' +
+      '<p class="co-step-summary" id="coStep2Summary">PayPal / Card (Secure Checkout)</p>' +
       '</div>' +
       '<button type="button" class="co-change" id="coEdit2" style="display:none;">Change</button>' +
       '</div>' +
@@ -599,16 +599,23 @@ function fetchJSON(url, options) {
       '<input type="radio" name="coMethod" value="paypal" checked>' +
       '<div class="co-option-main">' +
       '<strong>PayPal / Card (Secure Checkout)</strong>' +
-      '<span>Secure payment • $5.99 USD</span>' +
+      '<span>Secure payment • $5.99 USD • PayPal Buyer Protection</span>' +
       '</div>' +
       '</label>' +
 
       '<div class="co-method-detail active" id="coDetailPaypal">' +
-      '<p style="font-size:0.85rem; color:var(--text-muted);">You will be redirected to PayPal to pay $5.99 securely.</p>' +
+      '<div class="co-payment-security">' +
+      '<div class="security-icon">🔒</div>' +
+      '<div class="security-text">' +
+      '<strong>Secure Payment</strong>' +
+      '<p>Your payment is protected by PayPal Buyer Protection</p>' +
+      '</div>' +
+      '</div>' +
+      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your $5.99 payment securely.</p>' +
       '<div id="paymentButtons" class="payment-section"></div>' +
       '</div>' +
 
-      '<button type="button" class="btn btn-primary co-continue" id="coMethodContinue">Use this payment method</button>' +
+      '<button type="button" class="btn btn-primary co-continue" id="coMethodContinue">Continue to PayPal</button>' +
       '</div>' +
       '</section>' +
 
@@ -622,9 +629,25 @@ function fetchJSON(url, options) {
       '</div>' +
       '</div>' +
       '<div class="co-step-body">' +
+      '<div class="co-order-review">' +
+      '<div class="co-order-item">' +
+      '<div class="co-item-info">' +
+      '<strong>ER Studio Premium — Lifetime License</strong>' +
+      '<p>All VR scenes, 3D pose tracking & premium filters</p>' +
+      '</div>' +
+      '<div class="co-item-price">$5.99 USD</div>' +
+      '</div>' +
+      '</div>' +
       '<div class="co-total-row"><span>Order total</span><strong>$5.99 USD</strong></div>' +
       '<button type="button" class="btn-place-order" id="coPlaceOrder">Place your order</button>' +
       '<p class="co-note" id="coPlaceNote">Your license key is sent instantly after payment is confirmed.</p>' +
+      '<div class="co-help-section">' +
+      '<p class="co-help-text">Need help? Contact us:</p>' +
+      '<div class="co-help-contact">' +
+      '<a href="https://wa.me/918198091036" target="_blank" rel="noopener" class="co-help-whatsapp">📱 WhatsApp: +91 81980 91036</a>' +
+      '<a href="mailto:samchouhan1107@gmail.com" class="co-help-email">📧 Email: samchouhan1107@gmail.com</a>' +
+      '</div>' +
+      '</div>' +
       '</div>' +
       '</section>' +
 
@@ -657,10 +680,7 @@ function fetchJSON(url, options) {
       '</div>' + // er-modal-body
 
       '<div class="modal-footer">' +
-      '<p class="license-terms">' +
-      'Need help? WhatsApp: <a href="https://wa.me/918198091036" target="_blank" rel="noopener">+91 81980 91036</a> • ' +
-      'Email: <a href="mailto:samchouhan1107@gmail.com">samchouhan1107@gmail.com</a>' +
-      '</p>' +
+      '<p class="license-terms">By completing this purchase, you agree to our <a href="../terms.html">Terms of Service</a> and <a href="../privacy.html">Privacy Policy</a>. Your license is non-refundable and grants lifetime access to premium features.</p>' +
       '</div>' +
       '</div>';
 
@@ -998,8 +1018,33 @@ function fetchJSON(url, options) {
     modal.querySelector("#coPlaceOrder").addEventListener("click", function () {
       var email = state.email || (emailInput.value || "").trim();
       
+      // Validate email before proceeding
+      if (!email) {
+        showError("Please enter your email address first.");
+        gotoStep(1);
+        emailInput.focus();
+        return;
+      }
+      
+      // Validate email format
+      var emailValidation = validateEmail(email);
+      if (!emailValidation.valid) {
+        showError(emailValidation.message);
+        gotoStep(1);
+        emailInput.focus();
+        return;
+      }
+      
+      // Store email in state
+      state.email = email;
+      
+      // Show processing state
+      showProcessingState("Preparing your order...", "Initializing secure checkout");
+      
       // PayPal checkout only
-      startPayPalCheckout();
+      setTimeout(function() {
+        startPayPalCheckout();
+      }, 1000);
     });
 
 
