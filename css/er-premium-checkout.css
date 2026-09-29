@@ -1419,6 +1419,98 @@
   color: var(--brand-primary, #60a5fa);
 }
 
+/* PayPal Manual Container */
+.paypal-manual-container {
+  padding: 24px;
+  text-align: center;
+  background: var(--surface-light, #f8fafc);
+  border-radius: 8px;
+  border: 2px dashed var(--border-color, #e5e7eb);
+}
+
+.er-theme-dark .paypal-manual-container {
+  background: var(--surface-light, #2d2d2d);
+  border-color: var(--border-color, #374151);
+}
+
+.manual-payment-info {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.manual-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.manual-content h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-heading, #111827);
+  margin-bottom: 12px;
+}
+
+.er-theme-dark .manual-content h4 {
+  color: var(--text-heading, #f9fafb);
+}
+
+.manual-content p {
+  color: var(--text-muted, #6b7280);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.er-theme-dark .manual-content p {
+  color: var(--text-muted, #9ca3af);
+}
+
+.manual-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.manual-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--surface, #ffffff);
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.er-theme-dark .manual-step {
+  background: var(--surface, #1a1a1a);
+  border-color: var(--border-color, #374151);
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brand-primary, #3b82f6);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 0.9rem;
+  color: var(--text, #374151);
+}
+
+.er-theme-dark .step-text {
+  color: var(--text, #f9fafb);
+}
+
 .co-note {
   margin: 10px 0 0;
   font-size: 0.82rem;

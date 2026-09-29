@@ -532,6 +532,37 @@ function fetchJSON(url, options) {
           openCheckout();
         }
       });
+
+      // Manual complete button for demo mode
+      var manualCompleteBtn = modal.querySelector("#manualCompleteBtn");
+      if (manualCompleteBtn) {
+        manualCompleteBtn.addEventListener("click", function () {
+          // Simulate successful payment in demo mode
+          showProcessingState("Processing demo payment...", "Activating your license...");
+          
+          setTimeout(function() {
+            // Generate a fake license key for demo
+            var fakeLicenseKey = "WZB-ER-" + Math.random().toString(36).substr(2, 6).toUpperCase() + "-" + 
+                                  Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
+                                  Math.random().toString(36).substr(2, 6).toUpperCase();
+            
+            state.licenseKey = fakeLicenseKey;
+            state.email = email;
+            state.status = "active";
+            persist();
+            
+            showSuccessState("Payment Successful!", "Your premium license is now active.");
+            
+            setTimeout(function() {
+              close();
+              if (typeof window.updateFaceFilterUI === 'function') {
+                window.updateFaceFilterUI();
+              }
+            }, 2000);
+          }, 1500);
+        });
+      }
+
       modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
       modal.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
       return;
@@ -677,6 +708,26 @@ function fetchJSON(url, options) {
       '</div>' +
       '</div>' +
 
+      // PayPal Manual Container (fallback for demo/testing)
+      '<div id="paypalManualContainer" class="paypal-manual-container" style="display:none;">' +
+      '<div class="manual-payment-info">' +
+      '<div class="manual-icon">🎭</div>' +
+      '<div class="manual-content">' +
+      '<h4>Manual Payment Mode</h4>' +
+      '<p>This is a demo environment. In production, you would be redirected to PayPal to complete your $5.99 payment.</p>' +
+      '<div class="manual-steps">' +
+      '<div class="manual-step">' +
+      '<span class="step-number">1</span>' +
+      '<span class="step-text">Contact support for manual payment</span>' +
+      '</div>' +
+      '<div class="manual-step">' +
+      '<span class="step-number">2</span>' +
+      '<span class="step-text">Receive your license key via email</span>' +
+      '</div>' +
+      '</div>' +
+      '<button type="button" class="btn btn-primary" id="manualCompleteBtn">Complete Demo Purchase</button>' +
+      '</div>' +
+      '</div>' +
       '</div>' + // er-modal-body
 
       '<div class="modal-footer">' +
@@ -708,7 +759,7 @@ function fetchJSON(url, options) {
     var procText = modal.querySelector("#processing-text");
     var procSubtext = modal.querySelector("#processing-subtext");
     var successBox = modal.querySelector("#licSuccess");
-        var successText = modal.querySelector("#successText");
+    var successText = modal.querySelector("#successText");
     var successSubtext = modal.querySelector("#successSubtext");
 
     var paymentButtons = modal.querySelector("#paymentButtons");
@@ -770,6 +821,10 @@ function fetchJSON(url, options) {
       hideStates();
       errorBox.style.display = "block";
       if (errorDetails) errorDetails.textContent = msg;
+    }
+
+    function showSuccessState(message, subtext) {
+      showSuccess(message, subtext);
     }
 
     function showSuccess(title, subtext) {
