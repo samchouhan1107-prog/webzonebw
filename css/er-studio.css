@@ -1448,6 +1448,125 @@ body.webzonebw-er-camera-active {
     animation: er-spin 0.8s linear infinite;
 }
 
+/* PayPal Modal Overlay */
+#facefilter-paypal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+#facefilter-paypal-container .er-modal-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+#facefilter-paypal-container .er-modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#facefilter-paypal-container .er-modal-header h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+#facefilter-paypal-container .er-modal-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+#facefilter-paypal-container #paypal-buttons-container {
+    margin-bottom: 16px;
+}
+
+#facefilter-paypal-container .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+#facefilter-paypal-container .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+#facefilter-paypal-container .btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+#facefilter-paypal-container .btn-secondary {
+    background: #6b7280;
+    color: white;
+}
+
+#facefilter-paypal-container .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* PayPal button styling */
+#facefilter-paypal-container .paypal-button {
+    margin: 0 !important;
+}
+
+/* Success/Error state styling */
+#facefilter-paypal-container .success-state,
+#facefilter-paypal-container .error-state {
+    text-align: center;
+    padding: 20px;
+}
+
+#facefilter-paypal-container .success-icon,
+#facefilter-paypal-container .error-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+#facefilter-paypal-container .success-text {
+    color: #10b981;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+#facefilter-paypal-container .error-text {
+    color: #ef4444;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+#facefilter-paypal-container .success-subtext,
+#facefilter-paypal-container .error-subtext {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Processing state animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @keyframes er-spin { to { transform: rotate(360deg); } }
 
 /* Responsive: hub slabs & modals on small screens */

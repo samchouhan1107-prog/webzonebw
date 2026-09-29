@@ -121,6 +121,37 @@ function initWebZoneERStudio() {
   let qualityScale = 75; // Default quality
   let lastQualityChange = 0;
 
+  // Get display name for filter
+  function getFilterDisplayName(filter) {
+    const names = {
+      'cartoon': '🎨 Anime Cel',
+      'sunglasses': '🕶️ Designer Aviators',
+      'halo': '👑 Angel Halo',
+      'goldenhour': '🌟 Golden Hour',
+      'cinematic': '🎬 35mm Film',
+      'noir': '🖤 Leica Noir',
+      'vintage90s': '🎞️ Retro 90s',
+      'glitch': '⚡ Digital Glitch',
+      'space': '🚀 Deep Space',
+      'cyberpunk': '💡 Neon Cyberpunk',
+      'popart': '🎭 Pop Art',
+      'studiohd': '📷 Studio HD',
+      'ai-background': '🤖 AI Background',
+      'ghost-pose': '👻 Ghost Aura',
+      'pose-frame': '📸 Pose Frame',
+      'pumpkin-pose': '🎃 Pumpkin Pose',
+      'witch-ritual': '🧙 Witch Ritual',
+      'vr-nebula': '🌌 VR Nebula',
+      'haunted-forest': '🌲 Haunted Forest',
+      'vr-cyberdeck': '🖥️ VR Cyberdeck',
+      'vr-mansion': '🏚️ VR Mansion',
+      'dollar-rain': '💎 Dollar Rain',
+      'celebrity-spotlight': '⭐ Celebrity Spotlight',
+      'mother_care': '👶 Mother Care'
+    };
+    return names[filter] || filter;
+  }
+
   // ==========================================================
   // FACEFILTER ACCESS STATUS UPDATES
   // ==========================================================

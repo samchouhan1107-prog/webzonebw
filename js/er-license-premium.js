@@ -595,51 +595,17 @@ function fetchJSON(url, options) {
       '<button type="button" class="co-change" id="coEdit2" style="display:none;">Change</button>' +
       '</div>' +
       '<div class="co-step-body">' +
-      '<label class="co-option selected" id="coOptUpi">' +
-      '<input type="radio" name="coMethod" value="upi" checked>' +
+      '<label class="co-option selected" id="coOptPaypal">' +
+      '<input type="radio" name="coMethod" value="paypal" checked>' +
       '<div class="co-option-main">' +
-      '<strong>UPI — Direct Bank Transfer</strong>' +
-      '<span>GPay, PhonePe, Paytm • UPI to 8198091036@ybl</span>' +
-      '</div>' +
-      '</label>' +
-      '<label class="co-option" id="coOptPaypal">' +
-      '<input type="radio" name="coMethod" value="paypal">' +
-      '<div class="co-option-main">' +
-      '<strong>PayPal / Card (International)</strong>' +
-      '<span>Secure card payment • $5.99 USD</span>' +
-      '</div>' +
-      '</label>' +
-      '<label class="co-option" id="coOptKey">' +
-      '<input type="radio" name="coMethod" value="key">' +
-      '<div class="co-option-main">' +
-      '<strong>License Key / Promo Code</strong>' +
-      '<span>Already have a key? Redeem it here</span>' +
+      '<strong>PayPal / Card (Secure Checkout)</strong>' +
+      '<span>Secure payment • $5.99 USD</span>' +
       '</div>' +
       '</label>' +
 
-      '<div class="co-method-detail active" id="coDetailUpi">' +
-      '<div class="upi-info-card">' +
-      '<div style="font-weight:600; color:var(--text-heading);">Pay $5.99 (UPI in local currency) directly to:</div>' +
-      '<div class="upi-row">' +
-      '<span class="upi-id-badge" id="upiIdText">8198091036@ybl</span>' +
-      '<button type="button" class="btn-copy-upi" id="btnCopyUpi">📋 Copy</button>' +
-      '</div>' +
-      '<div style="margin-top:8px; font-size:0.8rem;">Funds go straight to the bank account — no middleman. After paying, tap "Place your order" to send your payment confirmation on WhatsApp.</div>' +
-      '</div>' +
-      '<button type="button" class="btn btn-secondary" id="licMailBtn" style="font-size:0.85rem; padding:8px 16px; margin-top:10px;">✉️ Request UPI Link via Email</button>' +
-      '</div>' +
-
-      '<div class="co-method-detail" id="coDetailPaypal">' +
+      '<div class="co-method-detail active" id="coDetailPaypal">' +
       '<p style="font-size:0.85rem; color:var(--text-muted);">You will be redirected to PayPal to pay $5.99 securely.</p>' +
       '<div id="paymentButtons" class="payment-section"></div>' +
-      '<div id="paypalManualContainer" style="display:none; margin-top:12px;">' +
-      '<button type="button" class="btn btn-secondary" id="licPaypalManualBtn" style="font-size:0.85rem; padding:8px 16px;">✉️ Request PayPal Invoice ($5.99 USD)</button>' +
-      '</div>' +
-      '</div>' +
-
-      '<div class="co-method-detail" id="coDetailKey">' +
-      '<input type="text" id="licKeyInput" class="email-input" placeholder="e.g. WZB-ER-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">' +
-      '<p id="licKeyError" class="email-error" style="display:none;"></p>' +
       '</div>' +
 
       '<button type="button" class="btn btn-primary co-continue" id="coMethodContinue">Use this payment method</button>' +
@@ -725,14 +691,8 @@ function fetchJSON(url, options) {
         var successText = modal.querySelector("#successText");
     var successSubtext = modal.querySelector("#successSubtext");
 
-    var copyUpiBtn = modal.querySelector("#btnCopyUpi");
-    var mailBtn = modal.querySelector("#licMailBtn");
     var paymentButtons = modal.querySelector("#paymentButtons");
     var paypalManualContainer = modal.querySelector("#paypalManualContainer");
-    var paypalManualBtn = modal.querySelector("#licPaypalManualBtn");
-
-    var keyInput = modal.querySelector("#licKeyInput");
-    var keyError = modal.querySelector("#licKeyError");
 
     /* ---------- Amazon-style 3-step flow ---------- */
     var stepEls = {
@@ -741,12 +701,10 @@ function fetchJSON(url, options) {
       3: modal.querySelector("#coStep3"),
     };
     var currentStep = 1;
-    var chosenMethod = "upi"; // "upi" | "paypal" | "key"
+    var chosenMethod = "paypal"; // "paypal" only
 
     var methodLabels = {
-      upi: "UPI — Direct Bank Transfer ($5.99)",
       paypal: "PayPal / Card ($5.99)",
-      key: "License Key / Promo Code",
     };
 
     function gotoStep(n) {
@@ -842,11 +800,9 @@ function fetchJSON(url, options) {
       gotoStep(2);
     });
 
-    // STEP 2: Payment method selection
+    // STEP 2: Payment method selection (PayPal ONLY)
     var methodOptions = {
-      upi: { opt: modal.querySelector("#coOptUpi"), detail: modal.querySelector("#coDetailUpi") },
       paypal: { opt: modal.querySelector("#coOptPaypal"), detail: modal.querySelector("#coDetailPaypal") },
-      key: { opt: modal.querySelector("#coOptKey"), detail: modal.querySelector("#coDetailKey") },
     };
 
     function selectMethod(method) {
@@ -876,56 +832,11 @@ function fetchJSON(url, options) {
       gotoStep(3);
     });;
 
-    // 2. Copy UPI ID Button Click
-    copyUpiBtn.addEventListener("click", function () {
-      var upiText = "8198091036@ybl";
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(upiText).then(function() {
-          copyUpiBtn.textContent = "✓ Copied!";
-          setTimeout(function() { copyUpiBtn.textContent = "📋 Copy UPI"; }, 2500);
-        });
-      } else {
-        copyUpiBtn.textContent = "✓ Copied!";
-        setTimeout(function() { copyUpiBtn.textContent = "📋 Copy UPI"; }, 2500);
-      }
-    });
+    // UPI section removed - PayPal only
 
-    // 3. Email Support Button Click
-    mailBtn.addEventListener("click", function () {
-      var email = emailInput.value.trim();
-      if (!validateEmailField()) {
-        emailInput.focus();
-        return;
-      }
-      getOrderEmail().then(function (orderEmail) {
-        var subject = "WebZoneBW ER Studio Premium — Order Request ($5.99 USD)";
-        var body =
-          "Hello WebZoneBW,\n\n" +
-          "I want to purchase the WebZoneBW ER Studio Premium license ($5.99 USD, one-time).\n\n" +
-          "Email (license will be bound to this): " + email + "\n\n" +
-          "Please send me the UPI payment details and activate my license.\n\n" +
-          "Thank you.";
-        window.location.href = "mailto:" + orderEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      }).catch(function () {
-        window.location.href = "mailto:samchouhan1107@gmail.com?subject=ER%20Studio%20Premium%20License&body=My%20email%3A%20" + encodeURIComponent(email);
-      });
-    });
+    // Email support removed - PayPal only
 
-    // 4. Manual PayPal Invoice Button
-    paypalManualBtn.addEventListener("click", function () {
-      var email = emailInput.value.trim();
-      if (!validateEmailField()) {
-        emailInput.focus();
-        return;
-      }
-      var subject = "WebZoneBW ER Studio Premium — PayPal Invoice Request ($5.99 USD)";
-      var body =
-        "Hello WebZoneBW,\n\n" +
-        "Please send a PayPal invoice for ER Studio Premium License ($5.99 USD) to my email:\n" +
-        email + "\n\n" +
-        "Thank you.";
-      window.location.href = "mailto:samchouhan1107@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-    });
+    // Manual invoice removed - direct PayPal only
 
     // 5. PayPal Checkout Flow (triggered from "Place your order")
     function startPayPalCheckout() {
@@ -1069,7 +980,7 @@ function fetchJSON(url, options) {
                   },
                   onError: function (err) {
                     hideStates();
-                    showError("PayPal error: " + (err.message || "Please try again or use UPI/WhatsApp."));
+                    showError("PayPal error: " + (err.message || "Please try again."));
                   }
                 })
                 .render("#paymentButtons");
@@ -1083,77 +994,15 @@ function fetchJSON(url, options) {
       });
     }
 
-    /* ---------- STEP 3: Place your order (single button) ---------- */
+    /* ---------- STEP 3: Place your order (PayPal only) ---------- */
     modal.querySelector("#coPlaceOrder").addEventListener("click", function () {
       var email = state.email || (emailInput.value || "").trim();
-
-      if (chosenMethod === "upi") {
-        // Direct UPI / bank transfer — confirm via WhatsApp
-        var msg =
-          "Hello WebZoneBW! I have paid $5.99 (equivalent in INR via UPI) for ER Studio Premium License (one-time).\n\n" +
-          "My Email: " + email + "\n\n" +
-          "Payment sent via UPI to 8198091036@ybl. Sending payment screenshot next — please send my license activation key.";
-        window.open(
-          "https://wa.me/918198091036?text=" + encodeURIComponent(msg),
-          "_blank"
-        );
-        showSuccess(
-          "🎉 Order started!",
-          "Send your payment screenshot on WhatsApp — your license key will arrive at " + email + " shortly."
-        );
-        return;
-      }
-
-      if (chosenMethod === "paypal") {
-        startPayPalCheckout();
-        return;
-      }
-
-      if (chosenMethod === "key") {
-        var keyVal = (keyInput.value || "").trim();
-        if (!keyVal) {
-          keyError.textContent = "Please enter your license key or promo code.";
-          keyError.style.display = "block";
-          gotoStep(2);
-          keyInput.focus();
-          return;
-        }
-        showProcessingState("Validating your key...", "Checking license server");
-        activateManualKey(keyVal, email)
-          .then(function (res) {
-            if (res.valid) {
-              if (keyError) keyError.style.display = "none";
-              showSuccess(
-                "💎 Premium unlocked!",
-                res.message || "Your license is now active on this device."
-              );
-              if (
-                window.WEBZONEBW_STUDIO_UI &&
-                typeof window.WEBZONEBW_STUDIO_UI.showToast === "function"
-              ) {
-                window.WEBZONEBW_STUDIO_UI.showToast(res.message || "💎 Premium unlocked!");
-              }
-              setTimeout(close, 1600);
-            } else {
-              keyError.textContent = res.message || "Invalid key. Please check and try again.";
-              keyError.style.display = "block";
-              showError(res.message || "Key not recognized. Please try again.");
-            }
-          })
-          .catch(function (err) {
-            showError(err.message || "Activation request failed.");
-          });
-        return;
-      }
+      
+      // PayPal checkout only
+      startPayPalCheckout();
     });
 
-    // Enter key inside the license key field jumps to review
-    keyInput.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        modal.querySelector("#coMethodContinue").click();
-      }
-    });
+
   }
 
   function logout() {
