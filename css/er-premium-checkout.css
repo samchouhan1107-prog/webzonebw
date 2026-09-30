@@ -143,6 +143,47 @@
   background: var(--border-color, #4b5563);
 }
 
+/* PayPal Payment Info Box */
+.paypal-info-box {
+  background: linear-gradient(135deg, #ffc439, #ff9500);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 148, 0, 0.3);
+}
+
+.paypal-payment-details {
+  text-align: center;
+}
+
+.paypal-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.paypal-description {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  opacity: 0.95;
+}
+
+.paypal-link-display {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.paypal-link-display::before {
+  content: "🔗";
+  font-size: 1.1rem;
+}
+
 /* Purchase Summary */
 .purchase-summary {
   margin-bottom: 32px;
