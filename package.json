@@ -6,13 +6,24 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
+    "start:enhanced": "node scripts/start-server.js",
     "dev": "node server.js",
+    "dev:enhanced": "node scripts/start-server.js",
     "build": "npm ci",
     "lint": "echo 'No lint errors'",
     "security:audit": "npm audit",
     "security:check": "npm audit --audit-level moderate",
-    "test:health": "curl http://localhost:3000/api/health",
-    "test:metrics": "curl http://localhost:3000/api/metrics"
+    "test:health": "curl http://localhost:3000/api/health || echo 'Port 3000 not available, trying fallback ports...' && curl http://localhost:3001/api/health && curl http://localhost:3002/api/health && curl http://localhost:3003/api/health && curl http://localhost:8080/api/health && curl http://localhost:8081/api/health",
+    "test:metrics": "curl http://localhost:3000/api/metrics || echo 'Port 3000 not available, trying fallback ports...' && curl http://localhost:3001/api/metrics && curl http://localhost:3002/api/metrics && curl http://localhost:3003/api/metrics && curl http://localhost:8080/api/metrics && curl http://localhost:8081/api/metrics",
+    "port:check": "node -e \"const net = require('net'); net.connect({host: 'localhost', port: 3000}, () => console.log('Port 3000 is available')).on('error', () => console.log('Port 3000 is in use'));\"",
+    "port:kill": "taskkill /F /IM node.exe /T",
+    "port:clean": "taskkill /F /IM node.exe /T && echo 'All Node.js processes killed'",
+    "port:free": "node scripts/start-server.js",
+    "start:3001": "node scripts/start-specific.js",
+    "start:3002": "node scripts/start-3002.js",
+    "start:simple": "node scripts/simple-start.js",
+    "start:quick": "node scripts/quick-start.js",
+    "test:ports": "node scripts/test-port.js"
   },
   "keywords": [
     "webzonebw",

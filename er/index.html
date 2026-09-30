@@ -1140,6 +1140,92 @@
 
                 </p>
 
+                <!-- =================================================
+                     SMART ENVIRONMENT STUDIO CONTROLS
+                     ================================================= -->
+
+                <div class="er-studio-controls"
+                     id="erStudioControls"
+                     role="group"
+                     aria-label="ER Studio Effect and Environment Controls">
+
+                    <label class="er-studio-switch"
+                           title="Face / Pose effect ON or OFF">
+
+                        <input type="checkbox"
+                               id="erToggleEffect"
+                               checked>
+
+                        <span class="er-switch-track"></span>
+
+                        <span class="er-switch-label">
+                            ✨ Effect
+                        </span>
+
+                    </label>
+
+                    <label class="er-studio-switch"
+                           title="Animation ON or frozen">
+
+                        <input type="checkbox"
+                               id="erToggleAnimation"
+                               checked>
+
+                        <span class="er-switch-track"></span>
+
+                        <span class="er-switch-label">
+                            🎬 Animation
+                        </span>
+
+                    </label>
+
+                    <label class="er-studio-switch"
+                           title="Smart environment background ON or OFF">
+
+                        <input type="checkbox"
+                               id="erToggleBackground"
+                               checked>
+
+                        <span class="er-switch-track"></span>
+
+                        <span class="er-switch-label">
+                            🌍 Background
+                        </span>
+
+                    </label>
+
+                    <div class="er-studio-strength">
+
+                        <label for="erStrengthRange">
+                            Strength
+                        </label>
+
+                        <input type="range"
+                               id="erStrengthRange"
+                               min="0"
+                               max="100"
+                               step="5"
+                               value="100"
+                               aria-label="Effect and environment strength">
+
+                        <span class="er-strength-value"
+                              id="erStrengthValue">
+                            100%
+                        </span>
+
+                    </div>
+
+                    <button type="button"
+                            class="er-studio-reset-btn"
+                            id="erResetStudioBtn"
+                            title="Reset studio to defaults">
+
+                        ♻️ Reset
+
+                    </button>
+
+                </div>
+
 
                 <div class="swipe-hint-bar">
 

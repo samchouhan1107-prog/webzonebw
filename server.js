@@ -42,6 +42,7 @@ const app = express();
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
+const FALLBACK_PORTS = [3001, 3002, 3003, 8080, 8081];
 
 const SERVER_VERSION = "2.4.0";
 const PROJECT_NAME = "WEBZONEBW";
@@ -2913,6 +2914,133 @@ const shutdown = (signal) => {
         process.exit(1);
     }, 10000).unref();
 };
+
+/* ============================================================
+ * PORT MANAGEMENT AND SERVER STARTUP
+ * ============================================================ */
+
+function findAvailablePort(startPort, fallbackPorts) {
+    return new Promise((resolve) => {
+        const testPort = (port) => {
+            const server = require('net').createServer();
+            server.listen(port, () => {
+                server.once('close', () => {
+                    resolve(port);
+                });
+                server.close();
+            });
+            server.on('error', () => {
+                // Try next port
+                const nextPort = fallbackPorts.shift();
+                if (nextPort) {
+                    testPort(nextPort);
+                } else {
+                    resolve(null);
+                }
+            });
+        };
+        
+        testPort(startPort);
+    });
+}
+
+async function startServer() {
+    let finalPort = PORT;
+    
+    // Simplified port check - just try to start the server
+    console.log(`[WEBZONEBW] Attempting to start on port ${finalPort}...`);
+    
+    const server = app.listen(finalPort, HOST, () => {
+        console.log(`\n[WEBZONEBW] 🚀 Server started successfully!`);
+        console.log(`[WEBZONEBW] 📡 Server listening on http://${HOST}:${finalPort}`);
+        console.log(`[WEBZONEBW] 🌐 Environment: ${NODE_ENV}`);
+        console.log(`[WEBZONEBW] 📊 Version: ${SERVER_VERSION}`);
+        console.log(`[WEBZONEBW] 🔒 Security: Enhanced 5-star implementation`);
+        console.log(`[WEBZONEBW] 📈 Health Check: http://${HOST}:${finalPort}/api/health`);
+        console.log(`[WEBZONEBW] 📊 Metrics: http://${HOST}:${finalPort}/api/metrics`);
+        console.log(`[WEBZONEBW] ⚡ Press Ctrl+C to stop the server\n`);
+    });
+    
+    server.on('error', (error) => {
+        if (error.code === 'EADDRINUSE') {
+            console.log(`[WEBZONEBW] Port ${finalPort} is in use, trying fallback ports...`);
+            
+            // Try fallback ports
+            const fallbackPorts = [3001, 3002, 3003, 8080, 8081];
+            let fallbackAttempt = 0;
+            
+            const tryNextPort = () => {
+                if (fallbackAttempt >= fallbackPorts.length) {
+                    console.error(`[WEBZONEBW] No available ports found. Please free up port ${PORT} or set PORT environment variable.`);
+                    process.exit(1);
+                }
+                
+                const nextPort = fallbackPorts[fallbackAttempt];
+                fallbackAttempt++;
+                
+                console.log(`[WEBZONEBW] Trying port ${nextPort}...`);
+                
+                const fallbackServer = app.listen(nextPort, HOST, () => {
+                    console.log(`[WEBZONEBW] 🚀 Server started on port ${nextPort}!`);
+                    console.log(`[WEBZONEBW] 📡 Server listening on http://${HOST}:${nextPort}`);
+                    console.log(`[WEBZONEBW] 🌐 Environment: ${NODE_ENV}`);
+                    console.log(`[WEBZONEBW] 📊 Version: ${SERVER_VERSION}`);
+                    console.log(`[WEBZONEBW] 🔒 Security: Enhanced 5-star implementation`);
+                    console.log(`[WEBZONEBW] 📈 Health Check: http://${HOST}:${nextPort}/api/health`);
+                    console.log(`[WEBZONEBW] 📊 Metrics: http://${HOST}:${nextPort}/api/metrics`);
+                    console.log(`[WEBZONEBW] ⚡ Press Ctrl+C to stop the server\n`);
+                    
+                    // Store the working server
+                    global.workingServer = fallbackServer;
+                });
+                
+                fallbackServer.on('error', (fallbackError) => {
+                    if (fallbackError.code === 'EADDRINUSE') {
+                        console.log(`[WEBZONEBW] Port ${nextPort} is also in use...`);
+                        tryNextPort();
+                    } else {
+                        console.error(`[WEBZONEBW] Server error:`, fallbackError);
+                        process.exit(1);
+                    }
+                });
+            };
+            
+            tryNextPort();
+        } else {
+            console.error(`[WEBZONEBW] Server error:`, error);
+            process.exit(1);
+        }
+    });
+    
+    return server;
+}
+
+// Check if a port is available
+function checkPortAvailability(port, host) {
+    return new Promise((resolve) => {
+        const net = require('net');
+        const server = net.createServer();
+        
+        server.listen(port, host, () => {
+            server.close(() => {
+                resolve(true);
+            });
+        });
+        
+        server.on('error', () => {
+            resolve(false);
+        });
+        
+        // Timeout after 1 second
+        setTimeout(() => {
+            server.close();
+            resolve(false);
+        }, 1000);
+    });
+}
+
+// Start the server
+const appServer = startServer();
 
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
