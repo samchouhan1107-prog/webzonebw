@@ -206,9 +206,10 @@ console.log(`📝 Changelog saved to: ${changelogPath}`);
 
 // Run deployment verification
 console.log('🔍 Running deployment verification...');
+let verification = false;
 try {
     // Verify all files were deployed correctly
-    const verification = config.filesToDeploy.every(filePath => {
+    verification = config.filesToDeploy.every(filePath => {
         const deployedPath = path.join(config.sourceDir, filePath);
         return fs.existsSync(deployedPath);
     });
