@@ -192,7 +192,7 @@ function fetchJSON(url, options) {
         }
       }
       
-      // API-based verification
+      // API-based verification with 24-hour expiration check
       return fetchJSON(API_BASE + "/api/license/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -217,6 +217,18 @@ function fetchJSON(url, options) {
               state.email = data.email || state.email;
               state.plan = data.plan;
               clearPromoAccess();
+              
+              // Check if license has expiration (24-hour access)
+              if (data.expiresAt) {
+                const expiresAt = new Date(data.expiresAt);
+                const now = new Date();
+                if (now >= expiresAt) {
+                  // License expired
+                  state.status = "expired";
+                  state.email = null;
+                  clearPromoAccess();
+                }
+              }
             } else {
               state.status = "inactive";
               state.email = null;
@@ -246,59 +258,17 @@ function fetchJSON(url, options) {
   function activateLicense(orderId, email, procMsg, showError, close) {
     return resolveAPIBase().then(function (apiBase) {
       if (apiBase === "local") {
-        // Static site - simulate license activation
-        const fakeLicenseKey = "WZB-ER-" + Math.random().toString(36).substr(2, 6).toUpperCase() + "-" + 
-                              Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
-                              Math.random().toString(36).substr(2, 6).toUpperCase();
-        
-        state.licenseKey = fakeLicenseKey;
-        state.email = email;
-        state.status = "active";
-        persist();
-
-        if (procMsg) {
-          procMsg.textContent = "✅ License activated!";
-        }
-
-        if (
-          window.WEBZONEBW_STUDIO_UI &&
-          typeof window.WEBZONEBW_STUDIO_UI.showToast === "function"
-        ) {
-          window.WEBZONEBW_STUDIO_UI.showToast(
-            "💎 Premium unlocked — Pose, VR & Halloween effects active!"
-          );
-        }
-
-        setTimeout(function () {
-          if (close) close();
-        }, 1400);
-
-        emit();
-        return true;
-      }
-      
-      // API-based activation
-      return fetchJSON(API_BASE + "/api/license/activate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId: orderId, email: email }),
-      })
-        .then(function (data) {
-          if (!data || !data.success || !data.licenseKey) {
-            throw new Error(
-              data && data.error
-                ? data.error
-                : "License activation failed — the payment could not be verified server-side. Premium stays locked."
-            );
-          }
-
-          state.licenseKey = data.licenseKey;
+        // Static site - only allow demo mode, no fake production licenses
+        if (confirm("This is a demo environment. In production, you would need to complete the PayPal payment to activate your license.")) {
+          const demoLicenseKey = "WZB-ER-DEMO-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+          
+          state.licenseKey = demoLicenseKey;
           state.email = email;
           state.status = "active";
           persist();
 
           if (procMsg) {
-            procMsg.textContent = "✅ License activated!";
+            procMsg.textContent = "✅ Demo license activated!";
           }
 
           if (
@@ -306,8 +276,52 @@ function fetchJSON(url, options) {
             typeof window.WEBZONEBW_STUDIO_UI.showToast === "function"
           ) {
             window.WEBZONEBW_STUDIO_UI.showToast(
-              "💎 Premium unlocked — Pose, VR & Halloween effects active!"
+              "🎭 Demo mode activated — This is for testing only. Complete PayPal payment for real access."
             );
+          }
+
+          setTimeout(function () {
+            if (close) close();
+          }, 1400);
+
+          emit();
+          return true;
+        }
+        return false;
+      }
+      
+      // Production mode - require server-side verification
+      return fetchJSON(API_BASE + "/api/license/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ licenseKey: orderId, promoKey: state.promoKey }),
+      })
+        .then(function (data) {
+          if (!data || !data.success || !data.valid) {
+            throw new Error(
+              data && data.error
+                ? data.error
+                : "License verification failed — payment could not be verified server-side. Premium stays locked."
+            );
+          }
+
+          state.licenseKey = orderId;
+          state.email = data.email || email;
+          state.status = data.valid ? "active" : "inactive";
+          persist();
+
+          if (procMsg) {
+            procMsg.textContent = "✅ License verified!";
+          }
+
+          if (
+            window.WEBZONEBW_STUDIO_UI &&
+            typeof window.WEBZONEBW_STUDIO_UI.showToast === "function"
+          ) {
+            const message = data.expiresAt 
+              ? "💎 Premium unlocked — 24-hour access activated!"
+              : "💎 Premium unlocked — Lifetime access activated!";
+            window.WEBZONEBW_STUDIO_UI.showToast(message);
           }
 
           setTimeout(function () {
@@ -320,7 +334,7 @@ function fetchJSON(url, options) {
         .catch(function (err) {
           showError(
             err.message ||
-              "License activation failed — premium stays locked. No fake unlock."
+              "License verification failed — premium stays locked. Payment verification required."
           );
           return false;
         });
@@ -1053,6 +1067,52 @@ function fetchJSON(url, options) {
     });
   }
 
+  function checkLicenseExpiration() {
+    if (state.status !== "active") return;
+    
+    // Check if we have stored license information with expiration
+    const stored = readStored();
+    if (!stored || !stored.licenseKey) return;
+    
+    resolveAPIBase().then(function (apiBase) {
+      if (apiBase === "local") {
+        // In demo mode, don't check expiration
+        return;
+      }
+      
+      // In production, check server-side expiration
+      return fetchJSON(API_BASE + "/api/license/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ licenseKey: stored.licenseKey })
+      })
+      .then(function (data) {
+        if (data && data.success && data.valid) {
+          // License is still valid
+          if (data.expiresAt) {
+            const expiresAt = new Date(data.expiresAt);
+            const now = new Date();
+            if (now >= expiresAt) {
+              // License expired
+              state.status = "expired";
+              state.email = null;
+              clearPromoAccess();
+              persist();
+              emit();
+              
+              if (window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.showToast === "function") {
+                window.WEBZONEBW_STUDIO_UI.showToast("⏰ Your premium license has expired. Please purchase again for continued access.");
+              }
+            }
+          }
+        }
+      })
+      .catch(function (error) {
+        console.error("[WEBZONEBW] License expiration check failed:", error);
+      });
+    });
+  }
+
   function getHalloweenStatus() {
     return resolveAPIBase()
       .then(function (apiBase) {
@@ -1182,5 +1242,11 @@ function fetchJSON(url, options) {
       verifyStoredLicense();
     });
   }
+
+  // Check license expiration every 5 minutes
+  setInterval(checkLicenseExpiration, 5 * 60 * 1000);
+  
+  // Check immediately after initialization
+  setTimeout(checkLicenseExpiration, 1000);
 
 })();

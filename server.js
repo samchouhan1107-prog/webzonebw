@@ -673,6 +673,67 @@ async function paypalRequest(accessToken, method, resourcePath, body) {
     return { ok: response.ok, status: response.status, data };
 }
 
+/*
+ * PayPal Webhook Verification - Security critical function
+ * Verifies webhook signature to prevent fraudulent payment notifications
+ */
+async function verifyPayPalWebhook(webhookData, headers) {
+    if (!PAYPAL_WEBHOOK_ID) {
+        console.error("[WEBZONEBW] PayPal webhook ID not configured");
+        return false;
+    }
+
+    try {
+        // PayPal webhook verification requires making a verification request
+        const verificationResponse = await fetch(`${PAYPAL_BASE_URL}/v1/notifications/verify-webhook-signature`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${await getPayPalToken()}`,
+                "Content-Type": "application/json",
+                "PayPal-Auth-Algo": headers["paypal-auth-algo"],
+                "PayPal-Transmission-Id": headers["paypal-transmission-id"],
+                "PayPal-Cert-Id": headers["paypal-cert-id"],
+                "PayPal-Transmission-Sig": headers["paypal-transmission-sig"],
+                "PayPal-Transmission-Time": headers["paypal-transmission-time"]
+            },
+            body: JSON.stringify({
+                webhook_id: PAYPAL_WEBHOOK_ID,
+                webhook_event: webhookData
+            })
+        });
+
+        if (!verificationResponse.ok) {
+            console.error("[WEBZONEBW] Webhook verification failed:", verificationResponse.status);
+            return false;
+        }
+
+        const verificationResult = await verificationResponse.json();
+        return verificationResult.verification_status === "SUCCESS";
+    } catch (error) {
+        console.error("[WEBZONEBW] Webhook verification error:", error);
+        return false;
+    }
+}
+
+/*
+ * Check if a license is valid and not expired
+ */
+function isLicenseValid(license) {
+    if (!license || license.status !== "ACTIVE") {
+        return false;
+    }
+
+    // Check expiration for ER Studio licenses (24-hour access)
+    if (license.expiresAt) {
+        const now = new Date();
+        const expiresAt = new Date(license.expiresAt);
+        return now < expiresAt;
+    }
+
+    // For non-expiring licenses (like lifetime licenses), just check status
+    return true;
+}
+
 /* ============================================================
  * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE (₹499)
  * PayPal ONLY. Fail-closed without credentials.
@@ -866,6 +927,90 @@ app.post("/api/create-order", async (req, res) => {
 });
 
 /*
+ * PayPal Webhook Handler: Secure server-side payment verification
+ * Handles PayPal IPN for real payment confirmation
+ */
+app.post("/api/paypal/webhook", async (req, res) => {
+    try {
+        const webhookData = req.body;
+        const webhookId = PAYPAL_WEBHOOK_ID;
+        
+        if (!webhookId) {
+            return res.status(503).json({ success: false, error: "WEBHOOK_NOT_CONFIGURED" });
+        }
+
+        // Verify webhook signature (security critical)
+        const isValidWebhook = await verifyPayPalWebhook(webhookData, req.headers);
+        if (!isValidWebhook) {
+            console.error("[WEBZONEBW] Invalid PayPal webhook signature");
+            return res.status(403).json({ success: false, error: "INVALID_WEBHOOK_SIGNATURE" });
+        }
+
+        // Handle PayPal webhook events
+        if (webhookData.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+            const capture = webhookData.resource;
+            const paypalOrderId = capture.custom_id || capture.supplementary_data?.related_ids?.[0];
+            
+            if (!paypalOrderId) {
+                console.error("[WEBZONEBW] PayPal webhook missing custom_id");
+                return res.status(400).json({ success: false, error: "MISSING_CUSTOM_ID" });
+            }
+
+            // Find the corresponding order in our system
+            const storedOrder = licenseStore.orders.get(paypalOrderId);
+            if (!storedOrder) {
+                console.error("[WEBZONEBW] Order not found for webhook:", paypalOrderId);
+                return res.status(404).json({ success: false, error: "ORDER_NOT_FOUND" });
+            }
+
+            // Verify payment amount and currency match
+            const capturedAmount = capture.amount?.value;
+            const expectedAmount = storedOrder.amountUsd?.toString() || "5.99";
+            
+            if (capturedAmount !== expectedAmount) {
+                console.error("[WEBZONEBW] Amount mismatch - expected:", expectedAmount, "got:", capturedAmount);
+                return res.status(400).json({ success: false, error: "AMOUNT_MISMATCH" });
+            }
+
+            // Create license with 24-hour expiration for ER Studio
+            const licenseKey = generateLicenseKey();
+            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours from now
+            
+            licenseStore.licenses.set(licenseKey, {
+                licenseKey: licenseKey,
+                email: storedOrder.email,
+                orderId: paypalOrderId,
+                plan: storedOrder.plan,
+                amount: storedOrder.amount,
+                status: "ACTIVE",
+                issuedAt: new Date().toISOString(),
+                expiresAt: expiresAt,
+                lastVerifiedAt: new Date().toISOString(),
+                paymentReference: capture.id,
+                paymentStatus: capture.status
+            });
+
+            // Update order status
+            storedOrder.status = "COMPLETED";
+            storedOrder.licenseKey = licenseKey;
+            storedOrder.completedAt = new Date().toISOString();
+            licenseStore.orders.set(paypalOrderId, storedOrder);
+            
+            saveLicenseStore();
+            
+            console.log(`[WEBZONEBW] License ${licenseKey} created for ${storedOrder.email} (24-hour access)`);
+            
+            return res.status(200).json({ success: true, licenseKey: licenseKey });
+        }
+
+        return res.status(200).json({ success: true, message: "Webhook processed" });
+    } catch (error) {
+        console.error("[WEBZONEBW] Webhook processing error:", error);
+        return res.status(500).json({ success: false, error: "WEBHOOK_PROCESSING_FAILED" });
+    }
+});
+
+/*
  * Server-side CAPTURE: called by the client after PayPal approval.
  * The license is issued ONLY when PayPal confirms a COMPLETED capture.
  */
@@ -973,6 +1118,55 @@ app.post("/api/paypal/webhook", async (req, res) => {
     } catch (error) {
         console.error("[WEBZONEBW] PayPal webhook error:", error.message);
         res.status(500).send("WEBHOOK_ERROR");
+    }
+});
+
+/*
+ * License verification endpoint - checks if license is valid and not expired
+ */
+app.post("/api/license/verify", (req, res) => {
+    try {
+        const { licenseKey, promoKey } = req.body || {};
+        
+        if (!licenseKey) {
+            return res.status(400).json({ success: false, error: "LICENSE_KEY_REQUIRED" });
+        }
+
+        const license = licenseStore.licenses.get(String(licenseKey));
+        
+        if (!license) {
+            return res.json({
+                success: true,
+                valid: false,
+                message: "License not found"
+            });
+        }
+
+        // Check if license is valid and not expired
+        const isValid = isLicenseValid(license);
+        
+        if (isValid) {
+            return res.json({
+                success: true,
+                valid: true,
+                hasPaidLicense: true,
+                hasPromoAccess: false,
+                licenseKey: licenseKey,
+                email: license.email,
+                plan: license.plan,
+                expiresAt: license.expiresAt
+            });
+        } else {
+            // License expired or invalid
+            return res.json({
+                success: true,
+                valid: false,
+                message: "License expired or invalid"
+            });
+        }
+    } catch (error) {
+        console.error("[WEBZONEBW] License verification error:", error);
+        res.status(500).json({ success: false, error: "LICENSE_VERIFICATION_FAILED" });
     }
 });
 
