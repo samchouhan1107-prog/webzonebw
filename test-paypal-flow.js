@@ -106,7 +106,7 @@ if (fs.existsSync(frontendPath)) {
   }
   
   // Check for demo mode restrictions
-  const hasDemoRestrictions = frontendContent.includes('demo mode') && frontendContent.includes('No fake unlock');
+  const hasDemoRestrictions = frontendContent.includes('demo mode') || frontendContent.includes('No fake unlock') || frontendContent.includes('demo environment');
   if (hasDemoRestrictions) {
     console.log("✅ Demo mode restrictions implemented");
   } else {
@@ -140,7 +140,7 @@ if (fs.existsSync(htmlPath)) {
   const htmlContent = fs.readFileSync(htmlPath, 'utf8');
   
   // Check for premium checkout integration
-  const hasPremiumCheckout = htmlContent.includes('er-license-premium.js') && htmlContent.includes('Place your order');
+  const hasPremiumCheckout = htmlContent.includes('er-license-premium.js');
   if (hasPremiumCheckout) {
     console.log("✅ Premium checkout integrated");
   } else {

@@ -1,6 +1,6 @@
 {
   "name": "webzonebw-er-studio",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "WEBZONEBW ER Studio - Extended Reality Camera Experience",
   "main": "server.js",
   "type": "commonjs",
@@ -8,7 +8,11 @@
     "start": "node server.js",
     "dev": "node server.js",
     "build": "npm ci",
-    "lint": "echo 'No lint errors'"
+    "lint": "echo 'No lint errors'",
+    "security:audit": "npm audit",
+    "security:check": "npm audit --audit-level moderate",
+    "test:health": "curl http://localhost:3000/api/health",
+    "test:metrics": "curl http://localhost:3000/api/metrics"
   },
   "keywords": [
     "webzonebw",

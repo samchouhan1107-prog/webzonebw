@@ -9,6 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
   initWebZoneERStudio();
 });
 
+// Initialize Enhanced FaceFilter Background Environments
+if (typeof window.WebZoneBW !== 'undefined' && 
+    window.WebZoneBW.EnhancedFaceFilter && 
+    window.WebZoneBW.EnhancedFaceFilter.BackgroundEnvironmentManager) {
+  
+  const BackgroundEnvironmentManager = window.WebZoneBW.EnhancedFaceFilter.BackgroundEnvironmentManager;
+  const backgroundManager = new BackgroundEnvironmentManager();
+  
+  // Initialize enhanced environments
+  backgroundManager.initialize().catch(console.error);
+  
+  // Add to global scope for access
+  window.WebZoneBW.BackgroundManager = backgroundManager;
+}
+
 function initWebZoneERStudio() {
   // Buttons & Controls
   const startBtn = document.getElementById("startExperienceBtn");
@@ -1216,6 +1231,164 @@ function initWebZoneERStudio() {
         desc: "Polished maternal care effect around forehead/upper-face",
         isPremium: false,
       },
+
+      // 🌟 ENHANCED SMART ENVIRONMENTS
+      {
+        id: "auto-detect",
+        name: "Auto Detect",
+        icon: "🤖",
+        category: "smart",
+        target: "scene",
+        desc: "AI automatically detects your environment and applies optimal background effects",
+        isPremium: false,
+        features: ["environmental_analysis", "auto_background_selection", "adaptive_lighting"]
+      },
+
+      {
+        id: "portrait-studio",
+        name: "Portrait Studio",
+        icon: "📸",
+        category: "smart",
+        target: "scene",
+        desc: "Professional portrait studio with perfect lighting and background blur",
+        isPremium: false,
+        features: ["depth_blur", "studio_lighting", "color_grading", "auto_retouch"]
+      },
+
+      {
+        id: "cinematic-mode",
+        name: "Cinematic Mode",
+        icon: "🎬",
+        category: "smart",
+        target: "scene",
+        desc: "Cinematic background effects with depth and atmosphere",
+        isPremium: false,
+        features: ["depth_mapping", "atmospheric_effects", "color_grading", "motion_blur"]
+      },
+
+      // 🌍 ENHANCED BACKGROUND ENVIRONMENTS
+      {
+        id: "enchanted-forest",
+        name: "Enchanted Forest",
+        icon: "🌲",
+        category: "background",
+        target: "scene",
+        desc: "Mystical forest with floating particles and magical atmosphere",
+        isPremium: false,
+        features: ["particle_system", "ambient_light", "depth_fog", "color_tint"]
+      },
+
+      {
+        id: "tropical-beach",
+        name: "Tropical Beach",
+        icon: "🏖️",
+        category: "background",
+        target: "scene",
+        desc: "Paradise beach with crystal clear water and sunset sky",
+        isPremium: false,
+        features: ["water_reflection", "sky_gradient", "sand_texture", "palm_silhouettes"]
+      },
+
+      {
+        id: "cyberpunk-city",
+        name: "Cyberpunk City",
+        icon: "🌃",
+        category: "background",
+        target: "scene",
+        desc: "Neon-lit futuristic city with rain and holographic elements",
+        isPremium: false,
+        features: ["neon_lights", "rain_effect", "holograms", "grid_overlay"]
+      },
+
+      {
+        id: "cosmic-nebula",
+        name: "Cosmic Nebula",
+        icon: "🌌",
+        category: "background",
+        target: "scene",
+        desc: "Space nebula with stars, galaxies, and cosmic dust",
+        isPremium: false,
+        features: ["star_field", "nebula_clouds", "cosmic_dust", "twinkling_stars"]
+      },
+
+      // 🎨 ADVANCED CAMERA EFFECTS
+      {
+        id: "bokeh-blur",
+        name: "Bokeh Blur",
+        icon: "✨",
+        category: "camera",
+        target: "scene",
+        desc: "Professional camera bokeh effect with depth of field",
+        isPremium: false,
+        features: ["depth_mapping", "blur_intensity", "shape_selection"]
+      },
+
+      {
+        id: "cinematic-lighting",
+        name: "Cinematic Lighting",
+        icon: "💡",
+        category: "camera",
+        target: "scene",
+        desc: "Professional cinematic lighting effects",
+        isPremium: false,
+        features: ["three_point_lighting", "rim_light", "key_light", "fill_light"]
+      },
+
+      {
+        id: "auto-enhance",
+        name: "Auto Enhance",
+        icon: "🔧",
+        category: "camera",
+        target: "scene",
+        desc: "AI-powered automatic enhancement of video quality",
+        isPremium: false,
+        features: ["auto_color_correction", "auto_contrast", "auto_sharpen", "auto_noise_reduction"]
+      },
+
+      {
+        id: "glitch-art",
+        name: "Glitch Art",
+        icon: "⚡",
+        category: "camera",
+        target: "scene",
+        desc: "Digital glitch and cyberpunk effects",
+        isPremium: false,
+        features: ["rgb_split", "scanlines", "pixelation", "data_mosh"]
+      },
+
+      // 💎 PREMIUM ENVIRONMENTS
+      {
+        id: "luxury-studio",
+        name: "Luxury Studio",
+        icon: "💎",
+        category: "premium",
+        target: "scene",
+        desc: "High-end photography studio with professional lighting",
+        isPremium: true,
+        features: ["professional_lighting", "high_resolution", "depth_blur", "color_grading"]
+      },
+
+      {
+        id: "exotic-location",
+        name: "Exotic Location",
+        icon: "🏝️",
+        category: "premium",
+        target: "scene",
+        desc: "Exotic travel destinations with perfect lighting",
+        isPremium: true,
+        features: ["professional_photography", "high_quality", "authentic_locations"]
+      },
+
+      {
+        id: "watercolor-art",
+        name: "Watercolor Art",
+        icon: "🎨",
+        category: "premium",
+        target: "scene",
+        desc: "Artistic watercolor painting backgrounds",
+        isPremium: true,
+        features: ["artistic_style", "hand_drawn", "creative_effects"]
+      }
     ];
 
   /*

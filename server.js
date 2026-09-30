@@ -43,11 +43,198 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
 
-const SERVER_VERSION = "2.3.0";
+const SERVER_VERSION = "2.4.0";
 const PROJECT_NAME = "WEBZONEBW";
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const IS_PRODUCTION = NODE_ENV === "production";
+
+/* ============================================================
+ * ENHANCED SECURITY AND MONITORING CONFIGURATION
+ * ============================================================ */
+
+const SECURITY_CONFIG = {
+    rateLimit: {
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        maxRequests: 100, // per window
+        maxRequestsPerIP: 50,
+        trustProxy: true,
+        skipSuccessfulRequests: false,
+        skipFailedRequests: false,
+    },
+    monitoring: {
+        enableDetailedLogging: true,
+        enableSecurityAlerts: true,
+        enablePerformanceMetrics: true,
+        logLevel: IS_PRODUCTION ? 'warn' : 'info'
+    },
+    validation: {
+        maxEmailLength: 254,
+        maxInputLength: 1000,
+        allowedProtocols: ['http:', 'https:'],
+        blockedPatterns: [
+            /<script/i,
+            /javascript:/i,
+            /data:/i,
+            /eval\(/i,
+            /Function\(/i
+        ]
+    }
+};
+
+/* ============================================================
+ * STANDARDIZED ERROR RESPONSE HELPER WITH ENHANCED FEATURES
+ * ============================================================ */
+
+function createErrorResponse(res, statusCode, error, message, details = {}) {
+    const requestId = crypto.randomBytes(4).toString("hex");
+    const response = {
+        success: false,
+        error: error,
+        message: message,
+        timestamp: new Date().toISOString(),
+        requestId: requestId,
+        path: res.req?.originalUrl || 'unknown',
+        method: res.req?.method || 'unknown',
+        ...details
+    };
+    
+    // Log error for monitoring
+    if (SECURITY_CONFIG.monitoring.enableDetailedLogging) {
+        console.error(`[${new Date().toISOString()}] ERROR ${statusCode}: ${error} - ${message}`, {
+            requestId,
+            path: response.path,
+            method: response.method,
+            details: details,
+            userAgent: res.req?.headers['user-agent'],
+            ip: res.req?.ip
+        });
+    }
+    
+    res.status(statusCode).json(response);
+}
+
+/* ============================================================
+ * ENHANCED INPUT VALIDATION HELPER
+ * ============================================================ */
+
+function validateInput(input, type = 'string', options = {}) {
+    if (typeof input !== type) {
+        throw new Error(`Invalid type: expected ${type}, got ${typeof input}`);
+    }
+
+    if (typeof input === 'string') {
+        // Check length
+        if (options.maxLength && input.length > options.maxLength) {
+            throw new Error(`Input too long: max ${options.maxLength} characters`);
+        }
+        
+        if (options.minLength && input.length < options.minLength) {
+            throw new Error(`Input too short: min ${options.minLength} characters`);
+        }
+
+        // Check blocked patterns
+        for (const pattern of SECURITY_CONFIG.validation.blockedPatterns) {
+            if (pattern.test(input)) {
+                throw new Error('Input contains potentially dangerous content');
+            }
+        }
+
+        // Email validation
+        if (options.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(input)) {
+                throw new Error('Invalid email format');
+            }
+            if (input.length > SECURITY_CONFIG.validation.maxEmailLength) {
+                throw new Error('Email address too long');
+            }
+        }
+    }
+
+    return true;
+}
+
+/* ============================================================
+ * ENHANCED RATE LIMITING WITH TIERED APPROACH
+ * ============================================================ */
+
+const requestCounts = new Map();
+const ipCounts = new Map();
+
+function enhancedRateLimiter(req, res, next) {
+    const ip = req.ip || req.connection.remoteAddress;
+    const now = Date.now();
+    const windowMs = SECURITY_CONFIG.rateLimit.windowMs;
+    
+    // Clean old entries
+    cleanupOldRequests(now, windowMs);
+    
+    // Check IP-based rate limiting
+    const ipRequestCount = getRecentRequests(ipCounts, ip, now, windowMs);
+    if (ipRequestCount >= SECURITY_CONFIG.rateLimit.maxRequestsPerIP) {
+        return createErrorResponse(res, 429, 'RATE_LIMIT_EXCEEDED_IP', 
+            'Too many requests from your IP address', {
+            retryAfter: Math.ceil(windowMs / 1000),
+            limit: SECURITY_CONFIG.rateLimit.maxRequestsPerIP
+        });
+    }
+    
+    // Check general rate limiting
+    const requestCount = getRecentRequests(requestCounts, ip, now, windowMs);
+    if (requestCount >= SECURITY_CONFIG.rateLimit.maxRequests) {
+        return createErrorResponse(res, 429, 'RATE_LIMIT_EXCEEDED', 
+            'Too many requests. Please try again later.', {
+            retryAfter: Math.ceil(windowMs / 1000),
+            limit: SECURITY_CONFIG.rateLimit.maxRequests
+        });
+    }
+    
+    // Set rate limit headers
+    res.setHeader("X-RateLimit-Limit", SECURITY_CONFIG.rateLimit.maxRequests);
+    res.setHeader("X-RateLimit-Remaining", Math.max(0, SECURITY_CONFIG.rateLimit.maxRequests - requestCount));
+    res.setHeader("X-RateLimit-Reset", new Date(now + windowMs).toISOString());
+    res.setHeader("X-RateLimit-IP-Limit", SECURITY_CONFIG.rateLimit.maxRequestsPerIP);
+    res.setHeader("X-RateLimit-IP-Remaining", Math.max(0, SECURITY_CONFIG.rateLimit.maxRequestsPerIP - ipRequestCount));
+    
+    next();
+}
+
+function getRecentRequests(counts, key, now, windowMs) {
+    if (!counts.has(key)) {
+        counts.set(key, []);
+    }
+    
+    const timestamps = counts.get(key);
+    
+    // Remove expired entries
+    while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
+        timestamps.shift();
+    }
+    
+    return timestamps.length;
+}
+
+function cleanupOldRequests(now, windowMs) {
+    const cleanupMap = (map) => {
+        for (const [key, timestamps] of map) {
+            while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
+                timestamps.shift();
+            }
+            if (timestamps.length === 0) {
+                map.delete(key);
+            }
+        }
+    };
+    
+    cleanupMap(requestCounts);
+    cleanupMap(ipCounts);
+}
+
+// Auto-cleanup every 5 minutes
+setInterval(() => {
+    cleanupOldRequests(Date.now(), SECURITY_CONFIG.rateLimit.windowMs);
+}, 5 * 60 * 1000).unref();
 
 // Security middleware
 app.use(helmet.hidePoweredBy());
@@ -90,7 +277,7 @@ app.use(compression({
   }
 }));
 
-// Helmet Configuration with Content Security Policy
+// Enhanced Helmet Configuration with Content Security Policy
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -104,12 +291,39 @@ app.use(helmet({
       baseUri: ["'self'"],
       formAction: ["'self'"],
       frameAncestors: ["'none'"],
-      upgradeInsecureRequests: []
-    }
+      upgradeInsecureRequests: [],
+      reportUri: "/api/security-csp-report"
+    },
+    reportOnly: false
   },
   crossOriginEmbedderPolicy: false,
-  crossOriginResourcePolicy: false
+  crossOriginResourcePolicy: false,
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
 }));
+
+// Enhanced Security Headers
+app.use((req, res, next) => {
+    // Standard Security Headers
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("X-Frame-Options", "SAMEORIGIN");
+    res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+    res.setHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()");
+    
+    // Additional Security Headers
+    res.setHeader("X-XSS-Protection", "1; mode=block");
+    res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+    res.setHeader("X-Request-ID", crypto.randomBytes(4).toString("hex"));
+    
+    // Security timing headers
+    res.setHeader("Timing-Allow-Origin", "*");
+    
+    next();
+});
 
 if (process.env.TRUST_PROXY === "true") {
     app.set("trust proxy", 1);
@@ -148,37 +362,83 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
-// Input validation and sanitization middleware
+/* ============================================================
+ * ENHANCED INPUT VALIDATION AND SANITIZATION MIDDLEWARE
+ * ============================================================ */
+
 app.use((req, res, next) => {
-    // Sanitize user input
-    const sanitizeInput = (input) => {
-        if (typeof input !== 'string') return input;
-        return input
-            .replace(/<\/?[^>]+(>|$)/g, '') // Remove HTML tags
-            .replace(/javascript:/gi, '')   // Remove javascript: protocol
-            .replace(/data:/gi, '')         // Remove data: protocol
-            .replace(/\b(alert|confirm|prompt|eval)\b/gi, ''); // Remove dangerous functions
-    };
-
-    // Sanitize body parameters
-    if (req.body) {
-        Object.keys(req.body).forEach(key => {
-            if (typeof req.body[key] === 'string') {
-                req.body[key] = sanitizeInput(req.body[key]);
+    try {
+        // Enhanced input validation
+        const validateRequestInput = (input, source = 'unknown') => {
+            if (input && typeof input === 'string') {
+                // Length validation
+                if (input.length > SECURITY_CONFIG.validation.maxInputLength) {
+                    throw new Error(`Input too long: max ${SECURITY_CONFIG.validation.maxInputLength} characters`);
+                }
+                
+                // Pattern validation
+                for (const pattern of SECURITY_CONFIG.validation.blockedPatterns) {
+                    if (pattern.test(input)) {
+                        throw new Error(`Invalid input format detected in ${source}`);
+                    }
+                }
+                
+                // Basic sanitization
+                input = input
+                    .replace(/<\/?[^>]+(>|$)/g, '') // Remove HTML tags
+                    .replace(/javascript:/gi, '')   // Remove javascript: protocol
+                    .replace(/data:/gi, '')         // Remove data: protocol
+                    .replace(/\b(alert|confirm|prompt|eval)\b/gi, ''); // Remove dangerous functions
             }
-        });
-    }
+            return input;
+        };
 
-    // Sanitize query parameters
-    if (req.query) {
-        Object.keys(req.query).forEach(key => {
-            if (typeof req.query[key] === 'string') {
-                req.query[key] = sanitizeInput(req.query[key]);
+        // Validate and sanitize body parameters
+        if (req.body) {
+            Object.keys(req.body).forEach(key => {
+                if (typeof req.body[key] === 'string') {
+                    try {
+                        validateRequestInput(req.body[key], `body.${key}`);
+                    } catch (error) {
+                        return createErrorResponse(res, 400, 'INVALID_INPUT', 
+                            `Invalid input in ${key}: ${error.message}`);
+                    }
+                }
+            });
+        }
+
+        // Validate and sanitize query parameters
+        if (req.query) {
+            Object.keys(req.query).forEach(key => {
+                if (typeof req.query[key] === 'string') {
+                    try {
+                        validateRequestInput(req.query[key], `query.${key}`);
+                    } catch (error) {
+                        return createErrorResponse(res, 400, 'INVALID_INPUT', 
+                            `Invalid input in ${key}: ${error.message}`);
+                    }
+                }
+            });
+        }
+
+        // Enhanced email validation for specific endpoints
+        if (req.body && req.body.email) {
+            try {
+                validateInput(req.body.email, 'string', { 
+                    type: 'email', 
+                    maxLength: SECURITY_CONFIG.validation.maxEmailLength 
+                });
+            } catch (error) {
+                return createErrorResponse(res, 400, 'INVALID_EMAIL', 
+                    error.message);
             }
-        });
-    }
+        }
 
-    next();
+        next();
+    } catch (error) {
+        createErrorResponse(res, 500, 'VALIDATION_ERROR', 
+            'Input validation failed', { error: error.message });
+    }
 });
 
 /* ============================================================
@@ -212,41 +472,85 @@ app.use((req, res, next) => {
 });
 
 /* ============================================================
- * REQUEST LOGGER WITH SECURITY MONITORING
+ * ENHANCED REQUEST LOGGER WITH MONITORING AND METRICS
  * ============================================================ */
 
 app.use((req, res, next) => {
     const started = Date.now();
+    const requestId = crypto.randomBytes(4).toString("hex");
 
-    // Security monitoring
+    // Enhanced security monitoring
     const securityLog = {
+        requestId: requestId,
         method: req.method,
         url: req.originalUrl,
         ip: req.ip || req.connection.remoteAddress,
         userAgent: req.headers['user-agent'],
         referer: req.headers.referer,
-        timestamp: new Date().toISOString()
+        contentType: req.headers['content-type'],
+        contentLength: req.headers['content-length'],
+        timestamp: new Date().toISOString(),
+        path: req.path,
+        query: req.query
     };
 
-    // Monitor suspicious requests
-    if (req.originalUrl.includes('..') || req.originalUrl.includes('<script')) {
-        console.warn("[WEBZONEBW SECURITY] Suspicious request detected:", securityLog);
+    // Monitor suspicious requests with enhanced detection
+    const isSuspicious = (
+        req.originalUrl.includes('..') || 
+        req.originalUrl.includes('<script') ||
+        req.originalUrl.includes('javascript:') ||
+        req.originalUrl.includes('data:') ||
+        (req.body && JSON.stringify(req.body).includes('<script'))
+    );
+
+    if (isSuspicious) {
+        console.warn(`[WEBZONEBW SECURITY] Suspicious request detected:`, {
+            ...securityLog,
+            threatType: 'potential_attack',
+            severity: 'high'
+        });
     }
 
-    res.on("finish", () => {
-        const duration = Date.now() - started;
+    // Performance monitoring
+    if (SECURITY_CONFIG.monitoring.enablePerformanceMetrics) {
+        res.on("finish", () => {
+            const duration = Date.now() - started;
+            const memoryUsage = process.memoryUsage();
+            
+            // Log performance metrics
+            const perfLog = {
+                requestId: requestId,
+                method: req.method,
+                url: req.originalUrl,
+                statusCode: res.statusCode,
+                duration: duration,
+                memoryUsed: Math.round(memoryUsage.rss / 1024 / 1024), // MB
+                timestamp: new Date().toISOString()
+            };
 
-        // Enhanced logging with security context
-        const logMessage = `[WEBZONEBW] ${req.method} ${req.originalUrl} ${res.statusCode} ${duration}ms`;
+            // Categorize log messages
+            if (res.statusCode >= 500) {
+                console.error(`[WEBZONEBW ERROR] ${JSON.stringify(perfLog)}`);
+            } else if (res.statusCode >= 400) {
+                console.warn(`[WEBZONEBW WARN] ${JSON.stringify(perfLog)}`);
+            } else if (duration > 1000) { // Slow requests
+                console.warn(`[WEBZONEBW SLOW] ${JSON.stringify(perfLog)}`);
+            } else {
+                console.log(`[WEBZONEBW INFO] ${JSON.stringify(perfLog)}`);
+            }
 
-        if (res.statusCode >= 400) {
-            console.error(`[WEBZONEBW ERROR] ${logMessage}`);
-        } else if (res.statusCode >= 300) {
-            console.warn(`[WEBZONEBW REDIRECT] ${logMessage}`);
-        } else {
-            console.log(`[WEBZONEBW] ${logMessage}`);
-        }
-    });
+            // Security alerts for specific patterns
+            if (res.statusCode === 401 || res.statusCode === 403) {
+                console.warn(`[WEBZONEBW SECURITY] Authentication/Authorization event:`, {
+                    ...perfLog,
+                    eventType: 'auth_failure'
+                });
+            }
+        });
+    }
+
+    // Add request ID to response for tracking
+    res.set('X-Request-ID', requestId);
 
     next();
 });
@@ -260,7 +564,10 @@ app.use((req, res, next) => {
     if (req.method === 'GET' && req.headers['content-length']) {
         return res.status(400).json({
             success: false,
-            error: "Invalid request: GET requests should not have content"
+            error: "INVALID_REQUEST",
+            message: "Invalid request: GET requests should not have content",
+            timestamp: new Date().toISOString(),
+            requestId: crypto.randomBytes(4).toString("hex")
         });
     }
 
@@ -311,11 +618,12 @@ app.use((req, res, next) => {
 });
 
 /* ============================================================
- * SIMPLE USER SESSION SYSTEM
+ * ENHANCED USER SESSION SYSTEM
  * ============================================================ */
 
-// Simple in-memory user session store
+// Enhanced in-memory user session store with cleanup
 const userSessions = new Map();
+const SESSION_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
 // Create user session (called on login or first access)
 function createUserSession(userEmail) {
@@ -325,98 +633,120 @@ function createUserSession(userEmail) {
         userEmail: userEmail,
         userId: userEmail.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + "-" + Date.now(),
         createdAt: new Date().toISOString(),
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + SESSION_TIMEOUT).toISOString()
     };
     
     userSessions.set(sessionId, session);
+    
+    // Log session creation
+    console.log(`[WEBZONEBW SESSION] Session created for ${userEmail}: ${sessionId}`);
+    
     return session;
 }
 
-// Get user session from request
+// Get user session from request with validation
 function getUserSession(req) {
     const sessionId = req.headers["x-session-id"] || req.cookies?.session_id;
-    if (sessionId && userSessions.has(sessionId)) {
-        const session = userSessions.get(sessionId);
-        session.lastActivity = new Date().toISOString();
-        return session;
+    
+    if (!sessionId || !userSessions.has(sessionId)) {
+        return null;
     }
-    return null;
+    
+    const session = userSessions.get(sessionId);
+    const now = new Date();
+    const sessionAge = now - new Date(session.lastActivity);
+    
+    // Check if session is expired
+    if (sessionAge > SESSION_TIMEOUT) {
+        userSessions.delete(sessionId);
+        console.log(`[WEBZONEBW SESSION] Session expired and removed: ${sessionId}`);
+        return null;
+    }
+    
+    // Update last activity
+    session.lastActivity = now.toISOString();
+    
+    return session;
+}
+
+// Clean up expired sessions every 10 minutes
+function cleanupExpiredSessions() {
+    const now = new Date();
+    let cleanedCount = 0;
+    
+    for (const [sessionId, session] of userSessions) {
+        const sessionAge = now - new Date(session.lastActivity);
+        if (sessionAge > SESSION_TIMEOUT) {
+            userSessions.delete(sessionId);
+            cleanedCount++;
+        }
+    }
+    
+    if (cleanedCount > 0) {
+        console.log(`[WEBZONEBW SESSION] Cleaned up ${cleanedCount} expired sessions`);
+    }
+}
+
+// Start session cleanup interval
+setInterval(cleanupExpiredSessions, 10 * 60 * 1000).unref();
+
+// Get session statistics
+function getSessionStats() {
+    const now = new Date();
+    let activeCount = 0;
+    let expiredCount = 0;
+    
+    for (const session of userSessions.values()) {
+        const sessionAge = now - new Date(session.lastActivity);
+        if (sessionAge <= SESSION_TIMEOUT) {
+            activeCount++;
+        } else {
+            expiredCount++;
+        }
+    }
+    
+    return {
+        active: activeCount,
+        expired: expiredCount,
+        total: userSessions.size
+    };
 }
 
 /* ============================================================
- * SIMPLE IN-MEMORY RATE LIMITER FOR API ROUTES
+ * ENHANCED RATE LIMITING IMPLEMENTATION
  * ============================================================ */
 
-const apiRequestCounts = new Map();
+// Apply enhanced rate limiting to all API routes
+app.use("/api", enhancedRateLimiter);
 
-function rateLimiter(req, res, next) {
-    const ip = req.ip || req.connection.remoteAddress;
-    const now = Date.now();
-    const windowMs = 60 * 1000;
-    const maxRequests = 100; // Increased to 100 for smoother operations
-
-    if (!apiRequestCounts.has(ip)) {
-        apiRequestCounts.set(ip, []);
-    }
-
-    const timestamps = apiRequestCounts.get(ip);
-
-    // Remove expired entries
-    while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
-        timestamps.shift();
-    }
-
-    // Set rate limit headers
-    res.setHeader("X-RateLimit-Limit", maxRequests);
-    res.setHeader("X-RateLimit-Remaining", Math.max(0, maxRequests - timestamps.length));
-    res.setHeader("X-RateLimit-Reset", new Date(now + windowMs).toISOString());
-
-    if (timestamps.length >= maxRequests) {
-        res.setHeader("Retry-After", Math.ceil(windowMs / 1000));
-        console.warn(`[WEBZONEBW SECURITY] Rate limit exceeded for IP: ${ip}`);
-        return res.status(429).json({
-            success: false,
-            error: "Too many requests. Please try again later.",
-            retryAfter: Math.ceil(windowMs / 1000),
-            security: "rate_limit_exceeded"
-        });
-    }
-
-    timestamps.push(now);
-    next();
-}
-
-// Clean up stale IP records every 5 minutes
-setInterval(() => {
-    const now = Date.now();
-    const windowMs = 60 * 1000;
-    for (const [ip, timestamps] of apiRequestCounts) {
-        while (timestamps.length > 0 && timestamps[0] <= now - windowMs) {
-            timestamps.shift();
-        }
-        if (timestamps.length === 0) {
-            apiRequestCounts.delete(ip);
-        }
-    }
-}, 5 * 60 * 1000).unref();
-
-app.use("/api", rateLimiter);
+// Additional rate limiting for sensitive endpoints
+app.use("/api/paypal", enhancedRateLimiter);
+app.use("/api/login", enhancedRateLimiter);
 
 /* ============================================================
  * USER AUTHENTICATION ENDPOINTS
  * ============================================================ */
 
-// Simple user login (creates session)
+// Enhanced user login (creates session)
 app.post("/api/login", (req, res) => {
     try {
         const { email } = req.body || {};
         
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            return res.status(400).json({
-                success: false,
-                error: "INVALID_EMAIL",
-                message: "Please provide a valid email address."
+        // Use enhanced validation
+        if (!email) {
+            return createErrorResponse(res, 400, 'MISSING_EMAIL', 
+                'Email address is required');
+        }
+        
+        try {
+            validateInput(email, 'string', { 
+                type: 'email', 
+                maxLength: SECURITY_CONFIG.validation.maxEmailLength 
             });
+        } catch (validationError) {
+            return createErrorResponse(res, 400, 'INVALID_EMAIL', 
+                validationError.message);
         }
 
         // Create or get existing session
@@ -438,24 +768,33 @@ app.post("/api/login", (req, res) => {
             sessionId: session.sessionId,
             userId: session.userId,
             userEmail: session.userEmail,
-            message: "Session created successfully"
+            message: "Session created successfully",
+            timestamp: new Date().toISOString()
         });
     } catch (error) {
-        console.error("[WEBZONEBW] Login error:", error);
-        res.status(500).json({ success: false, error: "LOGIN_FAILED" });
+        createErrorResponse(res, 500, 'LOGIN_FAILED', 
+            'Login failed due to server error', { error: error.message });
     }
 });
 
-// Get current user session
+// Enhanced current user session endpoint
 app.get("/api/session", (req, res) => {
     try {
         const session = getUserSession(req);
         if (!session) {
-            return res.status(401).json({
-                success: false,
-                error: "NO_SESSION",
-                message: "No active session found."
-            });
+            return createErrorResponse(res, 401, 'NO_SESSION', 
+                'No active session found. Please login again.');
+        }
+
+        // Check if session is expired (older than 24 hours)
+        const sessionAge = Date.now() - new Date(session.createdAt).getTime();
+        const isExpired = sessionAge > 24 * 60 * 60 * 1000;
+
+        if (isExpired) {
+            // Remove expired session
+            userSessions.delete(session.sessionId);
+            return createErrorResponse(res, 401, 'SESSION_EXPIRED', 
+                'Session has expired. Please login again.');
         }
 
         res.json({
@@ -464,17 +803,115 @@ app.get("/api/session", (req, res) => {
             userId: session.userId,
             userEmail: session.userEmail,
             createdAt: session.createdAt,
-            lastActivity: session.lastActivity
+            lastActivity: session.lastActivity,
+            sessionAge: Math.round(sessionAge / 1000 / 60), // minutes
+            timestamp: new Date().toISOString()
         });
     } catch (error) {
-        console.error("[WEBZONEBW] Session check error:", error);
-        res.status(500).json({ success: false, error: "SESSION_CHECK_FAILED" });
+        createErrorResponse(res, 500, 'SESSION_CHECK_FAILED', 
+            'Failed to check session status', { error: error.message });
     }
 });
 
 /* ============================================================
  * API ENDPOINTS (Ensures explicit application/json charset=utf-8)
  * ============================================================ */
+
+/* ============================================================
+ * ENHANCED MONITORING AND METRICS ENDPOINTS
+ * ============================================================ */
+
+app.get("/api/health", (req, res) => {
+    const memoryUsage = process.memoryUsage();
+    const healthData = {
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        version: SERVER_VERSION,
+        uptime: process.uptime(),
+        environment: NODE_ENV,
+        memory: {
+            used: Math.round(memoryUsage.rss / 1024 / 1024), // MB
+            total: Math.round(memoryUsage.heapTotal / 1024 / 1024), // MB
+            free: Math.round(memoryUsage.heapFree / 1024 / 1024), // MB
+            external: Math.round(memoryUsage.external / 1024 / 1024) // MB
+        },
+        sessions: {
+            active: userSessions.size,
+            totalCreated: userSessions.size
+        },
+        licenses: {
+            total: licenseStore.licenses.size,
+            active: Array.from(licenseStore.licenses.values()).filter(l => l.status === "ACTIVE").length
+        },
+        security: {
+            rateLimitWindow: SECURITY_CONFIG.rateLimit.windowMs,
+            maxRequests: SECURITY_CONFIG.rateLimit.maxRequests,
+            maxRequestsPerIP: SECURITY_CONFIG.rateLimit.maxRequestsPerIP
+        }
+    };
+
+    res.json(healthData);
+});
+
+/* CSP Report Endpoint */
+app.post("/api/security-csp-report", (req, res) => {
+    if (SECURITY_CONFIG.monitoring.enableSecurityAlerts) {
+        console.warn("[WEBZONEBW SECURITY] CSP Violation Report:", {
+            timestamp: new Date().toISOString(),
+            report: req.body,
+            userAgent: req.headers['user-agent'],
+            ip: req.ip
+        });
+    }
+    
+    res.status(204).send();
+});
+
+/* Enhanced Metrics Endpoint */
+app.get("/api/metrics", (req, res) => {
+    const memoryUsage = process.memoryUsage();
+    const now = Date.now();
+    
+    const metrics = {
+        timestamp: new Date().toISOString(),
+        system: {
+            uptime: process.uptime(),
+            memory: {
+                used: Math.round(memoryUsage.rss / 1024 / 1024),
+                total: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+                percentage: Math.round((memoryUsage.rss / memoryUsage.heapTotal) * 100)
+            },
+            cpu: process.cpuUsage()
+        },
+        application: {
+            sessions: {
+                active: userSessions.size,
+                totalCreated: userSessions.size
+            },
+            licenses: {
+                total: licenseStore.licenses.size,
+                active: Array.from(licenseStore.licenses.values()).filter(l => l.status === "ACTIVE").length,
+                expired: Array.from(licenseStore.licenses.values()).filter(l => {
+                    return l.expiresAt && new Date(l.expiresAt) < now;
+                }).length
+            },
+            orders: {
+                total: licenseStore.orders.size,
+                completed: Array.from(licenseStore.orders.values()).filter(o => o.status === "COMPLETED").size,
+                pending: Array.from(licenseStore.orders.values()).filter(o => o.status === "CREATED").size
+            }
+        },
+        security: {
+            rateLimit: {
+                windowMs: SECURITY_CONFIG.rateLimit.windowMs,
+                maxRequests: SECURITY_CONFIG.rateLimit.maxRequests,
+                maxRequestsPerIP: SECURITY_CONFIG.rateLimit.maxRequestsPerIP
+            }
+        }
+    };
+
+    res.json(metrics);
+});
 
 app.use("/api", (req, res, next) => {
     res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -748,22 +1185,37 @@ app.post("/api/paypal/create-order", async (req, res) => {
     try {
         const { planId, customerEmail } = req.body || {};
 
+        // Enhanced validation
         if (planId && planId !== ER_PREMIUM_PLAN) {
-            return res.status(400).json({ success: false, error: "UNKNOWN_PLAN" });
+            return createErrorResponse(res, 400, 'UNKNOWN_PLAN', 
+                'Invalid plan ID specified');
         }
 
         if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-            return res.status(503).json({ success: false, error: "PAYMENT_NOT_CONFIGURED" });
+            return createErrorResponse(res, 503, 'PAYMENT_NOT_CONFIGURED', 
+                'Payment system is not configured');
         }
 
         const email = String(customerEmail || "").trim();
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            return res.status(400).json({ success: false, error: "INVALID_CUSTOMER_DETAILS" });
+        if (!email) {
+            return createErrorResponse(res, 400, 'MISSING_CUSTOMER_EMAIL', 
+                'Customer email is required');
+        }
+
+        try {
+            validateInput(email, 'string', { 
+                type: 'email', 
+                maxLength: SECURITY_CONFIG.validation.maxEmailLength 
+            });
+        } catch (validationError) {
+            return createErrorResponse(res, 400, 'INVALID_CUSTOMER_EMAIL', 
+                validationError.message);
         }
 
         const accessToken = await getPayPalToken();
         if (!accessToken) {
-            return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
+            return createErrorResponse(res, 502, 'GATEWAY_AUTH_FAILED', 
+                'Payment gateway authentication failed');
         }
 
         const { ok, status, data } = await paypalRequest(accessToken, "POST", "/v2/checkout/orders", {
@@ -780,7 +1232,8 @@ app.post("/api/paypal/create-order", async (req, res) => {
 
         if (!ok || !data.id) {
             console.error("[WEBZONEBW] PayPal order creation failed:", status, data);
-            return res.status(502).json({ success: false, error: "GATEWAY_ORDER_FAILED" });
+            return createErrorResponse(res, 502, 'GATEWAY_ORDER_FAILED', 
+                'Failed to create PayPal order', { paypalStatus: status, paypalData: data });
         }
 
         licenseStore.orders.set(data.id, {
@@ -802,11 +1255,12 @@ app.post("/api/paypal/create-order", async (req, res) => {
             amount: ER_PREMIUM_AMOUNT,
             amountUsd: ER_PREMIUM_AMOUNT_USD,
             currency: PAYPAL_CURRENCY,
-            mode: PAYPAL_MODE
+            mode: PAYPAL_MODE,
+            timestamp: new Date().toISOString()
         });
     } catch (error) {
-        console.error("[WEBZONEBW] Payment init failed:", error);
-        res.status(500).json({ success: false, error: "Payment init failed" });
+        createErrorResponse(res, 500, 'PAYMENT_INIT_FAILED', 
+            'Payment initialization failed', { error: error.message });
     }
 });
 
@@ -927,8 +1381,8 @@ app.post("/api/create-order", async (req, res) => {
 });
 
 /*
- * PayPal Webhook Handler: Secure server-side payment verification
- * Handles PayPal IPN for real payment confirmation
+ * Enhanced PayPal Webhook Handler: Secure server-side payment verification
+ * Handles PayPal IPN for real payment confirmation with enhanced validation
  */
 app.post("/api/paypal/webhook", async (req, res) => {
     try {
@@ -936,31 +1390,41 @@ app.post("/api/paypal/webhook", async (req, res) => {
         const webhookId = PAYPAL_WEBHOOK_ID;
         
         if (!webhookId) {
-            return res.status(503).json({ success: false, error: "WEBHOOK_NOT_CONFIGURED" });
+            return createErrorResponse(res, 503, 'WEBHOOK_NOT_CONFIGURED', 
+                'PayPal webhook is not configured');
         }
 
         // Verify webhook signature (security critical)
         const isValidWebhook = await verifyPayPalWebhook(webhookData, req.headers);
         if (!isValidWebhook) {
             console.error("[WEBZONEBW] Invalid PayPal webhook signature");
-            return res.status(403).json({ success: false, error: "INVALID_WEBHOOK_SIGNATURE" });
+            return createErrorResponse(res, 403, 'INVALID_WEBHOOK_SIGNATURE', 
+                'Invalid PayPal webhook signature');
         }
 
-        // Handle PayPal webhook events
+        // Handle PayPal webhook events with enhanced validation
         if (webhookData.event_type === "PAYMENT.CAPTURE.COMPLETED") {
             const capture = webhookData.resource;
             const paypalOrderId = capture.custom_id || capture.supplementary_data?.related_ids?.[0];
             
             if (!paypalOrderId) {
                 console.error("[WEBZONEBW] PayPal webhook missing custom_id");
-                return res.status(400).json({ success: false, error: "MISSING_CUSTOM_ID" });
+                return createErrorResponse(res, 400, 'MISSING_CUSTOM_ID', 
+                    'PayPal webhook missing custom identifier');
+            }
+
+            // Enhanced validation for webhook data
+            if (!capture || !capture.amount || !capture.status) {
+                return createErrorResponse(res, 400, 'INVALID_WEBHOOK_DATA', 
+                    'Invalid webhook data structure');
             }
 
             // Find the corresponding order in our system
             const storedOrder = licenseStore.orders.get(paypalOrderId);
             if (!storedOrder) {
                 console.error("[WEBZONEBW] Order not found for webhook:", paypalOrderId);
-                return res.status(404).json({ success: false, error: "ORDER_NOT_FOUND" });
+                return createErrorResponse(res, 404, 'ORDER_NOT_FOUND', 
+                    `Order not found: ${paypalOrderId}`);
             }
 
             // Verify payment amount and currency match
@@ -969,7 +1433,31 @@ app.post("/api/paypal/webhook", async (req, res) => {
             
             if (capturedAmount !== expectedAmount) {
                 console.error("[WEBZONEBW] Amount mismatch - expected:", expectedAmount, "got:", capturedAmount);
-                return res.status(400).json({ success: false, error: "AMOUNT_MISMATCH" });
+                return createErrorResponse(res, 400, 'AMOUNT_MISMATCH', 
+                    'Payment amount mismatch', {
+                    expected: expectedAmount,
+                    received: capturedAmount
+                });
+            }
+
+            // Verify payment status
+            if (capture.status !== "COMPLETED") {
+                console.error("[WEBZONEBW] Payment not completed - status:", capture.status);
+                return createErrorResponse(res, 400, 'PAYMENT_NOT_COMPLETED', 
+                    'Payment is not completed', {
+                    paymentStatus: capture.status
+                });
+            }
+
+            // Check if license already exists for this order
+            if (storedOrder.licenseKey) {
+                console.log(`[WEBZONEBW] License already exists for order ${paypalOrderId}`);
+                return res.json({
+                    success: true,
+                    message: "License already issued for this order",
+                    licenseKey: storedOrder.licenseKey,
+                    timestamp: new Date().toISOString()
+                });
             }
 
             // Create license with 24-hour expiration for ER Studio
@@ -987,7 +1475,8 @@ app.post("/api/paypal/webhook", async (req, res) => {
                 expiresAt: expiresAt,
                 lastVerifiedAt: new Date().toISOString(),
                 paymentReference: capture.id,
-                paymentStatus: capture.status
+                paymentStatus: capture.status,
+                currency: capture.amount?.currency_code
             });
 
             // Update order status
@@ -1000,13 +1489,23 @@ app.post("/api/paypal/webhook", async (req, res) => {
             
             console.log(`[WEBZONEBW] License ${licenseKey} created for ${storedOrder.email} (24-hour access)`);
             
-            return res.status(200).json({ success: true, licenseKey: licenseKey });
+            return res.json({
+                success: true,
+                licenseKey: licenseKey,
+                message: "License created successfully",
+                expiresAt: expiresAt,
+                timestamp: new Date().toISOString()
+            });
         }
 
-        return res.status(200).json({ success: true, message: "Webhook processed" });
+        return res.json({
+            success: true,
+            message: "Webhook processed successfully",
+            timestamp: new Date().toISOString()
+        });
     } catch (error) {
-        console.error("[WEBZONEBW] Webhook processing error:", error);
-        return res.status(500).json({ success: false, error: "WEBHOOK_PROCESSING_FAILED" });
+        createErrorResponse(res, 500, 'WEBHOOK_PROCESSING_FAILED', 
+            'Webhook processing failed', { error: error.message });
     }
 });
 
@@ -1018,17 +1517,21 @@ app.post("/api/paypal/capture", async (req, res) => {
     try {
         const { orderId, email } = req.body || {};
 
+        // Enhanced validation
         if (!orderId) {
-            return res.status(400).json({ success: false, error: "ORDER_ID_REQUIRED" });
+            return createErrorResponse(res, 400, 'ORDER_ID_REQUIRED', 
+                'Order ID is required');
         }
 
         if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-            return res.status(503).json({ success: false, error: "PAYMENT_NOT_CONFIGURED" });
+            return createErrorResponse(res, 503, 'PAYMENT_NOT_CONFIGURED', 
+                'Payment system is not configured');
         }
 
         const accessToken = await getPayPalToken();
         if (!accessToken) {
-            return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
+            return createErrorResponse(res, 502, 'GATEWAY_AUTH_FAILED', 
+                'Payment gateway authentication failed');
         }
 
         const { ok, data } = await paypalRequest(
@@ -2366,6 +2869,20 @@ server.on("error", (error) => {
 /* ============================================================
  * GRACEFUL SHUTDOWN
  * ============================================================ */
+
+/* ============================================================
+ * HEALTH CHECK ENDPOINT
+ * ============================================================ */
+
+app.get("/api/health", (req, res) => {
+    res.json({
+        status: "healthy",
+        timestamp: new Date().toISOString(),
+        version: SERVER_VERSION,
+        uptime: process.uptime(),
+        environment: NODE_ENV
+    });
+});
 
 let shuttingDown = false;
 
