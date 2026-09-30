@@ -1397,6 +1397,591 @@ function initWebZoneERStudio() {
    * function. Do NOT redeclare it here.
    */
 
+  // ==========================================================
+  // SMART EFFECT → ENVIRONMENT ENGINE (v3)
+  // Each filter resolves to: environment + frame + lighting +
+  // atmosphere + animation preset. The environment layer is
+  // rendered UNDER the effect, the frame layer OVER it, so the
+  // filter belongs to the scene instead of a flat backdrop.
+  // ==========================================================
+
+  const ER_ENVIRONMENTS = {
+    studio:    { label: "Studio Portrait",  palette: ["246,182,215", "253,224,71", "255,255,255"], fog: 0,   glow: "rgba(251,191,36,0.10)", frame: "soft",    light: "warm-top" },
+    portrait:  { label: "Cinematic Portrait", palette: ["251,146,60", "56,189,248"], fog: 0.05, glow: "rgba(147,51,234,0.10)", frame: "soft",   light: "three-point" },
+    forest:    { label: "Haunted Forest",   palette: ["163,230,53", "226,232,240"], fog: 0.35, glow: "rgba(34,197,94,0.10)", frame: "organic", light: "moon-top" },
+    moonlight: { label: "Moonlit Woods",    palette: ["226,232,240", "196,181,253"], fog: 0.30, glow: "rgba(196,181,253,0.14)", frame: "organic", light: "moon-top" },
+    cemetery:  { label: "Ruined Cemetery",  palette: ["148,163,184", "107,114,128"], fog: 0.45, glow: "rgba(15,23,42,0.28)", frame: "organic", light: "cold-dim" },
+    ghost:     { label: "Spectral Night",   palette: ["224,242,254", "165,180,252"], fog: 0.40, glow: "rgba(199,210,254,0.16)", frame: "soft",    light: "cold-bloom" },
+    ruins:     { label: "Monster Ruins",    palette: ["120,113,108", "87,83,78"], fog: 0.40, glow: "rgba(0,0,0,0.30)", frame: "organic", light: "strong-shadow" },
+    witch:     { label: "Witch Moonlight",  palette: ["192,132,252", "74,222,128", "226,232,240"], fog: 0.32, glow: "rgba(147,51,234,0.16)", frame: "organic", light: "magic-glow" },
+    hellfire:  { label: "Hellfire Depths",  palette: ["239,68,68", "251,146,60"], fog: 0.22, glow: "rgba(239,68,68,0.16)", frame: "ember",  light: "ember-under" },
+    neon:      { label: "Neon Cyber City",  palette: ["34,211,238", "236,72,153"], fog: 0.18, glow: "rgba(6,182,212,0.14)", frame: "neon",   light: "neon-scan" },
+    fantasy:   { label: "Magical Glow",     palette: ["244,114,182", "250,204,21", "255,255,255"], fog: 0.12, glow: "rgba(244,114,182,0.12)", frame: "soft", light: "bloom" },
+    cinema:    { label: "35mm Location",    palette: ["15,118,110", "249,115,22"], fog: 0.08, glow: "rgba(15,23,42,0.22)", frame: "letterbox", light: "anamorphic" },
+    glitch:    { label: "Digital Wasteland", palette: ["239,68,68", "6,182,212"], fog: 0.10, glow: "rgba(6,182,212,0.12)", frame: "tech",   light: "strobe" },
+    nebula:    { label: "Deep Nebula",      palette: ["147,51,234", "59,130,246", "226,232,240"], fog: 0.10, glow: "rgba(147,51,234,0.16)", frame: "tech", light: "starfield" },
+    void:      { label: "Surreal Void",     palette: ["168,85,247", "6,182,212"], fog: 0.20, glow: "rgba(88,28,135,0.22)", frame: "tech",   light: "quantum" },
+    patch:     { label: "Pumpkin Patch",    palette: ["249,115,22", "250,204,21"], fog: 0.15, glow: "rgba(249,115,22,0.14)", frame: "ember",  light: "lantern" },
+    cyber:     { label: "VR Cyberdeck Grid", palette: ["34,211,238", "103,232,249"], fog: 0.06, glow: "rgba(34,211,238,0.12)", frame: "tech",  light: "holo-grid" },
+    manor:     { label: "Haunted Manor",    palette: ["67,56,81", "148,163,184"], fog: 0.35, glow: "rgba(30,27,75,0.30)", frame: "organic", light: "storm-light" }
+  };
+
+  /* filter id → environment id (per-effect smart mapping) */
+  const EFFECT_ENVIRONMENT_MAP = {
+    // Smart
+    "auto-detect": "portrait", "portrait-studio": "studio", "cinematic-mode": "cinema",
+    // Face
+    sunglasses: "studio", halo: "fantasy", goldenhour: "portrait", cartoon: "studio", "mother_care": "portrait",
+    // Scene
+    noir: "cinema", vintage90s: "portrait", cinematic: "cinema", glitch: "glitch",
+    space: "nebula", cyberpunk: "neon",
+    // Pose
+    "ghost-pose": "ghost", "pose-frame": "studio", "pumpkin-pose": "patch", "witch-ritual": "witch",
+    // VR
+    "vr-nebula": "nebula", "haunted-forest": "forest", "vr-cyberdeck": "cyber", "vr-mansion": "manor",
+    // Ghost / Monster / Zombie / Witch / Devil / Skull
+    "ghost-aura": "ghost", "spirit-possess": "ghost", "phantom-veil": "ghost",
+    "monster-fangs": "ruins", "beast-roar": "ruins", "creature-horns": "ruins",
+    "zombie-virus": "cemetery", "undead-plague": "cemetery", "walking-dead": "cemetery",
+    "witch-curse": "moonlight", "spell-caster": "witch", "potion-master": "witch",
+    "pumpkin-face": "patch", "carved-pumpkin": "patch", "pumpkin-king": "patch",
+    "skull-face": "cemetery", "death-mask": "cemetery", "reaper-essence": "ghost",
+    "devil-horns": "hellfire", "demon-possession": "hellfire", "hellfire-eyes": "hellfire",
+    // Cinema
+    "horror-movie": "cinema", "slasher-flick": "cinema", "psychological-horror": "manor",
+    // Experimental
+    "quantum-horror": "void", "dimensional-rip": "void", "void-exposure": "void",
+    // Premium horror
+    "neon-horror": "neon", "vampire-curse": "cemetery", "werewolf-transformation": "moonlight"
+  };
+
+  /* category → environment fallback (used when id has no explicit map) */
+  const ER_CATEGORY_ENV = {
+    smart: "studio", face: "studio", pose: "portrait", scene: "cinema", vr: "nebula",
+    ghost: "ghost", monster: "ruins", zombie: "cemetery", witch: "witch",
+    pumpkin: "patch", skull: "cemetery", devil: "hellfire", cinema: "cinema",
+    experimental: "void", horror: "ruins", background: "portrait", camera: "portrait",
+    premium: "nebula"
+  };
+
+  function resolveEffectEnvironment(filterId, category) {
+    return (
+      EFFECT_ENVIRONMENT_MAP[filterId] ||
+      ER_CATEGORY_ENV[category] ||
+      "portrait"
+    );
+  }
+
+  // ---------- Studio state (shared with the render pipeline) ----------
+
+  let studioState = {
+    effectEnabled: true,     // Face/Pose filter ON/OFF
+    animationEnabled: true,  // animation ON/OFF (freezes fx time)
+    backgroundEnabled: true, // environment layers ON/OFF
+    strength: 1.0            // 0 → 1, scales env/atmosphere/effect intensity
+  };
+
+  function erLoadStudioState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem("webzonebw-er-studio-state") || "null");
+      if (saved && typeof saved === "object") {
+        studioState.effectEnabled = saved.effectEnabled !== false;
+        studioState.animationEnabled = saved.animationEnabled !== false;
+        studioState.backgroundEnabled = saved.backgroundEnabled !== false;
+        studioState.strength = Math.max(0, Math.min(1, Number(saved.strength) || 1));
+      }
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  function erSaveStudioState() {
+    try {
+      localStorage.setItem("webzonebw-er-studio-state", JSON.stringify(studioState));
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  function erSetStrength(v) {
+    studioState.strength = Math.max(0, Math.min(1, Number(v) || 0));
+    erSaveStudioState();
+  }
+
+  // ---------- Active environment runtime + clean switching ----------
+
+  const ERActiveEnvironment = {
+    id: null,
+    label: null,
+    startedAt: 0
+  };
+
+  /* Stop + fully remove the previous environment (fog, particles,
+   * lighting, overlays, frames). All env layers are procedural &
+   * stateless, so teardown clears runtime flags and marks the
+   * canvas layer clean — no leftovers survive a switch. */
+  function teardownStudioEnvironment() {
+    ERActiveEnvironment.id = null;
+    ERActiveEnvironment.label = null;
+    ERActiveEnvironment.startedAt = 0;
+  }
+
+  function applyEffectEnvironment(filterName) {
+    const config = allFilterConfigs.find((c) => c.id === filterName);
+    const envId = resolveEffectEnvironment(
+      filterName,
+      config ? config.category : "scene"
+    );
+    const env = ER_ENVIRONMENTS[envId] || ER_ENVIRONMENTS.portrait;
+
+    if (ERActiveEnvironment.id !== envId) {
+      teardownStudioEnvironment();          // ← clean switch: no zombies, fog, frames left
+      ERActiveEnvironment.id = envId;
+      ERActiveEnvironment.label = env.label;
+      ERActiveEnvironment.startedAt = performance.now();
+    }
+
+    return ERActiveEnvironment;
+  }
+
+  /* Reused offscreen layer for strength-scaled effect compositing.
+   * Single instance — created once, resized with the main canvas,
+   * never re-allocated per frame (no leak / no GC churn). */
+  let erFxLayer = null;
+  let erFxCtx = null;
+
+  function erEnsureFxLayer(w, h) {
+    if (!erFxLayer) {
+      erFxLayer = document.createElement("canvas");
+      erFxCtx = erFxLayer.getContext("2d", { willReadFrequently: true });
+    }
+    if (erFxLayer.width !== w || erFxLayer.height !== h) {
+      erFxLayer.width = w;
+      erFxLayer.height = h;
+    }
+    return erFxCtx;
+  }
+
+  /* Draw the effect pass into the offscreen layer, then blend it
+   * back at `strength` alpha — the slider scales the EFFECT itself
+   * (0% = pure camera/environment, 100% = full effect). */
+  function erApplyStrengthScaledEffect(w, h, erFxTime) {
+    const fctx = erEnsureFxLayer(w, h);
+    fctx.setTransform(1, 0, 0, 1, 0, 0);
+    fctx.clearRect(0, 0, w, h);
+    fctx.drawImage(canvas, 0, 0, w, h);
+    applyArtThemeShader(fctx, w, h, currentFilter, erFxTime);
+
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = Math.max(0, Math.min(1, studioState.strength));
+    ctx.drawImage(erFxLayer, 0, 0, w, h);
+    ctx.restore();
+  }
+
+  // ---------- deterministic pseudo-random helper (stateless particles) ----------
+  function erRand(seed) {
+    const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  // ==========================================================
+  // ENVIRONMENT LAYER (rendered UNDER the effect)
+  // ==========================================================
+
+  function erDrawEnvironmentBackdrop(ctx, w, h, t, env) {
+    const s = studioState.strength;
+    if (s <= 0) return;
+
+    // Base scene grading — every env has its own colour identity
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    switch (ERActiveEnvironment.id) {
+      case "forest":
+        grad.addColorStop(0, "rgba(2,10,6," + 0.42 * s + ")");
+        grad.addColorStop(1, "rgba(1,5,3," + 0.72 * s + ")");
+        break;
+      case "moonlight":
+        grad.addColorStop(0, "rgba(8,12,30," + 0.40 * s + ")");
+        grad.addColorStop(1, "rgba(4,8,20," + 0.68 * s + ")");
+        break;
+      case "cemetery":
+        grad.addColorStop(0, "rgba(6,8,10," + 0.45 * s + ")");
+        grad.addColorStop(1, "rgba(2,3,5," + 0.75 * s + ")");
+        break;
+      case "ghost":
+        grad.addColorStop(0, "rgba(12,18,40," + 0.38 * s + ")");
+        grad.addColorStop(1, "rgba(6,10,24," + 0.65 * s + ")");
+        break;
+      case "ruins":
+        grad.addColorStop(0, "rgba(10,9,8," + 0.46 * s + ")");
+        grad.addColorStop(1, "rgba(3,3,3," + 0.76 * s + ")");
+        break;
+      case "witch":
+        grad.addColorStop(0, "rgba(20,8,34," + 0.40 * s + ")");
+        grad.addColorStop(1, "rgba(8,4,16," + 0.66 * s + ")");
+        break;
+      case "hellfire":
+        grad.addColorStop(0, "rgba(30,6,4," + 0.40 * s + ")");
+        grad.addColorStop(1, "rgba(10,2,2," + 0.70 * s + ")");
+        break;
+      case "neon":
+        grad.addColorStop(0, "rgba(4,14,22," + 0.36 * s + ")");
+        grad.addColorStop(1, "rgba(10,4,18," + 0.60 * s + ")");
+        break;
+      case "fantasy":
+        grad.addColorStop(0, "rgba(30,12,26," + 0.28 * s + ")");
+        grad.addColorStop(1, "rgba(14,6,14," + 0.48 * s + ")");
+        break;
+      case "cinema":
+        grad.addColorStop(0, "rgba(8,20,24," + 0.30 * s + ")");
+        grad.addColorStop(1, "rgba(4,8,14," + 0.52 * s + ")");
+        break;
+      case "glitch":
+        grad.addColorStop(0, "rgba(6,10,14," + 0.30 * s + ")");
+        grad.addColorStop(1, "rgba(2,4,8," + 0.55 * s + ")");
+        break;
+      case "nebula":
+        grad.addColorStop(0, "rgba(10,6,30," + 0.40 * s + ")");
+        grad.addColorStop(1, "rgba(2,3,12," + 0.66 * s + ")");
+        break;
+      case "void":
+        grad.addColorStop(0, "rgba(12,4,24," + 0.44 * s + ")");
+        grad.addColorStop(1, "rgba(2,2,8," + 0.70 * s + ")");
+        break;
+      case "patch":
+        grad.addColorStop(0, "rgba(28,14,4," + 0.30 * s + ")");
+        grad.addColorStop(1, "rgba(12,6,2," + 0.55 * s + ")");
+        break;
+      case "cyber":
+        grad.addColorStop(0, "rgba(2,12,18," + 0.34 * s + ")");
+        grad.addColorStop(1, "rgba(2,6,12," + 0.58 * s + ")");
+        break;
+      case "manor":
+        grad.addColorStop(0, "rgba(14,10,26," + 0.42 * s + ")");
+        grad.addColorStop(1, "rgba(4,4,10," + 0.68 * s + ")");
+        break;
+      case "studio":
+      case "portrait":
+      default:
+        grad.addColorStop(0, "rgba(255,255,255,0)");
+        grad.addColorStop(1, "rgba(10,10,16," + 0.20 * s + ")");
+        break;
+    }
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+
+    // Scenic silhouettes / structures per environment
+    ctx.save();
+    if (ERActiveEnvironment.id === "forest" || ERActiveEnvironment.id === "moonlight") {
+      // Parallax dead trees
+      for (let i = 0; i < 6; i++) {
+        const bx = erRand(i * 3.7) * w;
+        const sway = Math.sin(t * 0.8 + i) * 5;
+        const th = h * (0.30 + erRand(i * 9.1) * 0.24);
+        ctx.strokeStyle = "rgba(8,14,10," + (0.35 + erRand(i) * 0.3) * s + ")";
+        ctx.lineWidth = 3 + erRand(i * 5) * 6;
+        ctx.beginPath();
+        ctx.moveTo(bx, h);
+        ctx.quadraticCurveTo(bx + sway, h - th * 0.6, bx + sway * 1.6, h - th);
+        ctx.moveTo(bx + sway, h - th * 0.55);
+        ctx.lineTo(bx + sway + (i % 2 ? 1 : -1) * 34, h - th * 0.72);
+        ctx.stroke();
+      }
+    } else if (ERActiveEnvironment.id === "cemetery" || ERActiveEnvironment.id === "ruins") {
+      // Tombstones / broken pillars
+      for (let i = 0; i < 5; i++) {
+        const gx = erRand(i * 7.3) * w;
+        const gw = 16 + erRand(i * 2.1) * 26;
+        const gh = 26 + erRand(i * 4.4) * 40;
+        ctx.fillStyle = "rgba(6,8,10," + (0.4 + erRand(i) * 0.25) * s + ")";
+        ctx.fillRect(gx, h - gh, gw, gh);
+        ctx.fillRect(gx + gw * 0.3, h - gh - 8, gw * 0.4, 8);
+      }
+      // Distant movement — faint prowler silhouette
+      const px = w * (0.2 + 0.6 * (0.5 + 0.5 * Math.sin(t * 0.15)));
+      ctx.fillStyle = "rgba(0,0,0," + 0.35 * s + ")";
+      ctx.beginPath();
+      ctx.ellipse(px, h * 0.9, 12, 26, 0, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (ERActiveEnvironment.id === "witch") {
+      // Moon + ritual silhouette ring
+      ctx.shadowColor = "rgba(226,232,240,0.8)";
+      ctx.shadowBlur = 30 * s;
+      ctx.fillStyle = "rgba(226,232,240," + 0.75 * s + ")";
+      ctx.beginPath();
+      ctx.arc(w * 0.82, h * 0.16, 26, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    } else if (ERActiveEnvironment.id === "manor") {
+      // Mansion silhouette + storm light
+      const mx = w * 0.5, mw = w * 0.44, my = h * 0.6;
+      ctx.fillStyle = "rgba(2,6,23," + 0.9 * s + ")";
+      ctx.fillRect(mx - mw / 2, my - h * 0.2, mw, h * 0.4);
+      if (Math.sin(t * 1.3) > 0.994) {
+        ctx.fillStyle = "rgba(226,232,240," + 0.30 * s + ")";
+        ctx.fillRect(0, 0, w, h);
+      }
+    } else if (ERActiveEnvironment.id === "cyber") {
+      // Perspective neon floor grid
+      const horizon = h * 0.62;
+      ctx.strokeStyle = "rgba(34,211,238," + 0.35 * s + ")";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 10; i++) {
+        const y = horizon + (h - horizon) * Math.pow(i / 10, 2);
+        ctx.globalAlpha = (0.2 + (i / 10) * 0.5) * s;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      for (let i = -8; i <= 8; i++) {
+        ctx.globalAlpha = 0.4 * s;
+        ctx.beginPath();
+        ctx.moveTo(w / 2 + i * 18, horizon);
+        ctx.lineTo(w / 2 + i * w * 0.18, h);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    } else if (ERActiveEnvironment.id === "nebula" || ERActiveEnvironment.id === "void") {
+      // Star / dust field
+      ctx.fillStyle = "rgba(255,255,255," + 0.8 * s + ")";
+      for (let i = 0; i < 40; i++) {
+        const sx = erRand(i * 13.3) * w;
+        const sy = erRand(i * 27.7) * h;
+        const tw = 0.4 + 0.6 * Math.abs(Math.sin(t * 2 + i));
+        ctx.globalAlpha = tw * s;
+        ctx.beginPath();
+        ctx.arc(sx, sy, erRand(i * 3.1) * 1.6 + 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+
+    // Ambient environmental glow (lighting identity of the scene)
+    if (env.glow) {
+      const g = ctx.createRadialGradient(w / 2, h * 0.45, 0, w / 2, h * 0.45, Math.max(w, h) * 0.7);
+      g.addColorStop(0, env.glow.replace(/rgba\(([^)]+),[\d.]+\)/, (m, c) => "rgba(" + c + "," + (0.9 * s) + ")"));
+      g.addColorStop(1, "transparent");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    }
+  }
+
+  // ==========================================================
+  // ATMOSPHERE LAYER — fog + particles tied to env palette
+  // ==========================================================
+
+  function erDrawAtmosphere(ctx, w, h, t, env) {
+    const s = studioState.strength;
+    if (s <= 0) return;
+    const fog = env.fog * s;
+
+    // Rolling fog band
+    if (fog > 0.01) {
+      for (let i = 0; i < 3; i++) {
+        const fy = h * (0.55 + i * 0.16) + Math.sin(t * 0.5 + i * 2) * h * 0.04;
+        const fg = ctx.createLinearGradient(0, fy - h * 0.12, 0, fy + h * 0.12);
+        fg.addColorStop(0, "transparent");
+        fg.addColorStop(0.5, "rgba(160,170,190," + fog * 0.35 + ")");
+        fg.addColorStop(1, "transparent");
+        ctx.fillStyle = fg;
+        ctx.fillRect(0, fy - h * 0.12, w, h * 0.24);
+      }
+    }
+
+    // Floating particles in env palette (stateless — nothing to leak)
+    const count = Math.round(14 + 18 * s);
+    for (let i = 0; i < count; i++) {
+      const px = erRand(i * 5.7) * w + Math.sin(t * 0.7 + i) * 14;
+      const py = ((erRand(i * 11.3) + t * (0.02 + erRand(i * 2.2) * 0.05)) % 1) * h;
+      const size = 1 + erRand(i * 8.8) * 2.4;
+      const col = env.palette[i % env.palette.length];
+      const flicker = 0.35 + 0.35 * Math.sin(t * 2.2 + i * 1.7);
+      ctx.globalAlpha = Math.max(0, flicker) * s;
+      ctx.fillStyle = "rgba(" + col + ",0.9)";
+      ctx.beginPath();
+      ctx.arc(px, py, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // Witch/Zombie streaking motes (ember/spore feel)
+    if (ERActiveEnvironment.id === "witch" || ERActiveEnvironment.id === "hellfire" || ERActiveEnvironment.id === "patch") {
+      for (let i = 0; i < 10; i++) {
+        const ex = erRand(i * 3.3) * w;
+        const ey = h - ((erRand(i * 6.1) + t * 0.06) % 1) * h * 0.7;
+        ctx.globalAlpha = 0.4 * s;
+        ctx.strokeStyle = ERActiveEnvironment.id === "witch" ? "rgba(74,222,128,0.8)" : "rgba(251,146,60,0.8)";
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(ex + Math.sin(t * 3 + i) * 4, ey - 10);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ==========================================================
+  // FRAME LAYER (rendered OVER the effect)
+  // ==========================================================
+
+  function erDrawFrame(ctx, w, h, t, env) {
+    const s = studioState.strength;
+    if (s <= 0) return;
+
+    const style = env.frame;
+
+    if (style === "letterbox") {
+      const bar = h * 0.10;
+      ctx.fillStyle = "rgba(0,0,0," + 0.92 * s + ")";
+      ctx.fillRect(0, 0, w, bar);
+      ctx.fillRect(0, h - bar, w, bar);
+    }
+
+    // Vignette tuned per environment
+    const vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.34, w / 2, h / 2, Math.max(w, h) * 0.74);
+    const dark = style === "letterbox" ? 0.30 : style === "organic" ? 0.42 : 0.24;
+    vg.addColorStop(0, "transparent");
+    vg.addColorStop(1, "rgba(0,0,0," + dark * s + ")");
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, w, h);
+
+    // Coloured frame edge glow + corner brackets
+    const col = env.palette[0];
+    ctx.strokeStyle = "rgba(" + col + "," + 0.45 * s + ")";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(6, 6, w - 12, h - 12);
+
+    const L = Math.max(16, w * 0.045);
+    ctx.lineWidth = 4;
+    [[8, 8, 1, 1], [w - 8, 8, -1, 1], [8, h - 8, 1, -1], [w - 8, h - 8, -1, -1]].forEach(([cx, cy, dx, dy]) => {
+      ctx.beginPath();
+      ctx.moveTo(cx + dx * L, cy);
+      ctx.lineTo(cx, cy);
+      ctx.lineTo(cx, cy + dy * L);
+      ctx.stroke();
+    });
+
+    // Environment label — reinforces "filter belongs to scene"
+    if (ERActiveEnvironment.label) {
+      ctx.fillStyle = "rgba(" + col + "," + 0.8 * s + ")";
+      ctx.font = "bold 10px monospace";
+      ctx.textAlign = "left";
+      ctx.fillText("☾ " + ERActiveEnvironment.label.toUpperCase() + " ENVIRONMENT", 18, h - 18);
+    }
+  }
+
+  // ==========================================================
+  // COMPOSITING ENTRY — called from the render pipeline
+  // ==========================================================
+
+  function applyStudioEnvironmentStack(ctx, w, h, time) {
+    if (!ERActiveEnvironment.id && currentFilter) {
+      applyEffectEnvironment(currentFilter);
+    }
+    const env = ER_ENVIRONMENTS[ERActiveEnvironment.id] || ER_ENVIRONMENTS.portrait;
+    const t = studioState.animationEnabled ? time : 0;
+
+    if (studioState.backgroundEnabled && studioState.strength > 0) {
+      erDrawEnvironmentBackdrop(ctx, w, h, t, env);
+      erDrawAtmosphere(ctx, w, h, t, env);
+    }
+  }
+
+  function applyStudioFrameStack(ctx, w, h, time) {
+    if (!studioState.backgroundEnabled || studioState.strength <= 0) return;
+    const env = ER_ENVIRONMENTS[ERActiveEnvironment.id] || ER_ENVIRONMENTS.portrait;
+    const t = studioState.animationEnabled ? time : 0;
+    erDrawFrame(ctx, w, h, t, env);
+  }
+
+  window.WEBZONEBW_ER_SMART_ENV = {
+    resolve: resolveEffectEnvironment,
+    library: ER_ENVIRONMENTS,
+    active: ERActiveEnvironment,
+    state: studioState,
+    applyEnv: applyEffectEnvironment,
+    resetEnv: teardownStudioEnvironment
+  };
+
+  // ==========================================================
+  // STUDIO CONTROL WIRING (Effect / Animation / Strength /
+  // Background / Reset) — strength drives REAL rendering.
+  // ==========================================================
+
+  erLoadStudioState();
+
+  function erSyncStudioControlsUI() {
+    const tE = document.getElementById("erToggleEffect");
+    const tA = document.getElementById("erToggleAnimation");
+    const tB = document.getElementById("erToggleBackground");
+    const sR = document.getElementById("erStrengthRange");
+    const sL = document.getElementById("erStrengthValue");
+    if (tE) tE.checked = studioState.effectEnabled;
+    if (tA) tA.checked = studioState.animationEnabled;
+    if (tB) tB.checked = studioState.backgroundEnabled;
+    if (sR) sR.value = Math.round(studioState.strength * 100);
+    if (sL) sL.textContent = Math.round(studioState.strength * 100) + "%";
+  }
+
+  function erBindStudioControls() {
+    const tE = document.getElementById("erToggleEffect");
+    const tA = document.getElementById("erToggleAnimation");
+    const tB = document.getElementById("erToggleBackground");
+    const sR = document.getElementById("erStrengthRange");
+    const rB = document.getElementById("erResetStudioBtn");
+
+    if (tE && tE.dataset.erBound !== "1") {
+      tE.dataset.erBound = "1";
+      tE.addEventListener("change", () => {
+        studioState.effectEnabled = tE.checked;
+        erSaveStudioState();
+        showSwipeToast(tE.checked ? "✨" : "⛔", tE.checked ? "Effect ON" : "Effect OFF");
+      });
+    }
+    if (tA && tA.dataset.erBound !== "1") {
+      tA.dataset.erBound = "1";
+      tA.addEventListener("change", () => {
+        studioState.animationEnabled = tA.checked;
+        erSaveStudioState();
+        showSwipeToast(tA.checked ? "🎬" : "⏸", tA.checked ? "Animation ON" : "Animation Frozen");
+      });
+    }
+    if (tB && tB.dataset.erBound !== "1") {
+      tB.dataset.erBound = "1";
+      tB.addEventListener("change", () => {
+        studioState.backgroundEnabled = tB.checked;
+        if (!tB.checked) teardownStudioEnvironment(); // clean removal, no fog/frame leftovers
+        erSaveStudioState();
+        showSwipeToast(tB.checked ? "🌍" : "🚫", tB.checked ? "Environment ON" : "Environment OFF");
+      });
+    }
+    if (sR && sR.dataset.erBound !== "1") {
+      sR.dataset.erBound = "1";
+      sR.addEventListener("input", () => {
+        erSetStrength(sR.value / 100);
+        erSyncStudioControlsUI();
+      });
+    }
+    if (rB && rB.dataset.erBound !== "1") {
+      rB.dataset.erBound = "1";
+      rB.addEventListener("click", () => {
+        studioState = { effectEnabled: true, animationEnabled: true, backgroundEnabled: true, strength: 1.0 };
+        erSaveStudioState();
+        teardownStudioEnvironment();
+        selectFilter("cartoon");
+        erSyncStudioControlsUI();
+        showSwipeToast("♻️", "Studio Reset");
+      });
+    }
+
+    erSyncStudioControlsUI();
+  }
+
+  window.WEBZONEBW_ER_UTIL.onReady(erBindStudioControls);
+  setTimeout(erBindStudioControls, 600); // late-mounted safety
+
+  /*
+   * IMPORTANT:
+   * snapLensTrack was already declared near the top of this
+   * function. Do NOT redeclare it here.
+   */
+
   const smartStatusIcon = document.getElementById("smartStatusIcon");
 
   const smartStatusText = document.getElementById("smartStatusText");
@@ -1735,7 +2320,7 @@ function initWebZoneERStudio() {
           return session;
         }
       }
-      
+
       // Create new session
       const userEmail = "demo@example.com"; // Default demo user
       const loginResponse = await fetch("/api/login", {
@@ -1743,7 +2328,7 @@ function initWebZoneERStudio() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userEmail })
       });
-      
+
       if (loginResponse.ok) {
         const session = await loginResponse.json();
         return session;
@@ -1762,10 +2347,10 @@ function initWebZoneERStudio() {
       if (!clientResponse.ok) {
         throw new Error("PayPal client ID not available");
       }
-      
+
       const clientData = await clientResponse.json();
       const clientId = clientData.clientId;
-      
+
       // Load PayPal SDK
       if (!window.paypal) {
         const script = document.createElement('script');
@@ -1803,7 +2388,7 @@ function initWebZoneERStudio() {
     paypalContainer.style.display = 'flex';
     paypalContainer.style.alignItems = 'center';
     paypalContainer.style.justifyContent = 'center';
-    
+
     paypalContainer.innerHTML = `
       <div style="background: white; border-radius: 12px; padding: 24px; max-width: 500px; width: 90%;">
         <div style="text-align: center; margin-bottom: 20px;">
@@ -1816,15 +2401,15 @@ function initWebZoneERStudio() {
         </div>
       </div>
     `;
-    
+
     document.body.appendChild(paypalContainer);
-    
+
     // Cancel button handler
     paypalContainer.querySelector('#cancel-paypal-btn').addEventListener('click', () => {
       paypalContainer.remove();
       showSwipeToast("❌", "Payment cancelled");
     });
-    
+
     // Create PayPal buttons
     window.paypal.Buttons({
       style: {
@@ -1835,15 +2420,15 @@ function initWebZoneERStudio() {
         label: 'pay',
         tagline: false
       },
-      
+
       createOrder: function() {
         console.log(`[WEBZONEBW] Creating PayPal order for FaceFilter purchase: ${purchaseId}`);
         return purchaseId; // Use the FaceFilter purchase ID
       },
-      
+
       onApprove: function(data) {
         console.log(`[WEBZONEBW] PayPal approved: ${data.orderID}`);
-        
+
         // Show processing state
         paypalContainer.querySelector('#paypal-buttons-container').innerHTML = `
           <div style="text-align: center; padding: 20px;">
@@ -1851,7 +2436,7 @@ function initWebZoneERStudio() {
             <p style="margin: 0; color: #6b7280;">Processing payment...</p>
           </div>
         `;
-        
+
         // Capture the payment
         fetch("/api/paypal/capture", {
           method: "POST",
@@ -1872,7 +2457,7 @@ function initWebZoneERStudio() {
                 <p style="margin: 8px 0 0 0; color: #6b7280; font-size: 14px;">Activating your 24-hour access...</p>
               </div>
             `;
-            
+
             // Wait for webhook to process and refresh FaceFilter state
             setTimeout(() => {
               refreshFaceFilterAccess();
@@ -1894,19 +2479,19 @@ function initWebZoneERStudio() {
           `;
         });
       },
-      
+
       onCancel: function() {
         console.log("[WEBZONEBW] PayPal payment cancelled");
         paypalContainer.remove();
         showSwipeToast("❌", "Payment cancelled");
       },
-      
+
       onError: function(err) {
         console.error("[WEBZONEBW] PayPal error:", err);
         paypalContainer.remove();
         showSwipeToast("❌", "Payment error occurred");
       }
-      
+
     }).render('#paypal-buttons-container');
   }
 
@@ -1918,12 +2503,12 @@ function initWebZoneERStudio() {
         const response = await fetch("/api/facefilter/refresh", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             userEmail: purchaseInfo.userEmail,
             userId: purchaseInfo.userId
           })
         });
-        
+
         const data = await response.json();
         if (data.success && data.entitlements.length > 0) {
           // Trigger FaceFilter UI update
@@ -1949,14 +2534,14 @@ function initWebZoneERStudio() {
       } catch (e) {
         // Session check failed, will create new one
       }
-      
+
       if (!session) {
         session = await initializeUserSession();
       }
-      
+
       let userId = null;
       let userEmail = null;
-      
+
       if (session && session.success) {
         userId = session.userId;
         userEmail = session.userEmail;
@@ -1969,10 +2554,10 @@ function initWebZoneERStudio() {
       const response = await fetch("/api/facefilter/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          filterId: filterId, 
+        body: JSON.stringify({
+          filterId: filterId,
           userId: userId,
-          userEmail: userEmail 
+          userEmail: userEmail
         })
       });
 
@@ -1996,7 +2581,7 @@ function initWebZoneERStudio() {
     if (config.isPremium && !isFeatureAvailable(filterName)) {
       // Check if this is a 24-hour offer filter
       const is24HourFilter = ['halo', 'witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose'].includes(filterName);
-      
+
       if (is24HourFilter) {
         // Show 24-hour offer modal
         await show24HourOfferModal(filterName, config);
@@ -2020,6 +2605,12 @@ function initWebZoneERStudio() {
     }
 
     currentFilter = filterName;
+
+    /* SMART ENVIRONMENT SWITCH —
+     * stop previous env → teardown leftovers → load the new
+     * environment metadata → initialize its atmosphere/frame.
+     * Zombie → Witch removes ALL zombie fog/particles/frames. */
+    applyEffectEnvironment(filterName);
 
     // Update active pill text
     if (slideActivePill) {
@@ -2191,7 +2782,7 @@ function initWebZoneERStudio() {
           }
 
           const offer = offerData.offer;
-          
+
           // Create streamlined modal for direct purchase
           const modal = document.createElement("div");
           modal.id = "facefilterOfferModal";
@@ -2215,7 +2806,7 @@ function initWebZoneERStudio() {
                   <h3 style="margin: 0 0 8px 0;">24-Hour Access</h3>
                   <p style="color: var(--text-muted); margin: 0;">Temporary access to ${filterConfig.name}</p>
                 </div>
-                
+
                 <div style="background: var(--surface-hover, #f9fafb); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
                   <h4 style="margin: 0 0 16px 0;">Offer Details</h4>
                   <div style="display: grid; gap: 12px;">
@@ -2233,14 +2824,14 @@ function initWebZoneERStudio() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
                   <h4 style="color: #ef4444; margin: 0 0 8px 0;">Important</h4>
                   <p style="color: #991b1b; margin: 0; font-size: 0.9rem; line-height: 1.4;">
                     ${offerData.refundPolicy}
                   </p>
                 </div>
-                
+
                 <div id="offerProcessing" class="processing-state" style="display: none;">
                   <div class="processing-content">
                     <div class="er-spinner large"></div>
@@ -2248,7 +2839,7 @@ function initWebZoneERStudio() {
                     <div class="processing-subtext">Redirecting to PayPal checkout</div>
                   </div>
                 </div>
-                
+
                 <div id="offerSuccess" class="success-state" style="display: none;">
                   <div class="success-content">
                     <div class="success-icon">✅</div>
@@ -2256,7 +2847,7 @@ function initWebZoneERStudio() {
                     <div class="success-subtext">Your 24-hour access has been activated.</div>
                   </div>
                 </div>
-                
+
                 <div id="offerError" class="error-state" style="display: none;">
                   <div class="error-content">
                     <div class="error-icon">❌</div>
@@ -2311,7 +2902,7 @@ function initWebZoneERStudio() {
               const response = await fetch(`/api/facefilter/${filterId}/purchase`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                   userId: session.userId,
                   userEmail: session.userEmail // Use session email
                 })
@@ -2332,15 +2923,15 @@ function initWebZoneERStudio() {
               };
 
               console.log(`[WEBZONEBW] Created purchase ${purchaseData.purchaseId}, launching PayPal checkout...`);
-              
+
               // Close modal and launch PayPal checkout immediately
               close();
-              
+
               // Launch FaceFilter PayPal checkout directly
               setTimeout(() => {
                 launchFaceFilterPayPalCheckout(filterId, purchaseData.purchaseId);
               }, 500);
-              
+
             } catch (error) {
               console.error("[WEBZONEBW FACEFILTER] Purchase creation failed:", error);
               errorDetails.textContent = "Failed to create purchase. Please try again.";
@@ -4328,186 +4919,186 @@ function initWebZoneERStudio() {
 
   function drawGhostAura(ctx, w, h, time) {
     ctx.save();
-    
+
     // Create translucent spectral aura around face
     const cx = faceBox.x * w;
     const cy = faceBox.y * h;
     const radius = Math.max(w, h) * 0.4;
-    
+
     // Ethereal ghost aura with multiple layers
     for (let i = 0; i < 4; i++) {
       const auraRadius = radius + Math.sin(time * 1.5 + i) * 15;
       const alpha = 0.08 - i * 0.015;
-      
+
       const aura = ctx.createRadialGradient(cx, cy, 0, cx, cy, auraRadius);
       aura.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
       aura.addColorStop(0.3, `rgba(200, 200, 255, ${alpha * 0.7})`);
       aura.addColorStop(0.6, `rgba(150, 150, 255, ${alpha * 0.4})`);
       aura.addColorStop(1, 'transparent');
-      
+
       ctx.fillStyle = aura;
       ctx.fillRect(0, 0, w, h);
     }
-    
+
     // Floating spectral particles
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    
+
     for (let i = 0; i < 20; i++) {
       const angle = (time * 0.8 + i * Math.PI * 2 / 20) % (Math.PI * 2);
       const distance = radius * 0.6 + Math.sin(time * 2 + i) * radius * 0.3;
       const x = cx + Math.cos(angle) * distance;
       const y = cy + Math.sin(angle) * distance;
       const size = 2 + Math.sin(time * 3 + i) * 1.5;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Ghostly wisps
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
     ctx.lineWidth = 1;
-    
+
     for (let i = 0; i < 8; i++) {
       const startX = cx + (Math.random() - 0.5) * radius;
       const startY = cy + (Math.random() - 0.5) * radius;
       const endX = startX + Math.sin(time + i) * 30;
       const endY = startY + Math.cos(time + i) * 30;
-      
+
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
       ctx.stroke();
     }
-    
+
     ctx.restore();
   }
 
   function drawSpiritPossession(ctx, w, h, time) {
     ctx.save();
-    
+
     const cx = faceBox.x * w;
     const cy = faceBox.y * h;
     const radius = Math.max(w, h) * 0.35;
-    
+
     // Dark possession aura
     const possessionGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
     possessionGradient.addColorStop(0, 'rgba(128, 0, 128, 0.4)');
     possessionGradient.addColorStop(0.5, 'rgba(75, 0, 130, 0.3)');
     possessionGradient.addColorStop(0.8, 'rgba(25, 25, 112, 0.2)');
     possessionGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = possessionGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     // Glowing possessed eyes effect
     const eyeY = cy - radius * 0.1;
     const eyeSpacing = radius * 0.3;
-    
+
     // Left eye
     const leftEyeGlow = ctx.createRadialGradient(cx - eyeSpacing, eyeY, 0, cx - eyeSpacing, eyeY, radius * 0.15);
     leftEyeGlow.addColorStop(0, 'rgba(255, 0, 0, 0.9)');
     leftEyeGlow.addColorStop(0.5, 'rgba(255, 0, 0, 0.6)');
     leftEyeGlow.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = leftEyeGlow;
     ctx.beginPath();
     ctx.arc(cx - eyeSpacing, eyeY, radius * 0.15, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // Right eye
     const rightEyeGlow = ctx.createRadialGradient(cx + eyeSpacing, eyeY, 0, cx + eyeSpacing, eyeY, radius * 0.15);
     rightEyeGlow.addColorStop(0, 'rgba(255, 0, 0, 0.9)');
     rightEyeGlow.addColorStop(0.5, 'rgba(255, 0, 0, 0.6)');
     rightEyeGlow.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = rightEyeGlow;
     ctx.beginPath();
     ctx.arc(cx + eyeSpacing, eyeY, radius * 0.15, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // Dark energy tendrils
     ctx.strokeStyle = 'rgba(128, 0, 128, 0.6)';
     ctx.lineWidth = 2;
-    
+
     for (let i = 0; i < 6; i++) {
       const angle = (time * 0.5 + i * Math.PI * 2 / 6) % (Math.PI * 2);
       const startX = cx + Math.cos(angle) * radius * 0.3;
       const startY = cy + Math.sin(angle) * radius * 0.3;
       const endX = cx + Math.cos(angle) * radius * 0.8;
       const endY = cy + Math.sin(angle) * radius * 0.8;
-      
+
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
       ctx.stroke();
     }
-    
+
     // Pulsing dark energy
     const pulseAlpha = 0.2 + Math.sin(time * 2) * 0.1;
     const pulseGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.6);
     pulseGradient.addColorStop(0, `rgba(128, 0, 128, ${pulseAlpha})`);
     pulseGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = pulseGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     ctx.restore();
   }
 
   function drawPhantomVeil(ctx, w, h, time) {
     ctx.save();
-    
+
     const cx = faceBox.x * w;
     const cy = faceBox.y * h;
     const radius = Math.max(w, h) * 0.4;
-    
+
     // Mysterious phantom mist layers
     for (let layer = 0; layer < 3; layer++) {
       const mistOffset = time * 0.3 + layer * 2;
       const mistAlpha = 0.1 - layer * 0.02;
-      
+
       ctx.fillStyle = `rgba(200, 200, 255, ${mistAlpha})`;
-      
+
       // Create flowing mist effect
       for (let i = 0; i < 5; i++) {
         const mistX = cx + Math.sin(mistOffset + i * 1.2) * radius * 0.6;
         const mistY = cy + Math.cos(mistOffset + i * 0.8) * radius * 0.4;
         const mistSize = radius * 0.3 + Math.sin(mistOffset + i) * radius * 0.1;
-        
+
         const mistGradient = ctx.createRadialGradient(mistX, mistY, 0, mistX, mistY, mistSize);
         mistGradient.addColorStop(0, `rgba(200, 200, 255, ${mistAlpha})`);
         mistGradient.addColorStop(0.5, `rgba(150, 150, 255, ${mistAlpha * 0.5})`);
         mistGradient.addColorStop(1, 'transparent');
-        
+
         ctx.fillStyle = mistGradient;
         ctx.fillRect(0, 0, w, h);
       }
     }
-    
+
     // Phantom sparks
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    
+
     for (let i = 0; i < 15; i++) {
       const sparkX = cx + (Math.sin(time * 2 + i) * 0.7 + Math.random() * 0.6 - 0.3) * radius;
       const sparkY = cy + (Math.cos(time * 1.5 + i) * 0.7 + Math.random() * 0.6 - 0.3) * radius;
       const sparkSize = 1 + Math.sin(time * 4 + i) * 1;
-      
+
       ctx.beginPath();
       ctx.arc(sparkX, sparkY, sparkSize, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Ethereal veil edges
     ctx.strokeStyle = 'rgba(200, 200, 255, 0.4)';
     ctx.lineWidth = 1;
     ctx.setLineDash([5, 5]);
     ctx.lineDashOffset = time * 20;
-    
+
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
     ctx.stroke();
-    
+
     ctx.restore();
   }
 
@@ -4517,11 +5108,11 @@ function initWebZoneERStudio() {
 
   function drawZombieVirus(ctx, w, h, time) {
     ctx.save();
-    
+
     const cx = faceBox.x * w;
     const cy = faceBox.y * h;
     const radius = Math.max(w, h) * 0.4;
-    
+
     // Sickly green virus infection aura
     const virusGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
     virusGradient.addColorStop(0, 'rgba(0, 255, 0, 0.25)');
@@ -4529,181 +5120,181 @@ function initWebZoneERStudio() {
     virusGradient.addColorStop(0.6, 'rgba(34, 139, 34, 0.15)');
     virusGradient.addColorStop(0.8, 'rgba(0, 100, 0, 0.1)');
     virusGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = virusGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     // Rotting skin patches
     ctx.fillStyle = 'rgba(139, 69, 19, 0.6)';
-    
+
     for (let i = 0; i < 8; i++) {
       const patchX = cx + (Math.sin(time * 0.5 + i) * 0.6 + Math.random() * 0.4 - 0.2) * radius;
       const patchY = cy + (Math.cos(time * 0.3 + i) * 0.6 + Math.random() * 0.4 - 0.2) * radius;
       const patchSize = 15 + Math.sin(time + i) * 5;
-      
+
       ctx.beginPath();
       ctx.arc(patchX, patchY, patchSize, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Virus particles
     ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
-    
+
     for (let i = 0; i < 25; i++) {
       const angle = (time * 1.2 + i * Math.PI * 2 / 25) % (Math.PI * 2);
       const distance = radius * 0.5 + Math.sin(time * 2 + i) * radius * 0.3;
       const x = cx + Math.cos(angle) * distance;
       const y = cy + Math.sin(angle) * distance;
       const size = 2 + Math.sin(time * 3 + i) * 1;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Pulsing infection
     const pulseAlpha = 0.15 + Math.sin(time * 1.8) * 0.08;
     const pulseGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.7);
     pulseGradient.addColorStop(0, `rgba(0, 255, 0, ${pulseAlpha})`);
     pulseGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = pulseGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     ctx.restore();
   }
 
   function drawUndeadPlague(ctx, w, h, time) {
     ctx.save();
-    
+
     const cx = faceBox.x * w;
     const cy = faceBox.y * h;
     const radius = Math.max(w, h) * 0.4;
-    
+
     // Dark plague atmosphere
     const plagueGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
     plagueGradient.addColorStop(0, 'rgba(139, 0, 0, 0.3)');
     plagueGradient.addColorStop(0.4, 'rgba(75, 0, 130, 0.25)');
     plagueGradient.addColorStop(0.7, 'rgba(25, 25, 112, 0.2)');
     plagueGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = plagueGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     // Decaying skin texture
     ctx.fillStyle = 'rgba(105, 105, 105, 0.7)';
-    
+
     for (let i = 0; i < 12; i++) {
       const decayX = cx + (Math.sin(time * 0.4 + i) * 0.7 + Math.random() * 0.3 - 0.15) * radius;
       const decayY = cy + (Math.cos(time * 0.6 + i) * 0.7 + Math.random() * 0.3 - 0.15) * radius;
       const decaySize = 20 + Math.sin(time + i) * 8;
-      
+
       ctx.beginPath();
       ctx.arc(decayX, decayY, decaySize, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Plague mist
     ctx.fillStyle = 'rgba(128, 128, 128, 0.4)';
-    
+
     for (let i = 0; i < 10; i++) {
       const mistX = cx + Math.sin(time * 0.8 + i * 1.5) * radius * 0.8;
       const mistY = cy + Math.cos(time * 0.6 + i * 1.2) * radius * 0.6;
       const mistSize = 30 + Math.sin(time * 2 + i) * 15;
-      
+
       const mistGradient = ctx.createRadialGradient(mistX, mistY, 0, mistX, mistY, mistSize);
       mistGradient.addColorStop(0, 'rgba(128, 128, 128, 0.4)');
       mistGradient.addColorStop(0.5, 'rgba(105, 105, 105, 0.2)');
       mistGradient.addColorStop(1, 'transparent');
-      
+
       ctx.fillStyle = mistGradient;
       ctx.fillRect(0, 0, w, h);
     }
-    
+
     // Dark energy swirls
     ctx.strokeStyle = 'rgba(75, 0, 130, 0.6)';
     ctx.lineWidth = 2;
-    
+
     for (let i = 0; i < 5; i++) {
       const swirlAngle = time * 0.5 + i * Math.PI * 2 / 5;
       const swirlRadius = radius * 0.6 + Math.sin(time + i) * radius * 0.2;
       const swirlX = cx + Math.cos(swirlAngle) * swirlRadius;
       const swirlY = cy + Math.sin(swirlAngle) * swirlRadius;
-      
+
       ctx.beginPath();
       ctx.arc(swirlX, swirlY, 15, 0, Math.PI * 2);
       ctx.stroke();
     }
-    
+
     ctx.restore();
   }
 
   function drawWalkingDead(ctx, w, h, look) {
     ctx.save();
-    
+
     const cx = faceBox.x * w;
     const cy = faceBox.y * h;
     const radius = Math.max(w, h) * 0.4;
-    
+
     // Apocalyptic survivor aura
     const survivorGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
     survivorGradient.addColorStop(0, 'rgba(139, 90, 43, 0.25)');
     survivorGradient.addColorStop(0.4, 'rgba(160, 82, 45, 0.2)');
     survivorGradient.addColorStop(0.7, 'rgba(101, 67, 33, 0.15)');
     survivorGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = survivorGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     // Worn survivor texture
     ctx.fillStyle = 'rgba(101, 67, 33, 0.6)';
-    
+
     for (let i = 0; i < 10; i++) {
       const textureX = cx + (Math.sin(time * 0.3 + i) * 0.8 + Math.random() * 0.2 - 0.1) * radius;
       const textureY = cy + (Math.cos(time * 0.4 + i) * 0.8 + Math.random() * 0.2 - 0.1) * radius;
       const textureSize = 25 + Math.sin(time + i) * 10;
-      
+
       ctx.beginPath();
       ctx.arc(textureX, textureY, textureSize, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Dust particles (apocalyptic atmosphere)
     ctx.fillStyle = 'rgba(139, 90, 43, 0.7)';
-    
+
     for (let i = 0; i < 30; i++) {
       const dustX = cx + (Math.random() - 0.5) * radius * 1.5;
       const dustY = cy + (Math.random() - 0.5) * radius * 1.5;
       const dustSize = 1 + Math.random() * 3;
-      
+
       ctx.beginPath();
       ctx.arc(dustX, dustY, dustSize, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Survival gear highlights
     ctx.fillStyle = 'rgba(255, 215, 0, 0.6)';
-    
+
     for (let i = 0; i < 6; i++) {
       const gearAngle = (time * 0.2 + i * Math.PI * 2 / 6) % (Math.PI * 2);
       const gearX = cx + Math.cos(gearAngle) * radius * 0.7;
       const gearY = cy + Math.sin(gearAngle) * radius * 0.7;
       const gearSize = 4 + Math.sin(time * 2 + i) * 2;
-      
+
       ctx.beginPath();
       ctx.arc(gearX, gearY, gearSize, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Post-apocalyptic haze
     const hazeAlpha = 0.1 + Math.sin(time * 0.5) * 0.05;
     const hazeGradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.8);
     hazeGradient.addColorStop(0, `rgba(139, 90, 43, ${hazeAlpha})`);
     hazeGradient.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = hazeGradient;
     ctx.fillRect(0, 0, w, h);
-    
+
     ctx.restore();
   }
 
@@ -4713,12 +5304,12 @@ function initWebZoneERStudio() {
 
   function drawMotherCare(ctx, w, h, time) {
     ctx.save();
-    
+
     // Forehead/upper-face positioning for maternal care effect
     const cx = faceBox.x * w;
     const cy = faceBox.y * h - (faceBox.h * h * 0.2); // Shift upward for forehead focus
     const radius = Math.max(w, h) * 0.35;
-    
+
     // Polish version - delicate maternal aura
     // Quiet → delicate → warm → protective → alive
     const polishGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
@@ -4727,67 +5318,67 @@ function initWebZoneERStudio() {
     polishGlow.addColorStop(0.6, 'rgba(255, 192, 203, 0.12)'); // Light pink
     polishGlow.addColorStop(0.8, 'rgba(221, 160, 221, 0.08)'); // Thistle
     polishGlow.addColorStop(1, 'rgba(176, 196, 222, 0.04)'); // Light steel blue
-    
+
     ctx.fillStyle = polishGlow;
     ctx.fillRect(0, 0, w, h);
-    
+
     // Delicate floating particles representing maternal warmth
     ctx.fillStyle = 'rgba(255, 228, 196, 0.6)';
-    
+
     for (let i = 0; i < 12; i++) {
       const angle = (time * 0.3 + i * Math.PI * 2 / 12) % (Math.PI * 2);
       const distance = radius * 0.7 + Math.sin(time * 2 + i) * radius * 0.2;
       const x = cx + Math.cos(angle) * distance;
       const y = cy + Math.sin(angle) * distance;
       const size = 3 + Math.sin(time * 3 + i) * 1.5;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
     }
-    
+
     // Subtle protective aura rings
     ctx.strokeStyle = 'rgba(255, 218, 185, 0.3)';
     ctx.lineWidth = 1;
-    
+
     for (let i = 1; i <= 3; i++) {
       const ringRadius = radius * (0.5 + i * 0.3);
       const alpha = 0.3 - i * 0.08;
       ctx.globalAlpha = alpha;
-      
+
       ctx.beginPath();
       ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
       ctx.stroke();
     }
-    
+
     ctx.globalAlpha = 1;
-    
+
     // Soft warm light rays emanating from forehead area
     ctx.strokeStyle = 'rgba(255, 228, 196, 0.2)';
     ctx.lineWidth = 2;
-    
+
     for (let i = 0; i < 6; i++) {
       const angle = (i * Math.PI * 2 / 6) + time * 0.1;
       const startX = cx + Math.cos(angle) * radius * 0.3;
       const startY = cy + Math.sin(angle) * radius * 0.3;
       const endX = cx + Math.cos(angle) * radius * 0.8;
       const endY = cy + Math.sin(angle) * radius * 0.8;
-      
+
       ctx.beginPath();
       ctx.moveTo(startX, startY);
       ctx.lineTo(endX, endY);
       ctx.stroke();
     }
-    
+
     // Gentle pulsing effect to show "alive" quality
     const pulseAlpha = 0.1 + Math.sin(time * 1.5) * 0.05;
     const pulseGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.6);
     pulseGlow.addColorStop(0, `rgba(255, 228, 196, ${pulseAlpha})`);
     pulseGlow.addColorStop(1, 'transparent');
-    
+
     ctx.fillStyle = pulseGlow;
     ctx.fillRect(0, 0, w, h);
-    
+
     ctx.restore();
   }
 
@@ -4864,7 +5455,22 @@ function initWebZoneERStudio() {
         drawAIBackgroundDepth(ctx, w, h);
       }
 
-      applyArtThemeShader(ctx, w, h, currentFilter, time);
+      /* SMART ENVIRONMENT STACK —
+       * 1. Environment + Atmosphere UNDER the effect
+       * 2. Effect shader
+       * 3. Frame OVER the effect
+       * Strength scales actual rendered intensity (0% = disabled). */
+      const erFxTime = studioState.animationEnabled ? time : 0;
+
+      applyStudioEnvironmentStack(ctx, w, h, time);
+
+      if (studioState.effectEnabled) {
+        if (studioState.strength > 0.02) {
+          erApplyStrengthScaledEffect(w, h, erFxTime);
+        }
+      }
+
+      applyStudioFrameStack(ctx, w, h, time);
 
       if (isStudioLightEnabled) {
         applyStudioVignette(ctx, w, h);
