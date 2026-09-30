@@ -2812,7 +2812,7 @@ function initWebZoneERStudio() {
                   <div style="display: grid; gap: 12px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                       <span>Price:</span>
-                      <span style="font-weight: 600; font-size: 1.2rem;">₹${offer.price}</span>
+                      <span style="font-weight: 600; font-size: 1.2rem;">$${offer.price}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                       <span>Duration:</span>
@@ -4738,7 +4738,7 @@ function initWebZoneERStudio() {
     }
 
     if (licenseChipBtn) {
-      licenseChipBtn.textContent = premium ? "✓ Licensed" : "₹499 Upgrade";
+      licenseChipBtn.textContent = premium ? "✓ Licensed" : "$5.99 Upgrade";
       licenseChipBtn.disabled = false;
     }
   }
@@ -7921,7 +7921,7 @@ function initWebZoneERStudio() {
         erLicenseChip.classList.remove("promo-active");
         erLicenseChipIcon.textContent = "🔒";
         erLicenseChipText.textContent = hasPaidLicense ? "Premium Active" : "Free — Premium Locked";
-        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "₹499 Upgrade";
+        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "$5.99 Upgrade";
         erLicenseChipBtn.style.background = "";
       }
     }

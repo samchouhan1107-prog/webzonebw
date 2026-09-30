@@ -928,7 +928,7 @@ const PAYPAL_BASE_URL = PAYPAL_MODE === "production"
     : "https://api-m.sandbox.paypal.com";
 const PAYPAL_CURRENCY = process.env.PAYPAL_CURRENCY || "USD";
 const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID;
-/* PayPal does not settle INR; ₹499 is charged as the USD equivalent. */
+/* PayPal settlement in USD; $5.99 is the standard price. */
 const ER_PREMIUM_AMOUNT_USD = 5.99;
 
 /* Direct / manual order channel - buyers without PayPal can email us.
@@ -1009,12 +1009,12 @@ const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 // --- FaceFilter 24-Hour Offer Configuration ---
 const FACEFILTER_CONFIG = {
     offers: {
-        'halo': { name: 'Angel Halo', price: 99, currency: 'INR', duration: 24 },           // ₹99 for 24 hours
-        'witch-ritual': { name: 'Witch Ritual', price: 149, currency: 'INR', duration: 24 }, // ₹149 for 24 hours
-        'haunted-forest': { name: 'Haunted Forest', price: 199, currency: 'INR', duration: 24 }, // ₹199 for 24 hours
-        'vr-cyberdeck': { name: 'VR Cyberdeck', price: 299, currency: 'INR', duration: 24 },  // ₹299 for 24 hours
-        'vr-mansion': { name: 'VR Haunted Manor', price: 399, currency: 'INR', duration: 24 }, // ₹399 for 24 hours
-        'pumpkin-pose': { name: 'Pumpkin Pose', price: 99, currency: 'INR', duration: 24 }     // ₹99 for 24 hours
+        'halo': { name: 'Angel Halo', price: 1.99, currency: 'USD', duration: 24 },           // $1.99 for 24 hours
+        'witch-ritual': { name: 'Witch Ritual', price: 2.99, currency: 'USD', duration: 24 }, // $2.99 for 24 hours
+        'haunted-forest': { name: 'Haunted Forest', price: 3.99, currency: 'USD', duration: 24 }, // $3.99 for 24 hours
+        'vr-cyberdeck': { name: 'VR Cyberdeck', price: 4.99, currency: 'USD', duration: 24 },  // $4.99 for 24 hours
+        'vr-mansion': { name: 'VR Haunted Manor', price: 5.99, currency: 'USD', duration: 24 }, // $5.99 for 24 hours
+        'pumpkin-pose': { name: 'Pumpkin Pose', price: 1.99, currency: 'USD', duration: 24 }     // $1.99 for 24 hours
     }
 };
 
@@ -1173,7 +1173,7 @@ function isLicenseValid(license) {
 }
 
 /* ============================================================
- * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE (₹499)
+ * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE ($5.99)
  * PayPal ONLY. Fail-closed without credentials.
  * ============================================================ */
 
@@ -1830,8 +1830,8 @@ app.post("/api/facefilter/webhook", async (req, res) => {
                 // Verify amount and currency match
                 const offer = getFaceFilterOffer(storedOrder.filterId);
                 if (offer && paypalAmount && paypalCurrency) {
-                    // Convert INR to USD for comparison if needed (₹499 = ~$5.99)
-                    const expectedAmount = offer.currency === "INR" ? (offer.price / 83.5).toFixed(2) : offer.price.toFixed(2);
+                    // Standard USD pricing validation
+                    const expectedAmount = offer.price.toFixed(2);
                     
                     if (paypalAmount !== expectedAmount || paypalCurrency !== offer.currency) {
                         console.warn(`[WEBZONEBW FACEFILTER] Amount verification failed: expected ${offer.currency}${expectedAmount}, got ${paypalCurrency}${paypalAmount}`);

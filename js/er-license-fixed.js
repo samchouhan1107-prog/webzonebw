@@ -347,9 +347,9 @@ function fetchJSON(url, options) {
       // Pricing Section
       '<div class="pricing-section">' +
       '<div class="price-info">' +
-      '<div class="price-main">₹499</div>' +
+      '<div class="price-main">$5.99</div>' +
       '<div class="price-sub">One-time purchase</div>' +
-      '<div class="price-usd">≈ $5.99 USD</div>' +
+      '<div class="price-usd">USD</div>' +
       '</div>' +
       '<div class="price-security">' +
       '<span class="security-badge">🔒 Secure Payment</span>' +
@@ -444,10 +444,10 @@ function fetchJSON(url, options) {
     mailBtn.addEventListener("click", function () {
       var email = (modal.querySelector("#licEmail").value || "").trim();
       getOrderEmail().then(function (orderEmail) {
-        var subject = "WebZoneBW ER Studio Premium — Order Request (₹499)";
+        var subject = "WebZoneBW ER Studio Premium — Order Request ($5.99)";
         var body =
           "Hello WebZoneBW,\n\n" +
-          "I want to purchase the WebZoneBW ER Studio Premium license (₹499, one-time).\n\n" +
+          "I want to purchase the WebZoneBW ER Studio Premium license ($5.99, one-time).\n\n" +
           "Name: \n" +
           "Email (license will be bound to this): " + email + "\n" +
           "Phone: \n\n" +

@@ -14,7 +14,7 @@ const TEST_CONFIG = {
   filterId: 'halo',
   userEmail: 'test-buyer@example.com',
   expectedPrice: 99,
-  expectedCurrency: 'INR',
+  expectedCurrency: 'USD',
   expectedDuration: 24
 };
 
@@ -79,7 +79,7 @@ const TEST_SCENARIOS = [
 console.log('📋 Test Configuration:');
 console.log(`Filter: ${TEST_CONFIG.filterId}`);
 console.log(`Email: ${TEST_CONFIG.userEmail}`);
-console.log(`Expected Price: ₹${TEST_CONFIG.expectedPrice}`);
+console.log(`Expected Price: $${TEST_CONFIG.expectedPrice}`);
 console.log(`Duration: ${TEST_CONFIG.expectedDuration} hours`);
 
 console.log('\n🎯 Test Scenarios:');

@@ -185,7 +185,7 @@ function generateTestInstructions() {
   
   console.log('1. Test PayPal Payment Flow:');
   console.log('   URL: https://webzonebw.onrender.com/er/');
-  console.log('   Action: Click "₹499 Upgrade" or "$5.99 Upgrade"');
+  console.log('   Action: Click "$5.99 Upgrade"');
   console.log('   Expected: PayPal modal opens, payment completes, license activates');
   
   console.log('\n2. Test Your PayPal Payment Link:');
