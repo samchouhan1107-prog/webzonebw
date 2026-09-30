@@ -23,6 +23,11 @@
     "start:3002": "node scripts/start-3002.js",
     "start:simple": "node scripts/simple-start.js",
     "start:quick": "node scripts/quick-start.js",
+    "start:daemon": "node scripts/daemon-start.js",
+    "start:final": "node scripts/final-start.js",
+    "test:working": "node scripts/test-working.js",
+    "verify:start": "node scripts/verify-start.js",
+    "check:server": "node scripts/check-server.js",
     "test:ports": "node scripts/test-port.js"
   },
   "keywords": [
