@@ -1,87 +1,60 @@
 /* =====================================================
    WEBZONEBW ER STUDIO — PREMIUM CHECKOUT STYLES
-   Restored Original Floating/Pop-up Centered Modal
-   Visual separation from Studio canvas, responsive across
-   Desktop, Tablet, and Mobile with Dark Volcanic Theme.
    ===================================================== */
 
-/* Floating Modal Backdrop Overlay */
-#erLicenseCheckout,
-.er-modal-backdrop,
-.er-studio-body > #erLicenseCheckout,
-.er-studio-body > .er-modal-backdrop {
-  position: fixed !important;
-  inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  z-index: 999999 !important;
-  background: rgba(4, 3, 2, 0.85) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: clamp(12px, 3vw, 24px) !important;
-  margin: 0 !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  box-sizing: border-box !important;
-  animation: erModalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* Modal Backdrop */
+.er-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes erModalFadeIn {
+@keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* Floating Modal Card */
-#erLicenseCheckout .er-modal-card,
-.er-modal-backdrop .er-modal-card,
-.er-modal-card.premium-checkout,
+/* Modal Card */
 .er-modal-card {
-  position: relative !important;
-  background: #110d0b !important;
-  border: 1px solid rgba(255, 107, 26, 0.35) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.92), 0 0 50px rgba(255, 107, 26, 0.2) !important;
-  max-width: 520px !important;
-  width: 100% !important;
-  max-height: min(88vh, 88dvh) !important;
-  margin: auto !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  color: #f5f1ec !important;
-  z-index: 1000000 !important;
-  animation: erModalSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  background: var(--surface, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
 }
 
 .er-theme-dark .er-modal-card {
-  background: #110d0b !important;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 107, 26, 0.25) !important;
+  background: var(--surface, #1a1a1a);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes erModalSlideUp {
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
 /* Modal Header */
 .er-modal-header {
-  padding: 20px 24px 16px;
-  background: linear-gradient(180deg, #18120e, #110d0b);
-  border-bottom: 1px solid rgba(255, 107, 26, 0.2);
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -89,72 +62,64 @@
 }
 
 .er-theme-dark .er-modal-header {
-  border-bottom-color: rgba(255, 107, 26, 0.2);
+  border-bottom-color: var(--border-color, #374151);
 }
 
 .er-badge-category {
   display: inline-block;
   padding: 4px 12px;
-  background: linear-gradient(135deg, #ff6b1a, #ea580c);
-  color: #ffffff;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
   border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.75px;
-  margin-bottom: 6px;
-  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.35);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
 }
 
 .er-modal-header h2 {
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.01em;
+  color: var(--text-heading, #111827);
 }
 
 .er-theme-dark .er-modal-header h2 {
-  color: #ffffff;
+  color: var(--text-heading, #f9fafb);
 }
 
 .er-modal-close {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 1.3rem;
-  color: #a39a91;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted, #6b7280);
   cursor: pointer;
-  padding: 0;
-  border-radius: 8px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 34px;
-  height: 34px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
 }
 
 .er-modal-close:hover {
-  background: rgba(255, 107, 26, 0.18);
-  border-color: rgba(255, 107, 26, 0.4);
-  color: #ff6b1a;
-  transform: scale(1.05);
+  background: var(--surface-hover, #f3f4f6);
+  color: var(--text-heading, #111827);
 }
 
 .er-theme-dark .er-modal-close:hover {
-  background: rgba(255, 107, 26, 0.22);
-  color: #ff6b1a;
+  background: var(--surface-hover, #374151);
+  color: var(--text-heading, #f9fafb);
 }
 
 /* Modal Body */
 .er-modal-body {
-  flex: 1 1 auto;
+  flex: 1;
   overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  padding: 20px 24px;
-  background: #110d0b;
+  padding: 24px;
 }
 
 .er-modal-body::-webkit-scrollbar {
@@ -162,20 +127,20 @@
 }
 
 .er-modal-body::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface, #f9fafb);
 }
 
 .er-theme-dark .er-modal-body::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface, #1f2937);
 }
 
 .er-modal-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 107, 26, 0.3);
-  border-radius: 4px;
+  background: var(--border-color, #d1d5db);
+  border-radius: 3px;
 }
 
 .er-theme-dark .er-modal-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 107, 26, 0.35);
+  background: var(--border-color, #4b5563);
 }
 
 /* PayPal Payment Info Box */
@@ -1312,408 +1277,294 @@
   border-color: #3b82f6;
 }
 
-/* Step Navigation Improvements (All steps visible in accordion format) */
+/* Step Navigation Improvements */
 .co-step {
-  border: 1px solid rgba(255, 107, 26, 0.2) !important;
-  border-radius: 12px !important;
-  margin-bottom: 12px !important;
-  background: rgba(255, 255, 255, 0.02) !important;
-  opacity: 1 !important;
-  transform: none !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
 }
 
 .co-step.active {
-  border-color: rgba(255, 107, 26, 0.6) !important;
-  background: rgba(255, 107, 26, 0.05) !important;
-  box-shadow: 0 0 24px rgba(255, 107, 26, 0.14) !important;
+  opacity: 1;
+  transform: translateX(0);
 }
 
-.co-step.done {
-  border-color: rgba(16, 185, 129, 0.35) !important;
-  opacity: 0.95 !important;
+.co-step.completed {
+  opacity: 0.6;
 }
 
 .co-step-num {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 50% !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #a39a91 !important;
-  font-size: 0.85rem !important;
-  font-weight: 700 !important;
-  flex-shrink: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border-color, #e5e7eb);
+  color: var(--text-muted, #6b7280);
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 .co-step.active .co-step-num {
-  background: linear-gradient(135deg, #ff6b1a, #ea580c) !important;
-  color: #ffffff !important;
-  box-shadow: 0 2px 10px rgba(234, 88, 12, 0.45) !important;
+  background: var(--brand-primary, #3b82f6);
+  color: white;
 }
 
-.co-step.done .co-step-num {
-  background: #10b981 !important;
-  color: #ffffff !important;
+.co-step.completed .co-step-num {
+  background: var(--success, #10b981);
+  color: white;
 }
 
 .co-step-title h4 {
-  font-size: 0.98rem !important;
-  font-weight: 700 !important;
-  color: #ffffff !important;
-  margin: 0 0 2px 0 !important;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-heading, #111827);
+  margin: 0 0 4px 0;
 }
 
 .er-theme-dark .co-step-title h4 {
-  color: #ffffff !important;
+  color: var(--text-heading, #f9fafb);
 }
 
 .co-step-summary {
-  font-size: 0.82rem !important;
-  color: #a39a91 !important;
-  margin: 0 !important;
+  font-size: 0.85rem;
+  color: var(--text-muted, #6b7280);
+  margin: 0;
 }
 
 .er-theme-dark .co-step-summary {
-  color: #a39a91 !important;
+  color: var(--text-muted, #9ca3af);
 }
 
 .co-change {
-  background: rgba(255, 107, 26, 0.1) !important;
-  border: 1px solid rgba(255, 107, 26, 0.3) !important;
-  color: #ff6b1a !important;
-  padding: 4px 12px !important;
-  border-radius: 6px !important;
-  font-size: 0.82rem !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  background: none;
+  border: 1px solid var(--border-color, #e5e7eb);
+  color: var(--text-muted, #6b7280);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .er-theme-dark .co-change {
-  border-color: rgba(255, 107, 26, 0.35) !important;
-  color: #ff6b1a !important;
+  border-color: var(--border-color, #374151);
+  color: var(--text-muted, #9ca3af);
 }
 
 .co-change:hover {
-  background: rgba(255, 107, 26, 0.2) !important;
-  border-color: #ff6b1a !important;
-  color: #ffffff !important;
-  transform: translateY(-1px) !important;
+  background: var(--surface, #ffffff);
+  border-color: var(--brand-primary, #3b82f6);
+  color: var(--brand-primary, #3b82f6);
 }
 
 .er-theme-dark .co-change:hover {
-  background: rgba(255, 107, 26, 0.2) !important;
+  background: var(--surface, #1a1a1a);
 }
 
 /* Payment Security Section */
 .co-payment-security {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 12px !important;
-  background: rgba(16, 185, 129, 0.1) !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(16, 185, 129, 0.3) !important;
-  margin-bottom: 14px !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--success-light, #ecfdf5);
+  border-radius: 8px;
+  border: 1px solid var(--success, #10b981);
+  margin-bottom: 12px;
 }
 
 .er-theme-dark .co-payment-security {
-  background: rgba(16, 185, 129, 0.1) !important;
-  border-color: rgba(16, 185, 129, 0.3) !important;
+  background: var(--success-dark, #064e3b);
+  border-color: var(--success, #10b981);
 }
 
 .security-icon {
-  font-size: 1.4rem !important;
-  flex-shrink: 0 !important;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .security-text strong {
-  color: #34d399 !important;
-  font-size: 0.88rem !important;
-  font-weight: 700 !important;
+  color: var(--success, #059669);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .er-theme-dark .security-text strong {
-  color: #34d399 !important;
+  color: var(--success, #34d399);
 }
 
 .security-text p {
-  color: #a39a91 !important;
-  font-size: 0.8rem !important;
-  margin: 2px 0 0 !important;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.8rem;
+  margin: 0;
 }
 
 .er-theme-dark .security-text p {
-  color: #a39a91 !important;
+  color: var(--text-muted, #9ca3af);
 }
 
 /* Order Review Section */
 .co-order-review {
-  background: #17120f !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(255, 107, 26, 0.2) !important;
-  padding: 14px 16px !important;
-  margin-bottom: 16px !important;
+  background: var(--surface-light, #f8fafc);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
 .er-theme-dark .co-order-review {
-  background: #17120f !important;
-  border-color: rgba(255, 107, 26, 0.25) !important;
+  background: var(--surface-light, #2d2d2d);
+  border-color: var(--border-color, #374151);
 }
 
 .co-order-item {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  gap: 12px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
 }
 
 .co-item-info strong {
-  font-size: 0.95rem !important;
-  font-weight: 700 !important;
-  color: #ffffff !important;
-  display: block !important;
-  margin-bottom: 2px !important;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-heading, #111827);
+  display: block;
+  margin-bottom: 4px;
 }
 
 .er-theme-dark .co-item-info strong {
-  color: #ffffff !important;
+  color: var(--text-heading, #f9fafb);
 }
 
 .co-item-info p {
-  font-size: 0.82rem !important;
-  color: #a39a91 !important;
-  margin: 0 !important;
+  font-size: 0.85rem;
+  color: var(--text-muted, #6b7280);
+  margin: 0;
 }
 
 .er-theme-dark .co-item-info p {
-  color: #a39a91 !important;
+  color: var(--text-muted, #9ca3af);
 }
 
 .co-item-price {
-  font-size: 1.15rem !important;
-  font-weight: 800 !important;
-  color: #ff6b1a !important;
-  white-space: nowrap !important;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary, #3b82f6);
+  white-space: nowrap;
 }
 
 .er-theme-dark .co-item-price {
-  color: #ff6b1a !important;
-}
-
-/* PayPal Button */
-#coBtnPaypal,
-.btn-place-order {
-  width: 100% !important;
-  min-height: 48px !important;
-  padding: 14px 20px !important;
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  background: linear-gradient(180deg, #ffd814, #f7ca00) !important;
-  color: #0f1111 !important;
-  border: 1px solid #e2b300 !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  box-shadow: 0 4px 14px rgba(247, 202, 0, 0.35) !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 10px !important;
-}
-
-#coBtnPaypal:hover,
-.btn-place-order:hover:not(:disabled) {
-  background: linear-gradient(180deg, #f7ca00, #e8b400) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 6px 20px rgba(247, 202, 0, 0.5) !important;
-}
-
-#coBtnPaypal:active,
-.btn-place-order:active {
-  transform: translateY(0) !important;
-}
-
-/* Continue Buttons */
-#coEmailContinue,
-#coMethodContinue,
-.co-continue {
-  width: 100% !important;
-  min-height: 46px !important;
-  padding: 13px 20px !important;
-  font-size: 0.96rem !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #ff6b1a, #ea580c) !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35) !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-#coEmailContinue:hover,
-#coMethodContinue:hover,
-.co-continue:hover {
-  background: linear-gradient(135deg, #ff7a33, #f97316) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45) !important;
+  color: var(--brand-primary, #60a5fa);
 }
 
 /* PayPal Manual Container */
 .paypal-manual-container {
-  padding: 20px !important;
-  text-align: center !important;
-  background: #17120f !important;
-  border-radius: 10px !important;
-  border: 1px dashed rgba(255, 107, 26, 0.3) !important;
+  padding: 24px;
+  text-align: center;
+  background: var(--surface-light, #f8fafc);
+  border-radius: 8px;
+  border: 2px dashed var(--border-color, #e5e7eb);
 }
 
 .er-theme-dark .paypal-manual-container {
-  background: #17120f !important;
-  border-color: rgba(255, 107, 26, 0.35) !important;
+  background: var(--surface-light, #2d2d2d);
+  border-color: var(--border-color, #374151);
 }
 
 .manual-payment-info {
-  max-width: 400px !important;
-  margin: 0 auto !important;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .manual-icon {
-  font-size: 2.6rem !important;
-  margin-bottom: 12px !important;
+  font-size: 3rem;
+  margin-bottom: 16px;
 }
 
 .manual-content h4 {
-  font-size: 1.15rem !important;
-  font-weight: 700 !important;
-  color: #ffffff !important;
-  margin-bottom: 8px !important;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-heading, #111827);
+  margin-bottom: 12px;
 }
 
 .er-theme-dark .manual-content h4 {
-  color: #ffffff !important;
+  color: var(--text-heading, #f9fafb);
 }
 
 .manual-content p {
-  color: #a39a91 !important;
-  font-size: 0.88rem !important;
-  line-height: 1.5 !important;
-  margin-bottom: 16px !important;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
 }
 
 .er-theme-dark .manual-content p {
-  color: #a39a91 !important;
+  color: var(--text-muted, #9ca3af);
 }
 
 .manual-steps {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-  margin-bottom: 16px !important;
-  text-align: left !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .manual-step {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 10px 14px !important;
-  background: #1f1814 !important;
-  border-radius: 8px !important;
-  border: 1px solid rgba(255, 107, 26, 0.2) !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--surface, #ffffff);
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #e5e7eb);
 }
 
 .er-theme-dark .manual-step {
-  background: #1f1814 !important;
-  border-color: rgba(255, 107, 26, 0.25) !important;
+  background: var(--surface, #1a1a1a);
+  border-color: var(--border-color, #374151);
 }
 
 .step-number {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 24px !important;
-  height: 24px !important;
-  border-radius: 50% !important;
-  background: linear-gradient(135deg, #ff6b1a, #ea580c) !important;
-  color: white !important;
-  font-size: 0.78rem !important;
-  font-weight: 700 !important;
-  flex-shrink: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brand-primary, #3b82f6);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 .step-text {
-  font-size: 0.88rem !important;
-  color: #e2d9d0 !important;
+  font-size: 0.9rem;
+  color: var(--text, #374151);
 }
 
 .er-theme-dark .step-text {
-  color: #e2d9d0 !important;
+  color: var(--text, #f9fafb);
 }
 
 .co-note {
-  margin: 10px 0 0 !important;
-  font-size: 0.82rem !important;
-  color: #a39a91 !important;
-  text-align: center !important;
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted, #6b7280);
+  text-align: center;
 }
 
-/* Responsive Overrides (Desktop, Tablet, Mobile) */
-@media (max-width: 640px) {
-  #erLicenseCheckout,
-  .er-modal-backdrop {
-    padding: 12px !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  #erLicenseCheckout .er-modal-card,
-  .er-modal-backdrop .er-modal-card,
-  .er-modal-card {
-    max-width: calc(100vw - 24px) !important;
-    max-height: min(92vh, 92dvh) !important;
-    border-radius: 16px !important;
-  }
-
-  .er-modal-header {
-    padding: 16px 18px 12px !important;
-  }
-
-  .er-modal-body {
-    padding: 16px 18px !important;
-  }
-
-  .co-order-box {
-    padding: 12px 14px !important;
-    margin-bottom: 14px !important;
-  }
-
-  .co-step-head {
-    padding: 12px 14px !important;
-  }
-
-  .co-step-body {
-    padding: 0 14px 14px !important;
-  }
-}
-
+/* Mobile */
 @media (max-width: 480px) {
   .co-method-detail {
-    padding-left: 14px !important;
+    padding-left: 16px;
   }
-
   .co-order-price {
-    font-size: 1.05rem !important;
-  }
-
-  .er-modal-header h2 {
-    font-size: 1.2rem !important;
+    font-size: 1.05rem;
   }
 }

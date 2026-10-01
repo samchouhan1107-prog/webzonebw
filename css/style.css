@@ -1729,6 +1729,34 @@ form .btn {
     line-height: 1.6;
 }
 
+.ownership-card {
+    position: relative;
+    border: 1px solid rgba(249, 115, 22, 0.35);
+    background: radial-gradient(circle at 15% 15%, rgba(249, 115, 22, 0.08) 0%, var(--surface-card) 75%);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(249, 115, 22, 0.12);
+}
+
+.ownership-card .team-member-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(249, 115, 22, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+.ownership-card .team-member-card h3 {
+    color: var(--accent-primary, #f97316);
+    font-size: 1.25rem;
+}
+
+.ownership-card .team-member-card a {
+    color: #f97316;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.ownership-details {
+    padding: 12px 4px;
+}
+
 
 /* ==========================================================
    20e — CONTACT PAGE DETAILS & RESPONSE NOTE
@@ -8740,5 +8768,64 @@ body.light-mode .playlist-filter-scroll-wrap .carousel-arrow-btn:hover {
     .playlist-filter-scroll-wrap .carousel-arrow-btn {
         opacity: 0.7;
         pointer-events: auto;
+    }
+}
+
+/* ==========================================================
+   28 — GLOBAL SITE-WIDE POLISH & REFINEMENT
+   WCAG AA Focus Rings • Typography Balance • Subtle Glow Dynamics
+========================================================== */
+
+/* Typography Balance & Rendering */
+h1, h2, h3, .brand-title, .header-title {
+    text-wrap: balance;
+}
+
+/* Tabular figures for numbers, timestamps & metrics */
+.tabular-numbers, .metric-value, .stat-value, .track-duration {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Accessible focus visible rings across buttons and links */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--brand-cyan, #38bdf8);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25);
+}
+
+/* Micro-interaction polish for buttons */
+.btn, .camera-btn-primary, .studio-mode-rail-btn, .header-icon-btn {
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:active, .camera-btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Card hover lift & subtle edge highlight */
+.featured-card, .quick-info, .projects, .contact-section {
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.24s ease;
+}
+
+.featured-card:hover {
+    border-color: rgba(56, 189, 248, 0.25);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6), 0 0 16px -4px rgba(56, 189, 248, 0.08);
+}
+
+/* Touch target comfort on mobile */
+@media (max-width: 768px) {
+    .sidebar-nav ul li a {
+        min-height: 44px;
+    }
+    .hamburger-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    .btn {
+        min-height: 44px;
     }
 }

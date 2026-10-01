@@ -209,6 +209,26 @@
                         <input type="file" id="fileInput" accept="image/*" style="display:none;" aria-label="Upload an image">
                         
                     </div>
+                    
+                    <!-- Live Camera & Effect Tuning Toolbar -->
+                    <div class="er-studio-controls" aria-label="Live Lens Tuning Controls">
+                        
+                        <label class="er-studio-switch" for="eliteAutoEnhance" title="Toggle AI Auto-Enhancement Glow">
+                            <input type="checkbox" id="eliteAutoEnhance" checked>
+                            <span class="er-switch-label">✨ Auto Enhance</span>
+                        </label>
+                        
+                        <div class="er-studio-strength" title="Adjust effect filter intensity">
+                            <label for="eliteStrengthRange">Strength:</label>
+                            <input type="range" class="er-strength-range" id="eliteStrengthRange" min="0" max="100" value="75" aria-label="Effect Strength">
+                            <span class="er-strength-value" id="eliteStrengthValue">75%</span>
+                        </div>
+                        
+                        <button type="button" class="er-studio-reset-btn" id="eliteResetBtn" title="Reset all active filters and intensity">
+                            ↺ Reset All
+                        </button>
+                        
+                    </div>
                 </section>
                 
                 <!-- Elite Effects Panel -->
@@ -266,7 +286,7 @@
                             <span class="tab-count">4</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn premium-tab-btn polished-tab" data-smart-cat="premium" title="Premium lenses unlocked with the $5.49 USD ER Studio license">
+                        <button type="button" class="smart-cat-btn premium-tab-btn polished-tab" data-smart-cat="premium" title="Premium lenses unlocked with the $5.99 USD ER Studio license">
                             <span class="tab-icon">💎</span>
                             <span class="tab-label">Premium</span>
                             <span class="tab-badge">PRO</span>
@@ -284,7 +304,7 @@
                     <div class="er-license-chip" id="erLicenseChip" role="status" aria-live="polite">
                         <span class="er-license-chip-icon" id="erLicenseChipIcon">🔒</span>
                         <span class="er-license-chip-text" id="erLicenseChipText">Free — Premium Locked</span>
-                        <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn" title="Place your order">$5.49 Upgrade — Place your order</button>
+                        <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn">$5.99 Upgrade</button>
                     </div>
                     
                     <!-- Elite Effects Category Pills -->
@@ -379,17 +399,17 @@
                     <div class="er-filter-section-heading">EFFECTS</div>
                     <div class="effects-card-grid" id="effectsCardGrid">
                         
-                        <!-- FACE ER Lenses -->
+                        <!-- FACE ER Premium Effects -->
                         <button type="button" class="effect-card" data-filter="sunglasses" data-cat="face" data-target="face">
                             <div class="effect-icon-box glass-box">🕶️</div>
                             <span class="effect-name">Aviators</span>
                             <span class="effect-target-tag face-tag">👤 Face ER</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="halo" data-cat="face" data-target="face" data-premium="true">
+                        <button type="button" class="effect-card" data-filter="halo" data-cat="face" data-target="face">
                             <div class="effect-icon-box neon-box">👑</div>
                             <span class="effect-name">Angel Halo</span>
-                            <span class="effect-target-tag face-tag premium-tag">💎 Face ER</span>
+                            <span class="effect-target-tag face-tag">👤 Face ER</span>
                         </button>
                         
                         <button type="button" class="effect-card" data-filter="goldenhour" data-cat="face" data-target="face">
@@ -403,45 +423,9 @@
                             <span class="effect-name">Anime Cel</span>
                             <span class="effect-target-tag face-tag">👤 Face ER</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="kawaii" data-cat="face" data-target="face">
-                            <div class="effect-icon-box anime-box">🌸</div>
-                            <span class="effect-name">Kawaii Blush</span>
-                            <span class="effect-target-tag face-tag">👤 Face ER</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="cyberwarrior" data-cat="face" data-target="face">
-                            <div class="effect-icon-box neon-box">⚔️</div>
-                            <span class="effect-name">Cyber Warrior</span>
-                            <span class="effect-target-tag face-tag">👤 Face ER</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="icefrost" data-cat="face" data-target="face">
-                            <div class="effect-icon-box holo-box">❄️</div>
-                            <span class="effect-name">Diamond Frost</span>
-                            <span class="effect-target-tag face-tag">👤 Face ER</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="studiohd" data-cat="face cinema" data-target="face">
-                            <div class="effect-icon-box portrait-box">📸</div>
-                            <span class="effect-name">Studio Portrait</span>
-                            <span class="effect-target-tag face-tag">👤 Face ER</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="popart" data-cat="face" data-target="face">
-                            <div class="effect-icon-box anime-box">🎭</div>
-                            <span class="effect-name">Pop Art</span>
-                            <span class="effect-target-tag face-tag">👤 Face ER</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="mother_care" data-cat="face" data-target="face">
-                            <div class="effect-icon-box portrait-box">🤱</div>
-                            <span class="effect-name">Mother Care</span>
-                            <span class="effect-target-tag face-tag">👤 Face ER</span>
-                        </button>
                         
-                        <!-- SCENE SHADERS -->
-                        <button type="button" class="effect-card" data-filter="noir" data-cat="scene cinema" data-target="scene">
+                        <!-- SCENE SHADERS Premium Effects -->
+                        <button type="button" class="effect-card" data-filter="noir" data-cat="scene" data-target="scene">
                             <div class="effect-icon-box retro-box">🖤</div>
                             <span class="effect-name">Leica Noir</span>
                             <span class="effect-target-tag scene-tag">🌍 Scene</span>
@@ -453,32 +437,20 @@
                             <span class="effect-target-tag scene-tag">🌍 Scene</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="cinematic" data-cat="scene cinema" data-target="scene">
+                        <button type="button" class="effect-card" data-filter="cinematic" data-cat="scene" data-target="scene">
                             <div class="effect-icon-box cinema-box">🎬</div>
                             <span class="effect-name">35mm Film</span>
-                            <span class="effect-target-tag scene-tag cinema-tag">🎬 Cinema</span>
+                            <span class="effect-target-tag scene-tag">🌍 Scene</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="glitch" data-cat="scene experimental" data-target="scene">
+                        <button type="button" class="effect-card" data-filter="glitch" data-cat="scene" data-target="scene">
                             <div class="effect-icon-box glitch-box">⚡</div>
                             <span class="effect-name">Glitch FX</span>
                             <span class="effect-target-tag scene-tag">🌍 Scene</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="space" data-cat="scene" data-target="scene">
-                            <div class="effect-icon-box holo-box">🚀</div>
-                            <span class="effect-name">Deep Space</span>
-                            <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="cyberpunk" data-cat="scene experimental" data-target="scene">
-                            <div class="effect-icon-box neon-box">🏙️</div>
-                            <span class="effect-name">Cyberpunk Neon</span>
-                            <span class="effect-target-tag scene-tag">🌍 Scene</span>
-                        </button>
                         
-                        <!-- POSE EFFECTS -->
-                        <button type="button" class="effect-card" data-filter="ghost-pose" data-cat="pose ghost horror" data-target="pose">
+                        <!-- POSE EFFECTS Premium Effects -->
+                        <button type="button" class="effect-card" data-filter="ghost-pose" data-cat="pose" data-target="pose">
                             <div class="effect-icon-box holo-box">👻</div>
                             <span class="effect-name">Ghost Pose</span>
                             <span class="effect-target-tag pose-tag">🦴 Pose</span>
@@ -490,138 +462,66 @@
                             <span class="effect-target-tag pose-tag">🦴 Pose</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="pumpkin-pose" data-cat="pose horror" data-target="pose">
+                        <button type="button" class="effect-card" data-filter="pumpkin-pose" data-cat="pose" data-target="pose">
                             <div class="effect-icon-box retro-box">🎃</div>
                             <span class="effect-name">Pumpkin Pose</span>
                             <span class="effect-target-tag pose-tag">🦴 Pose</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="witch-ritual" data-cat="pose witch horror" data-target="pose" data-premium="true">
-                            <div class="effect-icon-box neon-box">🪄</div>
-                            <span class="effect-name">Witch Ritual</span>
-                            <span class="effect-target-tag pose-tag premium-tag">💎 Pose</span>
-                        </button>
                         
-                        <!-- VR EFFECTS -->
+                        <!-- VR EFFECTS Premium Effects -->
                         <button type="button" class="effect-card" data-filter="vr-nebula" data-cat="vr" data-target="scene">
                             <div class="effect-icon-box holo-box">🪐</div>
                             <span class="effect-name">VR Nebula</span>
                             <span class="effect-target-tag scene-tag vr-tag">🌌 VR</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="haunted-forest" data-cat="vr horror" data-target="scene" data-premium="true">
+                        <button type="button" class="effect-card" data-filter="haunted-forest" data-cat="vr" data-target="scene" data-premium="true">
                             <div class="effect-icon-box retro-box">🌲</div>
                             <span class="effect-name">Haunted Forest</span>
                             <span class="effect-target-tag scene-tag vr-tag premium-tag">💎 VR</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="vr-cyberdeck" data-cat="vr experimental" data-target="scene" data-premium="true">
-                            <div class="effect-icon-box neon-box">🖥️</div>
-                            <span class="effect-name">VR Cyberdeck</span>
-                            <span class="effect-target-tag scene-tag vr-tag premium-tag">💎 VR</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="vr-mansion" data-cat="vr horror" data-target="scene" data-premium="true">
-                            <div class="effect-icon-box horror-box">🏚️</div>
-                            <span class="effect-name">VR Manor</span>
-                            <span class="effect-target-tag scene-tag vr-tag premium-tag">💎 VR</span>
-                        </button>
                         
-                        <!-- HORROR & THEME EFFECTS -->
-                        <button type="button" class="effect-card" data-filter="neon-horror" data-cat="horror face" data-target="face" data-premium="true">
+                        <!-- HORROR PREMIUM EFFECTS -->
+                        <button type="button" class="effect-card" data-filter="neon-horror" data-cat="horror" data-target="face" data-premium="true">
                             <div class="effect-icon-box horror-box">💀</div>
                             <span class="effect-name">Neon Horror</span>
                             <span class="effect-target-tag face-tag horror-tag premium-tag">💎 Horror</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="zombie-virus" data-cat="zombie horror face" data-target="face">
+                        <button type="button" class="effect-card" data-filter="zombie-virus" data-cat="zombie" data-target="face">
                             <div class="effect-icon-box horror-box">🧟</div>
                             <span class="effect-name">Zombie Virus</span>
                             <span class="effect-target-tag face-tag zombie-tag">🧟 Zombie</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="undead-plague" data-cat="zombie horror face" data-target="face">
-                            <div class="effect-icon-box horror-box">🧟</div>
-                            <span class="effect-name">Undead Plague</span>
-                            <span class="effect-target-tag face-tag zombie-tag">🧟 Zombie</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="walking-dead" data-cat="zombie horror face" data-target="face">
-                            <div class="effect-icon-box horror-box">🧟</div>
-                            <span class="effect-name">Walking Dead</span>
-                            <span class="effect-target-tag face-tag zombie-tag">🧟 Zombie</span>
-                        </button>
                         
-                        <button type="button" class="effect-card" data-filter="witch-curse" data-cat="witch horror face" data-target="face">
+                        <button type="button" class="effect-card" data-filter="witch-curse" data-cat="witch" data-target="face">
                             <div class="effect-icon-box neon-box">🔮</div>
                             <span class="effect-name">Witch Curse</span>
                             <span class="effect-target-tag face-tag witch-tag">🔮 Witch</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="spell-caster" data-cat="witch horror face" data-target="face">
-                            <div class="effect-icon-box neon-box">🔮</div>
-                            <span class="effect-name">Spell Caster</span>
-                            <span class="effect-target-tag face-tag witch-tag">🔮 Witch</span>
-                        </button>
                         
-                        <button type="button" class="effect-card" data-filter="ghost-aura" data-cat="ghost horror face" data-target="face">
+                        <button type="button" class="effect-card" data-filter="ghost-aura" data-cat="ghost" data-target="face">
                             <div class="effect-icon-box holo-box">👻</div>
                             <span class="effect-name">Ghost Aura</span>
                             <span class="effect-target-tag face-tag ghost-tag">👻 Ghost</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="spirit-possess" data-cat="ghost horror face" data-target="face">
-                            <div class="effect-icon-box holo-box">👻</div>
-                            <span class="effect-name">Spirit Possess</span>
-                            <span class="effect-target-tag face-tag ghost-tag">👻 Ghost</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="phantom-veil" data-cat="ghost horror face" data-target="face">
-                            <div class="effect-icon-box holo-box">🌫️</div>
-                            <span class="effect-name">Phantom Veil</span>
-                            <span class="effect-target-tag face-tag ghost-tag">👻 Ghost</span>
-                        </button>
                         
-                        <button type="button" class="effect-card" data-filter="monster-fangs" data-cat="monster horror face" data-target="face">
+                        <button type="button" class="effect-card" data-filter="monster-fangs" data-cat="monster" data-target="face">
                             <div class="effect-icon-box horror-box">👹</div>
                             <span class="effect-name">Monster Fangs</span>
                             <span class="effect-target-tag face-tag monster-tag">👹 Monster</span>
                         </button>
-
-                        <button type="button" class="effect-card" data-filter="beast-roar" data-cat="monster horror face" data-target="face">
-                            <div class="effect-icon-box horror-box">🦁</div>
-                            <span class="effect-name">Beast Roar</span>
-                            <span class="effect-target-tag face-tag monster-tag">👹 Monster</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="creature-horns" data-cat="monster horror face" data-target="face">
-                            <div class="effect-icon-box horror-box">😈</div>
-                            <span class="effect-name">Creature Horns</span>
-                            <span class="effect-target-tag face-tag monster-tag">👹 Monster</span>
-                        </button>
                         
-                        <button type="button" class="effect-card" data-filter="horror-movie" data-cat="cinema horror scene" data-target="scene">
+                        <button type="button" class="effect-card" data-filter="horror-movie" data-cat="cinema" data-target="scene">
                             <div class="effect-icon-box horror-box">🎬</div>
                             <span class="effect-name">Horror Movie</span>
                             <span class="effect-target-tag scene-tag cinema-tag">🎬 Cinema</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="quantum-horror" data-cat="experimental horror scene" data-target="scene" data-premium="true">
+                        <button type="button" class="effect-card" data-filter="quantum-horror" data-cat="experimental" data-target="scene">
                             <div class="effect-icon-box holo-box">⚡</div>
                             <span class="effect-name">Quantum Horror</span>
-                            <span class="effect-target-tag scene-tag experimental-tag premium-tag">💎 Experimental</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="dollar-rain" data-cat="experimental" data-target="scene">
-                            <div class="effect-icon-box portrait-box">💵</div>
-                            <span class="effect-name">Dollar Rain</span>
-                            <span class="effect-target-tag scene-tag experimental-tag">⚡ FX</span>
-                        </button>
-
-                        <button type="button" class="effect-card" data-filter="celebrity-spotlight" data-cat="cinema" data-target="scene">
-                            <div class="effect-icon-box portrait-box">🌟</div>
-                            <span class="effect-name">Spotlight</span>
-                            <span class="effect-target-tag scene-tag cinema-tag">🎬 Cinema</span>
+                            <span class="effect-target-tag scene-tag experimental-tag premium-tag">⚡ Experimental</span>
                         </button>
                         
                     </div>
@@ -629,35 +529,7 @@
                 </aside>
             </div>
             
-            <!-- Elite Studio Controls -->
-            <div class="er-studio-controls">
-                
-                <div class="er-studio-switch" title="Toggle active effect on/off">
-                    <input type="checkbox" id="erToggleEffect" checked>
-                    <span class="er-switch-label">✨ Effect</span>
-                </div>
 
-                <div class="er-studio-switch" title="Toggle animation & particle motion">
-                    <input type="checkbox" id="erToggleAnimation" checked>
-                    <span class="er-switch-label">🎬 Motion</span>
-                </div>
-
-                <div class="er-studio-switch" title="Toggle 3D environmental background">
-                    <input type="checkbox" id="erToggleBackground" checked>
-                    <span class="er-switch-label">🌍 Scene 3D</span>
-                </div>
-                
-                <div class="er-studio-strength" title="Adjust effect intensity">
-                    <span>Strength:</span>
-                    <input type="range" class="er-strength-range" id="erStrengthRange" min="0" max="100" value="75" aria-label="Effect strength">
-                    <span class="er-strength-value" id="erStrengthValue">75%</span>
-                </div>
-                
-                <button type="button" class="er-studio-reset-btn" id="erResetStudioBtn" title="Reset all studio filters and adjustments">
-                    ↺ Reset Studio
-                </button>
-                
-            </div>
             
         </main>
     </div>

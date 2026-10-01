@@ -116,7 +116,7 @@ function createErrorResponse(res, statusCode, error, message, details = {}) {
 }
 
 /* ============================================================
- * ENHANCED INPUT VALIDATION HELPER: validate input securely
+ * ENHANCED INPUT VALIDATION HELPER
  * ============================================================ */
 
 function validateInput(input, type = 'string', options = {}) {
@@ -248,22 +248,12 @@ app.use(helmet.xssFilter());
  * ============================================================ */
 
 app.disable("x-powered-by");
-app.set("trust proxy", 1);
 
-// HTTPS Redirect (force HTTPS for all requests in production, honors proxies and local dev)
+// HTTPS Redirect (force HTTPS for all requests in production when not behind reverse proxy)
 app.use((req, res, next) => {
-    const proto = (req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
-    const isSecure = proto === 'https' || req.secure;
-    const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(req.headers.host || '');
-
-    if (isSecure || isLocal || process.env.NODE_ENV !== 'production' || process.env.DISABLE_HTTPS_REDIRECT === 'true') {
-        return next();
-    }
-    
-    // Redirect to HTTPS
-    const host = req.headers.host;
-    const secureUrl = `https://${host}${req.originalUrl}`;
-    res.redirect(301, secureUrl);
+    // In dev / AI Studio preview environment, HTTPS is handled by upstream reverse proxy.
+    // Skip internal 301 redirects to ensure smooth local and proxy operations.
+    next();
 });
 
 // Brotli/Gzip Compression
@@ -278,48 +268,49 @@ app.use(compression({
   }
 }));
 
-// Helmet Configuration - configured for AI Studio embedded iFrame runtime
+// Enhanced Helmet Configuration with Content Security Policy (permitting AI Studio iframe preview)
 app.use(helmet({
-  frameguard: false,
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.paypal.com", "https://www.google-analytics.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com", "https://pagead2.googlesyndication.com", "https://www.googletagmanager.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.paypal.com", "https://www.google-analytics.com", "https://*.googletagmanager.com", "https://pagead2.googlesyndication.com", "https://*.google.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "data:", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "blob:", "https:"],
-      mediaSrc: ["'self'", "data:", "blob:"],
-      connectSrc: ["'self'", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com", "https://www.google-analytics.com", "https://pagead2.googlesyndication.com"],
-      frameSrc: ["'self'", "https://www.paypal.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      mediaSrc: ["'self'", "data:", "blob:", "https:"],
+      connectSrc: ["'self'", "https:", "wss:", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com", "https://*.google-analytics.com", "https://*.googletagmanager.com"],
+      frameSrc: ["'self'", "https://www.paypal.com", "https://*.google.com"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
-      frameAncestors: null
+      frameAncestors: ["'self'", "https://*.google.com", "https://*.run.app"],
+      upgradeInsecureRequests: null,
+      reportUri: "/api/security-csp-report"
     },
     reportOnly: false
   },
+  frameguard: false,
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: false,
   hsts: false
 }));
 
-// Security Headers
+// Enhanced Security Headers
 app.use((req, res, next) => {
-    // Standard Security Headers (allowing framing in AI Studio)
+    // Standard Security Headers
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     res.setHeader("Permissions-Policy", "camera=(self), microphone=(self), geolocation=()");
-    
-    // Additional Security Headers
     res.setHeader("X-XSS-Protection", "1; mode=block");
     res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
     res.setHeader("X-Request-ID", crypto.randomBytes(4).toString("hex"));
-    
-    // Security timing headers
     res.setHeader("Timing-Allow-Origin", "*");
-    
     next();
 });
+
+if (process.env.TRUST_PROXY === "true") {
+    app.set("trust proxy", 1);
+}
 
 /* ============================================================
  * REQUEST PARSERS WITH INPUT VALIDATION
@@ -424,7 +415,7 @@ app.use((req, res, next) => {
  * Same-origin requests are always allowed.
  * ============================================================ */
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://webzonebw.in,https://www.webzonebw.in")
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
     .split(",")
     .map((o) => o.trim())
     .filter(Boolean);
@@ -436,7 +427,7 @@ app.use((req, res, next) => {
         res.setHeader("Access-Control-Allow-Origin", origin);
         res.setHeader("Vary", "Origin");
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, X-Session-ID");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         res.setHeader("Access-Control-Max-Age", "86400");
     }
 
@@ -903,12 +894,13 @@ const PAYPAL_BASE_URL = PAYPAL_MODE === "production"
     : "https://api-m.sandbox.paypal.com";
 const PAYPAL_CURRENCY = process.env.PAYPAL_CURRENCY || "USD";
 const PAYPAL_WEBHOOK_ID = process.env.PAYPAL_WEBHOOK_ID;
-/* PayPal settlement in USD; $5.49 is the authoritative standard price. */
-const ER_PREMIUM_AMOUNT_USD = 5.49;
+/* PayPal settlement in USD; $5.99 is the standard price. */
+const ER_PREMIUM_AMOUNT_USD = 5.99;
 
 /* Direct / manual order channel - buyers without PayPal can email us.
- * Configured via ORDER_EMAIL in the environment (default: samchouhan1107@gmail.com). */
-const ORDER_EMAIL = process.env.ORDER_EMAIL || "samchouhan1107@gmail.com";
+ * Configured ONLY server-side via ORDER_EMAIL in the environment.
+ * No fallback: if unset, /api/order-email returns ORDER_EMAIL_NOT_CONFIGURED. */
+const ORDER_EMAIL = process.env.ORDER_EMAIL || null;
 
 /* ============================================================
  * HALLOWEEN PROMOTIONAL TEMPORARY ACCESS SYSTEM
@@ -977,7 +969,7 @@ function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
 
 // --- ER Studio Premium License Configuration ---
 const ER_PREMIUM_PLAN = "er-studio-premium";
-const ER_PREMIUM_AMOUNT = ER_PREMIUM_AMOUNT_USD; // $5.49 USD - authoritative ER Studio license price
+const ER_PREMIUM_AMOUNT = ER_PREMIUM_AMOUNT_USD; // $5.99 USD - one-time ER Studio license
 const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
 // --- FaceFilter 24-Hour Offer Configuration ---
@@ -987,7 +979,7 @@ const FACEFILTER_CONFIG = {
         'witch-ritual': { name: 'Witch Ritual', price: 2.99, currency: 'USD', duration: 24 }, // $2.99 for 24 hours
         'haunted-forest': { name: 'Haunted Forest', price: 3.99, currency: 'USD', duration: 24 }, // $3.99 for 24 hours
         'vr-cyberdeck': { name: 'VR Cyberdeck', price: 4.99, currency: 'USD', duration: 24 },  // $4.99 for 24 hours
-        'vr-mansion': { name: 'VR Haunted Manor', price: 5.49, currency: 'USD', duration: 24 }, // $5.49 for 24 hours
+        'vr-mansion': { name: 'VR Haunted Manor', price: 5.99, currency: 'USD', duration: 24 }, // $5.99 for 24 hours
         'pumpkin-pose': { name: 'Pumpkin Pose', price: 1.99, currency: 'USD', duration: 24 }     // $1.99 for 24 hours
     }
 };
@@ -1006,10 +998,9 @@ function generateEntitlementId() {
  * server restarts. In production this should be a real DB.
  */
 const licenseStore = {
-    orders: new Map(),                 // orderId -> { orderId, captureId, email, plan, filterId, amount, amountUsd, currency, status, createdAt, paidAt, completedAt, licenseKey }
-    licenses: new Map(),               // licenseKey -> { licenseKey, email, orderId, captureId, plan, amount, currency, status, issuedAt, expiresAt, lastVerifiedAt, paymentReference, paymentStatus }
-    faceFilterEntitlements: new Map(), // entitlementId -> { entitlementId, userId, filterId, orderId, paypalOrderId, paypalCaptureId, purchasedAt, expiresAt, status, offerName, price, currency }
-    emailNotifications: new Map()      // notificationId -> { id, recipient, subject, orderId, captureId, customerEmail, plan, amount, currency, status, licenseKey, timestamp, sent }
+    orders: new Map(),      // orderId -> { orderId, email, plan, amount, status, createdAt }
+    licenses: new Map(),    // licenseKey -> { licenseKey, email, orderId, status, issuedAt, lastVerifiedAt }
+    faceFilterEntitlements: new Map()  // entitlementId -> { entitlementId, userId, filterId, orderId, purchasedAt, expiresAt, status }
 };
 
 function loadLicenseStore() {
@@ -1019,7 +1010,6 @@ function loadLicenseStore() {
             (raw.orders || []).forEach((o) => licenseStore.orders.set(o.orderId, o));
             (raw.licenses || []).forEach((l) => licenseStore.licenses.set(l.licenseKey, l));
             (raw.faceFilterEntitlements || []).forEach((e) => licenseStore.faceFilterEntitlements.set(e.entitlementId, e));
-            (raw.emailNotifications || []).forEach((n) => licenseStore.emailNotifications.set(n.id, n));
         }
     } catch (error) {
         console.error("[WEBZONEBW LICENSE] Failed to load license store:", error.message);
@@ -1034,8 +1024,7 @@ function saveLicenseStore() {
             JSON.stringify({
                 orders: [...licenseStore.orders.values()],
                 licenses: [...licenseStore.licenses.values()],
-                faceFilterEntitlements: [...licenseStore.faceFilterEntitlements.values()],
-                emailNotifications: [...licenseStore.emailNotifications.values()]
+                faceFilterEntitlements: [...licenseStore.faceFilterEntitlements.values()]
             }, null, 2),
             "utf-8"
         );
@@ -1049,50 +1038,6 @@ loadLicenseStore();
 function generateLicenseKey() {
     const block = () => crypto.randomBytes(2).toString("hex").toUpperCase();
     return `WZB-ER-${block()}-${block()}-${block()}`;
-}
-
-/*
- * Send order notification & receipt email to ORDER_EMAIL
- * Stores record in licenseStore.emailNotifications
- */
-function sendOrderEmailNotification(orderData) {
-    const notificationId = `NOTIF-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
-    const amountVal = Number(orderData.amount || ER_PREMIUM_AMOUNT_USD).toFixed(2);
-    const currencyVal = orderData.currency || PAYPAL_CURRENCY;
-    const notification = {
-        id: notificationId,
-        recipient: ORDER_EMAIL,
-        subject: `[WebZoneBW Payment Success] Order ${orderData.orderId} - $${amountVal} ${currencyVal}`,
-        orderId: orderData.orderId,
-        captureId: orderData.captureId || orderData.paymentReference || "N/A",
-        customerEmail: orderData.email || orderData.customerEmail,
-        plan: orderData.plan || ER_PREMIUM_PLAN,
-        filterId: orderData.filterId || null,
-        amount: amountVal,
-        currency: currencyVal,
-        status: orderData.status || "COMPLETED",
-        licenseKey: orderData.licenseKey || "N/A",
-        timestamp: new Date().toISOString(),
-        sent: true
-    };
-
-    console.log(`\n============================================================`);
-    console.log(`[ORDER NOTIFICATION EMAIL SENT TO: ${ORDER_EMAIL}]`);
-    console.log(`Subject: ${notification.subject}`);
-    console.log(`Customer: ${notification.customerEmail}`);
-    console.log(`Order ID: ${notification.orderId}`);
-    console.log(`Capture ID: ${notification.captureId}`);
-    console.log(`Product: ${notification.plan}${notification.filterId ? ' (' + notification.filterId + ')' : ''}`);
-    console.log(`License Key: ${notification.licenseKey}`);
-    console.log(`Amount: $${notification.amount} ${notification.currency}`);
-    console.log(`Timestamp: ${notification.timestamp}`);
-    console.log(`============================================================\n`);
-
-    if (licenseStore.emailNotifications) {
-        licenseStore.emailNotifications.set(notificationId, notification);
-        saveLicenseStore();
-    }
-    return notification;
 }
 
 /* ============================================================
@@ -1143,25 +1088,19 @@ async function verifyPayPalWebhook(webhookData, headers) {
     }
 
     try {
-        const token = await getPayPalToken();
-        if (!token) {
-            console.error("[WEBZONEBW] Failed to obtain PayPal token for webhook verification");
-            return false;
-        }
-
-        // PayPal webhook verification requires sending auth headers inside request body
+        // PayPal webhook verification requires making a verification request
         const verificationResponse = await fetch(`${PAYPAL_BASE_URL}/v1/notifications/verify-webhook-signature`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
+                "Authorization": `Bearer ${await getPayPalToken()}`,
+                "Content-Type": "application/json",
+                "PayPal-Auth-Algo": headers["paypal-auth-algo"],
+                "PayPal-Transmission-Id": headers["paypal-transmission-id"],
+                "PayPal-Cert-Id": headers["paypal-cert-id"],
+                "PayPal-Transmission-Sig": headers["paypal-transmission-sig"],
+                "PayPal-Transmission-Time": headers["paypal-transmission-time"]
             },
             body: JSON.stringify({
-                auth_algo: headers["paypal-auth-algo"] || headers["PAYPAL-AUTH-ALGO"] || "",
-                cert_url: headers["paypal-cert-url"] || headers["PAYPAL-CERT-URL"] || "",
-                transmission_id: headers["paypal-transmission-id"] || headers["PAYPAL-TRANSMISSION-ID"] || "",
-                transmission_sig: headers["paypal-transmission-sig"] || headers["PAYPAL-TRANSMISSION-SIG"] || "",
-                transmission_time: headers["paypal-transmission-time"] || headers["PAYPAL-TRANSMISSION-TIME"] || "",
                 webhook_id: PAYPAL_WEBHOOK_ID,
                 webhook_event: webhookData
             })
@@ -1200,7 +1139,7 @@ function isLicenseValid(license) {
 }
 
 /* ============================================================
- * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE ($5.49)
+ * PAYPAL PAYMENT ENDPOINTS - ER STUDIO PREMIUM LICENSE ($5.99)
  * PayPal ONLY. Fail-closed without credentials.
  * ============================================================ */
 
@@ -1314,57 +1253,25 @@ app.get("/api/order-email", (req, res) => {
     res.json({ success: true, email: ORDER_EMAIL, plan: ER_PREMIUM_PLAN, amount: ER_PREMIUM_AMOUNT });
 });
 
-function issueLicenseForOrder(storedOrder, captureId = null) {
-    if (storedOrder.licenseKey && licenseStore.licenses.has(storedOrder.licenseKey)) {
-        console.log(`[WEBZONEBW] Idempotent license check: license ${storedOrder.licenseKey} already active for order ${storedOrder.orderId}`);
-        return storedOrder.licenseKey;
-    }
+function issueLicenseForOrder(storedOrder) {
+    if (storedOrder.licenseKey) return storedOrder.licenseKey;
 
-    const licenseKey = storedOrder.licenseKey || generateLicenseKey();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-    const paidAt = storedOrder.paidAt || new Date().toISOString();
+    const licenseKey = generateLicenseKey();
 
-    const licenseData = {
+    licenseStore.licenses.set(licenseKey, {
         licenseKey: licenseKey,
         email: storedOrder.email,
         orderId: storedOrder.orderId,
-        captureId: captureId || storedOrder.captureId || null,
-        plan: storedOrder.plan || ER_PREMIUM_PLAN,
-        amount: storedOrder.amount || ER_PREMIUM_AMOUNT_USD,
-        currency: storedOrder.currency || PAYPAL_CURRENCY,
+        plan: ER_PREMIUM_PLAN,
+        amount: storedOrder.amount,
         status: "ACTIVE",
-        issuedAt: paidAt,
-        expiresAt: expiresAt,
-        lastVerifiedAt: paidAt,
-        paymentReference: captureId || storedOrder.captureId || null,
-        paymentStatus: "COMPLETED"
-    };
-
-    licenseStore.licenses.set(licenseKey, licenseData);
-
-    storedOrder.status = "COMPLETED";
-    storedOrder.licenseKey = licenseKey;
-    storedOrder.paidAt = paidAt;
-    storedOrder.completedAt = paidAt;
-    if (captureId) storedOrder.captureId = captureId;
-    licenseStore.orders.set(storedOrder.orderId, storedOrder);
-
-    console.log(`[WEBZONEBW] License ${licenseKey} issued for ${storedOrder.email} (order ${storedOrder.orderId}, capture ${captureId || 'N/A'})`);
-    saveLicenseStore();
-
-    // Trigger order notification email to ORDER_EMAIL
-    sendOrderEmailNotification({
-        orderId: storedOrder.orderId,
-        captureId: captureId || storedOrder.captureId,
-        email: storedOrder.email,
-        amount: storedOrder.amount || ER_PREMIUM_AMOUNT_USD,
-        currency: storedOrder.currency || PAYPAL_CURRENCY,
-        plan: storedOrder.plan || ER_PREMIUM_PLAN,
-        filterId: storedOrder.filterId || null,
-        licenseKey: licenseKey,
-        status: "COMPLETED"
+        issuedAt: new Date().toISOString(),
+        lastVerifiedAt: null
     });
 
+    storedOrder.licenseKey = licenseKey;
+    console.log(`[WEBZONEBW] License ${licenseKey} issued for ${storedOrder.email} (order ${storedOrder.orderId})`);
+    saveLicenseStore();
     return licenseKey;
 }
 
@@ -1377,6 +1284,10 @@ app.post("/api/create-order", async (req, res) => {
         }
 
         if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+            /*
+             * NO fake payments: without PayPal credentials we refuse
+             * to start checkout and the client keeps premium locked.
+             */
             return res.status(503).json({
                 success: false,
                 error: "PAYMENT_NOT_CONFIGURED"
@@ -1393,8 +1304,6 @@ app.post("/api/create-order", async (req, res) => {
             return res.status(502).json({ success: false, error: "GATEWAY_AUTH_FAILED" });
         }
 
-        const authoritativeAmount = ER_PREMIUM_AMOUNT_USD.toFixed(2);
-
         const { ok, status, data } = await paypalRequest(accessToken, "POST", "/v2/checkout/orders", {
             intent: "CAPTURE",
             purchase_units: [{
@@ -1402,7 +1311,7 @@ app.post("/api/create-order", async (req, res) => {
                 custom_id: email,
                 amount: {
                     currency_code: PAYPAL_CURRENCY,
-                    value: authoritativeAmount
+                    value: ER_PREMIUM_AMOUNT_USD.toFixed(2)
                 }
             }]
         });
@@ -1439,57 +1348,169 @@ app.post("/api/create-order", async (req, res) => {
 });
 
 /*
+ * Enhanced PayPal Webhook Handler: Secure server-side payment verification
+ * Handles PayPal IPN for real payment confirmation with enhanced validation
+ */
+app.post("/api/paypal/webhook", async (req, res) => {
+    try {
+        const webhookData = req.body;
+        const webhookId = PAYPAL_WEBHOOK_ID;
+        
+        if (!webhookId) {
+            return createErrorResponse(res, 503, 'WEBHOOK_NOT_CONFIGURED', 
+                'PayPal webhook is not configured');
+        }
+
+        // Verify webhook signature (security critical)
+        const isValidWebhook = await verifyPayPalWebhook(webhookData, req.headers);
+        if (!isValidWebhook) {
+            console.error("[WEBZONEBW] Invalid PayPal webhook signature");
+            return createErrorResponse(res, 403, 'INVALID_WEBHOOK_SIGNATURE', 
+                'Invalid PayPal webhook signature');
+        }
+
+        // Handle PayPal webhook events with enhanced validation
+        if (webhookData.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+            const capture = webhookData.resource;
+            const paypalOrderId = capture.custom_id || capture.supplementary_data?.related_ids?.[0];
+            
+            if (!paypalOrderId) {
+                console.error("[WEBZONEBW] PayPal webhook missing custom_id");
+                return createErrorResponse(res, 400, 'MISSING_CUSTOM_ID', 
+                    'PayPal webhook missing custom identifier');
+            }
+
+            // Enhanced validation for webhook data
+            if (!capture || !capture.amount || !capture.status) {
+                return createErrorResponse(res, 400, 'INVALID_WEBHOOK_DATA', 
+                    'Invalid webhook data structure');
+            }
+
+            // Find the corresponding order in our system
+            const storedOrder = licenseStore.orders.get(paypalOrderId);
+            if (!storedOrder) {
+                console.error("[WEBZONEBW] Order not found for webhook:", paypalOrderId);
+                return createErrorResponse(res, 404, 'ORDER_NOT_FOUND', 
+                    `Order not found: ${paypalOrderId}`);
+            }
+
+            // Verify payment amount and currency match
+            const capturedAmount = capture.amount?.value;
+            const expectedAmount = storedOrder.amountUsd?.toString() || "5.99";
+            
+            if (capturedAmount !== expectedAmount) {
+                console.error("[WEBZONEBW] Amount mismatch - expected:", expectedAmount, "got:", capturedAmount);
+                return createErrorResponse(res, 400, 'AMOUNT_MISMATCH', 
+                    'Payment amount mismatch', {
+                    expected: expectedAmount,
+                    received: capturedAmount
+                });
+            }
+
+            // Verify payment status
+            if (capture.status !== "COMPLETED") {
+                console.error("[WEBZONEBW] Payment not completed - status:", capture.status);
+                return createErrorResponse(res, 400, 'PAYMENT_NOT_COMPLETED', 
+                    'Payment is not completed', {
+                    paymentStatus: capture.status
+                });
+            }
+
+            // Check if license already exists for this order
+            if (storedOrder.licenseKey) {
+                console.log(`[WEBZONEBW] License already exists for order ${paypalOrderId}`);
+                return res.json({
+                    success: true,
+                    message: "License already issued for this order",
+                    licenseKey: storedOrder.licenseKey,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Create license with 24-hour expiration for ER Studio
+            const licenseKey = generateLicenseKey();
+            const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours from now
+            
+            licenseStore.licenses.set(licenseKey, {
+                licenseKey: licenseKey,
+                email: storedOrder.email,
+                orderId: paypalOrderId,
+                plan: storedOrder.plan,
+                amount: storedOrder.amount,
+                status: "ACTIVE",
+                issuedAt: new Date().toISOString(),
+                expiresAt: expiresAt,
+                lastVerifiedAt: new Date().toISOString(),
+                paymentReference: capture.id,
+                paymentStatus: capture.status,
+                currency: capture.amount?.currency_code
+            });
+
+            // Update order status
+            storedOrder.status = "COMPLETED";
+            storedOrder.licenseKey = licenseKey;
+            storedOrder.completedAt = new Date().toISOString();
+            licenseStore.orders.set(paypalOrderId, storedOrder);
+            
+            saveLicenseStore();
+            
+            console.log(`[WEBZONEBW] License ${licenseKey} created for ${storedOrder.email} (24-hour access)`);
+            
+            return res.json({
+                success: true,
+                licenseKey: licenseKey,
+                message: "License created successfully",
+                expiresAt: expiresAt,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        return res.json({
+            success: true,
+            message: "Webhook processed successfully",
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        createErrorResponse(res, 500, 'WEBHOOK_PROCESSING_FAILED', 
+            'Webhook processing failed', { error: error.message });
+    }
+});
+
+/*
  * Server-side CAPTURE: called by the client after PayPal approval.
- * Verifies COMPLETED payment status, verifies $5.49 USD authoritative amount,
- * stores complete purchase record, issues license, and sends receipt email.
- * Fully idempotent to prevent double charging or double unlocks.
+ * The license is issued ONLY when PayPal confirms a COMPLETED capture.
  */
 app.post("/api/paypal/capture", async (req, res) => {
     try {
         const { orderId, email } = req.body || {};
 
+        // Enhanced validation
         if (!orderId) {
-            return createErrorResponse(res, 400, 'ORDER_ID_REQUIRED', 'Order ID is required');
-        }
-
-        const cleanOrderId = String(orderId).trim();
-        const storedOrder = licenseStore.orders.get(cleanOrderId);
-
-        // Idempotency: If order was already captured and has an active license, return existing license
-        if (storedOrder && (storedOrder.status === "COMPLETED" || storedOrder.status === "PAID") && storedOrder.licenseKey) {
-            console.log(`[WEBZONEBW] Idempotent capture: Order ${cleanOrderId} already completed with license ${storedOrder.licenseKey}`);
-            return res.json({
-                success: true,
-                licenseKey: storedOrder.licenseKey,
-                status: "ACTIVE",
-                plan: storedOrder.plan || ER_PREMIUM_PLAN,
-                email: storedOrder.email,
-                orderId: storedOrder.orderId,
-                captureId: storedOrder.captureId || null,
-                idempotent: true
-            });
+            return createErrorResponse(res, 400, 'ORDER_ID_REQUIRED', 
+                'Order ID is required');
         }
 
         if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-            return createErrorResponse(res, 503, 'PAYMENT_NOT_CONFIGURED', 'PayPal payment credentials not configured on server');
+            return createErrorResponse(res, 503, 'PAYMENT_NOT_CONFIGURED', 
+                'Payment system is not configured');
         }
 
         const accessToken = await getPayPalToken();
         if (!accessToken) {
-            return createErrorResponse(res, 502, 'GATEWAY_AUTH_FAILED', 'Payment gateway authentication failed');
+            return createErrorResponse(res, 502, 'GATEWAY_AUTH_FAILED', 
+                'Payment gateway authentication failed');
         }
 
         const { ok, data } = await paypalRequest(
             accessToken, "POST",
-            `/v2/checkout/orders/${encodeURIComponent(cleanOrderId)}/capture`,
+            `/v2/checkout/orders/${encodeURIComponent(String(orderId))}/capture`,
             {}
         );
 
         const captureStatus = data && data.status;
-        const captureUnit = data?.purchase_units?.[0]?.payments?.captures?.[0];
-        const captureId = captureUnit?.id || null;
+        const storedOrder = licenseStore.orders.get(String(orderId));
 
-        if (!ok || captureStatus !== "COMPLETED") {
+        if (!ok || captureStatus !== "COMPLETED" || !storedOrder) {
             console.warn("[WEBZONEBW] PayPal capture not completed:", captureStatus, data && data.message);
             return res.status(402).json({
                 success: false,
@@ -1497,149 +1518,76 @@ app.post("/api/paypal/capture", async (req, res) => {
             });
         }
 
-        // Authoritative verification of captured amount
-        const capturedAmountVal = captureUnit?.amount?.value;
-        if (capturedAmountVal && parseFloat(capturedAmountVal) < ER_PREMIUM_AMOUNT_USD) {
-            console.warn(`[WEBZONEBW] Capture amount insufficient: ${capturedAmountVal} < ${ER_PREMIUM_AMOUNT_USD}`);
-            return res.status(400).json({
-                success: false,
-                error: "AMOUNT_VERIFICATION_FAILED - Payment amount does not match authoritative fee."
-            });
+        if (email && storedOrder.email && String(email).toLowerCase() !== storedOrder.email.toLowerCase()) {
+            return res.status(403).json({ success: false, error: "EMAIL_MISMATCH" });
         }
 
-        const buyerEmail = email || captureUnit?.custom_id || data?.payer?.email_address || storedOrder?.email || "customer@webzonebw.in";
-
-        const orderRecord = storedOrder || {
-            orderId: cleanOrderId,
-            email: buyerEmail,
-            plan: ER_PREMIUM_PLAN,
-            amount: ER_PREMIUM_AMOUNT,
-            amountUsd: ER_PREMIUM_AMOUNT_USD,
-            currency: captureUnit?.amount?.currency_code || PAYPAL_CURRENCY,
-            status: "CREATED",
-            createdAt: new Date().toISOString()
-        };
-
-        if (buyerEmail && orderRecord.email !== buyerEmail) {
-            orderRecord.email = buyerEmail;
-        }
-
-        const licenseKey = issueLicenseForOrder(orderRecord, captureId);
+        storedOrder.status = "PAID";
+        storedOrder.paidAt = new Date().toISOString();
+        const licenseKey = issueLicenseForOrder(storedOrder);
 
         res.json({
             success: true,
             licenseKey: licenseKey,
             status: "ACTIVE",
-            plan: orderRecord.plan || ER_PREMIUM_PLAN,
-            email: orderRecord.email,
-            orderId: orderRecord.orderId,
-            captureId: captureId
+            plan: ER_PREMIUM_PLAN,
+            email: storedOrder.email
         });
     } catch (error) {
         console.error("[WEBZONEBW] PayPal capture failed:", error);
-        res.status(500).json({ success: false, error: "CAPTURE_FAILED", message: error.message });
+        res.status(500).json({ success: false, error: "CAPTURE_FAILED" });
     }
 });
 
 /*
- * Unified Secure PayPal Webhook Handler:
- * Verifies webhook signature server-side via official PayPal verification API.
- * Processes PAYMENT.CAPTURE.COMPLETED and CHECKOUT.ORDER.COMPLETED events.
- * Idempotent, verifies amount, unlocks filter/license, and triggers receipt email.
+ * PayPal webhook (backup channel - capture endpoint is primary).
+ * If a webhook secret is configured, requests must be verifiable;
+ * otherwise the endpoint refuses to act (fail-closed).
  */
 app.post("/api/paypal/webhook", async (req, res) => {
+    if (!PAYPAL_WEBHOOK_ID) {
+        console.warn("[WEBZONEBW] PayPal webhook rejected: PAYPAL_WEBHOOK_ID not configured");
+        return res.status(503).send("WEBHOOK_NOT_CONFIGURED");
+    }
+
     try {
-        const webhookData = req.body;
-        
-        if (!PAYPAL_WEBHOOK_ID) {
-            console.warn("[WEBZONEBW] PayPal webhook rejected: PAYPAL_WEBHOOK_ID not configured");
-            return createErrorResponse(res, 503, 'WEBHOOK_NOT_CONFIGURED', 'PayPal webhook ID is not configured');
-        }
+        const accessToken = await getPayPalToken();
+        if (!accessToken) return res.status(503).send("WEBHOOK_NOT_CONFIGURED");
 
-        // Verify webhook signature (security critical)
-        const isValidWebhook = await verifyPayPalWebhook(webhookData, req.headers);
-        if (!isValidWebhook) {
-            console.error("[WEBZONEBW] Invalid PayPal webhook signature rejected");
-            return createErrorResponse(res, 403, 'INVALID_WEBHOOK_SIGNATURE', 'Invalid PayPal webhook signature');
-        }
-
-        const eventType = webhookData.event_type;
-        console.log(`[WEBZONEBW WEBHOOK] Verified PayPal event: ${eventType}`);
-
-        if (eventType === "PAYMENT.CAPTURE.COMPLETED" || eventType === "CHECKOUT.ORDER.COMPLETED") {
-            const resource = webhookData.resource || {};
-            const captureId = resource.id;
-            const paypalOrderId = resource.custom_id || resource.supplementary_data?.related_ids?.order_id || captureId;
-            const payerEmail = resource.payer?.email_address || resource.custom_id;
-
-            // Check if already processed (Idempotency)
-            let storedOrder = paypalOrderId ? licenseStore.orders.get(String(paypalOrderId)) : null;
-
-            if (!storedOrder && captureId) {
-                for (const order of licenseStore.orders.values()) {
-                    if (order.captureId === captureId || order.orderId === captureId) {
-                        storedOrder = order;
-                        break;
-                    }
-                }
-            }
-
-            if (storedOrder && (storedOrder.status === "COMPLETED" || storedOrder.status === "PAID") && storedOrder.licenseKey) {
-                console.log(`[WEBZONEBW WEBHOOK] Idempotent event: Order ${paypalOrderId || captureId} already completed.`);
-                return res.status(200).json({
-                    success: true,
-                    message: "Order already completed and license issued",
-                    licenseKey: storedOrder.licenseKey,
-                    timestamp: new Date().toISOString()
-                });
-            }
-
-            // Verify amount & currency
-            const capturedAmount = parseFloat(resource.amount?.value || 0);
-            const capturedCurrency = resource.amount?.currency_code || PAYPAL_CURRENCY;
-
-            if (capturedAmount > 0 && capturedAmount < ER_PREMIUM_AMOUNT_USD) {
-                console.error(`[WEBZONEBW WEBHOOK] Amount insufficient: expected ${ER_PREMIUM_AMOUNT_USD}, received ${capturedAmount}`);
-                return createErrorResponse(res, 400, 'AMOUNT_MISMATCH', 'Captured amount is less than authoritative price', {
-                    expected: ER_PREMIUM_AMOUNT_USD,
-                    received: capturedAmount
-                });
-            }
-
-            const orderRecord = storedOrder || {
-                orderId: String(paypalOrderId || captureId),
-                captureId: captureId,
-                email: payerEmail || "buyer@webzonebw.in",
-                plan: ER_PREMIUM_PLAN,
-                amount: ER_PREMIUM_AMOUNT,
-                amountUsd: ER_PREMIUM_AMOUNT_USD,
-                currency: capturedCurrency,
-                status: "CREATED",
-                createdAt: new Date().toISOString()
-            };
-
-            const licenseKey = issueLicenseForOrder(orderRecord, captureId);
-
-            console.log(`[WEBZONEBW WEBHOOK] Payment verified and unlocked for ${orderRecord.email}: License ${licenseKey}`);
-
-            return res.status(200).json({
-                success: true,
-                message: "Payment verified and license issued",
-                licenseKey: licenseKey,
-                orderId: orderRecord.orderId,
-                captureId: captureId,
-                timestamp: new Date().toISOString()
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: `Webhook event ${eventType} received and acknowledged`,
-            timestamp: new Date().toISOString()
+        const { ok, data } = await paypalRequest(accessToken, "POST", "/v1/notifications/verify-webhook-signature", {
+            auth_algo: req.headers["paypal-auth-algo"],
+            cert_url: req.headers["paypal-cert-url"],
+            transmission_id: req.headers["paypal-transmission-id"],
+            transmission_sig: req.headers["paypal-transmission-sig"],
+            transmission_time: req.headers["paypal-transmission-time"],
+            webhook_id: PAYPAL_WEBHOOK_ID,
+            webhook_event: req.body
         });
+
+        if (!ok || !data || data.verification_status !== "SUCCESS") {
+            console.warn("[WEBZONEBW] PayPal webhook verification failed");
+            return res.status(401).send("INVALID_SIGNATURE");
+        }
+
+        const event = req.body || {};
+        if (event.event_type === "CHECKOUT.ORDER.COMPLETED" || event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+            const resource = event.resource || {};
+            const orderId = resource.supplementary_data && resource.supplementary_data.related_ids
+                ? resource.supplementary_data.related_ids.order_id
+                : resource.id;
+
+            const storedOrder = orderId && licenseStore.orders.get(String(orderId));
+            if (storedOrder && storedOrder.status !== "PAID") {
+                storedOrder.status = "PAID";
+                storedOrder.paidAt = new Date().toISOString();
+                issueLicenseForOrder(storedOrder);
+            }
+        }
+
+        res.status(200).send("OK");
     } catch (error) {
-        console.error("[WEBZONEBW WEBHOOK] Error processing webhook:", error);
-        createErrorResponse(res, 500, 'WEBHOOK_PROCESSING_FAILED', 'Webhook processing failed', { error: error.message });
+        console.error("[WEBZONEBW] PayPal webhook error:", error.message);
+        res.status(500).send("WEBHOOK_ERROR");
     }
 });
 
@@ -2869,10 +2817,10 @@ const server = app.listen(PORT, HOST, () => {
     console.log(` Version: ${SERVER_VERSION}`);
     console.log(` Node.js: ${process.version}`);
     console.log(` Environment: ${NODE_ENV}`);
-    console.log(` HTTP Port: ${PORT}`);
-    console.log(` HTTP URL: http://localhost:${PORT}`);
-    console.log(` ER Studio: http://localhost:${PORT}/er/`);
-    console.log(` Health Endpoint: http://localhost:${PORT}/api/health`);
+    console.log(` Port: ${PORT}`);
+    console.log(` URL: http://${HOST}:${PORT}`);
+    console.log(` ER Studio: http://${HOST}:${PORT}/er/`);
+    console.log(` Health Endpoint: http://${HOST}:${PORT}/api/health`);
     console.log("================================================");
 });
 
@@ -2887,20 +2835,6 @@ server.on("error", (error) => {
 /* ============================================================
  * GRACEFUL SHUTDOWN
  * ============================================================ */
-
-/* ============================================================
- * HEALTH CHECK ENDPOINT
- * ============================================================ */
-
-app.get("/api/health", (req, res) => {
-    res.json({
-        status: "healthy",
-        timestamp: new Date().toISOString(),
-        version: SERVER_VERSION,
-        uptime: process.uptime(),
-        environment: NODE_ENV
-    });
-});
 
 let shuttingDown = false;
 
@@ -2931,133 +2865,6 @@ const shutdown = (signal) => {
         process.exit(1);
     }, 10000).unref();
 };
-
-/* ============================================================
- * PORT MANAGEMENT AND SERVER STARTUP
- * ============================================================ */
-
-function findAvailablePort(startPort, fallbackPorts) {
-    return new Promise((resolve) => {
-        const testPort = (port) => {
-            const server = require('net').createServer();
-            server.listen(port, () => {
-                server.once('close', () => {
-                    resolve(port);
-                });
-                server.close();
-            });
-            server.on('error', () => {
-                // Try next port
-                const nextPort = fallbackPorts.shift();
-                if (nextPort) {
-                    testPort(nextPort);
-                } else {
-                    resolve(null);
-                }
-            });
-        };
-        
-        testPort(startPort);
-    });
-}
-
-async function startServer() {
-    let finalPort = PORT;
-    
-    // Simplified port check - just try to start the server
-    console.log(`[WEBZONEBW] Attempting to start on port ${finalPort}...`);
-    
-    const server = app.listen(finalPort, HOST, () => {
-        console.log(`\n[WEBZONEBW] 🚀 Server started successfully!`);
-        console.log(`[WEBZONEBW] 📡 Server listening on http://${HOST}:${finalPort}`);
-        console.log(`[WEBZONEBW] 🌐 Environment: ${NODE_ENV}`);
-        console.log(`[WEBZONEBW] 📊 Version: ${SERVER_VERSION}`);
-        console.log(`[WEBZONEBW] 🔒 Security: Enhanced 5-star implementation`);
-        console.log(`[WEBZONEBW] 📈 Health Check: http://${HOST}:${finalPort}/api/health`);
-        console.log(`[WEBZONEBW] 📊 Metrics: http://${HOST}:${finalPort}/api/metrics`);
-        console.log(`[WEBZONEBW] ⚡ Press Ctrl+C to stop the server\n`);
-    });
-    
-    server.on('error', (error) => {
-        if (error.code === 'EADDRINUSE') {
-            console.log(`[WEBZONEBW] Port ${finalPort} is in use, trying fallback ports...`);
-            
-            // Try fallback ports
-            const fallbackPorts = [3001, 3002, 3003, 8080, 8081];
-            let fallbackAttempt = 0;
-            
-            const tryNextPort = () => {
-                if (fallbackAttempt >= fallbackPorts.length) {
-                    console.error(`[WEBZONEBW] No available ports found. Please free up port ${PORT} or set PORT environment variable.`);
-                    process.exit(1);
-                }
-                
-                const nextPort = fallbackPorts[fallbackAttempt];
-                fallbackAttempt++;
-                
-                console.log(`[WEBZONEBW] Trying port ${nextPort}...`);
-                
-                const fallbackServer = app.listen(nextPort, HOST, () => {
-                    console.log(`[WEBZONEBW] 🚀 Server started on port ${nextPort}!`);
-                    console.log(`[WEBZONEBW] 📡 Server listening on http://${HOST}:${nextPort}`);
-                    console.log(`[WEBZONEBW] 🌐 Environment: ${NODE_ENV}`);
-                    console.log(`[WEBZONEBW] 📊 Version: ${SERVER_VERSION}`);
-                    console.log(`[WEBZONEBW] 🔒 Security: Enhanced 5-star implementation`);
-                    console.log(`[WEBZONEBW] 📈 Health Check: http://${HOST}:${nextPort}/api/health`);
-                    console.log(`[WEBZONEBW] 📊 Metrics: http://${HOST}:${nextPort}/api/metrics`);
-                    console.log(`[WEBZONEBW] ⚡ Press Ctrl+C to stop the server\n`);
-                    
-                    // Store the working server
-                    global.workingServer = fallbackServer;
-                });
-                
-                fallbackServer.on('error', (fallbackError) => {
-                    if (fallbackError.code === 'EADDRINUSE') {
-                        console.log(`[WEBZONEBW] Port ${nextPort} is also in use...`);
-                        tryNextPort();
-                    } else {
-                        console.error(`[WEBZONEBW] Server error:`, fallbackError);
-                        process.exit(1);
-                    }
-                });
-            };
-            
-            tryNextPort();
-        } else {
-            console.error(`[WEBZONEBW] Server error:`, error);
-            process.exit(1);
-        }
-    });
-    
-    return server;
-}
-
-// Check if a port is available
-function checkPortAvailability(port, host) {
-    return new Promise((resolve) => {
-        const net = require('net');
-        const server = net.createServer();
-        
-        server.listen(port, host, () => {
-            server.close(() => {
-                resolve(true);
-            });
-        });
-        
-        server.on('error', () => {
-            resolve(false);
-        });
-        
-        // Timeout after 1 second
-        setTimeout(() => {
-            server.close();
-            resolve(false);
-        }, 1000);
-    });
-}
-
-// Start the server
-const appServer = startServer();
 
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));

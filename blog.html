@@ -11,18 +11,8 @@
 
     <meta charset="UTF-8">
 
-    <!-- =====================================================
-         GOOGLE ANALYTICS — GA4
-         (Consent Mode v2 defaults already set above)
-         ===================================================== -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
-    <script>
-        gtag('js', new Date());
-        gtag('config', 'G-ZFZ54Z2997');
-    </script>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-
 
     <!-- =====================================================
          BASIC DOCUMENT INFORMATION
@@ -35,7 +25,7 @@
     <meta name="description"
           content="Explore the WEBZONEBW technical blog covering web development, IT support, systems integration, cybersecurity learning, technology projects, career development and professional insights.">
 
-    <meta name="author"
+    <meta name="author" content="Sameer Chouhan">
 
     <meta name="robots"
           content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -62,14 +52,7 @@
     <link rel="preconnect"
           href="https://www.googletagmanager.com">
 
-    <!-- =====================================================
-         GOOGLE ADSENSE
-         ===================================================== -->
-
-    <meta name="google-adsense-account"
-          content="ca-pub-4823379856566931">
-
-    <!-- Consent Mode v2 defaults — MUST precede adsbygoogle -->
+    <!-- Google Consent Mode v2 defaults — MUST precede gtag and adsbygoogle -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -81,6 +64,20 @@
             wait_for_update:    500
         });
     </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
+    <script>
+        gtag('js', new Date());
+        gtag('config', 'G-ZFZ54Z2997');
+    </script>
+
+    <!-- =====================================================
+         GOOGLE ADSENSE
+         ===================================================== -->
+
+    <meta name="google-adsense-account"
+          content="ca-pub-4823379856566931">
 
     <script async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"

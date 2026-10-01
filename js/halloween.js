@@ -2351,11 +2351,11 @@ function initWebZoneERStudio() {
   erLoadStudioState();
 
   function erSyncStudioControlsUI() {
-    const tE = document.getElementById("erToggleEffect") || document.getElementById("eliteAutoEnhance");
+    const tE = document.getElementById("erToggleEffect");
     const tA = document.getElementById("erToggleAnimation");
     const tB = document.getElementById("erToggleBackground");
-    const sR = document.getElementById("erStrengthRange") || document.getElementById("eliteStrengthRange");
-    const sL = document.getElementById("erStrengthValue") || document.getElementById("eliteStrengthValue");
+    const sR = document.getElementById("erStrengthRange");
+    const sL = document.getElementById("erStrengthValue");
     if (tE) tE.checked = studioState.effectEnabled;
     if (tA) tA.checked = studioState.animationEnabled;
     if (tB) tB.checked = studioState.backgroundEnabled;
@@ -2364,11 +2364,11 @@ function initWebZoneERStudio() {
   }
 
   function erBindStudioControls() {
-    const tE = document.getElementById("erToggleEffect") || document.getElementById("eliteAutoEnhance");
+    const tE = document.getElementById("erToggleEffect");
     const tA = document.getElementById("erToggleAnimation");
     const tB = document.getElementById("erToggleBackground");
-    const sR = document.getElementById("erStrengthRange") || document.getElementById("eliteStrengthRange");
-    const rB = document.getElementById("erResetStudioBtn") || document.getElementById("eliteResetBtn");
+    const sR = document.getElementById("erStrengthRange");
+    const rB = document.getElementById("erResetStudioBtn");
 
     if (tE && tE.dataset.erBound !== "1") {
       tE.dataset.erBound = "1";
@@ -2728,7 +2728,7 @@ function initWebZoneERStudio() {
   function isUserPremium() {
     /*
      * Premium access can come from:
-     * 1. A verified WebZoneBW ER Studio license ($5.49 USD purchase verified server-side)
+     * 1. A verified WebZoneBW ER Studio license ($5.99 USD purchase verified server-side)
      * 2. Halloween promotional access (server-validated temporary access)
      * No localStorage shortcuts can unlock premium lenses.
      */
@@ -5096,7 +5096,7 @@ function initWebZoneERStudio() {
         window.WEBZONEBW_LICENSE.openCheckout();
       } else {
         alert(
-          "⏺ Video recording is a Premium feature.\n\nUnlock it with the WebZoneBW ER Studio Premium license ($5.49 USD).",
+          "⏺ Video recording is a Premium feature.\n\nUnlock it with the WebZoneBW ER Studio Premium license ($5.99 USD).",
         );
       }
 
@@ -5239,7 +5239,7 @@ function initWebZoneERStudio() {
     }
 
     if (licenseChipBtn) {
-      licenseChipBtn.textContent = premium ? "✓ Licensed" : "$5.49 Upgrade";
+      licenseChipBtn.textContent = premium ? "✓ Licensed" : "$5.99 Upgrade";
       licenseChipBtn.disabled = false;
     }
   }
@@ -8426,7 +8426,7 @@ function initWebZoneERStudio() {
         erLicenseChip.classList.remove("promo-active");
         erLicenseChipIcon.textContent = "🔒";
         erLicenseChipText.textContent = hasPaidLicense ? "Premium Active" : "Free — Premium Locked";
-        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "$5.49 Upgrade";
+        erLicenseChipBtn.textContent = hasPaidLicense ? "Manage" : "$5.99 Upgrade";
         erLicenseChipBtn.style.background = "";
       }
     }

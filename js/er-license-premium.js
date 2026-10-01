@@ -5,7 +5,7 @@
  * proper validation, and comprehensive error handling.
  *
  * Features:
- * - Real $5.49 USD one-time purchase via PayPal (UPI for India)
+ * - Real $5.99 USD one-time purchase via PayPal (UPI for India)
  * - Email validation with clear inline messages
  * - Complete purchase state machine
  * - Proper error handling for all failure scenarios
@@ -82,8 +82,8 @@ function fetchJSON(url, options) {
     status: "none",
     verifying: false,
     plan: "er-studio-premium",
-    amount: 5.49,
-    amountUsd: 5.49,
+    amount: 5.99,
+    amountUsd: 5.99,
     currency: "USD",
     paypalClientId: null,
     promoKey: null,
@@ -245,7 +245,7 @@ function fetchJSON(url, options) {
           return false;
         })
         .catch(function (error) {
-          console.error('Payment verification failed:', error);
+          console.error('License verification failed:', error);
           state.verifying = false;
           state.status = "unreachable";
           clearPromoAccess();
@@ -608,7 +608,7 @@ function fetchJSON(url, options) {
       '<h3>ER Studio Premium — Lifetime</h3>' +
       '<p>All VR scenes, 3D pose tracking & premium filters</p>' +
       '</div>' +
-      '<div class="co-order-price">$5.49<span>USD</span></div>' +
+      '<div class="co-order-price">$5.99<span>USD</span></div>' +
       '</div>' +
       '</div>' +
 
@@ -647,9 +647,10 @@ function fetchJSON(url, options) {
       '<input type="radio" name="coMethod" value="paypal" checked>' +
       '<div class="co-option-main">' +
       '<strong>PayPal / Card (Secure Checkout)</strong>' +
-      '<span>Secure payment • $5.49 USD • PayPal Buyer Protection</span>' +
+      '<span>Secure payment • $5.99 USD • PayPal Buyer Protection</span>' +
       '</div>' +
       '</label>' +
+
       '<div class="co-method-detail active" id="coDetailPaypal">' +
       '<div class="co-payment-security">' +
       '<div class="security-icon">🔒</div>' +
@@ -660,11 +661,11 @@ function fetchJSON(url, options) {
       '</div>' +
       '<div class="paypal-info-box">' +
       '<div class="paypal-payment-details">' +
-      '<div class="paypal-amount">$5.49 USD</div>' +
+      '<div class="paypal-amount">$5.99 USD</div>' +
       '<div class="paypal-description">ER Studio Premium License</div>' +
       '<div class="paypal-link-display">🔗 Payment will be processed through PayPal</div>' +
       '</div>' +
-      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your secure $5.49 payment.</p>' +
+      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your secure $5.99 payment.</p>' +
       '</div>' +
       '<div id="paymentButtons" class="payment-section"></div>' +
       '</div>' +
@@ -689,10 +690,10 @@ function fetchJSON(url, options) {
       '<strong>ER Studio Premium — Lifetime License</strong>' +
       '<p>All VR scenes, 3D pose tracking & premium filters</p>' +
       '</div>' +
-      '<div class="co-item-price">$5.49 USD</div>' +
+      '<div class="co-item-price">$5.99 USD</div>' +
       '</div>' +
       '</div>' +
-      '<div class="co-total-row"><span>Order total</span><strong>$5.49 USD</strong></div>' +
+      '<div class="co-total-row"><span>Order total</span><strong>$5.99 USD</strong></div>' +
       '<button type="button" class="btn-place-order" id="coPlaceOrder">Place your order</button>' +
       '<p class="co-note" id="coPlaceNote">Your license key is sent instantly after payment is confirmed.</p>' +
       '<div class="co-help-section">' +
@@ -737,7 +738,7 @@ function fetchJSON(url, options) {
       '<div class="manual-icon">🎭</div>' +
       '<div class="manual-content">' +
       '<h4>Manual Payment Mode</h4>' +
-      '<p>This is a demo environment. In production, you would be redirected to PayPal to complete your $5.49 payment.</p>' +
+      '<p>This is a demo environment. In production, you would be redirected to PayPal to complete your $5.99 payment.</p>' +
       '<div class="manual-steps">' +
       '<div class="manual-step">' +
       '<span class="step-number">1</span>' +
@@ -798,7 +799,7 @@ function fetchJSON(url, options) {
     var chosenMethod = "paypal"; // "paypal" only
 
     var methodLabels = {
-      paypal: "PayPal / Card ($5.49)",
+      paypal: "PayPal / Card ($5.99)",
     };
 
     function gotoStep(n) {
@@ -827,15 +828,7 @@ function fetchJSON(url, options) {
       gotoStep(2);
     });
 
-    var processingState = {
-      isProcessing: false,
-      message: "",
-      subtext: "",
-      step: 1
-    };
-
     function hideStates() {
-      processingState.isProcessing = false;
       proc.style.display = "none";
       errorBox.style.display = "none";
       successBox.style.display = "none";
@@ -843,9 +836,6 @@ function fetchJSON(url, options) {
 
     function showProcessingState(message, subtext) {
       hideStates();
-      processingState.isProcessing = true;
-      processingState.message = message;
-      processingState.subtext = subtext;
       proc.style.display = "block";
       if (procText) procText.textContent = message;
       if (procSubtext) procSubtext.textContent = subtext;
@@ -956,67 +946,37 @@ function fetchJSON(url, options) {
         return;
       }
 
-      showProcessingState("Creating secure PayPal order ($5.49 USD)...", "Authorizing with PayPal payment system");
+      showProcessingState("Redirecting to secure PayPal checkout...", "Please complete your payment");
 
-      // Official PayPal payment reference
+      // Use the specific PayPal payment link as required
       const paypalPaymentUrl = "https://www.paypal.com/ncp/payment/GEEZDGBAL6B64";
       
+      // Store purchase information for server-side verification
       const purchaseData = {
-        filterId: "premium-er-studio",
+        filterId: "premium-er-studio", // Generic identifier for ER Studio premium
         userEmail: email,
-        amount: 5.49,
+        amount: 5.99,
         currency: "USD",
         purchaseId: "WZB-ER-" + Date.now() + "-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
         timestamp: new Date().toISOString()
       };
       
+      // Store in window for server verification later
       window.currentERStudioPurchase = purchaseData;
-      try {
-        localStorage.setItem("wzb_pending_order_email", email);
-      } catch (e) {}
 
-      // Server-side authoritative order creation
+      // For production, redirect to PayPal
       resolveAPIBase().then(function (apiBase) {
         if (apiBase === "local") {
+          // Static/demo mode - show manual container
           hideStates();
           paypalManualContainer.style.display = "block";
           return;
         }
 
-        // Call backend server-side PayPal order creation ($5.49 USD enforced by server)
-        fetchJSON(apiBase + "/api/paypal/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            planId: "er-studio-premium",
-            customerEmail: email
-          })
-        }).then(function (res) {
-          if (!res || !res.orderId) {
-            throw new Error(res && res.message ? res.message : "Failed to create order on payment server");
-          }
-
-          purchaseData.orderId = res.orderId;
-          purchaseData.clientId = res.clientId;
-          window.currentERStudioPurchase = purchaseData;
-
-          showProcessingState("Redirecting to PayPal...", "Complete payment on PayPal to activate your license");
-
-          // Determine checkout URL
-          var checkoutUrl = res.mode === "production"
-            ? "https://www.paypal.com/checkoutnow?token=" + encodeURIComponent(res.orderId)
-            : "https://www.sandbox.paypal.com/checkoutnow?token=" + encodeURIComponent(res.orderId);
-
-          setTimeout(function() {
-            window.location.href = checkoutUrl;
-          }, 800);
-        }).catch(function (err) {
-          console.warn("[WEBZONEBW] Server order creation notice:", err.message);
-          // Fallback to PayPal payment gateway URL
-          setTimeout(function() {
-            window.location.href = paypalPaymentUrl;
-          }, 1000);
-        });
+        // Production mode - redirect to PayPal
+        setTimeout(function() {
+          window.location.href = paypalPaymentUrl;
+        }, 1000);
       });
     }
 
@@ -1208,7 +1168,7 @@ function fetchJSON(url, options) {
         : (state.verifying ? "Verifying license..." : "Free — Premium Locked");
     }
     if (chipBtn) {
-      chipBtn.textContent = isLicensed ? "✓ Licensed" : "$5.49 Upgrade";
+      chipBtn.textContent = isLicensed ? "✓ Licensed" : "$5.99 Upgrade";
       chipBtn.disabled = isLicensed;
     }
   }

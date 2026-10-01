@@ -335,7 +335,7 @@
   /* Server-Side Entitlement & Ownership Authority
    *
    * Premium ownership is granted ONLY through a verified
-   * WebZoneBW ER Studio license ($5.49 USD purchase). The old
+   * WebZoneBW ER Studio license ($5.99 USD purchase). The old
    * localStorage "owned lenses" path could unlock premium
    * content without payment and is now license-gated.
    */
@@ -489,7 +489,7 @@
                                     <div class="er-ownership-badge ${isOwned ? "owned" : "locked"}">
                                         ${isOwned ? "✅ OWNED & ACTIVE" : "🔒 LOCKED PREMIUM"}
                                     </div>
-                                    ${!isOwned ? `<button class="btn btn-primary" id="buyLensBtn" style="width:100%; margin-top:15px;">Purchase Lens ($5.49)</button>` : `<button class="btn btn-secondary" id="activateLensBtn" style="width:100%; margin-top:15px;">Launch in Live Studio</button>`}
+                                    ${!isOwned ? `<button class="btn btn-primary" id="buyLensBtn" style="width:100%; margin-top:15px;">Purchase Lens ($5.99)</button>` : `<button class="btn btn-secondary" id="activateLensBtn" style="width:100%; margin-top:15px;">Launch in Live Studio</button>`}
                                 </div>
                             </div>
 
@@ -562,6 +562,65 @@
       }
     },
 
+    setupStudioControls: function () {
+      var strengthRange = document.getElementById("eliteStrengthRange");
+      var strengthVal = document.getElementById("eliteStrengthValue");
+      var autoEnhance = document.getElementById("eliteAutoEnhance");
+      var resetBtn = document.getElementById("eliteResetBtn");
+      var canvas = document.getElementById("cameraCanvas");
+      var video = document.getElementById("cameraVideo");
+
+      if (strengthRange && strengthVal) {
+        strengthRange.addEventListener("input", function (e) {
+          var val = e.target.value;
+          strengthVal.textContent = val + "%";
+          if (canvas) {
+            canvas.style.opacity = (parseFloat(val) / 100).toFixed(2);
+          }
+        });
+      }
+
+      if (autoEnhance && video) {
+        autoEnhance.addEventListener("change", function (e) {
+          if (e.target.checked) {
+            video.style.filter = "contrast(1.08) brightness(1.04) saturate(1.15)";
+            if (window.WEBZONEBW_STUDIO_UI && window.WEBZONEBW_STUDIO_UI.showToast) {
+              window.WEBZONEBW_STUDIO_UI.showToast("✨ AI Auto-Enhance Active");
+            }
+          } else {
+            video.style.filter = "none";
+            if (window.WEBZONEBW_STUDIO_UI && window.WEBZONEBW_STUDIO_UI.showToast) {
+              window.WEBZONEBW_STUDIO_UI.showToast("Auto-Enhance Disabled");
+            }
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", function () {
+          if (strengthRange && strengthVal) {
+            strengthRange.value = 75;
+            strengthVal.textContent = "75%";
+          }
+          if (canvas) {
+            canvas.style.opacity = "0.75";
+          }
+          if (video) {
+            video.style.filter = autoEnhance && autoEnhance.checked ? "contrast(1.08) brightness(1.04) saturate(1.15)" : "none";
+          }
+          document.querySelectorAll(".effect-card.active").forEach(function (c) {
+            c.classList.remove("active");
+          });
+          if (window.WEBZONEBW_ER && typeof window.WEBZONEBW_ER.applyFilter === "function") {
+            window.WEBZONEBW_ER.applyFilter("normal", "effect");
+          }
+          if (window.WEBZONEBW_STUDIO_UI && window.WEBZONEBW_STUDIO_UI.showToast) {
+            window.WEBZONEBW_STUDIO_UI.showToast("↺ All Studio Effects & Strength Reset");
+          }
+        });
+      }
+    },
+
     renderHubSections: function () {
       // Inject dynamic hubs into er/index.html if placeholders exist, or append to main content
       var mainContainer =
@@ -571,20 +630,64 @@
         hubDiv.id = "webzoneStudioHubSections";
         hubDiv.className = "er-hub-sections-wrap";
 
-        // Build Lenses Discovery & Marketplace Slabs
+        // Build Lenses Discovery & Marketplace Slabs with Wise Layout
         var lensesHtml = window.WEBZONEBW_STUDIO_REGISTRY.lenses
           .map(function (lens) {
             var owned = window.WEBZONEBW_ENTITLEMENT_MANAGER.isLensOwned(
               lens.id,
             );
+            var pack = window.WEBZONEBW_STUDIO_REGISTRY.featurePacks.find(function (p) {
+              return p.id === lens.featurePackId || p.lensId === lens.id;
+            });
+            var effects = lens.effects || (pack ? pack.effects : []) || [];
+            var tagsHtml = effects.slice(0, 3).map(function (eff) {
+              return `<span class="er-pack-tag">⚡ ${eff}</span>`;
+            }).join("");
+
+            if (pack && pack.sounds && pack.sounds.length > 0) {
+              tagsHtml += `<span class="er-pack-tag sound-tag">🎵 Sound Loop</span>`;
+            }
+
+            var icon = "✨";
+            if (lens.id.includes("cyber")) icon = "⚡";
+            else if (lens.id.includes("volcanic")) icon = "🌋";
+            else if (lens.id.includes("spectral") || lens.id.includes("phantom")) icon = "👻";
+            else if (lens.id.includes("pumpkin")) icon = "🎃";
+
+            var categoryClass = lens.isPremium ? "cat-premium" : "cat-free";
+
             return `
-                        <div class="er-hub-card ${lens.isPremium ? "premium-card" : ""}" data-lens-id="${lens.id}">
-                            <div class="er-hub-badge">${lens.category} ${lens.isPremium ? "💎" : "✨"}</div>
-                            <h4>${lens.name}</h4>
-                            <p>${lens.description}</p>
+                        <div class="er-hub-card ${lens.isPremium ? "premium-card" : "standard-card"} ${categoryClass}" data-lens-id="${lens.id}">
+                            <div class="er-hub-card-topbar">
+                                <span class="er-hub-badge ${lens.isPremium ? "badge-premium" : "badge-included"}">
+                                    ${lens.category} ${lens.isPremium ? "💎" : "✨"}
+                                </span>
+                                <span class="er-owner-status ${owned ? "status-owned" : "status-locked"}">
+                                    ${owned ? "✅ Included / Active" : "🔒 Pro Pack · $5.99"}
+                                </span>
+                            </div>
+
+                            <div class="er-hub-card-title-row">
+                                <span class="er-lens-icon" aria-hidden="true">${icon}</span>
+                                <div>
+                                    <h4>${lens.name}</h4>
+                                    <span class="er-pack-name">${pack ? pack.name : "Feature Suite"}</span>
+                                </div>
+                            </div>
+
+                            <p class="er-hub-card-desc">${lens.description}</p>
+
+                            <div class="er-pack-tags-strip">
+                                ${tagsHtml}
+                            </div>
+
                             <div class="er-hub-card-footer">
-                                <span class="er-owner-status ${owned ? "text-success" : "text-warning"}">${owned ? "✅ Owned" : "🔒 Locked ($5.49)"}</span>
-                                <button class="btn btn-sm btn-primary view-pack-btn" data-lens-id="${lens.id}">View Feature Pack</button>
+                                <button type="button" class="btn btn-sm er-try-lens-btn" data-lens-id="${lens.id}" title="Activate this lens on live camera">
+                                    ⚡ Try Live in Studio
+                                </button>
+                                <button type="button" class="btn btn-sm view-pack-btn" data-lens-id="${lens.id}" title="Inspect full feature pack assets and sounds">
+                                    📦 View Feature Pack
+                                </button>
                             </div>
                         </div>
                     `;
@@ -599,11 +702,13 @@
               : `<h5>${n.title}</h5>`;
             return `
                         <div class="er-news-item">
-                            <span class="er-badge-pill ${n.status.toLowerCase()}">${n.status}</span>
-                            <div>
+                            <div class="er-news-item-header">
+                                <span class="er-badge-pill ${n.status.toLowerCase()}">${n.status}</span>
+                                <small class="er-news-date">${n.date}</small>
+                            </div>
+                            <div class="er-news-body">
                                 ${titleHtml}
                                 <p>${n.excerpt}</p>
-                                <small>${n.date}</small>
                             </div>
                         </div>
                     `;
@@ -613,24 +718,92 @@
         hubDiv.innerHTML = `
                     <section class="er-section-block" id="lensDiscoveryHub">
                         <div class="er-section-header">
-                            <h2>🔮 Lens Discovery & Feature Packs</h2>
-                            <p>Explore free, premium, and upcoming AR lenses with fully integrated feature packs.</p>
+                            <div class="er-section-title-wrap">
+                                <span class="er-section-sparkle" aria-hidden="true">🔮</span>
+                                <div>
+                                    <h2>Lens Discovery & Feature Packs</h2>
+                                    <p class="er-section-desc">Modular AR lenses, shaders, soundscapes, and feature packs crafted for WebZoneBW-ER Studio.</p>
+                                </div>
+                            </div>
+
+                            <div class="er-hub-filter-tabs" role="tablist" aria-label="Filter Lens Packs">
+                                <button type="button" class="er-hub-tab active" data-filter="all">All Packs (4)</button>
+                                <button type="button" class="er-hub-tab" data-filter="free">Free Included (2)</button>
+                                <button type="button" class="er-hub-tab" data-filter="premium">Premium Pro 💎 (2)</button>
+                            </div>
                         </div>
-                        <div class="er-hub-grid">${lensesHtml}</div>
+
+                        <div class="er-hub-grid" id="erHubGrid">${lensesHtml}</div>
                     </section>
 
                     <section class="er-section-block" id="newsUpdatesHub">
                         <div class="er-section-header">
-                            <h2>📰 Lens News & Updates Pipeline</h2>
-                            <p>Real-time updates, maintenance notices, and new effect announcements for active lens owners.</p>
+                            <div class="er-section-title-wrap">
+                                <span class="er-section-sparkle" aria-hidden="true">📰</span>
+                                <div>
+                                    <h2>Lens News & Updates Pipeline</h2>
+                                    <p class="er-section-desc">Real-time releases, shader maintenance notices, and new effect announcements for active studio users.</p>
+                                </div>
+                            </div>
                         </div>
                         <div class="er-news-list">${newsHtml}</div>
                     </section>
                 `;
 
-        mainContainer.insertBefore(hubDiv, mainContainer.querySelector("footer.site-footer"));
+        mainContainer.appendChild(hubDiv);
 
-        // Bind click events
+        // Bind filter tabs
+        hubDiv.querySelectorAll(".er-hub-tab").forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            hubDiv.querySelectorAll(".er-hub-tab").forEach(function (t) {
+              t.classList.remove("active");
+            });
+            tab.classList.add("active");
+            var filter = tab.getAttribute("data-filter");
+            var cards = hubDiv.querySelectorAll(".er-hub-card");
+            cards.forEach(function (card) {
+              if (filter === "all") {
+                card.style.display = "flex";
+              } else if (filter === "free") {
+                card.style.display = card.classList.contains("cat-free") ? "flex" : "none";
+              } else if (filter === "premium") {
+                card.style.display = card.classList.contains("cat-premium") ? "flex" : "none";
+              }
+            });
+          });
+        });
+
+        // Bind Try Live Lens buttons
+        hubDiv.querySelectorAll(".er-try-lens-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var lid = btn.getAttribute("data-lens-id");
+            var filterTarget = "studiohd";
+            if (lid.includes("cyber")) filterTarget = "cyberpunk";
+            else if (lid.includes("volcanic")) filterTarget = "vintage90s";
+            else if (lid.includes("spectral") || lid.includes("phantom")) filterTarget = "glitch";
+            else if (lid.includes("pumpkin")) filterTarget = "pumpkin-pose";
+
+            // Scroll to camera viewport smoothly
+            var cam = document.getElementById("cameraStage") || document.getElementById("cameraVideo") || document.querySelector(".er-camera-stage");
+            if (cam) {
+              cam.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+
+            // Apply filter
+            if (window.WEBZONEBW_ER && typeof window.WEBZONEBW_ER.applyFilter === "function") {
+              window.WEBZONEBW_ER.applyFilter(filterTarget, "lens");
+            } else {
+              var effCard = document.querySelector('.effect-card[data-filter="' + filterTarget + '"]');
+              if (effCard) effCard.click();
+            }
+
+            if (window.WEBZONEBW_STUDIO_UI && window.WEBZONEBW_STUDIO_UI.showToast) {
+              window.WEBZONEBW_STUDIO_UI.showToast("⚡ Activated " + lid.replace(/-/g, " ").toUpperCase() + " in Studio!");
+            }
+          });
+        });
+
+        // Bind view pack click events
         hubDiv.querySelectorAll(".view-pack-btn").forEach(function (btn) {
           btn.addEventListener("click", function () {
             var lid = btn.getAttribute("data-lens-id");
@@ -641,11 +814,14 @@
     },
   };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function () {
-      window.WEBZONEBW_STUDIO_UI.renderHubSections();
-    });
-  } else {
+  function initStudioPipeline() {
     window.WEBZONEBW_STUDIO_UI.renderHubSections();
+    window.WEBZONEBW_STUDIO_UI.setupStudioControls();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initStudioPipeline);
+  } else {
+    initStudioPipeline();
   }
 })();

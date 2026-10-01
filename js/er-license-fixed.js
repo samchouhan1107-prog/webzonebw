@@ -1,7 +1,7 @@
 /* ============================================================
  * WEBZONEBW ER STUDIO — PREMIUM LICENSE MANAGER
  * ------------------------------------------------------------
- * Real $5.49 USD purchase → PayPal checkout →
+ * Real $5.99 USD purchase → PayPal checkout →
  * server-side capture + verification → license activation →
  * persistent re-verification on every session.
  *
@@ -78,7 +78,7 @@ function fetchJSON(url, options) {
     status: "none",
     verifying: false,
     plan: "er-studio-premium",
-    amount: 5.49,
+    amount: 5.99,
     promoKey: null,
     promoFeatures: [],
     promoExpires: null,
@@ -347,7 +347,7 @@ function fetchJSON(url, options) {
       // Pricing Section
       '<div class="pricing-section">' +
       '<div class="price-info">' +
-      '<div class="price-main">$5.49</div>' +
+      '<div class="price-main">$5.99</div>' +
       '<div class="price-sub">One-time purchase</div>' +
       '<div class="price-usd">USD</div>' +
       '</div>' +
@@ -444,10 +444,10 @@ function fetchJSON(url, options) {
     mailBtn.addEventListener("click", function () {
       var email = (modal.querySelector("#licEmail").value || "").trim();
       getOrderEmail().then(function (orderEmail) {
-        var subject = "WebZoneBW ER Studio Premium — Order Request ($5.49)";
+        var subject = "WebZoneBW ER Studio Premium — Order Request ($5.99)";
         var body =
           "Hello WebZoneBW,\n\n" +
-          "I want to purchase the WebZoneBW ER Studio Premium license ($5.49, one-time).\n\n" +
+          "I want to purchase the WebZoneBW ER Studio Premium license ($5.99, one-time).\n\n" +
           "Name: \n" +
           "Email (license will be bound to this): " + email + "\n" +
           "Phone: \n\n" +
