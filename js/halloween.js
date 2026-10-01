@@ -1240,7 +1240,7 @@ function initWebZoneERStudio() {
   // Comprehensive catalog of all WebZoneBW
   // & Realistic AR effects with category and target metadata
   const allFilterConfigs = [
-    // 👤 FACE AR LENSES (verified working)
+    // Face ER portrait lenses (verified working)
     {
       id: "sunglasses",
       name: "Aviators",
@@ -2615,7 +2615,7 @@ function initWebZoneERStudio() {
       } else if (isFaceDetected) {
         smartStatusIcon.textContent = "👤";
 
-        smartStatusText.textContent = `Smart Face AR: Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+        smartStatusText.textContent = `Smart Face ER: Locked (${faceDetectionConfidence.toFixed(0)}%)`;
       } else {
         smartStatusIcon.textContent = "🌍";
 
@@ -2628,7 +2628,7 @@ function initWebZoneERStudio() {
         activeSmartCategory === "face" ||
         (activeSmartCategory === "smart" && isFaceDetected)
       ) {
-        smartInventoryBadge.textContent = `👤 ${faceCount} Face AR Lenses Ready`;
+        smartInventoryBadge.textContent = `👤 ${faceCount} Face ER Lenses Ready`;
 
         smartInventoryBadge.classList.remove("scene-mode");
       } else if (
@@ -8638,7 +8638,7 @@ function initWebZoneERStudio() {
     
     const statusMap = {
       'smart': { icon: '✨', text: 'Smart Adaptive: Ready', badge: '🌟 9 Smart Lenses' },
-      'face': { icon: '👤', text: 'Face AR Mode: Active', badge: '👤 7 Face AR Lenses' },
+      'face': { icon: '👤', text: 'Face ER Mode: Active', badge: '👤 7 Face ER Lenses' },
       'scene': { icon: '🌍', text: 'Scene Mode: Active', badge: '🌍 6 Scene Lenses' },
       'pose': { icon: '🦴', text: 'Pose Mode: Active', badge: '🦴 7 Pose Lenses' },
       'vr': { icon: '🌌', text: 'VR Mode: Active', badge: '🌌 4 VR Environments' },
