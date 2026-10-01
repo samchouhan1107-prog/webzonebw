@@ -6,14 +6,36 @@
 .er-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(4px);
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
   animation: fadeIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+.er-modal-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(194, 65, 12, 0.1) 70%);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .er-modal-backdrop {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.9);
+  }
+}
+
+@media (max-width: 560px) {
+  .er-modal-backdrop {
+    padding: 8px;
+  }
 }
 
 @keyframes fadeIn {
@@ -24,15 +46,49 @@
 /* Modal Card */
 .er-modal-card {
   background: var(--surface, #ffffff);
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 26, 0.2);
+  max-width: 520px;
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.er-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ff6b6b);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@media (max-width: 768px) {
+  .er-modal-card {
+    max-width: 90%;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@media (max-width: 560px) {
+  .er-modal-card {
+    max-width: 95%;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .er-theme-dark .er-modal-card {
@@ -43,12 +99,17 @@
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Modal Header */
@@ -120,6 +181,48 @@
   flex: 1;
   overflow-y: auto;
   padding: 24px;
+  overscroll-behavior: contain;
+}
+
+.er-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.er-modal-body::-webkit-scrollbar-track {
+  background: var(--surface, #f9fafb);
+}
+
+.er-theme-dark .er-modal-body::-webkit-scrollbar-track {
+  background: var(--surface, #1f2937);
+}
+
+.er-modal-body::-webkit-scrollbar-thumb {
+  background: var(--border-color, #d1d5db);
+  border-radius: 3px;
+}
+
+.er-theme-dark .er-modal-body::-webkit-scrollbar-thumb {
+  background: var(--border-color, #4b5563);
+}
+
+.er-modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--border-color, #9ca3af);
+}
+
+.er-theme-dark .er-modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--border-color, #6b7280);
+}
+
+@media (max-width: 768px) {
+  .er-modal-body {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .er-modal-body {
+    padding: 16px;
+  }
 }
 
 .er-modal-body::-webkit-scrollbar {
@@ -146,11 +249,103 @@
 /* PayPal Payment Info Box */
 .paypal-info-box {
   background: linear-gradient(135deg, #ffc439, #ff9500);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 16px 0;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0;
   color: white;
-  box-shadow: 0 4px 12px rgba(255, 148, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(255, 148, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.paypal-info-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: paypalShine 3s infinite;
+}
+
+@keyframes paypalShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.paypal-payment-details {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.paypal-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.paypal-description {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  opacity: 0.95;
+}
+
+.paypal-link-display {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.paypal-link-display::before {
+  content: "🔗";
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .paypal-info-box {
+    padding: 20px;
+    margin: 16px 0;
+  }
+  
+  .paypal-amount {
+    font-size: 2rem;
+  }
+  
+  .paypal-description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .paypal-info-box {
+    padding: 16px;
+    margin: 12px 0;
+  }
+  
+  .paypal-amount {
+    font-size: 1.8rem;
+  }
+  
+  .paypal-description {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+  
+  .paypal-link-display {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
 }
 
 .paypal-payment-details {

@@ -10,6 +10,19 @@
     <link rel="stylesheet" href="../css/responsive.css?v=3.0.0">
     <link rel="stylesheet" href="../css/er-studio.css">
     <link rel="stylesheet" href="../css/er-premium-100.css">
+    <link rel="stylesheet" href="../css/er-premium-checkout.css">
+    
+    <!-- Face Detection & Tracking -->
+    <script src="../js/face-detection-engine.js" defer></script>
+    <script src="../js/face-filter-system.js" defer></script>
+    
+    <!-- Lens & Camera Systems -->
+    <script src="../js/lens-catalog.js" defer></script>
+    <script src="../js/camera-controller.js" defer></script>
+    <script src="../js/rendering-engine.js" defer></script>
+    
+    <!-- Premium License & Checkout -->
+    <script src="../js/er-license-premium.js" defer></script>
     
 </head>
 <body class="er-studio-body">
@@ -134,6 +147,32 @@
                             <button type="button" class="cam-vertical-btn" id="toggleFaceMeshBtn" title="Face Tracking & Mesh" aria-label="Face Tracking and Mesh">
                                 <span>👤</span>
                             </button>
+                        </div>
+                        
+                        <!-- Enhanced Mobile Controls -->
+                        <div class="mobile-controls-panel">
+                            <div class="mobile-controls-header">
+                                <span class="mobile-controls-icon">🎮</span>
+                                <span class="mobile-controls-label">Controls</span>
+                            </div>
+                            <div class="mobile-controls-grid">
+                                <button type="button" class="mobile-control-btn" id="mobileFaceDetectionBtn" title="Face Detection">
+                                    <span class="control-emoji">👁️</span>
+                                    <span class="control-label">Face</span>
+                                </button>
+                                <button type="button" class="mobile-control-btn" id="mobileCameraSettingsBtn" title="Camera Settings">
+                                    <span class="control-emoji">⚙️</span>
+                                    <span class="control-label">Settings</span>
+                                </button>
+                                <button type="button" class="mobile-control-btn" id="mobileEffectsBtn" title="Effects Panel">
+                                    <span class="control-emoji">✨</span>
+                                    <span class="control-label">Effects</span>
+                                </button>
+                                <button type="button" class="mobile-control-btn" id="mobilePremiumBtn" title="Premium Features">
+                                    <span class="control-emoji">💎</span>
+                                    <span class="control-label">Premium</span>
+                                </button>
+                            </div>
                         </div>
                         
                         <div id="micStatusIndicator" class="cam-floating-badge" style="display:none;" title="Microphone Live" aria-live="polite">
@@ -279,6 +318,32 @@
                         
                     </div>
                     
+                    <!-- Elite Feature Discovery -->
+                    <div class="er-feature-discovery">
+                        <div class="discovery-header">
+                            <span class="discovery-icon">🎯</span>
+                            <h3>Feature Discovery</h3>
+                        </div>
+                        <div class="discovery-grid">
+                            <div class="discovery-item" title="Face Detection & Tracking">
+                                <span class="discovery-emoji">👁️</span>
+                                <span class="discovery-label">Face Detection</span>
+                            </div>
+                            <div class="discovery-item" title="AR Face Filters & Lenses">
+                                <span class="discovery-emoji">🎭</span>
+                                <span class="discovery-label">Face Filters</span>
+                            </div>
+                            <div class="discovery-item" title="Camera Controls & Settings">
+                                <span class="discovery-emoji">📷</span>
+                                <span class="discovery-label">Camera</span>
+                            </div>
+                            <div class="discovery-item" title="Lens Switching & Effects">
+                                <span class="discovery-emoji">🔍</span>
+                                <span class="discovery-label">Lenses</span>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Elite License Chip -->
                     <div class="er-license-chip" id="erLicenseChip" role="status" aria-live="polite">
                         <span class="er-license-chip-icon" id="erLicenseChipIcon">🔒</span>
@@ -362,6 +427,32 @@
                             <span class="tab-count">35+</span>
                         </button>
                         
+                    </div>
+                    
+                    <!-- Elite Quick Actions -->
+                    <div class="er-quick-actions">
+                        <div class="quick-actions-header">
+                            <span class="quick-actions-icon">⚡</span>
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="quick-actions-grid">
+                            <button type="button" class="quick-action-btn" id="quickFaceDetectionBtn" title="Toggle Face Detection">
+                                <span class="quick-action-emoji">👁️</span>
+                                <span class="quick-action-label">Face Detection</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" id="quickCameraSettingsBtn" title="Camera Settings">
+                                <span class="quick-action-emoji">⚙️</span>
+                                <span class="quick-action-label">Camera Settings</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" id="quickLensGalleryBtn" title="Lens Gallery">
+                                <span class="quick-action-emoji">🔍</span>
+                                <span class="quick-action-label">Lens Gallery</span>
+                            </button>
+                            <button type="button" class="quick-action-btn" id="quickPremiumBtn" title="Premium Features">
+                                <span class="quick-action-emoji">💎</span>
+                                <span class="quick-action-label">Premium</span>
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Elite Status Text -->
@@ -584,14 +675,31 @@
     <!-- Elite Studio Overlays -->
     <div id="erStudioOverlayContainer" class="er-overlay-container" style="display:none;"></div>
     
+    <!-- Elite Premium Checkout Modal -->
+    <div id="erLicenseCheckout" class="er-modal-backdrop" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+        <div class="er-modal-card premium-checkout">
+            <div class="er-modal-header">
+                <div>
+                    <span class="er-badge-category">Premium</span>
+                    <h2 id="checkout-title">ER Studio Premium</h2>
+                </div>
+                <button type="button" class="er-modal-close" id="closeCheckoutModalBtn" aria-label="Close Checkout">
+                    ✕
+                </button>
+            </div>
+            <div class="er-modal-body" id="checkoutContent">
+                <!-- Checkout content will be dynamically loaded -->
+            </div>
+        </div>
+    </div>
+    
     <!-- Shared site shell and consent services -->
     <script defer src="../js/script.js?v=3.0.0"></script>
     <script defer src="../js/beatles-playlists.js?v=3.0.0"></script>
     <script defer src="../js/cookie-utils.js?v=3.0.0"></script>
     <script defer src="../js/cookie-consent.js?v=3.0.0"></script>
     
-    <!-- License and active Studio renderer: camera, face tracking, filters, and overlays -->
-    <script defer src="../js/er-license-premium.js?v=3.0.0"></script>
+    <!-- Core Studio Engine -->
     <script defer src="../js/halloween.js?v=3.0.0"></script>
     
     <!-- Theme, camera stability, and lens catalog controllers -->
