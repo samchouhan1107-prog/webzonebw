@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEBZONEBW-ER Studio - 100% Enhanced Environment Demo</title>
+    <title>WEBZONEBW-ER Studio - 🔮 Enhanced Environment Demo</title>
     
     <!-- EXACT SAME CSS as original - UI PRESERVED -->
     <link rel="stylesheet" href="../css/style.css?v=2.2.0">
@@ -11,12 +11,190 @@
     <link rel="stylesheet" href="../css/er-studio.css">
     
     <style>
-        /* 5-Star Experience Enhanced Styles */
+        /* 🔮 Enhanced Experience Styles */
+        
+        /* Layout fixes for better spacing */
+        .er-workspace-grid {
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .er-camera-card {
+            min-height: 600px;
+        }
+        
+        .smart-inventory-ribbon {
+            margin-top: 15px;
+        }
+        
+        .er-lens-carousel-wrap {
+            margin-top: 15px;
+        }
+        
+        .er-bottom-controls-bar {
+            margin-top: 15px;
+        }
+        
+        /* Performance indicator positioning fix */
+        .performance-indicator {
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+        
+        /* Badge positioning fixes */
+        .demo-badge {
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+        }
+        
+        .star-rating {
+            top: 60px;
+            right: 10px;
+            z-index: 1001;
+        }
+        
+        .experience-quality {
+            bottom: 10px;
+            right: 10px;
+            z-index: 1001;
+        }
+        
+        .demo-info {
+            bottom: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+        
+        /* Dark mode section fix - ensure it's not covered */
+        .sidebar-theme-toggle-row {
+            position: relative;
+            z-index: 100;
+        }
+        
+        /* Enhanced spacing for mobile */
+        @media (max-width: 768px) {
+            .er-workspace-grid {
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            .er-camera-card {
+                min-height: 500px;
+            }
+            
+            .demo-badge {
+                top: 8px;
+                right: 8px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            .star-rating {
+                top: 50px;
+                right: 8px;
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            
+            .performance-indicator {
+                top: 8px;
+                left: 8px;
+                padding: 4px 10px;
+                font-size: 9px;
+            }
+            
+            .experience-quality {
+                bottom: 8px;
+                right: 8px;
+                padding: 6px 12px;
+                font-size: 10px;
+            }
+            
+            .demo-info {
+                bottom: 8px;
+                left: 8px;
+                max-width: 260px;
+                font-size: 10px;
+                padding: 10px;
+            }
+        }
+        
+        /* Theme toggle section enhancement */
+        .sidebar-theme-toggle-row {
+            position: relative;
+            z-index: 100;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-theme-toggle-row:hover {
+            background: rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .theme-label-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: inherit;
+        }
+        
+        .switch-toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .switch-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
         .demo-badge {
             position: fixed;
             top: 10px;
             right: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background: linear-gradient(45deg, #6366f1, #8b5cf6, #a855f7, #d946ef);
             background-size: 300% 300%;
             color: white;
             padding: 10px 20px;
@@ -24,8 +202,16 @@
             font-size: 13px;
             font-weight: bold;
             z-index: 1000;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
             animation: gradientShift 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .demo-badge::before {
+            content: '🔮';
+            font-size: 16px;
         }
         
         @keyframes gradientShift {
@@ -48,10 +234,11 @@
             padding: 12px;
             border-radius: 12px;
             font-size: 11px;
-            max-width: 320px;
+            max-width: 280px;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            line-height: 1.4;
         }
         
         .demo-info strong {
@@ -63,30 +250,38 @@
             top: 10px;
             left: 10px;
             background: rgba(0,0,0,0.8);
-            color: #4ecdc4;
+            color: #6366f1;
             padding: 6px 12px;
             border-radius: 15px;
             font-size: 10px;
             font-weight: bold;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(78, 205, 196, 0.3);
+            border: 1px solid rgba(99, 102, 241, 0.3);
         }
         
         .star-rating {
             position: fixed;
             top: 60px;
             right: 10px;
-            background: rgba(255, 215, 0, 0.9);
-            color: #333;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            color: white;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
             z-index: 1000;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.5);
             animation: starPulse 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .star-rating::before {
+            content: '🔮';
+            font-size: 14px;
         }
         
         @keyframes starPulse {
@@ -98,7 +293,7 @@
             position: fixed;
             bottom: 10px;
             right: 10px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -106,14 +301,22 @@
             font-weight: bold;
             z-index: 1000;
             backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .experience-quality::before {
+            content: '🔮';
+            font-size: 14px;
         }
     </style>
 </head>
 <body class="er-studio-body">
     
-    <!-- 5-Star Experience Badge -->
+    <!-- 🔮 Enhanced Experience Badge -->
     <div class="demo-badge">
-        ⭐ 100% Enhanced Experience
+        🔮 Enhanced Experience
     </div>
     
     <!-- Performance Indicator -->
@@ -121,27 +324,28 @@
         🚀 Performance: Optimal
     </div>
     
-    <!-- Star Rating -->
+    <!-- 🔮 Rating -->
     <div class="star-rating">
-        ⭐⭐⭐⭐⭐ 5-Star Experience
+        🔮 Premium Experience
     </div>
     
-    <!-- Experience Quality -->
+    <!-- 🔮 Quality -->
     <div class="experience-quality">
-        🎯 Premium Quality Active
+        🔮 Enhanced Quality
     </div>
     
     <!-- Demo info -->
     <div class="demo-info">
-        <strong>🚀 Enhanced Features:</strong><br>
+        <strong>🔮 Enhanced Features:</strong><br>
         • Filter-specific environments<br>
         • Atmospheric effects (fog, particles, lighting)<br>
         • Dynamic frames and animations<br>
         • Strength affects actual rendered results<br>
         • Clean environment switching<br>
         • Performance optimized<br>
-        • 5-Star user experience<br>
+        • Enhanced user experience<br>
         • Premium visual quality<br>
+        • 🔮 Icon integration<br>
         <br>
         <strong>🎯 UI Preserved:</strong><br>
         • Exact same layout and controls<br>
@@ -217,9 +421,9 @@
                     <h1 class="er-main-title">
                         <span class="brand-prefix">WEBZONEBW-</span>
                         <span class="gradient-text">ER STUDIO</span>
-                        <span class="sparkle-icon" aria-hidden="true">✨</span>
+                        <span class="sparkle-icon" aria-hidden="true">🔮</span>
                     </h1>
-                    <p class="er-subtitle">Explore interactive lenses, visual effects and the WEBZONEBW Halloween experience.</p>
+                    <p class="er-subtitle">🔮 Explore interactive lenses, visual effects and the WEBZONEBW Halloween experience.</p>
                 </div>
             </header>
             
@@ -498,6 +702,9 @@
     
     <!-- Original studio controllers -->
     <script src="../js/er-studio.js"></script>
+    
+    <!-- Comprehensive Enhanced Studio Platform -->
+    <script src="../js/enhanced-studio-platform.js"></script>
     
     <!-- 5-Star Experience Enhancement Script -->
     <script>

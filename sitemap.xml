@@ -139,6 +139,15 @@
         <priority>0.9</priority>
     </url>
 
+    <!-- WEBZONE ER Enhanced Demo -->
+
+    <url>
+        <loc>https://webzonebw.in/er-enhanced-demo.html</loc>
+        <lastmod>2026-12-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
 
     <!-- ========================================================
          TECHNICAL ARTICLES

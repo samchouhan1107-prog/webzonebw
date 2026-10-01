@@ -168,6 +168,441 @@ function initWebZoneERStudio() {
   }
 
   // ==========================================================
+  // CAMERA INITIALIZATION & STREAM MANAGEMENT
+  // ==========================================================
+
+  // Initialize camera with proper error handling
+  async function initCamera() {
+    try {
+      console.log('[WEBZONE ER] Initializing camera...');
+      
+      const constraints = {
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: 'user',
+          frameRate: { ideal: 30 }
+        },
+        audio: false
+      };
+
+      // Request camera access
+      mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      
+      // Set up video element
+      if (video) {
+        video.srcObject = mediaStream;
+        video.onloadedmetadata = () => {
+          video.play().catch(err => {
+            console.warn('[WEBZONE ER] Video play failed:', err);
+          });
+        };
+        
+        // Set canvas dimensions to match video
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        
+        // Hide placeholder and show video
+        placeholder.style.display = 'none';
+        video.style.display = 'block';
+        canvas.style.display = 'block';
+        
+        // Start rendering loop
+        startRenderLoop();
+        
+        console.log('[WEBZONE ER] Camera initialized successfully');
+      }
+    } catch (error) {
+      console.error('[WEBZONE ER] Camera initialization failed:', error);
+      showCameraError(error);
+    }
+  }
+
+  // Show camera error with user-friendly message
+  function showCameraError(error) {
+    const placeholder = document.getElementById("cameraPlaceholder");
+    const startBtn = document.getElementById("startExperienceBtn");
+    
+    if (placeholder) {
+      placeholder.innerHTML = `
+        <div class="camera-error">
+          <div class="error-icon">⚠️</div>
+          <h3>Camera Access Failed</h3>
+          <p>${error.message || 'Unable to access camera. Please check permissions and try again.'}</p>
+          <div class="error-actions">
+            <button onclick="requestCameraPermission()" class="btn camera-btn-primary">Retry Camera</button>
+            <button onclick="startDemoMode()" class="btn">Use Demo Mode</button>
+            <button onclick="uploadPhoto()" class="btn">Upload Photo</button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  // Request camera permission
+  async function requestCameraPermission() {
+    const placeholder = document.getElementById("cameraPlaceholder");
+    if (placeholder) {
+      placeholder.innerHTML = `
+        <div class="camera-loading">
+          <div class="loading-spinner">🔄</div>
+          <h3>Requesting Camera Access...</h3>
+          <p>Please allow camera access when prompted</p>
+        </div>
+      `;
+    }
+    
+    await initCamera();
+  }
+
+  // Start demo mode
+  function startDemoMode() {
+    isDemoMode = true;
+    const placeholder = document.getElementById("cameraPlaceholder");
+    const video = document.getElementById("cameraVideo");
+    const canvas = document.getElementById("cameraCanvas");
+    
+    if (placeholder) {
+      placeholder.innerHTML = `
+        <div class="demo-mode">
+          <div class="demo-icon">🎭</div>
+          <h3>Demo Mode Active</h3>
+          <p>Experience filters with sample images</p>
+          <div class="demo-controls">
+            <button onclick="loadSampleImage('face')" class="btn">Sample Face</button>
+            <button onclick="loadSampleImage('landscape')" class="btn">Sample Landscape</button>
+            <button onclick="loadSampleImage('abstract')" class="btn">Sample Abstract</button>
+          </div>
+        </div>
+      `;
+    }
+    
+    video.style.display = 'none';
+    canvas.style.display = 'none';
+    
+    // Load default sample image
+    loadSampleImage('face');
+  }
+
+  // Load sample image for demo mode
+  function loadSampleImage(type) {
+    const canvas = document.getElementById("cameraCanvas");
+    const ctx = canvas.getContext("2d");
+    
+    // Create sample image based on type
+    const sampleImages = {
+      face: 'https://picsum.photos/seed/face-demo/640/480.jpg',
+      landscape: 'https://picsum.photos/seed/landscape-demo/640/480.jpg',
+      abstract: 'https://picsum.photos/seed/abstract-demo/640/480.jpg'
+    };
+    
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function() {
+      canvas.width = 640;
+      canvas.height = 480;
+      ctx.drawImage(img, 0, 0, 640, 480);
+      
+      // Apply current filter to sample image
+      if (currentFilter && currentFilter !== 'none') {
+        applyFilterToCanvas(ctx, canvas.width, canvas.height);
+      }
+    };
+    img.src = sampleImages[type];
+  }
+
+  // Upload photo functionality
+  function uploadPhoto() {
+    const imageFileInput = document.getElementById("imageFileInput");
+    if (imageFileInput) {
+      imageFileInput.click();
+    }
+  }
+
+  // Handle file upload
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.getElementById("cameraCanvas");
+          const ctx = canvas.getContext("2d");
+          
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          
+          // Apply current filter
+          if (currentFilter && currentFilter !== 'none') {
+            applyFilterToCanvas(ctx, canvas.width, canvas.height);
+          }
+          
+          // Show canvas and hide video
+          const video = document.getElementById("cameraVideo");
+          video.style.display = 'none';
+          canvas.style.display = 'block';
+          
+          isDemoMode = true;
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Start rendering loop
+  function startRenderLoop() {
+    if (animFrameId) {
+      cancelAnimationFrame(animFrameId);
+    }
+    
+    function render() {
+      if (!isDemoMode && mediaStream && video && canvas) {
+        // Real-time camera processing
+        const ctx = canvas.getContext("2d");
+        
+        // Draw video frame to canvas
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Apply current filter
+        if (currentFilter && currentFilter !== 'none') {
+          applyFilterToCanvas(ctx, canvas.width, canvas.height);
+        }
+      }
+      
+      animFrameId = requestAnimationFrame(render);
+    }
+    
+    render();
+  }
+
+  // Apply filter to canvas
+  function applyFilterToCanvas(ctx, w, h) {
+    const time = Date.now();
+    
+    // Get filter configuration
+    const filterConfig = allFilterConfigs.find(f => f.id === currentFilter);
+    if (!filterConfig) return;
+    
+    // Apply filter based on type
+    switch (currentFilter) {
+      case 'cartoon':
+        drawCartoonShader(ctx, w, h, time);
+        break;
+      case 'sunglasses':
+        drawSunglasses(ctx, w, h, time);
+        break;
+      case 'halo':
+        drawAngelHalo(ctx, w, h, time);
+        break;
+      case 'goldenhour':
+        drawGoldenHour(ctx, w, h, time);
+        break;
+      case 'cinematic':
+        drawCinematic35mm(ctx, w, h, time);
+        break;
+      case 'noir':
+        drawCinematic35mm(ctx, w, h, time); // Noir uses same as cinematic but different colors
+        break;
+      case 'vintage90s':
+        drawVintage90s(ctx, w, h, time);
+        break;
+      case 'glitch':
+        drawDigitalGlitch(ctx, w, h, time);
+        break;
+      case 'space':
+        drawSpaceExplorer(ctx, w, h, time);
+        break;
+      case 'cyberpunk':
+        drawCyberpunk(ctx, w, h, time);
+        break;
+      case 'popart':
+        drawPopArt(ctx, w, h, time);
+        break;
+      case 'studiohd':
+        drawStudioHD(ctx, w, h, time);
+        break;
+      case 'ai-background':
+        drawAIBackground(ctx, w, h, time);
+        break;
+      case 'ghost-pose':
+      case 'ghost-aura':
+        drawGhostAura(ctx, w, h, time);
+        break;
+      case 'pose-frame':
+        drawPoseFrame(ctx, w, h, time);
+        break;
+      case 'pumpkin-pose':
+        drawPumpkinPose(ctx, w, h, time);
+        break;
+      case 'witch-ritual':
+        drawWitchRitualPose(ctx, w, h, time);
+        break;
+      case 'vr-nebula':
+        drawVRNebula(ctx, w, h, time);
+        break;
+      case 'haunted-forest':
+        drawHauntedForestVR(ctx, w, h, time);
+        break;
+      case 'vr-cyberdeck':
+        drawVRCyberdeck(ctx, w, h, time);
+        break;
+      case 'vr-mansion':
+        drawVRMansion(ctx, w, h, time);
+        break;
+      case 'zombie-virus':
+      case 'undead-plague':
+      case 'walking-dead':
+        drawZombieVirus(ctx, w, h, time);
+        break;
+      case 'dollar-rain':
+        drawDollarRain(ctx, w, h, time);
+        break;
+      case 'celebrity-spotlight':
+        drawCelebritySpotlight(ctx, w, h, time);
+        break;
+      case 'mother_care':
+        drawMotherCare(ctx, w, h, time);
+        break;
+      default:
+        // Default filter - no additional processing
+        break;
+    }
+  }
+
+  // Event Listeners for Camera Controls
+  function setupCameraEventListeners() {
+    // Start Experience Button
+    const startBtn = document.getElementById("startExperienceBtn");
+    if (startBtn) {
+      startBtn.addEventListener("click", async () => {
+        isCameraStarting = true;
+        await initCamera();
+        isCameraStarting = false;
+      });
+    }
+    
+    // Demo Mode Button
+    const demoBtn = document.getElementById("startDemoBtn");
+    if (demoBtn) {
+      demoBtn.addEventListener("click", () => {
+        startDemoMode();
+      });
+    }
+    
+    // File Upload
+    const imageFileInput = document.getElementById("imageFileInput");
+    if (imageFileInput) {
+      imageFileInput.addEventListener("change", handleFileUpload);
+    }
+    
+    // Flip Camera
+    const flipBtn = document.getElementById("flipCameraBtn");
+    if (flipBtn) {
+      flipBtn.addEventListener("click", flipCamera);
+    }
+    
+    // Snap Photo
+    const snapBtn = document.getElementById("snapPhotoBtn");
+    if (snapBtn) {
+      snapBtn.addEventListener("click", snapPhoto);
+    }
+    
+    // Lens Bubbles
+    const lensBubbles = document.querySelectorAll(".er-lens-bubble");
+    lensBubbles.forEach(bubble => {
+      bubble.addEventListener("click", () => {
+        const filter = bubble.dataset.filter;
+        selectFilter(filter);
+      });
+    });
+  }
+
+  // Select filter
+  function selectFilter(filterId) {
+    currentFilter = filterId;
+    
+    // Update UI
+    const lensBubbles = document.querySelectorAll(".er-lens-bubble");
+    lensBubbles.forEach(bubble => {
+      bubble.classList.remove("active");
+      if (bubble.dataset.filter === filterId) {
+        bubble.classList.add("active");
+      }
+    });
+    
+    // Show filter change notification
+    showCanvasToast('🎨', getFilterDisplayName(filterId));
+  }
+
+  // Flip camera
+  async function flipCamera() {
+    if (mediaStream) {
+      // Stop current stream
+      mediaStream.getTracks().forEach(track => track.stop());
+      mediaStream = null;
+    }
+    
+    // Toggle facing mode
+    isFacingUser = !isFacingUser;
+    
+    // Restart camera with new facing mode
+    await initCamera();
+  }
+
+  // Snap photo
+  function snapPhoto() {
+    const canvas = document.getElementById("cameraCanvas");
+    if (canvas) {
+      // Convert canvas to image
+      const imageData = canvas.toDataURL('image/png');
+      
+      // Show snapshot modal
+      const snapshotModal = document.getElementById("snapshotModal");
+      const snapshotImg = document.getElementById("snapshotImg");
+      const downloadLink = document.getElementById("downloadSnapshotBtn");
+      
+      if (snapshotModal && snapshotImg && downloadLink) {
+        snapshotImg.src = imageData;
+        downloadLink.href = imageData;
+        snapshotModal.style.display = 'block';
+      }
+    }
+  }
+
+  // Initialize everything when DOM is ready
+  function initializeStudio() {
+    console.log('[WEBZONE ER] Initializing studio...');
+    
+    // Set up event listeners
+    setupCameraEventListeners();
+    
+    // Set initial filter
+    currentFilter = 'cartoon';
+    
+    // Start demo mode by default
+    startDemoMode();
+    
+    console.log('[WEBZONE ER] Studio initialized successfully');
+  }
+
+  // Start initialization when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeStudio);
+  } else {
+    initializeStudio();
+  }
+
+  // Make functions globally available
+  window.requestCameraPermission = requestCameraPermission;
+  window.startDemoMode = startDemoMode;
+  window.uploadPhoto = uploadPhoto;
+  window.flipCamera = flipCamera;
+  window.snapPhoto = snapPhoto;
+
+  // ==========================================================
   // FACEFILTER ACCESS STATUS UPDATES
   // ==========================================================
 
