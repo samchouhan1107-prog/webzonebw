@@ -522,6 +522,85 @@ body.er-studio-body {
     box-shadow: 0 0 20px rgba(255, 107, 26, 0.5);
 }
 
+/* Effect Name and Target Tags */
+.effect-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    letter-spacing: 0.3px;
+    text-transform: capitalize;
+}
+
+.effect-target-tag {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.face-tag {
+    background: linear-gradient(135deg, rgba(255, 107, 26, 0.3), rgba(78, 205, 196, 0.3));
+    border-color: rgba(255, 107, 26, 0.4);
+}
+
+.scene-tag {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(255, 107, 26, 0.3));
+    border-color: rgba(78, 205, 196, 0.4);
+}
+
+.pose-tag {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.3), rgba(233, 30, 99, 0.3));
+    border-color: rgba(156, 39, 176, 0.4);
+}
+
+.vr-tag {
+    background: linear-gradient(135deg, rgba(63, 81, 181, 0.3), rgba(156, 39, 176, 0.3));
+    border-color: rgba(63, 81, 181, 0.4);
+}
+
+/* Enhanced Target Tags with Theme Variations */
+.horror-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.4), rgba(156, 39, 176, 0.4));
+    border-color: rgba(244, 67, 54, 0.5);
+}
+
+.witch-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.4), rgba(63, 81, 181, 0.4));
+    border-color: rgba(156, 39, 176, 0.5);
+}
+
+.zombie-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.4), rgba(139, 195, 74, 0.4));
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+.ghost-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(189, 189, 189, 0.4), rgba(255, 255, 255, 0.4));
+    border-color: rgba(189, 189, 189, 0.5);
+}
+
+.monster-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.4), rgba(255, 193, 7, 0.4));
+    border-color: rgba(255, 152, 0, 0.5);
+}
+
+.cinema-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(96, 125, 139, 0.4), rgba(69, 90, 100, 0.4));
+    border-color: rgba(96, 125, 139, 0.5);
+}
+
+.experimental-theme .effect-target-tag {
+    background: linear-gradient(135deg, rgba(255, 107, 26, 0.5), rgba(78, 205, 196, 0.5));
+    border-color: rgba(255, 107, 26, 0.6);
+    animation: experimentalPulse 2s ease-in-out infinite;
+}
+
 /* Lens Bubble Info */
 .lens-bubble-info {
     display: flex;
@@ -552,16 +631,17 @@ body.er-studio-body {
     position: relative;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 16px;
+    padding: 20px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    backdrop-filter: blur(10px);
+    gap: 16px;
+    backdrop-filter: blur(12px);
     overflow: hidden;
+    min-height: 120px;
 }
 
 .effects-card-grid .effect-card::before {
@@ -578,35 +658,40 @@ body.er-studio-body {
 }
 
 .effects-card-grid .effect-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 107, 26, 0.4);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 26, 0.2);
 }
 
 .effects-card-grid .effect-card:hover::before {
     opacity: 1;
+    background: radial-gradient(circle at center, rgba(255, 107, 26, 0.25), transparent 70%);
 }
 
 .effects-card-grid .effect-card.active {
-    background: linear-gradient(135deg, rgba(255, 107, 26, 0.3), rgba(78, 205, 196, 0.3));
-    border-color: rgba(255, 255, 255, 0.4);
+    background: linear-gradient(135deg, rgba(255, 107, 26, 0.4), rgba(78, 205, 196, 0.4));
+    border-color: rgba(255, 255, 255, 0.5);
     color: white;
-    box-shadow: 0 12px 35px rgba(255, 107, 26, 0.4);
+    box-shadow: 0 16px 45px rgba(255, 107, 26, 0.5), 0 0 40px rgba(255, 107, 26, 0.3);
+    transform: translateY(-4px) scale(1.02);
 }
 
 /* Enhanced Effect Icon Box */
 .effect-icon-box {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 32px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .effect-icon-box::before {
@@ -622,23 +707,47 @@ body.er-studio-body {
 }
 
 .effects-card-grid .effect-card:hover .effect-icon-box {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.15) rotate(5deg);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 107, 26, 0.5);
+    box-shadow: 0 6px 20px rgba(255, 107, 26, 0.3);
 }
 
 .effects-card-grid .effect-card:hover .effect-icon-box::before {
     opacity: 1;
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2));
+}
+
+.effects-card-grid .effect-card.active .effect-icon-box {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 25px rgba(255, 107, 26, 0.5);
+    transform: scale(1.1);
 }
 
 /* Enhanced Premium Tags */
 .premium-tag {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.6), rgba(255, 140, 0, 0.6));
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.8), rgba(255, 140, 0, 0.8));
     color: white;
     font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 8px;
-    font-size: 9px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    animation: premiumPulse 2s ease-in-out infinite;
+}
+
+@keyframes premiumPulse {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.9;
+        transform: scale(1.05);
+    }
 }
 
 /* Enhanced Mobile Controls Panel */
