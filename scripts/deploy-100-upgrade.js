@@ -367,7 +367,7 @@ try {
         return fs.existsSync(deployedPath);
     });
 
-    if (verification) {
+    if (verificationStatus) {
         console.log('✅ All 5-Star files deployed successfully!');
     } else {
         console.error('❌ Some files may not have deployed correctly.');
