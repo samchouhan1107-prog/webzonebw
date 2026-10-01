@@ -3038,7 +3038,7 @@ function initWebZoneERStudio() {
     };
 
     // Check if feature is available (paid license OR promotional access)
-    if (config.isPremium && !isFeatureAvailable(filterName)) {
+    if (config.isPremium && !(await isFeatureAvailable(filterName))) {
       // Check if this is a 24-hour offer filter
       const is24HourFilter = ['halo', 'witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose'].includes(filterName);
 
