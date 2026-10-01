@@ -148,7 +148,7 @@ This single-page experience features a unified interface for camera interaction,
 * **Lens Discovery**: Interactive discovery of free and premium lenses.
 * **Feature Packs**: Connected packages containing effects, tunes, and content.
 * **Secure Entitlement**: Server-side verified premium access (no local-storage-only reliance).
-* **Enhanced Payment Flow**: PayPal secure checkout ($5.99 USD) with improved user experience and error handling.
+* **Enhanced Payment Flow**: PayPal secure checkout ($5.49 USD) with improved user experience and error handling.
 * **Premium Halloween Filters**: Witch Ritual, Haunted Forest, Ghost Aura, Pumpkin Pose with 24-hour access.
 * **Content Pipeline**: Dynamic loading of articles, news, updates, hardware care, and assistance guides.
 * **Responsive Design**: Polished experience across mobile, tablet, and desktop.

@@ -8,6 +8,7 @@
 
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 console.log("🧪 WEBZONEBW PayPal Flow Test");
 console.log("==================================");
@@ -77,12 +78,16 @@ if (fs.existsSync(serverPath)) {
 
 // Test 3: Check frontend JavaScript
 console.log("\n📋 Test 3: Frontend Configuration");
+let hasPayPalIntegration = false;
+let hasSpecificPayPalLink = false;
+let hasExpirationChecking = false;
+let hasDemoRestrictions = false;
 const frontendPath = path.join(__dirname, 'js', 'er-license-premium.js');
 if (fs.existsSync(frontendPath)) {
   const frontendContent = fs.readFileSync(frontendPath, 'utf8');
   
   // Check for PayPal integration
-  const hasPayPalIntegration = frontendContent.includes('startPayPalCheckout') && frontendContent.includes('paypalPaymentUrl');
+  hasPayPalIntegration = frontendContent.includes('startPayPalCheckout') && frontendContent.includes('paypalPaymentUrl');
   if (hasPayPalIntegration) {
     console.log("✅ PayPal integration implemented");
   } else {
@@ -90,7 +95,7 @@ if (fs.existsSync(frontendPath)) {
   }
   
   // Check for specific PayPal link
-  const hasSpecificPayPalLink = frontendContent.includes('GEEZDGBAL6B64');
+  hasSpecificPayPalLink = frontendContent.includes('GEEZDGBAL6B64');
   if (hasSpecificPayPalLink) {
     console.log("✅ Specific PayPal payment link configured");
   } else {
@@ -98,7 +103,7 @@ if (fs.existsSync(frontendPath)) {
   }
   
   // Check for license expiration checking
-  const hasExpirationChecking = frontendContent.includes('checkLicenseExpiration') && frontendContent.includes('expiresAt');
+  hasExpirationChecking = frontendContent.includes('checkLicenseExpiration') && frontendContent.includes('expiresAt');
   if (hasExpirationChecking) {
     console.log("✅ License expiration checking implemented");
   } else {
@@ -106,7 +111,7 @@ if (fs.existsSync(frontendPath)) {
   }
   
   // Check for demo mode restrictions
-  const hasDemoRestrictions = frontendContent.includes('demo mode') || frontendContent.includes('No fake unlock') || frontendContent.includes('demo environment');
+  hasDemoRestrictions = frontendContent.includes('demo mode') || frontendContent.includes('No fake unlock') || frontendContent.includes('demo environment');
   if (hasDemoRestrictions) {
     console.log("✅ Demo mode restrictions implemented");
   } else {
@@ -118,12 +123,14 @@ if (fs.existsSync(frontendPath)) {
 
 // Test 4: Check CSS styling
 console.log("\n📋 Test 4: CSS Styling");
+let hasPayPalStyling = false;
 const cssPath = path.join(__dirname, 'css', 'er-premium-checkout.css');
 if (fs.existsSync(cssPath)) {
   const cssContent = fs.readFileSync(cssPath, 'utf8');
   
   // Check for PayPal styling
-  const hasPayPalStyling = cssContent.includes('paypal-info-box') && cssContent.includes('#ffc439');
+  hasPayPalStyling = cssContent.includes('paypal-info-box') && cssContent.includes('#ffc439');
+
   if (hasPayPalStyling) {
     console.log("✅ PayPal styling implemented");
   } else {

@@ -115,7 +115,7 @@ body.er-studio-body {
         linear-gradient(180deg, #f8fafc 0%, #f1f5f9 40%, #e2e8f0 100%);
 }
 
-.er-studio-body > * {
+.er-studio-body > *:not(.er-modal-backdrop):not(#erLicenseCheckout):not(.snapshot-modal):not(.permission-alert-modal):not(#erStudioOverlayContainer):not(.er-volcanic-embers) {
     position: relative;
     z-index: 1;
 }
