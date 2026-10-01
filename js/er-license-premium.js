@@ -346,7 +346,7 @@ function fetchJSON(url, options) {
     return resolveAPIBase().then(function (apiBase) {
       if (apiBase === "local") {
         // Static site - return a default support email
-        orderEmailCache = "samchouhan1107@gmail.com";
+        orderEmailCache = "sam.chouhan32@gmail.com";
         return orderEmailCache;
       }
       
@@ -700,7 +700,7 @@ function fetchJSON(url, options) {
       '<p class="co-help-text">Need help? Contact us:</p>' +
       '<div class="co-help-contact">' +
       '<a href="https://wa.me/918198091036" target="_blank" rel="noopener" class="co-help-whatsapp">📱 WhatsApp: +91 81980 91036</a>' +
-      '<a href="mailto:samchouhan1107@gmail.com" class="co-help-email">📧 Email: samchouhan1107@gmail.com</a>' +
+      '<a href="mailto:sam.chouhan32@gmail.com" class="co-help-email">📧 Email: sam.chouhan32@gmail.com</a>' +
       '</div>' +
       '</div>' +
       '</div>' +
