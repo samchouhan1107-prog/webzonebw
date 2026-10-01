@@ -3,105 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEBZONEBW-ER Studio - 5 Star Premium Experience</title>
+    <title>WEBZONEBW-ER Studio</title>
     
     <!-- Elite Premium CSS -->
     <link rel="stylesheet" href="../css/style.css?v=3.0.0">
     <link rel="stylesheet" href="../css/responsive.css?v=3.0.0">
     <link rel="stylesheet" href="../css/er-studio.css">
-    <link rel="stylesheet" href="../css/er-premium-100.css">
+    <link rel="stylesheet" href="../css/er-studio-effects.css">
     
-    <style>
-        /* Elite Premium Page Styles */
-        .elite-premium-badge {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #ffd700, #ff6b6b);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 1000;
-            box-shadow: 0 8px 32px rgba(255, 107, 26, 0.4);
-            animation: elitePremiumPulse 2s ease-in-out infinite;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .elite-premium-badge::before {
-            content: '🌟';
-            margin-right: 8px;
-            font-size: 16px;
-        }
-        
-        @keyframes elitePremiumPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 8px 32px rgba(255, 107, 26, 0.4);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 12px 40px rgba(255, 107, 26, 0.6);
-            }
-        }
-        
-        .elite-status-indicator {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 16px;
-            border-radius: 15px;
-            font-size: 12px;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .elite-performance-meter {
-            width: 100px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-        
-        .elite-performance-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4ecdc4, #ffd700);
-            border-radius: 2px;
-            animation: elitePerformancePulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes elitePerformancePulse {
-            0%, 100% {
-                width: 95%;
-            }
-            50% {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body class="er-studio-body">
-    
-    <!-- Elite Premium Badge -->
-    <div class="elite-premium-badge">
-        5 Star Premium Experience
-    </div>
-    
-    <!-- Elite Status Indicator -->
-    <div class="elite-status-indicator">
-        <div>🚀 Elite Performance</div>
-        <div class="elite-performance-meter">
-            <div class="elite-performance-fill"></div>
-        </div>
-    </div>
-    
+
     <!-- Elite Layout Container -->
     <div class="er-layout-container">
         
@@ -120,7 +32,7 @@
             <nav class="sidebar-nav" aria-label="Main Navigation">
                 <ul>
                     <li><a href="../index.html"><span class="nav-icon" aria-hidden="true">🏠</span>Dashboard</a></li>
-                    <li><a href="index.html" class="active er-nav-pill" aria-current="page"><span class="nav-icon" aria-hidden="true">🌟</span>5-Star ER Studio</a></li>
+                    <li><a href="index.html" class="active er-nav-pill" aria-current="page"><span class="nav-icon" aria-hidden="true">🔮</span>WEBZONEBW-ER Studio</a></li>
                     <li><a href="../projects.html"><span class="nav-icon" aria-hidden="true">💼</span>Projects</a></li>
                     <li><a href="../resume.html"><span class="nav-icon" aria-hidden="true">📄</span>Resume</a></li>
                     <li><a href="../blog.html"><span class="nav-icon" aria-hidden="true">📝</span>Blog</a></li>
@@ -156,6 +68,7 @@
                     <span></span><span></span><span></span>
                 </button>
                 <div class="er-mobile-title">
+                    <span class="er-studio-brand-icon" aria-hidden="true">🔮</span>
                     <span class="gradient-text">WEBZONEBW-</span>ER STUDIO
                 </div>
                 <button type="button" class="header-icon-btn" id="mobileEffectsToggleBtn" title="Toggle Effects Panel" aria-label="Toggle Effects Panel">
@@ -167,11 +80,11 @@
             <header class="er-top-header">
                 <div class="er-title-group">
                     <h1 class="er-main-title">
+                        <span class="er-studio-brand-icon" aria-hidden="true">🔮</span>
                         <span class="brand-prefix">WEBZONEBW-</span>
-                        <span class="gradient-text">5 STAR ER STUDIO</span>
-                        <span class="sparkle-icon" aria-hidden="true">🌟</span>
+                        <span class="gradient-text">ER STUDIO</span>
                     </h1>
-                    <p class="er-subtitle">Premium interactive lenses, visual effects and the ultimate WEBZONEBW Halloween experience.</p>
+                    <p class="er-subtitle">Live portraits, face-tracked lenses, and scene effects in one creative workspace.</p>
                 </div>
             </header>
             
@@ -189,12 +102,12 @@
                         
                         <div class="mobile-face-telemetry-bar" id="mobileFaceTelemetryBar" title="Biometric Face Engine Status • Tap to toggle Reticle HUD / Reset Lock" role="status" aria-live="polite">
                             <div class="face-telemetry-chip" id="faceTelemetryChip">
-                                <span class="face-chip-dot scanning" id="faceChipDot"></span>
-                                <span class="face-chip-status" id="faceChipStatus">👤 Scanning Face...</span>
+                                <span class="face-chip-dot" id="faceChipDot"></span>
+                                <span class="face-chip-status" id="faceChipStatus">Camera Off</span>
                             </div>
                             <div class="face-telemetry-chip-secondary" id="faceTelemetryChipSecondary">
-                                <span class="face-chip-metric" id="faceProximityMetric">🎯 Optimal Range</span>
-                                <span class="face-chip-metric" id="faceLightingMetric">⚡ Good Light</span>
+                                <span class="face-chip-metric" id="faceProximityMetric">🎯 Face Engine Idle</span>
+                                <span class="face-chip-metric" id="faceLightingMetric">⚡ Light Check Off</span>
                             </div>
                         </div>
                         
@@ -256,7 +169,7 @@
                         <video id="cameraVideo" class="camera-video" autoplay playsinline muted></video>
                         
                         <!-- Elite Canvas Overlay -->
-                        <canvas id="effectsCanvas" class="effects-canvas" style="display:none;"></canvas>
+                        <canvas id="cameraCanvas" class="effects-canvas" style="display:none;"></canvas>
                         
                         <!-- Elite Camera Status -->
                         <div class="camera-status-overlay" id="cameraStatusOverlay" style="display:none;">
@@ -273,9 +186,9 @@
                     <!-- Elite Camera Action Buttons -->
                     <div class="er-action-controls">
                         
-                        <button type="button" class="er-action-pill-btn" id="capturePhotoBtn" title="Capture HD Photo">
-                            <span aria-hidden="true">📸</span>
-                            <span>Capture Photo</span>
+                        <button type="button" class="er-action-pill-btn" id="capturePhotoBtn" title="Start the live camera or capture a photo">
+                            <span aria-hidden="true">📷</span>
+                            <span id="capturePhotoText">Start Camera</span>
                         </button>
                         
                         <div class="shutter-outer-glow">
@@ -319,6 +232,7 @@
                     </div>
                     
                     <!-- Elite Premium Tabs -->
+                    <div class="er-filter-section-heading">COLLECTION</div>
                     <div class="smart-inventory-category-pills polished-tabs-container" id="smartCategoryPills" role="tablist" aria-label="Smart Filter Inventory Categories">
                         
                         <button type="button" class="smart-cat-btn polished-tab active" data-smart-cat="smart" title="Auto-adapts based on real-time face detection">
@@ -373,6 +287,7 @@
                     </div>
                     
                     <!-- Elite Effects Category Pills -->
+                    <div class="er-filter-section-heading">CATEGORY</div>
                     <div class="effects-category-pills polished-tabs" role="tablist" aria-label="Effect Categories">
                         
                         <button type="button" class="cat-pill polished-tab active" data-cat="smart" title="Auto-detect face and prioritize matching filters">
@@ -460,6 +375,7 @@
                     </div>
                     
                     <!-- Elite Effects Card Grid -->
+                    <div class="er-filter-section-heading">EFFECTS</div>
                     <div class="effects-card-grid" id="effectsCardGrid">
                         
                         <!-- FACE AR Premium Effects -->
@@ -668,83 +584,23 @@
     <!-- Elite Studio Overlays -->
     <div id="erStudioOverlayContainer" class="er-overlay-container" style="display:none;"></div>
     
-    <!-- Elite Existing Scripts -->
+    <!-- Shared site shell and consent services -->
     <script defer src="../js/script.js?v=3.0.0"></script>
     <script defer src="../js/beatles-playlists.js?v=3.0.0"></script>
     <script defer src="../js/cookie-utils.js?v=3.0.0"></script>
     <script defer src="../js/cookie-consent.js?v=3.0.0"></script>
     
-    <!-- Elite Premium Checkout -->
+    <!-- License and active Studio renderer: camera, face tracking, filters, and overlays -->
     <script defer src="../js/er-license-premium.js?v=3.0.0"></script>
     <script defer src="../js/halloween.js?v=3.0.0"></script>
     
-    <!-- Elite Studio Controllers -->
+    <!-- Theme, camera stability, and lens catalog controllers -->
     <script defer src="../js/er-studio.js?v=3.0.0"></script>
     <script defer src="../js/er-studio-pipeline.js?v=3.0.0"></script>
     
-    <!-- Elite 5-Star Premium Systems -->
+    <!-- Studio interaction enhancements -->
     <script defer src="../js/er-studio-enhanced.js?v=3.0.0"></script>
-    <script defer src="../js/er-studio-100.js?v=3.0.0"></script>
-    
-    <!-- Elite Performance Optimization Script -->
-    <script>
-        // Elite Performance Optimization
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => {
-                // Elite Preload Critical Assets
-                const preloadAssets = [
-                    '../assets/logo.png',
-                    '../css/er-premium-100.css',
-                    '../css/er-studio.css'
-                ];
-                
-                preloadAssets.forEach(url => {
-                    if ('preload' in document.createElement('link')) {
-                        const link = document.createElement('link');
-                        link.rel = 'preload';
-                        link.href = url;
-                        link.as = url.endsWith('.css') ? 'style' : 'image';
-                        document.head.appendChild(link);
-                    }
-                });
-                
-                // Elite Performance Monitoring
-                console.log('🚀 Elite Performance System Initialized');
-            });
-        }
-        
-        // Elite Scroll Performance Optimization
-        let ticking = false;
-        function updateEliteScrollPerformance() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    // Elite Scroll Optimizations
-                    const scrollElements = document.querySelectorAll('.polished-tabs-container, .effects-card-grid');
-                    scrollElements.forEach(el => {
-                        el.style.willChange = 'transform, opacity';
-                    });
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-        
-        window.addEventListener('scroll', updateEliteScrollPerformance, { passive: true });
-        
-        // Elite Memory Management
-        window.addEventListener('beforeunload', () => {
-            // Elite Cleanup
-            if (window.WEBZONEBW_ER_100) {
-                window.WEBZONEBW_ER_100.performanceSystem.isMonitoring = false;
-            }
-        });
-        
-        // Elite System Status
-        console.log('🌟 WEBZONEBW ER Studio 5-Star Premium Experience Loaded');
-        console.log('⭐ Version 3.0.0 - 100% Excellence');
-        console.log('🚀 Elite Performance Optimizations Active');
-        console.log('💎 Premium User Experience Enabled');
-    </script>
+    <script defer src="../js/er-studio-controls.js?v=3.0.0"></script>
     
 </body>
 </html>

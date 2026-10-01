@@ -39,7 +39,10 @@
             const observer = new PerformanceObserver((list) => {
                 list.getEntries().forEach((entry) => {
                     if (entry.name.includes('filter') || entry.name.includes('tab')) {
-                        this.metrics[entry.name + 'Time'].push(entry.duration);
+                        const metricName = entry.name.toLowerCase().includes('filter')
+                            ? 'filterApplyTime'
+                            : 'tabSwitchTime';
+                        this.metrics[metricName].push(entry.duration);
                         this.pruneMetrics();
                     }
                 });
@@ -317,8 +320,7 @@
         }
 
         setupEliteTabInteraction(tab, prefix) {
-            const dataAttr = prefix === 'smart-cat' ? 'data-smart-cat' : 'data-cat';
-            const category = tab.dataset[dataAttr];
+            const category = prefix === 'smart-cat' ? tab.dataset.smartCat : tab.dataset.cat;
             
             // Elite interaction with performance optimization
             const clickHandler = (e) => {
@@ -685,6 +687,15 @@
             if (window.WEBZONEBW_ER && window.WEBZONEBW_ER.applyFilter) {
                 window.WEBZONEBW_ER.applyFilter(filter, type);
             }
+        }
+
+        debounce(callback, delay) {
+            let timeoutId;
+
+            return (...args) => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => callback.apply(this, args), delay);
+            };
         }
 
         setupPremiumEventListeners() {
