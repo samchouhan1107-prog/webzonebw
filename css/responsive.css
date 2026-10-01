@@ -31,6 +31,14 @@
         min-width: 44px;
         touch-action: manipulation;
     }
+
+    .carousel-arrow-btn {
+        flex-basis: 44px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+    }
     
     /* --- Mobile Navigation --- */
     .mobile-nav-bar,
