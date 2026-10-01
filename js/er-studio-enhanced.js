@@ -102,8 +102,7 @@
         }
 
         setupTabInteraction(tab, prefix) {
-            const dataAttr = prefix === 'smart-cat' ? 'data-smart-cat' : 'data-cat';
-            const category = tab.dataset[dataAttr];
+            const category = prefix === 'smart-cat' ? tab.dataset.smartCat : tab.dataset.cat;
             
             // Performance: Use passive event listeners
             tab.addEventListener('click', () => {

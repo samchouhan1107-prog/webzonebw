@@ -29,7 +29,9 @@ function initWebZoneERStudio() {
   const startBtn = document.getElementById("startExperienceBtn");
   const demoBtn = document.getElementById("startDemoBtn");
   const stopBtn = document.getElementById("stopExperienceBtn");
-  const snapBtn = document.getElementById("snapPhotoBtn");
+  const snapBtn =
+    document.getElementById("capturePhotoBtn") ||
+    document.getElementById("snapPhotoBtn");
   const audioBtn = document.getElementById("toggleAudioBtn");
   const flipBtn = document.getElementById("flipCameraBtn");
   const faceHudToggle = document.getElementById("toggleFaceHudBtn");
@@ -80,6 +82,7 @@ function initWebZoneERStudio() {
   const snapshotImg = document.getElementById("snapshotImg");
   const downloadLink = document.getElementById("downloadSnapshotBtn");
   const closeSnapBtn = document.getElementById("closeSnapshotBtn");
+  const capturePhotoText = document.getElementById("capturePhotoText");
 
   // Camera & Microphone Permission Alert Elements
   const permissionAlertModal = document.getElementById("permissionAlertModal");
@@ -102,6 +105,10 @@ function initWebZoneERStudio() {
 
   const permUploadBtn = document.getElementById("permUploadBtn");
 
+  const permAllowBtn = document.getElementById("permAllowBtn");
+
+  const permDismissBtn = document.getElementById("permDismissBtn");
+
   const micStatusIndicator = document.getElementById("micStatusIndicator");
 
   if (!canvas || !video) {
@@ -123,6 +130,7 @@ function initWebZoneERStudio() {
   let currentFilter = "cartoon";
   let activeMagazine = "none";
   let showFaceHud = false;
+  let isFaceTrackingEnabled = true;
 
   let isAutoHdEnabled = true;
   let isStudioLightEnabled = true;
@@ -572,6 +580,17 @@ function initWebZoneERStudio() {
     }
   }
 
+  const erPerf = {
+    frame: 0,
+    lastEnhance: 0,
+    lastFaceUpdate: 0,
+    processingMax: 960,
+    mobileMax: 640,
+    tabletMax: 800,
+    enhancementInterval: 8,
+    running: false,
+  };
+
   // Initialize everything when DOM is ready
   function initializeStudio() {
     console.log('[WEBZONE ER] Initializing studio...');
@@ -582,17 +601,16 @@ function initWebZoneERStudio() {
     // Set initial filter
     currentFilter = 'cartoon';
     
-    // Start demo mode by default
-    startDemoMode();
-    
     console.log('[WEBZONE ER] Studio initialized successfully');
   }
 
   // Start initialization when DOM is loaded
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeStudio);
+    document.addEventListener('DOMContentLoaded', () => {
+      window.setTimeout(initializeStudio, 0);
+    }, { once: true });
   } else {
-    initializeStudio();
+    window.setTimeout(initializeStudio, 0);
   }
 
   // Make functions globally available
@@ -656,17 +674,6 @@ function initWebZoneERStudio() {
   // Full-resolution getImageData() on every frame can stall
   // mobile GPUs and make the camera appear frozen.
   // ==========================================================
-  const erPerf = {
-    frame: 0,
-    lastEnhance: 0,
-    lastFaceUpdate: 0,
-    processingMax: 960,
-    mobileMax: 640,
-    tabletMax: 800,
-    enhancementInterval: 8,
-    running: false,
-  };
-
   // ==========================================================
   // QUALITY SCALING SYSTEM (10-100 scale)
   // Dynamically adjusts rendering quality based on scale
@@ -1118,7 +1125,9 @@ function initWebZoneERStudio() {
   function renderUploadedImage() {
     if (!uploadedImage) return;
 
-    placeholder.style.display = "none";
+    if (placeholder) {
+      placeholder.style.display = "none";
+    }
     canvas.style.display = "block";
 
     // Fit image nicely into canvas
@@ -2644,10 +2653,22 @@ function initWebZoneERStudio() {
         faceChipDot.classList.add("touch-locked");
 
         faceChipStatus.textContent = "🎯 Touch Lock Anchored";
+      } else if (!isFaceTrackingEnabled) {
+        faceChipDot.classList.add("idle");
+
+        faceChipStatus.textContent = "Face Tracking Off";
       } else if (isFaceDetected) {
         faceChipDot.classList.add("locked");
 
         faceChipStatus.textContent = `👤 Face Locked (${faceDetectionConfidence.toFixed(0)}%)`;
+      } else if (!mediaStream && !isDemoMode && studioMode !== "upload") {
+        faceChipDot.classList.add("idle");
+
+        faceChipStatus.textContent = "Camera Off";
+      } else if (isDemoMode) {
+        faceChipDot.classList.add("idle");
+
+        faceChipStatus.textContent = "Preview Mode · No live face data";
       } else {
         faceChipDot.classList.add("scanning");
 
@@ -2656,7 +2677,9 @@ function initWebZoneERStudio() {
     }
 
     if (faceProximityMetric) {
-      if (currentProximity === "close") {
+      if (!mediaStream && !isDemoMode) {
+        faceProximityMetric.textContent = "🎯 Face Engine Idle";
+      } else if (currentProximity === "close") {
         faceProximityMetric.textContent = "📐 Move Back";
       } else if (currentProximity === "far") {
         faceProximityMetric.textContent = "🔍 Step Closer";
@@ -2666,7 +2689,9 @@ function initWebZoneERStudio() {
     }
 
     if (faceLightingMetric) {
-      if (currentLighting === "low") {
+      if (!mediaStream && !isDemoMode) {
+        faceLightingMetric.textContent = "⚡ Light Check Off";
+      } else if (currentLighting === "low") {
         faceLightingMetric.textContent = "🌙 Low Light";
       } else if (currentLighting === "bright") {
         faceLightingMetric.textContent = "☀️ High Lumens";
@@ -3919,14 +3944,23 @@ function initWebZoneERStudio() {
   const toggleFaceMeshBtn = document.getElementById("toggleFaceMeshBtn");
 
   if (toggleFaceMeshBtn) {
-    toggleFaceMeshBtn.addEventListener("click", () => {
-      showFaceHud = !showFaceHud;
+    toggleFaceMeshBtn.classList.toggle("active", isFaceTrackingEnabled);
 
-      toggleFaceMeshBtn.classList.toggle("active", showFaceHud);
+    toggleFaceMeshBtn.addEventListener("click", () => {
+      isFaceTrackingEnabled = !isFaceTrackingEnabled;
+
+      toggleFaceMeshBtn.classList.toggle("active", isFaceTrackingEnabled);
+
+      if (!isFaceTrackingEnabled) {
+        isFaceDetected = false;
+        faceDetectionConfidence = 0;
+      }
+
+      updateSmartInventoryUI();
 
       showSwipeToast(
         "👤",
-        showFaceHud ? "Biometric Tracking ON" : "Biometric Tracking OFF",
+        isFaceTrackingEnabled ? "Face Tracking ON" : "Face Tracking OFF",
       );
     });
   }
@@ -4141,12 +4175,17 @@ function initWebZoneERStudio() {
   }
 
   if (autoHdBtnFloating) {
-    autoHdBtnFloating.addEventListener("click", () => {
-      if (autoHdBtn) {
-        autoHdBtn.click();
+    autoHdBtnFloating.classList.toggle("active", isAutoHdEnabled);
 
-        autoHdBtnFloating.classList.toggle("active", isAutoHdEnabled);
+    autoHdBtnFloating.addEventListener("click", () => {
+      isAutoHdEnabled = !isAutoHdEnabled;
+
+      if (autoHdBtn) {
+        autoHdBtn.classList.toggle("active", isAutoHdEnabled);
       }
+
+      autoHdBtnFloating.classList.toggle("active", isAutoHdEnabled);
+      showSwipeToast("✨", isAutoHdEnabled ? "Auto-HD ON" : "Auto-HD OFF");
     });
   }
 
@@ -4222,7 +4261,7 @@ function initWebZoneERStudio() {
           "Your browser blocked the camera for this site. Tap the <strong>lock / camera icon</strong> in the address bar (or open Safari/Chrome site settings), set <strong>Camera → Allow</strong>, then reload the page. On iOS also check Settings → Safari/Chrome → Camera.";
       } else {
         message =
-          "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Retry Camera</strong>. Also check Windows Settings → Privacy &amp; security → Camera.";
+          "Chrome has blocked the camera for this site (the camera icon with a red line in the address bar). Click that icon, choose <strong>Allow</strong>, then press <strong>Allow Camera Access</strong> here. Also check Windows Settings → Privacy &amp; security → Camera.";
       }
 
       icon = "🚫";
@@ -4381,6 +4420,17 @@ function initWebZoneERStudio() {
 
   if (permAlertCloseBtn) {
     permAlertCloseBtn.addEventListener("click", closePermissionAlert);
+  }
+
+  if (permAllowBtn) {
+    permAllowBtn.addEventListener("click", () => {
+      closePermissionAlert();
+      startCamera();
+    });
+  }
+
+  if (permDismissBtn) {
+    permDismissBtn.addEventListener("click", closePermissionAlert);
   }
 
   // ==========================================================
@@ -4563,9 +4613,15 @@ function initWebZoneERStudio() {
   }
 
   function attachLiveCameraFeed() {
-    placeholder.style.display = "none";
+    if (placeholder) {
+      placeholder.style.display = "none";
+    }
 
     canvas.style.display = "block";
+
+    if (capturePhotoText) {
+      capturePhotoText.textContent = "Capture Photo";
+    }
 
     resizeProcessingCanvas(video.videoWidth || 640, video.videoHeight || 480);
 
@@ -4798,7 +4854,13 @@ function initWebZoneERStudio() {
 
     stopCameraFeed();
 
-    placeholder.style.display = "none";
+    if (placeholder) {
+      placeholder.style.display = "none";
+    }
+
+    if (capturePhotoText) {
+      capturePhotoText.textContent = "Capture Preview";
+    }
 
     canvas.style.display = "block";
 
@@ -4836,6 +4898,10 @@ function initWebZoneERStudio() {
     }
 
     isDemoMode = false;
+
+    if (capturePhotoText) {
+      capturePhotoText.textContent = "Start Camera";
+    }
 
     isFaceDetected = false;
     detectionMethod = "scanning";
@@ -5922,6 +5988,10 @@ function initWebZoneERStudio() {
   // ==========================================================
 
   async function updateFaceTracking() {
+    if (!isFaceTrackingEnabled) {
+      return;
+    }
+
     const now = performance.now();
 
     const time = now * 0.001;
@@ -8377,6 +8447,8 @@ function initWebZoneERStudio() {
   // ==========================================================
   // LENS FILTER CAROUSEL EVENT LISTENERS
   // ==========================================================
+
+  const snapLensBubbles = document.querySelectorAll(".er-lens-bubble");
 
   // Lens bubble click handlers
   snapLensBubbles.forEach(bubble => {
