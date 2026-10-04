@@ -70,8 +70,8 @@ WEBZONEBW/
 ├── README.md
 │   └── Project documentation, architecture, features & development notes
 │
-├── AUDIT_REPORT.md / FILTER_ENVIRONMENT_UPGRADE_GUIDE.md / UNIFIED_LENS_IMPLEMENTATION_GUIDE.md
-│   └── Standing technical reference docs (implementation guides, audit notes)
+├── ER_STUDIO_REDESIGN_README.md
+│   └── Notes for the (currently unwired) alternate ER Studio redesign modules below
 │
 ├── package.json
 │   └── Node dependencies, scripts & server configuration
@@ -147,8 +147,14 @@ WEBZONEBW/
 │   ├── cookie-consent.js / cookie-utils.js
 │   │   └── Cookie consent banner & helper utilities
 │   │
-│   └── ER_STUDIO_MODULES.md
-│       └── Module load-order contract for the ER Studio JS files
+│   ├── ER_STUDIO_MODULES.md
+│   │   └── Module load-order contract for the ER Studio JS files
+│   │
+│   └── camera-controller.js / rendering-engine.js / face-detection-engine.js /
+│       face-filter-system.js / lens-catalog.js / enhanced-studio-platform.js
+│       └── Alternate ER Studio engine modules from the redesign branch;
+│           NOT wired into er/index.html (per ER_STUDIO_MODULES.md — active
+│           runtime remains halloween.js / er-studio-pipeline.js)
 │
 ├── assets/
 │   │
@@ -237,5 +243,7 @@ Dockerfile / render.yaml 🛠 Container & Render deployment config
 
 **Notes:**
 - The `backups/` directory and `src/assets/images/` duplicate tree have been removed from the repository as accidental duplication (identical content to files already tracked elsewhere).
+- `AUDIT_REPORT.md`, `FILTER_ENVIRONMENT_UPGRADE_GUIDE.md` and `UNIFIED_LENS_IMPLEMENTATION_GUIDE.md` were removed as stale standing docs superseded by `ER_STUDIO_REDESIGN_README.md` and `js/ER_STUDIO_MODULES.md`.
+- The redesign-branch engine modules in `js/` (`camera-controller.js`, `rendering-engine.js`, `face-detection-engine.js`, `face-filter-system.js`, `lens-catalog.js`, `enhanced-studio-platform.js`) are present in the repo but intentionally **not loaded** by `er/index.html` yet — integrating them requires an explicit migration per `js/ER_STUDIO_MODULES.md` to avoid double-loading `er-license-premium.js` and breaking the purchase/unlock flow.
 - This file is maintained manually and should be updated whenever top-level files or folders are added, renamed, or removed.
 ```
