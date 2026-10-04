@@ -168,7 +168,6 @@ WebZoneBW/
 │
 └── 📊 Additional Resources
     ├── data/ (Data Storage)
-    ├── schema/ (JSON Schema)
     ├── scripts/ (Deployment Scripts)
     ├── seo/ (SEO Templates)
     ├── root/ (Root Configuration)

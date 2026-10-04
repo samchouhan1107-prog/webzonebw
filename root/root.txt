@@ -85,17 +85,6 @@ WEBZONEBW/
 ├── .env.example
 │   └── Template for required environment variables (no real secrets)
 │
-├── schema/
-│   │
-│   ├── organization.json
-│   │   └── WEBZONEBW Organization structured-data definition
-│   │
-│   ├── website.json
-│   │   └── WEBZONEBW WebSite structured-data definition
-│   │
-│   └── article.json
-│       └── Article structured-data definition for technical content
-│
 ├── seo/
 │   │
 │   ├── meta-template.html
@@ -229,7 +218,6 @@ sitemap.xml / feed.xml ✅
 llms.txt               ✅
 ads.txt                ✅
 CNAME                  ✅
-schema/                ✅
 seo/                   ✅
 
 
