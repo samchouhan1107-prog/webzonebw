@@ -129,9 +129,6 @@ WEBZONEBW/
 │   ├── er-studio.js / er-studio-pipeline.js / er-studio-controls.js / er-studio-categories.js / er-studio-enhanced.js
 │   │   └── ER Studio rendering pipeline, controls & category modules
 │   │
-│   ├── er-license.js
-│   │   └── Legacy free/premium license gate (superseded by er-license-premium.js)
-│   │
 │   ├── er-license-premium.js
 │   │   └── Active premium licensing + PayPal integration (loaded by er/index.html)
 │   │
@@ -239,7 +236,6 @@ Dockerfile / render.yaml 🛠 Container & Render deployment config
 ```
 
 **Notes:**
-- `js/er-license.js` is legacy and no longer referenced by any shipped HTML page; `er/index.html` and `er-enhanced-demo.html` load `js/er-license-premium.js`. Kept for reference only — safe to remove in a future cleanup once confirmed unused by any deploy script.
 - The `backups/` directory and `src/assets/images/` duplicate tree have been removed from the repository as accidental duplication (identical content to files already tracked elsewhere).
 - This file is maintained manually and should be updated whenever top-level files or folders are added, renamed, or removed.
 ```

@@ -1144,7 +1144,7 @@ function isLicenseValid(license) {
  * ============================================================ */
 
 /*
- * Client-facing order creation - matches the er-license.js flow:
+ * Client-facing order creation - matches the er-license-premium.js flow:
  * returns the PayPal order id + the public client id so the PayPal
  * JS SDK Buttons can be rendered. No secrets are exposed here.
  */
