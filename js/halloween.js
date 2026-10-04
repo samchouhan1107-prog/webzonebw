@@ -129,6 +129,10 @@ function initWebZoneERStudio() {
   // Filters & Effects State
   let currentFilter = "cartoon";
   let activeMagazine = "none";
+  // Remembers the premium lens the user tried to select while locked, so
+  // that a successful checkout immediately unlocks and applies it instead
+  // of requiring a second manual click.
+  let pendingLensUnlockRequest = null;
   let showFaceHud = false;
   let isFaceTrackingEnabled = true;
 
@@ -666,6 +670,30 @@ function initWebZoneERStudio() {
   window.addEventListener('load', function() {
     setTimeout(updateFaceFilterUI, 1000); // Initial refresh
   });
+
+  // Refresh ALL lens lock/unlock UI (not just the 24-hour filter subset)
+  // and resume any lens the user tried to open before being sent to
+  // checkout, as soon as the license state changes (e.g. purchase success).
+  function refreshLensAccessUI() {
+    updateFaceFilterUI();
+
+    if (typeof renderSmartLensTrack === "function") {
+      renderSmartLensTrack();
+    }
+
+    if (pendingLensUnlockRequest && isUserPremium()) {
+      const unlockedFilter = pendingLensUnlockRequest;
+      pendingLensUnlockRequest = null;
+      selectFilter(unlockedFilter);
+    }
+  }
+
+  if (
+    window.WEBZONEBW_LICENSE &&
+    typeof window.WEBZONEBW_LICENSE.onStateChange === "function"
+  ) {
+    window.WEBZONEBW_LICENSE.onStateChange(refreshLensAccessUI);
+  }
 
   // ==========================================================
   // MOBILE / TABLET PERFORMANCE GUARD
@@ -3053,6 +3081,10 @@ function initWebZoneERStudio() {
         // User doesn't have any access - show checkout
         showSwipeToast("🔒", "Premium License Required!");
 
+        // Remember which lens the user wanted so it can be unlocked and
+        // applied automatically as soon as the checkout succeeds.
+        pendingLensUnlockRequest = filterName;
+
         if (
           window.WEBZONEBW_LICENSE &&
           typeof window.WEBZONEBW_LICENSE.openCheckout === "function"
@@ -3062,6 +3094,12 @@ function initWebZoneERStudio() {
       }
 
       return;
+    }
+
+    // Access granted (or already had it) - clear any pending unlock request
+    // for this lens so the checkout-success listener doesn't re-trigger it.
+    if (pendingLensUnlockRequest === filterName) {
+      pendingLensUnlockRequest = null;
     }
 
     currentFilter = filterName;

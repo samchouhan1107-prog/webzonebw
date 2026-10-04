@@ -812,11 +812,36 @@
         });
       }
     },
+
+    // Updates the "✅ Included / Active" vs "🔒 Pro Pack" badges on the
+    // already-rendered marketplace hub cards in place, so a successful
+    // checkout unlocks a lens immediately without a full re-render/reload.
+    refreshHubOwnership: function () {
+      document.querySelectorAll(".er-hub-card[data-lens-id]").forEach(function (card) {
+        var lensId = card.getAttribute("data-lens-id");
+        var owned = window.WEBZONEBW_ENTITLEMENT_MANAGER.isLensOwned(lensId);
+        var statusEl = card.querySelector(".er-owner-status");
+        if (statusEl) {
+          statusEl.classList.toggle("status-owned", owned);
+          statusEl.classList.toggle("status-locked", !owned);
+          statusEl.textContent = owned ? "✅ Included / Active" : "🔒 Pro Pack · $5.99";
+        }
+      });
+    },
   };
 
   function initStudioPipeline() {
     window.WEBZONEBW_STUDIO_UI.renderHubSections();
     window.WEBZONEBW_STUDIO_UI.setupStudioControls();
+
+    if (
+      window.WEBZONEBW_LICENSE &&
+      typeof window.WEBZONEBW_LICENSE.onStateChange === "function"
+    ) {
+      window.WEBZONEBW_LICENSE.onStateChange(function () {
+        window.WEBZONEBW_STUDIO_UI.refreshHubOwnership();
+      });
+    }
   }
 
   if (document.readyState === "loading") {
