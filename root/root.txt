@@ -22,17 +22,38 @@ WEBZONEBW/
 ├── privacy.html
 │   └── Privacy Policy — data, cookies, analytics & advertising information
 │
+├── privacy-center.html
+│   └── Consent/preference center for cookies & tracking controls
+│
+├── cookie-policy.html
+│   └── Cookie Policy — categories, purposes & opt-out guidance
+│
 ├── terms.html
 │   └── Terms & Conditions for using WebZoneBW
 │
 ├── disclaimer.html
 │   └── Disclaimer — educational content, projects, external services & advertising
 │
+├── soundbox.html
+│   └── WEBZONEBW Sound Box music player experience
+│
+├── er-enhanced-demo.html
+│   └── ER Studio enhanced feature demo page
+│
+├── test-checkout.html
+│   └── PayPal checkout flow test harness
+│
+├── master.html
+│   └── Internal layout/reference page
+│
+├── 500.html
+│   └── Server error page
+│
 ├── robots.txt
 │   └── Search-engine crawler instructions & sitemap location
 │
-├── sitemap.xml
-│   └── Sitemap containing publicly available WebZoneBW pages
+├── sitemap.xml / feed.xml
+│   └── Sitemap & RSS feed for publicly available WebZoneBW pages
 │
 ├── llms.txt
 │   └── AI-readable description of WebZoneBW, content areas & projects
@@ -43,14 +64,26 @@ WEBZONEBW/
 ├── CNAME
 │   └── Custom domain configuration for webzonebw.in
 │
+├── metadata.json
+│   └── Site-level structured metadata
+│
 ├── README.md
 │   └── Project documentation, architecture, features & development notes
 │
-├── package.json
-│   └── Local development dependencies & server configuration
+├── AUDIT_REPORT.md / FILTER_ENVIRONMENT_UPGRADE_GUIDE.md / UNIFIED_LENS_IMPLEMENTATION_GUIDE.md
+│   └── Standing technical reference docs (implementation guides, audit notes)
 │
-├── start-webzonebw.bat
-│   └── Windows local-development server launcher
+├── package.json
+│   └── Node dependencies, scripts & server configuration
+│
+├── server.js
+│   └── Express production server (security headers, rate limiting, PayPal API)
+│
+├── Dockerfile / render.yaml
+│   └── Container build & Render.com deployment configuration
+│
+├── .env.example
+│   └── Template for required environment variables (no real secrets)
 │
 ├── schema/
 │   │
@@ -65,11 +98,8 @@ WEBZONEBW/
 │
 ├── seo/
 │   │
-│   ├── meta.html
+│   ├── meta-template.html
 │   │   └── SEO title, descriptions, canonical & crawler metadata reference
-│   │
-│   ├── open-graph.html
-│   │   └── Social-sharing title, description & image metadata reference
 │   │
 │   └── structured-data.html
 │       └── JSON-LD implementation reference for Organization, WebSite & Articles
@@ -79,73 +109,86 @@ WEBZONEBW/
 │   ├── style.css
 │   │   └── Global WebZoneBW design system & core styling
 │   │
-│   └── responsive.css
-│       └── Desktop, tablet & mobile responsive behavior
+│   ├── responsive.css
+│   │   └── Desktop, tablet & mobile responsive behavior
+│   │
+│   ├── er-studio.css / er-studio-effects.css
+│   │   └── ER Studio camera experience styling & visual effects
+│   │
+│   └── er-premium-checkout.css
+│       └── PayPal premium checkout UI styling
 │
 ├── js/
 │   │
 │   ├── script.js
 │   │   └── Core frontend functionality & UI interactions
 │   │
-│   ├── halloween.js
-│   │   └── ER Studio camera filter engine
+│   ├── halloween.js / halloween-enhanced.js
+│   │   └── ER Studio camera filter engine (base + enhanced)
 │   │
-│   ├── webzonebw-player.js
-│   │   └── Soundbox music player engine
+│   ├── er-studio.js / er-studio-pipeline.js / er-studio-controls.js / er-studio-categories.js / er-studio-enhanced.js
+│   │   └── ER Studio rendering pipeline, controls & category modules
 │   │
-│   ├── beatles-playlists.js
-│   │   └── Beatles playlist data & mappings
+│   ├── er-license.js
+│   │   └── Legacy free/premium license gate (superseded by er-license-premium.js)
 │   │
-│   └── soundbox-engine.js
-│       └── Soundbox audio engine utilities
+│   ├── er-license-premium.js
+│   │   └── Active premium licensing + PayPal integration (loaded by er/index.html)
+│   │
+│   ├── facefilter-enhanced.js
+│   │   └── Face-tracking filter enhancements
+│   │
+│   ├── filter-environment-upgrade.js / enhanced-filter-environment.js / enhanced-filter-integration.js
+│   │   └── Filter/environment rendering upgrade modules
+│   │
+│   ├── unified-lens-integration.js / unified-lens-scaling.js
+│   │   └── Unified lens system integration & scaling logic
+│   │
+│   ├── webzonebw-player.js / soundbox-engine.js / beatles-playlists.js
+│   │   └── Soundbox music player engine, audio utilities & playlist data
+│   │
+│   ├── cookie-consent.js / cookie-utils.js
+│   │   └── Cookie consent banner & helper utilities
+│   │
+│   └── ER_STUDIO_MODULES.md
+│       └── Module load-order contract for the ER Studio JS files
 │
 ├── assets/
 │   │
-│   ├── logo.png
-│   │   └── WebZoneBW primary website logo
+│   ├── logo.png / favicon.ico / favicon/favicon.png
+│   │   └── WebZoneBW branding assets
 │   │
-│   ├── favicon/
-│   │   └── favicon.png
+│   ├── resume/Sameer_Chouhan.pdf
+│   │   └── Downloadable professional resume
 │   │
-│   ├── resume/
-│   │   └── Sameer_Chouhan.pdf
+│   ├── audio/The Beatles - Come Together.mp3
+│   │   └── Soundbox sample track
 │   │
-│   └── audio/
-│       └── The Beatles - Come Together.mp3
-│   │
-│   ├── resume/
-│   │   └── Sameer_Chouhan.pdf
-│   │       └── Downloadable professional resume
-│   │
-│   └── audio/
-│       │
-│       ├── phase-01-beatlemania-dawn.mp3
-│       │   └── WEBZONEBW Sound Box Phase 01
-│       │
-│       ├── phase-02-stereo-groove.mp3
-│       │   └── WEBZONEBW Sound Box Phase 02
-│       │
-│       ├── phase-03-psychedelic-orbit.mp3
-│       │   └── WEBZONEBW Sound Box Phase 03
-│       │
-│       ├── phase-04-studio-mosaic.mp3
-│       │   └── WEBZONEBW Sound Box Phase 04
-│       │
-│       ├── phase-05-roots-and-return.mp3
-│       │   └── WEBZONEBW Sound Box Phase 05
-│       │
-│       └── phase-06-final-horizon.mp3
-│           └── WEBZONEBW Sound Box Phase 06
+│   └── images/
+│       └── Portrait filter preview images used by ER Studio & marketing pages
 │
 ├── er/
 │   │
 │   └── index.html
-│       └── WEBZONEBW-ER experimental camera / extended-reality experience
+│       └── WEBZONEBW-ER experimental camera / extended-reality experience (production)
 │
-└── halloween/
+├── articles/
+│   │
+│   └── <article-slug>/index.html (+ article.json where present)
+│       └── Individual technical blog articles linked from blog.html
+│
+├── root/
+│   │
+│   ├── root.txt
+│   │   └── This file — repository structure & deployment status reference
+│   │
+│   └── sw.js
+│       └── Service worker registered by index.html at /root/sw.js
+│
+└── scripts/
     │
-    └── index.html
-        └── Seasonal Halloween experience — DEVELOPMENT / UNPUBLISHED
+    └── Deployment, verification, local-start & diagnostic Node/PowerShell scripts
+        used during development and Render deployments (not served to users)
 ```
 
 ### Current deployment status
@@ -156,25 +199,30 @@ PUBLIC / PRODUCTION
 index.html             ✅ LIVE
 about.html             ✅ LIVE
 projects.html          ✅ LIVE
-resume.html             ✅ LIVE
+resume.html            ✅ LIVE
 blog.html              ✅ LIVE
 contact.html           ✅ LIVE
 privacy.html           ✅ LIVE
+privacy-center.html    ✅ LIVE
+cookie-policy.html     ✅ LIVE
 terms.html             ✅ LIVE
 disclaimer.html        ✅ LIVE
+soundbox.html          ✅ LIVE
 er/index.html          ✅ LIVE
+articles/*             ✅ LIVE
 
 
-SEASONAL / UNPUBLISHED
+DEMO / TEST
 ────────────────────────────────────────
-halloween/index.html   🔒 NOT PUBLICLY LAUNCHED
-                       🎃 Development / testing only
+er-enhanced-demo.html  🧪 DEMO
+test-checkout.html     🧪 TEST HARNESS
+master.html            🧪 INTERNAL REFERENCE
 
 
 SUPPORT / SEO
 ────────────────────────────────────────
 robots.txt             ✅
-sitemap.xml            ✅
+sitemap.xml / feed.xml ✅
 llms.txt               ✅
 ads.txt                ✅
 CNAME                  ✅
@@ -184,10 +232,14 @@ seo/                   ✅
 
 DEVELOPMENT
 ────────────────────────────────────────
-package.json           🛠 Local development
-start-webzonebw.bat    🛠 Windows launcher
+package.json             🛠 Local development
+server.js                🛠 Production Express server
+scripts/                 🛠 Deployment & diagnostics tooling
+Dockerfile / render.yaml 🛠 Container & Render deployment config
 ```
 
-**Important:** I would **not** describe `halloween/` as a live website section in the README anymore. It is a seasonal project being prepared privately, while `/er/` is currently the active experimental experience.
-
-Also, your original tree only listed `css/style.css` and `js/script.js`, but the structure we've been working toward includes the additional modular CSS/audio files. If those files **do not physically exist in your current folder**, don't create empty entries just for documentation—the README should ultimately mirror the actual repository.
+**Notes:**
+- `js/er-license.js` is legacy and no longer referenced by any shipped HTML page; `er/index.html` and `er-enhanced-demo.html` load `js/er-license-premium.js`. Kept for reference only — safe to remove in a future cleanup once confirmed unused by any deploy script.
+- The `backups/` directory and `src/assets/images/` duplicate tree have been removed from the repository as accidental duplication (identical content to files already tracked elsewhere).
+- This file is maintained manually and should be updated whenever top-level files or folders are added, renamed, or removed.
+```
