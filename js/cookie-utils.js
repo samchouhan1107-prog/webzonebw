@@ -18,10 +18,15 @@
        INTERNAL HELPERS
        ---------------------------------------------------------- */
 
+    /** Escape regex metacharacters so dynamic names can't alter match semantics. */
+    function escapeRegExp(str) {
+        return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
     function rawGet(name) {
         if (!name) return null;
         var match = document.cookie.match(
-            new RegExp("(^| )" + name + "=([^;]*)")
+            new RegExp("(^| )" + escapeRegExp(name) + "=([^;]*)")
         );
         return match ? decodeURIComponent(match[2]) : null;
     }

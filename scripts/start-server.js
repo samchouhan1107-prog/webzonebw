@@ -37,26 +37,45 @@ function checkPort(port) {
     });
 }
 
-// Kill existing processes on port 3000
+// Kill only the specific process(es) bound to port 3000 (never a blanket "kill all node.exe",
+// which would also terminate unrelated Node processes such as editors/extensions).
 function killPort3000() {
     return new Promise((resolve) => {
         console.log('🔍 Checking for processes on port 3000...');
-        
-        exec('netstat -ano | findstr :3000', (error, stdout, stderr) => {
-            if (stdout && stdout.trim()) {
-                console.log('⚠️ Found processes using port 3000, killing them...');
-                exec('taskkill /F /IM node.exe /T', (killError, killStdout, killStderr) => {
-                    if (killError) {
-                        console.log('⚠️ Could not kill processes:', killError.message);
-                    } else {
-                        console.log('✅ Processes killed successfully');
-                    }
-                    setTimeout(resolve, 2000); // Wait 2 seconds for port to be released
-                });
-            } else {
+
+        exec('netstat -ano | findstr :3000', (error, stdout) => {
+            if (!stdout || !stdout.trim()) {
                 console.log('✅ No processes found on port 3000');
-                resolve();
+                return resolve();
             }
+
+            // Extract the PID (last column) from each matching LISTENING line.
+            const pids = new Set();
+            stdout.split(/\r?\n/).forEach((line) => {
+                const match = line.trim().match(/LISTENING\s+(\d+)\s*$/);
+                if (match) pids.add(match[1]);
+            });
+
+            if (pids.size === 0) {
+                console.log('✅ No listening processes found on port 3000');
+                return resolve();
+            }
+
+            console.log(`⚠️ Found process(es) on port 3000 (PID: ${[...pids].join(', ')}), killing them...`);
+            let remaining = pids.size;
+            pids.forEach((pid) => {
+                exec(`taskkill /F /PID ${pid}`, (killError) => {
+                    if (killError) {
+                        console.log(`⚠️ Could not kill PID ${pid}:`, killError.message);
+                    } else {
+                        console.log(`✅ Killed process PID ${pid}`);
+                    }
+                    remaining -= 1;
+                    if (remaining === 0) {
+                        setTimeout(resolve, 2000); // Wait 2 seconds for port to be released
+                    }
+                });
+            });
         });
     });
 }

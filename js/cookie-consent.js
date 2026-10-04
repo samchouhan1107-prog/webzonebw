@@ -42,10 +42,15 @@
 
     var CK = window.WebZoneCookie;
 
+    /** Escape regex metacharacters so dynamic keys can't alter match semantics. */
+    function escapeRegExp(str) {
+        return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
     function cookieGet(key) {
         if (CK) return CK.getNS("consent", key);
         var m = document.cookie.match(
-            new RegExp("(^| )webzonebw_consent_" + key + "=([^;]+)")
+            new RegExp("(^| )webzonebw_consent_" + escapeRegExp(key) + "=([^;]+)")
         );
         return m ? decodeURIComponent(m[2]) : null;
     }

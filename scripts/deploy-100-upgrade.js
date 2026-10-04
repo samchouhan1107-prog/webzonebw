@@ -79,7 +79,9 @@ versionUpdates.forEach(update => {
     const filePath = path.join(config.sourceDir, update.file);
     if (fs.existsSync(filePath)) {
         let content = fs.readFileSync(filePath, 'utf8');
-        content = content.replace(new RegExp(update.oldVersion, 'g'), update.newVersion);
+        // Escape regex metachars (version strings contain literal dots) and replace all occurrences.
+        const escaped = update.oldVersion.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        content = content.replace(new RegExp(escaped, 'g'), update.newVersion);
         fs.writeFileSync(filePath, content);
         console.log(`  📝 Updated version in: ${update.file}`);
     }

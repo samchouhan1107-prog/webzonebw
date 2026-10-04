@@ -547,39 +547,6 @@ function fetchJSON(url, options) {
         }
       });
 
-      // Manual complete button for demo mode
-      var manualCompleteBtn = modal.querySelector("#manualCompleteBtn");
-      if (manualCompleteBtn) {
-        manualCompleteBtn.addEventListener("click", function () {
-          // In production, this should NOT create fake licenses
-          // Only allow demo mode in development environments
-          if (resolveAPIBase() === "local") {
-            showProcessingState("Demo mode payment...", "Activating your license...");
-            
-            setTimeout(function() {
-              // Generate demo license key (only for local/demo environments)
-              var demoLicenseKey = "WZB-ER-DEMO-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-              
-              state.licenseKey = demoLicenseKey;
-              state.email = email;
-              state.status = "active";
-              persist();
-              
-              showSuccessState("Demo Payment Complete!", "Your demo license is now active.");
-              
-              setTimeout(function() {
-                close();
-                if (typeof window.updateFaceFilterUI === 'function') {
-                  window.updateFaceFilterUI();
-                }
-              }, 2000);
-            }, 1500);
-          } else {
-            showError("Demo mode not available in production. Please complete the PayPal payment.");
-          }
-        });
-      }
-
       modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
       modal.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
       return;
@@ -847,10 +814,6 @@ function fetchJSON(url, options) {
       if (errorDetails) errorDetails.textContent = msg;
     }
 
-    function showSuccessState(message, subtext) {
-      showSuccess(message, subtext);
-    }
-
     function showSuccess(title, subtext) {
       hideStates();
       successBox.style.display = "block";
@@ -1013,6 +976,45 @@ function fetchJSON(url, options) {
       }, 1000);
     });
 
+    // Demo/manual completion button — only ever shown (and only ever wired up)
+    // when resolveAPIBase() resolved to "local" inside startPayPalCheckout(), i.e.
+    // there is no live server backing this deployment (e.g. static hosting).
+    var manualCompleteBtn = modal.querySelector("#manualCompleteBtn");
+    if (manualCompleteBtn) {
+      manualCompleteBtn.addEventListener("click", function () {
+        var email = state.email || (emailInput.value || "").trim();
+        if (!email) {
+          hideStates();
+          paypalManualContainer.style.display = "none";
+          showError("Please enter your email address first.");
+          gotoStep(1);
+          emailInput.focus();
+          return;
+        }
+
+        showProcessingState("Demo mode payment...", "Activating your license...");
+
+        setTimeout(function () {
+          // Demo license key — local-storage simulation only, never used when a real API is present.
+          var demoLicenseKey = "WZB-ER-DEMO-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+          state.licenseKey = demoLicenseKey;
+          state.email = email;
+          state.status = "active";
+          persist();
+          emit(); // notify listeners (lens tray/hub) so the just-purchased lens unlocks immediately
+
+          showSuccess("Demo Payment Complete!", "Your demo license is now active.");
+
+          setTimeout(function () {
+            close();
+            if (typeof window.updateFaceFilterUI === "function") {
+              window.updateFaceFilterUI();
+            }
+          }, 2000);
+        }, 1500);
+      });
+    }
 
   }
 
