@@ -31,7 +31,8 @@ function checkPort(port) {
             resolve(true); // Port is available
         });
         
-        socket.on('error', () => {
+        socket.on('error', (err) => {
+            console.error(`ℹ️  Port check error (treated as available): ${err.message}`);
             resolve(true); // Port is available (connection refused)
         });
     });

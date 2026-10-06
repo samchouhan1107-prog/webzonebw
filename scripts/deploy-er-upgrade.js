@@ -79,6 +79,8 @@ versionUpdates.forEach(update => {
         let content = fs.readFileSync(filePath, 'utf8');
         // Escape regex metachars (version strings contain literal dots) and replace all occurrences.
         const escaped = update.oldVersion.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // escaped above, so it cannot alter match semantics.
+        // eslint-disable-next-line security-node/non-literal-reg-expr
         content = content.replace(new RegExp(escaped, 'g'), update.newVersion);
         fs.writeFileSync(filePath, content);
         console.log(`  📝 Updated version in: ${update.file}`);

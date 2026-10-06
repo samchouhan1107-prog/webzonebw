@@ -49,7 +49,9 @@
 
     function cookieGet(key) {
         if (CK) return CK.getNS("consent", key);
+        // key is escaped via escapeRegExp() above, so it cannot alter match semantics.
         var m = document.cookie.match(
+            // eslint-disable-next-line security-node/non-literal-reg-expr
             new RegExp("(^| )webzonebw_consent_" + escapeRegExp(key) + "=([^;]+)")
         );
         return m ? decodeURIComponent(m[2]) : null;

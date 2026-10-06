@@ -888,8 +888,9 @@ app.use("/api", (req, res, next) => {
 // --- PayPal API Configuration (PayPal ONLY - no other gateway) ---
 const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
 const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
-const PAYPAL_MODE = process.env.PAYPAL_MODE || "sandbox";
-const PAYPAL_BASE_URL = PAYPAL_MODE === "production"
+const PAYPAL_MODE = (process.env.PAYPAL_MODE || "sandbox").trim().toLowerCase();
+const IS_PAYPAL_LIVE = PAYPAL_MODE === "production" || PAYPAL_MODE === "live";
+const PAYPAL_BASE_URL = IS_PAYPAL_LIVE
     ? "https://api-m.paypal.com"
     : "https://api-m.sandbox.paypal.com";
 const PAYPAL_CURRENCY = process.env.PAYPAL_CURRENCY || "USD";
@@ -1591,54 +1592,6 @@ app.post("/api/paypal/webhook", async (req, res) => {
     }
 });
 
-/*
- * License verification endpoint - checks if license is valid and not expired
- */
-app.post("/api/license/verify", (req, res) => {
-    try {
-        const { licenseKey, promoKey } = req.body || {};
-        
-        if (!licenseKey) {
-            return res.status(400).json({ success: false, error: "LICENSE_KEY_REQUIRED" });
-        }
-
-        const license = licenseStore.licenses.get(String(licenseKey));
-        
-        if (!license) {
-            return res.json({
-                success: true,
-                valid: false,
-                message: "License not found"
-            });
-        }
-
-        // Check if license is valid and not expired
-        const isValid = isLicenseValid(license);
-        
-        if (isValid) {
-            return res.json({
-                success: true,
-                valid: true,
-                hasPaidLicense: true,
-                hasPromoAccess: false,
-                licenseKey: licenseKey,
-                email: license.email,
-                plan: license.plan,
-                expiresAt: license.expiresAt
-            });
-        } else {
-            // License expired or invalid
-            return res.json({
-                success: true,
-                valid: false,
-                message: "License expired or invalid"
-            });
-        }
-    } catch (error) {
-        console.error("[WEBZONEBW] License verification error:", error);
-        res.status(500).json({ success: false, error: "LICENSE_VERIFICATION_FAILED" });
-    }
-});
 
 /* ------------------------------------------------------------
  * MANUAL ORDER SUPPORT - licenses for email orders issued by the
@@ -1866,7 +1819,7 @@ app.post("/api/license/verify", (req, res) => {
 
     if (licenseKey) {
         license = licenseStore.licenses.get(String(licenseKey).trim().toUpperCase());
-        if (license && license.status === "ACTIVE") {
+        if (license && license.status === "ACTIVE" && isLicenseValid(license)) {
             validLicense = true;
         }
     }
@@ -1910,6 +1863,8 @@ app.post("/api/license/verify", (req, res) => {
         status: validLicense ? license.status : "PROMO_ACCESS",
         plan: validLicense ? license.plan : "halloween-promo",
         email: validLicense ? license.email : undefined,
+        licenseKey: validLicense ? license.licenseKey : undefined,
+        expiresAt: validLicense ? license.expiresAt : undefined,
         hasPaidLicense: validLicense,
         hasPromoAccess: validPromo,
         promoAccess: promoAccess,

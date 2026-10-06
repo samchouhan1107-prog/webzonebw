@@ -25,7 +25,9 @@
 
     function rawGet(name) {
         if (!name) return null;
+        // name is escaped via escapeRegExp() above, so it cannot alter match semantics.
         var match = document.cookie.match(
+            // eslint-disable-next-line security-node/non-literal-reg-expr
             new RegExp("(^| )" + escapeRegExp(name) + "=([^;]*)")
         );
         return match ? decodeURIComponent(match[2]) : null;

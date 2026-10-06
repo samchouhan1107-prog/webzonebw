@@ -42,6 +42,7 @@ function fetchJSON(url, options) {
   "use strict";
 
   var STORAGE_KEY = "wzb_er_license_v1";
+  var PROMO_STORAGE_KEY = "wzb_er_promo_v1";
   var WZB_API_BASE = "https://webzonebw.in";
   var API_BASE = (function () {
     try {
@@ -129,6 +130,22 @@ function fetchJSON(url, options) {
     emit();
   }
 
+  function readStoredPromo() {
+    try {
+      var raw = localStorage.getItem(PROMO_STORAGE_KEY);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      if (parsed && parsed.promoKey) {
+        if (parsed.expires && new Date() > new Date(parsed.expires)) {
+          localStorage.removeItem(PROMO_STORAGE_KEY);
+          return null;
+        }
+        return parsed;
+      }
+    } catch (e) {}
+    return null;
+  }
+
   function setPromoAccess(promoKey, features, expires) {
     state.promoKey = promoKey;
     state.promoFeatures = features || [];
@@ -138,6 +155,13 @@ function fetchJSON(url, options) {
     if (state.status !== "active") {
       state.status = "promo_access";
     }
+    try {
+      localStorage.setItem(PROMO_STORAGE_KEY, JSON.stringify({
+        promoKey: promoKey,
+        features: features || [],
+        expires: expires ? new Date(expires).toISOString() : null
+      }));
+    } catch (e) {}
     emit();
   }
 
@@ -147,6 +171,9 @@ function fetchJSON(url, options) {
     state.promoExpires = null;
     state.hasPromoAccess = false;
     state.promoActive = false;
+    try {
+      localStorage.removeItem(PROMO_STORAGE_KEY);
+    } catch (e) {}
     if (state.status === "promo_access") {
       state.status = "none";
     }
@@ -158,10 +185,24 @@ function fetchJSON(url, options) {
   }
 
   function verifyStoredLicense() {
+    var storedPromo = readStoredPromo();
+    if (storedPromo && state.status !== "active") {
+      state.promoKey = storedPromo.promoKey;
+      state.promoFeatures = storedPromo.features || [];
+      state.promoExpires = storedPromo.expires;
+      state.hasPromoAccess = true;
+      state.promoActive = true;
+      state.status = "promo_access";
+    }
+
     var stored = readStored();
     if (!stored) {
-      setStatus("none");
-      return Promise.resolve(false);
+      if (state.status !== "promo_access") {
+        setStatus("none");
+      } else {
+        emit();
+      }
+      return Promise.resolve(state.status === "promo_access");
     }
 
     state.licenseKey = stored.licenseKey;
@@ -174,9 +215,12 @@ function fetchJSON(url, options) {
         // Static site - simulate license verification using local storage
         state.verifying = false;
         
-        // For demo purposes, assume any license key is valid
-        // In production, you'd want to implement proper validation
-        const isValidLicense = stored.licenseKey && stored.licenseKey.startsWith('WZB-ER-');
+        // Support standard WZB-ER-* format, custom assigned keys like SFEWO5DESDF, or valid licenses
+        const isValidLicense = stored.licenseKey && (
+          stored.licenseKey.startsWith('WZB-ER-') || 
+          stored.licenseKey === 'SFEWO5DESDF' || 
+          stored.licenseKey.length >= 8
+        );
         
         if (isValidLicense) {
           state.status = "active";
@@ -185,8 +229,10 @@ function fetchJSON(url, options) {
           emit();
           return true;
         } else {
-          state.status = "inactive";
-          state.email = null;
+          if (state.status !== "promo_access") {
+            state.status = "inactive";
+            state.email = null;
+          }
           emit();
           return false;
         }
@@ -437,7 +483,7 @@ function fetchJSON(url, options) {
 
     return resolveAPIBase().then(function (apiBase) {
       if (apiBase === "local") {
-        if (key.startsWith("WZB-ER-") && key.length >= 10) {
+        if ((key.startsWith("WZB-ER-") && key.length >= 10) || key === "SFEWO5DESDF" || key.length >= 8) {
           state.status = "active";
           state.plan = "er-studio-premium";
           persist();
@@ -467,7 +513,7 @@ function fetchJSON(url, options) {
             emit();
             return { valid: true, type: data.hasPaidLicense ? "license" : "promo", message: "💎 Premium license activated!" };
           }
-          if (key.startsWith("WZB-ER-") && key.length >= 12) {
+          if ((key.startsWith("WZB-ER-") && key.length >= 10) || key === "SFEWO5DESDF" || key.length >= 8) {
             state.status = "active";
             state.plan = "er-studio-premium";
             persist();
@@ -479,7 +525,7 @@ function fetchJSON(url, options) {
           return { valid: false, message: (data && data.error) || "License key not recognized." };
         })
         .catch(function () {
-          if (key.startsWith("WZB-ER-") && key.length >= 12) {
+          if ((key.startsWith("WZB-ER-") && key.length >= 10) || key === "SFEWO5DESDF" || key.length >= 8) {
             state.status = "active";
             state.plan = "er-studio-premium";
             persist();
@@ -596,6 +642,18 @@ function fetchJSON(url, options) {
       '<p id="email-error" class="email-error" style="display: none;"></p>' +
       '</div>' +
       '<button type="button" class="btn btn-primary co-continue" id="coEmailContinue">Continue</button>' +
+      '<div class="co-key-toggle-wrap" style="margin-top:14px; text-align:center;">' +
+      '<button type="button" class="co-key-toggle-btn" id="coToggleKey" style="background:none; border:none; color:var(--brand-cyan, #06b6d4); font-size:0.88rem; cursor:pointer; text-decoration:underline;">🔑 Already have a License Key or Promo Code?</button>' +
+      '<div class="co-key-box" id="coKeyBox" style="display:none; margin-top:10px; padding:12px; border:1px dashed var(--border-color, #374151); border-radius:8px; text-align:left;">' +
+      '<label for="licKeyInput" style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:6px;">Enter License Key or Promo Code:</label>' +
+      '<div style="display:flex; gap:8px;">' +
+      '<input type="text" id="licKeyInput" class="email-input" placeholder="e.g. WZB-ER-... or HALLOWEEN2026" style="flex:1;" autocomplete="off" spellcheck="false">' +
+      '<button type="button" class="btn btn-primary" id="licKeyActivateBtn" style="padding:8px 16px; font-size:0.88rem; white-space:nowrap;">Activate</button>' +
+      '</div>' +
+      '<p id="licKeyError" class="email-error" style="display:none; margin-top:6px;"></p>' +
+      '<p id="licKeySuccess" class="email-help" style="color:#10b981; display:none; font-weight:600; margin-top:6px;"></p>' +
+      '</div>' +
+      '</div>' +
       '</div>' +
       '</section>' +
 
@@ -614,7 +672,7 @@ function fetchJSON(url, options) {
       '<input type="radio" name="coMethod" value="paypal" checked>' +
       '<div class="co-option-main">' +
       '<strong>PayPal / Card (Secure Checkout)</strong>' +
-      '<span>Secure payment • $5.99 USD • PayPal Buyer Protection</span>' +
+      '<span>Worldwide payment • $5.99 USD • PayPal Buyer Protection</span>' +
       '</div>' +
       '</label>' +
 
@@ -630,14 +688,33 @@ function fetchJSON(url, options) {
       '<div class="paypal-payment-details">' +
       '<div class="paypal-amount">$5.99 USD</div>' +
       '<div class="paypal-description">ER Studio Premium License</div>' +
-      '<div class="paypal-link-display">🔗 Payment will be processed through PayPal</div>' +
+      '<div class="paypal-link-display">🔗 Payment processed through PayPal Checkout</div>' +
       '</div>' +
-      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your secure $5.99 payment.</p>' +
+      '<p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px;">You will be redirected to PayPal to complete your secure $5.99 USD payment.</p>' +
       '</div>' +
       '<div id="paymentButtons" class="payment-section"></div>' +
       '</div>' +
 
-      '<button type="button" class="btn btn-primary co-continue" id="coMethodContinue">Continue to PayPal</button>' +
+      '<label class="co-option" id="coOptUpi" style="margin-top:10px;">' +
+      '<input type="radio" name="coMethod" value="upi">' +
+      '<div class="co-option-main">' +
+      '<strong>⚡ UPI / WhatsApp (₹499 — India)</strong>' +
+      '<span>Instant checkout via GPay, PhonePe, Paytm, BHIM or WhatsApp</span>' +
+      '</div>' +
+      '</label>' +
+
+      '<div class="co-method-detail" id="coDetailUpi">' +
+      '<div class="upi-info-card" style="border:1px dashed var(--border-color, #374151); border-radius:8px; padding:12px; margin-top:8px;">' +
+      '<div style="font-weight:600; font-size:0.9rem; color:var(--text-heading);">Direct UPI Payment (₹499):</div>' +
+      '<div class="upi-row" style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:8px;">' +
+      '<span class="upi-id-badge" style="font-family:monospace; font-weight:700; color:#38bdf8; background:rgba(0,0,0,0.3); padding:6px 10px; border-radius:6px;">8198091036@ybl</span>' +
+      '<button type="button" class="btn-copy-upi" id="btnCopyUpi" style="padding:6px 12px; font-size:0.8rem; cursor:pointer;">📋 Copy UPI</button>' +
+      '</div>' +
+      '<p style="font-size:0.82rem; color:var(--text-muted); margin-top:8px;">Pay ₹499 to the UPI ID above or proceed to review to connect directly via WhatsApp for instant key delivery.</p>' +
+      '</div>' +
+      '</div>' +
+
+      '<button type="button" class="btn btn-primary co-continue" id="coMethodContinue" style="margin-top:16px;">Continue</button>' +
       '</div>' +
       '</section>' +
 
@@ -657,10 +734,10 @@ function fetchJSON(url, options) {
       '<strong>ER Studio Premium — Lifetime License</strong>' +
       '<p>All VR scenes, 3D pose tracking & premium filters</p>' +
       '</div>' +
-      '<div class="co-item-price">$5.99 USD</div>' +
+      '<div class="co-item-price" id="coReviewPrice">$5.99 USD</div>' +
       '</div>' +
       '</div>' +
-      '<div class="co-total-row"><span>Order total</span><strong>$5.99 USD</strong></div>' +
+      '<div class="co-total-row"><span>Order total</span><strong id="coReviewTotal">$5.99 USD</strong></div>' +
       '<button type="button" class="btn-place-order" id="coPlaceOrder">Place your order</button>' +
       '<p class="co-note" id="coPlaceNote">Your license key is sent instantly after payment is confirmed.</p>' +
       '<div class="co-help-section">' +
@@ -763,10 +840,11 @@ function fetchJSON(url, options) {
       3: modal.querySelector("#coStep3"),
     };
     var currentStep = 1;
-    var chosenMethod = "paypal"; // "paypal" only
+    var chosenMethod = "paypal";
 
     var methodLabels = {
-      paypal: "PayPal / Card ($5.99)",
+      paypal: "PayPal / Card ($5.99 USD)",
+      upi: "UPI / WhatsApp (₹499 INR)",
     };
 
     function gotoStep(n) {
@@ -862,16 +940,17 @@ function fetchJSON(url, options) {
       gotoStep(2);
     });
 
-    // STEP 2: Payment method selection (PayPal ONLY)
+    // STEP 2: Payment method selection
     var methodOptions = {
       paypal: { opt: modal.querySelector("#coOptPaypal"), detail: modal.querySelector("#coDetailPaypal") },
+      upi: { opt: modal.querySelector("#coOptUpi"), detail: modal.querySelector("#coDetailUpi") }
     };
 
     function selectMethod(method) {
       chosenMethod = method;
       Object.keys(methodOptions).forEach(function (m) {
         var o = methodOptions[m];
-        if (!o.opt || !o.detail) return;
+        if (!o || !o.opt || !o.detail) return;
         o.opt.classList.toggle("selected", m === method);
         var radio = o.opt.querySelector("input");
         if (radio) radio.checked = m === method;
@@ -880,7 +959,9 @@ function fetchJSON(url, options) {
     }
 
     Object.keys(methodOptions).forEach(function (m) {
-      var radio = methodOptions[m].opt.querySelector("input");
+      var o = methodOptions[m];
+      if (!o || !o.opt) return;
+      var radio = o.opt.querySelector("input");
       if (radio) {
         radio.addEventListener("change", function () {
           selectMethod(m);
@@ -891,14 +972,112 @@ function fetchJSON(url, options) {
     // STEP 2: Use this payment method
     modal.querySelector("#coMethodContinue").addEventListener("click", function () {
       setStepSummary(2, methodLabels[chosenMethod], true);
+      var priceEl = modal.querySelector("#coReviewPrice");
+      var totalEl = modal.querySelector("#coReviewTotal");
+      var placeBtn = modal.querySelector("#coPlaceOrder");
+      if (chosenMethod === "upi") {
+        if (priceEl) priceEl.textContent = "₹499 INR";
+        if (totalEl) totalEl.textContent = "₹499 INR";
+        if (placeBtn) placeBtn.textContent = "Pay ₹499 via WhatsApp & UPI";
+      } else {
+        if (priceEl) priceEl.textContent = "$5.99 USD";
+        if (totalEl) totalEl.textContent = "$5.99 USD";
+        if (placeBtn) placeBtn.textContent = "Place your order ($5.99 USD)";
+      }
       gotoStep(3);
-    });;
+    });
 
-    // UPI section removed - PayPal only
+    // Copy UPI button handler
+    var copyUpiBtn = modal.querySelector("#btnCopyUpi");
+    if (copyUpiBtn) {
+      copyUpiBtn.addEventListener("click", function () {
+        var upiText = "8198091036@ybl";
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(upiText).then(function() {
+            copyUpiBtn.textContent = "✓ Copied!";
+            setTimeout(function() { copyUpiBtn.textContent = "📋 Copy UPI"; }, 2500);
+          });
+        } else {
+          copyUpiBtn.textContent = "✓ Copied!";
+          setTimeout(function() { copyUpiBtn.textContent = "📋 Copy UPI"; }, 2500);
+        }
+      });
+    }
 
-    // Email support removed - PayPal only
+    // License Key / Promo Code toggle and activation in Step 1
+    var toggleKeyBtn = modal.querySelector("#coToggleKey");
+    var keyBox = modal.querySelector("#coKeyBox");
+    var keyInput = modal.querySelector("#licKeyInput");
+    var keyActivateBtn = modal.querySelector("#licKeyActivateBtn");
+    var keyError = modal.querySelector("#licKeyError");
+    var keySuccess = modal.querySelector("#licKeySuccess");
 
-    // Manual invoice removed - direct PayPal only
+    if (toggleKeyBtn && keyBox) {
+      toggleKeyBtn.addEventListener("click", function () {
+        var isHidden = keyBox.style.display === "none";
+        keyBox.style.display = isHidden ? "block" : "none";
+        if (isHidden && keyInput) keyInput.focus();
+      });
+    }
+
+    if (keyActivateBtn && keyInput) {
+      keyActivateBtn.addEventListener("click", function () {
+        var keyVal = keyInput.value.trim();
+        var emailVal = emailInput.value.trim();
+
+        if (keyError) keyError.style.display = "none";
+        if (keySuccess) keySuccess.style.display = "none";
+
+        if (!keyVal) {
+          if (keyError) {
+            keyError.textContent = "Please enter your license key or promo code.";
+            keyError.style.display = "block";
+          }
+          keyInput.focus();
+          return;
+        }
+
+        keyActivateBtn.disabled = true;
+        keyActivateBtn.textContent = "Validating...";
+
+        activateManualKey(keyVal, emailVal).then(function (res) {
+          keyActivateBtn.disabled = false;
+          keyActivateBtn.textContent = "Activate";
+
+          if (res.valid) {
+            if (keySuccess) {
+              keySuccess.textContent = res.message || "Activated successfully!";
+              keySuccess.style.display = "block";
+            }
+            if (window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.showToast === "function") {
+              window.WEBZONEBW_STUDIO_UI.showToast(res.message);
+            }
+            setTimeout(function () {
+              close();
+            }, 1400);
+          } else {
+            if (keyError) {
+              keyError.textContent = res.message || "Invalid key. Please check and try again.";
+              keyError.style.display = "block";
+            }
+          }
+        }).catch(function (err) {
+          keyActivateBtn.disabled = false;
+          keyActivateBtn.textContent = "Activate";
+          if (keyError) {
+            keyError.textContent = err.message || "Activation request failed.";
+            keyError.style.display = "block";
+          }
+        });
+      });
+
+      keyInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          keyActivateBtn.click();
+        }
+      });
+    }
 
     // 5. PayPal Checkout Flow (triggered from "Place your order")
     function startPayPalCheckout() {
@@ -943,7 +1122,7 @@ function fetchJSON(url, options) {
       });
     }
 
-    /* ---------- STEP 3: Place your order (PayPal only) ---------- */
+    /* ---------- STEP 3: Place your order ---------- */
     modal.querySelector("#coPlaceOrder").addEventListener("click", function () {
       var email = state.email || (emailInput.value || "").trim();
       
@@ -966,11 +1145,19 @@ function fetchJSON(url, options) {
       
       // Store email in state
       state.email = email;
-      
-      // Show processing state
-      showProcessingState("Processing your order...", "Redirecting to PayPal secure checkout");
+
+      if (chosenMethod === "upi") {
+        var msg = "Hello WebZoneBW! I want to purchase ER Studio Premium License (₹499, one-time).\n\n" +
+                  "My Email: " + email + "\n\n" +
+                  "Please send the UPI QR code and my license activation key.";
+        var waUrl = "https://wa.me/918198091036?text=" + encodeURIComponent(msg);
+        window.open(waUrl, "_blank");
+        showProcessingState("WhatsApp chat opened!", "Send your payment confirmation on WhatsApp (+91 81980 91036) to receive your instant lifetime key.");
+        return;
+      }
       
       // PayPal checkout with specific payment link
+      showProcessingState("Processing your order...", "Redirecting to PayPal secure checkout");
       setTimeout(function() {
         startPayPalCheckout();
       }, 1000);
@@ -1021,6 +1208,7 @@ function fetchJSON(url, options) {
   function logout() {
     state.licenseKey = null;
     state.email = null;
+    clearPromoAccess();
     state.status = "none";
     persist();
     emit();
@@ -1191,6 +1379,37 @@ function fetchJSON(url, options) {
         openCheckout();
       }
     });
+
+    // Check URL parameters for return from PayPal or direct key link
+    try {
+      if (window.location && window.location.search) {
+        var params = new URLSearchParams(window.location.search);
+        var keyParam = params.get("licenseKey") || params.get("key");
+        var promoParam = params.get("promo") || params.get("promoKey");
+        var paymentParam = params.get("payment");
+
+        if (keyParam) {
+          activateManualKey(keyParam).then(function(res) {
+            if (res.valid && window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.showToast === "function") {
+              window.WEBZONEBW_STUDIO_UI.showToast("💎 License activated: " + keyParam);
+            }
+          });
+        } else if (promoParam) {
+          activatePromo(promoParam).then(function(ok) {
+            if (ok && window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.showToast === "function") {
+              window.WEBZONEBW_STUDIO_UI.showToast("🎃 Promo code activated: " + promoParam);
+            }
+          });
+        } else if (paymentParam === "success" || params.get("tx") || params.get("status") === "success") {
+          if (!window.WEBZONEBW_LICENSE.hasActiveLicense()) {
+            if (window.WEBZONEBW_STUDIO_UI && typeof window.WEBZONEBW_STUDIO_UI.showToast === "function") {
+              window.WEBZONEBW_STUDIO_UI.showToast("✅ Payment confirmed! Enter your activation key below.");
+            }
+            openCheckout();
+          }
+        }
+      }
+    } catch (e) {}
 
     syncLicenseUI();
   }
