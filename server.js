@@ -2460,18 +2460,42 @@ function resolveHtmlPageFromRoute(requestPath) {
     const routeName = normalizedPath.replace(/\/+$/, "").toLowerCase();
 
     const explicitRoutes = {
+        "/": path.join(__dirname, "index.html"),
+        "/index": path.join(__dirname, "index.html"),
+        "/index.html": path.join(__dirname, "index.html"),
+        "/about": path.join(__dirname, "about.html"),
+        "/about.html": path.join(__dirname, "about.html"),
+        "/about-us": path.join(__dirname, "about.html"),
+        "/contact": path.join(__dirname, "contact.html"),
+        "/contact.html": path.join(__dirname, "contact.html"),
+        "/contact-us": path.join(__dirname, "contact.html"),
+        "/blog": path.join(__dirname, "blog.html"),
+        "/blog.html": path.join(__dirname, "blog.html"),
+        "/projects": path.join(__dirname, "projects.html"),
+        "/projects.html": path.join(__dirname, "projects.html"),
+        "/resume": path.join(__dirname, "resume.html"),
+        "/resume.html": path.join(__dirname, "resume.html"),
+        "/privacy": path.join(__dirname, "privacy.html"),
+        "/privacy.html": path.join(__dirname, "privacy.html"),
+        "/privacy-policy": path.join(__dirname, "privacy.html"),
+        "/terms": path.join(__dirname, "terms.html"),
+        "/terms.html": path.join(__dirname, "terms.html"),
+        "/terms-of-service": path.join(__dirname, "terms.html"),
+        "/cookie-policy": path.join(__dirname, "cookie-policy.html"),
+        "/cookie-policy.html": path.join(__dirname, "cookie-policy.html"),
+        "/privacy-center": path.join(__dirname, "privacy-center.html"),
+        "/privacy-center.html": path.join(__dirname, "privacy-center.html"),
+        "/disclaimer": path.join(__dirname, "disclaimer.html"),
+        "/disclaimer.html": path.join(__dirname, "disclaimer.html"),
         "/soundbox": path.join(__dirname, "soundbox.html"),
+        "/soundbox.html": path.join(__dirname, "soundbox.html"),
         "/music": path.join(__dirname, "soundbox.html"),
         "/er": path.join(__dirname, "er", "index.html"),
         "/er/": path.join(__dirname, "er", "index.html"),
+        "/er/index": path.join(__dirname, "er", "index.html"),
+        "/er/index.html": path.join(__dirname, "er", "index.html"),
         "/halloween": path.join(__dirname, "er", "index.html"),
-        "/halloween/": path.join(__dirname, "er", "index.html"),
-        "/privacy-policy": path.join(__dirname, "privacy.html"),
-        "/terms-of-service": path.join(__dirname, "terms.html"),
-        "/cookie-policy": path.join(__dirname, "cookie-policy.html"),
-        "/privacy-center": path.join(__dirname, "privacy-center.html"),
-        "/about-us": path.join(__dirname, "about.html"),
-        "/contact-us": path.join(__dirname, "contact.html")
+        "/halloween/": path.join(__dirname, "er", "index.html")
     };
 
     if (explicitRoutes[routeName]) {
@@ -2571,26 +2595,7 @@ app.use((req, res, next) => {
 
     const requestPath = req.path || "/";
 
-    if (
-        requestPath.startsWith("/api/") ||
-        requestPath.startsWith("/assets/") ||
-        requestPath.startsWith("/css/") ||
-        requestPath.startsWith("/js/") ||
-        requestPath.startsWith("/audio/") ||
-        requestPath.startsWith("/video/") ||
-        requestPath.startsWith("/images/") ||
-        requestPath.startsWith("/fonts/") ||
-        requestPath.startsWith("/er/") ||
-        requestPath.startsWith("/halloween/") ||
-        path.extname(requestPath)
-    ) {
-        // API routes defined later must remain reachable — never 404 them here.
-        if (requestPath.startsWith("/api/")) {
-            return next();
-        }
-        return res.status(404).send("Not Found");
-    }
-
+    // 1. Check if the request matches an existing HTML page or mapped route (e.g. /er, /er/index.html, /contact)
     const resolvedPage = resolveHtmlPageFromRoute(requestPath);
     if (resolvedPage) {
         res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -2601,6 +2606,26 @@ app.use((req, res, next) => {
         });
     }
 
+    // 2. Allow downstream API routes to process
+    if (requestPath.startsWith("/api/")) {
+        return next();
+    }
+
+    // 3. Static asset directories or files with non-HTML extensions should 404 if not found
+    if (
+        requestPath.startsWith("/assets/") ||
+        requestPath.startsWith("/css/") ||
+        requestPath.startsWith("/js/") ||
+        requestPath.startsWith("/audio/") ||
+        requestPath.startsWith("/video/") ||
+        requestPath.startsWith("/images/") ||
+        requestPath.startsWith("/fonts/") ||
+        path.extname(requestPath)
+    ) {
+        return res.status(404).send("Not Found");
+    }
+
+    // 4. Default fallback to root index.html
     const indexFile = path.join(__dirname, "index.html");
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     return res.sendFile(indexFile, (error) => {

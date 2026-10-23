@@ -3269,180 +3269,252 @@ function initWebZoneERStudio() {
 
   async function show24HourOfferModal(filterId, filterConfig) {
     return new Promise((resolve) => {
-      // Get offer information
-      fetch(`/api/facefilter/${filterId}/offer`)
-        .then(response => response.json())
-        .then(offerData => {
-          if (!offerData.success) {
-            showSwipeToast("❌", "Offer information unavailable");
-            resolve();
+      const renderModal = (offerData) => {
+        const offer = (offerData && offerData.offer) || { price: "0.99", duration: "24 hours" };
+        const refundPolicy = (offerData && offerData.refundPolicy) || "24-hour passes activate immediately upon completion.";
+
+        // Create streamlined modal for direct purchase or instant license/promo activation
+        const modal = document.createElement("div");
+        modal.id = "facefilterOfferModal";
+        modal.className = "er-modal-backdrop";
+        modal.setAttribute("role", "dialog");
+        modal.setAttribute("aria-labelledby", "offer-title");
+        modal.setAttribute("aria-modal", "true");
+
+        modal.innerHTML = `
+          <div class="er-modal-card">
+            <div class="er-modal-header">
+              <div>
+                <span class="er-badge-category">🎁 UNLOCK FILTER</span>
+                <h2 id="offer-title">${filterConfig.name}</h2>
+              </div>
+              <button class="er-modal-close" id="offerCloseBtn" aria-label="Close offer">&times;</button>
+            </div>
+            <div class="er-modal-body">
+              <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 3.5rem; margin-bottom: 12px;">${filterConfig.icon}</div>
+                <h3 style="margin: 0 0 6px 0;">Unlock ${filterConfig.name}</h3>
+                <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;">Choose an option below to unlock this creative filter:</p>
+              </div>
+
+              <!-- Instant License Key / Promo Code Activation Box -->
+              <div class="offer-license-box" style="background: rgba(6, 182, 212, 0.08); border: 1px dashed rgba(6, 182, 212, 0.4); border-radius: 10px; padding: 14px; margin-bottom: 20px; text-align: left;">
+                <div style="font-weight: 600; font-size: 0.92rem; color: var(--brand-cyan, #06b6d4); margin-bottom: 6px;">
+                  🔑 Have a License Key or Promo Code?
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted, #94a3b8); margin: 0 0 10px 0;">
+                  Enter your key (e.g. SFEWO5DESDF or WZB-ER-...) or promo code to unlock all filters:
+                </p>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="offerLicenseInput" class="email-input" placeholder="e.g. SFEWO5DESDF or HALLOWEEN2026" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color, #374151); background: rgba(0,0,0,0.25); color: var(--text-heading, #fff); font-size: 0.88rem;" autocomplete="off" spellcheck="false" />
+                  <button type="button" class="btn btn-primary" id="offerActivateKeyBtn" style="padding: 8px 16px; font-size: 0.88rem; white-space: nowrap;">Unlock</button>
+                </div>
+                <div id="offerKeyFeedback" style="display: none; font-size: 0.82rem; margin-top: 8px; font-weight: 600;"></div>
+              </div>
+
+              <div style="background: var(--surface-hover, #f9fafb); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 12px 0;">24-Hour Pass Option</h4>
+                <div style="display: grid; gap: 8px; font-size: 0.9rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Price:</span>
+                    <span style="font-weight: 600; font-size: 1.1rem; color: var(--text-heading, #fff);">$${offer.price} USD</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Duration:</span>
+                    <span style="font-weight: 600;">24 hours full access</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="offerProcessing" class="processing-state" style="display: none;">
+                <div class="processing-content">
+                  <div class="er-spinner large"></div>
+                  <div class="processing-text">Processing your request...</div>
+                  <div class="processing-subtext">Redirecting to PayPal checkout</div>
+                </div>
+              </div>
+
+              <div id="offerSuccess" class="success-state" style="display: none;">
+                <div class="success-content">
+                  <div class="success-icon">✅</div>
+                  <div class="success-text">Payment Successful!</div>
+                  <div class="success-subtext">Your 24-hour access has been activated.</div>
+                </div>
+              </div>
+
+              <div id="offerError" class="error-state" style="display: none;">
+                <div class="error-content">
+                  <div class="error-icon">❌</div>
+                  <div class="error-text">Payment Failed</div>
+                  <div class="error-subtext" id="offerErrorDetails">Please try again.</div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
+              <button type="button" class="btn btn-secondary" id="offerCancelBtn">Cancel</button>
+              <button type="button" class="btn btn-secondary" id="offerLifetimeBtn" style="color: var(--brand-cyan, #06b6d4);">Lifetime License ($5.99)</button>
+              <button type="button" class="btn btn-primary" id="offerPurchaseBtn">Get 24h Pass ($${offer.price})</button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event listeners
+        const close = () => {
+          modal.remove();
+          resolve();
+        };
+
+        modal.querySelector("#offerCloseBtn").addEventListener("click", close);
+        modal.querySelector("#offerCancelBtn").addEventListener("click", close);
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) close();
+        });
+
+        // Lifetime Upgrade button handler
+        const lifetimeBtn = modal.querySelector("#offerLifetimeBtn");
+        if (lifetimeBtn) {
+          lifetimeBtn.addEventListener("click", () => {
+            close();
+            if (window.WEBZONEBW_LICENSE && typeof window.WEBZONEBW_LICENSE.openCheckout === "function") {
+              window.WEBZONEBW_LICENSE.openCheckout();
+            }
+          });
+        }
+
+        // License Key / Promo Code activation handler
+        const keyInput = modal.querySelector("#offerLicenseInput");
+        const activateBtn = modal.querySelector("#offerActivateKeyBtn");
+        const feedback = modal.querySelector("#offerKeyFeedback");
+
+        const handleActivate = () => {
+          const codeVal = (keyInput.value || "").trim();
+          if (!codeVal) {
+            feedback.textContent = "Please enter your license key or promo code.";
+            feedback.style.color = "#ef4444";
+            feedback.style.display = "block";
+            keyInput.focus();
             return;
           }
 
-          const offer = offerData.offer;
+          activateBtn.disabled = true;
+          activateBtn.textContent = "Unlocking...";
+          feedback.style.display = "none";
 
-          // Create streamlined modal for direct purchase
-          const modal = document.createElement("div");
-          modal.id = "facefilterOfferModal";
-          modal.className = "er-modal-backdrop";
-          modal.setAttribute("role", "dialog");
-          modal.setAttribute("aria-labelledby", "offer-title");
-          modal.setAttribute("aria-modal", "true");
+          if (window.WEBZONEBW_LICENSE && typeof window.WEBZONEBW_LICENSE.activateManualKey === "function") {
+            window.WEBZONEBW_LICENSE.activateManualKey(codeVal).then((res) => {
+              activateBtn.disabled = false;
+              activateBtn.textContent = "Unlock";
 
-          modal.innerHTML = `
-            <div class="er-modal-card">
-              <div class="er-modal-header">
-                <div>
-                  <span class="er-badge-category">🎁 24-HOUR OFFER</span>
-                  <h2 id="offer-title">${filterConfig.name}</h2>
-                </div>
-                <button class="er-modal-close" id="offerCloseBtn" aria-label="Close offer">&times;</button>
-              </div>
-              <div class="er-modal-body">
-                <div style="text-align: center; margin-bottom: 24px;">
-                  <div style="font-size: 4rem; margin-bottom: 16px;">${filterConfig.icon}</div>
-                  <h3 style="margin: 0 0 8px 0;">24-Hour Access</h3>
-                  <p style="color: var(--text-muted); margin: 0;">Temporary access to ${filterConfig.name}</p>
-                </div>
-
-                <div style="background: var(--surface-hover, #f9fafb); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-                  <h4 style="margin: 0 0 16px 0;">Offer Details</h4>
-                  <div style="display: grid; gap: 12px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span>Price:</span>
-                      <span style="font-weight: 600; font-size: 1.2rem;">$${offer.price}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span>Duration:</span>
-                      <span style="font-weight: 600;">24 hours</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span>Payment:</span>
-                      <span style="color: #3b82f6; font-weight: 600;">PayPal Secure Checkout</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-                  <h4 style="color: #ef4444; margin: 0 0 8px 0;">Important</h4>
-                  <p style="color: #991b1b; margin: 0; font-size: 0.9rem; line-height: 1.4;">
-                    ${offerData.refundPolicy}
-                  </p>
-                </div>
-
-                <div id="offerProcessing" class="processing-state" style="display: none;">
-                  <div class="processing-content">
-                    <div class="er-spinner large"></div>
-                    <div class="processing-text">Processing your request...</div>
-                    <div class="processing-subtext">Redirecting to PayPal checkout</div>
-                  </div>
-                </div>
-
-                <div id="offerSuccess" class="success-state" style="display: none;">
-                  <div class="success-content">
-                    <div class="success-icon">✅</div>
-                    <div class="success-text">Payment Successful!</div>
-                    <div class="success-subtext">Your 24-hour access has been activated.</div>
-                  </div>
-                </div>
-
-                <div id="offerError" class="error-state" style="display: none;">
-                  <div class="error-content">
-                    <div class="error-icon">❌</div>
-                    <div class="error-text">Payment Failed</div>
-                    <div class="error-subtext" id="offerErrorDetails">Please try again.</div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" id="offerCancelBtn">Cancel</button>
-                <button type="button" class="btn btn-primary" id="offerPurchaseBtn">Purchase with PayPal</button>
-              </div>
-            </div>
-          `;
-
-          document.body.appendChild(modal);
-
-          // Event listeners
-          const close = () => {
-            modal.remove();
-            resolve();
-          };
-
-          modal.querySelector("#offerCloseBtn").addEventListener("click", close);
-          modal.querySelector("#offerCancelBtn").addEventListener("click", close);
-          modal.addEventListener("click", (e) => {
-            if (e.target === modal) close();
-          });
-
-          const purchaseBtn = modal.querySelector("#offerPurchaseBtn");
-          const processing = modal.querySelector("#offerProcessing");
-          const success = modal.querySelector("#offerSuccess");
-          const error = modal.querySelector("#offerError");
-          const errorDetails = modal.querySelector("#offerErrorDetails");
-
-          // Direct purchase handler - no email input required
-          purchaseBtn.addEventListener("click", async () => {
-            // Show processing
-            processing.style.display = "block";
-            error.style.display = "none";
-            success.style.display = "none";
-            purchaseBtn.disabled = true;
-
-            try {
-              // Initialize session first
-              let session = await initializeUserSession();
-              if (!session || !session.success) {
-                throw new Error("Failed to create user session");
+              if (res && res.valid) {
+                feedback.textContent = res.message || "💎 Unlocked successfully!";
+                feedback.style.color = "#10b981";
+                feedback.style.display = "block";
+                setTimeout(() => {
+                  close();
+                  selectFilter(filterId);
+                }, 700);
+              } else {
+                feedback.textContent = (res && res.message) || "Invalid key. Please check and try again.";
+                feedback.style.color = "#ef4444";
+                feedback.style.display = "block";
               }
+            }).catch((err) => {
+              activateBtn.disabled = false;
+              activateBtn.textContent = "Unlock";
+              feedback.textContent = err.message || "Activation request failed.";
+              feedback.style.color = "#ef4444";
+              feedback.style.display = "block";
+            });
+          } else {
+            activateBtn.disabled = false;
+            activateBtn.textContent = "Unlock";
+            feedback.textContent = "License module unavailable.";
+            feedback.style.color = "#ef4444";
+            feedback.style.display = "block";
+          }
+        };
 
-              // Create purchase order
-              const response = await fetch(`/api/facefilter/${filterId}/purchase`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  userId: session.userId,
-                  userEmail: session.userEmail // Use session email
-                })
-              });
-
-              const purchaseData = await response.json();
-
-              if (!purchaseData.success) {
-                throw new Error(purchaseData.error || "Failed to create purchase");
-              }
-
-              // Store purchase ID for later verification
-              window.currentFaceFilterPurchase = {
-                purchaseId: purchaseData.purchaseId,
-                filterId: filterId,
-                userEmail: session.userEmail,
-                userId: session.userId
-              };
-
-              console.log(`[WEBZONEBW] Created purchase ${purchaseData.purchaseId}, launching PayPal checkout...`);
-
-              // Close modal and launch PayPal checkout immediately
-              close();
-
-              // Launch FaceFilter PayPal checkout directly
-              setTimeout(() => {
-                launchFaceFilterPayPalCheckout(filterId, purchaseData.purchaseId);
-              }, 500);
-
-            } catch (error) {
-              console.error("[WEBZONEBW FACEFILTER] Purchase creation failed:", error);
-              errorDetails.textContent = "Failed to create purchase. Please try again.";
-              error.style.display = "block";
-              processing.style.display = "none";
-              purchaseBtn.disabled = false;
+        if (activateBtn) activateBtn.addEventListener("click", handleActivate);
+        if (keyInput) {
+          keyInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleActivate();
             }
           });
+        }
+
+        const purchaseBtn = modal.querySelector("#offerPurchaseBtn");
+        const processing = modal.querySelector("#offerProcessing");
+        const success = modal.querySelector("#offerSuccess");
+        const error = modal.querySelector("#offerError");
+        const errorDetails = modal.querySelector("#offerErrorDetails");
+
+        // Direct purchase handler - no email input required
+        purchaseBtn.addEventListener("click", async () => {
+          processing.style.display = "block";
+          error.style.display = "none";
+          success.style.display = "none";
+          purchaseBtn.disabled = true;
+
+          try {
+            let session = await initializeUserSession();
+            if (!session || !session.success) {
+              throw new Error("Failed to create user session");
+            }
+
+            const response = await fetch(`/api/facefilter/${filterId}/purchase`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userId: session.userId,
+                userEmail: session.userEmail
+              })
+            });
+
+            const purchaseData = await response.json();
+
+            if (!purchaseData.success) {
+              throw new Error(purchaseData.error || "Failed to create purchase");
+            }
+
+            window.currentFaceFilterPurchase = {
+              purchaseId: purchaseData.purchaseId,
+              filterId: filterId,
+              userEmail: session.userEmail,
+              userId: session.userId
+            };
+
+            close();
+
+            setTimeout(() => {
+              launchFaceFilterPayPalCheckout(filterId, purchaseData.purchaseId);
+            }, 500);
+
+          } catch (error) {
+            console.error("[WEBZONEBW FACEFILTER] Purchase creation failed:", error);
+            errorDetails.textContent = "Failed to create purchase. Please try again.";
+            error.style.display = "block";
+            processing.style.display = "none";
+            purchaseBtn.disabled = false;
+          }
+        });
+      };
+
+      fetch(`/api/facefilter/${filterId}/offer`)
+        .then(response => response.json())
+        .then(offerData => {
+          if (offerData && offerData.success) {
+            renderModal(offerData);
+          } else {
+            renderModal(null);
+          }
         })
         .catch(error => {
-          console.error("[WEBZONEBW FACEFILTER] Offer retrieval failed:", error);
-          showSwipeToast("❌", "Unable to load offer information");
-          resolve();
+          console.warn("[WEBZONEBW FACEFILTER] Offer retrieval failed, using fallback:", error);
+          renderModal(null);
         });
     });
   }
