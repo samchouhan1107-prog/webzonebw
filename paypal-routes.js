@@ -1156,6 +1156,12 @@ function createPayPalRouter(ctx) {
 
     return {
         router,
+        helpers: {
+            getPayPalToken,
+            paypalRequest,
+            verifyPayPalWebhook,
+            isLicenseValid
+        },
         config: {
             PAYPAL_CLIENT_ID,
             PAYPAL_CLIENT_SECRET,

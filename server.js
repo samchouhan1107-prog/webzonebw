@@ -883,105 +883,12 @@ const paypalModule = createPayPalRouter({
 
 app.use(paypalModule.router);
 
+/* PayPal helpers live in paypal-routes.js (single source of truth). */
+const { getPayPalToken, verifyPayPalWebhook, isLicenseValid } = paypalModule.helpers;
+
 /* ============================================================
  * HALLOWEEN PROMOTIONAL ACCESS ENDPOINTS
  * ============================================================ */
-
-async function getPayPalToken() {
-    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) return null;
-    try {
-        const response = await fetch(`${PAYPAL_BASE_URL}/v1/oauth2/token`, {
-            method: "POST",
-            headers: {
-                "Authorization": "Basic " + Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64"),
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: "grant_type=client_credentials"
-        });
-        if (!response.ok) return null;
-        const data = await response.json();
-        return data.access_token || null;
-    } catch (e) {
-        console.error("[WEBZONEBW PAYPAL] Token error:", e.message);
-        return null;
-    }
-}
-
-async function paypalRequest(accessToken, method, resourcePath, body) {
-    const response = await fetch(`${PAYPAL_BASE_URL}${resourcePath}`, {
-        method,
-        headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: body ? JSON.stringify(body) : undefined
-    });
-    const data = await response.json().catch(() => ({}));
-    return { ok: response.ok, status: response.status, data };
-}
-
-/*
- * PayPal Webhook Verification - Security critical function
- * Verifies webhook signature to prevent fraudulent payment notifications
- */
-async function verifyPayPalWebhook(webhookData, headers) {
-    if (!PAYPAL_WEBHOOK_ID) {
-        console.error("[WEBZONEBW] PayPal webhook ID not configured");
-        return false;
-    }
-
-    try {
-        // PayPal webhook verification requires making a verification request
-        const verificationResponse = await fetch(`${PAYPAL_BASE_URL}/v1/notifications/verify-webhook-signature`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${await getPayPalToken()}`,
-                "Content-Type": "application/json",
-                "PayPal-Auth-Algo": headers["paypal-auth-algo"],
-                "PayPal-Transmission-Id": headers["paypal-transmission-id"],
-                "PayPal-Cert-Id": headers["paypal-cert-id"],
-                "PayPal-Transmission-Sig": headers["paypal-transmission-sig"],
-                "PayPal-Transmission-Time": headers["paypal-transmission-time"]
-            },
-            body: JSON.stringify({
-                webhook_id: PAYPAL_WEBHOOK_ID,
-                webhook_event: webhookData
-            })
-        });
-
-        if (!verificationResponse.ok) {
-            console.error("[WEBZONEBW] Webhook verification failed:", verificationResponse.status);
-            return false;
-        }
-
-        const verificationResult = await verificationResponse.json();
-        return verificationResult.verification_status === "SUCCESS";
-    } catch (error) {
-        console.error("[WEBZONEBW] Webhook verification error:", error);
-        return false;
-    }
-}
-
-/*
- * Check if a license is valid and not expired
- */
-function isLicenseValid(license) {
-    if (!license || license.status !== "ACTIVE") {
-        return false;
-    }
-
-    // Check expiration for ER Studio licenses (24-hour access)
-    if (license.expiresAt) {
-        const now = new Date();
-        const expiresAt = new Date(license.expiresAt);
-        return now < expiresAt;
-    }
-
-    // For non-expiring licenses (like lifetime licenses), just check status
-    return true;
-}
-
-/* ============================================================
 
 // Health check (used by deployment platforms + readiness tests)
 app.get("/api/health", (req, res) => {
