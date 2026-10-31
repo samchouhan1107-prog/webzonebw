@@ -1,8 +1,7 @@
+# Ignore VS Code AI rules
+.github/instructions/codacy.instructions.md
 
-
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
-
+# Dependencies
 node_modules/
 
 # HTTPS dev certificates (never commit)
@@ -10,8 +9,23 @@ certs/
 
 # ER Studio license persistence (never commit customer/license data)
 data/
+
 # Real environment config (never commit secrets)
 .env
+.env.*
+!.env.example
 .env.render
 .env*.local
 *.env
+
+# Local secrets and private keys
+*.pem
+*.key
+
+# Logs
+*.log
+npm-debug.log*
+
+# Operating system files
+.DS_Store
+Thumbs.db
