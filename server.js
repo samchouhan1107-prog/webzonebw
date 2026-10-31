@@ -23,6 +23,8 @@ const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const crypto = require("crypto");
+const helmet = require("helmet");
+const compression = require("compression");
 
 const { createPayPalRouter } = require("./paypal-routes");
 const {
@@ -828,6 +830,8 @@ function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
     }
     return false;
 }
+
+const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
 const licenseStore = {
     orders: new Map(),      // orderId -> { orderId, email, plan, amount, status, createdAt }
