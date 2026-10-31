@@ -273,7 +273,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.paypal.com", "https://www.google-analytics.com", "https://*.googletagmanager.com", "https://pagead2.googlesyndication.com", "https://*.google.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.paypal.com", "https://www.google-analytics.com", "https://*.googletagmanager.com", "https://*.google.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
