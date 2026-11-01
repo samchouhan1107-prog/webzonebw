@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#030712">
+    <title>Privacy Center | WebZoneBW</title>
+    <meta name="description" content="Manage your WebZoneBW privacy and cookie preferences.">
+    <link rel="icon" type="image/png" href="assets/favicon/favicon.png">
+    <link rel="stylesheet" href="css/style.css?v=2.3.0">
+    <link rel="stylesheet" href="css/responsive.css?v=2.3.0">
+</head>
+<body>
+    <div class="container">
+        <div class="mobile-nav-bar">
+            <button type="button" class="hamburger-btn" id="sidebarToggleBtn"
+                    aria-label="Toggle Sidebar Navigation" aria-controls="mainSidebar"
+                    aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="mobile-brand-title"><span class="gradient-text">WEBZONEBW</span></div>
+        </div>
+
+        <aside class="sidebar" id="mainSidebar">
+            <div class="logo">
+                <a href="index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
+                    <img src="assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img">
+                    <div class="brand-name-group">
+                        <span class="brand-title">WEBZONEBW</span>
+                        <span class="brand-sub">SYSTEMS · SUPPORT · INFRASTRUCTURE</span>
+                    </div>
+                </a>
+            </div>
+            <nav class="sidebar-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="index.html"><span class="nav-icon" aria-hidden="true">🏠</span>Dashboard</a></li>
+                    <li><a href="er/index.html"><span class="nav-icon" aria-hidden="true">🔮</span>WebZoneBW-ER Studio</a></li>
+                    <li><a href="projects.html"><span class="nav-icon" aria-hidden="true">💼</span>Projects</a></li>
+                    <li><a href="resume.html"><span class="nav-icon" aria-hidden="true">📄</span>Resume</a></li>
+                    <li><a href="blog.html"><span class="nav-icon" aria-hidden="true">📝</span>Blog</a></li>
+                    <li><a href="soundbox.html"><span class="nav-icon" aria-hidden="true">🎵</span>Sound Box</a></li>
+                    <li><a href="about.html"><span class="nav-icon" aria-hidden="true">👤</span>About Us</a></li>
+                    <li><a href="contact.html"><span class="nav-icon" aria-hidden="true">✉️</span>Contact Us</a></li>
+                    <li><a href="privacy.html"><span class="nav-icon" aria-hidden="true">🔒</span>Privacy Policy</a></li>
+                    <li><a href="cookie-policy.html"><span class="nav-icon" aria-hidden="true">🍪</span>Cookie Policy</a></li>
+                    <li><a href="privacy-center.html"><span class="nav-icon" aria-hidden="true">🎛️</span>Privacy Center</a></li>
+                    <li><a href="terms.html"><span class="nav-icon" aria-hidden="true">📋</span>Terms of Service</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-theme-toggle-row">
+                <div class="theme-label-group">
+                    <span id="themeModeIcon" aria-hidden="true">🌙</span>
+                    <span id="themeModeText">Dark Mode</span>
+                </div>
+                <label class="switch-toggle" for="themeToggleSwitch">
+                    <input type="checkbox" id="themeToggleSwitch" checked aria-label="Toggle Dark Mode">
+                    <span class="toggle-slider" aria-hidden="true"></span>
+                </label>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <article class="legal-page">
+                <h1>Privacy Center</h1>
+                <p>Manage your privacy preferences and learn how WebZoneBW uses cookies and similar technologies.</p>
+                <section>
+                    <h2>Your Privacy Choices</h2>
+                    <p>Use your browser settings or the cookie consent controls to manage optional cookies. Essential cookies remain active because they are required for the site to function.</p>
+                    <p><a class="btn" href="cookie-policy.html">Read the Cookie Policy</a></p>
+                </section>
+                <section>
+                    <h2>More Information</h2>
+                    <p>For details about data handling, read our <a href="privacy.html">Privacy Policy</a> or <a href="terms.html">Terms of Service</a>.</p>
+                </section>
+            </article>
+        </main>
+    </div>
+    <script defer src="js/script.js?v=2.3.0"></script>
+    <script defer src="js/cookie-utils.js?v=2.3.0"></script>
+    <script defer src="js/cookie-consent.js?v=2.3.0"></script>
+</body>
+</html>

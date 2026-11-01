@@ -769,6 +769,63 @@ body.light-mode .brand-sub {
     box-shadow: none;
 }
 
+.nav-submenu-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 14px;
+    color: var(--text-secondary);
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    border: 0;
+    border-left: 3px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-submenu-toggle:hover,
+.privacy-expanded > .nav-submenu-toggle {
+    background: var(--surface-card-hover);
+    color: var(--text-heading);
+    border-left-color: var(--brand-cyan);
+}
+
+.privacy-expanded > .nav-submenu-toggle {
+    color: var(--brand-cyan);
+    font-weight: 700;
+}
+
+.nav-submenu-arrow {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.privacy-expanded > .nav-submenu-toggle .nav-submenu-arrow {
+    transform: rotate(180deg);
+}
+
+.privacy-submenu {
+    margin: 2px 0 4px 18px !important;
+    padding-left: 10px !important;
+    border-left: 1px solid var(--border-color);
+}
+
+.privacy-submenu[hidden] {
+    display: none;
+}
+
+.privacy-submenu li {
+    margin: 2px 0 !important;
+}
+
+.privacy-submenu li a {
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+}
+
 body.light-mode .sidebar ul li a.active,
 body.light-mode .sidebar-nav ul li a.active {
     background: rgba(2, 132, 199, 0.1);
@@ -2154,6 +2211,15 @@ main section + section {
         min-height: 44px; /* Touch-friendly tap target */
         color: var(--text-secondary);
         background: transparent;
+    }
+
+    .nav-submenu-toggle {
+        min-height: 44px;
+        padding: 12px 14px;
+    }
+
+    .privacy-submenu {
+        margin-left: 14px !important;
     }
 
     .sidebar ul li a:hover,

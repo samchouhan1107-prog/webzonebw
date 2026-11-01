@@ -218,6 +218,11 @@ document.addEventListener(
         );
 
         safeInit(
+            "Privacy navigation",
+            initPrivacyNavigation
+        );
+
+        safeInit(
             "Active navigation",
             initActiveNavigation
         );
@@ -1786,6 +1791,91 @@ function initActiveNavigation() {
             }
         }
     );
+}
+
+
+/* ==========================================================
+   PRIVACY NAVIGATION
+========================================================== */
+
+function initPrivacyNavigation() {
+
+    document.querySelectorAll(".sidebar-nav ul").forEach(navList => {
+
+        const privacyLink =
+            Array.from(navList.querySelectorAll(":scope > li > a")).find(
+                link => link.getAttribute("href") &&
+                    link.getAttribute("href").toLowerCase().endsWith("privacy.html")
+            );
+
+        if (!privacyLink) {
+            return;
+        }
+
+        const privacyItem = privacyLink.parentElement;
+        const privacyIndex = Array.from(navList.children).indexOf(privacyItem);
+        const privacyItems = [];
+
+        Array.from(navList.children).slice(privacyIndex + 1).some(item => {
+            const link = item.querySelector(":scope > a");
+            const href = link && (link.getAttribute("href") || "").toLowerCase();
+
+            if (!href || !(
+                href.endsWith("cookie-policy.html") ||
+                href.endsWith("privacy-center.html") ||
+                href.endsWith("terms.html")
+            )) {
+                return true;
+            }
+
+            privacyItems.push(item);
+            return false;
+        });
+
+        if (!privacyItems.length || privacyItem.dataset.privacyNavigationReady === "true") {
+            return;
+        }
+
+        privacyItem.dataset.privacyNavigationReady = "true";
+
+        const submenu = document.createElement("ul");
+        submenu.className = "privacy-submenu";
+        submenu.setAttribute("aria-label", "Privacy Policy pages");
+
+        privacyItems.forEach(item => submenu.appendChild(item));
+
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "nav-submenu-toggle";
+        toggle.setAttribute("aria-controls", "privacy-submenu");
+        toggle.innerHTML =
+            '<span class="nav-icon" aria-hidden="true">🔒</span>' +
+            '<span class="nav-submenu-label">Privacy Policy</span>' +
+            '<span class="nav-submenu-arrow" aria-hidden="true">▾</span>';
+
+        privacyLink.replaceWith(toggle);
+        submenu.id = "privacy-submenu";
+        privacyItem.appendChild(submenu);
+
+        const currentPage = detectCurrentPage();
+        const isPrivacyPage = currentPage === "privacy.html" ||
+            privacyItems.some(item => {
+                const link = item.querySelector(":scope > a");
+                return link && isNavigationMatch(link.getAttribute("href") || "", currentPage);
+            });
+
+        const setExpanded = expanded => {
+            privacyItem.classList.toggle("privacy-expanded", expanded);
+            submenu.hidden = !expanded;
+            toggle.setAttribute("aria-expanded", String(expanded));
+        };
+
+        setExpanded(isPrivacyPage);
+
+        toggle.addEventListener("click", () => {
+            setExpanded(submenu.hidden);
+        });
+    });
 }
 
 
