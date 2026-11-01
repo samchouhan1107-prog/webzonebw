@@ -117,7 +117,6 @@ WebZoneBW/
 │   ├── master.html (Master Template)
 │   ├── soundbox.html (Audio Experience)
 │   ├── 500.html (Error Page)
-│   └── test-checkout.html (Testing)
 │
 ├── 🎃 WEBZONEBW-ER Studio
 │   ├── er/
