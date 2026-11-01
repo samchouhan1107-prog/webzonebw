@@ -185,6 +185,14 @@
         <priority>0.8</priority>
     </url>
 
+    <!-- Network Monitoring and Observability -->
+    <url>
+        <loc>https://webzonebw.in/articles/network-monitoring-observability/</loc>
+        <lastmod>2026-11-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
     <!-- Systems Integration Guide -->
     <url>
         <loc>https://webzonebw.in/articles/systems-integration-guide/</loc>
