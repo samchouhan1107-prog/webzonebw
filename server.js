@@ -174,12 +174,12 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.paypal.com", "https://www.google-analytics.com", "https://*.googletagmanager.com", "https://*.google.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.paypal.com", "https://www.google-analytics.com", "https://*.googletagmanager.com", "https://*.google.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
       mediaSrc: ["'self'", "data:", "blob:", "https:"],
-      connectSrc: ["'self'", "https:", "wss:", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com", "https://5gvci.com", "https://n6wxm.com", "https://al5sm.com", "https://*.google-analytics.com", "https://*.googletagmanager.com"],
+      connectSrc: ["'self'", "https:", "wss:", "https://api-m.paypal.com", "https://api-m.sandbox.paypal.com", "https://*.google-analytics.com", "https://*.googletagmanager.com"],
       frameSrc: ["'self'", "https://www.paypal.com", "https://*.google.com"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],

@@ -92,6 +92,19 @@ function createPayPalRouter(ctx) {
         return `WZB-ER-${block()}-${block()}-${block()}`;
     }
 
+    function requireUserSession(req, res) {
+        const session = getUserSession(req);
+        if (!session) {
+            res.status(401).json({
+                success: false,
+                error: "UNAUTHORIZED",
+                message: "Valid session required."
+            });
+            return null;
+        }
+        return session;
+    }
+
     /* ---------------- PayPal helpers ---------------- */
 
     async function getPayPalToken() {
@@ -838,16 +851,9 @@ function createPayPalRouter(ctx) {
 
     router.post("/api/facefilter/refresh", (req, res) => {
         try {
-            const { userId, userEmail } = req.body || {};
-
-            let finalUserId = userId;
-            let finalUserEmail = userEmail;
-            if (!userId && !userEmail) {
-                const session = getUserSession(req);
-                if (session) {
-                    finalUserId = session.userId;
-                    finalUserEmail = session.userEmail;
-                }
+            const session = requireUserSession(req, res);
+            if (!session) {
+                return;
             }
 
             const now = new Date().toISOString();
@@ -856,7 +862,8 @@ function createPayPalRouter(ctx) {
             for (const [entitlementId, entitlement] of licenseStore.faceFilterEntitlements) {
                 if (entitlement.status === "ACTIVE" &&
                     now < entitlement.expiresAt &&
-                    ((finalUserId && entitlement.userId === finalUserId) || (finalUserEmail && entitlement.userEmail === finalUserEmail))) {
+                    ((entitlement.userId && entitlement.userId === session.userId) ||
+                        (entitlement.userEmail && entitlement.userEmail === session.userEmail))) {
 
                     let status = "ACTIVE";
                     if (now >= entitlement.expiresAt) {
@@ -894,7 +901,7 @@ function createPayPalRouter(ctx) {
 
     router.post("/api/facefilter/verify", (req, res) => {
         try {
-            const { filterId, userId, userEmail } = req.body || {};
+            const { filterId } = req.body || {};
 
             if (!filterId) {
                 return res.status(400).json({
@@ -904,14 +911,9 @@ function createPayPalRouter(ctx) {
                 });
             }
 
-            let finalUserId = userId;
-            let finalUserEmail = userEmail;
-            if (!userId && !userEmail) {
-                const session = getUserSession(req);
-                if (session) {
-                    finalUserId = session.userId;
-                    finalUserEmail = session.userEmail;
-                }
+            const session = requireUserSession(req, res);
+            if (!session) {
+                return;
             }
 
             const now = new Date().toISOString();
@@ -921,7 +923,8 @@ function createPayPalRouter(ctx) {
                 if (entitlement.filterId === filterId &&
                     entitlement.status === "ACTIVE" &&
                     now < entitlement.expiresAt &&
-                    ((finalUserId && entitlement.userId === finalUserId) || (finalUserEmail && entitlement.userEmail === finalUserEmail))) {
+                ((entitlement.userId && entitlement.userId === session.userId) ||
+                    (entitlement.userEmail && entitlement.userEmail === session.userEmail))) {
                     activeEntitlement = {
                         entitlementId: entitlementId,
                         filterId: entitlement.filterId,
@@ -1122,13 +1125,17 @@ function createPayPalRouter(ctx) {
 
     router.get("/api/facefilter/entitlements", (req, res) => {
         try {
-            const { userId, userEmail } = req.query;
+            const session = requireUserSession(req, res);
+            if (!session) {
+                return;
+            }
 
             const userEntitlements = [];
             const now = new Date().toISOString();
 
             for (const [entitlementId, entitlement] of licenseStore.faceFilterEntitlements) {
-                if ((userId && entitlement.userId === userId) || (userEmail && entitlement.userEmail === userEmail)) {
+                if ((entitlement.userId && entitlement.userId === session.userId) ||
+                    (entitlement.userEmail && entitlement.userEmail === session.userEmail)) {
                     const isActive = entitlement.status === "ACTIVE" && now < entitlement.expiresAt;
                     userEntitlements.push({
                         entitlementId: entitlementId,
