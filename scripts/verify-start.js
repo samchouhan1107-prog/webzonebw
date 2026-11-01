@@ -18,7 +18,7 @@ try {
     
     // Check if ports are available
     const net = require('net');
-    const ports = [3000, 3001, 3002, 4000, 5000];
+    const ports = [3000, 3001];
     
     console.log('\n🔍 Checking port availability...');
     
@@ -36,8 +36,8 @@ try {
     });
     
     console.log('\n💡 Next steps:');
-    console.log('1. Run: npm run start:final');
-    console.log('2. Server will try port 5000, then fallback to 3001');
+    console.log('1. Run: npm run start:enhanced');
+    console.log('2. The enhanced starter checks and frees port 3000');
     console.log('3. Check server status with: npm run test:working');
     
 } catch (error) {

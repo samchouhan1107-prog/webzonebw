@@ -115,8 +115,8 @@ WEBZONEBW/
 │   ├── halloween.js / halloween-enhanced.js
 │   │   └── ER Studio camera filter engine (base + enhanced)
 │   │
-│   ├── er-studio.js / er-studio-pipeline.js / er-studio-controls.js / er-studio-categories.js / er-studio-enhanced.js
-│   │   └── ER Studio rendering pipeline, controls & category modules
+│   ├── er-studio.js / er-studio-pipeline.js / er-studio-controls.js / er-studio-enhanced.js
+│   │   └── ER Studio rendering pipeline, controls & enhancement modules
 │   │
 │   ├── er-license-premium.js
 │   │   └── Active premium licensing + PayPal integration (loaded by er/index.html)
@@ -139,11 +139,9 @@ WEBZONEBW/
 │   ├── ER_STUDIO_MODULES.md
 │   │   └── Module load-order contract for the ER Studio JS files
 │   │
-│   └── camera-controller.js / rendering-engine.js / face-detection-engine.js /
-│       face-filter-system.js / lens-catalog.js / enhanced-studio-platform.js
-│       └── Alternate ER Studio engine modules from the redesign branch;
-│           NOT wired into er/index.html (per ER_STUDIO_MODULES.md — active
-│           runtime remains halloween.js / er-studio-pipeline.js)
+│   └── enhanced-studio-platform.js
+│       └── Alternate ER Studio platform used by the enhanced demo;
+│           active runtime remains halloween.js / er-studio-pipeline.js
 │
 ├── assets/
 │   │
@@ -232,6 +230,6 @@ Dockerfile / render.yaml 🛠 Container & Render deployment config
 **Notes:**
 - The `backups/` directory and `src/assets/images/` duplicate tree have been removed from the repository as accidental duplication (identical content to files already tracked elsewhere).
 - `AUDIT_REPORT.md`, `FILTER_ENVIRONMENT_UPGRADE_GUIDE.md` and `UNIFIED_LENS_IMPLEMENTATION_GUIDE.md` were removed as stale standing docs superseded by `ER_STUDIO_REDESIGN_README.md` and `js/ER_STUDIO_MODULES.md`.
-- The redesign-branch engine modules in `js/` (`camera-controller.js`, `rendering-engine.js`, `face-detection-engine.js`, `face-filter-system.js`, `lens-catalog.js`, `enhanced-studio-platform.js`) are present in the repo but intentionally **not loaded** by `er/index.html` yet — integrating them requires an explicit migration per `js/ER_STUDIO_MODULES.md` to avoid double-loading `er-license-premium.js` and breaking the purchase/unlock flow.
+- The redesign-branch engine modules removed from `js/` were never loaded by any production page. The remaining alternate modules are retained only for the enhanced demo and require an explicit migration before being added to `er/index.html`.
 - This file is maintained manually and should be updated whenever top-level files or folders are added, renamed, or removed.
 ```

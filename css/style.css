@@ -4809,7 +4809,7 @@ body.light-mode .cam-floating-badge {
 /* Volcanic atmospheric glow for ER Studio */
 .er-studio-body::before {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
@@ -4822,6 +4822,12 @@ body.light-mode .cam-floating-badge {
 .er-studio-body > * {
     position: relative;
     z-index: 1;
+}
+
+.er-studio-body .site-footer {
+    background: #030712;
+    position: relative;
+    z-index: 2;
 }
 
 .er-layout-container {
@@ -5118,6 +5124,8 @@ body.light-mode .cam-floating-badge {
 .camera-viewport-frame {
     position: relative;
     width: 100%;
+    aspect-ratio: 4 / 3;
+    min-height: 0;
     background: linear-gradient(180deg, #050403 0%, #0a0806 100%);
     border-radius: 20px;
     overflow: hidden;
@@ -5749,6 +5757,22 @@ body.light-mode .cam-floating-badge {
     box-shadow: 0 8px 25px rgba(255, 107, 26, 0.4), 0 0 30px rgba(255, 107, 26, 0.2);
 }
 
+.er-action-pill-btn:focus-visible,
+.er-snap-shutter-btn:focus-visible,
+.cam-corner-btn:focus-visible {
+    outline: 3px solid rgba(251, 146, 60, 0.9);
+    outline-offset: 3px;
+}
+
+.er-action-pill-btn:disabled,
+.er-snap-shutter-btn:disabled,
+.cam-corner-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
+}
+
 /* Center Large Shutter Button */
 .er-snap-shutter-btn {
     background: transparent;
@@ -5957,6 +5981,21 @@ body.light-mode .cam-floating-badge {
     align-items: center;
     justify-content: center;
     font-size: 18px;
+}
+
+.lava-box {
+    background: radial-gradient(circle at 50% 70%, #ffd166 0 12%, #f97316 36%, #7f1d1d 72%, #1c0b08 100%);
+    box-shadow: 0 0 18px rgba(249, 115, 22, 0.45);
+}
+
+.volcanic-effect-card {
+    border-color: rgba(249, 115, 22, 0.32);
+}
+
+.volcanic-effect-card:hover,
+.volcanic-effect-card.active {
+    border-color: #fb923c;
+    box-shadow: 0 0 18px rgba(249, 115, 22, 0.28);
 }
 
 .effect-name {

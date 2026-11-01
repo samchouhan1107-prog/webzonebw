@@ -6,7 +6,7 @@
 
 const http = require('http');
 
-const ports = [3000, 3001, 3002, 4000];
+const ports = [3000, 3001];
 
 function checkPort(port) {
     return new Promise((resolve) => {

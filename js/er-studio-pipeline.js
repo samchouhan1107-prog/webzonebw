@@ -789,7 +789,7 @@
             var lid = btn.getAttribute("data-lens-id");
             var filterTarget = "studiohd";
             if (lid.includes("cyber")) filterTarget = "cyberpunk";
-            else if (lid.includes("volcanic")) filterTarget = "vintage90s";
+            else if (lid.includes("volcanic")) filterTarget = "volcanic-lava";
             else if (lid.includes("spectral") || lid.includes("phantom")) filterTarget = "glitch";
             else if (lid.includes("pumpkin")) filterTarget = "pumpkin-pose";
 

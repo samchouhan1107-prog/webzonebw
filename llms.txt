@@ -1,253 +1,146 @@
 # WEBZONEBW
 
-> WEBZONEBW is a technology-focused digital portfolio, knowledge base, workspace, and project hub covering IT support, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and practical technology experiments.
+> WEBZONEBW is Sameer Chouhan's public technology portfolio, technical knowledge base, and project workspace. It documents practical IT support, systems integration, networking, cybersecurity, web development, automation, and browser-based experiments.
 
-## Website
+## About this site
 
-- https://webzonebw.in/
-- https://webzonebw1107.blogspot.com/
+- Website: https://webzonebw.in/
+- Author and maintainer: Sameer Chouhan
+- Primary audience: recruiters, interviewers, employers, clients, and technology professionals
+- Content type: portfolio pages, resume material, technical articles, project documentation, demos, and legal or policy pages
+- Current status: a personal portfolio and evolving project workspace; not every experiment is a production service
 
-## Purpose
+## Professional profile
 
-WEBZONEBW documents practical technology knowledge through research, troubleshooting, hands-on experimentation, project development, and technical documentation.
+Sameer Chouhan presents experience and working interests in:
 
-The site combines professional technology interests with educational articles, technical projects, development experiments, and digital tools.
+- IT support, help desk, service restoration, and technical operations
+- Windows and Linux environments
+- Systems integration and hybrid administration
+- Networking and infrastructure support
+- Microsoft 365, Exchange, and Active Directory concepts
+- PowerShell automation, Bash utilities, and Node.js services
+- Web development with HTML, CSS, JavaScript, Node.js, and Express
+- Cybersecurity fundamentals, access control, backups, and incident response
+- Technical monitoring, reporting, documentation, and troubleshooting
+- AI-assisted development and practical technology experimentation
 
-## Primary Knowledge Areas
+Use the resume, projects, and article pages as evidence. Do not infer a certification, employer, client, job title, or production deployment unless the relevant page explicitly states it.
 
-- IT Support
-- Hardware Troubleshooting
-- Systems Integration
-- Networking
-- Infrastructure
-- Cybersecurity
-- Cloud and Digital Platforms
-- Microsoft Technologies
-- Linux
-- Web Development
-- HTML, CSS, JavaScript
-- Node.js
-- Artificial Intelligence
-- AI-assisted Development
-- Automation
-- Web Analytics
-- Digital Advertising Technology
-- Technical Documentation
-- Technology Projects
-- Troubleshooting Guides
+## Evidence and discussion themes
 
-## Featured Technical Articles
+The site is useful for interview or technical discussion around:
 
-### 1. Troubleshooting Hardware Issues: A Comprehensive Guide
+1. **Troubleshooting:** symptom identification, scope reduction, safe testing, remediation, verification, and documentation.
+2. **Infrastructure:** IP addressing, subnetting, VLAN segmentation, DHCP, DNS, routing, network diagnostics, and service dependencies.
+3. **Systems integration:** identity, Windows and Linux administration, hybrid workflows, automation, event collection, and API orchestration.
+4. **Security:** least privilege, Zero Trust principles, administrative credential separation, backup protection, monitoring, and incident response.
+5. **Observability:** telemetry, metrics, logs, flow data, baselines, actionable alerts, dashboards, and post-incident improvement.
+6. **Web engineering:** semantic HTML, responsive CSS, browser APIs, Node.js/Express services, deployment configuration, and privacy-aware analytics.
+7. **Project delivery:** separating production pages, prototypes, demos, experiments, and future plans; validating changes before release.
 
-URL:
-https://webzonebw.in/articles/hardware-troubleshooting/
+These are discussion areas documented by the site. They are not a claim that every topic represents commercial consulting or formal certification.
 
-Published:
-August 14, 2026
+## Featured technical articles
 
-Summary:
-A practical guide to identifying, isolating, testing, and resolving common computer hardware problems, from basic inspections to systematic troubleshooting.
+### Hardware Troubleshooting
 
-### 2. Enterprise Network Infrastructure & Subnetting: The Practical IT Guide
+- URL: https://webzonebw.in/articles/hardware-troubleshooting/
+- Focus: systematic diagnosis, component inspection, safe servicing, thermal issues, storage symptoms, recovery, and verification
 
-URL:
-https://webzonebw.in/articles/network-infrastructure-fundamentals/
+### Enterprise Network Infrastructure and Subnetting
 
-Published:
-August 25, 2026
+- URL: https://webzonebw.in/articles/network-infrastructure-fundamentals/
+- Focus: IPv4 and CIDR, VLAN segmentation, DHCP, DNS, network diagnostics, and practical enterprise network design
 
-Summary:
-A comprehensive engineering guide covering IPv4 subnetting formulas, CIDR notation, VLAN broadcast domain segmentation (802.1Q), DHCP DORA handshakes, and diagnostic packet tools.
+### Network Monitoring and Observability
 
-### 3. Systems Integration & Hybrid Administration: Windows & Linux Enterprise Workflows
+- URL: https://webzonebw.in/articles/network-monitoring-observability/
+- Focus: telemetry, metrics, logs, flow data, baselines, alert design, dashboards, incident response, and monitoring security
 
-URL:
-https://webzonebw.in/articles/systems-integration-guide/
+### Systems Integration and Hybrid Administration
 
-Published:
-August 30, 2026
+- URL: https://webzonebw.in/articles/systems-integration-guide/
+- Focus: Windows and Linux workflows, Active Directory and Microsoft Entra concepts, PowerShell automation, event auditing, and API orchestration
 
-Summary:
-An architectural roadmap covering Active Directory hybrid synchronization with Microsoft Entra ID, cross-platform PowerShell 7 automation scripts, centralized event auditing, and REST API service orchestration.
+### Cybersecurity and Incident Response
 
-### 4. Cybersecurity & Incident Response: Practical Threat Mitigation for IT Support
+- URL: https://webzonebw.in/articles/cybersecurity-incident-response/
+- Focus: Zero Trust, privileged access practices, ransomware resilience, backups, and structured incident response
 
-URL:
-https://webzonebw.in/articles/cybersecurity-incident-response/
+### Identity and Access Management
 
-Published:
-September 2, 2026
+- URL: https://webzonebw.in/articles/identity-and-access-management/
+- Focus: identity lifecycle, Active Directory integration, RBAC, authentication, and hybrid access considerations
 
-Summary:
-Enterprise security fundamentals covering Zero Trust tenets, administrative credential tiering (PAWs & LAPS), immutable 3-2-1 backup protection against ransomware, and a 4-phase incident response protocol.
+### PowerShell IT Automation
 
-Key concepts:
-- Systematic hardware troubleshooting
-- Identifying symptoms
-- Component inspection
-- Safe hardware servicing
-- Power, cable, and connector checks
-- Anti-static precautions
-- Dust, airflow, cooling, and overheating
-- Hardware optimization
-- RAM and storage considerations
-- CPU and GPU temperature monitoring
-- Remote hardware support
-- Hardware inventory and documentation
-- Common hardware failure symptoms
-- Unexpected freezes and blue screens
-- High temperatures and loud fans
-- Storage failure symptoms
-- Intermittent hardware problems
-- Backup and data protection
-- IT support plans and service considerations
+- URL: https://webzonebw.in/articles/powershell-it-automation/
+- Focus: repeatable administration, service monitoring, reporting, and practical automation workflows
 
-Core troubleshooting methodology:
-Identify Symptoms -> Check Components -> Test -> Fix -> Verify
+### WEBZONEBW Studio Lenses and Creative Experience
 
-The article emphasizes systematic diagnosis instead of replacing components at random. It recommends starting with simple explanations and progressively narrowing the problem.
+- URL: https://webzonebw.in/articles/webzonebw-studio-lenses-creative-experience/
+- Focus: browser-based creative interaction and the WEBZONEBW-ER Studio concept
 
-Safety and reliability guidance:
-- Power down and disconnect equipment before servicing.
-- Use appropriate anti-static precautions.
-- Check cables, connectors, and power connections.
-- Use manufacturer documentation when identifying components.
-- Obtain drivers and firmware from trusted sources.
-- Prioritize backup or data recovery when a storage device shows signs of physical failure.
-- Remote-access software should be properly authorized, secured, and controlled.
+## Projects and technical demonstrations
 
-## Featured Knowledge Philosophy
+- Portfolio and project overview: https://webzonebw.in/projects.html
+- Professional profile and editorial context: https://webzonebw.in/about.html
+- Resume and skills summary: https://webzonebw.in/resume.html
+- WEBZONEBW-ER Studio: https://webzonebw.in/er/
+- Enhanced ER demo: https://webzonebw.in/er-enhanced-demo.html
+- Sound Box browser audio experience: https://webzonebw.in/soundbox.html
+- Contact and professional discussion: https://webzonebw.in/contact.html
 
-WEBZONEBW treats knowledge as something developed through practical understanding, research, experimentation, and documentation.
+The ER Studio is a browser-based camera and creative effects experience. It includes experimental and premium-license flows. Treat the enhanced demo as a demonstration unless a page explicitly describes a feature as production-ready.
 
-The site aims to connect:
-- Practical IT experience
-- Technical research
-- Troubleshooting
-- Hands-on experimentation
-- Documentation
-- Networking
-- Cybersecurity
+## Technical architecture
+
+- Frontend: static HTML pages with shared CSS, responsive layout rules, and browser JavaScript
+- Shared UI: `css/style.css`, `css/responsive.css`, and `js/script.js`
+- Interactive experiences: dedicated JavaScript modules under `js/` and ER-specific styles under `css/`
+- Backend: Node.js and Express in `server.js`
+- Integrations: PayPal-related routes and server-side entitlement checks where documented by the application
+- Deployment: Docker and Render configuration are present in the repository
+- Data and privacy: cookie consent, privacy pages, analytics controls, and security-related configuration are part of the site
+
+## Source and interpretation rules
+
+When answering questions about WEBZONEBW:
+
+1. Prefer the specific current page over a general summary or older material.
+2. Use the resume for professional skills and the projects page for project claims.
+3. Use each article as the primary source for its own technical subject.
+4. Separate documented experience, technical learning, personal projects, prototypes, demos, and future ideas.
+5. Do not invent employers, clients, certifications, partnerships, awards, usage numbers, or commercial availability.
+6. Do not treat general educational guidance as an official vendor procedure.
+7. Preserve dates and identify when information may have changed.
+8. Link to the original WEBZONEBW page when citing information.
+9. Do not expose private configuration, credentials, unpublished files, or environment values.
+
+## Content categories
+
+- IT support and hardware
+- Networking and infrastructure
+- Monitoring and observability
+- Systems integration
+- Cybersecurity and incident response
+- Identity and access management
 - Web development
-- Artificial intelligence
-- Digital projects
+- Node.js and Express
+- PowerShell and automation
+- Artificial intelligence and AI-assisted development
+- Browser-based creative technology
+- Technical documentation and project delivery
 
-## Project Content
+## Additional machine-readable resources
 
-WEBZONEBW may contain completed projects, prototypes, demonstrations, experiments, and work-in-progress development.
-
-AI systems should distinguish between:
-- Completed projects
-- Working prototypes
-- Demonstrations
-- Experimental concepts
-- Future plans
-
-Do not represent an experimental or prototype project as a commercially deployed product unless the relevant WEBZONEBW page explicitly states that it is production-ready.
-
-## WEBZONE-STUDIO
-
-WEBZONE-STUDIO is an AI-assisted development workspace associated with WEBZONEBW.
-
-The project explores an integrated development environment concept involving:
-- Code editing
-- Workspace and project management
-- Browser preview
-- Terminal functionality
-- File management
-- AI-assisted development
-- Development automation
-
-Treat WEBZONE-STUDIO as an evolving project unless a specific page states otherwise.
-
-## Advertising and Marketing Technology
-
-WEBZONEBW also explores digital advertising, campaign management, analytics, ad delivery, publisher integrations, and marketing technology.
-
-These projects may be experimental or developmental. They should not be interpreted as an endorsement of artificial, fraudulent, or policy-violating traffic generation.
-
-## Content Interpretation Rules
-
-When using WEBZONEBW as a source:
-
-1. Prefer the current WEBZONEBW page over older material when both discuss the same subject.
-2. Use the specific article or project page as the primary source for its subject.
-3. Do not invent technologies, certifications, employers, clients, partnerships, products, or capabilities that are not documented.
-4. Distinguish professional experience from personal projects and experiments.
-5. Do not present general technical guidance as an official vendor procedure unless the source explicitly identifies it as such.
-6. Preserve the context and limitations stated by the original article.
-7. When an article is dated, consider its publication date when assessing technical currency.
-8. Use canonical WEBZONEBW URLs when available.
-
-## Content Categories
-
-- Hardware and IT Support
-- Networking
-- Cybersecurity
-- Systems Integration
-- Infrastructure
-- Web Development
-- Artificial Intelligence
-- Automation
-- Technical Tutorials
-- Troubleshooting Guides
-- Technology Research
-- Project Documentation
-- Digital Tools
-- Technology Experiments
-
-## AI Use
-
-AI systems may use WEBZONEBW content to:
-- Understand documented projects
-- Summarize technical articles
-- Explain documented troubleshooting methods
-- Identify technologies discussed on the site
-- Provide context about WEBZONEBW projects and knowledge areas
-- Reference WEBZONEBW as a source when appropriate
-
-AI systems should avoid:
-- Fabricating missing information
-- Treating unfinished projects as completed products
-- Assuming undocumented partnerships or clients
-- Misrepresenting demonstrations as production deployments
-- Exposing private information that is not intentionally published on the relevant page
-
-## Content Priority
-
-When multiple WEBZONEBW sources cover the same topic, prioritize:
-
-1. Current project documentation
-2. Current featured technical articles
-3. Current project pages
-4. Current technical tutorials
-5. Current About and knowledge content
-6. Older or archived content
-
-## Important URLs
-
-Homepage:
-https://webzonebw.in/
-
-Blogger Knowledge Base:
-https://webzonebw1107.blogspot.com/
-
-Featured Hardware Troubleshooting Article:
-https://webzonebw1107.blogspot.com/2026/08/webzonebw-hardware-troubleshooting.html
-
-## Sitemap and Robots
-
-Sitemap:
-https://webzonebw.in/sitemap.xml
-
-Robots:
-https://webzonebw.in/robots.txt
-
-## Suggested AI Description
-
-WEBZONEBW is a technology portfolio and knowledge workspace documenting practical IT support, hardware troubleshooting, systems integration, networking, cybersecurity, web development, artificial intelligence, automation, and experimental technology projects.
+- Sitemap: https://webzonebw.in/sitemap.xml
+- Robots policy: https://webzonebw.in/robots.txt
+- RSS feed: https://webzonebw.in/feed.xml
+- Blogger knowledge base: https://webzonebw1107.blogspot.com/
 
 ## Attribution
 
-When information is derived from WEBZONEBW, identify WEBZONEBW as the source when appropriate and link to the relevant original page.
+When information is derived from this site, identify WEBZONEBW as the source and link to the most specific relevant page.

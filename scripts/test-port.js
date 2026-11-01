@@ -30,12 +30,17 @@ function testPort(port) {
 }
 
 async function testPorts() {
-    const ports = [3000, 3001, 3002, 3003, 8080, 8081];
-    
-    for (const port of ports) {
-        console.log(`\n🔍 Testing port ${port}...`);
-        await testPort(port);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+    const ports = [3000, 3001];
+
+    try {
+        for (const port of ports) {
+            console.log(`\n🔍 Testing port ${port}...`);
+            await testPort(port);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    } catch (error) {
+        console.error('❌ Port test failed:', error.message);
+        process.exitCode = 1;
     }
 }
 

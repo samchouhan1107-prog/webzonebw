@@ -168,6 +168,7 @@ function initWebZoneERStudio() {
       'halo': '👑 Angel Halo',
       'goldenhour': '🌟 Golden Hour',
       'cinematic': '🎬 35mm Film',
+      'volcanic-lava': '🌋 Volcanic Lava',
       'noir': '🖤 Leica Noir',
       'vintage90s': '🎞️ Retro 90s',
       'glitch': '⚡ Digital Glitch',
@@ -432,6 +433,9 @@ function initWebZoneERStudio() {
         break;
       case 'vintage90s':
         drawVintage90s(ctx, w, h, time);
+        break;
+      case 'volcanic-lava':
+        drawVolcanicLava(ctx, w, h, time);
         break;
       case 'glitch':
         drawDigitalGlitch(ctx, w, h, time);
@@ -1347,6 +1351,15 @@ function initWebZoneERStudio() {
     },
 
     {
+      id: "volcanic-lava",
+      name: "Volcanic Lava",
+      icon: "🌋",
+      category: "scene",
+      target: "scene",
+      desc: "Warm lava color grade with drifting ember sparks and heat shimmer",
+    },
+
+    {
       id: "glitch",
       name: "Glitch FX",
       icon: "⚡",
@@ -1917,7 +1930,7 @@ function initWebZoneERStudio() {
     // Face
     sunglasses: "studio", halo: "fantasy", goldenhour: "portrait", cartoon: "studio", "mother_care": "portrait",
     // Scene
-    noir: "cinema", vintage90s: "portrait", cinematic: "cinema", glitch: "glitch",
+    noir: "cinema", vintage90s: "portrait", cinematic: "cinema", "volcanic-lava": "hellfire", glitch: "glitch",
     space: "nebula", cyberpunk: "neon",
     // Pose
     "ghost-pose": "ghost", "pose-frame": "studio", "pumpkin-pose": "patch", "witch-ritual": "witch",
@@ -6495,6 +6508,11 @@ function initWebZoneERStudio() {
 
         break;
 
+      case "volcanic-lava":
+        drawVolcanicLava(ctx, w, h, time);
+
+        break;
+
       case "kawaii":
         drawKawaiiAnimeBlush(ctx, w, h, time);
 
@@ -6669,6 +6687,53 @@ function initWebZoneERStudio() {
   // ==========================================================
   // GOLDEN HOUR GLAM
   // ==========================================================
+
+  function drawVolcanicLava(ctx, w, h, time) {
+    const t = time * 0.001;
+    const pulse = 0.5 + Math.sin(t * 1.8) * 0.12;
+
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+
+    const lava = ctx.createLinearGradient(0, h, w, 0);
+    lava.addColorStop(0, "rgba(80, 8, 2, 0.42)");
+    lava.addColorStop(0.42, "rgba(255, 75, 12, 0.18)");
+    lava.addColorStop(1, "rgba(255, 180, 48, 0.08)");
+    ctx.fillStyle = lava;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = "rgba(255, 112, 24, 0.28)";
+    ctx.lineWidth = Math.max(1, w * 0.002);
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.78);
+    for (let x = 0; x <= w; x += Math.max(18, w / 28)) {
+      const y = h * 0.78 + Math.sin(x * 0.018 + t * 1.4) * h * 0.035;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle = `rgba(255, 187, 66, ${0.38 + pulse * 0.2})`;
+    const emberCount = Math.min(28, Math.max(12, Math.round(w / 40)));
+    for (let i = 0; i < emberCount; i += 1) {
+      const seed = i * 17.37;
+      const x = ((seed * 13 + t * (8 + (i % 4) * 3)) % (w + 24)) - 12;
+      const y = h - ((seed * 7 + t * (18 + (i % 5) * 4)) % (h * 0.82));
+      const radius = 0.8 + (i % 3) * 0.55;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalCompositeOperation = "source-over";
+    const edge = ctx.createRadialGradient(w / 2, h / 0.9, 0, w / 2, h / 2, Math.max(w, h) * 0.75);
+    edge.addColorStop(0, "rgba(255, 86, 20, 0)");
+    edge.addColorStop(0.72, "rgba(130, 12, 2, 0.04)");
+    edge.addColorStop(1, "rgba(24, 3, 1, 0.32)");
+    ctx.fillStyle = edge;
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+  }
 
   function drawGoldenHourGlam(ctx, w, h, time) {
     ctx.save();
@@ -8641,6 +8706,7 @@ function initWebZoneERStudio() {
       'halo': '👑 Angel Halo',
       'goldenhour': '🌟 Golden Hour',
       'cinematic': '🎬 35mm Film',
+      'volcanic-lava': '🌋 Volcanic Lava',
       'noir': '🖤 Leica Noir',
       'vintage90s': '🎞️ Retro 90s',
       'glitch': '⚡ Digital Glitch',
