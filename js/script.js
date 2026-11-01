@@ -1851,7 +1851,7 @@ function initPrivacyNavigation() {
         toggle.innerHTML =
             '<span class="nav-icon" aria-hidden="true">🔒</span>' +
             '<span class="nav-submenu-label">Privacy Policy</span>' +
-            '<span class="nav-submenu-arrow" aria-hidden="true">▾</span>';
+            '<span class="nav-submenu-arrow" aria-hidden="true"></span>';
 
         privacyLink.replaceWith(toggle);
         submenu.id = "privacy-submenu";

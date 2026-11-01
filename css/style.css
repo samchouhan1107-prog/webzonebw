@@ -774,43 +774,49 @@ body.light-mode .brand-sub {
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 10px 14px;
+    min-height: 44px;
+    padding: 10px 18px;
     color: var(--text-secondary);
     background: transparent;
     font: inherit;
     text-align: left;
     border: 0;
-    border-left: 3px solid transparent;
-    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    border-radius: 999px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.nav-submenu-toggle:hover,
-.privacy-expanded > .nav-submenu-toggle {
+.nav-submenu-toggle:hover {
     background: var(--surface-card-hover);
     color: var(--text-heading);
-    border-left-color: var(--brand-cyan);
 }
 
 .privacy-expanded > .nav-submenu-toggle {
     color: var(--brand-cyan);
     font-weight: 700;
+    background: var(--bg-sidebar);
+    border-color: var(--brand-cyan);
 }
 
 .nav-submenu-arrow {
+    position: relative;
+    width: 9px;
+    height: 9px;
     margin-left: auto;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
     transition: transform 0.2s ease;
 }
 
 .privacy-expanded > .nav-submenu-toggle .nav-submenu-arrow {
-    transform: rotate(180deg);
+    transform: translateY(2px) rotate(225deg);
 }
 
 .privacy-submenu {
-    margin: 2px 0 4px 18px !important;
-    padding-left: 10px !important;
-    border-left: 1px solid var(--border-color);
+    margin: 3px 0 7px 45px !important;
+    padding: 0 0 0 3px !important;
 }
 
 .privacy-submenu[hidden] {
@@ -822,8 +828,11 @@ body.light-mode .brand-sub {
 }
 
 .privacy-submenu li a {
-    padding: 8px 10px !important;
+    padding: 7px 10px !important;
     font-size: 13px !important;
+    font-weight: 500 !important;
+    border-left: 0 !important;
+    border-radius: 8px !important;
 }
 
 body.light-mode .sidebar ul li a.active,
@@ -2215,11 +2224,11 @@ main section + section {
 
     .nav-submenu-toggle {
         min-height: 44px;
-        padding: 12px 14px;
+        padding: 12px 18px;
     }
 
     .privacy-submenu {
-        margin-left: 14px !important;
+        margin-left: 45px !important;
     }
 
     .sidebar ul li a:hover,
