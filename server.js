@@ -55,6 +55,7 @@ const PROJECT_NAME = "WEBZONEBW";
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const IS_PRODUCTION = NODE_ENV === "production";
+const TRUST_PROXY = process.env.TRUST_PROXY === "true";
 
 /* ============================================================
  * SECURITY CONFIG, ERROR RESPONSE & INPUT VALIDATION HELPERS
@@ -209,7 +210,7 @@ app.use((req, res, next) => {
     next();
 });
 
-if (process.env.TRUST_PROXY === "true") {
+if (TRUST_PROXY) {
     app.set("trust proxy", 1);
 }
 
@@ -468,9 +469,48 @@ app.use((req, res, next) => {
 const userSessions = new Map();
 const SESSION_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
+function parseCookies(header) {
+    if (!header) return {};
+
+    return header.split(";").reduce((cookies, pair) => {
+        const separator = pair.indexOf("=");
+        if (separator < 0) return cookies;
+
+        const name = pair.slice(0, separator).trim();
+        const value = pair.slice(separator + 1).trim();
+        if (!name) return cookies;
+
+        try {
+            cookies[name] = decodeURIComponent(value);
+        } catch (error) {
+            cookies[name] = value;
+        }
+        return cookies;
+    }, {});
+}
+
+function getSessionCookieOptions() {
+    return [
+        "Path=/",
+        `Max-Age=${Math.floor(SESSION_TIMEOUT / 1000)}`,
+        "HttpOnly",
+        "SameSite=Lax",
+        IS_PRODUCTION ? "Secure" : ""
+    ].filter(Boolean).join("; ");
+}
+
+function setSessionCookie(res, sessionId) {
+    res.setHeader("Set-Cookie", `session_id=${encodeURIComponent(sessionId)}; ${getSessionCookieOptions()}`);
+}
+
+function clearSessionCookie(res) {
+    res.setHeader("Set-Cookie", "session_id=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax" +
+        (IS_PRODUCTION ? "; Secure" : ""));
+}
+
 // Create user session (called on login or first access)
 function createUserSession(userEmail) {
-    const sessionId = `SESSION-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+    const sessionId = crypto.randomBytes(32).toString("base64url");
     const session = {
         sessionId: sessionId,
         userEmail: userEmail,
@@ -483,14 +523,15 @@ function createUserSession(userEmail) {
     userSessions.set(sessionId, session);
     
     // Log session creation
-    console.log(`[WEBZONEBW SESSION] Session created for ${userEmail}: ${sessionId}`);
+    console.log(`[WEBZONEBW SESSION] Session created for ${userEmail}`);
     
     return session;
 }
 
 // Get user session from request with validation
 function getUserSession(req) {
-    const sessionId = req.headers["x-session-id"] || req.cookies?.session_id;
+    const cookies = parseCookies(req.headers.cookie);
+    const sessionId = req.headers["x-session-id"] || cookies.session_id;
     
     if (!sessionId || !userSessions.has(sessionId)) {
         return null;
@@ -606,6 +647,7 @@ app.post("/api/login", (req, res) => {
             session = createUserSession(email);
         }
 
+        setSessionCookie(res, session.sessionId);
         res.json({
             success: true,
             sessionId: session.sessionId,
@@ -618,6 +660,19 @@ app.post("/api/login", (req, res) => {
         createErrorResponse(res, 500, 'LOGIN_FAILED', 
             'Login failed due to server error', { error: error.message });
     }
+});
+
+app.post("/api/logout", (req, res) => {
+    const session = getUserSession(req);
+    if (session) {
+        userSessions.delete(session.sessionId);
+    }
+    clearSessionCookie(res);
+    res.json({
+        success: true,
+        message: "Session ended",
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Enhanced current user session endpoint
@@ -636,6 +691,7 @@ app.get("/api/session", (req, res) => {
         if (isExpired) {
             // Remove expired session
             userSessions.delete(session.sessionId);
+            clearSessionCookie(res);
             return createErrorResponse(res, 401, 'SESSION_EXPIRED', 
                 'Session has expired. Please login again.');
         }
