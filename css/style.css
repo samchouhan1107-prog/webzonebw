@@ -688,6 +688,14 @@ html, body {
     margin-right: 10px;
 }
 
+.legacy-page-subtitle {
+    max-width: 900px;
+    margin: -14px auto 28px;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
 @media (max-width: 900px) {
     .legacy-sidebar-page > .container {
         padding-left: 24px;
@@ -701,6 +709,11 @@ html, body {
 
     .legacy-page-title {
         font-size: clamp(28px, 6vw, 38px);
+    }
+
+    .legacy-page-subtitle {
+        margin-top: -12px;
+        font-size: 15px;
     }
 }
 
