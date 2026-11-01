@@ -675,6 +675,19 @@ html, body {
     overflow-wrap: anywhere;
 }
 
+.legacy-page-title {
+    max-width: 1400px;
+    margin: 0 auto 28px;
+    color: var(--text-heading);
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.legacy-page-title .title-icon {
+    margin-right: 10px;
+}
+
 @media (max-width: 900px) {
     .legacy-sidebar-page > .container {
         padding-left: 24px;
@@ -684,6 +697,10 @@ html, body {
     .legacy-sidebar-page .section-header-row {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .legacy-page-title {
+        font-size: clamp(28px, 6vw, 38px);
     }
 }
 
