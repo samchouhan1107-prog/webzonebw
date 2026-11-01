@@ -82,6 +82,30 @@ function createPayPalRouter(ctx) {
         return FACEFILTER_CONFIG.offers[filterId];
     }
 
+    function normalizeMoney(value) {
+        return typeof value === "string" && /^\d+\.\d{2}$/.test(value)
+            ? value
+            : null;
+    }
+
+    function getCapturedPayment(orderData) {
+        const capture = orderData &&
+            orderData.purchase_units &&
+            orderData.purchase_units[0] &&
+            orderData.purchase_units[0].payments &&
+            orderData.purchase_units[0].payments.captures &&
+            orderData.purchase_units[0].payments.captures[0];
+
+        if (!capture) return null;
+
+        return {
+            id: capture.id,
+            status: capture.status,
+            amount: capture.amount && capture.amount.value,
+            currency: capture.amount && capture.amount.currency_code
+        };
+    }
+
     function generateEntitlementId() {
         const block = () => crypto.randomBytes(2).toString("hex").toUpperCase();
         return `FF-ENT-${block()}-${block()}-${block()}`;
@@ -557,7 +581,10 @@ function createPayPalRouter(ctx) {
             );
 
             const captureStatus = data && data.status;
-            const storedOrder = licenseStore.orders.get(String(orderId));
+            const storedOrder = licenseStore.orders.get(String(orderId)) ||
+                Array.from(licenseStore.orders.values()).find((order) =>
+                    order.paypalOrderId === String(orderId)
+                );
 
             if (!ok || captureStatus !== "COMPLETED" || !storedOrder) {
                 console.warn("[WEBZONEBW] PayPal capture not completed:", captureStatus, data && data.message);
@@ -569,6 +596,46 @@ function createPayPalRouter(ctx) {
 
             if (email && storedOrder.email && String(email).toLowerCase() !== storedOrder.email.toLowerCase()) {
                 return res.status(403).json({ success: false, error: "EMAIL_MISMATCH" });
+            }
+
+            const capturedPayment = getCapturedPayment(data);
+            const offer = storedOrder.filterId ? getFaceFilterOffer(storedOrder.filterId) : null;
+            const expectedAmount = offer
+                ? offer.price.toFixed(2)
+                : normalizeMoney(String(storedOrder.amountUsd || ""));
+            const expectedCurrency = offer
+                ? offer.currency
+                : storedOrder.currency || PAYPAL_CURRENCY;
+
+            if (!capturedPayment ||
+                capturedPayment.status !== "COMPLETED" ||
+                !capturedPayment.id ||
+                normalizeMoney(capturedPayment.amount) !== expectedAmount ||
+                capturedPayment.currency !== expectedCurrency) {
+                console.warn("[WEBZONEBW] PayPal capture verification failed:", {
+                    status: capturedPayment && capturedPayment.status,
+                    amount: capturedPayment && capturedPayment.amount,
+                    currency: capturedPayment && capturedPayment.currency
+                });
+                return res.status(402).json({
+                    success: false,
+                    error: "PAYMENT_NOT_VERIFIED - Amount, currency, or capture status did not match the stored purchase."
+                });
+            }
+
+            if (storedOrder.filterId) {
+                storedOrder.status = "CAPTURED";
+                storedOrder.paidAt = new Date().toISOString();
+                storedOrder.paypalCaptureId = capturedPayment.id;
+                saveLicenseStore();
+
+                return res.json({
+                    success: true,
+                    status: "COMPLETED",
+                    purchaseId: storedOrder.purchaseId,
+                    paypalOrderId: storedOrder.paypalOrderId,
+                    timestamp: new Date().toISOString()
+                });
             }
 
             storedOrder.status = "PAID";
@@ -774,36 +841,51 @@ function createPayPalRouter(ctx) {
             }
 
             const event = req.body || {};
-            if (event.event_type === "CHECKOUT.ORDER.COMPLETED" || event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
+            if (event.event_type === "PAYMENT.CAPTURE.COMPLETED") {
                 const resource = event.resource || {};
-                const paypalOrderId = resource.id;
-                const paypalCaptureId = resource.purchase_units && resource.purchase_units[0] && resource.purchase_units[0].payments && resource.purchase_units[0].captures && resource.purchase_units[0].captures[0] ? resource.purchase_units[0].captures[0].id : null;
+                const relatedIds = resource.supplementary_data && resource.supplementary_data.related_ids
+                    ? resource.supplementary_data.related_ids
+                    : {};
+                const paypalOrderId = relatedIds.order_id;
+                const paypalCaptureId = resource.id;
 
-                const paypalAmount = resource.purchase_units && resource.purchase_units[0] && resource.purchase_units[0].amount ? resource.purchase_units[0].amount.value : null;
-                const paypalCurrency = resource.purchase_units && resource.purchase_units[0] && resource.purchase_units[0].amount ? resource.purchase_units[0].amount.currency_code : null;
+                const paymentAmount = resource.amount;
+                const paypalAmount = paymentAmount ? paymentAmount.value : null;
+                const paypalCurrency = paymentAmount ? paymentAmount.currency_code : null;
 
-                let storedOrder = null;
-                for (const [orderId, order] of licenseStore.orders) {
-                    if (order.status !== "PAID" && (order.purchaseId?.startsWith("FF-PURCHASE-") || order.custom_id === paypalOrderId)) {
-                        storedOrder = order;
-                        break;
-                    }
+                const storedOrder = paypalOrderId
+                    ? Array.from(licenseStore.orders.values()).find((order) =>
+                        order.filterId && order.paypalOrderId === paypalOrderId)
+                    : null;
+
+                if (!paypalOrderId || !paypalCaptureId || resource.status !== "COMPLETED" || !storedOrder) {
+                    return res.status(400).send("CAPTURE_NOT_VERIFIED");
+                }
+
+                if (storedOrder.status === "PAID") {
+                    return res.status(200).send("OK");
                 }
 
                 if (storedOrder && storedOrder.filterId) {
-                    const offer = getFaceFilterOffer(storedOrder.filterId);
-                    if (offer && paypalAmount && paypalCurrency) {
-                        const expectedAmount = offer.price.toFixed(2);
-
-                        if (paypalAmount !== expectedAmount || paypalCurrency !== offer.currency) {
-                            console.warn(`[WEBZONEBW FACEFILTER] Amount verification failed: expected ${offer.currency}${expectedAmount}, got ${paypalCurrency}${paypalAmount}`);
-                            return res.status(400).send("AMOUNT_VERIFICATION_FAILED");
-                        }
+                    const existingEntitlement = Array.from(licenseStore.faceFilterEntitlements.values())
+                        .find((entitlement) =>
+                            entitlement.paypalOrderId === paypalOrderId &&
+                            entitlement.status === "ACTIVE");
+                    if (existingEntitlement) {
+                        return res.status(200).send("OK");
                     }
 
-                    if (storedOrder.status === "PAID") {
-                        console.log(`[WEBZONEBW FACEFILTER] Order already processed: ${storedOrder.purchaseId}`);
-                        return res.status(200).send("OK");
+                    const offer = getFaceFilterOffer(storedOrder.filterId);
+                    if (!offer ||
+                        normalizeMoney(paypalAmount) !== offer.price.toFixed(2) ||
+                        paypalCurrency !== offer.currency) {
+                        console.warn("[WEBZONEBW FACEFILTER] Amount verification failed:", {
+                            expectedAmount: offer && offer.price.toFixed(2),
+                            receivedAmount: paypalAmount,
+                            expectedCurrency: offer && offer.currency,
+                            receivedCurrency: paypalCurrency
+                        });
+                        return res.status(400).send("AMOUNT_VERIFICATION_FAILED");
                     }
 
                     const entitlementId = generateEntitlementId();
@@ -826,15 +908,21 @@ function createPayPalRouter(ctx) {
                         currency: offer.currency
                     };
 
+                    const previousOrder = { ...storedOrder };
                     licenseStore.faceFilterEntitlements.set(entitlementId, entitlement);
-
                     storedOrder.status = "PAID";
                     storedOrder.paidAt = purchasedAt;
                     storedOrder.paypalOrderId = paypalOrderId;
                     storedOrder.paypalCaptureId = paypalCaptureId;
                     licenseStore.orders.set(storedOrder.purchaseId, storedOrder);
 
-                    saveLicenseStore();
+                    try {
+                        saveLicenseStore();
+                    } catch (saveError) {
+                        licenseStore.faceFilterEntitlements.delete(entitlementId);
+                        licenseStore.orders.set(storedOrder.purchaseId, previousOrder);
+                        throw saveError;
+                    }
 
                     console.log(`[WEBZONEBW FACEFILTER] 24-hour entitlement created: ${entitlementId} for ${storedOrder.filterId} (${storedOrder.userEmail})`);
                 }

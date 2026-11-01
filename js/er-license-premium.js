@@ -43,13 +43,13 @@ function fetchJSON(url, options) {
 
   var STORAGE_KEY = "wzb_er_license_v1";
   var PROMO_STORAGE_KEY = "wzb_er_promo_v1";
-  var WZB_API_BASE = "https://webzonebw.in";
+  var WZB_API_BASE = "https://webzonebw.onrender.com";
   var API_BASE = (function () {
     try {
       var meta = document.querySelector('meta[name="wzb-api-base"]');
       if (meta && meta.content) return meta.content.replace(/\/+$/, "");
     } catch (e) {}
-    return window.location.origin || WZB_API_BASE;
+    return WZB_API_BASE;
   })();
   var listeners = [];
   var runtimeAPIBase = null;
@@ -58,22 +58,18 @@ function fetchJSON(url, options) {
   function resolveAPIBase() {
     if (runtimeAPIBase) return Promise.resolve(runtimeAPIBase);
     
-    // For static sites (GitHub Pages), use local storage simulation
-    // Check if we're on a static site by looking for the absence of API endpoints
-    return fetch(window.location.origin + "/api/health", { method: 'HEAD' })
+    // Verify the configured backend before making license or payment requests.
+    return fetch(WZB_API_BASE + "/api/health", { method: "GET" })
       .then(function (response) {
         if (response.ok) {
-          runtimeAPIBase = window.location.origin;
+          runtimeAPIBase = WZB_API_BASE;
           return runtimeAPIBase;
         }
         throw new Error("No API endpoint");
       })
       .catch(function () {
-        // Static site detected - use local storage simulation
-        console.log("[WEBZONEBW] Static site detected - using local storage simulation");
-        runtimeAPIBase = "local";
-        API_BASE = window.location.origin;
-        return Promise.resolve("local");
+        runtimeAPIBase = "unavailable";
+        return Promise.resolve(runtimeAPIBase);
       });
   }
 
@@ -211,31 +207,11 @@ function fetchJSON(url, options) {
     setStatus("verifying");
 
     return resolveAPIBase().then(function (apiBase) {
-      if (apiBase === "local") {
-        // Static site - simulate license verification using local storage
+      if (apiBase === "unavailable") {
         state.verifying = false;
-        
-        // Support standard WZB-ER-* format, custom assigned keys like SFEWO5DESDF, or valid licenses
-        const isValidLicense = stored.licenseKey && (
-          stored.licenseKey.startsWith('WZB-ER-') || 
-          stored.licenseKey === 'SFEWO5DESDF' || 
-          stored.licenseKey.length >= 8
-        );
-        
-        if (isValidLicense) {
-          state.status = "active";
-          state.email = stored.email;
-          state.plan = "er-studio-premium";
-          emit();
-          return true;
-        } else {
-          if (state.status !== "promo_access") {
-            state.status = "inactive";
-            state.email = null;
-          }
-          emit();
-          return false;
-        }
+        state.status = "unreachable";
+        emit();
+        return false;
       }
       
       // API-based verification with 24-hour expiration check
@@ -303,36 +279,8 @@ function fetchJSON(url, options) {
 
   function activateLicense(orderId, email, procMsg, showError, close) {
     return resolveAPIBase().then(function (apiBase) {
-      if (apiBase === "local") {
-        // Static site - only allow demo mode, no fake production licenses
-        if (confirm("This is a demo environment. In production, you would need to complete the PayPal payment to activate your license.")) {
-          const demoLicenseKey = "WZB-ER-DEMO-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-          
-          state.licenseKey = demoLicenseKey;
-          state.email = email;
-          state.status = "active";
-          persist();
-
-          if (procMsg) {
-            procMsg.textContent = "✅ Demo license activated!";
-          }
-
-          if (
-            window.WEBZONEBW_STUDIO_UI &&
-            typeof window.WEBZONEBW_STUDIO_UI.showToast === "function"
-          ) {
-            window.WEBZONEBW_STUDIO_UI.showToast(
-              "🎭 Demo mode activated — This is for testing only. Complete PayPal payment for real access."
-            );
-          }
-
-          setTimeout(function () {
-            if (close) close();
-          }, 1400);
-
-          emit();
-          return true;
-        }
+      if (apiBase === "unavailable") {
+        showError("License service is unavailable. Premium remains locked.");
         return false;
       }
       
@@ -390,10 +338,8 @@ function fetchJSON(url, options) {
   function getOrderEmail() {
     if (orderEmailCache) return Promise.resolve(orderEmailCache);
     return resolveAPIBase().then(function (apiBase) {
-      if (apiBase === "local") {
-        // Static site - return a default support email
-        orderEmailCache = "sam.chouhan32@gmail.com";
-        return orderEmailCache;
+      if (apiBase === "unavailable") {
+        throw new Error("ORDER_EMAIL_UNAVAILABLE");
       }
       
       return fetchJSON(API_BASE + "/api/order-email")
@@ -482,18 +428,10 @@ function fetchJSON(url, options) {
     persist();
 
     return resolveAPIBase().then(function (apiBase) {
-      if (apiBase === "local") {
-        if ((key.startsWith("WZB-ER-") && key.length >= 10) || key === "SFEWO5DESDF" || key.length >= 8) {
-          state.status = "active";
-          state.plan = "er-studio-premium";
-          persist();
-          emit();
-          return { valid: true, type: "license", message: "💎 Premium license activated!" };
-        } else {
-          state.licenseKey = null;
-          persist();
-          return { valid: false, message: "Invalid license format. License keys start with 'WZB-ER-'" };
-        }
+      if (apiBase === "unavailable") {
+        state.licenseKey = null;
+        persist();
+        return { valid: false, message: "License service is unavailable. Try again later." };
       }
 
       return fetchJSON(API_BASE + "/api/license/verify", {
@@ -513,25 +451,11 @@ function fetchJSON(url, options) {
             emit();
             return { valid: true, type: data.hasPaidLicense ? "license" : "promo", message: "💎 Premium license activated!" };
           }
-          if ((key.startsWith("WZB-ER-") && key.length >= 10) || key === "SFEWO5DESDF" || key.length >= 8) {
-            state.status = "active";
-            state.plan = "er-studio-premium";
-            persist();
-            emit();
-            return { valid: true, type: "license", message: "💎 License verified!" };
-          }
           state.licenseKey = null;
           persist();
           return { valid: false, message: (data && data.error) || "License key not recognized." };
         })
         .catch(function () {
-          if ((key.startsWith("WZB-ER-") && key.length >= 10) || key === "SFEWO5DESDF" || key.length >= 8) {
-            state.status = "active";
-            state.plan = "er-studio-premium";
-            persist();
-            emit();
-            return { valid: true, type: "license", message: "💎 License verified offline!" };
-          }
           state.licenseKey = null;
           persist();
           return { valid: false, message: "Verification failed. Check network or key format." };
@@ -776,26 +700,6 @@ function fetchJSON(url, options) {
       '</div>' +
       '</div>' +
 
-      // PayPal Manual Container (fallback for demo/testing)
-      '<div id="paypalManualContainer" class="paypal-manual-container" style="display:none;">' +
-      '<div class="manual-payment-info">' +
-      '<div class="manual-icon">🎭</div>' +
-      '<div class="manual-content">' +
-      '<h4>Manual Payment Mode</h4>' +
-      '<p>This is a demo environment. In production, you would be redirected to PayPal to complete your $5.99 payment.</p>' +
-      '<div class="manual-steps">' +
-      '<div class="manual-step">' +
-      '<span class="step-number">1</span>' +
-      '<span class="step-text">Contact support for manual payment</span>' +
-      '</div>' +
-      '<div class="manual-step">' +
-      '<span class="step-number">2</span>' +
-      '<span class="step-text">Receive your license key via email</span>' +
-      '</div>' +
-      '</div>' +
-      '<button type="button" class="btn btn-primary" id="manualCompleteBtn">Complete Demo Purchase</button>' +
-      '</div>' +
-      '</div>' +
       '</div>' + // er-modal-body
 
       '<div class="modal-footer">' +
@@ -831,7 +735,6 @@ function fetchJSON(url, options) {
     var successSubtext = modal.querySelector("#successSubtext");
 
     var paymentButtons = modal.querySelector("#paymentButtons");
-    var paypalManualContainer = modal.querySelector("#paypalManualContainer");
 
     /* ---------- Amazon-style 3-step flow ---------- */
     var stepEls = {
@@ -1108,10 +1011,8 @@ function fetchJSON(url, options) {
 
       // For production, redirect to PayPal
       resolveAPIBase().then(function (apiBase) {
-        if (apiBase === "local") {
-          // Static/demo mode - show manual container
-          hideStates();
-          paypalManualContainer.style.display = "block";
+        if (apiBase === "unavailable") {
+          showError("Payment service is unavailable. Please try again later.");
           return;
         }
 
@@ -1163,49 +1064,19 @@ function fetchJSON(url, options) {
       }, 1000);
     });
 
-    // Demo/manual completion button — only ever shown (and only ever wired up)
-    // when resolveAPIBase() resolved to "local" inside startPayPalCheckout(), i.e.
-    // there is no live server backing this deployment (e.g. static hosting).
-    var manualCompleteBtn = modal.querySelector("#manualCompleteBtn");
-    if (manualCompleteBtn) {
-      manualCompleteBtn.addEventListener("click", function () {
-        var email = state.email || (emailInput.value || "").trim();
-        if (!email) {
-          hideStates();
-          paypalManualContainer.style.display = "none";
-          showError("Please enter your email address first.");
-          gotoStep(1);
-          emailInput.focus();
-          return;
-        }
-
-        showProcessingState("Demo mode payment...", "Activating your license...");
-
-        setTimeout(function () {
-          // Demo license key — local-storage simulation only, never used when a real API is present.
-          var demoLicenseKey = "WZB-ER-DEMO-" + Math.random().toString(36).substr(2, 6).toUpperCase();
-
-          state.licenseKey = demoLicenseKey;
-          state.email = email;
-          state.status = "active";
-          persist();
-          emit(); // notify listeners (lens tray/hub) so the just-purchased lens unlocks immediately
-
-          showSuccess("Demo Payment Complete!", "Your demo license is now active.");
-
-          setTimeout(function () {
-            close();
-            if (typeof window.updateFaceFilterUI === "function") {
-              window.updateFaceFilterUI();
-            }
-          }, 2000);
-        }, 1500);
-      });
-    }
-
   }
 
   function logout() {
+    var sessionId = sessionStorage.getItem("webzonebw_session_id");
+    if (sessionId) {
+      fetch("https://webzonebw.onrender.com/api/logout", {
+        method: "POST",
+        headers: { "X-Session-Id": sessionId }
+      }).catch(function (error) {
+        console.warn("[WEBZONEBW] Server logout failed:", error);
+      });
+      sessionStorage.removeItem("webzonebw_session_id");
+    }
     state.licenseKey = null;
     state.email = null;
     clearPromoAccess();
@@ -1216,23 +1087,9 @@ function fetchJSON(url, options) {
 
   function activatePromo(promoKey) {
     return resolveAPIBase().then(function (apiBase) {
-      if (apiBase === "local") {
-        // Static site - validate promo keys locally
-        const validPromoKeys = ['HALLOWEEN2026', 'PUMPKIN2026'];
-        const promoFeatures = {
-          'HALLOWEEN2026': ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion'],
-          'PUMPKIN2026': ['pumpkin-pose', 'witch-ritual']
-        };
-
-        if (validPromoKeys.includes(promoKey)) {
-          const features = promoFeatures[promoKey];
-          const expires = new Date('2026-11-07T23:59:59.999Z');
-          setPromoAccess(promoKey + ' Free Access', features, expires);
-          return true;
-        } else {
-          clearPromoAccess();
-          return false;
-        }
+      if (apiBase === "unavailable") {
+        clearPromoAccess();
+        return false;
       }
 
       return fetchJSON(API_BASE + "/api/halloween/validate-promo", {
@@ -1265,8 +1122,9 @@ function fetchJSON(url, options) {
     if (!stored || !stored.licenseKey) return;
     
     resolveAPIBase().then(function (apiBase) {
-      if (apiBase === "local") {
-        // In demo mode, don't check expiration
+      if (apiBase === "unavailable") {
+        state.status = "unreachable";
+        emit();
         return;
       }
       
@@ -1306,22 +1164,8 @@ function fetchJSON(url, options) {
   function getHalloweenStatus() {
     return resolveAPIBase()
       .then(function (apiBase) {
-        if (apiBase === "local") {
-          // Static site - check if current date is within Halloween promotion period
-          const now = new Date();
-          const promoStart = new Date('2026-10-01T00:00:00.000Z');
-          const promoEnd = new Date('2026-11-07T23:59:59.999Z');
-          const isPromoActive = now >= promoStart && now <= promoEnd;
-
-          state.promoActive = isPromoActive;
-          return {
-            success: true,
-            promoActive: isPromoActive,
-            promoStart: promoStart.toISOString(),
-            promoEnd: promoEnd.toISOString(),
-            currentTime: now.toISOString(),
-            features: ['witch-ritual', 'haunted-forest', 'vr-cyberdeck', 'vr-mansion', 'pumpkin-pose']
-          };
+        if (apiBase === "unavailable") {
+          throw new Error("HALLOWEEN_STATUS_UNAVAILABLE");
         }
 
         return fetchJSON(API_BASE + "/api/halloween/status");

@@ -5,6 +5,18 @@
 
 "use strict";
 
+const WEBZONEBW_API_BASE = "https://webzonebw.onrender.com";
+const WEBZONEBW_SESSION_KEY = "webzonebw_session_id";
+
+function webzonebwApiFetch(path, options = {}) {
+  const headers = new Headers(options.headers || {});
+  const sessionId = sessionStorage.getItem(WEBZONEBW_SESSION_KEY);
+  if (sessionId) {
+    headers.set("X-Session-Id", sessionId);
+  }
+  return fetch(WEBZONEBW_API_BASE + path, { ...options, headers });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initWebZoneERStudio();
 });
@@ -2801,17 +2813,20 @@ function initWebZoneERStudio() {
   async function initializeUserSession() {
     try {
       // Check if we already have a session
-      const response = await fetch("/api/session");
+      const response = await webzonebwApiFetch("/api/session");
       if (response.ok) {
         const session = await response.json();
         if (session.success) {
+          if (session.sessionId) {
+            sessionStorage.setItem(WEBZONEBW_SESSION_KEY, session.sessionId);
+          }
           return session;
         }
       }
 
       // Create new session
       const userEmail = "demo@example.com"; // Default demo user
-      const loginResponse = await fetch("/api/login", {
+      const loginResponse = await webzonebwApiFetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: userEmail })
@@ -2819,6 +2834,9 @@ function initWebZoneERStudio() {
 
       if (loginResponse.ok) {
         const session = await loginResponse.json();
+        if (session.sessionId) {
+          sessionStorage.setItem(WEBZONEBW_SESSION_KEY, session.sessionId);
+        }
         return session;
       }
     } catch (error) {
@@ -2828,10 +2846,10 @@ function initWebZoneERStudio() {
   }
 
   // Direct PayPal checkout for FaceFilter purchases
-  async function launchFaceFilterPayPalCheckout(filterId, purchaseId) {
+  async function launchFaceFilterPayPalCheckout(filterId, purchaseId, paypalOrderId) {
     try {
       // Get PayPal client ID
-      const clientResponse = await fetch("/api/paypal/client-id");
+      const clientResponse = await webzonebwApiFetch("/api/paypal/client-id");
       if (!clientResponse.ok) {
         throw new Error("PayPal client ID not available");
       }
@@ -2844,10 +2862,10 @@ function initWebZoneERStudio() {
         const script = document.createElement('script');
         script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${clientData.currency}`;
         script.async = true;
-        script.onload = () => initializeFaceFilterPayPal(clientId, filterId, purchaseId);
+        script.onload = () => initializeFaceFilterPayPal(clientId, filterId, purchaseId, paypalOrderId);
         document.head.appendChild(script);
       } else {
-        initializeFaceFilterPayPal(clientId, filterId, purchaseId);
+        initializeFaceFilterPayPal(clientId, filterId, purchaseId, paypalOrderId);
       }
     } catch (error) {
       console.error("[WEBZONEBW] PayPal checkout initialization failed:", error);
@@ -2856,7 +2874,7 @@ function initWebZoneERStudio() {
   }
 
   // Initialize PayPal buttons for FaceFilter purchase
-  function initializeFaceFilterPayPal(clientId, filterId, purchaseId) {
+  function initializeFaceFilterPayPal(clientId, filterId, purchaseId, paypalOrderId) {
     if (!window.paypal || !window.paypal.Buttons) {
       console.error("[WEBZONEBW] PayPal SDK not loaded");
       showSwipeToast("❌", "PayPal checkout unavailable");
@@ -2911,7 +2929,7 @@ function initWebZoneERStudio() {
 
       createOrder: function() {
         console.log(`[WEBZONEBW] Creating PayPal order for FaceFilter purchase: ${purchaseId}`);
-        return purchaseId; // Use the FaceFilter purchase ID
+        return paypalOrderId;
       },
 
       onApprove: function(data) {
@@ -2926,7 +2944,7 @@ function initWebZoneERStudio() {
         `;
 
         // Capture the payment
-        fetch("/api/paypal/capture", {
+        webzonebwApiFetch("/api/paypal/capture", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -2988,7 +3006,7 @@ function initWebZoneERStudio() {
     try {
       const purchaseInfo = window.currentFaceFilterPurchase;
       if (purchaseInfo) {
-        const response = await fetch("/api/facefilter/refresh", {
+        const response = await webzonebwApiFetch("/api/facefilter/refresh", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -3015,7 +3033,7 @@ function initWebZoneERStudio() {
       // Initialize session if needed
       let session = null;
       try {
-        const sessionResponse = await fetch("/api/session");
+        const sessionResponse = await webzonebwApiFetch("/api/session");
         if (sessionResponse.ok) {
           session = await sessionResponse.json();
         }
@@ -3034,12 +3052,10 @@ function initWebZoneERStudio() {
         userId = session.userId;
         userEmail = session.userEmail;
       } else {
-        // Fallback for demo
-        userId = "demo-user";
-        userEmail = "demo@example.com";
+        return false;
       }
 
-      const response = await fetch("/api/facefilter/verify", {
+      const response = await webzonebwApiFetch("/api/facefilter/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -3465,7 +3481,7 @@ function initWebZoneERStudio() {
               throw new Error("Failed to create user session");
             }
 
-            const response = await fetch(`/api/facefilter/${filterId}/purchase`, {
+            const response = await webzonebwApiFetch(`/api/facefilter/${filterId}/purchase`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -3490,7 +3506,11 @@ function initWebZoneERStudio() {
             close();
 
             setTimeout(() => {
-              launchFaceFilterPayPalCheckout(filterId, purchaseData.purchaseId);
+              launchFaceFilterPayPalCheckout(
+                filterId,
+                purchaseData.purchaseId,
+                purchaseData.paypalOrderId
+              );
             }, 500);
 
           } catch (error) {
@@ -3503,7 +3523,7 @@ function initWebZoneERStudio() {
         });
       };
 
-      fetch(`/api/facefilter/${filterId}/offer`)
+      webzonebwApiFetch(`/api/facefilter/${filterId}/offer`)
         .then(response => response.json())
         .then(offerData => {
           if (offerData && offerData.success) {
@@ -3868,10 +3888,6 @@ function initWebZoneERStudio() {
       }
 
       selectFilter(filter);
-
-      effectCards.forEach((c) => c.classList.remove("active"));
-
-      card.classList.add("active");
     });
   });
 
@@ -8680,28 +8696,6 @@ function initWebZoneERStudio() {
   // ==========================================================
   // SMART CATEGORY FILTERING
   // ==========================================================
-
-  const smartCategoryPills = document.querySelectorAll(".smart-cat-btn");
-  
-  smartCategoryPills.forEach(pill => {
-    pill.addEventListener('click', function() {
-      // Remove active class from all pills
-      smartCategoryPills.forEach(p => p.classList.remove('active'));
-      
-      // Add active class to clicked pill
-      this.classList.add('active');
-      
-      // Get selected category
-      const category = this.dataset.smartCat;
-      activeSmartCategory = category;
-      
-      // Filter lens bubbles based on category
-      filterLensByCategory(category);
-      
-      // Update status text
-      updateSmartStatus(category);
-    });
-  });
 
   // Filter lens bubbles by category
   function filterLensByCategory(category) {
