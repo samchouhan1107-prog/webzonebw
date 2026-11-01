@@ -10,6 +10,17 @@
     <script src="js/consent-bootstrap.js"></script>
     <link rel="stylesheet" href="css/style.css?v=2.3.0">
     <link rel="stylesheet" href="css/responsive.css?v=2.3.0">
+    <style>
+        .privacy-controls { display: grid; gap: 12px; }
+        .privacy-choice { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 14px; border: 1px solid rgba(148,163,184,.2); border-radius: 10px; }
+        .privacy-choice small { display: block; color: #94a3b8; margin-top: 4px; }
+        .privacy-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+        .privacy-actions button { padding: 10px 16px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-weight: 600; }
+        .privacy-actions .primary { background: #38bdf8; color: #030712; }
+        .privacy-actions .secondary { background: transparent; color: #cbd5e1; border-color: rgba(148,163,184,.35); }
+        .privacy-actions .danger { background: transparent; color: #f87171; border-color: rgba(248,113,113,.4); }
+        .privacy-status { color: #7dd3fc; font-weight: 600; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -66,7 +77,23 @@
                 <p>Manage your privacy preferences and learn how WebZoneBW uses cookies and similar technologies.</p>
                 <section>
                     <h2>Your Privacy Choices</h2>
-                    <p>Optional cookies are controlled through your browser settings. Essential cookies remain active because they are required for the site to function.</p>
+                    <p>Choose which optional technologies may run. Essential cookies remain active because they are required for the site to function.</p>
+                    <p class="privacy-status" id="privacy-consent-status" role="status" aria-live="polite">No preference saved.</p>
+                    <div class="privacy-controls">
+                        <label class="privacy-choice">
+                            <span>Analytics<small>Helps us understand site usage.</small></span>
+                            <input type="checkbox" id="privacy-analytics">
+                        </label>
+                        <label class="privacy-choice">
+                            <span>Advertising<small>Supports relevant advertising services.</small></span>
+                            <input type="checkbox" id="privacy-advertising">
+                        </label>
+                    </div>
+                    <div class="privacy-actions">
+                        <button type="button" class="secondary" id="privacy-decline">Decline All</button>
+                        <button type="button" class="primary" id="privacy-save">Save Preferences</button>
+                        <button type="button" class="danger" id="privacy-revoke">Revoke All Consent</button>
+                    </div>
                 </section>
                 <section>
                     <h2>More Information</h2>
@@ -76,6 +103,95 @@
         </main>
     </div>
     <script defer src="js/script.js?v=2.3.0"></script>
-    <script defer src="js/cookie-utils.js?v=2.3.0"></script>
+    <script src="js/cookie-utils.js?v=2.3.0"></script>
+    <script>
+        (function () {
+            "use strict";
+
+            var cookie = window.WebZoneCookie;
+            var status = document.getElementById("privacy-consent-status");
+            var analytics = document.getElementById("privacy-analytics");
+            var advertising = document.getElementById("privacy-advertising");
+
+            function read(key) {
+                return cookie ? cookie.getNS("consent", key) : null;
+            }
+
+            function write(key, value) {
+                if (cookie) {
+                    cookie.setNS("consent", key, value, { days: 365 });
+                }
+            }
+
+            function updateGoogleConsent(categories) {
+                if (typeof window.gtag === "function") {
+                    window.gtag("consent", "update", {
+                        analytics_storage: categories.analytics ? "granted" : "denied",
+                        ad_storage: categories.advertising ? "granted" : "denied",
+                        ad_user_data: categories.advertising ? "granted" : "denied",
+                        ad_personalization: categories.advertising ? "granted" : "denied"
+                    });
+                }
+            }
+
+            function dispatch(statusValue, categories) {
+                window.dispatchEvent(new CustomEvent("webzonebw:cookie-consent", {
+                    detail: { status: statusValue, categories: categories, timestamp: Date.now() }
+                }));
+            }
+
+            function save(statusValue, categories, message) {
+                write("categories", JSON.stringify(categories));
+                write("status", statusValue);
+                write("version", "2");
+                updateGoogleConsent(categories);
+                dispatch(statusValue, categories);
+                status.textContent = message;
+            }
+
+            function load() {
+                var categories = { necessary: true, analytics: false, advertising: false };
+                var raw = read("categories");
+                if (raw) {
+                    try {
+                        categories = Object.assign(categories, JSON.parse(raw));
+                    } catch (error) {
+                        status.textContent = "Saved preference data could not be read.";
+                    }
+                }
+                analytics.checked = categories.analytics === true;
+                advertising.checked = categories.advertising === true;
+                if (read("status")) {
+                    status.textContent = "Current preference: " + read("status") + ".";
+                }
+            }
+
+            document.getElementById("privacy-save").addEventListener("click", function () {
+                save("custom", {
+                    necessary: true,
+                    analytics: analytics.checked,
+                    advertising: advertising.checked
+                }, "Preferences saved.");
+            });
+            document.getElementById("privacy-decline").addEventListener("click", function () {
+                analytics.checked = false;
+                advertising.checked = false;
+                save("declined", { necessary: true, analytics: false, advertising: false }, "Optional cookies declined.");
+            });
+            document.getElementById("privacy-revoke").addEventListener("click", function () {
+                analytics.checked = false;
+                advertising.checked = false;
+                if (cookie) {
+                    cookie.removeNS("consent", "categories");
+                    cookie.removeNS("consent", "status");
+                    cookie.removeNS("consent", "version");
+                }
+                updateGoogleConsent({ analytics: false, advertising: false });
+                dispatch("revoked", { necessary: true, analytics: false, advertising: false });
+                status.textContent = "All optional consent revoked.";
+            });
+            load();
+        }());
+    </script>
 </body>
 </html>
