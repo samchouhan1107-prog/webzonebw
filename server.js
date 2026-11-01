@@ -1103,6 +1103,43 @@ app.use("/er/assets", express.static(path.join(__dirname, "assets"), staticOptio
 app.use("/er/css", express.static(path.join(__dirname, "css"), staticOptions()));
 app.use("/er/js", express.static(path.join(__dirname, "js"), staticOptions()));
 
+// Never expose server-side source, deployment tooling, or private runtime data
+// through the public root static-file handler.
+const PRIVATE_STATIC_PATHS = new Set([
+    "/server.js",
+    "/paypal-routes.js",
+    "/package.json",
+    "/package-lock.json",
+    "/Dockerfile",
+    "/render.yaml",
+    "/.env",
+    "/.env.example",
+    "/.gitignore"
+]);
+
+app.use((req, res, next) => {
+    let requestPath;
+    try {
+        requestPath = decodeURIComponent((req.path || "").replace(/\\/g, "/"));
+    } catch (error) {
+        return res.status(400).type("text/plain").send("Invalid request path");
+    }
+    requestPath = path.posix.normalize(requestPath);
+    if (!requestPath.startsWith("/")) {
+        requestPath = `/${requestPath}`;
+    }
+    if (
+        PRIVATE_STATIC_PATHS.has(requestPath) ||
+        requestPath.startsWith("/scripts/") ||
+        requestPath.startsWith("/data/") ||
+        requestPath.startsWith("/certs/") ||
+        requestPath.startsWith("/.git/")
+    ) {
+        return res.status(404).type("text/plain").send("Not found");
+    }
+    return next();
+});
+
 // Serves Static files from Root directory
 app.use(express.static(__dirname, staticOptions()));
 
