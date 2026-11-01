@@ -617,6 +617,21 @@ html, body {
     background: var(--bg-body);
 }
 
+/* Standard sidebar shell for legacy content pages. */
+.legacy-sidebar-page > .container {
+    display: block;
+    width: calc(100% - 270px);
+    margin-left: 270px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .legacy-sidebar-page > .container {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
 
 /* ==========================================================
    04 — STANDARDIZED UNIFIED SIDEBAR

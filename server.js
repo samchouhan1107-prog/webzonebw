@@ -887,6 +887,41 @@ function isFeatureAvailableViaPromo(featureId, userPromoKeys = []) {
     return false;
 }
 
+// Public promotion status used by the ER Studio license UI.
+app.get("/api/halloween/status", (req, res) => {
+    res.status(200).json({
+        success: true,
+        promoActive: isHalloweenPromoActive(),
+        expiresAt: HALLOWEEN_PROMO_CONFIG.promoEnd.toISOString()
+    });
+});
+
+// Validate a promotion key without exposing the server-side key catalogue.
+app.post("/api/halloween/validate-promo", (req, res) => {
+    const promoKey = typeof req.body?.promoKey === "string"
+        ? req.body.promoKey.trim().toUpperCase()
+        : "";
+    const validation = validatePromoKey(promoKey);
+
+    if (!validation.valid) {
+        return res.status(200).json({
+            success: false,
+            valid: false,
+            reason: validation.reason
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        valid: true,
+        promo: {
+            name: validation.promo.name,
+            allowedFeatures: validation.promo.allowedFeatures,
+            expires: validation.expires.toISOString()
+        }
+    });
+});
+
 const ER_LICENSE_STORE = path.join(__dirname, "data", "licenses.json");
 
 const licenseStore = {
