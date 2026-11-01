@@ -489,7 +489,7 @@
                                     <div class="er-ownership-badge ${isOwned ? "owned" : "locked"}">
                                         ${isOwned ? "✅ OWNED & ACTIVE" : "🔒 LOCKED PREMIUM"}
                                     </div>
-                                    ${!isOwned ? `<button class="btn btn-primary" id="buyLensBtn" style="width:100%; margin-top:15px;">Purchase Lens ($5.99)</button>` : `<button class="btn btn-secondary" id="activateLensBtn" style="width:100%; margin-top:15px;">Launch in Live Studio</button>`}
+                                    ${!isOwned ? `<button class="btn btn-primary" id="buyLensBtn" style="width:100%; margin-top:15px;">Purchase Lens ($5.99)</button><button type="button" class="btn btn-link" id="fpActivateKeyBtn" style="width:100%; margin-top:8px; font-size:12px; color:var(--brand-cyan, #06b6d4); background:none; border:none; cursor:pointer; text-decoration:underline;">🔑 Already have a License Key or Promo Code?</button>` : `<button class="btn btn-secondary" id="activateLensBtn" style="width:100%; margin-top:15px;">Launch in Live Studio</button>`}
                                 </div>
                             </div>
 
@@ -538,6 +538,16 @@
                 window.WEBZONEBW_STUDIO_UI.openFeaturePackModal(lensId);
               },
             );
+          });
+        }
+
+        var fpKeyBtn = document.getElementById("fpActivateKeyBtn");
+        if (fpKeyBtn) {
+          fpKeyBtn.addEventListener("click", function () {
+            container.style.display = "none";
+            if (window.WEBZONEBW_LICENSE && typeof window.WEBZONEBW_LICENSE.openCheckout === "function") {
+              window.WEBZONEBW_LICENSE.openCheckout();
+            }
           });
         }
 
@@ -812,11 +822,36 @@
         });
       }
     },
+
+    // Updates the "✅ Included / Active" vs "🔒 Pro Pack" badges on the
+    // already-rendered marketplace hub cards in place, so a successful
+    // checkout unlocks a lens immediately without a full re-render/reload.
+    refreshHubOwnership: function () {
+      document.querySelectorAll(".er-hub-card[data-lens-id]").forEach(function (card) {
+        var lensId = card.getAttribute("data-lens-id");
+        var owned = window.WEBZONEBW_ENTITLEMENT_MANAGER.isLensOwned(lensId);
+        var statusEl = card.querySelector(".er-owner-status");
+        if (statusEl) {
+          statusEl.classList.toggle("status-owned", owned);
+          statusEl.classList.toggle("status-locked", !owned);
+          statusEl.textContent = owned ? "✅ Included / Active" : "🔒 Pro Pack · $5.99";
+        }
+      });
+    },
   };
 
   function initStudioPipeline() {
     window.WEBZONEBW_STUDIO_UI.renderHubSections();
     window.WEBZONEBW_STUDIO_UI.setupStudioControls();
+
+    if (
+      window.WEBZONEBW_LICENSE &&
+      typeof window.WEBZONEBW_LICENSE.onStateChange === "function"
+    ) {
+      window.WEBZONEBW_LICENSE.onStateChange(function () {
+        window.WEBZONEBW_STUDIO_UI.refreshHubOwnership();
+      });
+    }
   }
 
   if (document.readyState === "loading") {

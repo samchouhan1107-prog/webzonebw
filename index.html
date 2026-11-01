@@ -84,53 +84,16 @@
          PERFORMANCE — PRECONNECT HINTS
          ===================================================== -->
 
-    <link
-        rel="preconnect"
-        href="https://pagead2.googlesyndication.com"
-    >
 
     <link
         rel="preconnect"
         href="https://www.googletagmanager.com"
     >
 
-    <!-- =====================================================
-         GOOGLE ADSENSE
-         ===================================================== -->
 
-    <meta
-        name="google-adsense-account"
-        content="ca-pub-4823379856566931"
-    >
 
-    <!-- =====================================================
-         GOOGLE CONSENT MODE v2 — defaults (must precede gtag
-         and adsbygoogle so consent state is set before either
-         script initialises)
-         ===================================================== -->
+    <script src="js/consent-bootstrap.js"></script>
 
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag("consent", "default", {
-            analytics_storage:   "denied",
-            ad_storage:         "denied",
-            ad_user_data:       "denied",
-            ad_personalization: "denied",
-            wait_for_update:    500
-        });
-    </script>
-
-    <!-- AdSense loads AFTER consent defaults -->
-    <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4823379856566931"
-        crossorigin="anonymous">
-    </script>
 
     <!-- =====================================================
          OPEN GRAPH
@@ -865,25 +828,6 @@
         </section>
 
         <!-- =================================================
-             GOOGLE ADSENSE AD UNIT
-             ================================================= -->
-        <!-- Google AdSense Auto/Responsive Ad Unit -->
-        <section class="ad-section">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-4823379856566931"
-                 data-ad-slot="9847123490"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </section>
-
-        
-
-
-        <!-- =================================================
              WEBZONEBW ER STUDIO
              ================================================= -->
 
@@ -1202,36 +1146,17 @@
     }
 </script>
 
-<!-- =====================================================
-     SERVICE WORKER REGISTRATION
-     ===================================================== -->
-
 <script>
     if ("serviceWorker" in navigator) {
-
         window.addEventListener("load", () => {
-
-            navigator.serviceWorker
-                .register("/root/sw.js")
-                .then((registration) => {
-
-                    console.log(
-                        "[WEBZONEBW] Service Worker registered:",
-                        registration.scope
-                    );
-
-                })
-                .catch((error) => {
-
-                    console.log(
-                        "[WEBZONEBW] Service Worker registration skipped:",
-                        error.message
-                    );
-
-                });
-
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+                registrations
+                    .filter((registration) => registration.scope.endsWith("/root/"))
+                    .forEach((registration) => registration.unregister());
+            }).catch(() => {
+                // Service worker cleanup is best effort.
+            });
         });
-
     }
 </script>
 

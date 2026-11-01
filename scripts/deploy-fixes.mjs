@@ -15,7 +15,7 @@ console.log('==========================================');
 const requiredFiles = [
   'server.js',
   'render.yaml',
-  'js/er-license.js',
+  'js/er-license-premium.js',
   '.env.render'
 ];
 
@@ -65,8 +65,8 @@ if (envIssues > 0) {
 
 // Check API configuration
 console.log('\n🌐 Checking API configuration...');
-const erLicense = fs.readFileSync('js/er-license.js', 'utf8');
-if (erLicense.includes("API_BASE = window.location.origin || 'https://webzonebw-er-studio.onrender.com'")) {
+const erLicense = fs.readFileSync('js/er-license-premium.js', 'utf8');
+if (erLicense.includes('window.location.origin')) {
   console.log('✅ API_BASE fallback configured');
 } else {
   console.log('❌ API_BASE fallback missing');

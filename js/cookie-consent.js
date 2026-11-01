@@ -42,10 +42,17 @@
 
     var CK = window.WebZoneCookie;
 
+    /** Escape regex metacharacters so dynamic keys can't alter match semantics. */
+    function escapeRegExp(str) {
+        return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
     function cookieGet(key) {
         if (CK) return CK.getNS("consent", key);
+        // key is escaped via escapeRegExp() above, so it cannot alter match semantics.
         var m = document.cookie.match(
-            new RegExp("(^| )webzonebw_consent_" + key + "=([^;]+)")
+            // eslint-disable-next-line security-node/non-literal-reg-expr
+            new RegExp("(^| )webzonebw_consent_" + escapeRegExp(key) + "=([^;]+)")
         );
         return m ? decodeURIComponent(m[2]) : null;
     }

@@ -18,10 +18,17 @@
        INTERNAL HELPERS
        ---------------------------------------------------------- */
 
+    /** Escape regex metacharacters so dynamic names can't alter match semantics. */
+    function escapeRegExp(str) {
+        return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
     function rawGet(name) {
         if (!name) return null;
+        // name is escaped via escapeRegExp() above, so it cannot alter match semantics.
         var match = document.cookie.match(
-            new RegExp("(^| )" + name + "=([^;]*)")
+            // eslint-disable-next-line security-node/non-literal-reg-expr
+            new RegExp("(^| )" + escapeRegExp(name) + "=([^;]*)")
         );
         return match ? decodeURIComponent(match[2]) : null;
     }
