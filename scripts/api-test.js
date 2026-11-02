@@ -1,4 +1,4 @@
-﻿/* Production readiness API test for WEBZONEBW ER Studio endpoints (ESM). */
+/* Production readiness API test for WEBZONEBW ER Studio endpoints (ESM). */
 import http from "node:http";
 
 const BASE = process.env.BASE || "http://localhost:3000";
@@ -31,7 +31,7 @@ function req(method, path, { headers = {}, body } = {}) {
 }
 
 function check(name, cond, detail) {
-  console.log(`${cond ? "PASS" : "FAIL"}  ${name}${detail ? " â€” " + detail : ""}`);
+  console.log(`${cond ? "PASS" : "FAIL"}  ${name}${detail ? " — " + detail : ""}`);
   if (!cond) process.exitCode = 1;
 }
 
@@ -40,7 +40,7 @@ function check(name, cond, detail) {
   let r = await req("GET", "/api/health");
   check("GET /api/health returns 200", r.status === 200, `status=${r.status}`);
 
-  // 2. CORS preflight â€” allowed origin
+  // 2. CORS preflight — allowed origin
   r = await req("OPTIONS", "/api/license/verify", {
     headers: { Origin: "https://webzonebw.in", "Access-Control-Request-Method": "POST" },
   });
@@ -50,7 +50,7 @@ function check(name, cond, detail) {
     `acao=${r.headers["access-control-allow-origin"]}`,
   );
 
-  // 3. CORS preflight â€” disallowed origin must NOT be granted
+  // 3. CORS preflight — disallowed origin must NOT be granted
   r = await req("OPTIONS", "/api/license/verify", {
     headers: { Origin: "https://evil.example.com", "Access-Control-Request-Method": "POST" },
   });
@@ -60,7 +60,7 @@ function check(name, cond, detail) {
     `acao=${r.headers["access-control-allow-origin"] || "(none)"}`,
   );
 
-  // 4. License verify with bogus key â†’ fail-closed
+  // 4. License verify with bogus key → fail-closed
   r = await req("POST", "/api/license/verify", {
     headers: { Origin: "https://webzonebw.in" },
     body: { licenseKey: "TOTALLY-BOGUS-KEY" },
@@ -68,7 +68,7 @@ function check(name, cond, detail) {
   let j = JSON.parse(r.body || "{}");
   check("License verify bogus key returns valid=false (fail-closed)", j.valid === false, r.body);
 
-  // 5a. PayPal create-order with NO credentials â†’ PAYMENT_NOT_CONFIGURED (fail-closed)
+  // 5a. PayPal create-order with NO credentials → PAYMENT_NOT_CONFIGURED (fail-closed)
   r = await req("POST", "/api/paypal/create-order", {
     headers: { Origin: "https://webzonebw.in" },
     body: { planId: "er-studio-premium", customerEmail: "t@e.com" },
@@ -80,7 +80,7 @@ function check(name, cond, detail) {
     r.body,
   );
 
-  // 5b. PayPal client-id endpoint with no credentials â†’ PAYMENT_NOT_CONFIGURED
+  // 5b. PayPal client-id endpoint with no credentials → PAYMENT_NOT_CONFIGURED
   r = await req("GET", "/api/paypal/client-id", {
     headers: { Origin: "https://webzonebw.in" },
   });
@@ -101,7 +101,7 @@ function check(name, cond, detail) {
     r.body,
   );
 
-  // 6. License activate with unknown order â†’ must fail
+  // 6. License activate with unknown order → must fail
   r = await req("POST", "/api/license/activate", {
     headers: { Origin: "https://webzonebw.in" },
     body: { orderId: "FAKE-ORDER-1", email: "t@e.com" },
@@ -109,7 +109,7 @@ function check(name, cond, detail) {
   j = JSON.parse(r.body || "{}");
   check("License activate unknown order fails (no fake license)", j.success === false, r.body);
 
-  // 7. PayPal webhook with bad/missing signature â†’ must be rejected
+  // 7. PayPal webhook with bad/missing signature → must be rejected
   r = await req("POST", "/api/paypal/webhook", {
     headers: { Origin: "https://www.paypal.com", "paypal-transmission-sig": "bad-sig" },
     body: { event_type: "PAYMENT.CAPTURE.COMPLETED" },
