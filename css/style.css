@@ -5161,7 +5161,9 @@ body.light-mode .cam-floating-badge {
     gap: 10px;
 }
 
-.header-icon-btn {
+/* Scoped to the ER Studio header only — the generic .header-icon-btn
+   (section 09) serves all other pages via theme tokens. */
+.er-top-header .header-icon-btn {
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -5176,7 +5178,7 @@ body.light-mode .cam-floating-badge {
     transition: all 0.2s ease;
 }
 
-.header-icon-btn:hover {
+.er-top-header .header-icon-btn:hover {
     background: #1e293b;
     color: #ffffff;
     border-color: #d97706;
