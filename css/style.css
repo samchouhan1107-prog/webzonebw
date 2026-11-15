@@ -87,19 +87,20 @@ button {
 ========================================================== */
 
 :root {
-    /* Cosmic Deep-Space Theme Tokens */
+    color-scheme: dark;
+    /* Cosmic Deep-Space Theme Tokens — Upgraded Dark Mode (project default) */
     --brand-cyan: #38bdf8;
     --brand-cyan-hover: #0ea5e9;
     --brand-cyan-muted: #0284c7;
-    --brand-cyan-glow: rgba(56, 189, 248, 0.2);
+    --brand-cyan-glow: rgba(56, 189, 248, 0.25);
     --brand-purple: #8b5cf6;
     --brand-purple-hover: #a78bfa;
-    --brand-purple-glow: rgba(139, 92, 246, 0.18);
+    --brand-purple-glow: rgba(139, 92, 246, 0.22);
     --brand-gold: #d4af37;
     --brand-gold-hover: #e6c860;
-    --brand-gold-glow: rgba(212, 175, 55, 0.18);
+    --brand-gold-glow: rgba(212, 175, 55, 0.22);
     --brand-green: #10b981;
-    --brand-green-glow: rgba(16, 185, 129, 0.18);
+    --brand-green-glow: rgba(16, 185, 129, 0.22);
     --brand-red: #ef4444;
 
     /* Theme Transition Dynamics */
@@ -114,20 +115,20 @@ button {
     --radius-xl: 24px;
     --radius-full: 9999px;
 
-    /* Deep-Space Backgrounds */
+    /* Deep-Space Backgrounds (Dark Default) */
     --bg-deep: #030712;
     --bg-dark: #0a0e1a;
     --bg-body: linear-gradient(180deg, #030712 0%, #0a0e1a 35%, #0f172a 100%);
     --bg-sidebar: #0a0e1a;
-    --bg-overlay: rgba(3, 7, 18, 0.85);
-    --bg-starfield: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.15), transparent),
-                    radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.1), transparent),
-                    radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.12), transparent),
-                    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.08), transparent),
-                    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.1), transparent),
-                    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.07), transparent);
+    --bg-overlay: rgba(3, 7, 18, 0.88);
+    --bg-starfield: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.18), transparent),
+                    radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.13), transparent),
+                    radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.15), transparent),
+                    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.1), transparent),
+                    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.13), transparent),
+                    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.09), transparent);
 
-    /* Surfaces & Cards */
+    /* Surfaces & Cards (Dark Default) */
     --surface: #0f172a;
     --surface-card: #0f172a;
     --surface-card-hover: #1e293b;
@@ -136,13 +137,14 @@ button {
     --surface-card-elevated: #1e293b;
     --surface-input: #0f172a;
     --surface-input-focus: #1e293b;
-    --surface-badge: rgba(56, 189, 248, 0.1);
-    --surface-badge-gold: rgba(212, 175, 55, 0.1);
+    --surface-badge: rgba(56, 189, 248, 0.12);
+    --surface-badge-gold: rgba(212, 175, 55, 0.12);
     --surface-modal: #0f172a;
-    --surface-highlight: rgba(56, 189, 248, 0.08);
+    --surface-highlight: rgba(56, 189, 248, 0.1);
     --surface-tooltip: #1e293b;
+    --surface-raised: #1e293b;
 
-    /* Text & Typography */
+    /* Text & Typography (Dark Default) */
     --text-main: #f1f5f9;
     --text-heading: #f8fafc;
     --text-secondary: #cbd5e1;
@@ -153,33 +155,56 @@ button {
     --text-link: #38bdf8;
     --text-link-hover: #7dd3fc;
 
-    /* Borders & Outlines */
+    /* Borders & Outlines (Dark Default) */
     --border: #1e293b;
     --border-light: #334155;
     --border-color: #1e293b;
     --border-color-light: #334155;
     --border-color-hover: #38bdf8;
     --border-color-focus: #38bdf8;
-    --border-color-gold: rgba(212, 175, 55, 0.3);
+    --border-color-gold: rgba(212, 175, 55, 0.35);
 
-    /* Accent / Brand */
+    /* Accent / Brand (Dark Default) */
     --accent: #38bdf8;
-    --accent-soft: rgba(56, 189, 248, 0.12);
+    --accent-soft: rgba(56, 189, 248, 0.15);
     --accent-hover: #7dd3fc;
 
-    /* Status */
+    /* Status (Dark Default) */
     --success: #10b981;
-    --success-soft: rgba(16, 185, 129, 0.18);
+    --success-soft: rgba(16, 185, 129, 0.22);
     --danger: #ef4444;
-    --danger-soft: rgba(239, 68, 68, 0.18);
+    --danger-soft: rgba(239, 68, 68, 0.22);
     --warning: #f59e0b;
 
-    /* Shadows & Depth */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
-    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
-    --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.5);
-    --shadow-glow-cyan: 0 0 20px rgba(56, 189, 248, 0.15);
+    /* Shadows & Depth (Dark Default) */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.55);
+    --shadow-glow-cyan: 0 0 24px rgba(56, 189, 248, 0.18);
+
+    /* ==========================================================
+       ER STUDIO LAVA THEME BRIDGE — Volcanic tokens kept alive
+       These variables anchor the ER Studio lava (volcanic orange/amber)
+       theme so it survives dark/light switching across the whole project.
+       Loaded in :root (dark) and re-declared in light theme below.
+       ========================================================== */
+    --lava-primary: #ff6b6b;
+    --lava-secondary: #4ecdc4;
+    --lava-accent: #ffd700;
+    --lava-deep: #030712;
+    --lava-glow: 0 0 24px rgba(255, 107, 26, 0.45);
+    --lava-glow-soft: rgba(255, 107, 26, 0.18);
+    --lava-border: rgba(255, 255, 255, 0.2);
+    --lava-bg: rgba(255, 255, 255, 0.08);
+    --lava-hover-bg: rgba(255, 255, 255, 0.12);
+    --lava-active-bg: rgba(255, 107, 26, 0.3);
+    --lava-text: rgba(255, 255, 255, 0.92);
+    --lava-text-secondary: rgba(255, 255, 255, 0.72);
+    --lava-gradient: linear-gradient(135deg, var(--lava-primary), var(--lava-secondary));
+    --lava-orange: #ff6b1a;
+    --lava-amber: #ffb700;
+    --lava-ember: rgba(255, 107, 26, 0.6);
 
     /* Legacy Backward Compatibility aliases */
     --accent-purple: var(--brand-purple);
@@ -191,6 +216,7 @@ button {
    ========================================================== */
 :root[data-theme="light"],
 body.light-mode {
+    color-scheme: light;
     /* Cosmic Light Mode - Soft daylight canvas */
     --bg-deep: #ffffff;
     --bg-dark: #f8fafc;
@@ -211,6 +237,7 @@ body.light-mode {
     --surface-modal: #ffffff;
     --surface-highlight: #e0e0e0;
     --surface-tooltip: #1a1a1a;
+    --surface-raised: #ffffff;
 
     --text-main: #333333;
     --text-heading: #1a1a1a;
@@ -243,6 +270,47 @@ body.light-mode {
     --shadow-card: 0 2px 12px rgba(15, 23, 42, 0.05);
     --shadow-elevated: 0 6px 20px rgba(15, 23, 42, 0.08);
     --shadow-glow-cyan: 0 0 14px rgba(2, 132, 199, 0.16);
+
+    /* ==========================================================
+       ER STUDIO LAVA THEME BRIDGE — Light-mode volcanic tokens
+       Softer volcanic palette that keeps the ER Studio lava theme
+       alive and readable on the light canvas.
+       ========================================================== */
+    --lava-primary: #e85d4f;
+    --lava-secondary: #38b2ac;
+    --lava-accent: #eab308;
+    --lava-deep: #f8fafc;
+    --lava-glow: 0 0 18px rgba(255, 107, 26, 0.25);
+    --lava-glow-soft: rgba(255, 107, 26, 0.12);
+    --lava-border: rgba(0, 0, 0, 0.12);
+    --lava-bg: rgba(255, 107, 26, 0.06);
+    --lava-hover-bg: rgba(255, 107, 26, 0.1);
+    --lava-active-bg: rgba(255, 107, 26, 0.18);
+    --lava-text: #1f2937;
+    --lava-text-secondary: #4b5563;
+    --lava-gradient: linear-gradient(135deg, var(--lava-primary), var(--lava-secondary));
+    --lava-orange: #e85d4f;
+    --lava-amber: #d97706;
+    --lava-ember: rgba(255, 107, 26, 0.4);
+}
+
+/* ==========================================================
+   SYSTEM PREFERENCE — Automatic dark/light mode
+   Honors the OS color-scheme when no theme is manually set.
+   Dark is the project default; light follows system preference.
+   ========================================================== */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]),
+    body:not(.dark-mode):not(.er-theme-dark) {
+        color-scheme: light;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]),
+    body:not(.light-mode):not(.er-theme-light) {
+        color-scheme: dark;
+    }
 }
 
 /* ==========================================================
