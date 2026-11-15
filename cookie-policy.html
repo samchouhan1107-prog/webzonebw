@@ -33,12 +33,22 @@
     <link rel="canonical"
           href="https://webzonebw.in/cookie-policy.html">
 
-    <!-- Consent Mode v2 defaults -->
+    <script src="js/consent-bootstrap.js"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("consent", "default", {
+            analytics_storage:   "denied",
+            ad_storage:         "denied",
+            ad_user_data:       "denied",
+            ad_personalization: "denied",
+            wait_for_update:    500
+        });
+    </script>
 
     <!-- =====================================================
          PERFORMANCE — PRECONNECT HINTS
          ===================================================== -->
-
 
     <link rel="preconnect"
           href="https://www.googletagmanager.com">
@@ -92,18 +102,390 @@
          GOOGLE ANALYTICS — GA4
          ===================================================== -->
 
-    <script src="js/consent-bootstrap.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFZ54Z2997"></script>
-    <link rel="stylesheet" href="css/style.css?v=2.3.0">
-    <link rel="stylesheet" href="css/responsive.css?v=2.3.0">
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZFZ54Z2997');
+    </script>
+
+    <!-- =====================================================
+         MAIN STYLESHEET & RESPONSIVE
+         ===================================================== -->
+
+    <link rel="stylesheet"
+          href="css/style.css?v=2.3.0">
+    <link rel="stylesheet"
+          href="css/responsive.css?v=2.3.0">
+
+    <!-- =====================================================
+         STRUCTURED DATA — COOKIE POLICY
+         ===================================================== -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://webzonebw.in/cookie-policy.html#webpage",
+        "url": "https://webzonebw.in/cookie-policy.html",
+        "name": "Cookie Policy | WebZoneBW",
+        "description": "Cookie Policy for WebZoneBW explaining what cookies are used, their purpose, duration, and how to manage your cookie preferences.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://webzonebw.in/#website",
+            "name": "WEBZONEBW",
+            "url": "https://webzonebw.in/"
+        },
+        "about": {
+            "@type": "Organization",
+            "@id": "https://webzonebw.in/#organization",
+            "name": "WEBZONEBW",
+            "url": "https://webzonebw.in/"
+        },
+        "inLanguage": "en"
+    }
+    </script>
 </head>
 
-<body class="legacy-sidebar-page">
-<div class="mobile-nav-bar"><button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle sidebar navigation" aria-controls="mainSidebar" aria-expanded="false"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button><div class="mobile-brand-title"><span class="gradient-text">WEBZONEBW</span></div></div>
-<aside class="sidebar" id="mainSidebar" aria-label="Website sidebar"><div class="logo"><a href="index.html" aria-label="WEBZONEBW Home" class="brand-logo-link"><img src="assets/logo.png" alt="WEBZONEBW Logo" class="brand-logo-img"><div class="brand-name-group"><span class="brand-title">WEBZONEBW</span><span class="brand-sub">IT SUPPORT • SYSTEMS • LAB</span></div></a></div><nav class="sidebar-nav" aria-label="Sidebar navigation links"><ul><li><a href="index.html">🏠 Dashboard</a></li><li><a href="er/index.html">🔮 WebZoneBW-ER Studio</a></li><li><a href="projects.html">💼 Projects</a></li><li><a href="resume.html">📄 Resume</a></li><li><a href="blog.html">📝 Blog</a></li><li><a href="soundbox.html">🎵 Sound Box</a></li><li><a href="about.html">👤 About Us</a></li><li><a href="contact.html">✉️ Contact Us</a></li><li><a href="privacy.html">🔒 Privacy Policy</a></li><li><a href="cookie-policy.html" class="active" aria-current="page">🍪 Cookie Policy</a></li><li><a href="terms.html">📋 Terms of Service</a></li></ul></nav><div class="sidebar-theme-toggle-row"><div class="theme-label-group"><span id="themeModeIcon" aria-hidden="true">🌙</span><span id="themeModeText">Dark Mode</span></div><label class="switch-toggle" for="themeToggleSwitch"><input type="checkbox" id="themeToggleSwitch" aria-label="Toggle dark or light theme"><span class="toggle-slider" aria-hidden="true"></span></label></div></aside>
+<body>
 
 <div class="container">
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
+    <div class="mobile-nav-bar">
+
+        <button
+            type="button"
+            class="hamburger-btn"
+            id="sidebarToggleBtn"
+            aria-label="Toggle Sidebar Navigation"
+            aria-controls="mainSidebar"
+            aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+        <div class="mobile-brand-title">
+            <span class="gradient-text">WEBZONEBW</span>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STANDARDIZED SIDEBAR
+         ===================================================== -->
+
+    <aside
+        class="sidebar"
+        id="mainSidebar"
+        aria-label="Website sidebar">
+
+        <!-- Brand -->
+
+        <div class="logo">
+
+            <a
+                href="index.html"
+                aria-label="WebZoneBW Home"
+                class="brand-logo-link">
+
+                <img
+                    src="assets/logo.png"
+                    alt="WebZoneBW Logo"
+                    class="brand-logo-img">
+
+                <div class="brand-name-group">
+
+                    <span class="brand-title">
+                        WEBZONEBW
+                    </span>
+
+                    <span class="brand-sub">
+                        IT SUPPORT • SYSTEMS • LAB
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Sidebar Navigation">
+
+            <ul>
+
+                <li>
+
+                    <a href="index.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🏠
+                        </span>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="er/index.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🔮
+                        </span>
+
+                        WebZoneBW-ER Studio
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="projects.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            💼
+                        </span>
+
+                        Projects
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="resume.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📄
+                        </span>
+
+                        Resume
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="blog.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📝
+                        </span>
+
+                        Blog
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="soundbox.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🎵
+                        </span>
+
+                        Sound Box
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="about.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            👤
+                        </span>
+
+                        About Us
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="contact.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            ✉️
+                        </span>
+
+                        Contact Us
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="privacy.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🔒
+                        </span>
+
+                        Privacy Policy
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="cookie-policy.html"
+                       class="active"
+                       aria-current="page">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🍪
+                        </span>
+
+                        Cookie Policy
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="privacy-center.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            🎛️
+                        </span>
+
+                        Privacy Center
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="terms.html">
+
+                        <span
+                            class="nav-icon"
+                            aria-hidden="true">
+                            📋
+                        </span>
+
+                        Terms of Service
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+
+        <!-- =================================================
+             DARK MODE TOGGLE
+             ================================================= -->
+
+        <div class="sidebar-theme-toggle-row">
+
+            <div class="theme-label-group">
+
+                <span
+                    id="themeModeIcon"
+                    aria-hidden="true">
+                    🌙
+                </span>
+
+                <span id="themeModeText">
+                    Dark Mode
+                </span>
+
+            </div>
+
+
+            <label
+                class="switch-toggle"
+                for="themeToggleSwitch">
+
+                <input
+                    type="checkbox"
+                    id="themeToggleSwitch"
+                    checked
+                    aria-label="Toggle Dark Mode">
+
+                <span class="toggle-slider"></span>
+
+            </label>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content legal-page" id="main-content">
 
         <!-- =================================================
              PAGE HEADER
@@ -125,13 +507,46 @@
 
             <div class="header-utilities">
 
-                <a href="privacy-center.html" class="header-icon-btn" title="Open Privacy Center" aria-label="Open Privacy Center">
-                    <span aria-hidden="true">🔒</span>
+                <a
+                    href="er/index.html"
+                    class="header-icon-btn"
+                    title="ER Studio"
+                    aria-label="ER Studio">
+
+                    🔮
+
                 </a>
+
+                <a
+                    href="privacy-center.html"
+                    class="header-icon-btn"
+                    title="Open Privacy Center"
+                    aria-label="Open Privacy Center">
+
+                    🔒
+
+                </a>
+
+                <span class="header-badge">
+                    Legal 🍪
+                </span>
 
             </div>
 
         </header>
+
+
+        <!-- =================================================
+             POLICY DATES
+             ================================================= -->
+
+        <section class="featured-card">
+
+            <p style="margin: 0; font-size: 0.95rem; color: var(--text-secondary);">
+                <strong>Effective Date:</strong> January 15, 2026 &nbsp;|&nbsp; <strong>Last Updated:</strong> January 15, 2026
+            </p>
+
+        </section>
 
         <!-- =================================================
              TABLE OF CONTENTS
@@ -574,14 +989,26 @@
                 time with granular category toggles.
             </p>
 
-            <a
-                href="privacy-center.html"
-                class="btn">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;">
+                <a
+                    href="privacy-center.html"
+                    class="btn">
 
-                <span aria-hidden="true">🎛️</span>
-                Open Privacy Center
+                    <span aria-hidden="true">🎛️</span>
+                    Open Privacy Center
 
-            </a>
+                </a>
+
+                <button
+                    type="button"
+                    class="btn wbc-reopen"
+                    id="openCookieBannerBtn">
+
+                    <span aria-hidden="true">🍪</span>
+                    Cookie Settings
+
+                </button>
+            </div>
 
             <h3>Cookie Banner</h3>
 
