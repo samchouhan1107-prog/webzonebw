@@ -193,8 +193,14 @@
                                     </div>
                                 </div>
                                 <div class="perm-alert-actions">
-                                    <button type="button" class="btn perm-alert-allow" id="permAllowBtn">
-                                        Allow Camera Access
+                                    <button type="button" class="btn perm-path-btn perm-path-camera" id="permAllowBtn">
+                                        <span aria-hidden="true">📷</span> Start Camera
+                                    </button>
+                                    <button type="button" class="btn perm-path-btn perm-path-upload" id="permUploadBtn">
+                                        <span aria-hidden="true">📁</span> Upload Photo
+                                    </button>
+                                    <button type="button" class="btn perm-path-btn perm-path-demo" id="permDemoBtn">
+                                        <span aria-hidden="true">🎭</span> Explore Test Mode
                                     </button>
                                     <button type="button" class="btn perm-alert-dismiss" id="permDismissBtn">
                                         Maybe Later
@@ -243,6 +249,11 @@
                             <span id="recordVideoText">Record Video</span>
                         </button>
                         
+                        <button type="button" class="er-action-pill-btn" id="testModeBtn" title="Explore Test Mode with sample images">
+                            <span aria-hidden="true">🎭</span>
+                            <span>Test Mode</span>
+                        </button>
+                        
                         <input type="file" id="fileInput" accept="image/*" style="display:none;" aria-label="Upload an image">
                         
                     </div>
@@ -273,6 +284,10 @@
                     
                     <div class="effects-panel-header">
                         <div class="panel-title-group">
+                            <button type="button" class="panel-back-btn" id="backToCameraBtn" aria-label="Return to Live Camera or Uploaded Photo">
+                                <span aria-hidden="true">←</span>
+                                <span>Back to Camera</span>
+                            </button>
                             <span class="panel-icon">🌟</span>
                             <h2>
                                 <span class="text-white">WEBZONEBW-</span>
@@ -286,10 +301,13 @@
                     
                     <div class="effects-search-wrap">
                         <span class="search-icon" aria-hidden="true">🔍</span>
-                        <input type="text" id="effectsSearchInput" class="effects-search-input" placeholder="Search effects..." aria-label="Search effects">
+                        <input type="text" id="effectsSearchInput" class="effects-search-input" placeholder="Search effects by name..." aria-label="Search effects by name" autocomplete="off">
+                        <button type="button" class="search-clear-btn" id="effectsSearchClear" aria-label="Clear search" title="Clear search" style="display:none;">
+                            ✕
+                        </button>
                     </div>
                     
-                    <!-- Elite Premium Tabs -->
+                    <!-- Elite Unified Category Pills -->
                     <div class="er-filter-section-heading">COLLECTION</div>
                     <div class="smart-inventory-category-pills polished-tabs-container" id="smartCategoryPills" role="tablist" aria-label="Smart Filter Inventory Categories">
                         
@@ -301,7 +319,7 @@
                         
                         <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="face" title="Face-tracked ER lenses">
                             <span class="tab-icon">👤</span>
-                            <span class="tab-label">Face ER</span>
+                            <span class="tab-label">Face</span>
                             <span class="tab-count">12</span>
                         </button>
                         
@@ -323,9 +341,45 @@
                             <span class="tab-count">4</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn premium-tab-btn polished-tab" data-smart-cat="premium" title="Premium lenses unlocked with the $5.99 USD ER Studio license">
-                            <span class="tab-icon">💎</span>
-                            <span class="tab-label">Premium</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="horror" title="Horror and Thriller Effects">
+                            <span class="tab-icon">🎃</span>
+                            <span class="tab-label">Horror</span>
+                            <span class="tab-count">6</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="witch" title="Witchcraft & Curses">
+                            <span class="tab-icon">🔮</span>
+                            <span class="tab-label">Witch</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="zombie" title="Zombie Virus Effects">
+                            <span class="tab-icon">🧟</span>
+                            <span class="tab-label">Zombie</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="ghost" title="Spectral Phantoms">
+                            <span class="tab-icon">👻</span>
+                            <span class="tab-label">Ghost</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="monster" title="Beasts & Ghouls">
+                            <span class="tab-icon">👹</span>
+                            <span class="tab-label">Monster</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="cinema" title="Cinema Horror FX">
+                            <span class="tab-icon">🎬</span>
+                            <span class="tab-label">Cinema</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn premium-tab-btn polished-tab" data-smart-cat="experimental" title="Advanced FX unlocked with the $5.99 USD ER Studio license">
+                            <span class="tab-icon">⚡</span>
+                            <span class="tab-label">Experimental</span>
                             <span class="tab-badge">PRO</span>
                         </button>
                         
@@ -370,7 +424,7 @@
                         <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn">$5.99 Upgrade</button>
                     </div>
                     
-                    <!-- Elite Effects Category Pills -->
+                    <!-- Elite Unified Effect Category Pills -->
                     <div class="er-filter-section-heading">CATEGORY</div>
                     <div class="effects-category-pills polished-tabs" role="tablist" aria-label="Effect Categories">
                         
@@ -384,6 +438,12 @@
                             <span class="tab-icon">👤</span>
                             <span class="tab-label">Face</span>
                             <span class="tab-count">12</span>
+                        </button>
+                        
+                        <button type="button" class="cat-pill polished-tab" data-cat="scene" title="Full-Frame Scene Shaders">
+                            <span class="tab-icon">🌍</span>
+                            <span class="tab-label">Scene</span>
+                            <span class="tab-count">8</span>
                         </button>
                         
                         <button type="button" class="cat-pill polished-tab" data-cat="pose" title="Body/pose-reactive Halloween effects">

@@ -91,6 +91,23 @@ function initWebZoneERStudio() {
   const filterBtns = [];
   const tabBtns = [];
   const snapshotModal = document.getElementById("snapshotModal");
+
+  // ==========================================================
+  // TEST MODE / EXPLORE SAMPLE IMAGES
+  // ==========================================================
+
+  const testModeBtn = document.getElementById("testModeBtn");
+
+  if (testModeBtn) {
+    testModeBtn.addEventListener("click", () => {
+      // Highlight Test Mode as an equally clear entry point
+      setHighlightStep(3);
+      setTimeout(() => {
+        startDemoMode();
+      }, 150);
+    });
+  }
+
   const snapshotImg = document.getElementById("snapshotImg");
   const downloadLink = document.getElementById("downloadSnapshotBtn");
   const closeSnapBtn = document.getElementById("closeSnapshotBtn");
@@ -4007,6 +4024,24 @@ function initWebZoneERStudio() {
         }
       });
     });
+
+    // Search clear button
+    const effectsSearchClear = document.getElementById("effectsSearchClear");
+    if (effectsSearchClear && effectsSearchInput) {
+      effectsSearchClear.addEventListener("click", () => {
+        effectsSearchInput.value = "";
+        effectsSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        effectsSearchInput.focus();
+      });
+    }
+
+    // Show/hide clear button based on input value
+    effectsSearchInput.addEventListener("input", () => {
+      if (effectsSearchClear) {
+        effectsSearchClear.style.display =
+          effectsSearchInput.value.trim().length > 0 ? "inline-block" : "none";
+      }
+    });
   }
 
   // ==========================================================
@@ -4231,6 +4266,33 @@ function initWebZoneERStudio() {
       if (window.innerWidth <= 1199) {
         effectsPanel.style.display = "none";
         effectsPanel.classList.remove("mobile-overlay");
+      }
+    });
+  }
+
+  // ==========================================================
+  // BACK TO CAMERA / UPLOADED PHOTO
+  // ==========================================================
+
+  const backToCameraBtn = document.getElementById("backToCameraBtn");
+
+  if (backToCameraBtn && effectsPanel) {
+    backToCameraBtn.addEventListener("click", () => {
+      // Return to the active camera or uploaded photo view
+      effectsPanel.style.display = "none";
+      effectsPanel.classList.remove("mobile-overlay");
+
+      // Ensure the camera/video/canvas is visible
+      if (video) {
+        video.style.display = "block";
+      }
+      if (canvas) {
+        canvas.style.display = "block";
+      }
+      if (capturePhotoText) {
+        capturePhotoText.textContent = mediaStream || isDemoMode || studioMode === "upload"
+          ? "Capture Photo"
+          : "Start Camera";
       }
     });
   }
@@ -5194,6 +5256,22 @@ function initWebZoneERStudio() {
       if (snapshotModal) {
         snapshotModal.style.display = "none";
       }
+    });
+  }
+
+  // ==========================================================
+  // TEST MODE / EXPLORE SAMPLE IMAGES
+  // ==========================================================
+
+  const testModeBtn = document.getElementById("testModeBtn");
+
+  if (testModeBtn) {
+    testModeBtn.addEventListener("click", () => {
+      // Highlight Test Mode as an equally clear entry point
+      setHighlightStep(3);
+      setTimeout(() => {
+        startDemoMode();
+      }, 150);
     });
   }
 

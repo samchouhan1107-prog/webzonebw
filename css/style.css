@@ -87,20 +87,19 @@ button {
 ========================================================== */
 
 :root {
-    color-scheme: dark;
-    /* Cosmic Deep-Space Theme Tokens — Upgraded Dark Mode (project default) */
+    /* Cosmic Deep-Space Theme Tokens */
     --brand-cyan: #38bdf8;
     --brand-cyan-hover: #0ea5e9;
     --brand-cyan-muted: #0284c7;
-    --brand-cyan-glow: rgba(56, 189, 248, 0.25);
+    --brand-cyan-glow: rgba(56, 189, 248, 0.2);
     --brand-purple: #8b5cf6;
     --brand-purple-hover: #a78bfa;
-    --brand-purple-glow: rgba(139, 92, 246, 0.22);
+    --brand-purple-glow: rgba(139, 92, 246, 0.18);
     --brand-gold: #d4af37;
     --brand-gold-hover: #e6c860;
-    --brand-gold-glow: rgba(212, 175, 55, 0.22);
+    --brand-gold-glow: rgba(212, 175, 55, 0.18);
     --brand-green: #10b981;
-    --brand-green-glow: rgba(16, 185, 129, 0.22);
+    --brand-green-glow: rgba(16, 185, 129, 0.18);
     --brand-red: #ef4444;
 
     /* Theme Transition Dynamics */
@@ -115,20 +114,20 @@ button {
     --radius-xl: 24px;
     --radius-full: 9999px;
 
-    /* Deep-Space Backgrounds (Dark Default) */
+    /* Deep-Space Backgrounds */
     --bg-deep: #030712;
     --bg-dark: #0a0e1a;
     --bg-body: linear-gradient(180deg, #030712 0%, #0a0e1a 35%, #0f172a 100%);
     --bg-sidebar: #0a0e1a;
-    --bg-overlay: rgba(3, 7, 18, 0.88);
-    --bg-starfield: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.18), transparent),
-                    radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.13), transparent),
-                    radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.15), transparent),
-                    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.1), transparent),
-                    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.13), transparent),
-                    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.09), transparent);
+    --bg-overlay: rgba(3, 7, 18, 0.85);
+    --bg-starfield: radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.15), transparent),
+                    radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.1), transparent),
+                    radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.12), transparent),
+                    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.08), transparent),
+                    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.1), transparent),
+                    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.07), transparent);
 
-    /* Surfaces & Cards (Dark Default) */
+    /* Surfaces & Cards */
     --surface: #0f172a;
     --surface-card: #0f172a;
     --surface-card-hover: #1e293b;
@@ -137,14 +136,13 @@ button {
     --surface-card-elevated: #1e293b;
     --surface-input: #0f172a;
     --surface-input-focus: #1e293b;
-    --surface-badge: rgba(56, 189, 248, 0.12);
-    --surface-badge-gold: rgba(212, 175, 55, 0.12);
+    --surface-badge: rgba(56, 189, 248, 0.1);
+    --surface-badge-gold: rgba(212, 175, 55, 0.1);
     --surface-modal: #0f172a;
-    --surface-highlight: rgba(56, 189, 248, 0.1);
+    --surface-highlight: rgba(56, 189, 248, 0.08);
     --surface-tooltip: #1e293b;
-    --surface-raised: #1e293b;
 
-    /* Text & Typography (Dark Default) */
+    /* Text & Typography */
     --text-main: #f1f5f9;
     --text-heading: #f8fafc;
     --text-secondary: #cbd5e1;
@@ -155,56 +153,33 @@ button {
     --text-link: #38bdf8;
     --text-link-hover: #7dd3fc;
 
-    /* Borders & Outlines (Dark Default) */
+    /* Borders & Outlines */
     --border: #1e293b;
     --border-light: #334155;
     --border-color: #1e293b;
     --border-color-light: #334155;
     --border-color-hover: #38bdf8;
     --border-color-focus: #38bdf8;
-    --border-color-gold: rgba(212, 175, 55, 0.35);
+    --border-color-gold: rgba(212, 175, 55, 0.3);
 
-    /* Accent / Brand (Dark Default) */
+    /* Accent / Brand */
     --accent: #38bdf8;
-    --accent-soft: rgba(56, 189, 248, 0.15);
+    --accent-soft: rgba(56, 189, 248, 0.12);
     --accent-hover: #7dd3fc;
 
-    /* Status (Dark Default) */
+    /* Status */
     --success: #10b981;
-    --success-soft: rgba(16, 185, 129, 0.22);
+    --success-soft: rgba(16, 185, 129, 0.18);
     --danger: #ef4444;
-    --danger-soft: rgba(239, 68, 68, 0.22);
+    --danger-soft: rgba(239, 68, 68, 0.18);
     --warning: #f59e0b;
 
-    /* Shadows & Depth (Dark Default) */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
-    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
-    --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.55);
-    --shadow-glow-cyan: 0 0 24px rgba(56, 189, 248, 0.18);
-
-    /* ==========================================================
-       ER STUDIO LAVA THEME BRIDGE — Volcanic tokens kept alive
-       These variables anchor the ER Studio lava (volcanic orange/amber)
-       theme so it survives dark/light switching across the whole project.
-       Loaded in :root (dark) and re-declared in light theme below.
-       ========================================================== */
-    --lava-primary: #ff6b6b;
-    --lava-secondary: #4ecdc4;
-    --lava-accent: #ffd700;
-    --lava-deep: #030712;
-    --lava-glow: 0 0 24px rgba(255, 107, 26, 0.45);
-    --lava-glow-soft: rgba(255, 107, 26, 0.18);
-    --lava-border: rgba(255, 255, 255, 0.2);
-    --lava-bg: rgba(255, 255, 255, 0.08);
-    --lava-hover-bg: rgba(255, 255, 255, 0.12);
-    --lava-active-bg: rgba(255, 107, 26, 0.3);
-    --lava-text: rgba(255, 255, 255, 0.92);
-    --lava-text-secondary: rgba(255, 255, 255, 0.72);
-    --lava-gradient: linear-gradient(135deg, var(--lava-primary), var(--lava-secondary));
-    --lava-orange: #ff6b1a;
-    --lava-amber: #ffb700;
-    --lava-ember: rgba(255, 107, 26, 0.6);
+    /* Shadows & Depth */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --shadow-glow-cyan: 0 0 20px rgba(56, 189, 248, 0.15);
 
     /* Legacy Backward Compatibility aliases */
     --accent-purple: var(--brand-purple);
@@ -216,7 +191,6 @@ button {
    ========================================================== */
 :root[data-theme="light"],
 body.light-mode {
-    color-scheme: light;
     /* Cosmic Light Mode - Soft daylight canvas */
     --bg-deep: #ffffff;
     --bg-dark: #f8fafc;
@@ -237,7 +211,6 @@ body.light-mode {
     --surface-modal: #ffffff;
     --surface-highlight: #e0e0e0;
     --surface-tooltip: #1a1a1a;
-    --surface-raised: #ffffff;
 
     --text-main: #333333;
     --text-heading: #1a1a1a;
@@ -270,47 +243,6 @@ body.light-mode {
     --shadow-card: 0 2px 12px rgba(15, 23, 42, 0.05);
     --shadow-elevated: 0 6px 20px rgba(15, 23, 42, 0.08);
     --shadow-glow-cyan: 0 0 14px rgba(2, 132, 199, 0.16);
-
-    /* ==========================================================
-       ER STUDIO LAVA THEME BRIDGE — Light-mode volcanic tokens
-       Softer volcanic palette that keeps the ER Studio lava theme
-       alive and readable on the light canvas.
-       ========================================================== */
-    --lava-primary: #e85d4f;
-    --lava-secondary: #38b2ac;
-    --lava-accent: #eab308;
-    --lava-deep: #f8fafc;
-    --lava-glow: 0 0 18px rgba(255, 107, 26, 0.25);
-    --lava-glow-soft: rgba(255, 107, 26, 0.12);
-    --lava-border: rgba(0, 0, 0, 0.12);
-    --lava-bg: rgba(255, 107, 26, 0.06);
-    --lava-hover-bg: rgba(255, 107, 26, 0.1);
-    --lava-active-bg: rgba(255, 107, 26, 0.18);
-    --lava-text: #1f2937;
-    --lava-text-secondary: #4b5563;
-    --lava-gradient: linear-gradient(135deg, var(--lava-primary), var(--lava-secondary));
-    --lava-orange: #e85d4f;
-    --lava-amber: #d97706;
-    --lava-ember: rgba(255, 107, 26, 0.4);
-}
-
-/* ==========================================================
-   SYSTEM PREFERENCE — Automatic dark/light mode
-   Honors the OS color-scheme when no theme is manually set.
-   Dark is the project default; light follows system preference.
-   ========================================================== */
-@media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]),
-    body:not(.dark-mode):not(.er-theme-dark) {
-        color-scheme: light;
-    }
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]),
-    body:not(.light-mode):not(.er-theme-light) {
-        color-scheme: dark;
-    }
 }
 
 /* ==========================================================
@@ -1318,7 +1250,7 @@ body.light-mode .sidebar-close-btn {
 body.light-mode .sidebar-close-btn:hover {
     background: #fee2e2;
     border-color: #fca5a5;
-    color: #dc2626;
+    color: #a21313;
 }
 
 .mobile-brand-title {
@@ -4911,6 +4843,38 @@ body.light-mode .error-contact-row {
     padding: 10px 16px;
 }
 
+/* Equal entry-point paths inside the camera permission alert.
+   Start Camera / Upload Photo / Explore Test Mode are presented
+   with the same visual weight so a visitor who declines camera
+   still sees the photo-upload and Test Mode alternatives. */
+.perm-path-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--surface-card);
+    color: var(--text-main);
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.perm-path-btn:hover {
+    filter: brightness(1.08);
+    border-color: var(--border-hover, var(--border-color));
+}
+
+.perm-path-btn:focus-visible {
+    outline: 2px solid var(--accent-color, #e11d48);
+    outline-offset: 2px;
+}
+
 /* Light mode for permission modal */
 body.light-mode .permission-alert-backdrop {
     background: rgba(241, 245, 249, 0.88);
@@ -6046,6 +6010,37 @@ body.light-mode .cam-floating-badge {
     color: #ffffff;
 }
 
+.panel-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.panel-back-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.panel-back-btn:focus-visible {
+    outline: 2px solid #d97706;
+    outline-offset: 2px;
+}
+
+.panel-back-btn span:last-child {
+    display: inline;
+}
+
 /* Search Bar */
 .effects-search-wrap {
     position: relative;
@@ -6075,6 +6070,26 @@ body.light-mode .cam-floating-badge {
 
 .effects-search-input:focus {
     border-color: #d97706;
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+}
+
+.search-clear-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
 }
 
 /* Category Filter Pills */
