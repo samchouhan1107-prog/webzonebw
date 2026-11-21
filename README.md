@@ -119,9 +119,8 @@ WebZoneBW/
 │   ├── 500.html (Error Page)
 │
 ├── 🎃 WEBZONEBW-ER Studio
-│   ├── er/
-│   │   └── index.html (Halloween Studio + Extended Reality)
-│   └── er-enhanced-demo.html (Enhanced Filter Environment Demo)
+│   └── er/
+│       └── index.html (Halloween Studio + Extended Reality)
 │
 ├── 📝 Technical Articles
 │   ├── articles/
@@ -183,12 +182,11 @@ WebZoneBW/
 
 ## Enhanced Extended Reality Studio
 
-The WEBZONEBW-ER Studio features both the original Halloween experience and an enhanced demo environment with advanced filter systems and improved user experience.
+The WEBZONEBW-ER Studio is the unified camera effects experience at `er/index.html`.
 
 ### Studio Highlights
 
 * **Unified Experience**: All Studio features consolidated into `er/index.html`.
-* **Enhanced Demo**: Advanced filter environment system with `er-enhanced-demo.html`.
 * **Lens Discovery**: Interactive discovery of free and premium lenses.
 * **Feature Packs**: Connected packages containing effects, tunes, and content.
 * **Secure Entitlement**: Server-side verified premium access (no local-storage-only reliance).

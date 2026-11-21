@@ -37,9 +37,6 @@ WEBZONEBW/
 ├── soundbox.html
 │   └── WEBZONEBW Sound Box music player experience
 │
-├── er-enhanced-demo.html
-│   └── ER Studio enhanced feature demo page
-│
 ├── test-checkout.html
 │   └── PayPal checkout flow test harness
 │
@@ -204,8 +201,7 @@ articles/*             ✅ LIVE
 
 DEMO / TEST
 ────────────────────────────────────────
-er-enhanced-demo.html  🧪 DEMO
-test-checkout.html     🧪 TEST HARNESS
+test-checkout.html     🧪 TEST HARNESS (not in repo)
 master.html            🧪 INTERNAL REFERENCE
 
 

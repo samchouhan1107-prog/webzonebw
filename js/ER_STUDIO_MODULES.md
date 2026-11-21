@@ -19,7 +19,7 @@ The shared navigation, consent, and site behavior scripts are loaded separately 
 | Responsibility | File | Integration status |
 | --- | --- | --- |
 | Face-filter environments | `facefilter-enhanced.js` | Separate environment/filter implementation; not loaded by the active Studio entry page. |
-| Environment renderer | `enhanced-filter-environment.js` | Loaded by `er-enhanced-demo.html`; keep isolated from the active Studio renderer. |
+| Environment renderer | `enhanced-filter-environment.js` | Demo host page removed; keep isolated from the active Studio renderer. |
 | Environment-to-filter bridge | `enhanced-filter-integration.js`, `filter-environment-upgrade.js` | Optional integration scripts; verify their expected globals and page before adding them to a script list. |
 | Alternate full Studio renderer | `halloween-enhanced.js` | Alternative to `halloween.js`, not an additional active renderer. |
 | Unified face detector and lens scaling | `unified-lens-scaling.js`, `unified-lens-integration.js` | Separate pipeline that replaces renderer functions and owns its own face state. Do not load beside `halloween.js` without an explicit migration. |
