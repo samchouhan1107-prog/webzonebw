@@ -44,6 +44,7 @@ I enjoy building practical technology solutions, exploring modern tools and plat
 
 ### 🎨 Filter System
 * **20+ Professional Filters**: Face AR, Scene, VR, and Premium categories
+* **HERSHEY Movie Launch Lenses**: Promotional chocolate-glow lenses (HERSHEY MILK, DARK, CARAMEL)
 * **Environment-Aware Filters**: Smart filter detection and application
 * **Atmospheric Effects**: Fog, particles, lighting, and animations
 * **Premium Content**: Exclusive filters with 24-hour access
@@ -137,6 +138,7 @@ WebZoneBW/
 │   │   ├── style.css (Main Styles)
 │   │   ├── responsive.css (Mobile Optimization)
 │   │   ├── er-studio.css (Studio Interface)
+│   │   ├── er-hershey-banner.css (HERSHEY Movie Launch Banner)
 │   │   └── er-premium-checkout.css (Premium Checkout)
 │   ├── assets/
 │   │   ├── logo.png (Brand Identity)
@@ -148,7 +150,8 @@ WebZoneBW/
 │   ├── js/
 │   │   ├── er-license-premium.js (Premium Licensing System)
 │   │   ├── er-studio.js (Studio Controller)
-│   │   ├── halloween.js (Halloween Effects)
+│   │   ├── er-hershey-banner.js (HERSHEY Movie Launch Promotion)
+│   │   ├── halloween.js (Studio Filter Engine)
 │   │   ├── script.js (Core Application)
 │   │   ├── webzonebw-player.js (Audio Player)
 │   │   └── ...
@@ -182,7 +185,7 @@ WebZoneBW/
 
 ## Enhanced Extended Reality Studio
 
-The WEBZONEBW-ER Studio is the unified camera effects experience at `er/index.html`.
+The WEBZONEBW-ER Studio is the unified camera effects experience, live at `https://webzonebw.in/er/index.html`.
 
 ### Studio Highlights
 
@@ -191,26 +194,17 @@ The WEBZONEBW-ER Studio is the unified camera effects experience at `er/index.ht
 * **Feature Packs**: Connected packages containing effects, tunes, and content.
 * **Secure Entitlement**: Server-side verified premium access (no local-storage-only reliance).
 * **Enhanced Payment Flow**: PayPal secure checkout ($5.99 USD) with improved user experience and error handling.
+* **HERSHEY Movie Launch Special**: Cinematic promotional banner directing users into three chocolate-glow face lenses (HERSHEY MILK, HERSHEY DARK, HERSHEY CARAMEL) with intensity control and reset, campaign countdown (shown only when dates are configured), and banner dismissal that never interrupts an active editing session. The HERSHEY lens stays available in Face Filters after the campaign ends.
 * **Premium Halloween Filters**: Witch Ritual, Haunted Forest, Ghost Aura, Pumpkin Pose with 24-hour access.
 * **Content Pipeline**: Dynamic loading of articles, news, updates, hardware care, and assistance guides.
 * **Responsive Design**: Polished experience across mobile, tablet, and desktop.
 * **Demo Mode**: Fallback functionality for testing and development environments.
 
-### Enhanced Demo Features
-
-* **🔮 Advanced Filter System**: Environment-aware filters with atmospheric effects
-* **Dynamic Backgrounds**: Multiple background types (studio, fantasy, cinema, etc.)
-* **Atmospheric Effects**: Fog, particles, and dynamic lighting systems
-* **Frame Animations**: Custom frame styles with smooth transitions
-* **Performance Monitoring**: Real-time performance indicators and quality assessment
-* **🔮 Icon Integration**: Consistent magical theme throughout the interface
-* **Enhanced UI**: Improved spacing, layout, and visual feedback
-* **Dark Mode Support**: Enhanced theme switching with better visibility
-
 ### Technical Features
 
 * **Advanced Camera Integration**: Real-time video processing with filter effects
 * **Premium Licensing System**: Secure PayPal integration with server-side verification
+* **Quality Tooling**: `npm run lint` performs real syntax checks across all JS files; pre-push secret scanning via `scripts/scan-staged-secrets.ps1`
 * **Mobile-Optimized**: Touch-friendly interface with performance optimizations
 * **Accessibility Support**: ARIA labels and keyboard navigation
 * **Theme Integration**: Seamless dark/light mode support
@@ -228,19 +222,18 @@ The transition to a unified Studio+ experience ensures that premium content, upd
 
 ### Recent Improvements
 
+* **HERSHEY Movie Launch Campaign**: New promotional banner and chocolate-glow lens set inside the Studio
+* **Repository Hygiene**: Removed 39 obsolete test/debug/scratch scripts and backup files
+* **Real Lint Pipeline**: `npm run lint` now runs actual syntax checks (replaced the previous no-op)
 * **Enhanced Checkout Flow**: Improved PayPal integration with better error handling and user feedback
 * **Mobile Optimization**: Better responsive design and touch interactions
 * **Premium Filter System**: Advanced Halloween effects with proper licensing
 * **Demo Mode Support**: Fallback functionality for testing environments
 * **Performance Optimizations**: Better camera handling and reduced memory usage
 * **User Experience**: Improved navigation and visual feedback
-* **🔮 Enhanced Demo**: Advanced filter environment with atmospheric effects and quality monitoring
 * **Dark Mode Enhancements**: Improved theme switching with better visibility and accessibility
 * **Layout Improvements**: Fixed stretched layouts and better spacing throughout the interface
-* **Icon Integration**: Consistent magical theme with 🔮 icon throughout the project
 * **Complete Camera System**: Full camera initialization with proper error handling
-* **Comprehensive Platform**: Enhanced studio platform with best user experience
-* **Advanced Analytics**: Real-time performance monitoring and quality assessment
 * **Keyboard Shortcuts**: Intuitive keyboard controls for power users
 * **Touch Gestures**: Mobile-optimized gesture controls
 * **Smart Filter System**: Environment-aware filters with intelligent categorization
@@ -277,10 +270,10 @@ https://github.com/samchouhan1107-prog
 - **Solution**: Enhanced CSS spacing and responsive design fixes
 - **Result**: Better organized interface with proper element separation
 
-### Enhanced Demo Integration
-- **Problem**: Missing integration points for enhanced features
-- **Solution**: Added comprehensive enhanced demo with 🔮 theme throughout
-- **Result**: Consistent magical experience across all interfaces
+### Repository Cleanup
+- **Problem**: Dozens of obsolete test/debug/scratch scripts and a 197 KB CSS backup cluttering the repository
+- **Solution**: Removed all stale tooling, ignored `scratch/` and `*.backup` in `.gitignore`, and replaced the no-op lint with a real syntax-check pipeline
+- **Result**: Leaner repository with a trustworthy pre-push verification workflow
 
 ### Performance Monitoring
 - **Problem**: Lack of real-time performance feedback
