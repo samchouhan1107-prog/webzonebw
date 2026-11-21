@@ -1,0 +1,333 @@
+/* ==========================================================
+   WEBZONEBW — ER STUDIO
+   HERSHEY MOVIE LAUNCH PROMOTIONAL BANNER
+   Campaign: HERSHEY Movie Launch Special
+   Lens display name: HERSHEY (never "Chocolate Glow" as primary)
+   ----------------------------------------------------------
+   Cinematic movie-poster composition: deep chocolate brown,
+   rich cocoa texture, caramel highlights, golden cinematic
+   lighting and glossy chocolate reflections.
+   ========================================================== */
+
+:root {
+    --hershey-brown-deep: #1d0f06;
+    --hershey-brown: #2e1a0d;
+    --hershey-cocoa: #3f2513;
+    --hershey-caramel: #c98a3d;
+    --hershey-gold: #f0c46a;
+    --hershey-cream: #f7ead6;
+    /* Deep burgundy pulled from the official HERSHEY'S
+     * bar-artwork reference (dark cocoa wrapper red) */
+    --hershey-burgundy: #4a1220;
+    --hershey-burgundy-soft: #6b1c2e;
+    --hershey-foil: #d9d9d9;
+    --hershey-bar-red: #c8102e;
+}
+
+/* ---------- Banner shell ---------- */
+
+#hersheyPromoBanner {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 4vw, 48px);
+    background:
+        radial-gradient(ellipse at 22% 12%, rgba(240, 196, 106, 0.16), transparent 55%),
+        radial-gradient(ellipse at 78% 88%, rgba(201, 138, 61, 0.14), transparent 55%),
+        repeating-linear-gradient(48deg,
+            rgba(107, 28, 46, 0.16) 0 44px,
+            rgba(74, 18, 32, 0.05) 44px 88px),
+        rgba(10, 5, 2, 0.84);
+    backdrop-filter: blur(6px);
+    animation: hersheyBannerIn 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#hersheyPromoBanner.hershey-dismissing {
+    animation: hersheyBannerOut 0.32s ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes hersheyBannerIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes hersheyBannerOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* ---------- Poster card ---------- */
+
+.hershey-poster {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: clamp(24px, 5vw, 44px) clamp(20px, 5vw, 40px);
+    text-align: center;
+    color: var(--hershey-cream);
+    background:
+        radial-gradient(circle at 50% -10%, rgba(240, 196, 106, 0.22), transparent 60%),
+        radial-gradient(circle at 18% 108%, rgba(201, 138, 61, 0.18), transparent 50%),
+        linear-gradient(160deg, var(--hershey-burgundy-soft), var(--hershey-brown) 48%, var(--hershey-brown-deep));
+    border: 1px solid rgba(240, 196, 106, 0.35);
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(247, 234, 214, 0.12),
+        inset 0 -30px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* Rich cocoa texture + glossy chocolate reflections */
+.hershey-poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(115deg,
+            rgba(255, 255, 255, 0.02) 0 2px,
+            transparent 2px 9px),
+        radial-gradient(ellipse 120% 40% at 50% 0%,
+            rgba(247, 234, 214, 0.10), transparent 60%);
+    mix-blend-mode: screen;
+}
+
+.hershey-poster > * {
+    position: relative;
+}
+
+/* ---------- Typography ---------- */
+
+.hershey-kicker {
+    font-size: clamp(10px, 2.4vw, 12px);
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--hershey-gold);
+    margin: 0 0 14px;
+    opacity: 0.9;
+}
+
+.hershey-title {
+    margin: 0 0 6px;
+    font-size: clamp(44px, 11vw, 74px);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    color: var(--hershey-cream);
+    background: linear-gradient(180deg, #fff6e3 8%, var(--hershey-gold) 55%, var(--hershey-caramel) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.6));
+}
+
+.hershey-subtitle {
+    margin: 0 0 10px;
+    font-size: clamp(13px, 3.2vw, 17px);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(247, 234, 214, 0.85);
+}
+
+.hershey-launch-date {
+    margin: 0 0 8px;
+    font-size: clamp(11px, 2.6vw, 13px);
+    letter-spacing: 0.16em;
+    color: var(--hershey-gold);
+}
+
+/* Venue direction line (address as supplied by the campaign) */
+.hershey-venue {
+    margin: 0 0 20px;
+    font-size: clamp(11px, 2.6vw, 13px);
+    letter-spacing: 0.06em;
+    color: rgba(247, 234, 214, 0.72);
+}
+
+.hershey-desc {
+    margin: 0 auto 20px;
+    max-width: 40ch;
+    font-size: clamp(13px, 3vw, 15px);
+    line-height: 1.55;
+    color: rgba(247, 234, 214, 0.78);
+}
+
+/* ---------- Countdown ---------- */
+
+.hershey-countdown {
+    display: none;
+    margin: 0 auto 22px;
+    padding: 10px 0;
+    gap: 8px;
+    justify-content: center;
+}
+
+.hershey-countdown.hershey-countdown-active {
+    display: flex;
+}
+
+.hershey-countdown .hershey-count-unit {
+    min-width: 62px;
+    padding: 8px 6px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(240, 196, 106, 0.28);
+}
+
+.hershey-count-unit strong {
+    display: block;
+    font-size: clamp(18px, 5vw, 24px);
+    color: var(--hershey-gold);
+    font-variant-numeric: tabular-nums;
+}
+
+.hershey-count-unit span {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(247, 234, 214, 0.6);
+}
+
+/* ---------- Look presets ---------- */
+
+.hershey-looks {
+    display: none;
+    gap: 10px;
+    margin: 0 0 22px;
+}
+
+.hershey-looks.hershey-looks-open {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.hershey-look-btn {
+    min-height: 44px;
+    padding: 10px 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(240, 196, 106, 0.32);
+    background: rgba(0, 0, 0, 0.32);
+    color: var(--hershey-cream);
+    font-size: clamp(10px, 2.4vw, 12px);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.hershey-look-btn:hover,
+.hershey-look-btn:focus-visible {
+    border-color: var(--hershey-gold);
+    background: rgba(240, 196, 106, 0.14);
+    transform: translateY(-2px);
+}
+
+.hershey-look-btn.active {
+    border-color: var(--hershey-gold);
+    background: linear-gradient(180deg, rgba(240, 196, 106, 0.28), rgba(201, 138, 61, 0.18));
+    box-shadow: 0 0 18px rgba(240, 196, 106, 0.35);
+}
+
+/* ---------- Actions ---------- */
+
+.hershey-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.hershey-btn-primary {
+    min-height: 48px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: clamp(14px, 3.4vw, 16px);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--hershey-brown-deep);
+    background: linear-gradient(180deg, #ffe1a6, var(--hershey-caramel));
+    box-shadow: 0 8px 26px rgba(201, 138, 61, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.hershey-btn-primary:hover,
+.hershey-btn-primary:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(240, 196, 106, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.hershey-btn-ghost {
+    min-height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(247, 234, 214, 0.32);
+    background: transparent;
+    color: var(--hershey-cream);
+    font-size: clamp(12px, 3vw, 14px);
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.hershey-btn-ghost:hover,
+.hershey-btn-ghost:focus-visible {
+    border-color: var(--hershey-gold);
+    background: rgba(240, 196, 106, 0.1);
+}
+
+.hershey-btn-close {
+    min-height: 44px;
+    background: none;
+    border: none;
+    color: rgba(247, 234, 214, 0.6);
+    font-size: clamp(12px, 3vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.hershey-btn-close:hover,
+.hershey-btn-close:focus-visible {
+    color: var(--hershey-gold);
+}
+
+/* ---------- Small-screen poster composition ---------- */
+
+@media (max-width: 480px) {
+    .hershey-looks.hershey-looks-open {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- HERSHEY Studio Grid Effect Cards ---------- */
+
+.hershey-effect-card {
+    border-color: rgba(201, 138, 61, 0.35) !important;
+}
+
+.hershey-effect-card:hover,
+.hershey-effect-card.active {
+    border-color: var(--hershey-gold) !important;
+    box-shadow: 0 0 16px rgba(240, 196, 106, 0.35) !important;
+}
+
+.hershey-box {
+    background: radial-gradient(circle at 30% 30%, #5a2e14, #2e1a0d) !important;
+    border: 1px solid rgba(240, 196, 106, 0.4) !important;
+    box-shadow: inset 0 1px 0 rgba(247, 234, 214, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #hersheyPromoBanner,
+    #hersheyPromoBanner.hershey-dismissing,
+    .hershey-look-btn,
+    .hershey-btn-primary {
+        animation: none;
+        transition: none;
+    }
+}

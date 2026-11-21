@@ -540,5 +540,3 @@ window.WebZoneBW.UnifiedLensIntegration = new UnifiedLensIntegration();
 document.addEventListener('DOMContentLoaded', () => {
   window.WebZoneBW.UnifiedLensIntegration.initialize().catch(console.error);
 });
-
-export default UnifiedLensIntegration;

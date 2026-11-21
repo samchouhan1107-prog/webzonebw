@@ -375,5 +375,3 @@ if (typeof document !== 'undefined') {
   // Make integration globally available
   window.enhancedFilterIntegration = enhancedFilterIntegration;
 }
-
-export { enhancedFilterIntegration };
