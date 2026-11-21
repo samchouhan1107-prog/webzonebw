@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WEBZONEBW-ER Studio - Live portraits, face-tracked lenses, and scene effects in one creative workspace">
+    <meta name="keywords" content="AR filters, face tracking, camera effects, lenses, photography, WEBZONEBW">
+    <meta name="author" content="WEBZONEBW">
     <title>WEBZONEBW-ER Studio</title>
     
     <!-- Elite Premium CSS -->
@@ -12,6 +15,8 @@
     <link rel="stylesheet" href="../css/er-studio.css">
     <link rel="stylesheet" href="../css/er-studio-effects.css">
     <link rel="stylesheet" href="../css/er-premium-checkout.css">
+    <link rel="stylesheet" href="../css/er-studio-enhancements.css">
+    <link rel="stylesheet" href="../css/er-hershey-banner.css?v=1.0.0">
 
 
     <!-- Google tag (gtag.js) -->
@@ -24,16 +29,24 @@
       gtag('config', 'G-ZFZ54Z2997');
     </script>
 </head>
-<body class="er-studio-body">
+<body class="er-studio-body" data-page="er-studio">
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
+    
+    <!-- Loading indicator -->
+    <div class="er-loading-overlay" id="erLoadingOverlay" aria-hidden="true">
+        <div class="loading-spinner" aria-hidden="true">🔄</div>
+        <div class="loading-text" role="status" aria-live="polite">Initializing ER Studio...</div>
+    </div>
 
     <!-- Elite Layout Container -->
     <div class="er-layout-container">
         
         <!-- Elite Sidebar -->
-        <aside class="sidebar er-sidebar" id="mainSidebar" aria-label="WEBZONEBW navigation">
+        <aside class="sidebar er-sidebar" id="mainSidebar" aria-label="WEBZONEBW navigation" role="navigation">
             <div class="logo">
-                <a href="../index.html" aria-label="WebZoneBW Home" class="brand-logo-link">
-                    <img src="../assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img" decoding="async">
+                <a href="../index.html" aria-label="WebZoneBW Home" class="brand-logo-link" tabindex="0">
+                    <img src="../assets/logo.png" alt="WebZoneBW Logo" class="brand-logo-img" decoding="async" loading="lazy">
                     <div class="brand-name-group">
                         <span class="brand-title">WEBZONEBW</span>
                         <span class="brand-sub">SYSTEMS · SUPPORT · INFRASTRUCTURE</span>
@@ -41,20 +54,20 @@
                 </a>
             </div>
             
-            <nav class="sidebar-nav" aria-label="Main Navigation">
-                <ul>
-                    <li><a href="../index.html"><span class="nav-icon" aria-hidden="true">🏠</span>Dashboard</a></li>
-                    <li><a href="index.html" class="active er-nav-pill" aria-current="page"><span class="nav-icon" aria-hidden="true">🔮</span>WEBZONEBW-ER Studio</a></li>
-                    <li><a href="../projects.html"><span class="nav-icon" aria-hidden="true">💼</span>Projects</a></li>
-                    <li><a href="../resume.html"><span class="nav-icon" aria-hidden="true">📄</span>Resume</a></li>
-                    <li><a href="../blog.html"><span class="nav-icon" aria-hidden="true">📝</span>Blog</a></li>
-                    <li><a href="../soundbox.html"><span class="nav-icon" aria-hidden="true">🎵</span>Sound Box</a></li>
-                    <li><a href="../about.html"><span class="nav-icon" aria-hidden="true">👤</span>About</a></li>
-                    <li><a href="../contact.html"><span class="nav-icon" aria-hidden="true">✉️</span>Contact</a></li>
-                    <li><a href="../privacy.html"><span class="nav-icon" aria-hidden="true">🔒</span>Privacy Policy</a></li>
-                    <li><a href="../cookie-policy.html"><span class="nav-icon" aria-hidden="true">🍪</span>Cookie Policy</a></li>
-                    <li><a href="../privacy-center.html"><span class="nav-icon" aria-hidden="true">🎛️</span>Privacy Center</a></li>
-                    <li><a href="../terms.html"><span class="nav-icon" aria-hidden="true">📋</span>Terms of Service</a></li>
+            <nav class="sidebar-nav" aria-label="Main Navigation" role="menubar">
+                <ul role="menubar">
+                    <li role="none"><a href="../index.html" role="menuitem" tabindex="0" aria-label="Dashboard"><span class="nav-icon" aria-hidden="true">🏠</span>Dashboard</a></li>
+                    <li role="none"><a href="index.html" class="active er-nav-pill" role="menuitem" aria-current="page" tabindex="-1"><span class="nav-icon" aria-hidden="true">🔮</span>WEBZONEBW-ER Studio</a></li>
+                    <li role="none"><a href="../projects.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">💼</span>Projects</a></li>
+                    <li role="none"><a href="../resume.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">📄</span>Resume</a></li>
+                    <li role="none"><a href="../blog.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">📝</span>Blog</a></li>
+                    <li role="none"><a href="../soundbox.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">🎵</span>Sound Box</a></li>
+                    <li role="none"><a href="../about.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">👤</span>About</a></li>
+                    <li role="none"><a href="../contact.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">✉️</span>Contact</a></li>
+                    <li role="none"><a href="../privacy.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">🔒</span>Privacy Policy</a></li>
+                    <li role="none"><a href="../cookie-policy.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">🍪</span>Cookie Policy</a></li>
+                    <li role="none"><a href="../privacy-center.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">🎛️</span>Privacy Center</a></li>
+                    <li role="none"><a href="../terms.html" role="menuitem" tabindex="0"><span class="nav-icon" aria-hidden="true">📋</span>Terms of Service</a></li>
                 </ul>
             </nav>
             
@@ -72,12 +85,12 @@
         </aside>
         
         <!-- Elite Main Content -->
-        <main class="main-content er-main-content">
+        <main class="main-content er-main-content" id="main-content">
             
             <!-- Elite Mobile Navigation -->
-            <div class="er-mobile-nav-bar">
-                <button type="button" class="er-hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation" aria-controls="mainSidebar">
-                    <span></span><span></span><span></span>
+            <div class="er-mobile-nav-bar" role="banner">
+                <button type="button" class="er-hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar Navigation" aria-controls="mainSidebar" aria-expanded="false">
+                    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
                 </button>
                 <div class="er-mobile-title">
                     <span class="er-studio-brand-icon" aria-hidden="true">🔮</span>
@@ -89,7 +102,7 @@
             </div>
             
             <!-- Elite Header -->
-            <header class="er-top-header">
+            <header class="er-top-header" role="banner">
                 <div class="er-title-group">
                     <h1 class="er-main-title">
                         <span class="er-studio-brand-icon" aria-hidden="true">🔮</span>
@@ -101,11 +114,11 @@
             </header>
             
             <!-- Elite Workspace Grid -->
-            <div class="er-workspace-grid">
+            <div class="er-workspace-grid" role="main">
                 
                 <!-- Elite Camera Card -->
                 <section class="er-camera-card" aria-label="Live Camera Extended Reality Stage">
-                    <div class="camera-viewport-frame" id="cameraViewport" aria-label="Live WEBZONEBW-ER camera viewport">
+                    <div class="camera-viewport-frame" id="cameraViewport" aria-label="Live WEBZONEBW-ER camera viewport" role="region" aria-live="polite">
                         
                         <!-- Elite Camera Controls -->
                         <button type="button" class="cam-corner-btn top-left" id="toggleFaceHudBtn" title="Toggle Biometric Reticle HUD" aria-label="Toggle Biometric Reticle HUD">
@@ -193,8 +206,14 @@
                                     </div>
                                 </div>
                                 <div class="perm-alert-actions">
-                                    <button type="button" class="btn perm-alert-allow" id="permAllowBtn">
-                                        Allow Camera Access
+                                    <button type="button" class="btn perm-path-btn perm-path-camera" id="permAllowBtn">
+                                        <span aria-hidden="true">📷</span> Start Camera
+                                    </button>
+                                    <button type="button" class="btn perm-path-btn perm-path-upload" id="permUploadBtn">
+                                        <span aria-hidden="true">📁</span> Upload Photo
+                                    </button>
+                                    <button type="button" class="btn perm-path-btn perm-path-demo" id="permDemoBtn">
+                                        <span aria-hidden="true">🎭</span> Explore Test Mode
                                     </button>
                                     <button type="button" class="btn perm-alert-dismiss" id="permDismissBtn">
                                         Maybe Later
@@ -224,7 +243,7 @@
                     <!-- Elite Camera Action Buttons -->
                     <div class="er-action-controls">
                         
-                        <button type="button" class="er-action-pill-btn" id="capturePhotoBtn" title="Start the live camera or capture a photo">
+                        <button type="button" class="er-action-pill-btn" id="capturePhotoBtn" title="Start the live camera or capture a photo" aria-label="Start Camera or Capture Photo">
                             <span aria-hidden="true">📷</span>
                             <span id="capturePhotoText">Start Camera</span>
                         </button>
@@ -233,17 +252,23 @@
                             <div class="shutter-inner-core"></div>
                         </div>
                         
-                        <button type="button" class="er-action-pill-btn" id="modeUploadBtn" title="Upload Photo from Device">
+                        <button type="button" class="er-action-pill-btn" id="modeUploadBtn" title="Upload Photo from Device" aria-label="Upload Photo from Device">
                             <span aria-hidden="true">📁</span>
                             <span>Upload Photo</span>
                         </button>
                         
-                        <button type="button" class="er-action-pill-btn er-record-btn" id="recordVideoBtn" title="Record Video with Live Effects (Premium)">
+                        <button type="button" class="er-action-pill-btn er-record-btn" id="recordVideoBtn" title="Record Video with Live Effects (Premium)" aria-label="Record Video with Live Effects (Premium)">
                             <span aria-hidden="true" id="recordVideoIcon">⏺</span>
                             <span id="recordVideoText">Record Video</span>
                         </button>
                         
-                        <input type="file" id="fileInput" accept="image/*" style="display:none;" aria-label="Upload an image">
+                        <button type="button" class="er-action-pill-btn" id="testModeBtn" title="Explore Test Mode with sample images" aria-label="Explore Test Mode with sample images">
+                            <span aria-hidden="true">🎭</span>
+                            <span>Test Mode</span>
+                        </button>
+                        
+                        <input type="file" id="fileInput" accept="image/*" style="display:none;" aria-label="Upload an image" aria-describedby="fileInputDescription">
+                        <span id="fileInputDescription" class="visually-hidden">Upload an image from your device</span>
                         
                     </div>
                     
@@ -269,11 +294,15 @@
                 </section>
                 
                 <!-- Elite Effects Panel -->
-                <aside class="er-effects-panel" id="effectsPanel" aria-label="WEBZONEBW-ER Effects">
+                <aside class="er-effects-panel" id="effectsPanel" aria-label="WEBZONEBW-ER Effects" role="complementary">
                     
                     <div class="effects-panel-header">
                         <div class="panel-title-group">
-                            <span class="panel-icon">🌟</span>
+                            <button type="button" class="panel-back-btn" id="backToCameraBtn" aria-label="Return to Live Camera or Uploaded Photo">
+                                <span aria-hidden="true">←</span>
+                                <span>Back to Camera</span>
+                            </button>
+                            <span class="panel-icon" aria-hidden="true">🌟</span>
                             <h2>
                                 <span class="text-white">WEBZONEBW-</span>
                                 <span class="gradient-text">ER EFFECTS</span>
@@ -284,53 +313,96 @@
                         </button>
                     </div>
                     
+                    <!-- Hidden close button for accessibility -->
+                    <button type="button" id="closeEffectsPanelBtn" class="visually-hidden" aria-label="Close Effects Panel" style="position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip: rect(0, 0, 0, 0);"></button>
+                    
                     <div class="effects-search-wrap">
                         <span class="search-icon" aria-hidden="true">🔍</span>
-                        <input type="text" id="effectsSearchInput" class="effects-search-input" placeholder="Search effects..." aria-label="Search effects">
+                        <input type="text" id="effectsSearchInput" class="effects-search-input" placeholder="Search effects by name..." aria-label="Search effects by name" autocomplete="off" aria-describedby="searchHelp">
+                        <button type="button" class="search-clear-btn" id="effectsSearchClear" aria-label="Clear search" title="Clear search" style="display:none;">
+                            ✕
+                        </button>
+                        <span id="searchHelp" class="visually-hidden">Type to search for effects by name</span>
                     </div>
                     
-                    <!-- Elite Premium Tabs -->
+                    <!-- Elite Unified Category Pills -->
                     <div class="er-filter-section-heading">COLLECTION</div>
                     <div class="smart-inventory-category-pills polished-tabs-container" id="smartCategoryPills" role="tablist" aria-label="Smart Filter Inventory Categories">
                         
-                        <button type="button" class="smart-cat-btn polished-tab active" data-smart-cat="smart" title="Auto-adapts based on real-time face detection">
-                            <span class="tab-icon">🌟</span>
+                        <button type="button" class="smart-cat-btn polished-tab active" data-smart-cat="smart" title="Auto-adapts based on real-time face detection" role="tab" aria-selected="true" aria-controls="smart-content">
+                            <span class="tab-icon" aria-hidden="true">🌟</span>
                             <span class="tab-label">Smart</span>
                             <span class="tab-badge">AI</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="face" title="Face-tracked ER lenses">
-                            <span class="tab-icon">👤</span>
-                            <span class="tab-label">Face ER</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="face" title="Face-tracked ER lenses" role="tab" aria-selected="false" aria-controls="face-content">
+                            <span class="tab-icon" aria-hidden="true">👤</span>
+                            <span class="tab-label">Face</span>
                             <span class="tab-count">12</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="scene" title="Full-Frame Scene Shaders">
-                            <span class="tab-icon">🌍</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="scene" title="Full-Frame Scene Shaders" role="tab" aria-selected="false" aria-controls="scene-content">
+                            <span class="tab-icon" aria-hidden="true">🌍</span>
                             <span class="tab-label">Scene</span>
                             <span class="tab-count">8</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="pose" title="Live camera pose-reactive effects">
-                            <span class="tab-icon">🦴</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="pose" title="Live camera pose-reactive effects" role="tab" aria-selected="false" aria-controls="pose-content">
+                            <span class="tab-icon" aria-hidden="true">🦴</span>
                             <span class="tab-label">Pose</span>
                             <span class="tab-count">4</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="vr" title="VR-style immersive environments">
-                            <span class="tab-icon">🌌</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="vr" title="VR-style immersive environments" role="tab" aria-selected="false" aria-controls="vr-content">
+                            <span class="tab-icon" aria-hidden="true">🌌</span>
                             <span class="tab-label">VR</span>
                             <span class="tab-count">4</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn premium-tab-btn polished-tab" data-smart-cat="premium" title="Premium lenses unlocked with the $5.99 USD ER Studio license">
-                            <span class="tab-icon">💎</span>
-                            <span class="tab-label">Premium</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="horror" title="Horror and Thriller Effects" role="tab" aria-selected="false" aria-controls="horror-content">
+                            <span class="tab-icon" aria-hidden="true">🎃</span>
+                            <span class="tab-label">Horror</span>
+                            <span class="tab-count">6</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="witch" title="Witchcraft & Curses" role="tab" aria-selected="false" aria-controls="witch-content">
+                            <span class="tab-icon" aria-hidden="true">🔮</span>
+                            <span class="tab-label">Witch</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="zombie" title="Zombie Virus Effects" role="tab" aria-selected="false" aria-controls="zombie-content">
+                            <span class="tab-icon" aria-hidden="true">🧟</span>
+                            <span class="tab-label">Zombie</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="ghost" title="Spectral Phantoms" role="tab" aria-selected="false" aria-controls="ghost-content">
+                            <span class="tab-icon" aria-hidden="true">👻</span>
+                            <span class="tab-label">Ghost</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="monster" title="Beasts & Ghouls" role="tab" aria-selected="false" aria-controls="monster-content">
+                            <span class="tab-icon" aria-hidden="true">👹</span>
+                            <span class="tab-label">Monster</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="cinema" title="Cinema Horror FX" role="tab" aria-selected="false" aria-controls="cinema-content">
+                            <span class="tab-icon" aria-hidden="true">🎬</span>
+                            <span class="tab-label">Cinema</span>
+                            <span class="tab-count">3</span>
+                        </button>
+                        
+                        <button type="button" class="smart-cat-btn premium-tab-btn polished-tab" data-smart-cat="experimental" title="Advanced FX unlocked with the $5.99 USD ER Studio license" role="tab" aria-selected="false" aria-controls="experimental-content">
+                            <span class="tab-icon" aria-hidden="true">⚡</span>
+                            <span class="tab-label">Experimental</span>
                             <span class="tab-badge">PRO</span>
                         </button>
                         
-                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="all" title="Browse all effects">
-                            <span class="tab-icon">✨</span>
+                        <button type="button" class="smart-cat-btn polished-tab" data-smart-cat="all" title="Browse all effects" role="tab" aria-selected="false" aria-controls="all-content">
+                            <span class="tab-icon" aria-hidden="true">✨</span>
                             <span class="tab-label">All</span>
                             <span class="tab-count">35+</span>
                         </button>
@@ -370,7 +442,7 @@
                         <button type="button" class="er-license-chip-btn" id="erLicenseChipBtn">$5.99 Upgrade</button>
                     </div>
                     
-                    <!-- Elite Effects Category Pills -->
+                    <!-- Elite Unified Effect Category Pills -->
                     <div class="er-filter-section-heading">CATEGORY</div>
                     <div class="effects-category-pills polished-tabs" role="tablist" aria-label="Effect Categories">
                         
@@ -384,6 +456,12 @@
                             <span class="tab-icon">👤</span>
                             <span class="tab-label">Face</span>
                             <span class="tab-count">12</span>
+                        </button>
+                        
+                        <button type="button" class="cat-pill polished-tab" data-cat="scene" title="Full-Frame Scene Shaders">
+                            <span class="tab-icon">🌍</span>
+                            <span class="tab-label">Scene</span>
+                            <span class="tab-count">8</span>
                         </button>
                         
                         <button type="button" class="cat-pill polished-tab" data-cat="pose" title="Body/pose-reactive Halloween effects">
@@ -486,135 +564,155 @@
                     
                     <!-- Elite Effects Card Grid -->
                     <div class="er-filter-section-heading">EFFECTS</div>
-                    <div class="effects-card-grid" id="effectsCardGrid">
+                    <div class="effects-card-grid" id="effectsCardGrid" role="grid" aria-label="Available Effects">
                         
                         <!-- FACE ER Premium Effects -->
-                        <button type="button" class="effect-card" data-filter="sunglasses" data-cat="face" data-target="face">
-                            <div class="effect-icon-box glass-box">🕶️</div>
+                        <button type="button" class="effect-card" data-filter="sunglasses" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="Aviators - Face ER Filter">
+                            <div class="effect-icon-box glass-box" aria-hidden="true">🕶️</div>
                             <span class="effect-name">Aviators</span>
                             <span class="effect-target-tag face-tag">Face ER</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="halo" data-cat="face" data-target="face">
-                            <div class="effect-icon-box neon-box">👑</div>
+                        <button type="button" class="effect-card" data-filter="halo" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="Angel Halo - Face ER Filter">
+                            <div class="effect-icon-box neon-box" aria-hidden="true">👑</div>
                             <span class="effect-name">Angel Halo</span>
                             <span class="effect-target-tag face-tag">Face ER</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="goldenhour" data-cat="face" data-target="face">
-                            <div class="effect-icon-box portrait-box">🌟</div>
+                        <button type="button" class="effect-card" data-filter="goldenhour" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="Golden Hour - Face ER Filter">
+                            <div class="effect-icon-box portrait-box" aria-hidden="true">🌟</div>
                             <span class="effect-name">Golden Hour</span>
                             <span class="effect-target-tag face-tag">Face ER</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="cartoon" data-cat="face" data-target="face">
-                            <div class="effect-icon-box anime-box">🎨</div>
+                        <button type="button" class="effect-card" data-filter="cartoon" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="Anime Cel - Face ER Filter">
+                            <div class="effect-icon-box anime-box" aria-hidden="true">🎨</div>
                             <span class="effect-name">Anime Cel</span>
                             <span class="effect-target-tag face-tag">Face ER</span>
                         </button>
                         
+                        <!-- HERSHEY MOVIE LAUNCH — promotional lenses -->
+                        <button type="button" class="effect-card hershey-effect-card" data-filter="hershey" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="HERSHEY - Face ER Filter, Movie Launch Special">
+                            <div class="effect-icon-box hershey-box" aria-hidden="true">🍫</div>
+                            <span class="effect-name">HERSHEY</span>
+                            <span class="effect-target-tag face-tag">Face ER</span>
+                        </button>
+                        
+                        <button type="button" class="effect-card hershey-effect-card" data-filter="hershey-dark" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="HERSHEY DARK - Face ER Filter, deep cocoa cinematic finish">
+                            <div class="effect-icon-box hershey-box" aria-hidden="true">🍫</div>
+                            <span class="effect-name">HERSHEY DARK</span>
+                            <span class="effect-target-tag face-tag">Face ER</span>
+                        </button>
+                        
+                        <button type="button" class="effect-card hershey-effect-card" data-filter="hershey-caramel" data-cat="face" data-target="face" role="gridcell" tabindex="0" aria-label="HERSHEY CARAMEL - Face ER Filter, golden caramel glow">
+                            <div class="effect-icon-box hershey-box" aria-hidden="true">🍯</div>
+                            <span class="effect-name">HERSHEY CARAMEL</span>
+                            <span class="effect-target-tag face-tag">Face ER</span>
+                        </button>
+                        
+                        
                         <!-- SCENE SHADERS Premium Effects -->
-                        <button type="button" class="effect-card" data-filter="noir" data-cat="scene" data-target="scene">
-                            <div class="effect-icon-box retro-box">🖤</div>
+                        <button type="button" class="effect-card" data-filter="noir" data-cat="scene" data-target="scene" role="gridcell" tabindex="0" aria-label="Leica Noir - Scene Filter">
+                            <div class="effect-icon-box retro-box" aria-hidden="true">🖤</div>
                             <span class="effect-name">Leica Noir</span>
                             <span class="effect-target-tag scene-tag">Scene</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="vintage90s" data-cat="scene" data-target="scene">
-                            <div class="effect-icon-box retro-box">🎞️</div>
+                        <button type="button" class="effect-card" data-filter="vintage90s" data-cat="scene" data-target="scene" role="gridcell" tabindex="0" aria-label="Retro 90s - Scene Filter">
+                            <div class="effect-icon-box retro-box" aria-hidden="true">🎞️</div>
                             <span class="effect-name">Retro 90s</span>
                             <span class="effect-target-tag scene-tag">Scene</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="cinematic" data-cat="scene" data-target="scene">
-                            <div class="effect-icon-box cinema-box">🎬</div>
+                        <button type="button" class="effect-card" data-filter="cinematic" data-cat="scene" data-target="scene" role="gridcell" tabindex="0" aria-label="35mm Film - Scene Filter">
+                            <div class="effect-icon-box cinema-box" aria-hidden="true">🎬</div>
                             <span class="effect-name">35mm Film</span>
                             <span class="effect-target-tag scene-tag">Scene</span>
                         </button>
 
-                        <button type="button" class="effect-card volcanic-effect-card" data-filter="volcanic-lava" data-cat="scene" data-target="scene">
-                            <div class="effect-icon-box lava-box">🌋</div>
+                        <button type="button" class="effect-card volcanic-effect-card" data-filter="volcanic-lava" data-cat="scene" data-target="scene" role="gridcell" tabindex="0" aria-label="Volcanic Lava - Scene Filter">
+                            <div class="effect-icon-box lava-box" aria-hidden="true">🌋</div>
                             <span class="effect-name">Volcanic Lava</span>
                             <span class="effect-target-tag scene-tag">Scene</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="glitch" data-cat="scene" data-target="scene">
-                            <div class="effect-icon-box glitch-box">⚡</div>
+                        <button type="button" class="effect-card" data-filter="glitch" data-cat="scene" data-target="scene" role="gridcell" tabindex="0" aria-label="Glitch FX - Scene Filter">
+                            <div class="effect-icon-box glitch-box" aria-hidden="true">⚡</div>
                             <span class="effect-name">Glitch FX</span>
                             <span class="effect-target-tag scene-tag">Scene</span>
                         </button>
                         
                         <!-- POSE EFFECTS Premium Effects -->
-                        <button type="button" class="effect-card" data-filter="ghost-pose" data-cat="pose" data-target="pose">
-                            <div class="effect-icon-box holo-box">👻</div>
+                        <button type="button" class="effect-card" data-filter="ghost-pose" data-cat="pose" data-target="pose" role="gridcell" tabindex="0" aria-label="Ghost Pose - Pose Filter">
+                            <div class="effect-icon-box holo-box" aria-hidden="true">👻</div>
                             <span class="effect-name">Ghost Pose</span>
                             <span class="effect-target-tag pose-tag">Pose</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="pose-frame" data-cat="pose" data-target="pose">
-                            <div class="effect-icon-box glass-box">🧭</div>
+                        <button type="button" class="effect-card" data-filter="pose-frame" data-cat="pose" data-target="pose" role="gridcell" tabindex="0" aria-label="Pose Align - Pose Filter">
+                            <div class="effect-icon-box glass-box" aria-hidden="true">🧭</div>
                             <span class="effect-name">Pose Align</span>
                             <span class="effect-target-tag pose-tag">Pose</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="pumpkin-pose" data-cat="pose" data-target="pose">
-                            <div class="effect-icon-box retro-box">🎃</div>
+                        <button type="button" class="effect-card" data-filter="pumpkin-pose" data-cat="pose" data-target="pose" role="gridcell" tabindex="0" aria-label="Pumpkin Pose - Pose Filter">
+                            <div class="effect-icon-box retro-box" aria-hidden="true">🎃</div>
                             <span class="effect-name">Pumpkin Pose</span>
                             <span class="effect-target-tag pose-tag">Pose</span>
                         </button>
                         
                         <!-- VR EFFECTS Premium Effects -->
-                        <button type="button" class="effect-card" data-filter="vr-nebula" data-cat="vr" data-target="scene">
-                            <div class="effect-icon-box holo-box">🪐</div>
+                        <button type="button" class="effect-card" data-filter="vr-nebula" data-cat="vr" data-target="scene" role="gridcell" tabindex="0" aria-label="VR Nebula - VR Filter">
+                            <div class="effect-icon-box holo-box" aria-hidden="true">🪐</div>
                             <span class="effect-name">VR Nebula</span>
                             <span class="effect-target-tag scene-tag vr-tag">VR</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="haunted-forest" data-cat="vr" data-target="scene" data-premium="true">
-                            <div class="effect-icon-box retro-box">🌲</div>
+                        <button type="button" class="effect-card" data-filter="haunted-forest" data-cat="vr" data-target="scene" data-premium="true" role="gridcell" tabindex="0" aria-label="Haunted Forest - VR Filter (Premium)">
+                            <div class="effect-icon-box retro-box" aria-hidden="true">🌲</div>
                             <span class="effect-name">Haunted Forest</span>
                             <span class="effect-target-tag scene-tag vr-tag premium-tag">VR · PRO</span>
                         </button>
                         
                         <!-- HORROR PREMIUM EFFECTS -->
-                        <button type="button" class="effect-card" data-filter="neon-horror" data-cat="horror" data-target="face" data-premium="true">
-                            <div class="effect-icon-box horror-box">💀</div>
+                        <button type="button" class="effect-card" data-filter="neon-horror" data-cat="horror" data-target="face" data-premium="true" role="gridcell" tabindex="0" aria-label="Neon Horror - Horror Filter (Premium)">
+                            <div class="effect-icon-box horror-box" aria-hidden="true">💀</div>
                             <span class="effect-name">Neon Horror</span>
                             <span class="effect-target-tag face-tag horror-tag premium-tag">Horror · PRO</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="zombie-virus" data-cat="zombie" data-target="face">
-                            <div class="effect-icon-box horror-box">🧟</div>
+                        <button type="button" class="effect-card" data-filter="zombie-virus" data-cat="zombie" data-target="face" role="gridcell" tabindex="0" aria-label="Zombie Virus - Zombie Filter">
+                            <div class="effect-icon-box horror-box" aria-hidden="true">🧟</div>
                             <span class="effect-name">Zombie Virus</span>
                             <span class="effect-target-tag face-tag zombie-tag">Zombie</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="witch-curse" data-cat="witch" data-target="face">
-                            <div class="effect-icon-box neon-box">🔮</div>
+                        <button type="button" class="effect-card" data-filter="witch-curse" data-cat="witch" data-target="face" role="gridcell" tabindex="0" aria-label="Witch Curse - Witch Filter">
+                            <div class="effect-icon-box neon-box" aria-hidden="true">🔮</div>
                             <span class="effect-name">Witch Curse</span>
                             <span class="effect-target-tag face-tag witch-tag">Witch</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="ghost-aura" data-cat="ghost" data-target="face">
-                            <div class="effect-icon-box holo-box">👻</div>
+                        <button type="button" class="effect-card" data-filter="ghost-aura" data-cat="ghost" data-target="face" role="gridcell" tabindex="0" aria-label="Ghost Aura - Ghost Filter">
+                            <div class="effect-icon-box holo-box" aria-hidden="true">👻</div>
                             <span class="effect-name">Ghost Aura</span>
                             <span class="effect-target-tag face-tag ghost-tag">Ghost</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="monster-fangs" data-cat="monster" data-target="face">
-                            <div class="effect-icon-box horror-box">👹</div>
+                        <button type="button" class="effect-card" data-filter="monster-fangs" data-cat="monster" data-target="face" role="gridcell" tabindex="0" aria-label="Monster Fangs - Monster Filter">
+                            <div class="effect-icon-box horror-box" aria-hidden="true">👹</div>
                             <span class="effect-name">Monster Fangs</span>
                             <span class="effect-target-tag face-tag monster-tag">Monster</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="horror-movie" data-cat="cinema" data-target="scene">
-                            <div class="effect-icon-box horror-box">🎬</div>
+                        <button type="button" class="effect-card" data-filter="horror-movie" data-cat="cinema" data-target="scene" role="gridcell" tabindex="0" aria-label="Horror Movie - Cinema Filter">
+                            <div class="effect-icon-box horror-box" aria-hidden="true">🎬</div>
                             <span class="effect-name">Horror Movie</span>
                             <span class="effect-target-tag scene-tag cinema-tag">Cinema</span>
                         </button>
                         
-                        <button type="button" class="effect-card" data-filter="quantum-horror" data-cat="experimental" data-target="scene">
-                            <div class="effect-icon-box holo-box">⚡</div>
+                        <button type="button" class="effect-card" data-filter="quantum-horror" data-cat="experimental" data-target="scene" data-premium="true" role="gridcell" tabindex="0" aria-label="Quantum Horror - Experimental Filter (Premium)">
+                            <div class="effect-icon-box holo-box" aria-hidden="true">⚡</div>
                             <span class="effect-name">Quantum Horror</span>
                             <span class="effect-target-tag scene-tag experimental-tag premium-tag">Experimental · PRO</span>
                         </button>
@@ -656,7 +754,7 @@
     </div>
     
     <!-- Elite Footer -->
-    <footer class="site-footer">
+    <footer class="site-footer" role="contentinfo">
         <div class="footer-content">
             <p>
                 © 2026 <strong>WEBZONEBW</strong>. All rights reserved.
@@ -692,6 +790,9 @@
     <script defer src="../js/er-license-premium.js?v=3.0.0"></script>
     <script defer src="../js/halloween.js?v=3.0.0"></script>
     
+    <!-- Accessibility and performance enhancements -->
+    <script defer src="../js/er-studio-accessibility.js?v=3.0.0"></script>
+    
     <!-- Theme, camera stability, and lens catalog controllers -->
     <script defer src="../js/er-studio.js?v=3.0.0"></script>
     <script defer src="../js/er-studio-pipeline.js?v=3.0.0"></script>
@@ -699,6 +800,9 @@
     <!-- Studio interaction enhancements -->
     <script defer src="../js/er-studio-enhanced.js?v=3.0.0"></script>
     <script defer src="../js/er-studio-controls.js?v=3.0.0"></script>
+
+    <!-- HERSHEY Movie Launch promotional banner controller -->
+    <script defer src="../js/er-hershey-banner.js?v=1.0.0"></script>
     
 </body>
 </html>

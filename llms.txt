@@ -88,12 +88,11 @@ These are discussion areas documented by the site. They are not a claim that eve
 - Portfolio and project overview: https://webzonebw.in/projects.html
 - Professional profile and editorial context: https://webzonebw.in/about.html
 - Resume and skills summary: https://webzonebw.in/resume.html
-- WEBZONEBW-ER Studio: https://webzonebw.in/er/
-- Enhanced ER demo: https://webzonebw.in/er-enhanced-demo.html
+- WEBZONEBW-ER Studio: https://webzonebw.in/er/index.html
 - Sound Box browser audio experience: https://webzonebw.in/soundbox.html
 - Contact and professional discussion: https://webzonebw.in/contact.html
 
-The ER Studio is a browser-based camera and creative effects experience. It includes experimental and premium-license flows. Treat the enhanced demo as a demonstration unless a page explicitly describes a feature as production-ready.
+The ER Studio is a browser-based camera and creative effects experience. It includes experimental and premium-license flows.
 
 ## Technical architecture
 

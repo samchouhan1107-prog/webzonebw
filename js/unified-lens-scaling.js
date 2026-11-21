@@ -520,5 +520,3 @@ window.WebZoneBW.UnifiedLensScaling = new UnifiedLensScalingEngine();
 document.addEventListener('DOMContentLoaded', () => {
   window.WebZoneBW.UnifiedLensScaling.initializeNativeFaceDetector();
 });
-
-export default UnifiedLensScalingEngine;

@@ -136,7 +136,6 @@ class CameraFirstDeployment {
       'js/enhanced-studio-platform.js',
       'js/enhanced-filter-environment.js',
       'js/enhanced-filter-integration.js',
-      'er-enhanced-demo.html',
       'css/er-studio.css',
       'css/responsive.css'
     ];

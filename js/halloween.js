@@ -91,7 +91,12 @@ function initWebZoneERStudio() {
   const filterBtns = [];
   const tabBtns = [];
   const snapshotModal = document.getElementById("snapshotModal");
-  const snapshotImg = document.getElementById("snapshotImg");
+
+  // ==========================================================
+  // TEST MODE / EXPLORE SAMPLE IMAGES
+  // ==========================================================
+
+  const testModeBtn = document.getElementById("testModeBtn");
   const downloadLink = document.getElementById("downloadSnapshotBtn");
   const closeSnapBtn = document.getElementById("closeSnapshotBtn");
   const capturePhotoText = document.getElementById("capturePhotoText");
@@ -164,6 +169,9 @@ function initWebZoneERStudio() {
   function getFilterDisplayName(filter) {
     const names = {
       'cartoon': '🎨 Anime Cel',
+      'hershey': '🍫 HERSHEY',
+      'hershey-dark': '🍫 HERSHEY DARK',
+      'hershey-caramel': '🍯 HERSHEY CARAMEL',
       'sunglasses': '🕶️ Designer Aviators',
       'halo': '👑 Angel Halo',
       'goldenhour': '🌟 Golden Hour',
@@ -415,6 +423,16 @@ function initWebZoneERStudio() {
     switch (currentFilter) {
       case 'cartoon':
         drawCartoonShader(ctx, w, h, time);
+        break;
+      case 'hershey':
+      case 'hershey-milk':
+        drawHersheyGlow(ctx, w, h, time, 'milk');
+        break;
+      case 'hershey-dark':
+        drawHersheyGlow(ctx, w, h, time, 'dark');
+        break;
+      case 'hershey-caramel':
+        drawHersheyGlow(ctx, w, h, time, 'caramel');
         break;
       case 'sunglasses':
         drawSunglasses(ctx, w, h, time);
@@ -1322,6 +1340,34 @@ function initWebZoneERStudio() {
       desc: "High-contrast comic outline with vibrant cel shading",
     },
 
+    // 🍫 HERSHEY MOVIE LAUNCH — promotional face lenses
+    {
+      id: "hershey",
+      name: "HERSHEY",
+      icon: "🍫",
+      category: "face",
+      target: "face",
+      desc: "HERSHEY Movie Launch — soft warm chocolate glow",
+    },
+
+    {
+      id: "hershey-dark",
+      name: "HERSHEY DARK",
+      icon: "🍫",
+      category: "face",
+      target: "face",
+      desc: "HERSHEY Movie Launch — deep cocoa cinematic finish",
+    },
+
+    {
+      id: "hershey-caramel",
+      name: "HERSHEY CARAMEL",
+      icon: "🍯",
+      category: "face",
+      target: "face",
+      desc: "HERSHEY Movie Launch — golden caramel glow",
+    },
+
     // 🌍 SCENE & ATMOSPHERIC SHADERS (verified working)
     {
       id: "noir",
@@ -1929,6 +1975,7 @@ function initWebZoneERStudio() {
     "auto-detect": "portrait", "portrait-studio": "studio", "cinematic-mode": "cinema",
     // Face
     sunglasses: "studio", halo: "fantasy", goldenhour: "portrait", cartoon: "studio", "mother_care": "portrait",
+    hershey: "studio", "hershey-milk": "portrait", "hershey-dark": "cinema", "hershey-caramel": "portrait",
     // Scene
     noir: "cinema", vintage90s: "portrait", cinematic: "cinema", "volcanic-lava": "hellfire", glitch: "glitch",
     space: "nebula", cyberpunk: "neon",
@@ -4007,6 +4054,24 @@ function initWebZoneERStudio() {
         }
       });
     });
+
+    // Search clear button
+    const effectsSearchClear = document.getElementById("effectsSearchClear");
+    if (effectsSearchClear && effectsSearchInput) {
+      effectsSearchClear.addEventListener("click", () => {
+        effectsSearchInput.value = "";
+        effectsSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        effectsSearchInput.focus();
+      });
+    }
+
+    // Show/hide clear button based on input value
+    effectsSearchInput.addEventListener("input", () => {
+      if (effectsSearchClear) {
+        effectsSearchClear.style.display =
+          effectsSearchInput.value.trim().length > 0 ? "inline-block" : "none";
+      }
+    });
   }
 
   // ==========================================================
@@ -4231,6 +4296,33 @@ function initWebZoneERStudio() {
       if (window.innerWidth <= 1199) {
         effectsPanel.style.display = "none";
         effectsPanel.classList.remove("mobile-overlay");
+      }
+    });
+  }
+
+  // ==========================================================
+  // BACK TO CAMERA / UPLOADED PHOTO
+  // ==========================================================
+
+  const backToCameraBtn = document.getElementById("backToCameraBtn");
+
+  if (backToCameraBtn && effectsPanel) {
+    backToCameraBtn.addEventListener("click", () => {
+      // Return to the active camera or uploaded photo view
+      effectsPanel.style.display = "none";
+      effectsPanel.classList.remove("mobile-overlay");
+
+      // Ensure the camera/video/canvas is visible
+      if (video) {
+        video.style.display = "block";
+      }
+      if (canvas) {
+        canvas.style.display = "block";
+      }
+      if (capturePhotoText) {
+        capturePhotoText.textContent = mediaStream || isDemoMode || studioMode === "upload"
+          ? "Capture Photo"
+          : "Start Camera";
       }
     });
   }
@@ -5196,6 +5288,11 @@ function initWebZoneERStudio() {
       }
     });
   }
+
+  // ==========================================================
+  // TEST MODE / EXPLORE SAMPLE IMAGES
+  // (button + listener registered near the top of the file)
+  // ==========================================================
 
   // ==========================================================
   // VIDEO RECORDING (MediaRecorder on the live effects canvas)
@@ -6479,6 +6576,109 @@ function initWebZoneERStudio() {
   }
 
   // ==========================================================
+  // HERSHEY MOVIE LAUNCH — CHOCOLATE GLOW EXPERIENCE
+  // ==========================================================
+
+  function drawHersheyGlow(ctx, w, h, time, preset) {
+    ctx.save();
+
+    const cx = faceBox.x * w;
+    const cy = faceBox.y * h;
+    const rx = (faceBox.w * w) / 2;
+    const ry = (faceBox.h * h) / 2;
+
+    /* Preset palettes — MILK soft warm chocolate, DARK deep cocoa
+     * cinematic, CARAMEL golden caramel glow. */
+    const palettes = {
+      milk: {
+        glow: "rgba(212, 160, 108, 0.30)",
+        mid: "rgba(150, 98, 56, 0.18)",
+        edge: "rgba(43, 24, 12, 0.20)",
+        shimmer: "rgba(255, 224, 178, ",
+        cheek: "rgba(214, 148, 92, 0.26)",
+        vignette: "rgba(28, 15, 8, 0.26)",
+      },
+      dark: {
+        glow: "rgba(122, 78, 46, 0.34)",
+        mid: "rgba(72, 44, 26, 0.24)",
+        edge: "rgba(18, 9, 4, 0.34)",
+        shimmer: "rgba(240, 199, 150, ",
+        cheek: "rgba(126, 78, 44, 0.30)",
+        vignette: "rgba(10, 5, 2, 0.40)",
+      },
+      caramel: {
+        glow: "rgba(250, 204, 120, 0.32)",
+        mid: "rgba(222, 158, 78, 0.20)",
+        edge: "rgba(60, 32, 12, 0.22)",
+        shimmer: "rgba(255, 236, 190, ",
+        cheek: "rgba(240, 176, 104, 0.28)",
+        vignette: "rgba(40, 20, 6, 0.28)",
+      },
+    };
+    const p = palettes[preset] || palettes.milk;
+
+    /* Golden cinematic key light from upper-left, like a poster rig */
+    const keyGrad = ctx.createRadialGradient(
+      w * 0.28, h * 0.18, 20, w * 0.5, h * 0.5, Math.max(w, h) * 0.9,
+    );
+    keyGrad.addColorStop(0, p.glow);
+    keyGrad.addColorStop(0.45, p.mid);
+    keyGrad.addColorStop(1, p.edge);
+    ctx.fillStyle = keyGrad;
+    ctx.fillRect(0, 0, w, h);
+
+    /* Face-aware glossy chocolate sheen — moving specular highlight */
+    const sheenX = cx - rx * 0.3 + Math.sin(time * 0.8) * rx * 0.15;
+    const sheenY = cy - ry * 0.35;
+    const sheenR = Math.max(20, rx * 0.55);
+    const sheen = ctx.createRadialGradient(sheenX, sheenY, 0, sheenX, sheenY, sheenR);
+    sheen.addColorStop(0, p.shimmer + "0.30)");
+    sheen.addColorStop(0.6, p.shimmer + "0.10)");
+    sheen.addColorStop(1, "transparent");
+    ctx.fillStyle = sheen;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx * 1.05, ry * 1.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    /* Cocoa shimmer particles — drifting gloss flecks */
+    ctx.globalCompositeOperation = "lighter";
+    for (let i = 1; i <= 10; i++) {
+      const fx = erRand(i * 3.3 + 7) * w;
+      const fy = ((erRand(i * 7.7 + 13) * h) + time * 12 * (0.4 + erRand(i) * 0.8)) % h;
+      const rad = 1.5 + erRand(i * 5.1) * 3.5;
+      ctx.fillStyle = p.shimmer + (0.22 + erRand(i * 2.9) * 0.2) + ")";
+      ctx.beginPath();
+      ctx.arc(fx, fy, rad, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+
+    /* Warm caramel blush on the cheeks */
+    const cheekY = cy + ry * 0.14;
+    const cheekR = Math.max(16, rx * 0.3);
+    [cx - rx * 0.48, cx + rx * 0.48].forEach((bx) => {
+      const blush = ctx.createRadialGradient(bx, cheekY, 0, bx, cheekY, cheekR);
+      blush.addColorStop(0, p.cheek);
+      blush.addColorStop(1, "transparent");
+      ctx.fillStyle = blush;
+      ctx.beginPath();
+      ctx.arc(bx, cheekY, cheekR, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    /* Cinematic poster vignette */
+    const vignette = ctx.createRadialGradient(
+      cx, cy, Math.max(rx, ry) * 0.7, cx, cy, Math.max(w, h) * 0.72,
+    );
+    vignette.addColorStop(0, "transparent");
+    vignette.addColorStop(1, p.vignette);
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.restore();
+  }
+
+  // ==========================================================
   // MASTER FILTER SHADER ROUTER
   // ==========================================================
 
@@ -6491,6 +6691,19 @@ function initWebZoneERStudio() {
       case "goldenhour":
         drawGoldenHourGlam(ctx, w, h, time);
 
+        break;
+
+      case "hershey":
+      case "hershey-milk":
+        drawHersheyGlow(ctx, w, h, time, "milk");
+        break;
+
+      case "hershey-dark":
+        drawHersheyGlow(ctx, w, h, time, "dark");
+        break;
+
+      case "hershey-caramel":
+        drawHersheyGlow(ctx, w, h, time, "caramel");
         break;
 
       case "sunglasses":
@@ -8702,6 +8915,9 @@ function initWebZoneERStudio() {
   function getFilterDisplayName(filter) {
     const names = {
       'cartoon': '🎨 Anime Cel',
+      'hershey': '🍫 HERSHEY',
+      'hershey-dark': '🍫 HERSHEY DARK',
+      'hershey-caramel': '🍯 HERSHEY CARAMEL',
       'sunglasses': '🕶️ Designer Aviators',
       'halo': '👑 Angel Halo',
       'goldenhour': '🌟 Golden Hour',
@@ -8779,7 +8995,7 @@ function initWebZoneERStudio() {
       if (category === 'smart') {
         shouldShow = ['cartoon', 'goldenhour', 'cinematic', 'studiohd', 'ai-background'];
       } else if (category === 'face') {
-        shouldShow = ['sunglasses', 'halo', 'kawaii', 'cyberwarrior', 'noir', 'icefrost', 'mother_care'];
+        shouldShow = ['sunglasses', 'halo', 'kawaii', 'cyberwarrior', 'noir', 'icefrost', 'mother_care', 'hershey', 'hershey-dark', 'hershey-caramel'];
       } else if (category === 'scene') {
         shouldShow = ['vintage90s', 'popart', 'cyberpunk', 'cinematic', 'glitch', 'space'];
       } else if (category === 'pose') {
