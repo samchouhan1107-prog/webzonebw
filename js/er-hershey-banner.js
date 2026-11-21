@@ -24,10 +24,15 @@
        dismissed for the session, and the countdown never shows.
        ---------------------------------------------------------- */
     var CAMPAIGN = {
-        /* ISO date string or null — e.g. "2026-12-04T00:00:00" */
-        launchDate: null,
+        /* Official campaign artwork (one-day 5¢ bar event, Nov 25).
+         * Path relative to /er/index.html */
+        posterImage: "../assets/images/Hershey.png",
+        posterAlt: "HERSHEY'S milk chocolate — Grab a bar for just 5¢ each, Nov 25, 1 day only. Limit of 10 per person",
+        /* ISO date string or null */
+        launchDate: "2026-11-25T00:00:00",
         start: null,
-        end: null,
+        /* One-day-only event: banner retires after Nov 25 ends */
+        end: "2026-11-26T00:00:00",
         /* Keep the HERSHEY lens selectable after the event ends */
         lensRemainsAvailable: true,
         /* localStorage key so CLOSE is remembered per visitor */
@@ -37,12 +42,29 @@
         venueLine: "101 Chocolate World Wy, Hershey, PA 17033, USA",
     };
 
-    /* HERSHEY preset → actual registered lens id */
+    /* HERSHEY preset → actual registered lens id.
+     * Each preset is exposed ONLY if its Studio effect card
+     * (configuration + assets) is actually present in the DOM. */
     var LOOKS = [
         { id: "hershey", label: "HERSHEY MILK", hint: "Soft warm chocolate finish" },
         { id: "hershey-dark", label: "HERSHEY DARK", hint: "Deep cocoa cinematic finish" },
         { id: "hershey-caramel", label: "HERSHEY CARAMEL", hint: "Golden caramel glow" },
     ];
+
+    /* Requirement: presets render only when their configurations
+     * and rendering assets are available. A look is available when
+     * its registered Studio lens card exists. */
+    function lensIsAvailable(lensId) {
+        return Boolean(
+            document.querySelector('.effect-card[data-filter="' + lensId + '"]')
+        );
+    }
+
+    function availableLooks() {
+        return LOOKS.filter(function (look) {
+            return lensIsAvailable(look.id);
+        });
+    }
 
     function isValidDate(value) {
         return value instanceof Date && !isNaN(value.getTime());
@@ -91,6 +113,17 @@
         var poster = document.createElement("div");
         poster.className = "hershey-poster";
 
+        /* Official poster artwork — rendered only when supplied */
+        if (CAMPAIGN.posterImage) {
+            var art = document.createElement("img");
+            art.className = "hershey-poster-art";
+            art.src = CAMPAIGN.posterImage;
+            art.alt = CAMPAIGN.posterAlt || "HERSHEY campaign artwork";
+            art.decoding = "async";
+            art.loading = "lazy";
+            poster.appendChild(art);
+        }
+
         var kicker = document.createElement("p");
         kicker.className = "hershey-kicker";
         kicker.textContent = "Movie Launch Special";
@@ -129,7 +162,7 @@
         poster.appendChild(desc);
 
         /* Venue direction line — rendered only when supplied */
-        if (CAMPAIGN.venueLine) {
+        if (CAMPAIGN.venueLine && !CAMPAIGN.posterImage) {
             var venue = document.createElement("p");
             venue.className = "hershey-venue";
             venue.textContent = "📍 " + CAMPAIGN.venueLine;
@@ -159,7 +192,7 @@
         var looks = document.createElement("div");
         looks.className = "hershey-looks";
         looks.id = "hersheyLooks";
-        LOOKS.forEach(function (look) {
+        availableLooks().forEach(function (look) {
             var btn = document.createElement("button");
             btn.type = "button";
             btn.className = "hershey-look-btn";
@@ -193,6 +226,8 @@
                 dismiss(true);
             }
         });
+        /* Main lens unavailable → hide the primary CTA entirely */
+        tryBtn.style.display = lensIsAvailable("hershey") ? "" : "none";
         actions.appendChild(tryBtn);
 
         var looksBtn = document.createElement("button");
@@ -298,9 +333,26 @@
 
     function init() {
         if (!shouldShowNow()) return;
+        /* No configured HERSHEY presets → nothing to promote */
+        if (!availableLooks().length) return;
 
         var banner = buildBanner();
-        document.body.appendChild(banner);
+
+        /* Requirement 4: mount INSIDE the existing Face workspace —
+         * the ER Studio effects panel discovery area — so the
+         * campaign feels native to the Studio, never a separate
+         * fullscreen application. Falls back to the fixed overlay
+         * only when the Studio panel is not present. */
+        var discovery = document.querySelector(".er-feature-discovery");
+        if (discovery && discovery.parentNode) {
+            banner.classList.add("hershey-banner-inline");
+            banner.removeAttribute("role");
+            banner.removeAttribute("aria-modal");
+            banner.setAttribute("aria-label", "HERSHEY Movie Launch Special");
+            discovery.parentNode.insertBefore(banner, discovery);
+        } else {
+            document.body.appendChild(banner);
+        }
 
         var target = parseDate(CAMPAIGN.launchDate) || parseDate(CAMPAIGN.end);
         if (target && target.getTime() > Date.now()) {

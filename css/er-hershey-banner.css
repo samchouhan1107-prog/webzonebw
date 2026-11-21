@@ -331,3 +331,76 @@
         transition: none;
     }
 }
+
+/* ---------- Inline (native Studio) banner mode ----------
+ * Requirement: chocolate styling belongs ONLY to the HERSHEY
+ * campaign, and the banner must sit inside the existing Face
+ * workspace — never as a separate fullscreen application. */
+
+#hersheyPromoBanner.hershey-banner-inline {
+    position: static;
+    inset: auto;
+    z-index: auto;
+    display: block;
+    padding: 14px;
+    margin: 0 0 16px;
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(74, 18, 32, 0.55), rgba(46, 26, 13, 0.55));
+    backdrop-filter: none;
+    animation: none;
+    border: 1px solid rgba(240, 196, 106, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+#hersheyPromoBanner.hershey-banner-inline .hershey-poster {
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    padding: clamp(16px, 3vw, 26px);
+    border-radius: 12px;
+    background:
+        radial-gradient(circle at 50% -10%, rgba(240, 196, 106, 0.18), transparent 60%),
+        linear-gradient(160deg, rgba(107, 28, 46, 0.55), rgba(46, 26, 13, 0.85));
+}
+
+#hersheyPromoBanner.hershey-banner-inline .hershey-title {
+    font-size: clamp(30px, 6vw, 44px);
+}
+
+#hersheyPromoBanner.hershey-banner-inline .hershey-venue,
+#hersheyPromoBanner.hershey-banner-inline .hershey-countdown {
+    display: none;
+}
+
+#hersheyPromoBanner.hershey-banner-inline .hershey-looks.hershey-looks-open {
+    display: grid;
+}
+
+#hersheyPromoBanner.hershey-banner-inline.hershey-dismissing {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* ---------- Poster artwork (official campaign image) ---------- */
+
+.hershey-poster-art {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    margin: 0 auto 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(240, 196, 106, 0.4);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+#hersheyPromoBanner.hershey-banner-inline .hershey-poster-art {
+    max-width: 220px;
+    margin-bottom: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #hersheyPromoBanner.hershey-banner-inline.hershey-dismissing {
+        transition: none;
+    }
+}
