@@ -33,5 +33,4 @@ Thumbs.db
 *.backup
 *.bak
 
-# Scratch/workdir experiments
-scratch/
+
